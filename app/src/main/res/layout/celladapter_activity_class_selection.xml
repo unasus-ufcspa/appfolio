@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="match_parent"
+    android:textAlignment="center">
+
+    <TextView
+        android:layout_width="250dp"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="Large Text"
+        android:id="@+id/txt_class_code"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:background="#8997ff"
+        android:capitalize="sentences"
+        android:textAlignment="center" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="200dp"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="Medium Text"
+        android:id="@+id/txt_class_description"
+        android:layout_below="@+id/txt_class_code"
+        android:layout_alignLeft="@+id/txt_class_code"
+        android:layout_alignStart="@+id/txt_class_code"
+        android:layout_alignRight="@+id/txt_class_code"
+        android:layout_alignEnd="@+id/txt_class_code"
+        android:background="#dbdeef"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="Small Text"
+        android:id="@+id/txt_class_dates"
+        android:layout_alignRight="@+id/txt_class_description"
+        android:layout_alignEnd="@+id/txt_class_description"
+        android:gravity="right"
+        android:layout_below="@+id/txt_class_description"
+        android:layout_toRightOf="@+id/txt_class_status"
+        android:layout_toEndOf="@+id/txt_class_status" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:id="@+id/txt_class_status"
+        android:layout_below="@+id/txt_class_description"
+        android:layout_alignLeft="@+id/txt_class_description"
+        android:layout_alignStart="@+id/txt_class_description"
+        android:text="Ativo"
+        android:nestedScrollingEnabled="false" />
+</RelativeLayout>
