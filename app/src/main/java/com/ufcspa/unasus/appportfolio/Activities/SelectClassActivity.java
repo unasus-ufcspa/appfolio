@@ -1,14 +1,9 @@
 package com.ufcspa.unasus.appportfolio.Activities;
 
 import android.os.Bundle;
-import android.os.PersistableBundle;
 import android.support.v7.app.AppCompatActivity;
-import android.view.View;
-import android.widget.AdapterView;
 import android.widget.GridView;
-import android.widget.Toast;
 
-import com.ufcspa.unasus.appportfolio.DataBase.DatabaseHelper;
 import com.ufcspa.unasus.appportfolio.Model.SelectClassGridViewAdapter;
 import com.ufcspa.unasus.appportfolio.Model.Team;
 import com.ufcspa.unasus.appportfolio.R;
