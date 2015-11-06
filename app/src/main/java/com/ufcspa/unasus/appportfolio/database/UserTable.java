@@ -16,5 +16,9 @@ public class UserTable {
                 ")";
     }
 
+    public static void selectAll(){
+
+    }
+
 
 }
