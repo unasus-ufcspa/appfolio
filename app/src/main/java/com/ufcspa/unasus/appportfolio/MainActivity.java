@@ -9,10 +9,17 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.TextView;
+
+import com.ufcspa.unasus.appportfolio.database.Banco;
 
 public class MainActivity extends AppCompatActivity {
     static final int REQUEST_IMAGE_CAPTURE = 1;
     private ImageView foto;
+    private TextView txt;
+
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -21,10 +28,14 @@ public class MainActivity extends AppCompatActivity {
         // Teste do Segundo Commit
         foto=(ImageView)findViewById(R.id.imageView);
         final Button btFoto = (Button)findViewById(R.id.btFoto);
+
+        txt=(TextView)findViewById(R.id.textQuery);
         btFoto.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-            dispatchTakePictureIntent();
+            //dispatchTakePictureIntent();
+                Banco b= new Banco(getApplicationContext());
+                txt.setText(b.listarUsers());
             }
         });
     }

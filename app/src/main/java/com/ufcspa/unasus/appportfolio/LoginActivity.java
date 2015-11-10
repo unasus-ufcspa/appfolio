@@ -82,7 +82,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             @Override
             public boolean onEditorAction(TextView textView, int id, KeyEvent keyEvent) {
                 if (id == R.id.login || id == EditorInfo.IME_NULL) {
-                    attemptLogin();
+                    //attemptLogin();
                     return true;
                 }
                 return false;
@@ -122,11 +122,16 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     private boolean verificarLogin(){
        boolean result=false;
         try {
+            Banco bd = new Banco(this);
             result=bd.verifyPass(mEmailView.getText().toString(),mPasswordView.getText().toString());
+            Log.d("BANCO"," pass:"+result);
+            bd.criarUser();
+
         }catch (Exception e){
-            Log.d("BANCO",e.getMessage());
+            Log.d("BANCO","verificando pass:"+e.getMessage());
         }
         return result;
+
     }
 
 

@@ -362,6 +362,24 @@ public class ClassTable {
     }
 
 
+        public static String createUser(){
+                return "CREATE TABLE `tb_user` (\n" +
+                        "\t`id_user`\tINTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,\n" +
+                        "\t`nm_user`\tTEXT NOT NULL,\n" +
+                        "\t`nu_identification`\tTEXT NOT NULL,\n" +
+                        "\t`tp_user`\tINTEGER,\n" +
+                        "\t`ds_email`\tTEXT NOT NULL,\n" +
+                        "\t`ds_password`\tTEXT,\n" +
+                        "\t`nu_cellphone`\tINTEGER\n" +
+                        ");";
+        }
+
+        public static String insertUsers(){
+                //return "insert into tb_user values(null,'Arthur','1234','S','arthur@1234','1234','97465121')";
+        return "insert into tb_user(nm_user) values ('zago')";
+        }
+
+
 
 
 }
