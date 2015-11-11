@@ -35,7 +35,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
             //dispatchTakePictureIntent();
                 Banco b= new Banco(getApplicationContext());
-                txt.setText(b.listarUsers());
+                txt.setText(b.listarUsers()+"\n"+b.listarTabelas());
             }
         });
     }
