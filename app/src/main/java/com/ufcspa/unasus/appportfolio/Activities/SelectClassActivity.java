@@ -2,6 +2,8 @@ package com.ufcspa.unasus.appportfolio.Activities;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.GridView;
 
 import com.ufcspa.unasus.appportfolio.Model.SelectClassGridViewAdapter;
@@ -19,7 +21,7 @@ import java.util.List;
  * informações realacionadas as turmas do aluno logado. Sendo
  * possível selecionar a turma desejada.
  */
-public class SelectClassActivity extends AppCompatActivity
+public class SelectClassActivity extends AppCompatActivity implements AdapterView.OnItemClickListener
 {
     private GridView grid_classes;
     private List<Team> classes;
@@ -28,7 +30,7 @@ public class SelectClassActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_class_selection);
+        setContentView(R.layout.activity_classes);
 
         fakeData();
         init();
@@ -40,6 +42,8 @@ public class SelectClassActivity extends AppCompatActivity
 
         grid_classes = (GridView) findViewById(R.id.grid_classes);
         grid_classes.setAdapter(gridAdapter);
+
+        grid_classes.setOnItemClickListener(this);
     }
 
     private void fakeData()
@@ -63,5 +67,11 @@ public class SelectClassActivity extends AppCompatActivity
         classes = new ArrayList();
         classes.add(c);
         classes.add(c2);
+    }
+
+    @Override
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id)
+    {
+        System.out.println("Teste" + position);
     }
 }

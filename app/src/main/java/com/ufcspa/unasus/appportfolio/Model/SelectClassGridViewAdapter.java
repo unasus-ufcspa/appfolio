@@ -60,9 +60,9 @@ public class SelectClassGridViewAdapter extends BaseAdapter
         Holder holder = new Holder();
         View rowView;
 
-        rowView = inflater.inflate(R.layout.celladapter_activity_class_selection, null);
-        holder.txt_class_code = (TextView) rowView.findViewById(R.id.txt_class_code);
-        holder.txt_class_description = (TextView) rowView.findViewById(R.id.txt_class_description);
+        rowView = inflater.inflate(R.layout.celladapter_activity_classes, null);
+        holder.txt_class_code = (TextView) rowView.findViewById(R.id.txt_activity_title);
+        holder.txt_class_description = (TextView) rowView.findViewById(R.id.txt_activity_description);
         holder.txt_class_dates = (TextView) rowView.findViewById(R.id.txt_class_dates);
         holder.txt_class_status = (TextView) rowView.findViewById(R.id.txt_class_status);
 
