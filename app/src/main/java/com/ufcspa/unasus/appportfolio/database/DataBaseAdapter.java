@@ -13,28 +13,28 @@ public class DataBaseAdapter {
         source = new DataBaseAdapter(getApplicationContext());
         Log.d("BANCO", "TABELAS = " + source.getTestData());
      */
-//    private SQLiteDatabase db;
-//    private DataBaseHelper helper;
-//
-//    public DataBaseAdapter(Context context)
-//    {
-//        helper = new DataBaseHelper(context);
-//        db = helper.getDatabase();
-//    }
-//
-//    public String getTestData()
-//    {
-//        String sql ="SELECT name FROM sqlite_master WHERE type='table'";
-//
-//        Cursor mCur = db.rawQuery(sql, null);
-//        String tabelas = "";
-//        if (mCur.moveToFirst())
-//        {
-//            do {
-//                tabelas += mCur.getString(0) + "\n";
-//            }while(mCur.moveToNext());
-//        }
-//        return tabelas;
-//    }
+    private SQLiteDatabase db;
+    private DataBase helper;
+
+    public DataBaseAdapter(Context context)
+    {
+        helper = new DataBase(context);
+        db = helper.getDatabase();
+    }
+
+    public String getTestData()
+    {
+        String sql ="SELECT name FROM sqlite_master WHERE type='table'";
+
+        Cursor mCur = db.rawQuery(sql, null);
+        String tabelas = "";
+        if (mCur.moveToFirst())
+        {
+            do {
+                tabelas += mCur.getString(0) + "\n";
+            }while(mCur.moveToNext());
+        }
+        return tabelas;
+    }
 
 }
