@@ -31,15 +31,32 @@ public class Banco extends SQLiteOpenHelper {
                 "tp_user TEXT,\n" +
                 "ds_email TEXT NOT NULL,\n" +
                 "ds_password TEXT,\n" +
-                "nu_cellphone INTEGER\n" +
+                "nu_cellphone TEXT\n" +
                 ");";
 
         //criarUser(this);
             //db=this.getWritableDatabase();
 
         try{
+            String criar="INSERT INTO tb_user VALUES(NULL,'ICARUS','666','S','icaromscastro@gmail.com','senha123','97854632')";
             db.execSQL(query);
             Log.d(tag, "criou bd");
+            db.execSQL(criar);
+            Log.d(tag, "inseriu no banco");
+            //this.getWritableDatabase();
+
+            // criar usuario inicial
+//            ContentValues cv= new ContentValues();
+//            cv.put("nm_user","Icaro");
+//            cv.put("nu_identification","467");
+//            cv.put("tp_user","S");
+//            cv.put("ds_email","icaro@1234");
+//            cv.put("ds_password", "1234");
+//            db.insert("tb_user", null, cv);
+//            db.close();
+
+
+
         }catch (Exception e){
             Log.e(tag," catch on create:"+e.getMessage());
         }
@@ -56,7 +73,7 @@ public class Banco extends SQLiteOpenHelper {
         if(email!="" && pass!="")
         {
             SQLiteDatabase db =this.getReadableDatabase();
-            String query="select count(*) from tb_user where ds_email = '"+email+"' AND ds_password = '"+pass+"';";
+            String query="select id_user from tb_user where ds_email = '"+email+"' AND ds_password = '"+pass+"';";
             Cursor c= db.rawQuery(query,null);
             if(c.moveToFirst()){
                 Log.d(tag,"password correto");
@@ -87,32 +104,45 @@ public void criarUser(){
         cv.put("ds_password", "1234");
         db.insert("tb_user", null, cv);
         db.close();
-        Log.d(tag,"inseriu no banco");
+        Log.d(tag, "inseriu no banco");
         }
 
 
     public String listarUsers(){
         SQLiteDatabase db=this.getWritableDatabase();
         String query = "SELECT * FROM tb_user";
-        String[] result= {""};
         String r="";
         Log.d(tag, "nome d abase:" + this.getDatabaseName());
         Cursor c = db.rawQuery(query,null);
         if(c.moveToFirst()){
-            r+=c.getString(0);
-            r+=c.getString(1);
-            r+=c.getString(2);
-            r+=c.getString(3);
-            r+=c.getString(4);
-            r+=c.getString(5);
-            r+=c.getString(6);
+            r+="id:"+c.getString(0)+"\n";
+            r+="nome:"+c.getString(1)+"\n";
+            r+="email:"+c.getString(4)+"\n";
+
+        }else{
+            r="Não há users!";
         }
         c.close();
         db.close();
         Log.d(tag,"resultado string:"+r);
         return r;
 
+    }
+    public String listarTabelas(){
+        String query="SELECT name from sqlite_master where type='table'";
+        SQLiteDatabase db=this.getWritableDatabase();
+        String r="";
+        Cursor c = db.rawQuery(query,null);
+        if(c.moveToFirst()){
+                do {
+                    r += c.getString(0) + "\n";
+                    //r += c.getString(1) + "\n";
+                }while(c.moveToNext());
+        }else{
+                r="não há tabelas";
+            }
 
+        return r;
     }
 
 

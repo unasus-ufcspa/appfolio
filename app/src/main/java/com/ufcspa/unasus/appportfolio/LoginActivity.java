@@ -75,9 +75,9 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         // Set up the login form.
         mEmailView = (AutoCompleteTextView) findViewById(R.id.email);
         populateAutoComplete();
-        criarBD();
-
         mPasswordView = (EditText) findViewById(R.id.password);
+        mLoginFormView = findViewById(R.id.login_form);
+        mProgressView = findViewById(R.id.login_progress);
         mPasswordView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView textView, int id, KeyEvent keyEvent) {
@@ -103,8 +103,14 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             }
         });
 
-        mLoginFormView = findViewById(R.id.login_form);
-        mProgressView = findViewById(R.id.login_progress);
+
+    }
+
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        criarBD();
     }
 
     private void populateAutoComplete() {
@@ -124,9 +130,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         try {
             Banco bd = new Banco(this);
             result=bd.verifyPass(mEmailView.getText().toString(),mPasswordView.getText().toString());
-            Log.d("BANCO"," pass:"+result);
-            bd.criarUser();
-
+            Log.d("BANCO", " pass:" + result);
         }catch (Exception e){
             Log.d("BANCO","verificando pass:"+e.getMessage());
         }

@@ -378,6 +378,90 @@ public class ClassTable {
                 //return "insert into tb_user values(null,'Arthur','1234','S','arthur@1234','1234','97465121')";
         return "insert into tb_user(nm_user) values ('zago')";
         }
+        public static String createTables(){
+                return "CREATE TABLE tb_portfolio(\n" +
+                        "  id_portfolio INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,\n" +
+                        "  ds_title TEXT,\n" +
+                        "  ds_description TEXT,\n" +
+                        "  nu_portfolio_version TEXT\n" +
+                        ");\n" +
+                        "CREATE TABLE tb_activity(\n" +
+                        "  id_activity INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,\n" +
+                        "  id_portfolio INTEGER NOT NULL,\n" +
+                        "  nu_order INTEGER,\n" +
+                        "  ds_title TEXT,\n" +
+                        "  ds_description TEXT,\n" +
+                        ");\n" +
+                        "CREATE TABLE tb_user(\n" +
+                        "  id_user INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,\n" +
+                        "  nm_user TEXT,\n" +
+                        "  nu_identification TEXT,\n" +
+                        "  tp_user TEXT,\n" +
+                        "--   User type:\n" +
+                        "--   P = Proposer;\n" +
+                        "--   A = Administrator;\n" +
+                        "--   S = Student;\n" +
+                        "--   T = Tutor;\n" +
+                        "  ds_email TEXT,\n" +
+                        "  ds_password TEXT,\n" +
+                        "  nu_cellphone TEXT\n" +
+                        ");\n" +
+                        "CREATE TABLE tb_reference(\n" +
+                        "  id_reference INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,\n" +
+                        "  id_activity_student INTEGER NOT NULL,\n" +
+                        "  ds_url TEXT\n" +
+                        ");\n" +
+                        "CREATE TABLE tb_portfolio_class(\n" +
+                        "  id_portfolio_class INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,\n" +
+                        "  id_portfolio INTEGER NOT NULL,\n" +
+                        "  id_class INTEGER NOT NULL\n" +
+                        ");\n" +
+                        "CREATE TABLE tb_class(\n" +
+                        "  id_class INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,\n" +
+                        "  ds_code TEXT,\n" +
+                        "  ds_description TEXT,\n" +
+                        "  st_status TEXT,\n" +
+                        "  dt_start TEXT,\n" +
+                        "  dt_finish TEXT\n" +
+                        ");\n" +
+                        "CREATE TABLE tb_class_student(\n" +
+                        "  id_class_student INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,-- Identificador da tabela.\n" +
+                        "  id_class INTEGER ,-- Chave estrangeira para a tabela \"tb_class\" para identificar a turma dos alunos.\n" +
+                        "  id_student INTEGER -- Chave estrangeira para a tabela \"tb_user\" para identificar os alunos. Somente deve ser preenchida com usuários do tipo 'S'.\n" +
+                        ");\n" +
+                        "CREATE TABLE tb_activity_student(\n" +
+                        "  id_activity_student INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,\n" +
+                        "  id_portfolio_student INTEGER NOT NULL,\n" +
+                        "  id_activity INTEGER NOT NULL,\n" +
+                        "  tx_activity TEXT,\n" +
+                        "  dt_first_sync TEXT,\n" +
+                        "  dt_last_access TEXT,\n" +
+                        "  dt_conclusion TEXT\n" +
+                        ");\n" +
+                        "CREATE TABLE tb_attachment(\n" +
+                        "  id_attachment INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,\n" +
+                        "  id_comment INTEGER NOT NULL,\n" +
+                        "  id_activity_comment INTEGER NOT NULL,\n" +
+                        "  ds_local_path TEXT,\n" +
+                        "  ds_server_path TEXT\n" +
+                        ");\n" +
+                        "CREATE TABLE tb_class_tutor(\n" +
+                        "--   Tabela para armazenar os usuários que poderão ser cadastrados como tutor em uma turma. Tabela usada como referência para associação de tutores aos alunos de uma turma.--\n" +
+                        "  id_class_tutor INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,-- Identificador da tabela.\n" +
+                        "  id_class INTEGER,-- Chave estrangeira para a tabela \"tb_class\" para identificar a turma dos tutores.\n" +
+                        "  id_tutor INTEGER -- Chave estrangeira para a tabela \"tb_user\" para identificar os tutores. Somente deve ser preenchida com usuários do tipo 'T'.\n" +
+                        ");\n" +
+                        "CREATE TABLE tb_comment(\n" +
+                        "  id_comment INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,\n" +
+                        "  id_activity_student INTEGER NOT NULL,\n" +
+                        "  id_author INTEGER NOT NULL,\n" +
+                        "  tx_comment TEXT,\n" +
+                        "  tx_reference TEXT,\n" +
+                        "  tp_comment TEXT,\n" +
+                        "  dt_comment TEXT\n" +
+                        ");";
+        }
+
 
 
 
