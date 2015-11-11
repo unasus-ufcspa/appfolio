@@ -5,7 +5,6 @@ import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.database.sqlite.SQLiteDatabase;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
@@ -34,6 +33,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.ufcspa.unasus.appportfolio.database.Banco;
+import com.ufcspa.unasus.appportfolio.database.DataBaseAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -94,11 +94,11 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             @Override
             public void onClick(View view) {
                 //attemptLogin();
-                if(verificarLogin()){
-                    startActivity(new Intent(getApplicationContext(),MainActivity.class));
+                if (verificarLogin()) {
+                    startActivity(new Intent(getApplicationContext(), MainActivity.class));
                     finish();
-                }else{
-                    Toast.makeText(getApplicationContext(),"Erro ao logar, favor verifique email e senha",Toast.LENGTH_LONG).show();
+                } else {
+                    Toast.makeText(getApplicationContext(), "Erro ao logar, favor verifique email e senha", Toast.LENGTH_LONG).show();
                 }
             }
         });
