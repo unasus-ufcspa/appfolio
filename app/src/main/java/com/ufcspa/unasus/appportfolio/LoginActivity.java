@@ -32,7 +32,6 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.ufcspa.unasus.appportfolio.database.Banco;
 import com.ufcspa.unasus.appportfolio.database.DataBaseAdapter;
 
 import java.util.ArrayList;
@@ -67,7 +66,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     private EditText mPasswordView;
     private View mProgressView;
     private View mLoginFormView;
-    private Banco bd;
+    private DataBaseAdapter bd;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -102,10 +101,6 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                 }
             }
         });
-        DataBaseAdapter source;
-        source = new DataBaseAdapter(getApplicationContext());
-        Log.d("BANCO", "TABELAS = " + source.getTestData());
-
     }
 
 
@@ -124,13 +119,13 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     }
 
     private void criarBD(){
-        bd=new Banco(this);
+        bd=new DataBaseAdapter(getApplicationContext());
     }
 
     private boolean verificarLogin(){
        boolean result=false;
         try {
-            Banco bd = new Banco(this);
+            DataBaseAdapter bd = new DataBaseAdapter(getApplicationContext());
             result=bd.verifyPass(mEmailView.getText().toString(),mPasswordView.getText().toString());
             Log.d("BANCO", " pass:" + result);
         }catch (Exception e){
