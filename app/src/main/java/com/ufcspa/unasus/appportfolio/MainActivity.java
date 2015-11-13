@@ -11,7 +11,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.ufcspa.unasus.appportfolio.database.Banco;
+import com.ufcspa.unasus.appportfolio.database.DataBaseAdapter;
 
 public class MainActivity extends AppCompatActivity {
     static final int REQUEST_IMAGE_CAPTURE = 1;
@@ -34,7 +34,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
             //dispatchTakePictureIntent();
-                Banco b= new Banco(getApplicationContext());
+                DataBaseAdapter b= new DataBaseAdapter(getApplicationContext());
                 txt.setText(b.listarUsers()+"\n"+b.listarTabelas());
             }
         });
