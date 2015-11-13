@@ -25,14 +25,14 @@ public class DataBaseAdapter {
     public String getTestData()
     {
         //String sql ="SELECT name FROM sqlite_master WHERE type='table'";
-        String sql ="SELECT Count(*) FROM tb_activity_student";
+        String sql ="SELECT nm_user FROM tb_user";
 
         Cursor mCur = db.rawQuery(sql, null);
         String tabelas = "";
         if (mCur.moveToFirst())
         {
             do {
-                tabelas += mCur.getString(0) + "\n";
+                tabelas += "nome:"+mCur.getString(0) + "\n";
             }while(mCur.moveToNext());
         }
         return tabelas;
