@@ -102,7 +102,9 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                 }
             }
         });
-
+        DataBaseAdapter source;
+        source = new DataBaseAdapter(getApplicationContext());
+        Log.d("BANCO", "TABELAS = " + source.getTestData());
 
     }
 

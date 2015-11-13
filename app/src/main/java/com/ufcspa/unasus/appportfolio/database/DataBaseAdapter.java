@@ -24,7 +24,8 @@ public class DataBaseAdapter {
 
     public String getTestData()
     {
-        String sql ="SELECT name FROM sqlite_master WHERE type='table'";
+        //String sql ="SELECT name FROM sqlite_master WHERE type='table'";
+        String sql ="SELECT Count(*) FROM tb_activity_student";
 
         Cursor mCur = db.rawQuery(sql, null);
         String tabelas = "";
