@@ -6,6 +6,8 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
+import com.ufcspa.unasus.appportfolio.Model.User;
+
 /**
  * Created by UNASUS on 11/11/2015.
  */
@@ -39,22 +41,30 @@ public class DataBaseAdapter {
         return tabelas;
     }
 
-    public boolean verifyPass(String email, String pass) {
+    public User verifyPass(String email, String pass) {
+        int id=0;
+        char type='0';
+        String name="zebra";
+        User user=new User(0,null,null);
+        try {
+            if (email != "" && pass != "") {
 
-        if (email != "" && pass != "") {
-
-            String query = "select id_user from tb_user where ds_email = '" + email + "' AND ds_password = '" + pass + "';";
-            Cursor c = db.rawQuery(query, null);
-            if (c.moveToFirst()) {
-                Log.d(tag, "password correto");
-                db.close();
-                return true;
-            } else {
-                db.close();
-                return false;
+                String query = "select id_user , nm_user , tp_user from tb_user where ds_email ='"+email+"' "+"AND ds_password ='"+pass+"' ;";
+                Cursor c = db.rawQuery(query, null);
+                if (c.moveToFirst()) {
+                    Log.d(tag, "password correto");
+                    id=Integer.parseInt(c.getString(0));
+                    name=c.getString(1);
+                    type=c.getString(2).charAt(0);
+                    user=new User(id,type,name);
+                    Log.d(tag,"dados: id:"+id+" type:"+type+" name:"+name);
+                }
             }
-        } else {
-            return false;
+        }catch (Exception e){
+            Log.d(tag,"erro query:"+e.getMessage());
+        }finally {
+            db.close();
+            return user;
         }
     }
 
@@ -105,5 +115,11 @@ public class DataBaseAdapter {
 
         return r;
     }
+
+
+
+
+
+
 
 }

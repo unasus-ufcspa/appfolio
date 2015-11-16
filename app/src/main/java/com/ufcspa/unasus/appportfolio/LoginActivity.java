@@ -32,6 +32,9 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.ufcspa.unasus.appportfolio.Activities.SelectClassActivity;
+import com.ufcspa.unasus.appportfolio.Model.SingletonUser;
+import com.ufcspa.unasus.appportfolio.Model.User;
 import com.ufcspa.unasus.appportfolio.database.DataBaseAdapter;
 
 import java.util.ArrayList;
@@ -67,6 +70,8 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     private View mProgressView;
     private View mLoginFormView;
     private DataBaseAdapter bd;
+    private User user;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -93,7 +98,9 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             @Override
             public void onClick(View view) {
                 //attemptLogin();
-                if (verificarLogin()) {
+                if (verificarLogin()!=0) {
+                    SingletonUser session=SingletonUser.getInstance();
+                    session.user=user;
                     startActivity(new Intent(getApplicationContext(), MainActivity.class));
                     finish();
                 } else {
@@ -122,16 +129,19 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         bd=new DataBaseAdapter(getApplicationContext());
     }
 
-    private boolean verificarLogin(){
-       boolean result=false;
+    private int verificarLogin(){
+       int result=0;
         try {
             DataBaseAdapter bd = new DataBaseAdapter(getApplicationContext());
-            result=bd.verifyPass(mEmailView.getText().toString(),mPasswordView.getText().toString());
-            Log.d("BANCO", " pass:" + result);
+            user=bd.verifyPass(mEmailView.getText().toString(),mPasswordView.getText().toString());
+            result=user.getIdUser();
+            //Log.d("BANCO", " pass:" + result);
         }catch (Exception e){
             Log.d("BANCO","verificando pass:"+e.getMessage());
+        }finally {
+            return result;
         }
-        return result;
+
 
     }
 
