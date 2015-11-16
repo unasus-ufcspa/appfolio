@@ -11,6 +11,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.ufcspa.unasus.appportfolio.Model.SingletonUser;
 import com.ufcspa.unasus.appportfolio.database.DataBaseAdapter;
 
 public class MainActivity extends AppCompatActivity {
@@ -21,6 +22,8 @@ public class MainActivity extends AppCompatActivity {
 
 
 
+
+     
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -35,7 +38,8 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
             //dispatchTakePictureIntent();
                 DataBaseAdapter b= new DataBaseAdapter(getApplicationContext());
-                txt.setText(b.listarUsers()+"\n"+b.listarTabelas());
+                SingletonUser session=SingletonUser.getInstance();
+                txt.setText(session.user.getName());
             }
         });
     }
