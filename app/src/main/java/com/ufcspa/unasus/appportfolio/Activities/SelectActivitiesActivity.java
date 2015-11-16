@@ -9,8 +9,11 @@ import android.widget.GridView;
 import com.ufcspa.unasus.appportfolio.Model.Activity;
 import com.ufcspa.unasus.appportfolio.Model.SelectActivitiesGridViewAdapter;
 import com.ufcspa.unasus.appportfolio.R;
+import com.ufcspa.unasus.appportfolio.database.DataBaseAdapter;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -19,7 +22,8 @@ import java.util.List;
 public class SelectActivitiesActivity extends AppCompatActivity implements AdapterView.OnItemClickListener
 {
     private GridView grid_activities;
-    private List<Activity> activities;
+    private ArrayList<Activity> activities;
+    private DataBaseAdapter source;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -27,26 +31,15 @@ public class SelectActivitiesActivity extends AppCompatActivity implements Adapt
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_activities);
 
-        fakeData();
         init();
     }
 
-    private void fakeData()
-    {
-
-        Activity a = new Activity("Introdução", "Escreva uma introdução bacana.");
-        Activity a2 = new Activity("Desenvolvimento", "Escreva um desenvolvimento bacana.");
-        Activity a3 = new Activity("Conclusão", "Escreva uma conclusão bacana.");
-
-        activities = new ArrayList();
-        activities.add(a);
-        activities.add(a2);
-        activities.add(a3);
-    }
-
-
     private void init()
     {
+        source = new DataBaseAdapter(getApplicationContext());
+        activities = source.getActivities(17, 5);
+        Collections.sort(activities);
+
         SelectActivitiesGridViewAdapter gridAdapter = new SelectActivitiesGridViewAdapter(this, activities);
 
         grid_activities = (GridView) findViewById(R.id.grid_activities);
@@ -55,9 +48,10 @@ public class SelectActivitiesActivity extends AppCompatActivity implements Adapt
         grid_activities.setOnItemClickListener(this);
     }
 
+
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id)
     {
-        System.out.println("Teste" + position);
+        System.out.println("Teste " + position);
     }
 }

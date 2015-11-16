@@ -6,6 +6,16 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
+import com.ufcspa.unasus.appportfolio.Model.Activity;
+import com.ufcspa.unasus.appportfolio.Model.Team;
+
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
 /**
  * Created by UNASUS on 11/11/2015.
  */
@@ -106,4 +116,75 @@ public class DataBaseAdapter {
         return r;
     }
 
+    public List<Team> getClasses()
+    {
+        String query = "SELECT * FROM tb_class";
+        List<Team> array_team = new ArrayList<>();
+
+        Cursor cursor = db.rawQuery(query, null);
+        cursor.moveToFirst();
+
+        do{ array_team.add(cursorToTeam(cursor)); } while(cursor.moveToNext());
+
+        return array_team;
+    }
+
+    private Team cursorToTeam(Cursor cursor)
+    {
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+
+        Team team = null;
+       try {
+            String dateBegin = cursor.getString(4);
+            String dateEnd = cursor.getString(5);
+
+            if(dateBegin == null)
+                dateBegin = "1900-01-01";
+
+            if(dateEnd == null)
+                dateEnd = "1900-01-01";
+
+            team = new Team(cursor.getInt(0), cursor.getString(1), cursor.getString(2), cursor.getString(3).charAt(0), dateFormat.parse(dateBegin),dateFormat.parse(dateEnd));
+        } catch (ParseException e) {
+            Log.d(tag,"Data em formato errado! (cursorToTeam())");
+        }
+
+        return team;
+    }
+
+    public ArrayList<Activity> getActivities(int userId, int portfolioId)
+    {
+        String query = "select \n" +
+                        "\ta.id_activity,\n" +
+                        "\ta.id_portfolio,\n" +
+                        "\ta.nu_order,\n" +
+                        "\ta.ds_title,\n" +
+                        "\ta.ds_description\n" +
+                        "from \n" +
+                        "\ttb_activity_student ac\n" +
+                        "    join tb_activity a on a.id_activity = ac.id_activity\n" +
+                        "    join tb_portfolio p on p.id_portfolio = a.id_portfolio\n" +
+                        "    join tb_portfolio_student ps on ps.id_portfolio_student = ac.id_portfolio_student    \n" +
+                        "    join tb_portfolio_class pc on pc.id_portfolio_class = ps.id_portfolio_class\n" +
+                        "    join tb_class c on c.id_class = pc.id_class\n" +
+                        "    join tb_user s on s.id_user = ps.id_student\n" +
+                        "where 1 = 1\n" +
+                            "\tand s.id_user = "+ userId + "\n" +
+                            "\tand p.id_portfolio = "+ portfolioId +";";
+
+        ArrayList<Activity> array_activity = new ArrayList<>();
+
+        Cursor cursor = db.rawQuery(query, null);
+        cursor.moveToFirst();
+
+        do{ array_activity.add(cursorToActivity(cursor)); } while(cursor.moveToNext());
+
+        return array_activity;
+    }
+
+    private Activity cursorToActivity(Cursor cursor)
+    {
+        Activity activity = new Activity(cursor.getInt(0), cursor.getInt(1), cursor.getInt(2), cursor.getString(3), cursor.getString(4));
+        return activity;
+    }
 }

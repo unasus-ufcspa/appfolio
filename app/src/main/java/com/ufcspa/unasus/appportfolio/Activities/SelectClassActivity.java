@@ -9,6 +9,7 @@ import android.widget.GridView;
 import com.ufcspa.unasus.appportfolio.Model.SelectClassGridViewAdapter;
 import com.ufcspa.unasus.appportfolio.Model.Team;
 import com.ufcspa.unasus.appportfolio.R;
+import com.ufcspa.unasus.appportfolio.database.DataBaseAdapter;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -25,6 +26,7 @@ public class SelectClassActivity extends AppCompatActivity implements AdapterVie
 {
     private GridView grid_classes;
     private List<Team> classes;
+    private DataBaseAdapter source;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -32,41 +34,19 @@ public class SelectClassActivity extends AppCompatActivity implements AdapterVie
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_classes);
 
-        fakeData();
         init();
     }
 
-    private void init()
-    {
+    private void init() {
+        source = new DataBaseAdapter(getApplicationContext());
+        classes = source.getClasses();
+
         SelectClassGridViewAdapter gridAdapter = new SelectClassGridViewAdapter(this, classes);
 
         grid_classes = (GridView) findViewById(R.id.grid_classes);
         grid_classes.setAdapter(gridAdapter);
 
         grid_classes.setOnItemClickListener(this);
-    }
-
-    private void fakeData()
-    {
-        Date begin = null;
-        Date finish = null;
-
-        try
-        {
-            begin = new SimpleDateFormat("yyyy-MM-dd").parse("2015-11-15");
-            finish = new SimpleDateFormat("yyyy-MM-dd").parse("2015-11-30");
-        }
-        catch (ParseException e)
-        {
-            e.printStackTrace();
-        }
-
-        Team c = new Team(0, "T 128", "Turma de Ciência da Computação da Faculdade de Informática da PUCRS", 'A', begin,finish);
-        Team c2 = new Team(1, "T 320", "Turma de Informática Biomédica da UFCSPA", 'A', begin, finish);
-
-        classes = new ArrayList();
-        classes.add(c);
-        classes.add(c2);
     }
 
     @Override
