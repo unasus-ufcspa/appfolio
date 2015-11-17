@@ -101,7 +101,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                 if (verificarLogin()!=0) {
                     SingletonUser session=SingletonUser.getInstance();
                     session.user=user;
-                    startActivity(new Intent(getApplicationContext(), MainActivity.class));
+                    startActivity(new Intent(getApplicationContext(), SelectClassActivity.class));
                     finish();
                 } else {
                     Toast.makeText(getApplicationContext(), "Erro ao logar, favor verifique email e senha", Toast.LENGTH_LONG).show();

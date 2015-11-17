@@ -1,10 +1,12 @@
 package com.ufcspa.unasus.appportfolio.Activities;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.GridView;
+import android.widget.Toast;
 
 import com.ufcspa.unasus.appportfolio.Model.SelectClassGridViewAdapter;
 import com.ufcspa.unasus.appportfolio.Model.Team;
@@ -53,5 +55,8 @@ public class SelectClassActivity extends AppCompatActivity implements AdapterVie
     public void onItemClick(AdapterView<?> parent, View view, int position, long id)
     {
         System.out.println("Teste" + position);
+        Toast.makeText(getApplicationContext(),"clicou em:"+classes.get(position).getCode(),Toast.LENGTH_SHORT).show();
+        startActivity(new Intent(this,SelectPortfolioActivity.class));
+        finish();
     }
 }

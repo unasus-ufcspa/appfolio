@@ -7,6 +7,8 @@ import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
 import com.ufcspa.unasus.appportfolio.Model.Activity;
+import com.ufcspa.unasus.appportfolio.Model.Portfolio;
+import com.ufcspa.unasus.appportfolio.Model.PortfolioClass;
 import com.ufcspa.unasus.appportfolio.Model.Team;
 
 import java.text.DateFormat;
@@ -126,16 +128,57 @@ public class DataBaseAdapter {
         return r;
     }
 
+
+    public List<PortfolioClass> listarPortfolio(int idClass, char userType,int idUser){
+        String query = "SELECT * FROM tb_portofolio";
+
+        String queryNova="select \n" +
+                "\t a.id_portfolio_student as id_portfolio_student,\n" +
+                "\t c.ds_code as code,\n" +
+                "\t d.nm_user as nome_aluno\n" +
+                "from\n" +
+                "    tb_portfolio_student a\n" +
+                "\tjoin tb_portfolio_class b on b.id_portfolio_class = a.id_portfolio_class\n" +
+                "\tjoin tb_class c on c.id_class = b.id_class \n" +
+                "\tjoin tb_user d on d.id_user = a.id_student\n" +
+                "\tjoin tb_user e on e.id_user = a.id_tutor\n" +
+                "where 1=1 \n" +
+                "\tAND ";
+        if(userType=='S')
+            queryNova+="AND a.id_student="+idUser+";";
+        else
+            queryNova+="AND a.id_tutor="+idUser+";";
+
+
+        ArrayList<PortfolioClass> portfolios = new ArrayList<PortfolioClass>();
+        Cursor c = db.rawQuery(query,null);
+        if(c.moveToFirst()){
+            do{
+                portfolios.add(cursorToPortfolio(c));
+            }while(c.moveToNext());
+        }
+        return portfolios;
+    }
+
+    private PortfolioClass cursorToPortfolio(Cursor c){
+        return new PortfolioClass(Integer.parseInt(c.getString(0)),c.getString(1),c.getString(2));
+    }
+
+
+
+
+
     public List<Team> getClasses()
     {
         String query = "SELECT * FROM tb_class";
         List<Team> array_team = new ArrayList<>();
-
         Cursor cursor = db.rawQuery(query, null);
-        cursor.moveToFirst();
+        if(cursor.moveToFirst()) {
 
-        do{ array_team.add(cursorToTeam(cursor)); } while(cursor.moveToNext());
-
+            do {
+                array_team.add(cursorToTeam(cursor));
+            } while (cursor.moveToNext());
+        }
         return array_team;
     }
 
