@@ -207,7 +207,7 @@ public class DataBaseAdapter {
         return team;
     }
 
-    public ArrayList<Activity> getActivities(int userId, int portfolioId)
+    public ArrayList<Activity> getActivities(int userId, int portfolioStudentId)
     {
         String query = "select \n" +
                         "\ta.id_activity,\n" +
@@ -225,7 +225,7 @@ public class DataBaseAdapter {
                         "    join tb_user s on s.id_user = ps.id_student\n" +
                         "where 1 = 1\n" +
                             "\tand s.id_user = "+ userId + "\n" +
-                            "\tand p.id_portfolio = "+ portfolioId +";";
+                            "\tand ps.id_portfolio_student = "+ portfolioStudentId +";";
 
         ArrayList<Activity> array_activity = new ArrayList<>();
 
