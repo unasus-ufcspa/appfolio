@@ -33,7 +33,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.ufcspa.unasus.appportfolio.Activities.SelectClassActivity;
-import com.ufcspa.unasus.appportfolio.Model.SingletonUser;
+import com.ufcspa.unasus.appportfolio.Model.Singleton;
 import com.ufcspa.unasus.appportfolio.Model.User;
 import com.ufcspa.unasus.appportfolio.database.DataBaseAdapter;
 
@@ -99,7 +99,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             public void onClick(View view) {
                 //attemptLogin();
                 if (verificarLogin()!=0) {
-                    SingletonUser session=SingletonUser.getInstance();
+                    Singleton session= Singleton.getInstance();
                     session.user=user;
                     startActivity(new Intent(getApplicationContext(), SelectClassActivity.class));
                     finish();

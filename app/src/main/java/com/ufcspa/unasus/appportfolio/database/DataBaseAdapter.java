@@ -130,7 +130,7 @@ public class DataBaseAdapter {
 
 
     public List<PortfolioClass> listarPortfolio(int idClass, char userType,int idUser){
-        String query = "SELECT * FROM tb_portofolio";
+        String query = "SELECT * FROM tb_portfolio";
 
         String queryNova="select \n" +
                 "\t a.id_portfolio_student as id_portfolio_student,\n" +
@@ -142,16 +142,16 @@ public class DataBaseAdapter {
                 "\tjoin tb_class c on c.id_class = b.id_class \n" +
                 "\tjoin tb_user d on d.id_user = a.id_student\n" +
                 "\tjoin tb_user e on e.id_user = a.id_tutor\n" +
-                "where 1=1 \n" +
-                "\tAND ";
+                "where 1=1 \n";
         if(userType=='S')
-            queryNova+="AND a.id_student="+idUser+";";
+            queryNova+="AND a.id_student="+idUser;
         else
-            queryNova+="AND a.id_tutor="+idUser+";";
+            queryNova+="AND a.id_tutor="+idUser;
 
+        queryNova+=" AND "+"b.id_class="+idClass+";";
 
         ArrayList<PortfolioClass> portfolios = new ArrayList<PortfolioClass>();
-        Cursor c = db.rawQuery(query,null);
+        Cursor c = db.rawQuery(queryNova,null);
         if(c.moveToFirst()){
             do{
                 portfolios.add(cursorToPortfolio(c));
@@ -161,7 +161,9 @@ public class DataBaseAdapter {
     }
 
     private PortfolioClass cursorToPortfolio(Cursor c){
-        return new PortfolioClass(Integer.parseInt(c.getString(0)),c.getString(1),c.getString(2));
+         PortfolioClass pc =new PortfolioClass(Integer.parseInt(c.getString(0)),c.getString(1),c.getString(2));
+        Log.d(tag,"portfolio populado:"+pc.toString());
+        return pc;
     }
 
 

@@ -2,7 +2,6 @@ package com.ufcspa.unasus.appportfolio;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.media.Image;
 import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -11,7 +10,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.ufcspa.unasus.appportfolio.Model.SingletonUser;
+import com.ufcspa.unasus.appportfolio.Model.Singleton;
 import com.ufcspa.unasus.appportfolio.database.DataBaseAdapter;
 
 public class MainActivity extends AppCompatActivity {
@@ -38,7 +37,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
             //dispatchTakePictureIntent();
                 DataBaseAdapter b= new DataBaseAdapter(getApplicationContext());
-                SingletonUser session=SingletonUser.getInstance();
+                Singleton session= Singleton.getInstance();
                 txt.setText(session.user.getName());
             }
         });

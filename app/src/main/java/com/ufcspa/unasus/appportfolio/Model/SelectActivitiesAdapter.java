@@ -17,14 +17,14 @@ import java.util.List;
 /**
  * Created by UNASUS on 10/11/2015.
  */
-public class SelectActivitiesGridViewAdapter extends BaseAdapter
+public class SelectActivitiesAdapter extends BaseAdapter
 {
     private SelectActivitiesActivity context;
     private List<Activity> activities;
 
     private static LayoutInflater inflater = null;
 
-    public SelectActivitiesGridViewAdapter(SelectActivitiesActivity context, List<Activity> activities)
+    public SelectActivitiesAdapter(SelectActivitiesActivity context, List<Activity> activities)
     {
         this.context = context;
         this.activities = activities;

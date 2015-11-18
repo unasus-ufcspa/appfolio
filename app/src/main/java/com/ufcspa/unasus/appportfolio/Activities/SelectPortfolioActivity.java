@@ -8,12 +8,13 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
 
 import com.ufcspa.unasus.appportfolio.Model.PortfolioClass;
 import com.ufcspa.unasus.appportfolio.Model.SelectPortfolioAdapter;
-import com.ufcspa.unasus.appportfolio.Model.SingletonUser;
+import com.ufcspa.unasus.appportfolio.Model.Singleton;
 import com.ufcspa.unasus.appportfolio.R;
 import com.ufcspa.unasus.appportfolio.database.DataBaseAdapter;
 
@@ -50,21 +51,24 @@ public class SelectPortfolioActivity extends AppCompatActivity {
 
     }
     public void init(){
-        SingletonUser single =SingletonUser.getInstance();
+        Singleton single = Singleton.getInstance();
         data=new DataBaseAdapter(this);
         try{
             portfolios=data.listarPortfolio(1,single.user.getUserType(),single.user.getIdUser());
         }catch (Exception e){
             Log.e("BANCO","falha em pegar lista:"+e.getMessage());
         }
-        SelectPortfolioAdapter adapter = new SelectPortfolioAdapter(getApplicationContext(),portfolios);
-        listview.setAdapter(adapter);
-        listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Toast.makeText(getApplicationContext(),"clicou em:"+portfolios.get(position).getStudentName(),Toast.LENGTH_SHORT).show();
-            }
-        });
+        if(portfolios.size() != 0 && portfolios != null) {
+            SelectPortfolioAdapter adapter = new SelectPortfolioAdapter(getApplicationContext(), portfolios);
+            listview.setAdapter(adapter);
+            listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    Toast.makeText(getApplicationContext(), "clicou em:" + portfolios.get(position).getStudentName(), Toast.LENGTH_SHORT).show();
+                }
+            });
+        }else
+            Toast.makeText(getApplicationContext(),"Não há portfolios!",Toast.LENGTH_SHORT).show();
     }
 
 }

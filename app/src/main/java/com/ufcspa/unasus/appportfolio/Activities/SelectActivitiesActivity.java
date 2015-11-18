@@ -7,14 +7,12 @@ import android.widget.AdapterView;
 import android.widget.GridView;
 
 import com.ufcspa.unasus.appportfolio.Model.Activity;
-import com.ufcspa.unasus.appportfolio.Model.SelectActivitiesGridViewAdapter;
+import com.ufcspa.unasus.appportfolio.Model.SelectActivitiesAdapter;
 import com.ufcspa.unasus.appportfolio.R;
 import com.ufcspa.unasus.appportfolio.database.DataBaseAdapter;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
-import java.util.List;
 
 /**
  * Created by UNASUS on 10/11/2015.
@@ -40,7 +38,7 @@ public class SelectActivitiesActivity extends AppCompatActivity implements Adapt
         activities = source.getActivities(17, 5);
         Collections.sort(activities);
 
-        SelectActivitiesGridViewAdapter gridAdapter = new SelectActivitiesGridViewAdapter(this, activities);
+        SelectActivitiesAdapter gridAdapter = new SelectActivitiesAdapter(this, activities);
 
         grid_activities = (GridView) findViewById(R.id.grid_activities);
         grid_activities.setAdapter(gridAdapter);

@@ -51,7 +51,7 @@ public class SelectPortfolioAdapter extends BaseAdapter {
     public View getView(int position, View convertView, ViewGroup parent) {
         Components  components= new Components();
         View rowView;
-        rowView = inflater.inflate(R.layout.celladapter_activity_classes, null);
+        rowView = inflater.inflate(R.layout.celladapter_acitivity_portfolios, null);
         PortfolioClass aux=portfolios.get(position);
         components.txt_class_code=(TextView)rowView.findViewById(R.id.adapater_txt_portfolio_classCode);
         components.txt_name_student=(TextView)rowView.findViewById(R.id.adapater_txt_portfolio_nameStudent);

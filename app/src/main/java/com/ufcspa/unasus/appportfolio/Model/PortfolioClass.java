@@ -14,6 +14,15 @@ public class PortfolioClass {
         this.studentName = studentName;
     }
 
+    @Override
+    public String toString() {
+        return "PortfolioClass{" +
+                "idPortfolio=" + idPortfolio +
+                ", classCode='" + classCode + '\'' +
+                ", studentName='" + studentName + '\'' +
+                '}';
+    }
+
     public int getIdPortfolio() {
         return idPortfolio;
     }
