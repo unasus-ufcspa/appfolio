@@ -42,7 +42,7 @@ public class SelectClassActivity extends AppCompatActivity implements AdapterVie
         singleton = Singleton.getInstance();
 
         source = new DataBaseAdapter(getApplicationContext());
-        classes = source.getClasses();
+        classes = source.getClasses(singleton.user.getIdUser(), singleton.user.getUserType());
 
         SelectClassAdapter gridAdapter = new SelectClassAdapter(this, classes);
 
@@ -59,6 +59,6 @@ public class SelectClassActivity extends AppCompatActivity implements AdapterVie
         Log.d("BANCO", "ID da Turma " + singleton.team.getIdClass());
         Toast.makeText(getApplicationContext(),"clicou em:"+classes.get(position).getCode(),Toast.LENGTH_SHORT).show();
         startActivity(new Intent(this,SelectPortfolioActivity.class));
-        finish();
+        //finish();
     }
 }

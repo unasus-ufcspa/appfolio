@@ -8,5 +8,5 @@
         android:layout_height="wrap_content"
         android:id="@+id/grid_activities"
         android:layout_gravity="center_horizontal"
-        android:numColumns="2"/>
+        android:numColumns="1"/>
 </LinearLayout>

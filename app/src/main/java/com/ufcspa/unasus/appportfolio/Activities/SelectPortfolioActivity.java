@@ -1,5 +1,6 @@
 package com.ufcspa.unasus.appportfolio.Activities;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -8,7 +9,6 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -24,6 +24,7 @@ public class SelectPortfolioActivity extends AppCompatActivity {
     private ListView listview;
     private List<PortfolioClass> portfolios;
     private DataBaseAdapter data;
+    private Singleton single;
 
 
 
@@ -51,10 +52,10 @@ public class SelectPortfolioActivity extends AppCompatActivity {
 
     }
     public void init(){
-        Singleton single = Singleton.getInstance();
+        single = Singleton.getInstance();
         data=new DataBaseAdapter(this);
         try{
-            portfolios=data.listarPortfolio(1,single.user.getUserType(),single.user.getIdUser());
+            portfolios=data.listarPortfolio(single.team.getIdClass(),single.user.getUserType(),single.user.getIdUser());
         }catch (Exception e){
             Log.e("BANCO","falha em pegar lista:"+e.getMessage());
         }
@@ -65,6 +66,10 @@ public class SelectPortfolioActivity extends AppCompatActivity {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                     Toast.makeText(getApplicationContext(), "clicou em:" + portfolios.get(position).getStudentName(), Toast.LENGTH_SHORT).show();
+                    single.portfolioClass = portfolios.get(position);
+                    Log.d("BANCO", "ID do Portfolio " + single.portfolioClass.getIdPortfolioStudent());
+                    startActivity(new Intent(getApplicationContext(),SelectActivitiesActivity.class));
+                    //finish();
                 }
             });
         }else

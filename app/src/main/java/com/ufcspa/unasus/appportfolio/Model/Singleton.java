@@ -14,4 +14,5 @@ public class Singleton {
 
     public User user= new User(0,null,null);
     public Team team= null;
+    public PortfolioClass portfolioClass = null;
 }

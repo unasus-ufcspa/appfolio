@@ -8,6 +8,7 @@ import android.widget.GridView;
 
 import com.ufcspa.unasus.appportfolio.Model.Activity;
 import com.ufcspa.unasus.appportfolio.Model.SelectActivitiesAdapter;
+import com.ufcspa.unasus.appportfolio.Model.Singleton;
 import com.ufcspa.unasus.appportfolio.R;
 import com.ufcspa.unasus.appportfolio.database.DataBaseAdapter;
 
@@ -22,6 +23,7 @@ public class SelectActivitiesActivity extends AppCompatActivity implements Adapt
     private GridView grid_activities;
     private ArrayList<Activity> activities;
     private DataBaseAdapter source;
+    private Singleton singleton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -34,8 +36,10 @@ public class SelectActivitiesActivity extends AppCompatActivity implements Adapt
 
     private void init()
     {
+        singleton = Singleton.getInstance();
+
         source = new DataBaseAdapter(getApplicationContext());
-        activities = source.getActivities(17, 5);
+        activities = source.getActivities(singleton.user.getIdUser(), singleton.portfolioClass.getIdPortfolioStudent());
         Collections.sort(activities);
 
         SelectActivitiesAdapter gridAdapter = new SelectActivitiesAdapter(this, activities);

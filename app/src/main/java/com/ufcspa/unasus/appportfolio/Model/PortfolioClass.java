@@ -4,31 +4,23 @@ package com.ufcspa.unasus.appportfolio.Model;
  * Created by Desenvolvimento on 17/11/2015.
  */
 public class PortfolioClass {
-    private int idPortfolio;
+    private int idPortfolioStudent;
     private String classCode;
     private String studentName;
 
-    public PortfolioClass(int idPortfolio, String classCode, String studentName) {
-        this.idPortfolio = idPortfolio;
+    public PortfolioClass(int idPortfolioStudent, String classCode, String studentName) {
+        this.idPortfolioStudent = idPortfolioStudent;
         this.classCode = classCode;
         this.studentName = studentName;
     }
 
-    @Override
-    public String toString() {
-        return "PortfolioClass{" +
-                "idPortfolio=" + idPortfolio +
-                ", classCode='" + classCode + '\'' +
-                ", studentName='" + studentName + '\'' +
-                '}';
+
+    public int getIdPortfolioStudent() {
+        return idPortfolioStudent;
     }
 
-    public int getIdPortfolio() {
-        return idPortfolio;
-    }
-
-    public void setIdPortfolio(int idPortfolio) {
-        this.idPortfolio = idPortfolio;
+    public void setIdPortfolioStudent(int idPortfolioStudent) {
+        this.idPortfolioStudent = idPortfolioStudent;
     }
 
     public String getClassCode() {

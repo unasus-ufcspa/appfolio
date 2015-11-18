@@ -145,7 +145,7 @@ public class DataBaseAdapter {
                 "where 1=1 \n";
         if(userType=='S')
             queryNova+="AND a.id_student="+idUser;
-        else
+        else if(userType=='T')
             queryNova+="AND a.id_tutor="+idUser;
 
         queryNova+=" AND "+"b.id_class="+idClass+";";
@@ -170,13 +170,31 @@ public class DataBaseAdapter {
 
 
 
-    public List<Team> getClasses()
+    public List<Team> getClasses(int idUser, char userType)
     {
-        String query = "SELECT * FROM tb_class";
+        String query = "select \n" +
+                "\tf.id_class,\n" +
+                "    f.ds_code,\n" +
+                "\tf.ds_description,\n" +
+                "\tf.st_status,\n" +
+                "\tf.dt_start,\n" +
+                "\tf.dt_finish\n" +
+                "from \n" +
+                "\ttb_portfolio_student a\n" +
+                "\tjoin tb_user b on b.id_user = a.id_tutor\n" +
+                "    join tb_user c on c.id_user = a.id_student\n" +
+                "    join tb_portfolio_class d on d.id_portfolio_class = a.id_portfolio_class\n" +
+                "    join tb_portfolio e on e.id_portfolio = d.id_portfolio\n" +
+                "    join tb_class f on f.id_class = d.id_class\n" +
+                "where 1=1 ";
+
+        if(userType=='S')
+            query+="AND a.id_student="+idUser;
+        else if(userType=='T')
+            query+="AND a.id_tutor="+idUser;
         List<Team> array_team = new ArrayList<>();
         Cursor cursor = db.rawQuery(query, null);
         if(cursor.moveToFirst()) {
-
             do {
                 array_team.add(cursorToTeam(cursor));
             } while (cursor.moveToNext());
