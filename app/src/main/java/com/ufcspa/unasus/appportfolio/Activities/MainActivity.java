@@ -12,7 +12,7 @@ import android.widget.TextView;
 
 import com.ufcspa.unasus.appportfolio.Model.Singleton;
 import com.ufcspa.unasus.appportfolio.R;
-import com.ufcspa.unasus.appportfolio.DataBase.DataBaseAdapter;
+import com.ufcspa.unasus.appportfolio.database.DataBaseAdapter;
 
 public class MainActivity extends AppCompatActivity {
     static final int REQUEST_IMAGE_CAPTURE = 1;
