@@ -9,11 +9,11 @@ import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.Toast;
 
-import com.ufcspa.unasus.appportfolio.Model.SelectClassAdapter;
+import com.ufcspa.unasus.appportfolio.Adapter.SelectClassAdapter;
 import com.ufcspa.unasus.appportfolio.Model.Singleton;
 import com.ufcspa.unasus.appportfolio.Model.Team;
 import com.ufcspa.unasus.appportfolio.R;
-import com.ufcspa.unasus.appportfolio.database.DataBaseAdapter;
+import com.ufcspa.unasus.appportfolio.DataBase.DataBaseAdapter;
 
 import java.util.List;
 

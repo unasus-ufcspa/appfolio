@@ -8,8 +8,6 @@ public class Portfolio {
     private String dsTitle;
     private String dsDescription;
 
-
-
     public Portfolio(int idPortfolio, String dsTitle, String dsDescription) {
         this.idPortfolio = idPortfolio;
         this.dsTitle = dsTitle;

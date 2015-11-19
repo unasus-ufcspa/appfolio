@@ -7,13 +7,14 @@ public class PortfolioClass {
     private int idPortfolioStudent;
     private String classCode;
     private String studentName;
+    private String portfolioTitle;
 
-    public PortfolioClass(int idPortfolioStudent, String classCode, String studentName) {
+    public PortfolioClass(int idPortfolioStudent, String classCode, String studentName, String portfolioTitle) {
         this.idPortfolioStudent = idPortfolioStudent;
         this.classCode = classCode;
         this.studentName = studentName;
+        this.portfolioTitle = portfolioTitle;
     }
-
 
     public int getIdPortfolioStudent() {
         return idPortfolioStudent;
@@ -29,6 +30,10 @@ public class PortfolioClass {
 
     public void setClassCode(String classCode) {
         this.classCode = classCode;
+    }
+
+    public String getPortfolioTitle() {
+        return portfolioTitle;
     }
 
     public String getStudentName() {

@@ -1,8 +1,10 @@
-package com.ufcspa.unasus.appportfolio;
+package com.ufcspa.unasus.appportfolio.Activities;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.support.annotation.NonNull;
@@ -32,10 +34,10 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.ufcspa.unasus.appportfolio.Activities.SelectClassActivity;
 import com.ufcspa.unasus.appportfolio.Model.Singleton;
 import com.ufcspa.unasus.appportfolio.Model.User;
-import com.ufcspa.unasus.appportfolio.database.DataBaseAdapter;
+import com.ufcspa.unasus.appportfolio.R;
+import com.ufcspa.unasus.appportfolio.DataBase.DataBaseAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -72,6 +74,9 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     private DataBaseAdapter bd;
     private User user;
 
+    // Singleton
+    private Singleton session;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -93,21 +98,74 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             }
         });
 
+        /*********************************************************/
+        /*********************************************************/
+        /**************************TESTE**************************/
+        mEmailView.setText("mario@port.com");
+        mPasswordView.setText("222");
+        /*********************************************************/
+        /*********************************************************/
+        /*********************************************************/
+
         Button mEmailSignInButton = (Button) findViewById(R.id.email_sign_in_button);
         mEmailSignInButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
                 //attemptLogin();
                 if (verificarLogin()!=0) {
-                    Singleton session= Singleton.getInstance();
-                    session.user=user;
-                    startActivity(new Intent(getApplicationContext(), SelectClassActivity.class));
-                    finish();
+                    session = Singleton.getInstance();
+                    session.user = user;
+
+                    char userType = checkUserType(user.getIdUser());
+                    if(userType == 'U')
+                    {
+                        showChooseTutorOrStudentPopup();
+                    }
+                    else
+                    {
+                        session.user.setUserType(userType);
+                        loginSuccess();
+                    }
                 } else {
                     Toast.makeText(getApplicationContext(), "Erro ao logar, favor verifique email e senha", Toast.LENGTH_LONG).show();
                 }
             }
         });
+    }
+
+    private void showChooseTutorOrStudentPopup()
+    {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage("Do you want to enter as Student or Tutor?")
+                .setCancelable(false)
+                .setPositiveButton("Student", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        session.user.setUserType('S');
+                        dialog.cancel();
+                        loginSuccess();
+                    }
+                })
+                .setNegativeButton("Tutor", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        session.user.setUserType('T');
+                        dialog.cancel();
+                        loginSuccess();
+                    }
+                });
+        AlertDialog alert = builder.create();
+        alert.show();
+    }
+
+    private void loginSuccess()
+    {
+        startActivity(new Intent(getApplicationContext(), SelectClassActivity.class));
+        finish();
+    }
+
+    private char checkUserType(int idUser)
+    {
+        DataBaseAdapter bd = new DataBaseAdapter(getApplicationContext());
+        return bd.verifyUserType(idUser);
     }
 
 

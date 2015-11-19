@@ -12,7 +12,8 @@ public class Singleton {
 
     private Singleton() {}
 
-    public User user= new User(0,null,null);
-    public Team team= null;
+    public User user = new User(0,null,null);
+    public Team team = null;
     public PortfolioClass portfolioClass = null;
+    public Activity activity = null;
 }

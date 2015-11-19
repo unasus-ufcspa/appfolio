@@ -17,7 +17,7 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme" >
-        <activity android:name=".MainActivity" >
+        <activity android:name=".Activities.MainActivity" >
         </activity>
         <activity
             android:name=".Activities.SelectActivitiesActivity"
@@ -28,7 +28,7 @@
             android:label="@string/title_activity_select_class" >
         </activity>
         <activity
-            android:name=".LoginActivity"
+            android:name=".Activities.LoginActivity"
             android:label="@string/title_activity_login" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

@@ -13,10 +13,10 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import com.ufcspa.unasus.appportfolio.Model.PortfolioClass;
-import com.ufcspa.unasus.appportfolio.Model.SelectPortfolioAdapter;
+import com.ufcspa.unasus.appportfolio.Adapter.SelectPortfolioAdapter;
 import com.ufcspa.unasus.appportfolio.Model.Singleton;
 import com.ufcspa.unasus.appportfolio.R;
-import com.ufcspa.unasus.appportfolio.database.DataBaseAdapter;
+import com.ufcspa.unasus.appportfolio.DataBase.DataBaseAdapter;
 
 import java.util.List;
 
@@ -32,18 +32,21 @@ public class SelectPortfolioActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_select_portfolio);
-        listview=(ListView)findViewById(R.id.selectPortfolioListView);
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+//
+//        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+//        fab.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+//                        .setAction("Action", null).show();
+//            }
+//        });
+
+        listview=(ListView)findViewById(R.id.selectPortfolioListView);
         init();
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
     }
 
     @Override

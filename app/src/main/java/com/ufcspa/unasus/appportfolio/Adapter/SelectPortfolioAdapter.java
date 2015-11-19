@@ -1,4 +1,4 @@
-package com.ufcspa.unasus.appportfolio.Model;
+package com.ufcspa.unasus.appportfolio.Adapter;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
+import com.ufcspa.unasus.appportfolio.Model.PortfolioClass;
 import com.ufcspa.unasus.appportfolio.R;
 
 import java.util.List;
@@ -56,7 +57,7 @@ public class SelectPortfolioAdapter extends BaseAdapter {
         components.txt_class_code=(TextView)rowView.findViewById(R.id.adapater_txt_portfolio_classCode);
         components.txt_name_student=(TextView)rowView.findViewById(R.id.adapater_txt_portfolio_nameStudent);
         components.txt_name_student.setText(aux.getStudentName());
-        components.txt_class_code.setText(aux.getClassCode());
+        components.txt_class_code.setText(aux.getClassCode() + " - " + aux.getPortfolioTitle());
         return rowView;
     }
 }

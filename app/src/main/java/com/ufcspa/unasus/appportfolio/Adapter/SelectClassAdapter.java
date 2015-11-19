@@ -1,4 +1,4 @@
-package com.ufcspa.unasus.appportfolio.Model;
+package com.ufcspa.unasus.appportfolio.Adapter;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -8,6 +8,7 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 import com.ufcspa.unasus.appportfolio.Activities.SelectClassActivity;
+import com.ufcspa.unasus.appportfolio.Model.Team;
 import com.ufcspa.unasus.appportfolio.R;
 
 import java.text.SimpleDateFormat;

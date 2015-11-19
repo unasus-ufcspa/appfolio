@@ -7,10 +7,10 @@ import android.widget.AdapterView;
 import android.widget.GridView;
 
 import com.ufcspa.unasus.appportfolio.Model.Activity;
-import com.ufcspa.unasus.appportfolio.Model.SelectActivitiesAdapter;
+import com.ufcspa.unasus.appportfolio.Adapter.SelectActivitiesAdapter;
 import com.ufcspa.unasus.appportfolio.Model.Singleton;
 import com.ufcspa.unasus.appportfolio.R;
-import com.ufcspa.unasus.appportfolio.database.DataBaseAdapter;
+import com.ufcspa.unasus.appportfolio.DataBase.DataBaseAdapter;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -39,7 +39,7 @@ public class SelectActivitiesActivity extends AppCompatActivity implements Adapt
         singleton = Singleton.getInstance();
 
         source = new DataBaseAdapter(getApplicationContext());
-        activities = source.getActivities(singleton.user.getIdUser(), singleton.portfolioClass.getIdPortfolioStudent());
+        activities = source.getActivities(singleton.user.getIdUser(), singleton.portfolioClass.getIdPortfolioStudent(), singleton.user.getUserType());
         Collections.sort(activities);
 
         SelectActivitiesAdapter gridAdapter = new SelectActivitiesAdapter(this, activities);
@@ -54,6 +54,7 @@ public class SelectActivitiesActivity extends AppCompatActivity implements Adapt
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id)
     {
+        singleton.activity = this.activities.get(position);
         System.out.println("Teste " + position);
     }
 }

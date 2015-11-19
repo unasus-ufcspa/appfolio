@@ -1,4 +1,4 @@
-package com.ufcspa.unasus.appportfolio;
+package com.ufcspa.unasus.appportfolio.Activities;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -11,7 +11,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.ufcspa.unasus.appportfolio.Model.Singleton;
-import com.ufcspa.unasus.appportfolio.database.DataBaseAdapter;
+import com.ufcspa.unasus.appportfolio.R;
+import com.ufcspa.unasus.appportfolio.DataBase.DataBaseAdapter;
 
 public class MainActivity extends AppCompatActivity {
     static final int REQUEST_IMAGE_CAPTURE = 1;
