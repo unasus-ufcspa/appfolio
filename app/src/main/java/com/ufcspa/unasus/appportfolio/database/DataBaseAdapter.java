@@ -183,10 +183,10 @@ public class DataBaseAdapter {
 
         return userType;
     }
-    //TODO Parece que as turmas vem repetidas quando o usuário se loga como Tutor. Verificar o SELECT.
+
     public List<Team> getClasses(int idUser, char userType)
     {
-        String query = "select \n" +
+        String query = "select distinct\n" +
                 "\tf.id_class,\n" +
                 "\tf.id_proposer,\n" +
                 "    f.ds_code,\n" +
