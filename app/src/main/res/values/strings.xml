@@ -1,9 +1,9 @@
 <resources>
-    <string name="app_name">APP Portfolio</string>
-    <string name="title_edit_activity">Edit</string>
-    <string name="title_activity_login">Sign in</string>
-    <string name="title_activity_select_class">Classes</string>
-    <string name="title_activity_select_activity">Activities</string>
+    <string name="app_name">PROTOTIFOLIOS </string>
+    <string name="title_edit_activity">Edit your activity</string>
+    <string name="title_activity_login">PROTOTIFOLIOS</string>
+    <string name="title_activity_select_class">Select your class</string>
+    <string name="title_activity_select_activity">Select your Activities</string>
     <!-- Strings related to login -->
     <string name="prompt_email">Email</string>
     <string name="prompt_password">Password (optional)</string>
@@ -16,5 +16,5 @@
     <string name="permission_rationale">"Contacts permissions are needed for providing email
         completions."
     </string>
-    <string name="title_activity_select_portfolio">Portfolios</string>
+    <string name="title_activity_select_portfolio">Select your Portfolios</string>
 </resources>
