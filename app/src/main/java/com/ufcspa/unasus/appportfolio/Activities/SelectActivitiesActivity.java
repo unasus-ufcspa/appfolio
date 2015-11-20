@@ -1,5 +1,6 @@
 package com.ufcspa.unasus.appportfolio.Activities;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -56,5 +57,6 @@ public class SelectActivitiesActivity extends AppCompatActivity implements Adapt
     {
         singleton.activity = this.activities.get(position);
         System.out.println("Teste " + position);
+        startActivity(new Intent(this, EditActivity.class));
     }
 }

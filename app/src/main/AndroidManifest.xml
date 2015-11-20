@@ -24,6 +24,10 @@
             android:label="@string/title_activity_select_activity" >
         </activity>
         <activity
+            android:name=".Activities.EditActivity"
+            android:label="@string/title_edit_activity" >
+        </activity>
+        <activity
             android:name=".Activities.SelectClassActivity"
             android:label="@string/title_activity_select_class" >
         </activity>
