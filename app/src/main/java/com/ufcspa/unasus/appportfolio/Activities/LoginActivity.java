@@ -158,6 +158,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
     private void loginSuccess()
     {
+        Log.d("singletonn","id:"+session.user.getIdUser()+" uT:" +session.user.getUserType());
         startActivity(new Intent(getApplicationContext(), SelectClassActivity.class));
         finish();
     }

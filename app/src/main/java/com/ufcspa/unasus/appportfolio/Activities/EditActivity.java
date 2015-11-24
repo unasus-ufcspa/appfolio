@@ -9,7 +9,9 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.ufcspa.unasus.appportfolio.R;
 
@@ -24,6 +26,7 @@ public class EditActivity extends AppCompatActivity {
     static final int REQUEST_IMAGE_CAPTURE = 1;
 
     private static final int SELECT_PICTURE = 1;
+    private Button btSave;
 
     private String selectedImagePath;
     //ADDED
@@ -33,7 +36,7 @@ public class EditActivity extends AppCompatActivity {
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_activity);
-
+        btSave=(Button)findViewById(R.id.edit_acttivity_bt_msg);
         mEditor = (RichEditor) findViewById(R.id.editor);
         mEditor.setEditorHeight(200);
         mEditor.setEditorFontSize(22);
@@ -44,7 +47,6 @@ public class EditActivity extends AppCompatActivity {
         mEditor.setPadding(10, 10, 10, 10);
 //    mEditor.setBackground("https://raw.githubusercontent.com/wasabeef/art/master/chip.jpg");
         mEditor.setPlaceholder("Insert text here...");
-
         mPreview = (TextView) findViewById(R.id.preview);
         mEditor.setOnTextChangeListener(new RichEditor.OnTextChangeListener() {
             @Override public void onTextChange(String text) {
@@ -250,7 +252,7 @@ public class EditActivity extends AppCompatActivity {
                     System.out.println("filemanagerstring is the right one for you!");
             }
         }
-        mEditor.insertImage(selectedImagePath,"");
+        mEditor.insertImage(selectedImagePath,"Testando imagem!");
     }
 
     //UPDATED!
@@ -269,5 +271,14 @@ public class EditActivity extends AppCompatActivity {
         else return null;
     }
 
-
+    @Override
+    protected void onResume() {
+        super.onResume();
+        btSave.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(getApplicationContext(), mEditor.getHtml(), Toast.LENGTH_LONG).show();
+            }
+        });
+    }
 }

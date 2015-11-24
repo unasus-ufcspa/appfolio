@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.ufcspa.unasus.appportfolio.Model.PortfolioClass;
@@ -22,6 +23,7 @@ import java.util.List;
 
 public class SelectPortfolioActivity extends AppCompatActivity {
     private ListView listview;
+    private TextView txtCodeTeam;
     private List<PortfolioClass> portfolios;
     private DataBaseAdapter data;
     private Singleton single;
@@ -44,8 +46,9 @@ public class SelectPortfolioActivity extends AppCompatActivity {
 //                        .setAction("Action", null).show();
 //            }
 //        });
-
+        txtCodeTeam=(TextView)findViewById(R.id.select_portfolio_txt_code);
         listview=(ListView)findViewById(R.id.selectPortfolioListView);
+
         init();
     }
 
@@ -63,6 +66,7 @@ public class SelectPortfolioActivity extends AppCompatActivity {
             Log.e("BANCO","falha em pegar lista:"+e.getMessage());
         }
         if(portfolios.size() != 0 && portfolios != null) {
+            txtCodeTeam.setText(portfolios.get(0).getPortfolioTitle());
             SelectPortfolioAdapter adapter = new SelectPortfolioAdapter(getApplicationContext(), portfolios);
             listview.setAdapter(adapter);
             listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {

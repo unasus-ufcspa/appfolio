@@ -15,6 +15,8 @@ import com.ufcspa.unasus.appportfolio.Model.Team;
 import com.ufcspa.unasus.appportfolio.R;
 import com.ufcspa.unasus.appportfolio.database.DataBaseAdapter;
 
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
 
 /**
@@ -42,13 +44,31 @@ public class SelectClassActivity extends AppCompatActivity implements AdapterVie
         singleton = Singleton.getInstance();
 
         source = new DataBaseAdapter(getApplicationContext());
-        classes = source.getClasses(singleton.user.getIdUser(), singleton.user.getUserType());
+        try {
+            classes = source.getClasses(singleton.user.getIdUser(), singleton.user.getUserType());
+        }catch (Exception e){
+
+            Log.wtf("ERRO",e.getMessage());
+        }
+
+        ArrayList<String>codTurmas = new ArrayList<String>();
+        for(int i=0;i<classes.size();i++){
+            if(!codTurmas.contains(classes.get(i).getCode()))
+                codTurmas.add(classes.get(i).getCode());
+        }
+        Log.d("Class:","cod Turmas:"+codTurmas.toString());
+        LinkedHashMap<String,Team> itens = new LinkedHashMap<>(classes.size());
+        for(int i=0;i<classes.size();i++){
+            itens.put(classes.get(i).getCode(),classes.get(i));
+        }
+        Log.d("Class","itens hashmap"+itens.toString());
+
+
 
         SelectClassAdapter gridAdapter = new SelectClassAdapter(this, classes);
 
         grid_classes = (GridView) findViewById(R.id.grid_classes);
         grid_classes.setAdapter(gridAdapter);
-
         grid_classes.setOnItemClickListener(this);
     }
 
