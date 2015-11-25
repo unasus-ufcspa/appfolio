@@ -41,6 +41,8 @@ public class SelectActivitiesActivity extends AppCompatActivity implements Adapt
 
         source = new DataBaseAdapter(getApplicationContext());
         activities = source.getActivities(singleton.user.getIdUser(), singleton.portfolioClass.getIdPortfolioStudent(), singleton.user.getUserType());
+        source.close();
+
         Collections.sort(activities);
         SelectActivitiesAdapter gridAdapter = new SelectActivitiesAdapter(this, activities);
         grid_activities = (GridView) findViewById(R.id.grid_activities);
@@ -53,8 +55,7 @@ public class SelectActivitiesActivity extends AppCompatActivity implements Adapt
     public void onItemClick(AdapterView<?> parent, View view, int position, long id)
     {
         singleton.activity = this.activities.get(position);
-        System.out.println("Teste " + position);
         startActivity(new Intent(this, EditActivity.class));
-        finish();
+        //finish();
     }
 }

@@ -46,6 +46,7 @@ public class SelectClassActivity extends AppCompatActivity implements AdapterVie
         source = new DataBaseAdapter(getApplicationContext());
         try {
             classes = source.getClasses(singleton.user.getIdUser(), singleton.user.getUserType());
+            source.close();
         }catch (Exception e){
 
             Log.wtf("ERRO",e.getMessage());

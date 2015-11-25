@@ -1,35 +1,38 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="fill_parent"
-    android:layout_height="fill_parent">
-    <TextView
-        android:layout_width="fill_parent"
-        android:layout_height="50dp"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="Large Text"
-        android:id="@+id/adapater_txt_portfolio_classCode"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:background="#8997ff"
-        android:capitalize="sentences"
-        android:textAlignment="center"
-        android:focusable="false"
-        android:focusableInTouchMode="false"/>
+    android:layout_height="fill_parent"
+    android:weightSum="1">
+    <!--<TextView-->
+        <!--android:layout_width="fill_parent"-->
+        <!--android:layout_height="50dp"-->
+        <!--android:textAppearance="?android:attr/textAppearanceLarge"-->
+        <!--android:text="Large Text"-->
+        <!--android:id="@+id/adapater_txt_portfolio_classCode"-->
+        <!--android:layout_alignParentTop="true"-->
+        <!--android:layout_centerHorizontal="true"-->
+        <!--android:background="#8997ff"-->
+        <!--android:capitalize="sentences"-->
+        <!--android:textAlignment="center"-->
+        <!--android:focusable="false"-->
+        <!--android:focusableInTouchMode="false"/>-->
 
     <TextView
         android:layout_width="fill_parent"
-        android:layout_height="50dp"
+        android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:text="Medium Text"
-        android:id="@+id/adapater_txt_portfolio_nameStudent"
+        android:id= "@+id/adapater_txt_portfolio_nameStudent"
         android:layout_below="@+id/txt_activity_title"
         android:layout_alignLeft="@+id/txt_activity_title"
         android:layout_alignStart="@+id/txt_activity_title"
         android:layout_alignRight="@+id/txt_activity_title"
         android:layout_alignEnd="@+id/txt_activity_title"
-        android:background="#dbdeef"
+        android:background="#9fa5af"
         android:focusable="false"
         android:focusableInTouchMode="false"
         android:textColor="#000000"
-        android:textSize="20dp" />
+        android:textSize="30dp"
+        android:layout_weight="0.05"
+        android:gravity="center" />
 </LinearLayout>

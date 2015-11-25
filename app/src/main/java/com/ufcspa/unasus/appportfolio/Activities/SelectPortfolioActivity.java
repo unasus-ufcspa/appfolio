@@ -62,6 +62,7 @@ public class SelectPortfolioActivity extends AppCompatActivity {
         data=new DataBaseAdapter(this);
         try{
             portfolios=data.listarPortfolio(single.team.getIdClass(),single.user.getUserType(),single.user.getIdUser());
+            data.close();
         }catch (Exception e){
             Log.e("BANCO","falha em pegar lista:"+e.getMessage());
         }
@@ -72,6 +73,7 @@ public class SelectPortfolioActivity extends AppCompatActivity {
             listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    Log.d("ID: ", view.toString());
                     Toast.makeText(getApplicationContext(), "clicou em:" + portfolios.get(position).getStudentName(), Toast.LENGTH_SHORT).show();
                     single.portfolioClass = portfolios.get(position);
                     Log.d("BANCO", "ID do Portfolio " + single.portfolioClass.getIdPortfolioStudent());

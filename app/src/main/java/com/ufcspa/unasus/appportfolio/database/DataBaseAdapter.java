@@ -279,5 +279,10 @@ public class DataBaseAdapter {
         return activity;
     }
 
+    public void close()
+    {
+        db.close();
+    }
+
 
 }
