@@ -54,7 +54,7 @@ public class SelectActivitiesActivity extends AppCompatActivity implements Adapt
     {
         singleton.activity = this.activities.get(position);
         System.out.println("Teste " + position);
-        startActivity(new Intent(this, EditActivity.class));
+        startActivity(new Intent(this, EditActivityFrag.class));
         finish();
     }
 }
