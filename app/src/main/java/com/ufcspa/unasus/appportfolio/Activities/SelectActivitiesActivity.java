@@ -55,7 +55,8 @@ public class SelectActivitiesActivity extends AppCompatActivity implements Adapt
     public void onItemClick(AdapterView<?> parent, View view, int position, long id)
     {
         singleton.activity = this.activities.get(position);
-        startActivity(new Intent(this, EditActivity.class));
-        //finish();
+        System.out.println("Teste " + position);
+        startActivity(new Intent(this, EditActivityFrag.class));
+        finish();
     }
 }

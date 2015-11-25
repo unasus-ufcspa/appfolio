@@ -20,6 +20,8 @@
         android:theme="@style/AppTheme" >
         <activity android:name=".Activities.MainActivity" >
         </activity>
+        <activity android:name=".Activities.EditActivityFrag" >
+        </activity>
         <activity
             android:name=".Activities.SelectActivitiesActivity"
             android:label="@string/title_activity_select_activity" >
