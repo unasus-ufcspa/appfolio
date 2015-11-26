@@ -29,7 +29,6 @@ public class SelectPortfolioActivity extends AppCompatActivity {
     private Singleton single;
 
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -46,8 +45,8 @@ public class SelectPortfolioActivity extends AppCompatActivity {
 //                        .setAction("Action", null).show();
 //            }
 //        });
-        txtCodeTeam=(TextView)findViewById(R.id.select_portfolio_txt_code);
-        listview=(ListView)findViewById(R.id.selectPortfolioListView);
+        txtCodeTeam = (TextView) findViewById(R.id.select_portfolio_txt_code);
+        listview = (ListView) findViewById(R.id.selectPortfolioListView);
 
         init();
     }
@@ -57,16 +56,17 @@ public class SelectPortfolioActivity extends AppCompatActivity {
         super.onResume();
 
     }
-    public void init(){
+
+    public void init() {
         single = Singleton.getInstance();
-        data=new DataBaseAdapter(this);
-        try{
-            portfolios=data.listarPortfolio(single.team.getIdClass(),single.user.getUserType(),single.user.getIdUser());
-            data.close();
-        }catch (Exception e){
-            Log.e("BANCO","falha em pegar lista:"+e.getMessage());
+        data = new DataBaseAdapter(this);
+        try {
+            portfolios = data.listarPortfolio(single.team.getIdClass(), single.user.getUserType(), single.user.getIdUser());
+            //data.close();
+        } catch (Exception e) {
+            Log.e("BANCO", "falha em pegar lista:" + e.getMessage());
         }
-        if(portfolios.size() != 0 && portfolios != null) {
+        if (portfolios.size() != 0) {
             txtCodeTeam.setText(portfolios.get(0).getPortfolioTitle());
             SelectPortfolioAdapter adapter = new SelectPortfolioAdapter(getApplicationContext(), portfolios);
             listview.setAdapter(adapter);
@@ -77,12 +77,12 @@ public class SelectPortfolioActivity extends AppCompatActivity {
                     Toast.makeText(getApplicationContext(), "clicou em:" + portfolios.get(position).getStudentName(), Toast.LENGTH_SHORT).show();
                     single.portfolioClass = portfolios.get(position);
                     Log.d("BANCO", "ID do Portfolio " + single.portfolioClass.getIdPortfolioStudent());
-                    startActivity(new Intent(getApplicationContext(),SelectActivitiesActivity.class));
+                    startActivity(new Intent(getApplicationContext(), SelectActivitiesActivity.class));
                     //finish();
                 }
             });
-        }else
-            Toast.makeText(getApplicationContext(),"Não há portfolios!",Toast.LENGTH_SHORT).show();
+        } else
+            Toast.makeText(getApplicationContext(), "Não há portfolios!", Toast.LENGTH_SHORT).show();
     }
 
 }
