@@ -3,6 +3,7 @@ package com.ufcspa.unasus.appportfolio.Activities;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.GridView;
@@ -40,7 +41,13 @@ public class SelectActivitiesActivity extends AppCompatActivity implements Adapt
         singleton = Singleton.getInstance();
 
         source = new DataBaseAdapter(getApplicationContext());
-        activities = source.getActivities(singleton.user.getIdUser(), singleton.portfolioClass.getIdPortfolioStudent(), singleton.user.getUserType());
+        try {
+            activities = source.getActivities(singleton.user.getIdUser(), singleton.portfolioClass.getIdPortfolioStudent(), singleton.user.getUserType());
+            //source.close();
+        } catch (Exception e) {
+            Log.e("BANCO", "falha em pegar atividades (SelectActivitiesAactivity):" + e.getMessage());
+        }
+
         Collections.sort(activities);
         SelectActivitiesAdapter gridAdapter = new SelectActivitiesAdapter(this, activities);
         grid_activities = (GridView) findViewById(R.id.grid_activities);

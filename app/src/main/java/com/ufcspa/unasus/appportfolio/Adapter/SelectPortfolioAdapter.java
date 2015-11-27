@@ -54,10 +54,10 @@ public class SelectPortfolioAdapter extends BaseAdapter {
         View rowView;
         rowView = inflater.inflate(R.layout.celladapter_acitivity_portfolios, null);
         PortfolioClass aux=portfolios.get(position);
-        components.txt_class_code=(TextView)rowView.findViewById(R.id.adapater_txt_portfolio_classCode);
+       // components.txt_class_code=(TextView)rowView.findViewById(R.id.adapater_txt_portfolio_classCode);
         components.txt_name_student=(TextView)rowView.findViewById(R.id.adapater_txt_portfolio_nameStudent);
         components.txt_name_student.setText(aux.getStudentName());
-        components.txt_class_code.setText(aux.getPortfolioTitle());
+       // components.txt_class_code.setText("");
         return rowView;
     }
 }
