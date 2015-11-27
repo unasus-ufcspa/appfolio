@@ -242,19 +242,15 @@ public class FragmentEditText extends Fragment {
 
     //UPDATED!
     public String getPath(Uri uri) {
-        String[] projection = { MediaStore.Images.Media.DATA };
+        String[] projection = {MediaStore.Images.Media.DATA};
         Cursor cursor = getActivity().managedQuery(uri, projection, null, null, null);
-        if(cursor!=null)
-        {
+        if (cursor != null) {
             //HERE YOU WILL GET A NULLPOINTER IF CURSOR IS NULL
             //THIS CAN BE, IF YOU USED OI FILE MANAGER FOR PICKING THE MEDIA
             int column_index = cursor
                     .getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
             cursor.moveToFirst();
             return cursor.getString(column_index);
-        }
-        else return null;
+        } else return null;
     }
-
-
 }

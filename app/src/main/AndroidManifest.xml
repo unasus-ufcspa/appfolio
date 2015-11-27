@@ -20,7 +20,8 @@
         android:theme="@style/AppTheme" >
         <activity android:name=".Activities.MainActivity" >
         </activity>
-        <activity android:name=".Activities.EditActivityFrag" >
+        <activity android:name=".Activities.EditActivityFrag"
+            android:label="Edit your activity" >
         </activity>
         <activity
             android:name=".Activities.SelectActivitiesActivity"
@@ -42,7 +43,7 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-
+            >
         </activity>
         <activity
             android:name=".Activities.SelectPortfolioActivity"

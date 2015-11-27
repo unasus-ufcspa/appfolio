@@ -17,6 +17,7 @@
             android:layout_height="match_parent"
             android:name="com.ufcspa.unasus.appportfolio.Activities.FragmentEditText"
             android:id="@+id/fragment"
+            class="com.ufcspa.unasus.appportfolio.Activities.FragmentEditText"
             tools:layout="@layout/fragment_edit_text" />
     </LinearLayout>
 
