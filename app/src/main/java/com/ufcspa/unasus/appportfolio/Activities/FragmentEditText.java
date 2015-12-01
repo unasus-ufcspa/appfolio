@@ -31,6 +31,10 @@ public class FragmentEditText extends Fragment {
     //ADDED
     private String filemanagerstring;
 
+
+    public FragmentEditText(){}
+
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_edit_text,null);
@@ -45,130 +49,144 @@ public class FragmentEditText extends Fragment {
         mEditor.setPadding(10, 10, 10, 10);
 //    mEditor.setBackground("https://raw.githubusercontent.com/wasabeef/art/master/chip.jpg");
         mEditor.setPlaceholder("Insert text here...");
+//        mEditor.setOnTextChangeListener(new RichEditor.OnTextChangeListener() {
+//            @Override public void onTextChange(String text) {
+//                mPreview.setText(text);
+//            }
+//        });
 
-        view.findViewById(R.id.action_undo).setOnClickListener(new View.OnClickListener() {
+
+        return view;
+
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        getView().findViewById(R.id.action_undo).setOnClickListener(new View.OnClickListener() {
             @Override public void onClick(View v) {
                 mEditor.undo();
             }
         });
 
-        view.findViewById(R.id.action_redo).setOnClickListener(new View.OnClickListener() {
+        getView().findViewById(R.id.action_redo).setOnClickListener(new View.OnClickListener() {
             @Override public void onClick(View v) {
                 mEditor.redo();
             }
         });
 
-        view.findViewById(R.id.action_bold).setOnClickListener(new View.OnClickListener() {
+        getView().findViewById(R.id.action_bold).setOnClickListener(new View.OnClickListener() {
             @Override public void onClick(View v) {
                 mEditor.setBold();
             }
         });
 
-        view.findViewById(R.id.action_italic).setOnClickListener(new View.OnClickListener() {
+        getView().findViewById(R.id.action_italic).setOnClickListener(new View.OnClickListener() {
             @Override public void onClick(View v) {
                 mEditor.setItalic();
             }
         });
 
-        view.findViewById(R.id.action_subscript).setOnClickListener(new View.OnClickListener() {
+        getView().findViewById(R.id.action_subscript).setOnClickListener(new View.OnClickListener() {
             @Override public void onClick(View v) {
                 mEditor.setSubscript();
             }
         });
 
-        view.findViewById(R.id.action_superscript).setOnClickListener(new View.OnClickListener() {
+        getView().findViewById(R.id.action_superscript).setOnClickListener(new View.OnClickListener() {
             @Override public void onClick(View v) {
                 mEditor.setSuperscript();
             }
         });
 
-        view.findViewById(R.id.action_strikethrough).setOnClickListener(new View.OnClickListener() {
+        getView().findViewById(R.id.action_strikethrough).setOnClickListener(new View.OnClickListener() {
             @Override public void onClick(View v) {
                 mEditor.setStrikeThrough();
             }
         });
 
-        view.findViewById(R.id.action_underline).setOnClickListener(new View.OnClickListener() {
+        getView().findViewById(R.id.action_underline).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 mEditor.setUnderline();
             }
         });
 
-        view.findViewById(R.id.action_heading1).setOnClickListener(new View.OnClickListener() {
+        getView().findViewById(R.id.action_heading1).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 mEditor.setHeading(1);
             }
         });
 
-        view.findViewById(R.id.action_heading2).setOnClickListener(new View.OnClickListener() {
+        getView().findViewById(R.id.action_heading2).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 mEditor.setHeading(2);
             }
         });
 
-        view.findViewById(R.id.action_heading3).setOnClickListener(new View.OnClickListener() {
+        getView().findViewById(R.id.action_heading3).setOnClickListener(new View.OnClickListener() {
             @Override public void onClick(View v) {
                 mEditor.setHeading(3);
             }
         });
 
-        view.findViewById(R.id.action_heading4).setOnClickListener(new View.OnClickListener() {
+        getView().findViewById(R.id.action_heading4).setOnClickListener(new View.OnClickListener() {
             @Override public void onClick(View v) {
                 mEditor.setHeading(4);
             }
         });
 
-        view.findViewById(R.id.action_heading5).setOnClickListener(new View.OnClickListener() {
+        getView().findViewById(R.id.action_heading5).setOnClickListener(new View.OnClickListener() {
             @Override public void onClick(View v) {
                 mEditor.setHeading(5);
             }
         });
 
-        view.findViewById(R.id.action_heading6).setOnClickListener(new View.OnClickListener() {
+        getView().findViewById(R.id.action_heading6).setOnClickListener(new View.OnClickListener() {
             @Override public void onClick(View v) {
                 mEditor.setHeading(6);
             }
         });
-        view.findViewById(R.id.action_indent).setOnClickListener(new View.OnClickListener() {
+        getView().findViewById(R.id.action_indent).setOnClickListener(new View.OnClickListener() {
             @Override public void onClick(View v) {
                 mEditor.setIndent();
             }
         });
 
-        view.findViewById(R.id.action_outdent).setOnClickListener(new View.OnClickListener() {
+        getView().findViewById(R.id.action_outdent).setOnClickListener(new View.OnClickListener() {
             @Override public void onClick(View v) {
                 mEditor.setOutdent();
             }
         });
 
-        view.findViewById(R.id.action_align_left).setOnClickListener(new View.OnClickListener() {
+        getView().findViewById(R.id.action_align_left).setOnClickListener(new View.OnClickListener() {
             @Override public void onClick(View v) {
                 mEditor.setAlignLeft();
             }
         });
 
-        view.findViewById(R.id.action_align_center).setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View v) {
+        getView().findViewById(R.id.action_align_center).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
                 mEditor.setAlignCenter();
             }
         });
 
-        view.findViewById(R.id.action_align_right).setOnClickListener(new View.OnClickListener() {
+        getView().findViewById(R.id.action_align_right).setOnClickListener(new View.OnClickListener() {
             @Override public void onClick(View v) {
                 mEditor.setAlignRight();
             }
         });
 
-        view.findViewById(R.id.action_blockquote).setOnClickListener(new View.OnClickListener() {
+        getView().findViewById(R.id.action_blockquote).setOnClickListener(new View.OnClickListener() {
             @Override public void onClick(View v) {
                 mEditor.setBlockquote();
             }
         });
 
-        view.findViewById(R.id.action_insert_image).setOnClickListener(new View.OnClickListener() {
+        getView().findViewById(R.id.action_insert_image).setOnClickListener(new View.OnClickListener() {
             @Override public void onClick(View v) {
 
                 //mEditor.insertImage("http://www.1honeywan.com/dachshund/image/7.21/7.21_3_thumb.JPG",
@@ -181,28 +199,18 @@ public class FragmentEditText extends Fragment {
             }
         });
 
-        view.findViewById(R.id.action_insert_link).setOnClickListener(new View.OnClickListener() {
+        getView().findViewById(R.id.action_insert_link).setOnClickListener(new View.OnClickListener() {
             @Override public void onClick(View v) {
                 mEditor.insertLink("https://github.com/wasabeef", "wasabeef");
             }
         });
-        view.findViewById(R.id.action_insert_checkbox).setOnClickListener(new View.OnClickListener() {
+        getView().findViewById(R.id.action_insert_checkbox).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 mEditor.insertTodo();
             }
         });
-        return view;
 
-    }
-
-    @Override
-    public void onResume() {
-        mEditor.setOnTextChangeListener(new RichEditor.OnTextChangeListener() {
-            @Override public void onTextChange(String text) {
-                mPreview.setText(text);
-            }
-        });
     }
     private void dispatchTakePictureIntent() {
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
