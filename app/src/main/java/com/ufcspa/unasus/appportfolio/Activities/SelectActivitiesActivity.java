@@ -8,8 +8,8 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.GridView;
 
-import com.ufcspa.unasus.appportfolio.Model.Activity;
 import com.ufcspa.unasus.appportfolio.Adapter.SelectActivitiesAdapter;
+import com.ufcspa.unasus.appportfolio.Model.Activity;
 import com.ufcspa.unasus.appportfolio.Model.Singleton;
 import com.ufcspa.unasus.appportfolio.R;
 import com.ufcspa.unasus.appportfolio.database.DataBaseAdapter;
@@ -61,7 +61,7 @@ public class SelectActivitiesActivity extends AppCompatActivity implements Adapt
     {
         singleton.activity = this.activities.get(position);
         System.out.println("Teste " + position);
-        startActivity(new Intent(this, EditActivityWDrawer.class));
+        startActivity(new Intent(this, EditActivity.class));
         finish();
     }
 }
