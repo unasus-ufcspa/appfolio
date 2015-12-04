@@ -5,6 +5,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -54,19 +55,24 @@ public class EditActivity extends AppCompatActivity {
                 R.string.drawer_close  /* "close drawer" description for accessibility */
         )
 
+
         {
             public void onDrawerClosed(View view) {
                 getSupportActionBar().setTitle(mTitle);
                 invalidateOptionsMenu(); // creates call to onPrepareOptionsMenu()
+                Log.d("Toolbar", "close");
             }
 
             public void onDrawerOpened(View drawerView) {
                 getSupportActionBar().setTitle(mDrawerTitle);
                 invalidateOptionsMenu(); // creates call to onPrepareOptionsMenu()
+                //mDrawerLayout.openDrawer(mDrawerList);
+                Log.d("Toolbar", "open");
             }
         };
         mDrawerLayout.setDrawerListener(mDrawerToggle);
         mDrawerToggle.setHomeAsUpIndicator(R.drawable.ic_drawer);
+
 
         if (savedInstanceState == null) {
             selectItem(0);
@@ -76,6 +82,12 @@ public class EditActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        mDrawerToggle.setToolbarNavigationClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.d("Toolbar", "foi");
+            }
+        });
     }
 
     @Override
@@ -112,8 +124,26 @@ public class EditActivity extends AppCompatActivity {
 //
 //        // update selected item and title, then close the drawer
 //        mDrawerList.setItemChecked(position, true);
-//        setTitle(mPlanetTitles[position]);
+//        setTitle(itens[position]);
         mDrawerLayout.closeDrawer(mDrawerList);
+    }
+
+    @Override
+    protected void onPostCreate(Bundle savedInstanceState) {
+        super.onPostCreate(savedInstanceState);
+        // Sync the toggle state after onRestoreInstanceState has occurred.
+        mDrawerToggle.syncState();
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // The action bar home/up action should open or close the drawer.
+        // ActionBarDrawerToggle will take care of this.
+        if (mDrawerToggle.onOptionsItemSelected(item)) {
+            //actionbar clicked
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
 }
