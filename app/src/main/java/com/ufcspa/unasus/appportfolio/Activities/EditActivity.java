@@ -112,6 +112,8 @@ public class EditActivity extends AppCompatActivity {
             case 0:
                 getFragmentManager().beginTransaction().replace(R.id.content_frame, new FragmentEditText()).commit();
                 break;
+            case 3:
+                getFragmentManager().beginTransaction().replace(R.id.content_frame, new FragmentComments()).commit();
         }
         // update the main content by replacing fragments
 //        Fragment fragment = new PlanetFragment();
