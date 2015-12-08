@@ -155,7 +155,7 @@ public class DataBaseAdapter {
     }
 
     private PortfolioClass cursorToPortfolio(Cursor c){
-        PortfolioClass pc =new PortfolioClass(Integer.parseInt(c.getString(0)),c.getString(1),c.getString(2),c.getString(3));
+        PortfolioClass pc = new PortfolioClass(Integer.parseInt(c.getString(0)), c.getString(1), c.getString(2), c.getString(3));
         Log.d(tag,"portfolio populado:"+pc.toString());
         return pc;
     }
@@ -285,4 +285,12 @@ public class DataBaseAdapter {
     }
 
 
+    public void saveFile(String path, char type, int idActivity) {
+        ContentValues values = new ContentValues();
+
+        values.put("id_activity_comment", 1);
+        values.put("ds_local_path", path);
+
+        db.insert("tb_attachment", null, values);
+    }
 }

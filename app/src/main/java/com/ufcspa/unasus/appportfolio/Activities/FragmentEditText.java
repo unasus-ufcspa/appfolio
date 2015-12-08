@@ -10,6 +10,7 @@ import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.media.ThumbnailUtils;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -22,13 +23,16 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.ufcspa.unasus.appportfolio.Model.Singleton;
 import com.ufcspa.unasus.appportfolio.R;
+import com.ufcspa.unasus.appportfolio.database.DataBaseAdapter;
 
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.sql.SQLOutput;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -44,20 +48,28 @@ public class FragmentEditText extends Fragment {
     static final int REQUEST_IMAGE_CAPTURE = 1;
     static final int RESULT_LOAD_IMAGE = 2;
     static final int PICKFILE_RESULT_CODE = 3;
+    static final int REQUEST_VIDEO_CAPTURE = 4;
 
     private String mCurrentPhotoPath;
+
+    private DataBaseAdapter source;
+
+    private Singleton singleton;
 
     private Button btSave;
 
     private String selectedImagePath;
     //ADDED
     private String filemanagerstring;
-    public FragmentEditText(){}
+
+    public FragmentEditText() {
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_edit_text,null);
+        View view = inflater.inflate(R.layout.fragment_edit_text, null);
         //btSave=(Button)view.findViewById(R.id.edit_acttivity_bt_msg);
+        singleton = Singleton.getInstance();
         mEditor = (RichEditor) view.findViewById(R.id.editor);
         mEditor.setEditorHeight(200);
         mEditor.setEditorFontSize(22);
@@ -82,44 +94,54 @@ public class FragmentEditText extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
+
+        source = new DataBaseAdapter(getActivity());
+
         getView().findViewById(R.id.action_undo).setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View v) {
+            @Override
+            public void onClick(View v) {
                 mEditor.undo();
             }
         });
 
         getView().findViewById(R.id.action_redo).setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View v) {
+            @Override
+            public void onClick(View v) {
                 mEditor.redo();
             }
         });
 
         getView().findViewById(R.id.action_bold).setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View v) {
+            @Override
+            public void onClick(View v) {
                 mEditor.setBold();
             }
         });
 
         getView().findViewById(R.id.action_italic).setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View v) {
+            @Override
+            public void onClick(View v) {
                 mEditor.setItalic();
             }
         });
 
         getView().findViewById(R.id.action_subscript).setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View v) {
+            @Override
+            public void onClick(View v) {
                 mEditor.setSubscript();
             }
         });
 
         getView().findViewById(R.id.action_superscript).setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View v) {
+            @Override
+            public void onClick(View v) {
                 mEditor.setSuperscript();
             }
         });
 
         getView().findViewById(R.id.action_strikethrough).setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View v) {
+            @Override
+            public void onClick(View v) {
                 mEditor.setStrikeThrough();
             }
         });
@@ -146,42 +168,49 @@ public class FragmentEditText extends Fragment {
         });
 
         getView().findViewById(R.id.action_heading3).setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View v) {
+            @Override
+            public void onClick(View v) {
                 mEditor.setHeading(3);
             }
         });
 
         getView().findViewById(R.id.action_heading4).setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View v) {
+            @Override
+            public void onClick(View v) {
                 mEditor.setHeading(4);
             }
         });
 
         getView().findViewById(R.id.action_heading5).setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View v) {
+            @Override
+            public void onClick(View v) {
                 mEditor.setHeading(5);
             }
         });
 
         getView().findViewById(R.id.action_heading6).setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View v) {
+            @Override
+            public void onClick(View v) {
                 mEditor.setHeading(6);
             }
         });
         getView().findViewById(R.id.action_indent).setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View v) {
+            @Override
+            public void onClick(View v) {
                 mEditor.setIndent();
             }
         });
 
         getView().findViewById(R.id.action_outdent).setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View v) {
+            @Override
+            public void onClick(View v) {
                 mEditor.setOutdent();
             }
         });
 
         getView().findViewById(R.id.action_align_left).setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View v) {
+            @Override
+            public void onClick(View v) {
                 mEditor.setAlignLeft();
             }
         });
@@ -194,26 +223,31 @@ public class FragmentEditText extends Fragment {
         });
 
         getView().findViewById(R.id.action_align_right).setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View v) {
+            @Override
+            public void onClick(View v) {
                 mEditor.setAlignRight();
             }
         });
 
         getView().findViewById(R.id.action_blockquote).setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View v) {
+            @Override
+            public void onClick(View v) {
                 mEditor.setBlockquote();
             }
         });
 
         getView().findViewById(R.id.action_insert_image).setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View v) {
+            @Override
+            public void onClick(View v) {
                 showChooseGalleryOrTakePicture();
             }
         });
 
         getView().findViewById(R.id.action_insert_link).setOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View v) {
-                mEditor.insertLink("https://github.com/wasabeef", "wasabeef");
+            @Override
+            public void onClick(View v) {
+                //mEditor.insertLink("https://github.com/wasabeef", "wasabeef");
+                dispatchTakeVideoIntent();
             }
         });
         getView().findViewById(R.id.action_insert_checkbox).setOnClickListener(new View.OnClickListener() {
@@ -251,34 +285,50 @@ public class FragmentEditText extends Fragment {
         // Quando o usuário escolhe a opção Take Picture
         if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == Activity.RESULT_OK) {
             galleryAddPic();
-            saveImage();
-            mEditor.insertImage(mCurrentPhotoPath, "Testando imagem!");
+            //saveImage();
+            //mEditor.insertImage(mCurrentPhotoPath, "Testando imagem!");
+            insertImageIntoEditor(320, 240);
         }
 
         // Quando o usuário escolhe a opção Gallery
         if (requestCode == RESULT_LOAD_IMAGE && resultCode == Activity.RESULT_OK) {
-            Uri selectedImage = data.getData();
-            String[] filePathColumn = {MediaStore.Images.Media.DATA};
-            try {
-                Cursor cursor = getActivity().getContentResolver().query(selectedImage, filePathColumn, null, null, null);
-                cursor.moveToFirst();
+            Uri selectedUri = data.getData();
+            String[] columns = {MediaStore.Images.Media.DATA, MediaStore.Images.Media.MIME_TYPE};
 
-                int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
-                mCurrentPhotoPath = cursor.getString(columnIndex);
+            Cursor cursor = getActivity().getContentResolver().query(selectedUri, columns, null, null, null);
+            cursor.moveToFirst();
 
-                cursor.close();
+            int pathColumnIndex = cursor.getColumnIndex(columns[0]);
+            int mimeTypeColumnIndex = cursor.getColumnIndex(columns[1]);
 
-                saveImage();
-                //image.setImageBitmap(BitmapFactory.decodeFile(mCurrentPhotoPath));
-                mEditor.insertImage(mCurrentPhotoPath, "Testando imagem!");
-            } catch (Exception e) {
+            String contentPath = cursor.getString(pathColumnIndex);
+            String mimeType = cursor.getString(mimeTypeColumnIndex);
 
+            cursor.close();
+
+            mCurrentPhotoPath = contentPath;
+
+            if (mimeType.startsWith("image")) {
+                insertImageIntoEditor(320, 240);
+            } else if (mimeType.startsWith("video")) {
+//                insertVideoIntoEditor(320, 240, "mp4");
+                mCurrentPhotoPath = getThumbnailPathForLocalFile(getActivity(), selectedUri);
+                insertImageIntoEditor(320, 240);
             }
         }
 
         if (requestCode == PICKFILE_RESULT_CODE && resultCode == Activity.RESULT_OK) {
             String FilePath = data.getData().getPath();
             Log.d("Path:", FilePath);
+            openPDF(FilePath);
+        }
+
+        if (requestCode == REQUEST_VIDEO_CAPTURE && resultCode == Activity.RESULT_OK) {
+//            mCurrentPhotoPath = data.getData().getPath();
+//            insertVideoIntoEditor(320, 240, "mp4");
+
+            mCurrentPhotoPath = getThumbnailPathForLocalFile(getActivity(), data.getData());
+            insertImageIntoEditor(320, 240);
         }
     }
 
@@ -289,6 +339,7 @@ public class FragmentEditText extends Fragment {
     */
     private void dispatchGetPictureFromGallery() {
         Intent getPicutureFromGalleryIntent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        getPicutureFromGalleryIntent.setType("image/* video/*");
         startActivityForResult(getPicutureFromGalleryIntent, RESULT_LOAD_IMAGE);
     }
 
@@ -336,50 +387,91 @@ public class FragmentEditText extends Fragment {
         getActivity().sendBroadcast(mediaScanIntent);
     }
 
-    // Não salva com o nome que eu quero
-    private void saveImage() {
-        String[] path = mCurrentPhotoPath.split("\\.");
-        path[0] += "_small";
+    private void insertFileIntoDataBase(String path, char type) {
+        source.saveFile(path, type, singleton.activity.getIdAtivity());
+    }
 
-        OutputStream fOutputStream = null;
-        File file = new File(path[0] + "." + path[1]);
-        if (!file.exists()) {
-            try {
-                file.createNewFile();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+    private void insertImageIntoEditor(int width, int height) {
+        if (mEditor.getHtml() != null)
+            mEditor.setHtml(mEditor.getHtml() + "<img src=\"" + mCurrentPhotoPath + "\" alt=\"Photo\" style=\"width:" + width + "px;height:" + height + "px;\">");
+        else
+            mEditor.setHtml("<img src=\"" + mCurrentPhotoPath + "\" alt=\"Photo\" style=\"width:" + width + "px;height:" + height + "px;\">");
+    }
+
+    /*
+     * Vídeos
+     */
+
+    private void insertVideoIntoEditor(int width, int height, String type) {
+        if (mEditor.getHtml() != null)
+            mEditor.setHtml(mEditor.getHtml() + "<video width=\"" + width + "\" height=\"" + height + "\" controls>\n" +
+                    "  <source src=\"" + mCurrentPhotoPath + "\" type=\"video/" + type + "\">\n" +
+                    "</video>");
+        else
+            mEditor.setHtml("<video width=\"" + width + "\" height=\"" + height + "\" controls>\n" +
+                    "  <source src=\"" + mCurrentPhotoPath + "\" type=\"video/" + type + "\">\n" +
+                    "</video>");
+    }
+
+    private void dispatchTakeVideoIntent() {
+        Intent takeVideoIntent = new Intent(MediaStore.ACTION_VIDEO_CAPTURE);
+        if (takeVideoIntent.resolveActivity(getActivity().getPackageManager()) != null) {
+            startActivityForResult(takeVideoIntent, REQUEST_VIDEO_CAPTURE);
         }
+    }
 
+    public static String[] thumbColumns = {MediaStore.Video.Thumbnails.DATA};
+    public static String[] mediaColumns = {MediaStore.Video.Media._ID};
+
+    public static String getThumbnailPathForLocalFile(Activity context, Uri fileUri) {
+
+        long fileId = getFileId(context, fileUri);
+
+        MediaStore.Video.Thumbnails.getThumbnail(context.getContentResolver(),
+                fileId, MediaStore.Video.Thumbnails.MICRO_KIND, null);
+
+        Cursor thumbCursor = null;
         try {
-            fOutputStream = new FileOutputStream(file);
 
-            Bitmap bitmap = BitmapFactory.decodeFile(mCurrentPhotoPath);
-            mCurrentPhotoPath = path[0] + "." + path[1];
+            thumbCursor = context.managedQuery(
+                    MediaStore.Video.Thumbnails.EXTERNAL_CONTENT_URI,
+                    thumbColumns, MediaStore.Video.Thumbnails.VIDEO_ID + " = "
+                            + fileId, null, null);
 
-            Bitmap resized = Bitmap.createScaledBitmap(bitmap, 320, 240, true);
-            resized.compress(Bitmap.CompressFormat.PNG, 40, fOutputStream);
+            if (thumbCursor.moveToFirst()) {
+                String thumbPath = thumbCursor.getString(thumbCursor
+                        .getColumnIndex(MediaStore.Video.Thumbnails.DATA));
 
-            fOutputStream.flush();
-            fOutputStream.close();
+                return thumbPath;
+            }
 
-            MediaStore.Images.Media.insertImage(getActivity().getContentResolver(), file.getAbsolutePath(), file.getName(), file.getName());
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-            Toast.makeText(getActivity(), "Save Failed", Toast.LENGTH_SHORT).show();
-            return;
-        } catch (IOException e) {
-            e.printStackTrace();
-            Toast.makeText(getActivity(), "Save Failed", Toast.LENGTH_SHORT).show();
-            return;
+        } finally {
         }
+
+        return null;
+    }
+
+    public static long getFileId(Activity context, Uri fileUri) {
+
+        Cursor cursor = context.managedQuery(fileUri, mediaColumns, null, null,
+                null);
+
+        if (cursor.moveToFirst()) {
+            int columnIndex = cursor
+                    .getColumnIndexOrThrow(MediaStore.Video.Media._ID);
+            int id = cursor.getInt(columnIndex);
+
+            return id;
+        }
+
+        return 0;
     }
 
     /*
     * Other things
     */
     private void openPDF(String filename) {
-        File file = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + "/" + filename);
+        File file = new File(filename);
         Intent target = new Intent(Intent.ACTION_VIEW);
         target.setDataAndType(Uri.fromFile(file), "application/pdf");
         target.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
@@ -394,13 +486,53 @@ public class FragmentEditText extends Fragment {
 
     private void openFileBrowser() {
         Intent fileintent = new Intent(Intent.ACTION_GET_CONTENT);
-        fileintent.setType("gagt/sdf");
+        fileintent.setType("file/*"); //"file/*"
         try {
             startActivityForResult(fileintent, PICKFILE_RESULT_CODE);
         } catch (ActivityNotFoundException e) {
             System.out.println("No activity can handle picking a file. Showing alternatives.");
+            System.out.println(e);
         }
     }
+
+//    private void saveImage() {
+//        String[] path = mCurrentPhotoPath.split("\\.");
+//        path[0] += "_small";
+//
+//        OutputStream fOutputStream = null;
+//        File file = new File(path[0] + "." + path[1]);
+//        if (!file.exists()) {
+//            try {
+//                file.createNewFile();
+//            } catch (IOException e) {
+//                e.printStackTrace();
+//            }
+//        }
+//
+//        try {
+//            fOutputStream = new FileOutputStream(file);
+//
+//            Bitmap bitmap = BitmapFactory.decodeFile(mCurrentPhotoPath);
+//            mCurrentPhotoPath = path[0] + "." + path[1];
+//
+//            Bitmap resized = Bitmap.createScaledBitmap(bitmap, 320, 240, true);
+//            resized.compress(Bitmap.CompressFormat.PNG, 40, fOutputStream);
+//
+//            fOutputStream.flush();
+//            fOutputStream.close();
+//
+//            MediaStore.Images.Media.insertImage(getActivity().getContentResolver(), file.getAbsolutePath(), file.getName(), file.getName());
+//        } catch (FileNotFoundException e) {
+//            e.printStackTrace();
+//            Toast.makeText(getActivity(), "Save Failed", Toast.LENGTH_SHORT).show();
+//            return;
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//            Toast.makeText(getActivity(), "Save Failed", Toast.LENGTH_SHORT).show();
+//            return;
+//        }
+//    }
+
 //    private void dispatchTakePictureIntent() {
 //        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
 //        if (takePictureIntent.resolveActivity(getActivity().getPackageManager()) != null) {
