@@ -7,16 +7,16 @@ import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
 import com.ufcspa.unasus.appportfolio.Model.Activity;
+import com.ufcspa.unasus.appportfolio.Model.Comentario;
 import com.ufcspa.unasus.appportfolio.Model.PortfolioClass;
 import com.ufcspa.unasus.appportfolio.Model.Team;
+import com.ufcspa.unasus.appportfolio.Model.User;
 
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
-
-import com.ufcspa.unasus.appportfolio.Model.User;
 
 /**
  * Created by UNASUS on 11/11/2015.
@@ -47,31 +47,82 @@ public class DataBaseAdapter {
     }
 
     public User verifyPass(String email, String pass) {
-        int id=0;
-        char type='0';
-        String name="zebra";
-        User user=new User(0,null,null);
+        int id = 0;
+        char type = '0';
+        String name = "zebra";
+        User user = new User(0, null, null);
         try {
             if (email != "" && pass != "") {
 
-                String query = "select id_user , nm_user , tp_user from tb_user where ds_email ='"+email+"' "+"AND ds_password ='"+pass+"' ;";
+                String query = "select id_user , nm_user , tp_user from tb_user where ds_email ='" + email + "' " + "AND ds_password ='" + pass + "' ;";
                 Cursor c = db.rawQuery(query, null);
                 if (c.moveToFirst()) {
                     Log.d(tag, "password correto");
-                    id=Integer.parseInt(c.getString(0));
-                    name=c.getString(1);
-                    type=c.getString(2).charAt(0);
-                    user=new User(id,type,name);
-                    Log.d(tag,"dados: id:"+id+" type:"+type+" name:"+name);
+                    id = Integer.parseInt(c.getString(0));
+                    name = c.getString(1);
+                    type = c.getString(2).charAt(0);
+                    user = new User(id, type, name);
+                    Log.d(tag, "dados: id:" + id + " type:" + type + " name:" + name);
                 }
             }
-        }catch (Exception e){
-            Log.d(tag,"erro query:"+e.getMessage());
-        }finally {
+        } catch (Exception e) {
+            Log.d(tag, "erro query:" + e.getMessage());
+        } finally {
             db.close();
             return user;
         }
     }
+
+    public void insertComment(Comentario c) {
+        ContentValues cv = new ContentValues();
+        cv.put("id_activity_student", c.getIdActivityStudent());
+        cv.put("id_author", c.getIdAuthor());
+        cv.put("tx_comment", c.getTxtComment());
+        cv.put("tx_reference", c.getTxtReference());
+        cv.put("tp_comment", c.getTypeComment());
+        cv.put("dt_comment", c.getDateComment());
+        db.insert("tb_comment", null, cv);
+        try {
+            db.close();
+            Log.d(tag, "inseriu comentario no banco");
+        } catch (Exception e) {
+            Log.e(tag, "erro ao inserir:" + e.getMessage());
+        }
+
+    }
+
+    public List<Comentario> listComments(int idActStu) {
+        ArrayList<Comentario> comentarios = new ArrayList<Comentario>();
+        String sql = "select * from tb_comment WHERE id_activity_student =" + idActStu + " ORDER BY dt_comment ASC;";
+        Cursor c = db.rawQuery(sql, null);
+        Comentario cmm;
+        if (c.moveToFirst()) {
+            do {
+                try {
+                    cmm = new Comentario();
+                    cmm.setIdComment(c.getInt(0));
+                    cmm.setIdActivityStudent(c.getInt(1));
+                    cmm.setIdAuthor(c.getInt(2));
+                    cmm.setTxtComment(c.getString(3));
+                    cmm.setTxtReference(c.getString(4));
+                    cmm.setTypeComment(c.getString(5));
+                    cmm.setDateComment(c.getString(6));
+                    comentarios.add(cmm);
+                } catch (Exception v) {
+                    Log.e(tag, "erro ao pegar dados do banco:" + v.getMessage());
+                }
+                //add comment
+            } while (c.moveToNext());
+            c.close();
+            db.close();
+        } else {
+            Log.d(tag, "não retornoun nada");
+        }
+        Log.d(tag, "listou comentarios no banco n:" + comentarios.size());
+        return comentarios;
+
+    }
+
 
     public void criarUser() {
         ContentValues cv = new ContentValues();
