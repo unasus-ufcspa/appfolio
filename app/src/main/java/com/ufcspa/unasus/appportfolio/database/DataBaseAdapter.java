@@ -7,6 +7,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
 import com.ufcspa.unasus.appportfolio.Model.Activity;
+import com.ufcspa.unasus.appportfolio.Model.Attachment;
 import com.ufcspa.unasus.appportfolio.Model.Comentario;
 import com.ufcspa.unasus.appportfolio.Model.PortfolioClass;
 import com.ufcspa.unasus.appportfolio.Model.Team;
@@ -169,6 +170,8 @@ public class DataBaseAdapter {
             r = "não há tabelas";
         }
 
+        db.close();
+
         return r;
     }
 
@@ -202,12 +205,14 @@ public class DataBaseAdapter {
                 portfolios.add(cursorToPortfolio(c));
             }while(c.moveToNext());
         }
+
+        db.close();
         return portfolios;
     }
 
     private PortfolioClass cursorToPortfolio(Cursor c){
         PortfolioClass pc = new PortfolioClass(Integer.parseInt(c.getString(0)), c.getString(1), c.getString(2), c.getString(3));
-        Log.d(tag,"portfolio populado:"+pc.toString());
+        Log.d(tag, "portfolio populado:" + pc.toString());
         return pc;
     }
 
@@ -232,6 +237,7 @@ public class DataBaseAdapter {
             userType = cursor.getString(0).charAt(0);
         }
 
+        db.close();
         return userType;
     }
 
@@ -265,6 +271,7 @@ public class DataBaseAdapter {
 
         if(cursor.moveToFirst()) { do { array_team.add(cursorToTeam(cursor)); } while (cursor.moveToNext());}
 
+        db.close();
         return array_team;
     }
 
@@ -288,6 +295,7 @@ public class DataBaseAdapter {
             Log.d(tag,"Data em formato errado! (cursorToTeam())");
         }
 
+        db.close();
         return team;
     }
 
@@ -321,6 +329,7 @@ public class DataBaseAdapter {
 
         do{ array_activity.add(cursorToActivity(cursor)); } while(cursor.moveToNext());
 
+        db.close();
         return array_activity;
     }
 
@@ -330,18 +339,48 @@ public class DataBaseAdapter {
         return activity;
     }
 
-    public void close()
-    {
-        db.close();
-    }
-
-
-    public void saveFile(String path, char type, int idActivity) {
+    public void saveAttachmentActivityStudent(String path, String type, int idActivityStudent) {
         ContentValues values = new ContentValues();
 
-        values.put("id_activity_comment", 1);
+        values.put("id_activity_student", idActivityStudent);
         values.put("ds_local_path", path);
+        values.put("ds_type", type);
 
         db.insert("tb_attachment", null, values);
+    }
+
+    public int getActivityStudentID(int idActivity, int idPortfolioStudent)
+    {
+        String query = "SELECT  id_activity_student FROM tb_activity_student WHERE \n" +
+                "\tid_portfolio_student = " + idPortfolioStudent + " and id_activity = " + idActivity + ";";
+
+        Cursor cursor = db.rawQuery(query, null);
+
+        if(cursor.moveToFirst())
+            return cursor.getInt(0);
+
+        db.close();
+        return -1;
+    }
+
+    public ArrayList<Attachment> getAttachmentsFromActivityStudent(int idActivityStudent)
+    {
+        String query = "SELECT * FROM tb_attachment WHERE id_activity_comment = " + idActivityStudent + ";";
+
+        ArrayList<Attachment> array_attachment = new ArrayList<>();
+
+        Cursor cursor = db.rawQuery(query, null);
+        cursor.moveToFirst();
+
+        do{ array_attachment.add(cursorToAttachment(cursor)); } while(cursor.moveToNext());
+
+        db.close();
+        return array_attachment;
+    }
+
+    private Attachment cursorToAttachment(Cursor cursor)
+    {
+        Attachment attachment = new Attachment(cursor.getInt(0), cursor.getInt(1), cursor.getInt(2), cursor.getString(3), cursor.getString(4), cursor.getString(5));
+        return attachment;
     }
 }

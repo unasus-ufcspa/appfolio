@@ -19,6 +19,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.MimeTypeMap;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -62,6 +63,9 @@ public class FragmentEditText extends Fragment {
     //ADDED
     private String filemanagerstring;
 
+    //Formatting Controls
+    private Boolean bulletPoints = false;
+
     public FragmentEditText() {
     }
 
@@ -69,7 +73,11 @@ public class FragmentEditText extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_edit_text, null);
         //btSave=(Button)view.findViewById(R.id.edit_acttivity_bt_msg);
+        source = new DataBaseAdapter(getActivity());
+
         singleton = Singleton.getInstance();
+        singleton.idActivityStudent = source.getActivityStudentID(singleton.activity.getIdAtivity(),singleton.portfolioClass.getIdPortfolioStudent());
+
         mEditor = (RichEditor) view.findViewById(R.id.editor);
         mEditor.setEditorHeight(200);
         mEditor.setEditorFontSize(22);
@@ -86,16 +94,14 @@ public class FragmentEditText extends Fragment {
 //            }
 //        });
 
+        System.out.println("ID ACTIVITY: " + singleton.activity.getIdAtivity() + " ID PORTFOLIO STUDENT: " +  singleton.portfolioClass.getIdPortfolioStudent());
 
         return view;
-
     }
 
     @Override
     public void onResume() {
         super.onResume();
-
-        source = new DataBaseAdapter(getActivity());
 
         getView().findViewById(R.id.action_undo).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -232,7 +238,7 @@ public class FragmentEditText extends Fragment {
         getView().findViewById(R.id.action_blockquote).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mEditor.setBlockquote();
+                //mEditor.setBlockquote();
             }
         });
 
@@ -287,6 +293,7 @@ public class FragmentEditText extends Fragment {
             galleryAddPic();
             //saveImage();
             //mEditor.insertImage(mCurrentPhotoPath, "Testando imagem!");
+            insertFileIntoDataBase(mCurrentPhotoPath, "I");
             insertImageIntoEditor(320, 240);
         }
 
@@ -310,8 +317,10 @@ public class FragmentEditText extends Fragment {
 
             if (mimeType.startsWith("image")) {
                 insertImageIntoEditor(320, 240);
+                insertFileIntoDataBase(mCurrentPhotoPath, "I");
             } else if (mimeType.startsWith("video")) {
 //                insertVideoIntoEditor(320, 240, "mp4");
+                insertFileIntoDataBase(mCurrentPhotoPath, "V");
                 mCurrentPhotoPath = getThumbnailPathForLocalFile(getActivity(), selectedUri);
                 insertImageIntoEditor(320, 240);
             }
@@ -319,17 +328,32 @@ public class FragmentEditText extends Fragment {
 
         if (requestCode == PICKFILE_RESULT_CODE && resultCode == Activity.RESULT_OK) {
             String FilePath = data.getData().getPath();
-            Log.d("Path:", FilePath);
-            openPDF(FilePath);
+            insertFileIntoDataBase(FilePath, "T");
+            System.out.println(FilePath);
+            System.out.println(getMimeType(FilePath));
+            //openPDF(FilePath);
         }
 
         if (requestCode == REQUEST_VIDEO_CAPTURE && resultCode == Activity.RESULT_OK) {
 //            mCurrentPhotoPath = data.getData().getPath();
 //            insertVideoIntoEditor(320, 240, "mp4");
-
+            insertFileIntoDataBase(data.getData().getPath(), "I");
             mCurrentPhotoPath = getThumbnailPathForLocalFile(getActivity(), data.getData());
             insertImageIntoEditor(320, 240);
         }
+    }
+
+    public static String getMimeType(String url) {
+        String type = null;
+        String extension = MimeTypeMap.getFileExtensionFromUrl(url);
+        if (extension != null) {
+            type = MimeTypeMap.getSingleton().getMimeTypeFromExtension(extension);
+        }
+        return type;
+    }
+
+    private void insertFileIntoDataBase(String path, String type) {
+        source.saveAttachmentActivityStudent(path, type, singleton.idActivityStudent);
     }
 
     /*
@@ -385,10 +409,6 @@ public class FragmentEditText extends Fragment {
         Uri contentUri = Uri.fromFile(f);
         mediaScanIntent.setData(contentUri);
         getActivity().sendBroadcast(mediaScanIntent);
-    }
-
-    private void insertFileIntoDataBase(String path, char type) {
-        source.saveFile(path, type, singleton.activity.getIdAtivity());
     }
 
     private void insertImageIntoEditor(int width, int height) {

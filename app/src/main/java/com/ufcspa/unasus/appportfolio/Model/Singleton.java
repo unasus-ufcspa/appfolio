@@ -16,4 +16,6 @@ public class Singleton {
     public Team team = new Team(0,0,null,null,'Z',null,null) ;
     public PortfolioClass portfolioClass = new PortfolioClass(1,"212","artur","ARRAY");
     public Activity activity = new Activity(1,1,1,"Atividade final","legal");
+
+    public int idActivityStudent = -1;
 }

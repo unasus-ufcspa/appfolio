@@ -75,7 +75,7 @@ public class EditActivity extends AppCompatActivity {
 
 
         if (savedInstanceState == null) {
-            selectItem(3);
+            selectItem(0);
         }
     }
 
