@@ -53,7 +53,7 @@ public class FragmentComments extends Fragment {
     public void onResume() {
         super.onResume();
         btGenMess = (Button) getView().findViewById(R.id.gen_messag_bt);
-        btGenMess.setVisibility(View.INVISIBLE);
+        //btGenMess.setVisibility(View.INVISIBLE);
 
         lv = (ListView) getView().findViewById(R.id.listView1);
 
@@ -66,6 +66,19 @@ public class FragmentComments extends Fragment {
             public void onClick(View v) {
                 //addRandomItem();
                 //lv.setAdapter(adapter);
+                addItems();
+                Singleton singleton = Singleton.getInstance();
+                Comentario c = new Comentario();
+                c.setDateComment(getActualTime());
+                c.setIdAuthor(singleton.user.getIdUser());
+                c.setTypeComment("C");
+                c.setTxtComment(editText1.getText().toString());
+                c.setIdActivityStudent(singleton.activity.getIdAtivity());
+                insertComment(c);
+                adapter.add(new OneComment(false, editText1.getText().toString()));
+                editText1.setText("");
+                lv.setAdapter(adapter);
+
             }
         });
         editText1 = (EditText) getView().findViewById(R.id.editText1);
@@ -74,17 +87,6 @@ public class FragmentComments extends Fragment {
                 // If the event is a key-down event on the "enter" button
                 if ((event.getAction() == KeyEvent.ACTION_DOWN) && (keyCode == KeyEvent.KEYCODE_ENTER)) {
                     // Perform action on key press
-                    addItems();
-                    Singleton singleton = Singleton.getInstance();
-                    Comentario c = new Comentario();
-                    c.setDateComment(getActualTime());
-                    c.setIdAuthor(singleton.user.getIdUser());
-                    c.setTypeComment("C");
-                    c.setTxtComment(editText1.getText().toString());
-                    c.setIdActivityStudent(singleton.activity.getIdAtivity());
-                    insertComment(c);
-                    adapter.add(new OneComment(false, editText1.getText().toString()));
-                    editText1.setText("");
                     return true;
                 }
                 return false;
@@ -101,7 +103,7 @@ public class FragmentComments extends Fragment {
             ArrayList<Comentario> lista = (ArrayList<Comentario>) db.listComments(singleton.activity.getIdAtivity());
             if (lista.size() != 0) {
                 for (int i = 0; i < lista.size(); i++) {
-                    adapter.add(new OneComment(lista.get(i).getIdAuthor() == singleton.user.getIdUser(),
+                    adapter.add(new OneComment(lista.get(i).getIdAuthor() != singleton.user.getIdUser(),
                             lista.get(i).getTxtComment() + "\n" + lista.get(i).getDateComment()));
                 }
                 Log.d("Banco", "Lista populada:" + lista);
