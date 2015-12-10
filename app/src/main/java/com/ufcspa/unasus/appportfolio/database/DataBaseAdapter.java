@@ -365,7 +365,7 @@ public class DataBaseAdapter {
 
     public ArrayList<Attachment> getAttachmentsFromActivityStudent(int idActivityStudent)
     {
-        String query = "SELECT * FROM tb_attachment WHERE id_activity_comment = " + idActivityStudent + ";";
+        String query = "SELECT * FROM tb_attachment WHERE id_activity_student = " + idActivityStudent + ";";
 
         ArrayList<Attachment> array_attachment = new ArrayList<>();
 
@@ -374,7 +374,21 @@ public class DataBaseAdapter {
 
         do{ array_attachment.add(cursorToAttachment(cursor)); } while(cursor.moveToNext());
 
-        db.close();
+        return array_attachment;
+    }
+
+    public ArrayList<Attachment> getAttachmentsFromActivityStudent(int idActivityStudent, String type) {
+        String query = "SELECT * FROM tb_attachment WHERE id_activity_student = " + idActivityStudent + " and ds_type = '" + type + "';";
+
+        ArrayList<Attachment> array_attachment = new ArrayList<>();
+
+        Cursor cursor = db.rawQuery(query, null);
+
+        do {
+            if (cursor.moveToFirst())
+                array_attachment.add(cursorToAttachment(cursor));
+        } while (cursor.moveToNext());
+
         return array_attachment;
     }
 

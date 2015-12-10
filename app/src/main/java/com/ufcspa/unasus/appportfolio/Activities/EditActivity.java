@@ -112,8 +112,12 @@ public class EditActivity extends AppCompatActivity {
             case 0:
                 getFragmentManager().beginTransaction().replace(R.id.content_frame, new FragmentEditText()).commit();
                 break;
+            case 1:
+                getFragmentManager().beginTransaction().replace(R.id.content_frame, new FragmentAttachment()).commit();
+                break;
             case 3:
                 getFragmentManager().beginTransaction().replace(R.id.content_frame, new FragmentComments()).commit();
+                break;
         }
         // update the main content by replacing fragments
 //        Fragment fragment = new PlanetFragment();
@@ -125,7 +129,7 @@ public class EditActivity extends AppCompatActivity {
 //        fragmentManager.beginTransaction().replace(R.id.content_frame, fragment).commit();
 //
 //        // update selected item and title, then close the drawer
-//        mDrawerList.setItemChecked(position, true);
+        mDrawerList.setItemChecked(position, true);
 //        setTitle(itens[position]);
         mDrawerLayout.closeDrawer(mDrawerList);
     }
