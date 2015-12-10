@@ -8,9 +8,15 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.SimpleAdapter;
 
+import com.ufcspa.unasus.appportfolio.Adapter.FragmentAttachmentAdapter;
+import com.ufcspa.unasus.appportfolio.Model.Attachment;
 import com.ufcspa.unasus.appportfolio.Model.Singleton;
 import com.ufcspa.unasus.appportfolio.R;
 import com.ufcspa.unasus.appportfolio.database.DataBaseAdapter;
+
+import java.util.AbstractCollection;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by desenvolvimento on 10/12/2015.
@@ -20,7 +26,9 @@ public class FragmentAttachment extends Frag {
     private RecyclerView recViewVideos;
     private RecyclerView recViewOthers;
 
-    private RecyclerView.Adapter mAdapter;
+    private List<Attachment> attachmentsPhotos;
+    private List<Attachment> attachmentsVideos;
+    private List<Attachment> attachmentsOthers;
 
     public FragmentAttachment() {
     }
@@ -29,35 +37,48 @@ public class FragmentAttachment extends Frag {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_attachment, null);
 
-        init();
-
         return view;
     }
 
     @Override
     public void onResume() {
         super.onResume();
+        init();
     }
 
     private void init() {
-        source = new DataBaseAdapter(getActivity());
+//        attachmentsPhotos = new ArrayList<>();
+//        attachmentsVideos = new ArrayList<>();
+//        attachmentsOthers = new ArrayList<>();
+//
+//        source = new DataBaseAdapter(getActivity());
+//
+//        singleton = Singleton.getInstance();
+//        singleton.idActivityStudent = source.getActivityStudentID(singleton.activity.getIdAtivity(), singleton.portfolioClass.getIdPortfolioStudent());
+//
+//        recViewPhotos = (RecyclerView) getView().findViewById(R.id.recview_photos);
+//        recViewVideos = (RecyclerView) getView().findViewById(R.id.recview_videos);
+//        recViewOthers = (RecyclerView) getView().findViewById(R.id.recview_others);
+//
+//        LinearLayoutManager layoutManagerPhotos = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
+//        LinearLayoutManager layoutManagerVideos = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
+//        LinearLayoutManager layoutManagerOthers = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
+//
+//        recViewPhotos.setLayoutManager(layoutManagerPhotos);
+//        recViewVideos.setLayoutManager(layoutManagerVideos);
+//        recViewOthers.setLayoutManager(layoutManagerOthers);
 
-        singleton = Singleton.getInstance();
-        singleton.idActivityStudent = source.getActivityStudentID(singleton.activity.getIdAtivity(), singleton.portfolioClass.getIdPortfolioStudent());
+//        attachmentsPhotos = source.getAttachmentsFromActivityStudent(singleton.idActivityStudent, "I");
+        //attachmentsVideos = source.getAttachmentsFromActivityStudent(singleton.idActivityStudent, "V");
+        //attachmentsOthers = source.getAttachmentsFromActivityStudent(singleton.idActivityStudent, "O");
 
-        recViewPhotos = (RecyclerView) getView().findViewById(R.id.recview_photos);
-        recViewVideos = (RecyclerView) getView().findViewById(R.id.recview_videos);
-        recViewOthers = (RecyclerView) getView().findViewById(R.id.recview_others);
+//        FragmentAttachmentAdapter adapterPhotos = new FragmentAttachmentAdapter(attachmentsPhotos);
+        //FragmentAttachmentAdapter adapterVideos = new FragmentAttachmentAdapter(attachmentsVideos);
+        //FragmentAttachmentAdapter adapterOthers = new FragmentAttachmentAdapter(attachmentsOthers);
 
-        LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
-
-        recViewPhotos.setLayoutManager(layoutManager);
-        recViewVideos.setLayoutManager(layoutManager);
-        recViewOthers.setLayoutManager(layoutManager);
-
-        String[] teste = {"TESTE 1", "TESTE 2", "TESTE 3", "TESTE 4"};
-//        mAdapter = new RecyclerView.Adapter(teste);
-//        mAdapter = new SimpleAdapter(getActivity(),teste);
+//        recViewPhotos.setAdapter(adapterPhotos);
+        //recViewVideos.setAdapter(adapterVideos);
+        //recViewOthers.setAdapter(adapterOthers);
     }
 
 
