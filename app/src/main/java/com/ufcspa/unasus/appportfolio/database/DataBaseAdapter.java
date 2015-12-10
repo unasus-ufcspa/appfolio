@@ -7,6 +7,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
 import com.ufcspa.unasus.appportfolio.Model.Activity;
+import com.ufcspa.unasus.appportfolio.Model.ActivityStudent;
 import com.ufcspa.unasus.appportfolio.Model.Attachment;
 import com.ufcspa.unasus.appportfolio.Model.Comentario;
 import com.ufcspa.unasus.appportfolio.Model.PortfolioClass;
@@ -121,7 +122,39 @@ public class DataBaseAdapter {
         }
         Log.d(tag, "listou comentarios no banco n:" + comentarios.size());
         return comentarios;
+    }
 
+    public void updateActivityStudent(ActivityStudent activityStudent) {
+        ContentValues cv = new ContentValues();
+        cv.put("tx_activity", activityStudent.getTxtActivity());
+        cv.put("dt_last_access", activityStudent.getDtLastAcess());
+        try {
+            db.update("tb_activity_student", cv, "id_activity_student=?", new String[]{String.valueOf(activityStudent.getIdActivityStudent())});
+            Log.d(tag, "conseguiu salvar alteração da atividade");
+        } catch (Exception e) {
+            Log.e(tag, "erro ao atualizar acStudent:" + e.getMessage());
+        }
+    }
+
+    public ActivityStudent listActivityStudent(int idActivityStudent) {
+        ActivityStudent acStudent = new ActivityStudent();
+        String query = "select tx_activity from tb_activity_student WHERE id_activity_student = " + idActivityStudent + ";";
+        Cursor c = null;
+        try {
+            c = db.rawQuery(query, null);
+        } catch (Exception e) {
+            Log.e(tag, "erro ao listar atividade do estudante:" + e.getMessage());
+        }
+
+        if (c.moveToFirst()) {
+            acStudent.setIdActivityStudent(idActivityStudent);
+            acStudent.setTxtActivity(c.getString(0));
+        } else {
+            Log.d(tag, "não há texto da atividade no banco");
+        }
+        c.close();
+        db.close();
+        return acStudent;
     }
 
 

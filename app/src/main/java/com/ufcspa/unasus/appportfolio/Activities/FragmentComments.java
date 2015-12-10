@@ -77,8 +77,6 @@ public class FragmentComments extends Fragment {
                 insertComment(c);
                 adapter.add(new OneComment(false, editText1.getText().toString()));
                 editText1.setText("");
-                lv.setAdapter(adapter);
-
             }
         });
         editText1 = (EditText) getView().findViewById(R.id.editText1);
