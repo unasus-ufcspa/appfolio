@@ -7,6 +7,7 @@ import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -68,6 +69,13 @@ public class FragmentEditText extends Frag {
         System.out.println("ID ACTIVITY: " + singleton.activity.getIdAtivity() + " ID PORTFOLIO STUDENT: " +  singleton.portfolioClass.getIdPortfolioStudent());
 
         return view;
+    }
+
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        loadLastText();
     }
 
     @Override
@@ -234,9 +242,8 @@ public class FragmentEditText extends Frag {
                 openFileBrowser();
             }
         });
-        loadLastText();
+        mEditor.setHtml(acStudent.getTxtActivity());
     }
-
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         // Quando o usuário escolhe a opção Take Picture
@@ -301,12 +308,16 @@ public class FragmentEditText extends Frag {
 
     @Override
     public void onStop() {
+        super.onResume();
         saveText();
+        Log.d("onStop", "Vai salvar o texto");
     }
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
+        Log.d("telaEditActivity", "Vai salvar o texto");
+        saveText();
     }
 
     @Override
@@ -318,7 +329,6 @@ public class FragmentEditText extends Frag {
         singleton = Singleton.getInstance();
         source = new DataBaseAdapter(getActivity());
         acStudent = source.listActivityStudent(singleton.idActivityStudent);
-        mEditor.setHtml(acStudent.getTxtActivity());
     }
 
     public void saveText() {
@@ -330,7 +340,7 @@ public class FragmentEditText extends Frag {
 
     @Override
     public void onDestroy() {
-        saveText();
         super.onDestroy();
+        saveText();
     }
 }
