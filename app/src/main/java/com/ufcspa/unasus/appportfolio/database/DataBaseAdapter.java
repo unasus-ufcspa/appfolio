@@ -153,7 +153,7 @@ public class DataBaseAdapter {
             Log.d(tag, "não há texto da atividade no banco");
         }
         c.close();
-        db.close();
+        //db.close();
         return acStudent;
     }
 
@@ -392,7 +392,7 @@ public class DataBaseAdapter {
         if(cursor.moveToFirst())
             return cursor.getInt(0);
 
-        db.close();
+//        db.close();
         return -1;
     }
 

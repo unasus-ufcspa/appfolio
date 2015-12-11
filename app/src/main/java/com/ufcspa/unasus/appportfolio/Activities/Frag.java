@@ -192,29 +192,7 @@ public class Frag extends Fragment {
         }
     }
 
-    /*
-    ************|
-    *  Pictures |
-    ************|
-    */
-
-    private File createImageFile() throws IOException {
-        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-        String imageFileName = "JPEG_" + timeStamp + "_";
-
-        File storageDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
-
-        File image = File.createTempFile(
-                imageFileName,  /* prefix */
-                ".jpg",         /* suffix */
-                storageDir      /* directory */
-        );
-
-        mCurrentPhotoPath = image.getAbsolutePath();
-        return image;
-    }
-
-    private void saveImage() {
+    public void saveSmallImage() {
         String[] path = mCurrentPhotoPath.split("\\.");
         path[0] += "_small";
 
@@ -250,6 +228,28 @@ public class Frag extends Fragment {
             Toast.makeText(getActivity(), "Save Failed", Toast.LENGTH_SHORT).show();
             return;
         }
+    }
+
+    /*
+    ************|
+    *  Pictures |
+    ************|
+    */
+
+    private File createImageFile() throws IOException {
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+        String imageFileName = "JPEG_" + timeStamp + "_";
+
+        File storageDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
+
+        File image = File.createTempFile(
+                imageFileName,  /* prefix */
+                ".jpg",         /* suffix */
+                storageDir      /* directory */
+        );
+
+        mCurrentPhotoPath = image.getAbsolutePath();
+        return image;
     }
 
     /*
