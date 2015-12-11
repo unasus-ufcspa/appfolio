@@ -7,6 +7,8 @@ import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.text.SpannableString;
+import android.text.style.StyleSpan;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -243,7 +245,10 @@ public class FragmentEditText extends Frag {
             }
         });
         mEditor.setHtml(acStudent.getTxtActivity());
+//        loadLastText();
+//        Log.d("Cycle", "On Resume");
     }
+
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         // Quando o usuário escolhe a opção Take Picture
@@ -274,6 +279,8 @@ public class FragmentEditText extends Frag {
             mCurrentPhotoPath = contentPath;
 
             if (mimeType.startsWith("image")) {
+//                saveSmallImage();
+//                mEditor.insertImage(mCurrentPhotoPath, "Testando imagem!");
                 insertImageIntoEditor(320, 240);
                 insertFileIntoDataBase(mCurrentPhotoPath, "I");
             } else if (mimeType.startsWith("video")) {
@@ -297,6 +304,8 @@ public class FragmentEditText extends Frag {
             mCurrentPhotoPath = getThumbnailPathForLocalFile(getActivity(), data.getData());
             insertImageIntoEditor(320, 240);
         }
+//        saveText();
+//        Log.d("Cycle", "Activity Result");
     }
 
     private void insertImageIntoEditor(int width, int height) {
@@ -310,7 +319,6 @@ public class FragmentEditText extends Frag {
     public void onStop() {
         super.onResume();
         saveText();
-        Log.d("onStop", "Vai salvar o texto");
     }
 
     @Override
@@ -326,14 +334,15 @@ public class FragmentEditText extends Frag {
     }
 
     public void loadLastText() {
-        singleton = Singleton.getInstance();
-        source = new DataBaseAdapter(getActivity());
+//        singleton = Singleton.getInstance();
+//        source = new DataBaseAdapter(getActivity());
         acStudent = source.listActivityStudent(singleton.idActivityStudent);
+        mEditor.setHtml(acStudent.getTxtActivity());
     }
 
     public void saveText() {
-        singleton = Singleton.getInstance();
-        source = new DataBaseAdapter(getActivity());
+//        singleton = Singleton.getInstance();
+//        source = new DataBaseAdapter(getActivity());
         acStudent.setTxtActivity(mEditor.getHtml());
         source.updateActivityStudent(acStudent);
     }

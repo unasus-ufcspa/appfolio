@@ -155,7 +155,7 @@ public class DataBaseAdapter {
             acStudent.setTxtActivity("");
         }
         c.close();
-        db.close();
+//        db.close();
         return acStudent;
     }
 
@@ -394,7 +394,7 @@ public class DataBaseAdapter {
         if(cursor.moveToFirst())
             return cursor.getInt(0);
 
-        db.close();
+//        db.close();
         cursor.close();
         return -1;
     }
