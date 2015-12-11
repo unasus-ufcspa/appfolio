@@ -151,9 +151,11 @@ public class DataBaseAdapter {
             acStudent.setTxtActivity(c.getString(0));
         } else {
             Log.d(tag, "não há texto da atividade no banco");
+            acStudent.setIdActivityStudent(idActivityStudent);
+            acStudent.setTxtActivity("");
         }
         c.close();
-        //db.close();
+//        db.close();
         return acStudent;
     }
 
@@ -393,6 +395,7 @@ public class DataBaseAdapter {
             return cursor.getInt(0);
 
 //        db.close();
+        cursor.close();
         return -1;
     }
 
