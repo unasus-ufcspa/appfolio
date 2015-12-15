@@ -110,7 +110,7 @@ public class EditActivity extends AppCompatActivity {
     private void selectItem(int position) {
         switch (position) {
             case 0:
-                getFragmentManager().beginTransaction().replace(R.id.content_frame, new FragmentEditText()).commit();
+                getFragmentManager().beginTransaction().replace(R.id.content_frame, new FragEditText()).commit();//FragmentEditText
                 break;
             case 1:
                 getFragmentManager().beginTransaction().replace(R.id.content_frame, new FragmentAttachment()).commit();
