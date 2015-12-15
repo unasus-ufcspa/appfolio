@@ -13,6 +13,12 @@
         android:id="@+id/rte_toolbar_container"
         layout="@layout/rte_toolbar" />
 
+    <Button
+        android:layout_width="64px"
+        android:layout_height="64px"
+        android:background="@drawable/ic_copy"
+        android:id="@+id/btCopyText"
+        android:gravity="center" />
     <ScrollView
         android:id="@+id/rte_content"
         android:layout_width="match_parent"

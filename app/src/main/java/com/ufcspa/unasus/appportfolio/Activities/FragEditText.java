@@ -1,15 +1,19 @@
 package com.ufcspa.unasus.appportfolio.Activities;
 
 import android.app.Activity;
+import android.app.FragmentManager;
+import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 
 import com.onegravity.rteditor.RTEditText;
 import com.onegravity.rteditor.RTManager;
@@ -25,6 +29,7 @@ import com.ufcspa.unasus.appportfolio.R;
 public class FragEditText extends Frag {
     private RTManager rtManager;
     private RTEditText rtEditText;
+    private Button btCopy;
 
     private Toolbar toolbar;
 
@@ -45,6 +50,29 @@ public class FragEditText extends Frag {
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+        btCopy = (Button) getView().findViewById(R.id.btCopyText);
+        btCopy.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                int i = rtEditText.getSelectionStart();
+                int j = rtEditText.getSelectionEnd();
+                String selectedText = rtEditText.getText().toString().substring(i, j);
+                Log.d("select text:", "" + selectedText);
+
+                FragmentComments fragment2 = new FragmentComments();
+                FragmentManager fragmentManager = getFragmentManager();
+                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                fragmentTransaction.replace(R.id.content_frame, fragment2);
+                fragmentTransaction.addToBackStack(null);
+                fragmentTransaction.commit();
+
+            }
+        });
+    }
+
+    @Override
     public void onStart() {
         super.onStart();
 
@@ -59,6 +87,14 @@ public class FragEditText extends Frag {
         rtEditText = (RTEditText) getView().findViewById(R.id.rtEditText);
         rtManager.registerEditor(rtEditText, true);
         rtEditText.setRichTextEditing(true, "<b>Bem Vindo!</b>");
+
+        rtEditText.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                return false;
+            }
+        });
+
     }
 
     @Override
