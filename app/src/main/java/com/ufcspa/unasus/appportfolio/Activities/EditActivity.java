@@ -5,11 +5,16 @@ import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 
 import com.ufcspa.unasus.appportfolio.Adapter.CommentArrayAdapter;
@@ -28,11 +33,17 @@ import java.util.ArrayList;
 public class EditActivity extends AppCompatActivity {
     private DrawerLayout mDrawerLayout;
     private ListView mDrawerList;
-    private ListView mRightDrawerList;
+//    private ListView mRightDrawerList;
     private CharSequence mDrawerTitle;
     private CharSequence mTitle;
     private CommentArrayAdapter commentAdapter;
     private ActionBarDrawerToggle mDrawerToggle;
+
+    private LinearLayout ll;
+    float startX;
+    private Animation animLeft;
+    private Animation animRight;
+    private boolean visible;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,19 +57,19 @@ public class EditActivity extends AppCompatActivity {
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(getApplicationContext(), android.R.layout.simple_list_item_1, itens);
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         mDrawerList = (ListView) findViewById(R.id.left_drawer);
-        mRightDrawerList = (ListView) findViewById(R.id.right_drawer);
+//        mRightDrawerList = (ListView) findViewById(R.id.right_drawer);
 
         // Set the adapter for the list view
         mDrawerList.setAdapter(adapter);
-        mRightDrawerList.setAdapter(commentAdapter);
+//        mRightDrawerList.setAdapter(commentAdapter);
         // Set the list's click listener
         mDrawerList.setOnItemClickListener(new DrawerItemClickListener());
-        mRightDrawerList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                selectItem(3);
-            }
-        });
+//        mRightDrawerList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+//            @Override
+//            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+//                selectItem(3);
+//            }
+//        });
 
         // enable ActionBar app icon to behave as action to toggle nav drawer
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -93,8 +104,18 @@ public class EditActivity extends AppCompatActivity {
 
 
         if (savedInstanceState == null) {
-            selectItem(3);
+            selectItem(0);
         }
+
+        getFragmentManager().beginTransaction().replace(R.id.content_right, new FragmentComments()).commit();
+
+        ll = (LinearLayout) findViewById(R.id.slider);
+        ll.setVisibility(View.GONE);
+
+        animLeft = AnimationUtils.loadAnimation(this, R.anim.anim_right);
+        animRight = AnimationUtils.loadAnimation(this, R.anim.anim_left);
+
+        visible = false;
     }
 
     @Override
@@ -132,7 +153,8 @@ public class EditActivity extends AppCompatActivity {
                 getFragmentManager().beginTransaction().replace(R.id.content_frame, new FragmentEditText()).commit();//FragmentEditText
                 break;
             case 1:
-                getFragmentManager().beginTransaction().replace(R.id.content_frame, new FragmentAttachment()).commit();
+                showDrawer();
+                //getFragmentManager().beginTransaction().replace(R.id.content_frame, new FragmentAttachment()).commit();
                 break;
             case 3:
                 getFragmentManager().beginTransaction().replace(R.id.content_frame, new FragmentComments()).commit();
@@ -187,8 +209,8 @@ public class EditActivity extends AppCompatActivity {
             } else {
                 ArrayAdapter ad = new ArrayAdapter<String>(getApplicationContext(), android.R.layout.select_dialog_item,
                         new String[]{"Não há mensagens"});
-                mRightDrawerList.setAdapter(ad);
-                mRightDrawerList.setBackgroundColor(Color.BLACK);
+                //mRightDrawerList.setAdapter(ad);
+                //mRightDrawerList.setBackgroundColor(Color.BLACK);
                 Log.d("Banco", "Lista retornou vazia!");
             }
         } catch (Exception e) {
@@ -197,4 +219,44 @@ public class EditActivity extends AppCompatActivity {
 
     }
 
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+
+        switch (event.getAction()) {
+            case MotionEvent.ACTION_DOWN: {
+                startX = event.getX();
+                break;
+            }
+            case MotionEvent.ACTION_UP: {
+                float endX = event.getX();
+
+                if (endX < startX) {
+                    System.out.println("Move left");
+                    ll.setVisibility(View.VISIBLE);
+                    ll.startAnimation(animLeft);
+                }
+                else {
+                    ll.startAnimation(animRight);
+                    ll.setVisibility(View.GONE);
+                }
+            }
+        }
+        return true;
+    }
+
+    public void showDrawer()
+    {
+        if(!visible)
+        {
+            ll.setVisibility(View.VISIBLE);
+            ll.startAnimation(animLeft);
+            visible = true;
+        }
+        else
+        {
+            ll.startAnimation(animRight);
+            ll.setVisibility(View.GONE);
+            visible = false;
+        }
+    }
 }

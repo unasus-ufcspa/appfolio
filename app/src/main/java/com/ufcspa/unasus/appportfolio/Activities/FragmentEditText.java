@@ -7,6 +7,7 @@ import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.ActionMode;
 import android.view.LayoutInflater;
@@ -53,7 +54,7 @@ public class FragmentEditText extends Frag {
         singleton.idActivityStudent = source.getActivityStudentID(singleton.activity.getIdAtivity(),singleton.portfolioClass.getIdPortfolioStudent());
 
         mEditor = (RichEditor) view.findViewById(R.id.editor);
-        mEditor.setEditorHeight(200);
+
         mEditor.setEditorFontSize(22);
         mEditor.setEditorFontColor(Color.BLACK);
         //mEditor.setEditorBackgroundColor(Color.BLUE);
@@ -68,7 +69,10 @@ public class FragmentEditText extends Frag {
 //            }
 //        });
 
-        System.out.println("ID ACTIVITY: " + singleton.activity.getIdAtivity() + " ID PORTFOLIO STUDENT: " +  singleton.portfolioClass.getIdPortfolioStudent());
+        DisplayMetrics dm = new DisplayMetrics();
+        getActivity().getWindowManager().getDefaultDisplay().getMetrics(dm);
+        int height = dm.heightPixels;
+        mEditor.setEditorHeight(height);
 
         return view;
     }
