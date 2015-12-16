@@ -6,7 +6,7 @@
     <com.onegravity.rteditor.RTEditText
         android:id="@+id/rtEditText"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:imeOptions="actionDone|flagNoEnterAction"
         android:inputType="textMultiLine|textAutoCorrect|textCapSentences" />
 
