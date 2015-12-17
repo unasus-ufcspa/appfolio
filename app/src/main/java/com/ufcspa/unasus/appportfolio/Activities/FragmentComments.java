@@ -1,6 +1,5 @@
 package com.ufcspa.unasus.appportfolio.Activities;
 
-import android.app.Fragment;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -25,7 +24,7 @@ import java.util.Calendar;
 /**
  * Created by Desenvolvimento on 07/12/2015.
  */
-public class FragmentComments extends Fragment {
+public class FragmentComments extends Frag {
     private CommentArrayAdapter adapter;
     private ListView lv;
     private Button btGenMess;

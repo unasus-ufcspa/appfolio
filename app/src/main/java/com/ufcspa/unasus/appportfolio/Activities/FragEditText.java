@@ -1,8 +1,6 @@
 package com.ufcspa.unasus.appportfolio.Activities;
 
 import android.app.Activity;
-import android.app.FragmentManager;
-import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
@@ -61,12 +59,12 @@ public class FragEditText extends Frag {
                 String selectedText = rtEditText.getText().toString().substring(i, j);
                 Log.d("select text:", "" + selectedText);
 
-                FragmentComments fragment2 = new FragmentComments();
-                FragmentManager fragmentManager = getFragmentManager();
-                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                fragmentTransaction.replace(R.id.content_frame, fragment2);
-                fragmentTransaction.addToBackStack(null);
-                fragmentTransaction.commit();
+//                FragmentComments fragment2 = new FragmentComments();
+//                FragmentManager fragmentManager = getFragmentManager();
+//                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+//                fragmentTransaction.replace(R.id.content_frame, fragment2);
+//                fragmentTransaction.addToBackStack(null);
+//                fragmentTransaction.commit();
 
             }
         });

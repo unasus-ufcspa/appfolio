@@ -81,11 +81,13 @@ public class FragmentEditText extends Frag {
     public void onStart() {
         super.onStart();
         loadLastText();
+        Log.d("FragmentEditText", "onStart");
     }
 
     @Override
     public void onResume() {
         super.onResume();
+        Log.d("FragmentEditText", "onResume");
 
         getView().findViewById(R.id.action_undo).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -147,7 +149,6 @@ public class FragmentEditText extends Frag {
             @Override
             public void onClick(View v) {
                 mEditor.setHeading(1);
-                //Toast.makeText()
             }
         });
         getView().findViewById(R.id.action_txt_color).setOnClickListener(new View.OnClickListener() {
@@ -314,8 +315,9 @@ public class FragmentEditText extends Frag {
             mCurrentPhotoPath = getThumbnailPathForLocalFile(getActivity(), data.getData());
             insertImageIntoEditor(320, 240);
         }
-//        saveText();
+        saveText();
 //        Log.d("Cycle", "Activity Result");
+        Log.d("FragmentEditText", "onActivityResult");
     }
 
     private void insertImageIntoEditor(int width, int height) {
@@ -344,15 +346,11 @@ public class FragmentEditText extends Frag {
     }
 
     public void loadLastText() {
-//        singleton = Singleton.getInstance();
-//        source = new DataBaseAdapter(getActivity());
         acStudent = source.listActivityStudent(singleton.idActivityStudent);
         mEditor.setHtml(acStudent.getTxtActivity());
     }
 
     public void saveText() {
-//        singleton = Singleton.getInstance();
-//        source = new DataBaseAdapter(getActivity());
         acStudent.setTxtActivity(mEditor.getHtml());
         source.updateActivityStudent(acStudent);
     }

@@ -1,30 +1,23 @@
 package com.ufcspa.unasus.appportfolio.Activities;
 
-import android.graphics.Color;
 import android.os.Bundle;
+import android.support.v4.app.FragmentTabHost;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.LinearLayout;
 import android.widget.ListView;
 
-import com.ufcspa.unasus.appportfolio.Adapter.CommentArrayAdapter;
-import com.ufcspa.unasus.appportfolio.Model.Comentario;
-import com.ufcspa.unasus.appportfolio.Model.OneComment;
-import com.ufcspa.unasus.appportfolio.Model.Singleton;
 import com.ufcspa.unasus.appportfolio.R;
-import com.ufcspa.unasus.appportfolio.database.DataBaseAdapter;
-
-import java.util.ArrayList;
 
 
 /**
@@ -36,11 +29,10 @@ public class EditActivity extends AppCompatActivity {
 //    private ListView mRightDrawerList;
     private CharSequence mDrawerTitle;
     private CharSequence mTitle;
-    private CommentArrayAdapter commentAdapter;
+    //private CommentArrayAdapter commentAdapter;
     private ActionBarDrawerToggle mDrawerToggle;
 
-    private LinearLayout ll;
-    float startX;
+    private FragmentTabHost slider;
     private Animation animLeft;
     private Animation animRight;
     private boolean visible;
@@ -49,10 +41,9 @@ public class EditActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_activity);
-        Log.d("cycle", "on create");
 
         mTitle = mDrawerTitle = getTitle();
-        commentAdapter = new CommentArrayAdapter(getApplicationContext(), R.layout.comment_item);
+        //commentAdapter = new CommentArrayAdapter(getApplicationContext(), R.layout.comment_item);
         String[] itens = {"Editar Texto", "Anexos", "Referências", "Comentários"};
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(getApplicationContext(), android.R.layout.simple_list_item_1, itens);
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -107,16 +98,37 @@ public class EditActivity extends AppCompatActivity {
             selectItem(0);
         }
 
-        getFragmentManager().beginTransaction().replace(R.id.content_right, new FragmentComments()).commit();
+        //getFragmentManager().beginTransaction().replace(R.id.content_right, new FragmentComments()).commit();
 
-        ll = (LinearLayout) findViewById(R.id.slider);
-        ll.setVisibility(View.GONE);
+        slider = (FragmentTabHost) findViewById(R.id.slider);
+        slider.setup(this, getSupportFragmentManager(), R.id.realtabcontent);
+        slider.setVisibility(View.GONE);
+
+        DisplayMetrics dm = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(dm);
+        int width = dm.widthPixels;
+
+        slider.getLayoutParams().width = width / 2;
+        slider.requestLayout();
+
+        slider.addTab(slider.newTabSpec("Comments").setIndicator(null, getResources().getDrawable(R.drawable.ic_announcement_black_24dp)), FragmentComments.class, null);
+        slider.addTab(slider.newTabSpec("New Edit Text").setIndicator(null, getResources().getDrawable(R.drawable.ic_copy)), FragEditText.class, null);
+        slider.addTab(slider.newTabSpec("Old Edit Text").setIndicator(null, getResources().getDrawable(R.drawable.ic_share)), FragmentEditText.class, null);
 
         animLeft = AnimationUtils.loadAnimation(this, R.anim.anim_right);
         animRight = AnimationUtils.loadAnimation(this, R.anim.anim_left);
 
         visible = false;
     }
+
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu, menu);
+        return true;
+    }
+
 
     @Override
     protected void onResume() {
@@ -127,7 +139,7 @@ public class EditActivity extends AppCompatActivity {
                 Log.d("Toolbar", "foi");
             }
         });
-        addItems();
+        // addItems();
     }
 
     @Override
@@ -150,113 +162,101 @@ public class EditActivity extends AppCompatActivity {
     private void selectItem(int position) {
         switch (position) {
             case 0:
-                getFragmentManager().beginTransaction().replace(R.id.content_frame, new FragmentEditText()).commit();//FragmentEditText
+                //getFragmentManager().beginTransaction().replace(R.id.content_frame, new FragmentEditText()).commit();//FragmentEditText
                 break;
             case 1:
-                showDrawer();
-                //getFragmentManager().beginTransaction().replace(R.id.content_frame, new FragmentAttachment()).commit();
+                // getFragmentManager().beginTransaction().replace(R.id.content_frame, new FragmentAttachment()).commit();
                 break;
             case 3:
-                getFragmentManager().beginTransaction().replace(R.id.content_frame, new FragmentComments()).commit();
+                //getFragmentManager().beginTransaction().replace(R.id.content_frame, new FragmentComments()).commit();
                 break;
         }
-        // update the main content by replacing fragments
-//        Fragment fragment = new PlanetFragment();
-//        Bundle args = new Bundle();
-//        args.putInt(PlanetFragment.ARG_PLANET_NUMBER, position);
-//        fragment.setArguments(args);
-//
-//        FragmentManager fragmentManager = getFragmentManager();
-//        fragmentManager.beginTransaction().replace(R.id.content_frame, fragment).commit();
-//
-//        // update selected item and title, then close the drawer
         mDrawerList.setItemChecked(position, true);
-//        setTitle(itens[position]);
         mDrawerLayout.closeDrawer(mDrawerList);
     }
 
     @Override
     protected void onPostCreate(Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
-        // Sync the toggle state after onRestoreInstanceState has occurred.
         mDrawerToggle.syncState();
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // The action bar home/up action should open or close the drawer.
-        // ActionBarDrawerToggle will take care of this.
         if (mDrawerToggle.onOptionsItemSelected(item)) {
-            //actionbar clicked
+            if (visible)
+                showDrawer();
             return true;
         }
+        if (item.getItemId() == R.id.action_favorite)
+            showDrawer();
         return super.onOptionsItemSelected(item);
-    }
-
-
-    private void addItems() {
-        //adapter.add(new OneComment(true, "Hello bubbles!"));
-        try {
-            DataBaseAdapter db = new DataBaseAdapter(this);
-            Singleton singleton = Singleton.getInstance();
-            ArrayList<Comentario> lista = (ArrayList<Comentario>) db.listComments(singleton.activity.getIdAtivity());
-            if (lista.size() != 0) {
-                for (int i = 0; i < lista.size(); i++) {
-                    commentAdapter.add(new OneComment(lista.get(i).getIdAuthor() != singleton.user.getIdUser(),
-                            lista.get(i).getTxtComment() + "\n" + lista.get(i).getDateComment()));
-                }
-                Log.d("Banco", "Lista populada:" + lista);
-            } else {
-                ArrayAdapter ad = new ArrayAdapter<String>(getApplicationContext(), android.R.layout.select_dialog_item,
-                        new String[]{"Não há mensagens"});
-                //mRightDrawerList.setAdapter(ad);
-                //mRightDrawerList.setBackgroundColor(Color.BLACK);
-                Log.d("Banco", "Lista retornou vazia!");
-            }
-        } catch (Exception e) {
-
-        }
-
-    }
-
-    @Override
-    public boolean onTouchEvent(MotionEvent event) {
-
-        switch (event.getAction()) {
-            case MotionEvent.ACTION_DOWN: {
-                startX = event.getX();
-                break;
-            }
-            case MotionEvent.ACTION_UP: {
-                float endX = event.getX();
-
-                if (endX < startX) {
-                    System.out.println("Move left");
-                    ll.setVisibility(View.VISIBLE);
-                    ll.startAnimation(animLeft);
-                }
-                else {
-                    ll.startAnimation(animRight);
-                    ll.setVisibility(View.GONE);
-                }
-            }
-        }
-        return true;
     }
 
     public void showDrawer()
     {
         if(!visible)
         {
-            ll.setVisibility(View.VISIBLE);
-            ll.startAnimation(animLeft);
+            mDrawerLayout.closeDrawer(mDrawerList);
+            slider.setVisibility(View.VISIBLE);
+            slider.startAnimation(animLeft);
             visible = true;
         }
         else
         {
-            ll.startAnimation(animRight);
-            ll.setVisibility(View.GONE);
+            slider.startAnimation(animRight);
+            slider.setVisibility(View.GONE);
             visible = false;
         }
     }
+
+
+//    private void addItems() {
+//        //adapter.add(new OneComment(true, "Hello bubbles!"));
+//        try {
+//            DataBaseAdapter db = new DataBaseAdapter(this);
+//            Singleton singleton = Singleton.getInstance();
+//            ArrayList<Comentario> lista = (ArrayList<Comentario>) db.listComments(singleton.activity.getIdAtivity());
+//            if (lista.size() != 0) {
+//                for (int i = 0; i < lista.size(); i++) {
+//                    commentAdapter.add(new OneComment(lista.get(i).getIdAuthor() != singleton.user.getIdUser(),
+//                            lista.get(i).getTxtComment() + "\n" + lista.get(i).getDateComment()));
+//                }
+//                Log.d("Banco", "Lista populada:" + lista);
+//            } else {
+//                ArrayAdapter ad = new ArrayAdapter<String>(getApplicationContext(), android.R.layout.select_dialog_item,
+//                        new String[]{"Não há mensagens"});
+//                //mRightDrawerList.setAdapter(ad);
+//                //mRightDrawerList.setBackgroundColor(Color.BLACK);
+//                Log.d("Banco", "Lista retornou vazia!");
+//            }
+//        } catch (Exception e) {
+//
+//        }
+//
+//    }
+
+//    @Override
+//    public boolean onTouchEvent(MotionEvent event) {
+//        switch (event.getAction()) {
+//            case MotionEvent.ACTION_DOWN: {
+//                startX = event.getX();
+//                break;
+//            }
+//            case MotionEvent.ACTION_UP: {
+//                float endX = event.getX();
+//
+//                if (endX < startX) {
+//                    System.out.println("Move left");
+//                    slider.setVisibility(View.VISIBLE);
+//                    slider.startAnimation(animLeft);
+//                }
+//                else {
+//                    slider.startAnimation(animRight);
+//                    slider.setVisibility(View.GONE);
+//                }
+//            }
+//        }
+//        return true;
+//    }
 }
