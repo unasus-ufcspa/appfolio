@@ -70,6 +70,7 @@ public class EditActivity extends AppCompatActivity {
 
         slider.getLayoutParams().width = width / 2;
         slider.requestLayout();
+        slider.bringToFront();
 
         slider.addTab(slider.newTabSpec("Comments").setIndicator(null, getResources().getDrawable(R.drawable.ic_announcement_black_24dp)), FragmentComments.class, null);
         slider.addTab(slider.newTabSpec("New Edit Text").setIndicator(null, getResources().getDrawable(R.drawable.ic_copy)), FragEditText.class, null);
