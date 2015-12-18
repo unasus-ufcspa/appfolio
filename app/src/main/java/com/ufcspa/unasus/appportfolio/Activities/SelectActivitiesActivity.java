@@ -20,7 +20,7 @@ import java.util.Collections;
 /**
  * Created by UNASUS on 10/11/2015.
  */
-public class SelectActivitiesActivity extends AppCompatActivity implements AdapterView.OnItemClickListener
+public class SelectActivitiesActivity extends AppActivity implements AdapterView.OnItemClickListener
 {
     private GridView grid_activities;
     private ArrayList<Activity> activities;
@@ -34,6 +34,7 @@ public class SelectActivitiesActivity extends AppCompatActivity implements Adapt
         setContentView(R.layout.activity_activities);
 
         init();
+        createDrawer(savedInstanceState);
     }
 
     private void init()
