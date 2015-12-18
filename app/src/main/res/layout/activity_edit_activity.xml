@@ -1,57 +1,43 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:orientation="vertical">
 
-    <android.support.v4.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        android:id="@+id/drawer_layout"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-        <!-- The main content view -->
-        <FrameLayout
-            android:id="@+id/content_frame"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"></FrameLayout>
+    <!--<android.support.v4.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"-->
+    <!--android:id="@+id/drawer_layout"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="match_parent">-->
+    <!--&lt;!&ndash; The main content view &ndash;&gt;-->
+    <!--<FrameLayout-->
+    <!--android:id="@+id/content_frame"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="match_parent"></FrameLayout>-->
 
-        <!-- The navigation drawer -->
-        <ListView
-            android:id="@+id/left_drawer"
-            android:layout_width="240dp"
-            android:layout_height="match_parent"
-            android:layout_gravity="start"
-            android:choiceMode="singleChoice"
-            android:divider="@android:color/transparent"
-            android:dividerHeight="0dp"
-            android:background="#111" />
-
+    <!--&lt;!&ndash; The navigation drawer &ndash;&gt;-->
         <!--<ListView-->
-            <!--android:id="@+id/right_drawer"-->
+    <!--android:id="@+id/left_drawer"-->
             <!--android:layout_width="240dp"-->
             <!--android:layout_height="match_parent"-->
-            <!--android:layout_gravity="end"-->
+    <!--android:layout_gravity="start"-->
             <!--android:choiceMode="singleChoice"-->
             <!--android:divider="@android:color/transparent"-->
             <!--android:dividerHeight="0dp"-->
-            <!--android:background="#FFFFFF"-->
-            <!--android:headerDividersEnabled="false" />-->
-    </android.support.v4.widget.DrawerLayout>
+    <!--android:background="#111" />-->
 
-    <!--<LinearLayout-->
-    <!--android:id="@+id/slider"-->
-    <!--android:layout_width="200dp"-->
-    <!--android:layout_height="match_parent"-->
-    <!--android:layout_alignParentRight="true"-->
-    <!--android:background="@android:color/darker_gray"-->
-    <!--android:content="@+id/content"-->
-    <!--android:gravity="bottom|center_horizontal"-->
-    <!--android:orientation="vertical" >-->
-
-    <!--<FrameLayout-->
-    <!--android:id="@+id/content_right"-->
-    <!--android:layout_width="match_parent"-->
-    <!--android:layout_height="match_parent"></FrameLayout>-->
-    <!--</LinearLayout>-->
+    <!--&lt;!&ndash;<ListView&ndash;&gt;-->
+    <!--&lt;!&ndash;android:id="@+id/right_drawer"&ndash;&gt;-->
+    <!--&lt;!&ndash;android:layout_width="240dp"&ndash;&gt;-->
+    <!--&lt;!&ndash;android:layout_height="match_parent"&ndash;&gt;-->
+    <!--&lt;!&ndash;android:layout_gravity="end"&ndash;&gt;-->
+    <!--&lt;!&ndash;android:choiceMode="singleChoice"&ndash;&gt;-->
+    <!--&lt;!&ndash;android:divider="@android:color/transparent"&ndash;&gt;-->
+    <!--&lt;!&ndash;android:dividerHeight="0dp"&ndash;&gt;-->
+    <!--&lt;!&ndash;android:background="#FFFFFF"&ndash;&gt;-->
+    <!--&lt;!&ndash;android:headerDividersEnabled="false" />&ndash;&gt;-->
+    <!--</android.support.v4.widget.DrawerLayout>-->
 
     <android.support.v4.app.FragmentTabHost xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/slider"
@@ -63,16 +49,16 @@
         android:orientation="vertical" >
 
         <LinearLayout
-            android:orientation="vertical"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:orientation="vertical">
 
             <TabWidget
                 android:id="@android:id/tabs"
-                android:orientation="horizontal"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="0" />
+                android:layout_weight="0"
+                android:orientation="horizontal" />
 
             <FrameLayout
                 android:id="@android:id/tabcontent"
@@ -88,5 +74,20 @@
 
         </LinearLayout>
     </android.support.v4.app.FragmentTabHost>
+
+    <LinearLayout
+        android:id="@+id/crossfade_content"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+
+        <fragment
+            android:id="@+id/fragment"
+            android:name="com.ufcspa.unasus.appportfolio.Activities.FragmentEditText"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center_horizontal" />
+    </LinearLayout>
 
 </RelativeLayout>
