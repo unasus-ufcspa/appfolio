@@ -24,7 +24,7 @@ import java.util.List;
  * informações realacionadas as turmas do aluno logado. Sendo
  * possível selecionar a turma desejada.
  */
-public class SelectClassActivity extends AppCompatActivity implements AdapterView.OnItemClickListener
+public class SelectClassActivity extends AppActivity implements AdapterView.OnItemClickListener
 {
     private GridView grid_classes;
     private List<Team> classes;
@@ -38,6 +38,7 @@ public class SelectClassActivity extends AppCompatActivity implements AdapterVie
         setContentView(R.layout.activity_classes);
 
         init();
+        createDrawer(savedInstanceState);
     }
 
     private void init() {

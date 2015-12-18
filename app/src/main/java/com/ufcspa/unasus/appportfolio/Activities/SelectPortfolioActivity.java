@@ -21,7 +21,7 @@ import com.ufcspa.unasus.appportfolio.database.DataBaseAdapter;
 
 import java.util.List;
 
-public class SelectPortfolioActivity extends AppCompatActivity {
+public class SelectPortfolioActivity extends AppActivity {
     private ListView listview;
     private TextView txtCodeTeam;
     private List<PortfolioClass> portfolios;
@@ -49,6 +49,7 @@ public class SelectPortfolioActivity extends AppCompatActivity {
         listview = (ListView) findViewById(R.id.selectPortfolioListView);
 
         init();
+        createDrawer(savedInstanceState);
     }
 
     @Override
