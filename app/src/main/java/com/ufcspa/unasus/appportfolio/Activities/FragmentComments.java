@@ -12,6 +12,7 @@ import android.widget.ListView;
 
 import com.ufcspa.unasus.appportfolio.Adapter.CommentArrayAdapter;
 import com.ufcspa.unasus.appportfolio.Model.Comentario;
+import com.ufcspa.unasus.appportfolio.Model.HttpClient;
 import com.ufcspa.unasus.appportfolio.Model.OneComment;
 import com.ufcspa.unasus.appportfolio.Model.Singleton;
 import com.ufcspa.unasus.appportfolio.R;
@@ -123,12 +124,20 @@ public class FragmentComments extends Frag {
     }
 
     private void insertComment(Comentario c) {
-        System.out.println("id:" + c.getIdActivityStudent());
-        System.out.println("comentario inserido:" + c);
+//        System.out.println("id:" + c.getIdActivityStudent());
+//        System.out.println("comentario inserido:" + c);
+        try{
+            HttpClient client = new HttpClient(getActivity(),c);
+            System.out.println(c.toJSON().toString());
+            client.postJson(c.toJSON());
+            Log.d("Banco:", "comentario inserido  no bd externo com sucesso");
+        }catch (Exception e){
+            Log.e("JSON",e.getMessage());
+        }
         try {
             DataBaseAdapter db = new DataBaseAdapter(getActivity());
             db.insertComment(c);
-            Log.d("Banco:", "comentario inserido com sucesso");
+            Log.d("Banco:", "comentario inserido  no bd interno com sucesso");
         } catch (Exception e) {
             Log.e("Erro:", e.getMessage());
         }
