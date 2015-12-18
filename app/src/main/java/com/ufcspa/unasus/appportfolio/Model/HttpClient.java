@@ -19,7 +19,7 @@ import org.json.JSONObject;
 public class HttpClient {
     private Context context;
     private Comentario comentario=null;
-    private static final String URL="localhost:8080/portfolio/";
+    private static final String URL="http://localhost:8080/portfolio/";
     private String tag="JSON";
 
     public HttpClient(Context context) {
@@ -34,7 +34,7 @@ public class HttpClient {
 
     public void postJson(JSONObject jsonBody){
         final Response.Listener<JSONObject> response = null;
-        JsonObjectRequest jsObjReq = new JsonObjectRequest(Request.Method.POST, URL + "insert.php", jsonBody, new Response.Listener<JSONObject>() {
+        JsonObjectRequest jsObjReq = new JsonObjectRequest(Request.Method.POST, URL + "volley.php", jsonBody, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
                 Log.d(tag,"Retornou do request");

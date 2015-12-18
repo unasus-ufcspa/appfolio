@@ -127,12 +127,12 @@ public class FragmentComments extends Frag {
 //        System.out.println("id:" + c.getIdActivityStudent());
 //        System.out.println("comentario inserido:" + c);
         try{
-            HttpClient client = new HttpClient(getActivity(),c);
+            HttpClient client = new HttpClient(getActivity().getApplicationContext(),c);
             System.out.println(c.toJSON().toString());
             client.postJson(c.toJSON());
             Log.d("Banco:", "comentario inserido  no bd externo com sucesso");
         }catch (Exception e){
-            Log.e("JSON",e.getMessage());
+            Log.e("JSON act",e.getMessage());
         }
         try {
             DataBaseAdapter db = new DataBaseAdapter(getActivity());
