@@ -1,5 +1,8 @@
 package com.ufcspa.unasus.appportfolio.Model;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 /**
  * Created by Desenvolvimento on 08/12/2015.
  */
@@ -79,4 +82,21 @@ public class Comentario {
                 ", idAuthor=" + idAuthor +
                 '}';
     }
+    public JSONObject toJSON(){
+        JSONObject c= new JSONObject();// c is comment JSON OBJECT
+        try {
+            //c.put("id_comment",+getIdComment());
+            c.put("id_activity_student",getIdActivityStudent());
+            c.put("id_author",getIdAuthor());
+            c.put("tx_comment",getTxtComment());
+            c.put("dt_comment",getDateComment());
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return c;
+    }
+
+
+
+
 }
