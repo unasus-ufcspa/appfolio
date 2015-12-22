@@ -1,5 +1,8 @@
 package com.ufcspa.unasus.appportfolio.Activities;
 
+import android.app.AlertDialog;
+import android.app.Dialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -8,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ListView;
 
 import com.ufcspa.unasus.appportfolio.Adapter.CommentArrayAdapter;
@@ -18,6 +22,7 @@ import com.ufcspa.unasus.appportfolio.Model.Singleton;
 import com.ufcspa.unasus.appportfolio.R;
 import com.ufcspa.unasus.appportfolio.database.DataBaseAdapter;
 
+import java.sql.SQLOutput;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -29,6 +34,7 @@ public class FragmentComments extends Frag {
     private CommentArrayAdapter adapter;
     private ListView lv;
     private Button btGenMess;
+    private Button btAttachment;
     //private LoremIpsum ipsum;
     private EditText editText1;
 
@@ -53,6 +59,8 @@ public class FragmentComments extends Frag {
     public void onResume() {
         super.onResume();
         btGenMess = (Button) getView().findViewById(R.id.gen_messag_bt);
+        btAttachment = (Button) getView().findViewById(R.id.bt_add_attachment);
+
         //btGenMess.setVisibility(View.INVISIBLE);
 
         lv = (ListView) getView().findViewById(R.id.listView1);
@@ -60,6 +68,13 @@ public class FragmentComments extends Frag {
         adapter = new CommentArrayAdapter(getActivity().getApplicationContext(), R.layout.comment_item);
 
         lv.setAdapter(adapter);
+
+        btAttachment.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                addAttachmentToComments();
+            }
+        });
 
         btGenMess.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -159,6 +174,69 @@ public class FragmentComments extends Frag {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         String strDate = sdf.format(c.getTime());
         return strDate;
+    }
+
+    private void addAttachmentToComments() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+//        // Get the layout inflater
+//        LayoutInflater inflater = getActivity().getLayoutInflater();
+//
+//        // Inflate and set the layout for the dialog
+//        // Pass null as the parent view because its going in the dialog layout
+//        builder.setView(inflater.inflate(R.layout.attachment_popup, null))
+//                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+//                    public void onClick(DialogInterface dialog, int id) {
+//                        dialog.cancel();
+//                    }
+//                });
+//        AlertDialog alert = builder.create();
+//        alert.show();
+        // custom dialog
+        final Dialog dialog = new Dialog(getActivity());
+        dialog.setContentView(R.layout.attachment_popup);
+        dialog.setTitle("Attachments");
+
+        ImageButton img_gallery = (ImageButton) dialog.findViewById(R.id.img_gallery);
+        img_gallery.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                System.out.println("Gallery");
+            }
+        });
+
+        ImageButton img_photos = (ImageButton) dialog.findViewById(R.id.img_photos);
+        img_photos.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                System.out.println("Photos");
+            }
+        });
+
+        ImageButton img_videos = (ImageButton) dialog.findViewById(R.id.img_videos);
+        img_videos.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                System.out.println("Videos");
+            }
+        });
+
+        ImageButton img_text = (ImageButton) dialog.findViewById(R.id.img_text);
+        img_text.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                System.out.println("Text");
+            }
+        });
+
+        Button bt_cancel = (Button) dialog.findViewById(R.id.btn_cancel);
+        bt_cancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+
+        dialog.show();
     }
 
 }

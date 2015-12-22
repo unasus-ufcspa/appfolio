@@ -69,10 +69,10 @@ public class FragmentEditText extends Frag {
 //            }
 //        });
 
-        DisplayMetrics dm = new DisplayMetrics();
-        getActivity().getWindowManager().getDefaultDisplay().getMetrics(dm);
-        int height = dm.heightPixels;
-        mEditor.setEditorHeight(height);
+//        DisplayMetrics dm = new DisplayMetrics();
+//        getActivity().getWindowManager().getDefaultDisplay().getMetrics(dm);
+//        int height = dm.heightPixels;
+//        mEditor.setEditorHeight(height);
 
         return view;
     }
