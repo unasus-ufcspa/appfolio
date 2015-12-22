@@ -93,6 +93,40 @@ public class DataBaseAdapter {
 
     }
 
+    public Comentario getCommentById(int id){
+        String sql = "select * from tb_comment WHERE id_comment ="+id+ ";";
+        Cursor c = db.rawQuery(sql,null);
+            if(c!=null && c.getCount()>0) {
+                c.moveToFirst();
+                Comentario comm = new Comentario();
+                comm.setIdComment(c.getInt(0));
+                comm.setIdActivityStudent(c.getInt(1));
+                comm.setIdAuthor(c.getInt(2));
+                comm.setTxtComment(c.getString(3));
+                comm.setTxtReference(c.getString(4));
+                comm.setTypeComment(c.getString(5));
+                comm.setDateComment(c.getString(6));
+                c.close();
+                return  comm;
+            }else{
+                return null;
+            }
+    }
+    public void updateComment(Comentario c){
+        ContentValues cv = new ContentValues();
+        cv.put("id_activity_student", c.getIdActivityStudent());
+        cv.put("id_author", c.getIdAuthor());
+        cv.put("tx_comment",c.getTxtComment());
+        cv.put("tx_reference",c.getTxtReference());
+        cv.put("dt_comment",c.getDateComment());
+        try{
+            db.update("tb_comment",cv,"id_comment=?",new String[]{""+c.getIdComment()});
+        }catch (Exception e ){
+            Log.d(tag, e.getMessage());
+        }
+    }
+
+
     public List<Comentario> listComments(int idActStu) {
         ArrayList<Comentario> comentarios = new ArrayList<Comentario>();
         String sql = "select * from tb_comment WHERE id_activity_student =" + idActStu + " ORDER BY dt_comment ASC;";

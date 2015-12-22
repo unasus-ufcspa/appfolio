@@ -93,7 +93,7 @@ public class FragmentComments extends Frag {
         addItems();
     }
 
-    private void addItems() {
+    public void addItems() {
         //adapter.add(new OneComment(true, "Hello bubbles!"));
         try {
             DataBaseAdapter db = new DataBaseAdapter(getActivity());
