@@ -27,8 +27,9 @@
                 android:id="@+id/select_portfolio_txt_code"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
+                android:gravity="center"
                 android:text="New Text"
-                android:textSize="30dp" />
+                android:textSize="25dp" />
         </LinearLayout>
 
         <LinearLayout

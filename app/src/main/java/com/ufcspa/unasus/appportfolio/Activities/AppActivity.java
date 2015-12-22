@@ -1,5 +1,6 @@
 package com.ufcspa.unasus.appportfolio.Activities;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
@@ -62,14 +63,12 @@ public class AppActivity extends AppCompatActivity implements Drawer.OnDrawerIte
                 .withActivity(this)
                 .withAccountHeader(headerResult) //set the AccountHeader we created earlier for the header
                 .addDrawerItems(
-                        new PrimaryDrawerItem().withName("Home").withIcon(FontAwesome.Icon.faw_home).withIdentifier(1),
-                        new PrimaryDrawerItem().withName("Free to Play").withIcon(FontAwesome.Icon.faw_gamepad),
-                        new PrimaryDrawerItem().withName("Custom").withIcon(FontAwesome.Icon.faw_eye),
-                        new SectionDrawerItem().withName("Section Header"),
-                        new SecondaryDrawerItem().withName("Settings").withIcon(FontAwesome.Icon.faw_cog),
-                        new SecondaryDrawerItem().withName("Help").withIcon(FontAwesome.Icon.faw_question).withEnabled(false),
-                        new SecondaryDrawerItem().withName("Source").withIcon(FontAwesome.Icon.faw_github),
-                        new SecondaryDrawerItem().withName("Contacts").withIcon(FontAwesome.Icon.faw_bullhorn)
+                        new PrimaryDrawerItem().withName("Portfolios").withIcon(FontAwesome.Icon.faw_photo).withIdentifier(1),
+                        new PrimaryDrawerItem().withName("Atividades").withIcon(FontAwesome.Icon.faw_pencil),
+                        new SectionDrawerItem().withName("Geral"),
+                        new SecondaryDrawerItem().withName("Arquivos").withIcon(FontAwesome.Icon.faw_paste),
+                        new SecondaryDrawerItem().withName("Relatórios").withIcon(FontAwesome.Icon.faw_calendar),
+                        new SecondaryDrawerItem().withName("Configurações").withIcon(FontAwesome.Icon.faw_cog)
                 )
                 .withSavedInstance(savedInstanceState)
                 .withOnDrawerItemClickListener(this);
@@ -87,7 +86,7 @@ public class AppActivity extends AppCompatActivity implements Drawer.OnDrawerIte
                 .withAccountHeader(headerResult);
 
         //get the widths in px for the first and second panel
-        int firstWidth = (int) com.mikepenz.crossfader.util.UIUtils.convertDpToPixel(300, this);
+        int firstWidth = (int) com.mikepenz.crossfader.util.UIUtils.convertDpToPixel(250, this);
         int secondWidth = (int) com.mikepenz.crossfader.util.UIUtils.convertDpToPixel(72, this);
 
         //create and build our crossfader (see the MiniDrawer is also builded in here, as the build method returns the view to be used in the crossfader)
@@ -126,7 +125,17 @@ public class AppActivity extends AppCompatActivity implements Drawer.OnDrawerIte
 
     @Override
     public boolean onItemClick(View view, int position, IDrawerItem drawerItem) {
-        System.out.println("Item Clicked " + position + " " + drawerItem.getIdentifier());
+        System.out.println(position);
+        switch (position) {
+            case 1:
+                startActivity(new Intent(this, SelectPortfolioActivity.class));
+                break;
+            case 2:
+                startActivity(new Intent(this, SelectActivitiesActivity.class));
+                break;
+            default:
+                break;
+        }
         return false;
     }
 }

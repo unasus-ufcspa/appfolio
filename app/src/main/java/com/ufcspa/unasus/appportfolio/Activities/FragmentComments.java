@@ -1,5 +1,8 @@
 package com.ufcspa.unasus.appportfolio.Activities;
 
+import android.app.AlertDialog;
+import android.app.Dialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -8,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ListView;
 
 import com.ufcspa.unasus.appportfolio.Adapter.CommentArrayAdapter;
@@ -18,6 +22,7 @@ import com.ufcspa.unasus.appportfolio.Model.Singleton;
 import com.ufcspa.unasus.appportfolio.R;
 import com.ufcspa.unasus.appportfolio.database.DataBaseAdapter;
 
+import java.sql.SQLOutput;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -29,12 +34,19 @@ public class FragmentComments extends Frag {
     private CommentArrayAdapter adapter;
     private ListView lv;
     private Button btGenMess;
+    private Button btAttachment;
     //private LoremIpsum ipsum;
     private EditText editText1;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_messages, null);
+
+        source = new DataBaseAdapter(getActivity());
+
+        singleton = Singleton.getInstance();
+        singleton.idActivityStudent = source.getActivityStudentID(singleton.activity.getIdAtivity(), singleton.portfolioClass.getIdPortfolioStudent());
+
 
         //btGenMess.setOnClickListener(new View.OnClickListener() {
 //            @Override
@@ -53,6 +65,8 @@ public class FragmentComments extends Frag {
     public void onResume() {
         super.onResume();
         btGenMess = (Button) getView().findViewById(R.id.gen_messag_bt);
+        btAttachment = (Button) getView().findViewById(R.id.bt_add_attachment);
+
         //btGenMess.setVisibility(View.INVISIBLE);
 
         lv = (ListView) getView().findViewById(R.id.listView1);
@@ -60,6 +74,13 @@ public class FragmentComments extends Frag {
         adapter = new CommentArrayAdapter(getActivity().getApplicationContext(), R.layout.comment_item);
 
         lv.setAdapter(adapter);
+
+        btAttachment.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                addAttachmentToComments();
+            }
+        });
 
         btGenMess.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -163,5 +184,4 @@ public class FragmentComments extends Frag {
         String strDate = sdf.format(c.getTime());
         return strDate;
     }
-
 }

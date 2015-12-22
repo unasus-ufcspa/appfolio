@@ -7,17 +7,13 @@ import org.json.JSONObject;
  * Created by Desenvolvimento on 08/12/2015.
  */
 public class Comentario {
-    private int idComment;
-    private int idActivityStudent;
-    private int idAuthor;
     String txtComment;
     String txtReference;
     String typeComment;
     String dateComment;
-
-    public void setIdAuthor(int idAuthor) {
-        this.idAuthor = idAuthor;
-    }
+    private int idComment;
+    private int idActivityStudent;
+    private int idAuthor;
 
     public String getTxtReference() {
         return txtReference;
@@ -26,7 +22,6 @@ public class Comentario {
     public void setTxtReference(String txtReference) {
         this.txtReference = txtReference;
     }
-
 
     public int getIdComment() {
         return idComment;
@@ -46,6 +41,10 @@ public class Comentario {
 
     public int getIdAuthor() {
         return idAuthor;
+    }
+
+    public void setIdAuthor(int idAuthor) {
+        this.idAuthor = idAuthor;
     }
 
     public String getTxtComment() {
