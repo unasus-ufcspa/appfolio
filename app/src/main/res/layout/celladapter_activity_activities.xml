@@ -4,33 +4,33 @@
     android:textAlignment="center">
 
     <TextView
+        android:id="@+id/txt_activity_title"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="Large Text"
-        android:id="@+id/txt_activity_title"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:background="#8997ff"
+        android:background="#70E7D0"
         android:capitalize="sentences"
-        android:textAlignment="center"
         android:focusable="false"
-        android:focusableInTouchMode="false"/>
+        android:focusableInTouchMode="false"
+        android:text="Large Text"
+        android:textAlignment="center"
+        android:textAppearance="?android:attr/textAppearanceLarge" />
 
     <TextView
+        android:id="@+id/txt_activity_description"
         android:layout_width="wrap_content"
         android:layout_height="150dp"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="Medium Text"
-        android:id="@+id/txt_activity_description"
-        android:layout_below="@+id/txt_activity_title"
-        android:layout_alignLeft="@+id/txt_activity_title"
-        android:layout_alignStart="@+id/txt_activity_title"
-        android:layout_alignRight="@+id/txt_activity_title"
         android:layout_alignEnd="@+id/txt_activity_title"
-        android:background="#dbdeef"
+        android:layout_alignLeft="@+id/txt_activity_title"
+        android:layout_alignRight="@+id/txt_activity_title"
+        android:layout_alignStart="@+id/txt_activity_title"
+        android:layout_below="@+id/txt_activity_title"
+        android:background="#c5fef3"
         android:focusable="false"
-        android:focusableInTouchMode="false"/>
+        android:focusableInTouchMode="false"
+        android:text="Medium Text"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
 
     <!--<Button-->
     <!--style="?android:attr/buttonStyleSmall"-->

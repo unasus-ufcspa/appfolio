@@ -230,29 +230,30 @@ public class FragmentEditText extends Frag {
         getView().findViewById(R.id.action_blockquote).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //mEditor.setBlockquote();
+                mEditor.setBlockquote();
             }
         });
 
         getView().findViewById(R.id.action_insert_image).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showChooseGalleryOrTakePicture();
+//                showChooseGalleryOrTakePicture();
+                addAttachmentToComments();
             }
         });
 
         getView().findViewById(R.id.action_insert_link).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //mEditor.insertLink("https://github.com/wasabeef", "wasabeef");
-                dispatchTakeVideoIntent();
+                mEditor.insertLink("https://github.com/wasabeef", "wasabeef");
+//                dispatchTakeVideoIntent();
             }
         });
         getView().findViewById(R.id.action_insert_checkbox).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //mEditor.insertTodo();
-                openFileBrowser();
+                mEditor.insertTodo();
+//                openFileBrowser();
             }
         });
         mEditor.setHtml(acStudent.getTxtActivity());

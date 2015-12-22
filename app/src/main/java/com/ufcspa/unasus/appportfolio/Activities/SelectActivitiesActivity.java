@@ -63,6 +63,6 @@ public class SelectActivitiesActivity extends AppActivity implements AdapterView
         singleton.activity = this.activities.get(position);
         System.out.println("Teste " + position);
         startActivity(new Intent(this, EditActivity.class));
-        finish();
+        //finish();
     }
 }

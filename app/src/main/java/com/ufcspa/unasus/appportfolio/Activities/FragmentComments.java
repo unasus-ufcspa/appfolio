@@ -42,6 +42,12 @@ public class FragmentComments extends Frag {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_messages, null);
 
+        source = new DataBaseAdapter(getActivity());
+
+        singleton = Singleton.getInstance();
+        singleton.idActivityStudent = source.getActivityStudentID(singleton.activity.getIdAtivity(), singleton.portfolioClass.getIdPortfolioStudent());
+
+
         //btGenMess.setOnClickListener(new View.OnClickListener() {
 //            @Override
 //            public void onClick(View v) {
@@ -178,68 +184,4 @@ public class FragmentComments extends Frag {
         String strDate = sdf.format(c.getTime());
         return strDate;
     }
-
-    private void addAttachmentToComments() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-//        // Get the layout inflater
-//        LayoutInflater inflater = getActivity().getLayoutInflater();
-//
-//        // Inflate and set the layout for the dialog
-//        // Pass null as the parent view because its going in the dialog layout
-//        builder.setView(inflater.inflate(R.layout.attachment_popup, null))
-//                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-//                    public void onClick(DialogInterface dialog, int id) {
-//                        dialog.cancel();
-//                    }
-//                });
-//        AlertDialog alert = builder.create();
-//        alert.show();
-        // custom dialog
-        final Dialog dialog = new Dialog(getActivity());
-        dialog.setContentView(R.layout.attachment_popup);
-        dialog.setTitle("Attachments");
-
-        ImageButton img_gallery = (ImageButton) dialog.findViewById(R.id.img_gallery);
-        img_gallery.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                System.out.println("Gallery");
-            }
-        });
-
-        ImageButton img_photos = (ImageButton) dialog.findViewById(R.id.img_photos);
-        img_photos.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                System.out.println("Photos");
-            }
-        });
-
-        ImageButton img_videos = (ImageButton) dialog.findViewById(R.id.img_videos);
-        img_videos.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                System.out.println("Videos");
-            }
-        });
-
-        ImageButton img_text = (ImageButton) dialog.findViewById(R.id.img_text);
-        img_text.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                System.out.println("Text");
-            }
-        });
-
-        Button bt_cancel = (Button) dialog.findViewById(R.id.btn_cancel);
-        bt_cancel.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dialog.dismiss();
-            }
-        });
-
-        dialog.show();
-    }
-
 }

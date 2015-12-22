@@ -124,4 +124,5 @@ public class EditActivity extends AppActivity {
             visible = false;
         }
     }
+
 }
