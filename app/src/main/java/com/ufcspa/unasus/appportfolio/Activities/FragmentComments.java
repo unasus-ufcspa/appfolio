@@ -145,15 +145,18 @@ public class FragmentComments extends Frag {
             HttpClient client = new HttpClient(getActivity().getApplicationContext(),c);
             System.out.println(c.toJSON().toString());
             client.postJson(c.toJSON());
-            Log.d("Banco:", "comentario inserido  no bd externo com sucesso");
-        }catch (Exception e){
+            //Log.d("Banco:", "comentario enviado ao bd externo com sucesso");
+        }
+        catch (Exception e){
             Log.e("JSON act",e.getMessage());
         }
+
         try {
             DataBaseAdapter db = new DataBaseAdapter(getActivity());
             db.insertComment(c);
-            Log.d("Banco:", "comentario inserido  no bd interno com sucesso");
-        } catch (Exception e) {
+            Log.d("Banco:", "comentario inserido no bd interno com sucesso");
+        }
+        catch (Exception e) {
             Log.e("Erro:", e.getMessage());
         }
     }
