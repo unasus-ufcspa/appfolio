@@ -34,7 +34,7 @@
                 android:layout_alignRight="@+id/img_gallery"
                 android:layout_below="@+id/img_gallery"
                 android:gravity="center"
-                android:text="Gallery"
+                android:text="@string/files_popup_gallery"
                 android:textAppearance="?android:attr/textAppearanceMedium" />
         </RelativeLayout>
 
@@ -66,7 +66,7 @@
                 android:layout_alignRight="@+id/img_photos"
                 android:layout_below="@+id/img_photos"
                 android:gravity="center"
-                android:text="Photos"
+                android:text="@string/files_popup_photos"
                 android:textAppearance="?android:attr/textAppearanceMedium" />
         </RelativeLayout>
     </LinearLayout>
@@ -100,7 +100,7 @@
                 android:layout_alignRight="@+id/img_text"
                 android:layout_below="@+id/img_text"
                 android:gravity="center"
-                android:text="Text"
+                android:text="@string/files_popup_text"
                 android:textAppearance="?android:attr/textAppearanceMedium" />
         </RelativeLayout>
 
@@ -132,7 +132,7 @@
                 android:layout_alignRight="@+id/img_videos"
                 android:layout_below="@+id/img_videos"
                 android:gravity="center"
-                android:text="Videos"
+                android:text="@string/files_popup_videos"
                 android:textAppearance="?android:attr/textAppearanceMedium" />
         </RelativeLayout>
     </LinearLayout>
@@ -143,6 +143,6 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:background="#70E7D0"
-        android:text="Cancel" />
+        android:text="@string/cancel" />
 
 </LinearLayout>

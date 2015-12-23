@@ -63,12 +63,12 @@ public class AppActivity extends AppCompatActivity implements Drawer.OnDrawerIte
                 .withActivity(this)
                 .withAccountHeader(headerResult) //set the AccountHeader we created earlier for the header
                 .addDrawerItems(
-                        new PrimaryDrawerItem().withName("Portfolios").withIcon(FontAwesome.Icon.faw_photo).withIdentifier(1),
-                        new PrimaryDrawerItem().withName("Atividades").withIcon(FontAwesome.Icon.faw_pencil),
-                        new SectionDrawerItem().withName("Geral"),
-                        new SecondaryDrawerItem().withName("Arquivos").withIcon(FontAwesome.Icon.faw_paste),
-                        new SecondaryDrawerItem().withName("Relatórios").withIcon(FontAwesome.Icon.faw_calendar),
-                        new SecondaryDrawerItem().withName("Configurações").withIcon(FontAwesome.Icon.faw_cog)
+                        new PrimaryDrawerItem().withName(R.string.drawer_portfolio).withIcon(FontAwesome.Icon.faw_photo).withIdentifier(1),
+                        new PrimaryDrawerItem().withName(R.string.drawer_activities).withIcon(FontAwesome.Icon.faw_pencil),
+                        new SectionDrawerItem().withName(R.string.drawer_general),
+                        new SecondaryDrawerItem().withName(R.string.drawer_files).withIcon(FontAwesome.Icon.faw_paste),
+                        new SecondaryDrawerItem().withName(R.string.drawer_reports).withIcon(FontAwesome.Icon.faw_calendar),
+                        new SecondaryDrawerItem().withName(R.string.drawer_settings).withIcon(FontAwesome.Icon.faw_cog)
                 )
                 .withSavedInstance(savedInstanceState)
                 .withOnDrawerItemClickListener(this);

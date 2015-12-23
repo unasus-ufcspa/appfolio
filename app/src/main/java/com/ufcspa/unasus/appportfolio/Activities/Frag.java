@@ -338,7 +338,7 @@ public class Frag extends Fragment {
 
         final Dialog dialog = new Dialog(getActivity());
         dialog.setContentView(R.layout.attachment_popup);
-        dialog.setTitle("Attachments");
+        dialog.setTitle(R.string.files_popup_attachment);
 
         ImageButton img_gallery = (ImageButton) dialog.findViewById(R.id.img_gallery);
         img_gallery.setOnClickListener(new View.OnClickListener() {

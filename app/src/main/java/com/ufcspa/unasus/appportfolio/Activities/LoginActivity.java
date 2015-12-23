@@ -136,16 +136,16 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     private void showChooseTutorOrStudentPopup()
     {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setMessage("Do you want to enter as Student or Tutor?")
+        builder.setMessage(R.string.popup_login)
                 .setCancelable(false)
-                .setPositiveButton("Student", new DialogInterface.OnClickListener() {
+                .setPositiveButton(R.string.popup_login_student, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         session.user.setUserType('S');
                         dialog.cancel();
                         loginSuccess();
                     }
                 })
-                .setNegativeButton("Tutor", new DialogInterface.OnClickListener() {
+                .setNegativeButton(R.string.popup_login_tutor, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         session.user.setUserType('T');
                         dialog.cancel();
@@ -374,6 +374,16 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
     }
 
+    private void addEmailsToAutoComplete(List<String> emailAddressCollection) {
+        //Create adapter to tell the AutoCompleteTextView what to show in its dropdown list.
+        ArrayAdapter<String> adapter =
+                new ArrayAdapter<>(LoginActivity.this,
+                        android.R.layout.simple_dropdown_item_1line, emailAddressCollection);
+
+        mEmailView.setAdapter(adapter);
+    }
+
+
     private interface ProfileQuery {
         String[] PROJECTION = {
                 ContactsContract.CommonDataKinds.Email.ADDRESS,
@@ -382,16 +392,6 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
         int ADDRESS = 0;
         int IS_PRIMARY = 1;
-    }
-
-
-    private void addEmailsToAutoComplete(List<String> emailAddressCollection) {
-        //Create adapter to tell the AutoCompleteTextView what to show in its dropdown list.
-        ArrayAdapter<String> adapter =
-                new ArrayAdapter<>(LoginActivity.this,
-                        android.R.layout.simple_dropdown_item_1line, emailAddressCollection);
-
-        mEmailView.setAdapter(adapter);
     }
 
     /**

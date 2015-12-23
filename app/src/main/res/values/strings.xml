@@ -20,4 +20,23 @@
     <string name="drawer_open">Open navigation drawer</string>
     <string name="drawer_close">Close navigation drawer</string>
 
+    <string name="drawer_portfolio">Portfolios</string>
+    <string name="drawer_activities">Activities</string>
+    <string name="drawer_general">General</string>
+    <string name="drawer_files">Files</string>
+    <string name="drawer_reports">Reports</string>
+    <string name="drawer_settings">Settings</string>
+
+    <string name="files_popup_photos">Photos</string>
+    <string name="files_popup_gallery">Gallery</string>
+    <string name="files_popup_videos">Videos</string>
+    <string name="files_popup_text">Text</string>
+    <string name="files_popup_attachment">Attachments</string>
+
+    <string name="cancel">Cancel</string>
+
+    <string name="popup_login">Do you want to enter as Student or Tutor?</string>
+    <string name="popup_login_student">Student</string>
+    <string name="popup_login_tutor">Tutor</string>
+
 </resources>
