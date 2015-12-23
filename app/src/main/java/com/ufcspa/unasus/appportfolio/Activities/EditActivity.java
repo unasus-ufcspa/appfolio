@@ -34,6 +34,7 @@ import com.mikepenz.materialdrawer.model.SecondaryDrawerItem;
 import com.mikepenz.materialdrawer.model.SectionDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.IProfile;
 import com.mikepenz.materialize.util.UIUtils;
+import com.ufcspa.unasus.appportfolio.Activities.Fragments.FragRef;
 import com.ufcspa.unasus.appportfolio.Model.CrossfadeWrapper;
 import com.ufcspa.unasus.appportfolio.R;
 import com.mikepenz.google_material_typeface_library.GoogleMaterial;
@@ -68,7 +69,7 @@ public class EditActivity extends AppActivity {
         slider.bringToFront();
 
         slider.addTab(slider.newTabSpec("Comments").setIndicator(null, getResources().getDrawable(R.drawable.ic_announcement_black_24dp)), FragmentComments.class, null);
-        slider.addTab(slider.newTabSpec("New Edit Text").setIndicator(null, getResources().getDrawable(R.drawable.ic_copy)), FragEditText.class, null);
+        slider.addTab(slider.newTabSpec("References").setIndicator(null, getResources().getDrawable(R.drawable.ic_copy)), FragRef.class, null);
         slider.addTab(slider.newTabSpec("Old Edit Text").setIndicator(null, getResources().getDrawable(R.drawable.ic_share)), FragmentEditText.class, null);
 
         animLeft = AnimationUtils.loadAnimation(this, R.anim.anim_right);

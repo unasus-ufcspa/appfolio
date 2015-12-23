@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="fill_parent"
+    android:layout_height="match_parent"
+    >
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/scrollView"
+        android:layout_weight="3"
+        >
+
+        <EditText
+            android:id="@+id/frag_ref_edt"
+            android:layout_height="150dp"
+            android:layout_width="fill_parent"
+            android:inputType="textWebEmailAddress"
+            android:hint="enter the reference here"
+            android:autoLink="web" />
+    </ScrollView>
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="4"
+        >
+
+        <Button
+            style="?android:attr/buttonStyleSmall"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Save changes"
+            android:id="@+id/frag_ref_btSave"
+            android:layout_gravity="center" />
+    </LinearLayout>
+
+</LinearLayout>

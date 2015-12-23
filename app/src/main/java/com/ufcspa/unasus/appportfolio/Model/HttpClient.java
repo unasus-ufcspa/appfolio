@@ -106,7 +106,39 @@ public class HttpClient {
         });
         com.android.volley.RequestQueue queue = Volley.newRequestQueue(context);
         queue.add(jsonArtRequest);
+    }
 
 
+
+    public void getMessage(final FragmentComments fComm){
+        JsonObjectRequest jsObjReq = new JsonObjectRequest(Request.Method.GET, URL + "volley.php", null, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject json) {
+                Log.d(tag,"Retornou do request");
+                Comentario c = new Comentario();
+                try {
+                    c.setIdComment(json.getInt("id_comment"));
+                    c.setDateComment(json.getString("tx_comment"));
+                    c.setTxtComment(json.getString(""));
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                    Log.e(tag,"erro ao pegar na request:"+e.getMessage());
+                }
+                DataBaseAdapter dao = new DataBaseAdapter(context);
+                if (dao.getCommentById(c.getIdComment()) != null) {
+                    dao.updateComment(c);
+                } else {
+                    dao.insertComment(c);
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError volleyError) {
+                Log.e(tag,"Erro  na request");
+                Log.e(tag,volleyError.getMessage());
+            }
+        });
+        RequestQueue  queue= Volley.newRequestQueue(context);
+        queue.add(jsObjReq);
     }
 }

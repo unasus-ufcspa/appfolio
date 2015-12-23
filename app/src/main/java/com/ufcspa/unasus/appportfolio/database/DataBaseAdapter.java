@@ -11,6 +11,7 @@ import com.ufcspa.unasus.appportfolio.Model.ActivityStudent;
 import com.ufcspa.unasus.appportfolio.Model.Attachment;
 import com.ufcspa.unasus.appportfolio.Model.Comentario;
 import com.ufcspa.unasus.appportfolio.Model.PortfolioClass;
+import com.ufcspa.unasus.appportfolio.Model.Reference;
 import com.ufcspa.unasus.appportfolio.Model.Team;
 import com.ufcspa.unasus.appportfolio.Model.User;
 
@@ -74,6 +75,62 @@ public class DataBaseAdapter {
             return user;
         }
     }
+
+
+    public boolean insertReference(Reference ref){
+        ContentValues cv = new ContentValues();
+        //cv.put("id_reference",ref.getIdRef());
+        cv.put("ds_url",ref.getDsUrl());
+        cv.put("id_activity_student",ref.getIdActStudent());
+        try {
+            db.insert("tb_reference", null, cv);
+            db.close();
+            Log.d(tag, "inseriu referencia no banco");
+            return true;
+        }catch (Exception e){
+            Log.e(tag, "erro ao inserir ref:" + e.getMessage());
+            return false;
+        }
+    }
+
+    public void deleteReference(int idReference) {
+        try {
+            db.delete("tb_reference", "id_reference=?", new String[]{"" + idReference});
+            Log.d(tag, "removeu ref do banco");
+        }catch (Exception e){
+            Log.e(tag, "erro ao delete ref:" + e.getMessage());
+        }
+    }
+
+    public List getReferences(int idActivity){
+        List refs= new ArrayList<Reference>();
+        String sql="SELECT * FROM tb_reference WHERE id_activity_student ="+idActivity+";";
+        Cursor c = db.rawQuery(sql, null);
+        Reference r;
+        if (c.moveToFirst()) {
+            do {
+                try {
+                   r= new Reference(c.getInt(0),c.getString(1),0);
+                    refs.add(r);
+                } catch (Exception v) {
+                    Log.e(tag, "erro ao pegar dados do banco:" + v.getMessage());
+                }
+                //add references
+            } while (c.moveToNext());
+            c.close();
+            db.close();
+        } else {
+            Log.d(tag, "não retornoun nada");
+        }
+        return refs;
+    }
+
+
+
+
+
+
+
 
     public void insertComment(Comentario c) {
         ContentValues cv = new ContentValues();
