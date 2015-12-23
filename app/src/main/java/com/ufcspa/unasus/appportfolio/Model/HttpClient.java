@@ -46,13 +46,13 @@ public class HttpClient {
             public void onResponse(JSONObject response) {
                 Log.d(tag,"Retornou do request");
                 //try {
-                    Log.d(tag,"JSON POST foi"+ response.toString());
+                    Log.d(tag,"JSON RESPONSE: "+ response.toString());
 //                    if(response.getString("result").equals(0)) {
 //                        Log.e(tag, "JSON POST erro");
 //                    }else{
 //                        Log.d(tag,"JSON POST foi");
 //                        if(comentario!=null){
-//                            //comentario.setIdComment(response.getInt("result"));
+//                            comentario.setIdComment(response.getInt("result"));
 //                        }
 //                    }
 //                } catch (JSONException e) {
@@ -134,7 +134,7 @@ public class HttpClient {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError volleyError) {
-                Log.e(tag,"Erro  na request");
+                Log.e(tag,"Erro na request");
                 Log.e(tag,volleyError.getMessage());
             }
         });
