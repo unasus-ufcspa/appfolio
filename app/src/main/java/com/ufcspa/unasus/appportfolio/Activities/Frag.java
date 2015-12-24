@@ -162,7 +162,7 @@ public class Frag extends Fragment {
         }
 
         if (requestCode == REQUEST_VIDEO_CAPTURE && resultCode == Activity.RESULT_OK) {
-            insertFileIntoDataBase(data.getData().getPath(), "I");
+            insertFileIntoDataBase(data.getData().getPath(), "V");
             mCurrentPhotoPath = getThumbnailPathForLocalFile(getActivity(), data.getData());
         }
     }

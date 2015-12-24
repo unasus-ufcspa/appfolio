@@ -63,7 +63,7 @@ public class HttpClient {
             @Override
             public void onErrorResponse(VolleyError volleyError) {
                 Log.e(tag,"Erro  na request");
-                Log.e(tag,volleyError.getMessage());
+                Log.e(tag,volleyError.getMessage() + " ");
             }
         });
         RequestQueue  queue= Volley.newRequestQueue(context);
