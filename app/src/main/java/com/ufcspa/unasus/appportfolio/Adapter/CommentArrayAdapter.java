@@ -65,5 +65,9 @@ public class CommentArrayAdapter extends ArrayAdapter<OneComment> {
     public Bitmap decodeToBitmap(byte[] decodedByte) {
         return BitmapFactory.decodeByteArray(decodedByte, 0, decodedByte.length);
     }
+    public void clearAdapter(){
+        countries.clear();
+        notifyDataSetChanged();
+    }
 
 }

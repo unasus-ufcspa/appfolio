@@ -1,17 +1,12 @@
 package com.ufcspa.unasus.appportfolio.Activities;
 
-import android.app.AlertDialog;
-import android.app.Dialog;
-import android.content.DialogInterface;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.ListView;
 
 import com.ufcspa.unasus.appportfolio.Adapter.CommentArrayAdapter;
@@ -22,7 +17,6 @@ import com.ufcspa.unasus.appportfolio.Model.Singleton;
 import com.ufcspa.unasus.appportfolio.R;
 import com.ufcspa.unasus.appportfolio.database.DataBaseAdapter;
 
-import java.sql.SQLOutput;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -36,7 +30,7 @@ public class FragmentComments extends Frag {
     private Button btGenMess;
     private Button btAttachment;
     //private LoremIpsum ipsum;
-    private EditText editText1;
+    private EditText edtMessage;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -87,36 +81,36 @@ public class FragmentComments extends Frag {
             public void onClick(View v) {
                 //addRandomItem();
                 //lv.setAdapter(adapter);
-                addItems();
-                Singleton singleton = Singleton.getInstance();
-                Comentario c = new Comentario();
-                c.setDateComment(getActualTime());
-                c.setIdAuthor(singleton.user.getIdUser());
-                c.setTypeComment("C");
-                c.setTxtComment(editText1.getText().toString());
-                c.setIdActivityStudent(singleton.activity.getIdAtivity());
-                insertComment(c);
-                adapter.add(new OneComment(false, editText1.getText().toString()));
-                editText1.setText("");
-            }
-        });
-        editText1 = (EditText) getView().findViewById(R.id.editText1);
-        editText1.setOnKeyListener(new View.OnKeyListener() {
-            public boolean onKey(View v, int keyCode, KeyEvent event) {
-                // If the event is a key-down event on the "enter" button
-                if ((event.getAction() == KeyEvent.ACTION_DOWN) && (keyCode == KeyEvent.KEYCODE_ENTER)) {
-                    // Perform action on key press
-                    return true;
+                if(!edtMessage.getText().toString().isEmpty()) {
+                    addItems();
+                    Comentario c = getCommentFromText();
+                    insertComment(c);
+                    adapter.add(new OneComment(false, edtMessage.getText().toString() + "\n" + c.getDateComment()));
+                    edtMessage.setText("");
+                    lv.setAdapter(adapter);
+                }else{
+                    Log.d(getTag(),"tentou inserir comentario vazio");
                 }
-                return false;
             }
         });
+        edtMessage = (EditText) getView().findViewById(R.id.editText1);
         addItems();
     }
 
+    public Comentario getCommentFromText(){
+        Singleton singleton = Singleton.getInstance();
+        Comentario c = new Comentario();
+        c.setDateComment(getActualTime());
+        c.setIdAuthor(singleton.user.getIdUser());
+        c.setTypeComment("C");
+        c.setTxtComment(edtMessage.getText().toString());
+        c.setIdActivityStudent(singleton.activity.getIdAtivity());
+        return c;
+    }
+
     public void addItems() {
-        //adapter.add(new OneComment(true, "Hello bubbles!"));
         try {
+            adapter.clearAdapter();
             DataBaseAdapter db = new DataBaseAdapter(getActivity());
             Singleton singleton = Singleton.getInstance();
             ArrayList<Comentario> lista = (ArrayList<Comentario>) db.listComments(singleton.activity.getIdAtivity());
@@ -141,12 +135,21 @@ public class FragmentComments extends Frag {
 //			adapter.add(new OneComment(left, words));
 
         //}
-        lv.setAdapter(adapter);
     }
 
     private void insertComment(Comentario c) {
 //        System.out.println("id:" + c.getIdActivityStudent());
 //        System.out.println("comentario inserido:" + c);
+
+        try {
+            DataBaseAdapter db = new DataBaseAdapter(getActivity());
+            db.insertComment(c);
+            Log.d("Banco:", "comentario inserido no bd interno com sucesso");
+        }
+        catch (Exception e) {
+            Log.e("Erro:", e.getMessage());
+        }
+
         try{
             HttpClient client = new HttpClient(getActivity().getApplicationContext(),c);
             System.out.println(c.toJSON().toString());
@@ -157,14 +160,6 @@ public class FragmentComments extends Frag {
             Log.e("JSON act",e.getMessage());
         }
 
-        try {
-            DataBaseAdapter db = new DataBaseAdapter(getActivity());
-            db.insertComment(c);
-            Log.d("Banco:", "comentario inserido no bd interno com sucesso");
-        }
-        catch (Exception e) {
-            Log.e("Erro:", e.getMessage());
-        }
     }
 
     private void addRandomItem() {
