@@ -39,6 +39,7 @@ public class FragRef extends Fragment {
                 if(salvar()){
                     Toast.makeText(getActivity(),"Referências salvas com sucesso!",Toast.LENGTH_SHORT).show();
                 }
+                
             }
         });
 
