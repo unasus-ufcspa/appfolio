@@ -70,7 +70,7 @@ public class EditActivity extends AppActivity {
 
         slider.addTab(slider.newTabSpec("Comments").setIndicator(null, getResources().getDrawable(R.drawable.ic_announcement_black_24dp)), FragmentComments.class, null);
         slider.addTab(slider.newTabSpec("References").setIndicator(null, getResources().getDrawable(R.drawable.ic_copy)), FragRef.class, null);
-        slider.addTab(slider.newTabSpec("Old Edit Text").setIndicator(null, getResources().getDrawable(R.drawable.ic_share)), FragmentEditText.class, null);
+        slider.addTab(slider.newTabSpec("Old Edit Text").setIndicator(null, getResources().getDrawable(R.drawable.ic_share)), FragmentAttachment.class, null);
 
         animLeft = AnimationUtils.loadAnimation(this, R.anim.anim_right);
         animRight = AnimationUtils.loadAnimation(this, R.anim.anim_left);
