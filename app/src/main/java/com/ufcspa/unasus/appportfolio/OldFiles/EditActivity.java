@@ -1,25 +1,10 @@
 package com.ufcspa.unasus.appportfolio.OldFiles;
 
-import android.os.Bundle;
 import android.support.v4.app.FragmentTabHost;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.DisplayMetrics;
-import android.util.Log;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
-import android.view.View;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.ListView;
 
-import com.ufcspa.unasus.appportfolio.Activities.FragEditText;
-import com.ufcspa.unasus.appportfolio.Activities.FragmentComments;
-import com.ufcspa.unasus.appportfolio.Activities.FragmentEditText;
 import com.ufcspa.unasus.appportfolio.R;
 
 

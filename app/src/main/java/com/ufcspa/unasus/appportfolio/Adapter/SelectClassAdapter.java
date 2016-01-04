@@ -19,10 +19,9 @@ import java.util.List;
  */
 public class SelectClassAdapter extends BaseAdapter
 {
+    private static LayoutInflater inflater = null;
     private SelectClassActivity context;
     private List<Team> classes;
-
-    private static LayoutInflater inflater = null;
 
     public SelectClassAdapter(SelectClassActivity context, List<Team> classes)
     {
@@ -47,41 +46,40 @@ public class SelectClassAdapter extends BaseAdapter
         return position;
     }
 
+    @Override
+    public View getView(int position, View convertView, ViewGroup parent) {
+        Holder holder = new Holder();
+        View rowView;
+
+        rowView = inflater.inflate(R.layout.adapter_item, null);
+//        holder.txt_class_code = (TextView) rowView.findViewById(R.id.txt_activity_title);
+//        holder.txt_class_description = (TextView) rowView.findViewById(R.id.txt_activity_description);
+//        holder.txt_class_dates = (TextView) rowView.findViewById(R.id.txt_class_dates);
+//        holder.txt_class_status = (TextView) rowView.findViewById(R.id.txt_class_status);
+//
+//        Team class_aux = classes.get(position);
+//
+//        holder.txt_class_code.setText(class_aux.getCode());
+//        holder.txt_class_description.setText(class_aux.getDescription());
+//
+//        String dateStart = new SimpleDateFormat("dd-MM-yyyy").format(class_aux.getDateStart());
+//        String dateFinish = new SimpleDateFormat("dd-MM-yyyy").format(class_aux.getDateFinish());
+//
+//        holder.txt_class_dates.setText(dateStart + "/" + dateFinish);
+//
+//        if(class_aux.getStatus() == 'A')
+//            holder.txt_class_status.setText("Ativo");
+//        else
+//            holder.txt_class_status.setText("Inativo");
+
+        return rowView;
+    }
+
     public class Holder
     {
         TextView txt_class_code;
         TextView txt_class_description;
         TextView txt_class_dates;
         TextView txt_class_status;
-    }
-
-    @Override
-    public View getView(int position, View convertView, ViewGroup parent)
-    {
-        Holder holder = new Holder();
-        View rowView;
-
-        rowView = inflater.inflate(R.layout.celladapter_activity_classes, null);
-        holder.txt_class_code = (TextView) rowView.findViewById(R.id.txt_activity_title);
-        holder.txt_class_description = (TextView) rowView.findViewById(R.id.txt_activity_description);
-        holder.txt_class_dates = (TextView) rowView.findViewById(R.id.txt_class_dates);
-        holder.txt_class_status = (TextView) rowView.findViewById(R.id.txt_class_status);
-
-        Team class_aux = classes.get(position);
-
-        holder.txt_class_code.setText(class_aux.getCode());
-        holder.txt_class_description.setText(class_aux.getDescription());
-
-        String dateStart = new SimpleDateFormat("dd-MM-yyyy").format(class_aux.getDateStart());
-        String dateFinish = new SimpleDateFormat("dd-MM-yyyy").format(class_aux.getDateFinish());
-
-        holder.txt_class_dates.setText(dateStart + "/" + dateFinish);
-
-        if(class_aux.getStatus() == 'A')
-            holder.txt_class_status.setText("Ativo");
-        else
-            holder.txt_class_status.setText("Inativo");
-
-        return rowView;
     }
 }

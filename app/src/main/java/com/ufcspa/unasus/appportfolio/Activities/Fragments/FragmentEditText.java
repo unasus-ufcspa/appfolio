@@ -1,4 +1,4 @@
-package com.ufcspa.unasus.appportfolio.Activities;
+package com.ufcspa.unasus.appportfolio.Activities.Fragments;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -7,7 +7,6 @@ import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.ActionMode;
 import android.view.LayoutInflater;

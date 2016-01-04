@@ -1,4 +1,4 @@
-package com.ufcspa.unasus.appportfolio.Activities;
+package com.ufcspa.unasus.appportfolio.Activities.Fragments;
 
 import android.app.Activity;
 import android.app.AlertDialog;
