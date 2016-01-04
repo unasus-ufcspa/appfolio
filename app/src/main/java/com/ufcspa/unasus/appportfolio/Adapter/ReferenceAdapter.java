@@ -39,6 +39,10 @@ public class ReferenceAdapter extends BaseAdapter {
         refs.add(obj);
         notifyDataSetChanged();
     }
+    public void delete(int position){
+        refs.remove(position);
+        notifyDataSetChanged();
+    }
 
 
     public int getCount() {

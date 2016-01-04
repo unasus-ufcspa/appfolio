@@ -1,5 +1,7 @@
 package com.ufcspa.unasus.appportfolio.Activities.Fragments;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.ContextMenu;
@@ -49,11 +51,11 @@ public class FragRef extends Fragment {
             @Override
             public void onClick(View v) {
                 if(salvar()){
-                    adapter.clearAdapter();
+                    //adapter.clearAdapter();
                     Reference r=new Reference();
-                    r.setDsUrl("http://yahoo.com.br");
+                    r.setDsUrl(edtRef.getText().toString());
                     adapter.add(r);
-                    list.setAdapter(adapter);
+
                     Toast.makeText(getActivity(),"Referências salvas com sucesso!",Toast.LENGTH_SHORT).show();
                 }
 
@@ -117,6 +119,9 @@ public class FragRef extends Fragment {
                 break;
             case 2:
                 Toast.makeText(getContext(),"go url",Toast.LENGTH_SHORT).show();
+                Intent i = new Intent(Intent.ACTION_VIEW);
+                i.setData(Uri.parse(edtRef.getText().toString()));
+                startActivity(i);
                 break;
         }
         return super.onContextItemSelected(item);
