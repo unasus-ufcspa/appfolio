@@ -14,8 +14,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
-        android:horizontalSpacing="10dp"
+        android:columnWidth="150dp"
+        android:contextClickable="false"
+        android:horizontalSpacing="70dp"
         android:numColumns="auto_fit"
-        android:verticalSpacing="10dp" />
+        android:verticalSpacing="50dp" />
     </RelativeLayout>
 </LinearLayout>

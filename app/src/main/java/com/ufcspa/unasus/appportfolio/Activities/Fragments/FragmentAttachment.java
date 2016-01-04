@@ -1,4 +1,4 @@
-package com.ufcspa.unasus.appportfolio.Activities;
+package com.ufcspa.unasus.appportfolio.Activities.Fragments;
 
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -6,9 +6,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.GridView;
 import android.widget.ListView;
-import android.widget.SimpleAdapter;
 
 import com.ufcspa.unasus.appportfolio.Adapter.FragmentAttachmentAdapter;
 import com.ufcspa.unasus.appportfolio.Model.Attachment;
@@ -16,9 +14,7 @@ import com.ufcspa.unasus.appportfolio.Model.Singleton;
 import com.ufcspa.unasus.appportfolio.R;
 import com.ufcspa.unasus.appportfolio.database.DataBaseAdapter;
 
-import java.util.AbstractCollection;
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by desenvolvimento on 10/12/2015.

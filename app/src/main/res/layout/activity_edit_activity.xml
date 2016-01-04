@@ -47,7 +47,7 @@
 
         <fragment
             android:id="@+id/fragment"
-            android:name="com.ufcspa.unasus.appportfolio.Activities.FragmentEditText"
+            android:name="com.ufcspa.unasus.appportfolio.Activities.Fragments.FragmentEditText"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_gravity="center_horizontal" />

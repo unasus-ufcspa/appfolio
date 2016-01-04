@@ -1,4 +1,4 @@
-package com.ufcspa.unasus.appportfolio.Activities;
+package com.ufcspa.unasus.appportfolio.Activities.Fragments;
 
 import android.os.Bundle;
 import android.util.Log;

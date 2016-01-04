@@ -1,7 +1,5 @@
 package com.ufcspa.unasus.appportfolio.Activities;
 
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.v4.app.FragmentTabHost;
 import android.support.v4.widget.DrawerLayout;
@@ -9,17 +7,11 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.ImageView;
-import android.widget.ListView;
 
 import com.mikepenz.crossfader.Crossfader;
 import com.mikepenz.iconics.IconicsDrawable;
@@ -35,7 +27,8 @@ import com.mikepenz.materialdrawer.model.SectionDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.IProfile;
 import com.mikepenz.materialize.util.UIUtils;
 import com.ufcspa.unasus.appportfolio.Activities.Fragments.FragRef;
-import com.ufcspa.unasus.appportfolio.Model.CrossfadeWrapper;
+import com.ufcspa.unasus.appportfolio.Activities.Fragments.FragmentAttachment;
+import com.ufcspa.unasus.appportfolio.Activities.Fragments.FragmentComments;
 import com.ufcspa.unasus.appportfolio.R;
 import com.mikepenz.google_material_typeface_library.GoogleMaterial;
 import com.mikepenz.fontawesome_typeface_library.FontAwesome;

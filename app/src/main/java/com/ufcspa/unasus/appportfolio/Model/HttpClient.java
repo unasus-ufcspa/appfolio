@@ -10,7 +10,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
-import com.ufcspa.unasus.appportfolio.Activities.FragmentComments;
+import com.ufcspa.unasus.appportfolio.Activities.Fragments.FragmentComments;
 import com.ufcspa.unasus.appportfolio.database.DataBaseAdapter;
 
 import org.json.JSONArray;
@@ -24,10 +24,10 @@ import java.util.List;
  * Created by Desenvolvimento on 18/12/2015.
  */
 public class HttpClient {
-    private Context context;
-    private Comentario comentario=null;
     private static final String ip = "192.168.0.169";
     private static final String URL = "http://" + ip + "/portfolio/";
+    private Context context;
+    private Comentario comentario = null;
     private String tag="JSON";
 
     public HttpClient(Context context) {
