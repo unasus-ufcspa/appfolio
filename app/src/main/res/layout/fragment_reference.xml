@@ -4,12 +4,18 @@
     android:layout_height="match_parent"
     >
 
-    <ScrollView
+    <LinearLayout
+        android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/scrollView"
-        android:layout_weight="3"
-        >
+        android:layout_weight="4"
+        android:weightSum="1">
+
+        <ListView
+            android:layout_width="match_parent"
+            android:layout_height="274dp"
+            android:id="@+id/frag_ref_listview"
+            android:layout_weight="0.96" />
 
         <EditText
             android:id="@+id/frag_ref_edt"
@@ -18,14 +24,6 @@
             android:inputType="textWebEmailAddress"
             android:hint="enter the reference here"
             android:autoLink="web" />
-    </ScrollView>
-
-    <LinearLayout
-        android:orientation="vertical"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_weight="4"
-        >
 
         <Button
             style="?android:attr/buttonStyleSmall"
