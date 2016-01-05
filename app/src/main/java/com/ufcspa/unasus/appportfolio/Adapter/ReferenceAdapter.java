@@ -67,8 +67,6 @@ public class ReferenceAdapter extends BaseAdapter {
 
         reference = (TextView) rowView.findViewById(R.id.ref_item_txt_url);
         reference.setText(ref.getDsUrl());
-
-
         return rowView;
     }
 

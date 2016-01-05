@@ -112,6 +112,7 @@ public class DataBaseAdapter {
                 try {
                    r= new Reference(c.getInt(0),c.getString(1),0);
                     refs.add(r);
+                    Log.d(tag,"reference:"+r.toString());
                 } catch (Exception v) {
                     Log.e(tag, "erro ao pegar dados do banco:" + v.getMessage());
                 }

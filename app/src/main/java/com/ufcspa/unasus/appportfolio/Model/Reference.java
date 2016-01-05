@@ -16,6 +16,15 @@ public class Reference {
         this.idActStudent = idActStudent;
     }
 
+    @Override
+    public String toString() {
+        return "Reference{" +
+                "dsUrl='" + dsUrl + '\'' +
+                ", idRef=" + idRef +
+                ", idActStudent=" + idActStudent +
+                '}';
+    }
+
     public int getIdRef() {
         return idRef;
     }

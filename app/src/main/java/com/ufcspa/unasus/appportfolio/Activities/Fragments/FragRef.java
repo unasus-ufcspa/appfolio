@@ -17,7 +17,9 @@ import android.widget.Toast;
 
 import com.ufcspa.unasus.appportfolio.Adapter.ReferenceAdapter;
 import com.ufcspa.unasus.appportfolio.Model.Reference;
+import com.ufcspa.unasus.appportfolio.Model.Singleton;
 import com.ufcspa.unasus.appportfolio.R;
+import com.ufcspa.unasus.appportfolio.database.DataBaseAdapter;
 
 import java.util.ArrayList;
 
@@ -30,6 +32,7 @@ public class FragRef extends Fragment {
     private ListView list;
     private ReferenceAdapter adapter;
     private Reference refSelected;
+    private ArrayList<Reference> references;
 
 
     @Override
@@ -44,8 +47,8 @@ public class FragRef extends Fragment {
         super.onResume();
 
         initComp();
-
         recuperar();
+        gerarLista();
 
         btSave.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -54,9 +57,9 @@ public class FragRef extends Fragment {
                     //adapter.clearAdapter();
                     Reference r=new Reference();
                     r.setDsUrl(edtRef.getText().toString());
-                    adapter.add(r);
-
                     Toast.makeText(getActivity(),"Referências salvas com sucesso!",Toast.LENGTH_SHORT).show();
+                }else {
+                    Toast.makeText(getActivity(),"Erro ao salvar referências",Toast.LENGTH_SHORT).show();
                 }
 
             }
@@ -73,10 +76,10 @@ public class FragRef extends Fragment {
         btSave=(Button)getView().findViewById(R.id.frag_ref_btSave);
         edtRef=(EditText)getView().findViewById(R.id.frag_ref_edt);
         list=(ListView)getView().findViewById(R.id.frag_ref_listview);
-        adapter= new ReferenceAdapter(getContext(),new ArrayList());
-        Reference r =new Reference();
-        r.setDsUrl("http://gmail.com");
-        adapter.add(r);
+    }
+
+    private void gerarLista(){
+        adapter= new ReferenceAdapter(getContext(),references);
         list.setAdapter(adapter);
         list.setClickable(true);
         list.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
@@ -89,13 +92,29 @@ public class FragRef extends Fragment {
         });
     }
 
+
+
+
     public boolean salvar(){
-        return true;
+        boolean result = false;
+        Singleton singleton = Singleton.getInstance();
+        DataBaseAdapter data = new DataBaseAdapter(getContext());
+        Reference refer=new Reference();
+        refer.setDsUrl(edtRef.getText().toString());
+        refer.setIdActStudent(singleton.idActivityStudent);
+        result=data.insertReference(refer);
+        if(result==true){
+            adapter.add(refer);
+        }
+        return result;
     }
     public void recuperar(){
      //get tx_reference from database
 //        String tx="http://port.com";
 //        edtRef.setText(tx);
+        Singleton singleton = Singleton.getInstance();
+        DataBaseAdapter data = new DataBaseAdapter(getContext());
+        references=(ArrayList)data.getReferences(singleton.idActivityStudent);
     }
 
     @Override
@@ -114,6 +133,7 @@ public class FragRef extends Fragment {
             case 0:
                 Toast.makeText(getContext(),"Delete",Toast.LENGTH_SHORT).show();
                 break;
+
             case 1:
                 Toast.makeText(getContext(),"Refact",Toast.LENGTH_SHORT).show();
                 break;
