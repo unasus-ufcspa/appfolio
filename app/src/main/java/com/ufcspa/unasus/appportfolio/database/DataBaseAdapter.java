@@ -460,6 +460,29 @@ public class DataBaseAdapter {
         return array_activity;
     }
 
+    public void selectListActivitiesAndStudents(){
+        String query="select a.id_activity,\n" +
+                "       a.id_portfolio,\n" +
+                "\t   a.nu_order,\n" +
+                "       a.ds_title,\n" +
+                "\t   a.ds_description,\n" +
+                "\t   s.nm_user\n" +
+                "\t\t\t\tfrom \n" +
+                "                tb_activity_student ac\n" +
+                "\t\t\t\t\tjoin tb_activity a on a.id_activity = ac.id_activity\n" +
+                "                    join tb_portfolio p on p.id_portfolio = a.id_portfolio\n" +
+                "                    join tb_portfolio_student ps on ps.id_portfolio_student = ac.id_portfolio_student\n" +
+                "                    join tb_portfolio_class pc on pc.id_portfolio_class = ps.id_portfolio_class\n" +
+                "                    join tb_class c on c.id_class = pc.id_class\n" +
+                "                    join tb_user s on s.id_user = ps.id_student \n" +
+                "                WHERE 1 = 1\n" +
+                "                AND p.id_portfolio=?;";
+    }
+
+
+
+
+
     private Activity cursorToActivity(Cursor cursor)
     {
         Activity activity = new Activity(cursor.getInt(0), cursor.getInt(1), cursor.getInt(2), cursor.getString(3), cursor.getString(4));
