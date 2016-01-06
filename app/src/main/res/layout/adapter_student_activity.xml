@@ -3,25 +3,54 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <ImageView
-        android:id="@+id/imageView3"
-        android:layout_width="70dp"
-        android:layout_height="70dp"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_centerVertical="true"
-        android:layout_marginLeft="38dp"
-        android:layout_marginStart="38dp"
-        android:background="@drawable/rounded_corner" />
-
-    <TextView
-        android:id="@+id/textView5"
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="2dp"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_centerVertical="true"
-        android:background="#70e7d0"
-        android:textAppearance="?android:attr/textAppearanceSmall" />
+        android:layout_height="230dp">
+
+        <ImageView
+            android:id="@+id/student_image"
+            android:layout_width="70dp"
+            android:layout_height="70dp"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_marginBottom="20dp"
+            android:layout_marginLeft="30dp"
+            android:background="@drawable/rounded_corner"
+            android:elevation="2dp" />
+
+        <TextView
+            android:id="@+id/line"
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_alignTop="@+id/student_image"
+            android:layout_marginTop="31dp"
+            android:background="#70e7d0"
+            android:textAppearance="?android:attr/textAppearanceSmall" />
+
+        <TextView
+            android:id="@+id/student_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/line"
+            android:layout_toEndOf="@+id/student_image"
+            android:layout_toRightOf="@+id/student_image"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:text="Carolina Ribeiro"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:textSize="15dp" />
+
+        <LinearLayout
+            android:id="@+id/activities_layout"
+            android:layout_width="match_parent"
+            android:layout_height="170dp"
+            android:layout_alignBottom="@+id/student_name"
+            android:layout_toEndOf="@+id/student_name"
+            android:layout_toRightOf="@+id/student_name"
+            android:orientation="horizontal"></LinearLayout>
+    </RelativeLayout>
 
 </RelativeLayout>

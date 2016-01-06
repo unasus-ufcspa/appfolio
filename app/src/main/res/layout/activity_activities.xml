@@ -10,13 +10,15 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <GridView
-            android:id="@+id/grid_activities"
+        <ListView
+            android:id="@+id/list_activities"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
+            android:divider="@null"
+            android:dividerHeight="0dp"
             android:horizontalSpacing="10dp"
-            android:numColumns="auto_fit"
-            android:verticalSpacing="10dp" />
+            android:minHeight="170dp"
+            android:verticalSpacing="50dp" />
     </RelativeLayout>
 </LinearLayout>

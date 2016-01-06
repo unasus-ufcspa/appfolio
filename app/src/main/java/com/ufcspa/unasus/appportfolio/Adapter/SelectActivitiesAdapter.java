@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.ufcspa.unasus.appportfolio.Activities.SelectActivitiesActivity;
@@ -59,15 +60,19 @@ public class SelectActivitiesAdapter extends BaseAdapter
     {
         Holder holder = new Holder();
         View rowView;
-        rowView = inflater.inflate(R.layout.celladapter_activity_activities, null);
+        rowView = inflater.inflate(R.layout.adapter_student_activity, null);
 
-        holder.txt_activity_title = (TextView) rowView.findViewById(R.id.txt_activity_title);
-        holder.txt_activity_description = (TextView) rowView.findViewById(R.id.txt_activity_description);
+        LinearLayout linearLayout = (LinearLayout) rowView.findViewById(R.id.activities_layout);
+        View v = context.getLayoutInflater().inflate(R.layout.adapter_item, null);
+        linearLayout.addView(v);
 
-        Activity activity_aux = activities.get(position);
-
-        holder.txt_activity_title.setText(activity_aux.getTitle());
-        holder.txt_activity_description.setText(activity_aux.getDescription());
+//        holder.txt_activity_title = (TextView) rowView.findViewById(R.id.txt_activity_title);
+//        holder.txt_activity_description = (TextView) rowView.findViewById(R.id.txt_activity_description);
+//
+//        Activity activity_aux = activities.get(position);
+//
+//        holder.txt_activity_title.setText(activity_aux.getTitle());
+//        holder.txt_activity_description.setText(activity_aux.getDescription());
 
         return rowView;
     }

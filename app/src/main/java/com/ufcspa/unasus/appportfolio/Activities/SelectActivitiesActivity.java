@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.GridView;
+import android.widget.ListView;
 
 import com.ufcspa.unasus.appportfolio.Adapter.SelectActivitiesAdapter;
 import com.ufcspa.unasus.appportfolio.Model.Activity;
@@ -22,7 +23,7 @@ import java.util.Collections;
  */
 public class SelectActivitiesActivity extends AppActivity implements AdapterView.OnItemClickListener
 {
-    private GridView grid_activities;
+    private ListView list_activities;
     private ArrayList<Activity> activities;
     private DataBaseAdapter source;
     private Singleton singleton;
@@ -51,9 +52,9 @@ public class SelectActivitiesActivity extends AppActivity implements AdapterView
 
         Collections.sort(activities);
         SelectActivitiesAdapter gridAdapter = new SelectActivitiesAdapter(this, activities);
-        grid_activities = (GridView) findViewById(R.id.grid_activities);
-        grid_activities.setAdapter(gridAdapter);
-        grid_activities.setOnItemClickListener(this);
+        list_activities = (ListView) findViewById(R.id.list_activities);
+        list_activities.setAdapter(gridAdapter);
+        list_activities.setOnItemClickListener(this);
     }
 
 
