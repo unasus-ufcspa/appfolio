@@ -11,7 +11,6 @@ import com.ufcspa.unasus.appportfolio.Activities.SelectClassActivity;
 import com.ufcspa.unasus.appportfolio.Model.Team;
 import com.ufcspa.unasus.appportfolio.R;
 
-import java.text.SimpleDateFormat;
 import java.util.List;
 
 /**
@@ -51,7 +50,7 @@ public class SelectClassAdapter extends BaseAdapter
         Holder holder = new Holder();
         View rowView;
 
-        rowView = inflater.inflate(R.layout.adapter_item, null);
+        rowView = inflater.inflate(R.layout.adapter_item_class, null);
 //        holder.txt_class_code = (TextView) rowView.findViewById(R.id.txt_activity_title);
 //        holder.txt_class_description = (TextView) rowView.findViewById(R.id.txt_activity_description);
 //        holder.txt_class_dates = (TextView) rowView.findViewById(R.id.txt_class_dates);

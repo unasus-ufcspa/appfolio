@@ -1,54 +1,48 @@
 package com.ufcspa.unasus.appportfolio.Adapter;
 
-import android.content.Context;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.BaseAdapter;
 
-import com.ufcspa.unasus.appportfolio.Activities.SelectActivitiesActivity;
-import com.ufcspa.unasus.appportfolio.Model.Activity;
 import com.ufcspa.unasus.appportfolio.R;
-
-import java.util.List;
 
 /**
  * Created by arthurzettler on 1/5/16.
  */
-public class ActivitiesAdapter extends BaseAdapter {
+public class ActivitiesAdapter extends RecyclerView.Adapter<ActivitiesAdapter.ViewHolder> {
+    private String[] mDataset;
 
-    private SelectActivitiesActivity context;
-    private List<Activity> activities;
-
-    private static LayoutInflater inflater = null;
-
-    public ActivitiesAdapter(SelectActivitiesActivity context, List<Activity> activities)
-    {
-        this.context = context;
-        this.activities = activities;
-
-        inflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-    }
-    @Override
-    public int getCount() {
-        return 10;
+    public ActivitiesAdapter() {
+        mDataset = null;
     }
 
+    // Create new views (invoked by the layout manager)
     @Override
-    public Activity getItem(int position) {
-        return null;
+    public ActivitiesAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        // create a new view
+        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.adapter_item_portfolio_activity, parent, false);
+        ViewHolder vh = new ViewHolder(v);
+        return vh;
     }
 
+    // Replace the contents of a view (invoked by the layout manager)
     @Override
-    public long getItemId(int position) {
-        return position;
+    public void onBindViewHolder(ViewHolder holder, int position) {
+        // - get element from your dataset at this position
+        // - replace the contents of the view with that element
     }
 
+    // Return the size of your dataset (invoked by the layout manager)
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
-        View rowView;
-        rowView = inflater.inflate(R.layout.adapter_item, null);
+    public int getItemCount() {
+        return 10;//mDataset.length;
+    }
 
-        return rowView;
+    public static class ViewHolder extends RecyclerView.ViewHolder {
+        // each data item is just a string in this case
+        public ViewHolder(View v) {
+            super(v);
+        }
     }
 }

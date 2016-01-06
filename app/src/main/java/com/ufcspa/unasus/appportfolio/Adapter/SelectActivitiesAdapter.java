@@ -1,21 +1,20 @@
 package com.ufcspa.unasus.appportfolio.Adapter;
 
 import android.content.Context;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.TextView;
 
 import com.ufcspa.unasus.appportfolio.Activities.SelectActivitiesActivity;
-import com.ufcspa.unasus.appportfolio.Activities.SelectClassActivity;
 import com.ufcspa.unasus.appportfolio.Model.Activity;
+import com.ufcspa.unasus.appportfolio.Model.DividerItemDecoration;
 import com.ufcspa.unasus.appportfolio.R;
 
-import java.text.SimpleDateFormat;
 import java.util.List;
 
 /**
@@ -23,10 +22,9 @@ import java.util.List;
  */
 public class SelectActivitiesAdapter extends BaseAdapter
 {
+    private static LayoutInflater inflater = null;
     private SelectActivitiesActivity context;
     private List<Activity> activities;
-
-    private static LayoutInflater inflater = null;
 
     public SelectActivitiesAdapter(SelectActivitiesActivity context, List<Activity> activities)
     {
@@ -51,21 +49,14 @@ public class SelectActivitiesAdapter extends BaseAdapter
         return position;
     }
 
-    public class Holder
-    {
-        TextView txt_activity_title;
-        TextView txt_activity_description;
-    }
-
     @Override
-    public View getView(int position, View convertView, ViewGroup parent)
-    {
+    public View getView(int position, View convertView, ViewGroup parent) {
         Holder holder = new Holder();
         View rowView;
-        rowView = inflater.inflate(R.layout.adapter_student_activity, null);
+        rowView = inflater.inflate(R.layout.adapter_portfolio_activity, null);
 
-        ListView listView = (ListView) rowView.findViewById(R.id.activities_list);
-        listView.setOnTouchListener(new View.OnTouchListener() {
+        RecyclerView recyclerView = (RecyclerView) rowView.findViewById(R.id.activities_list);
+        recyclerView.setOnTouchListener(new View.OnTouchListener() {
 
             @Override
             public boolean onTouch(View v, MotionEvent event) {
@@ -74,10 +65,14 @@ public class SelectActivitiesAdapter extends BaseAdapter
                 return false;
             }
         });
-        listView.setAdapter(new ActivitiesAdapter(context,activities));
+        LinearLayoutManager layoutManager = new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false);
+        recyclerView.setLayoutManager(layoutManager);
+        recyclerView.addItemDecoration(new DividerItemDecoration(context, DividerItemDecoration.HORIZONTAL_LIST, 100));
+
+        recyclerView.setAdapter(new ActivitiesAdapter());
 
 //        LinearLayout linearLayout = (LinearLayout) rowView.findViewById(R.id.activities_layout);
-//        View v = context.getLayoutInflater().inflate(R.layout.adapter_item, null);
+//        View v = context.getLayoutInflater().inflate(R.layout., null);
 //        linearLayout.addView(v);
 
 //        holder.txt_activity_title = (TextView) rowView.findViewById(R.id.txt_activity_title);
@@ -89,5 +84,11 @@ public class SelectActivitiesAdapter extends BaseAdapter
 //        holder.txt_activity_description.setText(activity_aux.getDescription());
 
         return rowView;
+    }
+
+    public class Holder
+    {
+        TextView txt_activity_title;
+        TextView txt_activity_description;
     }
 }

@@ -2,12 +2,10 @@ package com.ufcspa.unasus.appportfolio.Activities;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.GridView;
 import android.widget.ListView;
 
 import com.ufcspa.unasus.appportfolio.Adapter.SelectActivitiesAdapter;
@@ -33,7 +31,7 @@ public class SelectActivitiesActivity extends AppActivity implements AdapterView
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_activities);
+        setContentView(R.layout.activity_portfolio_activity);
 
         init();
         createDrawer(savedInstanceState);
