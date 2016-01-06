@@ -52,13 +52,14 @@
             android:layout_toRightOf="@+id/student_name"
             android:orientation="horizontal">
 
-            <ListView
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/activities_list"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/activities_list"
                 android:layout_gravity="center_vertical"
                 android:layout_weight="1" />
         </LinearLayout>
+
     </RelativeLayout>
 
 </RelativeLayout>
