@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.GridView;
@@ -55,6 +56,16 @@ public class SelectActivitiesActivity extends AppActivity implements AdapterView
         list_activities = (ListView) findViewById(R.id.list_activities);
         list_activities.setAdapter(gridAdapter);
         list_activities.setOnItemClickListener(this);
+        list_activities.setOnTouchListener(new View.OnTouchListener() {
+
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+
+                findViewById(R.id.activities_list).getParent()
+                        .requestDisallowInterceptTouchEvent(false);
+                return false;
+            }
+        });
     }
 
 

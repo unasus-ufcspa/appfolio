@@ -39,8 +39,8 @@ public class AppActivity extends AppCompatActivity implements Drawer.OnDrawerIte
 
     public void createDrawer(Bundle savedInstanceState) {
         // Create a few sample profile
-        final IProfile profile = new ProfileDrawerItem().withName("Mike Penz").withEmail("mikepenz@gmail.com").withIcon(R.drawable.profile);
-        final IProfile profile2 = new ProfileDrawerItem().withName("Max Muster").withEmail("max.mustermann@gmail.com").withIcon(R.drawable.profile2);
+        final IProfile profile = new ProfileDrawerItem().withName("Tutor").withEmail("tutor@folio.com");
+        final IProfile profile2 = new ProfileDrawerItem().withName("Aluno").withEmail("aluno@folio.com");
 
         // Create the AccountHeader
         headerResult = new AccountHeaderBuilder()
