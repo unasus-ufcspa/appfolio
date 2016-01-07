@@ -1,29 +1,20 @@
 package com.ufcspa.unasus.appportfolio.Activities;
 
+import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.ImageView;
 
 import com.mikepenz.crossfader.Crossfader;
 import com.mikepenz.fontawesome_typeface_library.FontAwesome;
-import com.mikepenz.google_material_typeface_library.GoogleMaterial;
-import com.mikepenz.iconics.IconicsDrawable;
 import com.mikepenz.materialdrawer.AccountHeader;
-import com.mikepenz.materialdrawer.AccountHeaderBuilder;
 import com.mikepenz.materialdrawer.Drawer;
 import com.mikepenz.materialdrawer.DrawerBuilder;
 import com.mikepenz.materialdrawer.MiniDrawer;
 import com.mikepenz.materialdrawer.model.PrimaryDrawerItem;
-import com.mikepenz.materialdrawer.model.ProfileDrawerItem;
-import com.mikepenz.materialdrawer.model.SecondaryDrawerItem;
-import com.mikepenz.materialdrawer.model.SectionDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
-import com.mikepenz.materialdrawer.model.interfaces.IProfile;
-import com.mikepenz.materialize.util.UIUtils;
 import com.ufcspa.unasus.appportfolio.Model.CrossfadeWrapper;
 import com.ufcspa.unasus.appportfolio.R;
 
@@ -39,36 +30,29 @@ public class AppActivity extends AppCompatActivity implements Drawer.OnDrawerIte
 
     public void createDrawer(Bundle savedInstanceState) {
         // Create a few sample profile
-        final IProfile profile = new ProfileDrawerItem().withName("Tutor").withEmail("tutor@folio.com");
-        final IProfile profile2 = new ProfileDrawerItem().withName("Aluno").withEmail("aluno@folio.com");
-
         // Create the AccountHeader
-        headerResult = new AccountHeaderBuilder()
-                .withActivity(this)
-                .withCompactStyle(true)
-                .withTranslucentStatusBar(true)
-                .withHeaderBackground(new ColorDrawable(Color.parseColor("#FDFDFD")))
-                .withHeightPx(UIUtils.getActionBarHeight(this))
-                .withAccountHeader(R.layout.material_drawer_compact_persistent_header)
-                .withTextColor(Color.BLACK)
-                .addProfiles(
-                        profile,
-                        profile2
-                )
-                .withSavedInstance(savedInstanceState)
-                .build();
+//        headerResult = new AccountHeaderBuilder()
+//                .withActivity(this)
+//                .withCompactStyle(true)
+//                .withTranslucentStatusBar(true)
+//                .withHeaderBackground(new ColorDrawable(Color.parseColor("#FDFDFD")))
+//                .withHeightPx(UIUtils.getActionBarHeight(this))
+//                .withAccountHeader(R.layout.material_drawer_compact_persistent_header)
+//                .withTextColor(Color.BLACK)
+//                .withSavedInstance(savedInstanceState)
+//                .build();
+
+        LayoutInflater inflater = (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
         //Create the drawer
         DrawerBuilder builder = new DrawerBuilder()
-                .withActivity(this)
-                .withAccountHeader(headerResult) //set the AccountHeader we created earlier for the header
+                .withActivity(this)//.withHeader(inflater.inflate(R.layout.material_drawer_compact_persistent_header, null))
                 .addDrawerItems(
                         new PrimaryDrawerItem().withName(R.string.drawer_portfolio).withIcon(FontAwesome.Icon.faw_photo).withIdentifier(1),
                         new PrimaryDrawerItem().withName(R.string.drawer_activities).withIcon(FontAwesome.Icon.faw_pencil),
-                        new SectionDrawerItem().withName(R.string.drawer_general),
-                        new SecondaryDrawerItem().withName(R.string.drawer_files).withIcon(FontAwesome.Icon.faw_paste),
-                        new SecondaryDrawerItem().withName(R.string.drawer_reports).withIcon(FontAwesome.Icon.faw_calendar),
-                        new SecondaryDrawerItem().withName(R.string.drawer_settings).withIcon(FontAwesome.Icon.faw_cog)
+                        new PrimaryDrawerItem().withName(R.string.drawer_files).withIcon(FontAwesome.Icon.faw_paste),
+                        new PrimaryDrawerItem().withName(R.string.drawer_reports).withIcon(FontAwesome.Icon.faw_calendar),
+                        new PrimaryDrawerItem().withName(R.string.drawer_settings).withIcon(FontAwesome.Icon.faw_cog)
                 )
                 .withSavedInstance(savedInstanceState)
                 .withOnDrawerItemClickListener(this);
@@ -86,7 +70,7 @@ public class AppActivity extends AppCompatActivity implements Drawer.OnDrawerIte
                 .withAccountHeader(headerResult);
 
         //get the widths in px for the first and second panel
-        int firstWidth = (int) com.mikepenz.crossfader.util.UIUtils.convertDpToPixel(250, this);
+        int firstWidth = (int) com.mikepenz.crossfader.util.UIUtils.convertDpToPixel(300, this);
         int secondWidth = (int) com.mikepenz.crossfader.util.UIUtils.convertDpToPixel(72, this);
 
         //create and build our crossfader (see the MiniDrawer is also builded in here, as the build method returns the view to be used in the crossfader)
@@ -100,16 +84,16 @@ public class AppActivity extends AppCompatActivity implements Drawer.OnDrawerIte
         //define the crossfader to be used with the miniDrawer. This is required to be able to automatically toggle open / close
         miniResult.withCrossFader(new CrossfadeWrapper(crossFader));
 
-        //define and create the arrow ;)
-        ImageView toggle = (ImageView) headerResult.getView().findViewById(R.id.material_drawer_account_header_toggle);
-        //for RTL you would have to define the other arrow
-        toggle.setImageDrawable(new IconicsDrawable(this, GoogleMaterial.Icon.gmd_chevron_left).sizeDp(16).color(Color.BLACK));
-        toggle.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                crossFader.crossFade();
-            }
-        });
+//        //define and create the arrow ;)
+//        ImageView toggle = (ImageView) headerResult.getView().findViewById(R.id.material_drawer_account_header_toggle);
+//        //for RTL you would have to define the other arrow
+//        toggle.setImageDrawable(new IconicsDrawable(this, GoogleMaterial.Icon.gmd_chevron_left).sizeDp(16).color(Color.BLACK));
+//        toggle.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                crossFader.crossFade();
+//            }
+//        });
     }
 
     @Override
@@ -117,7 +101,7 @@ public class AppActivity extends AppCompatActivity implements Drawer.OnDrawerIte
         //add the values which need to be saved from the drawer to the bundle
         outState = result.saveInstanceState(outState);
         //add the values which need to be saved from the accountHeader to the bundle
-        outState = headerResult.saveInstanceState(outState);
+//        outState = headerResult.saveInstanceState(outState);
         //add the values which need to be saved from the crossFader to the bundle
         outState = crossFader.saveInstanceState(outState);
         super.onSaveInstanceState(outState);

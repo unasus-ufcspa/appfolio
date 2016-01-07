@@ -47,9 +47,10 @@
         <activity
             android:name=".Activities.SelectPortfolioActivity"
             android:label="@string/title_activity_select_portfolio"
-            android:theme="@style/AppTheme.NoActionBar" ></activity>
-        <activity android:name="com.onegravity.rteditor.media.choose.MediaChooserActivity"></activity>
-        <activity android:name="com.onegravity.rteditor.media.crop.CropImageActivity">
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name="com.onegravity.rteditor.media.choose.MediaChooserActivity" />
+        <activity android:name="com.onegravity.rteditor.media.crop.CropImageActivity"></activity>
+        <activity android:name=".Activities.MainActivity">
         </activity>
     </application>
 

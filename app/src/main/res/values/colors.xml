@@ -7,24 +7,24 @@
     <color name="white">#FFFFFf</color>
 
     <!-- Material DEFAULT colors -->
-    <color name="material_drawer_primary">#70E7D0</color>
-    <color name="material_drawer_primary_dark">#70E7D0</color>
-    <color name="material_drawer_primary_light">#70E7D0</color>
-    <color name="material_drawer_accent">#70E7D0</color>
+    <color name="material_drawer_primary">#666666</color>
+    <color name="material_drawer_primary_dark">#666666</color>
+    <color name="material_drawer_primary_light">#666666</color>
+    <color name="material_drawer_accent">#666666</color>
 
     <!-- OVERWRITE THESE COLORS FOR A LIGHT THEME #70E7D0 -->
     <!-- MaterialDrawer DEFAULT colors -->
-    <color name="material_drawer_background">#70E7D0</color>
+    <color name="material_drawer_background">#666666</color>
     <!-- Material DEFAULT text / items colors -->
-    <color name="material_drawer_primary_text">#DE000000</color>
-    <color name="material_drawer_primary_icon">#DE000000</color>
-    <color name="material_drawer_secondary_text">#DE000000</color>
-    <color name="material_drawer_hint_text">#DE000000</color>
+    <color name="material_drawer_primary_text">#CCCCCC</color>
+    <color name="material_drawer_primary_icon">#CCCCCC</color>
+    <color name="material_drawer_secondary_text">#CCCCCC</color>
+    <color name="material_drawer_hint_text">#CCCCCC</color>
     <color name="material_drawer_divider">#1F000000</color>
     <!-- Material DEFAULT drawer colors -->
-    <color name="material_drawer_selected">#70E7D0</color>
-    <color name="material_drawer_selected_text">#DE000000</color>
-    <color name="material_drawer_header_selection_text">#70E7D0</color>
+    <color name="material_drawer_selected">#666666</color>
+    <color name="material_drawer_selected_text">#666666</color>
+    <color name="material_drawer_header_selection_text">#666666</color>
 
     <!-- OVERWRITE THESE COLORS FOR A DARK THEME -->
     <!-- MaterialDrawer DEFAULT DARK colors -->
@@ -39,6 +39,13 @@
     <color name="material_drawer_dark_selected">#202020</color>
     <color name="material_drawer_dark_selected_text">@color/material_drawer_primary</color>
     <color name="material_drawer_dark_header_selection_text">#FFF</color>
+
+    <color name="gray_1">#666666</color>
+    <color name="gray_2">#808080</color>
+    <color name="gray_3">#CCCCCC</color>
+    <color name="gray_4">#F3F4F2</color>
+    <color name="gray_5">#FFFFFF</color>
+    <color name="base_green">#70E7D0</color>
 
 
 </resources>

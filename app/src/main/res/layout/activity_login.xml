@@ -13,19 +13,19 @@
         android:layout_marginBottom="8dp" android:visibility="gone" />
 
     <ImageView
-        android:layout_width="392dp"
-        android:layout_height="100dp"
         android:id="@+id/imageView4"
-        android:background="@drawable/portfolio_foreground"
-        android:layout_marginBottom="20dp" />
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/logo" />
 
     <ScrollView android:id="@+id/login_form" android:layout_width="match_parent"
         android:layout_height="320dp">
 
         <LinearLayout android:id="@+id/email_login_form" android:layout_width="match_parent"
-            android:layout_height="wrap_content" android:orientation="vertical"
-            android:weightSum="1"
-            android:gravity="center">
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:weightSum="1">
 
             <android.support.design.widget.TextInputLayout android:layout_width="match_parent"
                 android:layout_height="wrap_content">

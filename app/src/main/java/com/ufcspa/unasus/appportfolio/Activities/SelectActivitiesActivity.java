@@ -32,6 +32,7 @@ public class SelectActivitiesActivity extends AppActivity implements AdapterView
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_portfolio_activity);
+        getSupportActionBar().hide();
 
         init();
         createDrawer(savedInstanceState);

@@ -2,7 +2,6 @@ package com.ufcspa.unasus.appportfolio.Activities;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -36,6 +35,7 @@ public class SelectClassActivity extends AppActivity implements AdapterView.OnIt
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_classes);
+        getSupportActionBar().hide();
 
         init();
         createDrawer(savedInstanceState);

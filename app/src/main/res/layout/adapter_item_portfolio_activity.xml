@@ -68,7 +68,7 @@
         android:text="Atividade"
         android:textAppearance="?android:attr/textAppearanceSmall"
         android:textColor="#ffffff"
-        android:textSize="20dp" />
+        android:textSize="18dp" />
 
     <TextView
         android:id="@+id/item_description"
@@ -88,7 +88,7 @@
         android:text="sistema imunológico"
         android:textAppearance="?android:attr/textAppearanceSmall"
         android:textColor="#70e7d0"
-        android:textSize="20dp" />
+        android:textSize="18dp" />
 
     <ImageButton
         android:id="@+id/imageButton"
