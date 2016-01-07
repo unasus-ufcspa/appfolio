@@ -12,6 +12,8 @@ import com.ufcspa.unasus.appportfolio.Model.Attachment;
 import com.ufcspa.unasus.appportfolio.Model.Comentario;
 import com.ufcspa.unasus.appportfolio.Model.PortfolioClass;
 import com.ufcspa.unasus.appportfolio.Model.Reference;
+import com.ufcspa.unasus.appportfolio.Model.StudFrPortClass;
+import com.ufcspa.unasus.appportfolio.Model.Student;
 import com.ufcspa.unasus.appportfolio.Model.Team;
 import com.ufcspa.unasus.appportfolio.Model.User;
 
@@ -19,6 +21,8 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 
 /**
@@ -460,23 +464,69 @@ public class DataBaseAdapter {
         return array_activity;
     }
 
-    public void selectListActivitiesAndStudents(){
-        String query="select a.id_activity,\n" +
-                "       a.id_portfolio,\n" +
-                "\t   a.nu_order,\n" +
-                "       a.ds_title,\n" +
-                "\t   a.ds_description,\n" +
-                "\t   s.nm_user\n" +
-                "\t\t\t\tfrom \n" +
-                "                tb_activity_student ac\n" +
-                "\t\t\t\t\tjoin tb_activity a on a.id_activity = ac.id_activity\n" +
-                "                    join tb_portfolio p on p.id_portfolio = a.id_portfolio\n" +
-                "                    join tb_portfolio_student ps on ps.id_portfolio_student = ac.id_portfolio_student\n" +
-                "                    join tb_portfolio_class pc on pc.id_portfolio_class = ps.id_portfolio_class\n" +
-                "                    join tb_class c on c.id_class = pc.id_class\n" +
-                "                    join tb_user s on s.id_user = ps.id_student \n" +
-                "                WHERE 1 = 1\n" +
-                "                AND p.id_portfolio=?;";
+    public void selectListActivitiesAndStudents(int idPortfolioClass){
+        String query="select \n" +
+                "tas.id_activity_student,\n" +
+                "a.ds_title,\n" +
+                "a.ds_description,\n" +
+                "u.nm_user as nm_student\n" +
+                "\n" +
+                "FROM\n" +
+                "\ttb_activity_student as tas\n" +
+                "\tjoin tb_activity a on tas.id_activity = a.id_activity\n" +
+                "\tjoin tb_portfolio_student ps on ps.id_portfolio_student = tas.id_portfolio_student\n" +
+                "\tjoin tb_user u on u.id_user = ps.id_student\n" +
+                "WHERE \n" +
+                "\tps.id_portfolio_class="+idPortfolioClass;
+        ArrayList<StudFrPortClass> students = new ArrayList<>();
+        Cursor c = db.rawQuery(query, null);
+        if(c.moveToFirst()){
+//            for (int i = 0; i <c.getCount() ; i++) {
+//                int  idUser=c.getInt(1);
+//                StudFrPortClass student = new StudFrPortClass();
+//                    student.setNameStudent(c.getString(4));
+//                LinkedHashMap hash = new LinkedHashMap<Integer,Student>();
+//                hash.put(idUser,student);
+////                HashMap hash= new HashMap<Integer,Student>();
+////              hash.put(idUser,student);
+//            }
+            HashMap<Integer,StudFrPortClass> hash = new LinkedHashMap<Integer,StudFrPortClass>();
+            do{
+                int  idUser=c.getInt(1);
+                String nameStudent=c.getString(4);
+                Activity a = new Activity(c.getInt(0),c.getString(2),c.getString(3));
+                if(hash.containsKey(idUser)){
+                    hash.get(idUser).setNameStudent(nameStudent);
+                    hash.get(idUser).add(a);
+                }else {
+                    StudFrPortClass student = new StudFrPortClass();
+                    student.setNameStudent(nameStudent);
+                    student.add(a);
+                    hash.put(idUser,student);
+                }
+            }while (c.moveToNext());
+
+        }
+    }
+
+    public void selectListClassAnd(int idUser){
+        String query="select \n" +
+                "\tps.id_portfolio_class,\n" +
+                "\tc.ds_code,\n" +
+                "\tc.ds_description,\n" +
+                "\tp.ds_title,\n" +
+                "\tp.ds_description,\n" +
+                "\tcase \n" +
+                "\t\twhen id_student = 5 then 'S'\n" +
+                "\t\twhen id_tutor = 5 then 'T' \n" +
+                "\tend as perfil\n" +
+                "from \n" +
+                "\ttb_portfolio_student as ps \n" +
+                "\tjoin tb_portfolio_class pc on pc.id_portfolio_class = ps.id_portfolio_class\n" +
+                "\tjoin tb_class c on c.id_class = pc.id_class \n" +
+                "\tjoin tb_portfolio p on p.id_portfolio = pc.id_portfolio\n" +
+                "WHERE\n" +
+                "\t( id_tutor = 5 OR id_student = 5 )";
     }
 
 
@@ -548,4 +598,11 @@ public class DataBaseAdapter {
         Attachment attachment = new Attachment(cursor.getInt(0), cursor.getInt(1), cursor.getInt(2), cursor.getString(3), cursor.getString(4), cursor.getString(5));
         return attachment;
     }
+
+
+
+
+
+
+
 }

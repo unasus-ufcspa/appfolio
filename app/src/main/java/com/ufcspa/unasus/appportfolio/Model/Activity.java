@@ -20,6 +20,12 @@ public class Activity implements Comparable<Activity>
         this.ds_description = ds_description;
     }
 
+    public Activity(int id_activity, String ds_title, String ds_description) {
+        this.id_activity = id_activity;
+        this.ds_title = ds_title;
+        this.ds_description = ds_description;
+    }
+
     public int getIdAtivity() {
         return id_activity;
     }
