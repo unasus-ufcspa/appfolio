@@ -8,9 +8,10 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
-import com.ufcspa.unasus.appportfolio.Adapter.SelectActivitiesAdapter;
+import com.ufcspa.unasus.appportfolio.Adapter.StudentActivitiesAdapter;
 import com.ufcspa.unasus.appportfolio.Model.Activity;
 import com.ufcspa.unasus.appportfolio.Model.Singleton;
+import com.ufcspa.unasus.appportfolio.Model.StudFrPortClass;
 import com.ufcspa.unasus.appportfolio.R;
 import com.ufcspa.unasus.appportfolio.database.DataBaseAdapter;
 
@@ -20,10 +21,10 @@ import java.util.Collections;
 /**
  * Created by UNASUS on 10/11/2015.
  */
-public class SelectActivitiesActivity extends AppActivity implements AdapterView.OnItemClickListener
+public class SelectActivitiesActivity extends AppActivity //implements AdapterView.OnItemClickListener
 {
     private ListView list_activities;
-    private ArrayList<Activity> activities;
+    private ArrayList<StudFrPortClass> list;
     private DataBaseAdapter source;
     private Singleton singleton;
 
@@ -44,17 +45,16 @@ public class SelectActivitiesActivity extends AppActivity implements AdapterView
 
         source = new DataBaseAdapter(getApplicationContext());
         try {
-            activities = source.getActivities(singleton.user.getIdUser(), singleton.portfolioClass.getIdPortfolioStudent(), singleton.user.getUserType());
+            list = source.selectListActivitiesAndStudents(2);
             //source.close();
         } catch (Exception e) {
             Log.e("BANCO", "falha em pegar atividades (SelectActivitiesAactivity):" + e.getMessage());
         }
 
-        Collections.sort(activities);
-        SelectActivitiesAdapter gridAdapter = new SelectActivitiesAdapter(this, activities);
+//        Collections.sort(activities);
+        StudentActivitiesAdapter gridAdapter = new StudentActivitiesAdapter(this, list);
         list_activities = (ListView) findViewById(R.id.list_activities);
         list_activities.setAdapter(gridAdapter);
-        list_activities.setOnItemClickListener(this);
         list_activities.setOnTouchListener(new View.OnTouchListener() {
 
             @Override
@@ -68,12 +68,12 @@ public class SelectActivitiesActivity extends AppActivity implements AdapterView
     }
 
 
-    @Override
-    public void onItemClick(AdapterView<?> parent, View view, int position, long id)
-    {
-        singleton.activity = this.activities.get(position);
-        System.out.println("Teste " + position);
-        startActivity(new Intent(this, EditActivity.class));
-        //finish();
-    }
+//    @Override
+//    public void onItemClick(AdapterView<?> parent, View view, int position, long id)
+//    {
+//        singleton.activity = this.activities.get(position);
+//        System.out.println("Teste " + position);
+//        startActivity(new Intent(this, EditActivity.class));
+//        //finish();
+//    }
 }
