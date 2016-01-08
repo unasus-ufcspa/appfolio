@@ -56,7 +56,7 @@ public class CommentArrayAdapter extends ArrayAdapter<OneComment> {
 
         countryName.setText(coment.comment);
 
-        countryName.setBackgroundResource(coment.orientation ? R.drawable.bubble_yellow : R.drawable.bubble_green);
+        //countryName.setBackgroundResource(coment.orientation ? R.drawable.bubble_yellow : R.drawable.bubble_green);
         wrapper.setGravity(coment.orientation ? Gravity.LEFT : Gravity.RIGHT);
 
         return row;
