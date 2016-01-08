@@ -8,7 +8,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
-import com.ufcspa.unasus.appportfolio.Adapter.SelectActivitiesAdapter;
+import com.ufcspa.unasus.appportfolio.Adapter.StudentActivitiesAdapter;
 import com.ufcspa.unasus.appportfolio.Model.Activity;
 import com.ufcspa.unasus.appportfolio.Model.Singleton;
 import com.ufcspa.unasus.appportfolio.R;
@@ -51,7 +51,7 @@ public class SelectActivitiesActivity extends AppActivity implements AdapterView
         }
 
         Collections.sort(activities);
-        SelectActivitiesAdapter gridAdapter = new SelectActivitiesAdapter(this, activities);
+        StudentActivitiesAdapter gridAdapter = new StudentActivitiesAdapter(this, null);
         list_activities = (ListView) findViewById(R.id.list_activities);
         list_activities.setAdapter(gridAdapter);
         list_activities.setOnItemClickListener(this);

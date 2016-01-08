@@ -8,7 +8,7 @@ import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.Toast;
 
-import com.ufcspa.unasus.appportfolio.Adapter.SelectClassAdapter;
+import com.ufcspa.unasus.appportfolio.Adapter.ClassAdapter;
 import com.ufcspa.unasus.appportfolio.Model.Singleton;
 import com.ufcspa.unasus.appportfolio.Model.Team;
 import com.ufcspa.unasus.appportfolio.R;
@@ -67,7 +67,7 @@ public class SelectClassActivity extends AppActivity implements AdapterView.OnIt
 
 
 
-        SelectClassAdapter gridAdapter = new SelectClassAdapter(this, classes);
+        ClassAdapter gridAdapter = new ClassAdapter(this, classes);
 
         grid_classes = (GridView) findViewById(R.id.grid_classes);
         grid_classes.setAdapter(gridAdapter);
