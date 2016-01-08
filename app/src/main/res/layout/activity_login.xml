@@ -18,7 +18,7 @@
         android:layout_height="wrap_content"
         android:src="@drawable/logo" />
 
-    <ScrollView android:id="@+id/login_form" android:layout_width="match_parent"
+    <ScrollView android:id="@+id/login_form" android:layout_width="175dp"
         android:layout_height="320dp">
 
         <LinearLayout android:id="@+id/email_login_form" android:layout_width="match_parent"

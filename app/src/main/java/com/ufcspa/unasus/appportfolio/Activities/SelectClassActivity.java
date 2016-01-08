@@ -8,7 +8,6 @@ import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.Toast;
 
-import com.ufcspa.unasus.appportfolio.Adapter.SelectClassAdapter;
 import com.ufcspa.unasus.appportfolio.Adapter.SelectPortfolioClassAdapter;
 import com.ufcspa.unasus.appportfolio.Model.PortfolioClass;
 import com.ufcspa.unasus.appportfolio.Model.Singleton;
@@ -86,7 +85,7 @@ public class SelectClassActivity extends AppActivity implements AdapterView.OnIt
         singleton.portfolioClass = portclasses.get(position);
         Log.d("BANCO", "ID do portfolioClass " + singleton.portfolioClass.getIdPortClass());
         Toast.makeText(getApplicationContext(),"clicou em:"+portclasses.get(position).getClassCode(),Toast.LENGTH_SHORT).show();
-        startActivity(new Intent(this,SelectPortfolioActivity.class));
+        startActivity(new Intent(this,SelectActivitiesActivity.class));
         //finish();
     }
 }

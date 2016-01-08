@@ -516,7 +516,7 @@ public class DataBaseAdapter {
     public List<PortfolioClass> selectListClassAndUserType(int idUser){
         //retorna uma lista com as turmas que o usuário esta cadastro e seu papel nela(tutor ou aluno);
         // perfil S- Student T-tutor
-        String query="select \n" +
+        String query="select distinct \n" +
                 "\tps.id_portfolio_class,\n" +
                 "\tc.ds_code,\n" +
                 "\tc.ds_description,\n" +

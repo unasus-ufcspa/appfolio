@@ -39,7 +39,7 @@ public class ActivitiesAdapter extends RecyclerView.Adapter<ActivitiesAdapter.Vi
         View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.adapter_item_portfolio_activity, parent, false);
         ViewHolder vh = new ViewHolder(v);
 
-        vh.title = (TextView)v.findViewById(R.id.item_description);
+        vh.title = (TextView)v.findViewById(R.id.adapter_item_class_txv_ds_title);
         vh.moreInfo = (ImageButton)v.findViewById(R.id.btn_info);
         vh.description = "";
         return vh;

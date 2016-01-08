@@ -124,9 +124,9 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                     session.user = user;
 
                     char userType = checkUserType(user.getIdUser());
-                    if(userType == 'U')
+                    if(userType == 'W')
                     {
-                        showChooseTutorOrStudentPopup();
+                        //showChooseTutorOrStudentPopup();
                     }
                     else
                     {
