@@ -37,8 +37,7 @@ public class StudentActivitiesAdapter extends BaseAdapter
 
     @Override
     public int getCount() {
-        //return list.size();
-        return 10;
+        return list.size();
     }
 
     @Override
@@ -57,7 +56,7 @@ public class StudentActivitiesAdapter extends BaseAdapter
         View rowView;
         rowView = inflater.inflate(R.layout.adapter_portfolio_activity, null);
 
-        //StudFrPortClass aux = list.get(position);
+        StudFrPortClass aux = list.get(position);
 
         holder.recyclerView = (RecyclerView) rowView.findViewById(R.id.activities_list);
         holder.recyclerView.setOnTouchListener(new View.OnTouchListener() {
@@ -73,10 +72,10 @@ public class StudentActivitiesAdapter extends BaseAdapter
         holder.recyclerView.setLayoutManager(layoutManager);
         holder.recyclerView.addItemDecoration(new DividerItemDecoration(context, DividerItemDecoration.HORIZONTAL_LIST, 100));
 
-        holder.recyclerView.setAdapter(new ActivitiesAdapter());
+        holder.recyclerView.setAdapter(new ActivitiesAdapter(context, aux.getListActivities()));
 
-//        holder.studentName = (TextView) rowView.findViewById(R.id.student_name);
-//        holder.studentName.setText(aux.getNameStudent());
+        holder.studentName = (TextView) rowView.findViewById(R.id.student_name);
+        holder.studentName.setText(aux.getNameStudent());
 
         return rowView;
     }

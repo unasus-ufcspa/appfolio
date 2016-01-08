@@ -1,5 +1,6 @@
 package com.ufcspa.unasus.appportfolio.Adapter;
 
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,9 +10,13 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.ufcspa.unasus.appportfolio.Activities.EditActivity;
+import com.ufcspa.unasus.appportfolio.Activities.SelectActivitiesActivity;
 import com.ufcspa.unasus.appportfolio.Model.Activity;
+import com.ufcspa.unasus.appportfolio.Model.Singleton;
 import com.ufcspa.unasus.appportfolio.R;
 
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -19,9 +24,14 @@ import java.util.List;
  */
 public class ActivitiesAdapter extends RecyclerView.Adapter<ActivitiesAdapter.ViewHolder> {
     private List<Activity> list;
+    private SelectActivitiesActivity context;
+    private Singleton singleton;
 
-    public ActivitiesAdapter() {
-        this.list = null;
+    public ActivitiesAdapter(SelectActivitiesActivity context, List<Activity> list) {
+        this.list = list;
+        this.context = context;
+        this.singleton = Singleton.getInstance();
+        Collections.sort(this.list);
     }
 
     @Override
@@ -36,31 +46,31 @@ public class ActivitiesAdapter extends RecyclerView.Adapter<ActivitiesAdapter.Vi
     }
 
     @Override
-    public void onBindViewHolder(final ViewHolder holder, int position) {
-//        Activity aux = this.list.get(position);
+    public void onBindViewHolder(final ViewHolder holder, final int position) {
+        Activity aux = this.list.get(position);
 
-//        holder.title.setText(aux.getTitle());
-
-//        holder.description = aux.getDescription();
-        holder.title.setText("sistema imunológico bem bacana de se usar");
+        holder.title.setText(aux.getTitle());
+        holder.description = aux.getDescription();
         holder.moreInfo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(v.getContext(), holder.description, Toast.LENGTH_SHORT).show();
+                Toast.makeText(v.getContext(), holder.title.getText()+"\n"+ holder.description, Toast.LENGTH_SHORT).show();
             }
         });
 
         holder.view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //TROCA DE TELA
+                singleton.activity = list.get(position);
+                System.out.println(position);
+                context.startActivity(new Intent(context, EditActivity.class));
             }
         });
     }
 
     @Override
     public int getItemCount() {
-        return 5;//this.list.size()
+        return this.list.size();
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {

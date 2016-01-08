@@ -591,7 +591,7 @@ public class DataBaseAdapter {
         Cursor cursor = db.rawQuery(query, null);
 
         do {
-            if (cursor.moveToFirst())
+            if (cursor.getCount() != 0)
                 array_attachment.add(cursorToAttachment(cursor));
         } while (cursor.moveToNext());
 
