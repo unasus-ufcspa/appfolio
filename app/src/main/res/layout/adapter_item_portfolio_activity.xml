@@ -54,21 +54,21 @@
         android:textSize="25dp"
         android:visibility="visible" />
 
-    <TextView
-        android:id="@+id/adapter_item_class_txv_code"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignEnd="@+id/item_color_background"
-        android:layout_alignLeft="@+id/item_color_background"
-        android:layout_alignRight="@+id/item_color_background"
-        android:layout_alignStart="@+id/item_color_background"
-        android:layout_centerVertical="true"
-        android:gravity="right"
-        android:paddingRight="15dp"
-        android:text="Atividade"
-        android:textAppearance="?android:attr/textAppearanceSmall"
-        android:textColor="#ffffff"
-        android:textSize="18dp" />
+    <!--<TextView-->
+        <!--android:id="@+id/adapter_item_class_txv_code"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_alignEnd="@+id/item_color_background"-->
+        <!--android:layout_alignLeft="@+id/item_color_background"-->
+        <!--android:layout_alignRight="@+id/item_color_background"-->
+        <!--android:layout_alignStart="@+id/item_color_background"-->
+        <!--android:layout_centerVertical="true"-->
+        <!--android:gravity="right"-->
+        <!--android:paddingRight="15dp"-->
+        <!--android:text="Atividade"-->
+        <!--android:textAppearance="?android:attr/textAppearanceSmall"-->
+        <!--android:textColor="#ffffff"-->
+        <!--android:textSize="18dp" />-->
 
     <TextView
         android:id="@+id/adapter_item_class_txv_ds_title"
@@ -79,7 +79,6 @@
         android:layout_alignLeft="@+id/item_color_background"
         android:layout_alignRight="@+id/item_color_background"
         android:layout_alignStart="@+id/item_color_background"
-        android:layout_below="@+id/adapter_item_class_txv_code"
         android:gravity="bottom|right"
         android:lines="2"
         android:longClickable="false"
@@ -89,7 +88,8 @@
         android:textAppearance="?android:attr/textAppearanceSmall"
         android:textColor="#70e7d0"
         android:textSize="18dp"
-        android:ellipsize="end"/>
+        android:ellipsize="end"
+        android:layout_below="@+id/item_notification_icon" />
 
     <ImageButton
         android:id="@+id/btn_info"

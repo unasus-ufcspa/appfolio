@@ -1,15 +1,19 @@
 package com.ufcspa.unasus.appportfolio.Adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
+import com.ufcspa.unasus.appportfolio.Activities.SelectActivitiesActivity;
 import com.ufcspa.unasus.appportfolio.Activities.SelectClassActivity;
 import com.ufcspa.unasus.appportfolio.Model.PortfolioClass;
+import com.ufcspa.unasus.appportfolio.Model.Singleton;
 import com.ufcspa.unasus.appportfolio.Model.Team;
 import com.ufcspa.unasus.appportfolio.R;
 
@@ -54,34 +58,33 @@ public class SelectPortfolioClassAdapter extends BaseAdapter {
         rowView = inflater.inflate(R.layout.adapter_item_class, null);
         holder.txt_class_code=(TextView) rowView.findViewById(R.id.adapter_item_class_txv_code);
         holder.txt_port_title=(TextView) rowView.findViewById(R.id.adapter_item_class_txv_ds_title);
-        PortfolioClass portClass=portclasses.get(position);
+        holder.background=(TextView) rowView.findViewById(R.id.item_color_background);
+        holder.btnInfo=(ImageButton) rowView.findViewById(R.id.btn_info);
+        holder.nofificationIcon=(TextView) rowView.findViewById(R.id.item_notification_icon);
+        final PortfolioClass portClass=portclasses.get(position);
+
+        if(position%2 == 0)
+            holder.nofificationIcon.setVisibility(View.INVISIBLE);
+
         if(portClass.getPerfil().equals("S")){
-            rowView.setBackgroundColor(Color.GREEN);
-        }else{
-            rowView.setBackgroundColor(Color.GRAY);
+            holder.background.setBackgroundResource(R.color.base_green);
+            holder.txt_class_code.setTextColor(Color.GRAY);
+            holder.txt_port_title.setTextColor(Color.WHITE);
+            holder.btnInfo.setBackgroundResource(R.color.base_green);
+            holder.nofificationIcon.setBackgroundResource(R.drawable.rounded_student);
+            holder.nofificationIcon.setVisibility(View.VISIBLE);
         }
         holder.txt_class_code.setText(portClass.getClassCode());
         holder.txt_port_title.setText(portClass.getPortfolioTitle());
 
-//        holder.txt_class_code = (TextView) rowView.findViewById(R.id.txt_activity_title);
-//        holder.txt_class_description = (TextView) rowView.findViewById(R.id.txt_activity_description);
-//        holder.txt_class_dates = (TextView) rowView.findViewById(R.id.txt_class_dates);
-//        holder.txt_class_status = (TextView) rowView.findViewById(R.id.txt_class_status);
-//
-//        Team class_aux = classes.get(position);
-//
-//        holder.txt_class_code.setText(class_aux.getCode());
-//        holder.txt_class_description.setText(class_aux.getDescription());
-//
-//        String dateStart = new SimpleDateFormat("dd-MM-yyyy").format(class_aux.getDateStart());
-//        String dateFinish = new SimpleDateFormat("dd-MM-yyyy").format(class_aux.getDateFinish());
-//
-//        holder.txt_class_dates.setText(dateStart + "/" + dateFinish);
-//
-//        if(class_aux.getStatus() == 'A')
-//            holder.txt_class_status.setText("Ativo");
-//        else
-//            holder.txt_class_status.setText("Inativo");
+        rowView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Singleton singleton = Singleton.getInstance();
+                singleton.portfolioClass = portClass;
+                context.startActivity(new Intent(context, SelectActivitiesActivity.class));
+            }
+        });
 
         return rowView;
     }
@@ -89,10 +92,10 @@ public class SelectPortfolioClassAdapter extends BaseAdapter {
     public class Holder
     {
         TextView txt_class_code;
-        TextView txt_class_description;
-        TextView txt_class_dates;
-        TextView txt_class_status;
         TextView txt_port_title;
+        TextView background;
+        ImageButton btnInfo;
+        TextView nofificationIcon;
     }
 }
 
