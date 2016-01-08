@@ -33,6 +33,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.ufcspa.unasus.appportfolio.Model.Singleton;
+import com.ufcspa.unasus.appportfolio.Model.StudFrPortClass;
 import com.ufcspa.unasus.appportfolio.Model.User;
 import com.ufcspa.unasus.appportfolio.R;
 import com.ufcspa.unasus.appportfolio.database.DataBaseAdapter;
@@ -97,6 +98,11 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                 return false;
             }
         });
+        
+//        DataBaseAdapter data= new DataBaseAdapter(this);
+//        ArrayList<StudFrPortClass> lista=data.selectListActivitiesAndStudents(2);
+//        Log.d("lista","tamanho:"+lista.size());
+//        System.out.println("lista de alunos:"+lista.get(1).toString());
 
         /*********************************************************/
         /*********************************************************/

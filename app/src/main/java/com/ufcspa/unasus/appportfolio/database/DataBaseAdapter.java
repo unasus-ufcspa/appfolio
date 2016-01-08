@@ -180,7 +180,7 @@ public class DataBaseAdapter {
         cv.put("id_author", c.getIdAuthor());
         cv.put("tx_comment",c.getTxtComment());
         cv.put("tx_reference",c.getTxtReference());
-        cv.put("dt_comment",c.getDateComment());
+        cv.put("dt_comment", c.getDateComment());
         try{
             db.update("tb_comment",cv,"id_comment=?",new String[]{""+c.getIdComment()});
         }catch (Exception e ){
@@ -464,9 +464,10 @@ public class DataBaseAdapter {
         return array_activity;
     }
 
-    public void selectListActivitiesAndStudents(int idPortfolioClass){
+    public ArrayList<StudFrPortClass> selectListActivitiesAndStudents(int idPortfolioClass){
         String query="select \n" +
                 "tas.id_activity_student,\n" +
+                "u.id_user,\n" +
                 "a.ds_title,\n" +
                 "a.ds_description,\n" +
                 "u.nm_user as nm_student\n" +
@@ -481,35 +482,39 @@ public class DataBaseAdapter {
         ArrayList<StudFrPortClass> students = new ArrayList<>();
         Cursor c = db.rawQuery(query, null);
         if(c.moveToFirst()){
-//            for (int i = 0; i <c.getCount() ; i++) {
-//                int  idUser=c.getInt(1);
-//                StudFrPortClass student = new StudFrPortClass();
-//                    student.setNameStudent(c.getString(4));
-//                LinkedHashMap hash = new LinkedHashMap<Integer,Student>();
-//                hash.put(idUser,student);
-////                HashMap hash= new HashMap<Integer,Student>();
-////              hash.put(idUser,student);
-//            }
             HashMap<Integer,StudFrPortClass> hash = new LinkedHashMap<Integer,StudFrPortClass>();
+            int lastid;
+            int  idUser = 0;
+            int cont=-1;
             do{
-                int  idUser=c.getInt(1);
+                lastid=idUser;
+                idUser=c.getInt(1);
+
                 String nameStudent=c.getString(4);
                 Activity a = new Activity(c.getInt(0),c.getString(2),c.getString(3));
-                if(hash.containsKey(idUser)){
-                    hash.get(idUser).setNameStudent(nameStudent);
-                    hash.get(idUser).add(a);
-                }else {
+
+                if(lastid==idUser){
+                    students.get(cont).setNameStudent(nameStudent);
+                    students.get(cont).add(a);
+                }else{
                     StudFrPortClass student = new StudFrPortClass();
                     student.setNameStudent(nameStudent);
                     student.add(a);
-                    hash.put(idUser,student);
+                    students.add(student);
+                    cont++;
                 }
+//
+
             }while (c.moveToNext());
 
+        }else{
+            Log.d(tag,"Nao retornou nada na consulta");
         }
+        return students;
     }
 
-    public void selectListClassAnd(int idUser){
+    public void selectListClassAndUserType(int idUser){
+        //retorna uma lista com as turmas que o usuário esta cadastro e seu papel nela(tutor ou aluno);
         String query="select \n" +
                 "\tps.id_portfolio_class,\n" +
                 "\tc.ds_code,\n" +
