@@ -7,6 +7,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.ufcspa.unasus.appportfolio.Adapter.StudentActivitiesAdapter;
 import com.ufcspa.unasus.appportfolio.Model.Activity;
@@ -14,6 +15,8 @@ import com.ufcspa.unasus.appportfolio.Model.Singleton;
 import com.ufcspa.unasus.appportfolio.Model.StudFrPortClass;
 import com.ufcspa.unasus.appportfolio.R;
 import com.ufcspa.unasus.appportfolio.database.DataBaseAdapter;
+
+import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -27,6 +30,9 @@ public class SelectActivitiesActivity extends AppActivity //implements AdapterVi
     private ArrayList<StudFrPortClass> list;
     private DataBaseAdapter source;
     private Singleton singleton;
+
+    private TextView className;
+    private TextView portfolioName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -52,7 +58,12 @@ public class SelectActivitiesActivity extends AppActivity //implements AdapterVi
             Log.e("BANCO", "falha em pegar atividades (SelectActivitiesAactivity):" + e.getMessage());
         }
 
-//        Collections.sort(activities);
+        className = (TextView)findViewById(R.id.class_name);
+        portfolioName = (TextView)findViewById(R.id.portfolio_name);
+
+        className.setText(singleton.portfolioClass.getClassCode());
+        portfolioName.setText(singleton.portfolioClass.getPortfolioTitle());
+
         StudentActivitiesAdapter gridAdapter = new StudentActivitiesAdapter(this, list);
         list_activities = (ListView) findViewById(R.id.list_activities);
         list_activities.setAdapter(gridAdapter);
