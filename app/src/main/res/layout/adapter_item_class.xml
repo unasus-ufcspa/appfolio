@@ -54,7 +54,7 @@
         android:textSize="25dp" />
 
     <TextView
-        android:id="@+id/item_name"
+        android:id="@+id/adapter_item_class_txv_code"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignEnd="@+id/item_color_background"
@@ -73,12 +73,12 @@
         android:id="@+id/textView5"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/item_description"
+        android:layout_above="@+id/adapter_item_class_txv_ds_title"
         android:layout_alignEnd="@+id/item_background"
         android:layout_alignLeft="@+id/item_background"
         android:layout_alignRight="@+id/item_background"
         android:layout_alignStart="@+id/item_background"
-        android:layout_below="@+id/item_name"
+        android:layout_below="@+id/adapter_item_class_txv_code"
         android:gravity="bottom|right"
         android:paddingRight="15dp"
         android:text="portfolio 1"
@@ -87,7 +87,7 @@
         android:textSize="18dp" />
 
     <TextView
-        android:id="@+id/item_description"
+        android:id="@+id/adapter_item_class_txv_ds_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignBottom="@+id/item_color_background"

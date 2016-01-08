@@ -32,6 +32,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.ufcspa.unasus.appportfolio.Model.PortfolioClass;
 import com.ufcspa.unasus.appportfolio.Model.Singleton;
 import com.ufcspa.unasus.appportfolio.Model.StudFrPortClass;
 import com.ufcspa.unasus.appportfolio.Model.User;
@@ -98,12 +99,12 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                 return false;
             }
         });
-        
-//        DataBaseAdapter data= new DataBaseAdapter(this);
-//        ArrayList<StudFrPortClass> lista=data.selectListActivitiesAndStudents(2);
-//        Log.d("lista","tamanho:"+lista.size());
-//        System.out.println("lista de alunos:"+lista.get(1).toString());
 
+        DataBaseAdapter data= new DataBaseAdapter(this);
+//        ArrayList<PortfolioClass> lista= (ArrayList<PortfolioClass>) data.selectListClassAndUserType(5);
+//        Log.d("lista","tamanho:"+lista.size());
+//
+//        Log.d("lista","portfolio:"+lista.toString());
         /*********************************************************/
         /*********************************************************/
         /**************************TESTE**************************/

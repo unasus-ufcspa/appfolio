@@ -513,8 +513,9 @@ public class DataBaseAdapter {
         return students;
     }
 
-    public void selectListClassAndUserType(int idUser){
+    public List<PortfolioClass> selectListClassAndUserType(int idUser){
         //retorna uma lista com as turmas que o usuário esta cadastro e seu papel nela(tutor ou aluno);
+        // perfil S- Student T-tutor
         String query="select \n" +
                 "\tps.id_portfolio_class,\n" +
                 "\tc.ds_code,\n" +
@@ -522,8 +523,8 @@ public class DataBaseAdapter {
                 "\tp.ds_title,\n" +
                 "\tp.ds_description,\n" +
                 "\tcase \n" +
-                "\t\twhen id_student = 5 then 'S'\n" +
-                "\t\twhen id_tutor = 5 then 'T' \n" +
+                "\t\twhen id_student = "+idUser+" then 'S'\n" +
+                "\t\twhen id_tutor = "+idUser+" then 'T' \n" +
                 "\tend as perfil\n" +
                 "from \n" +
                 "\ttb_portfolio_student as ps \n" +
@@ -531,7 +532,24 @@ public class DataBaseAdapter {
                 "\tjoin tb_class c on c.id_class = pc.id_class \n" +
                 "\tjoin tb_portfolio p on p.id_portfolio = pc.id_portfolio\n" +
                 "WHERE\n" +
-                "\t( id_tutor = 5 OR id_student = 5 )";
+                "\t( id_tutor = "+idUser+" OR id_student = "+idUser+" )";
+        Cursor c = db.rawQuery(query, null);
+        ArrayList lista = new ArrayList<PortfolioClass>();
+            if(c.moveToFirst()){
+                do{
+                    int idPortClass=c.getInt(0);
+                    String classCode=c.getString(1);
+                    String portTitle=c.getString(3);
+                    String perfil=c.getString(5);
+                    PortfolioClass p = new PortfolioClass(classCode,idPortClass,perfil,portTitle);
+                    lista.add(p);
+                    Log.d(tag,"port class:" +p.toString());
+                }while (c.moveToNext());
+            }else{
+                Log.d(tag,"Nao retornou nada na consulta");
+            }
+
+        return lista;
     }
 
 
