@@ -55,4 +55,13 @@ public class Activity implements Comparable<Activity>
             return 1;
         return 0;
     }
+
+    @Override
+    public String toString() {
+        return "Activity{" +
+                "id_activity=" + id_activity +
+                ", ds_title='" + ds_title + '\'' +
+                ", ds_description='" + ds_description + '\'' +
+                '}';
+    }
 }

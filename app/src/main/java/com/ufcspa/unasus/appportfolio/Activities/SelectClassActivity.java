@@ -8,7 +8,8 @@ import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.Toast;
 
-import com.ufcspa.unasus.appportfolio.Adapter.SelectClassAdapter;
+import com.ufcspa.unasus.appportfolio.Adapter.SelectPortfolioClassAdapter;
+import com.ufcspa.unasus.appportfolio.Model.PortfolioClass;
 import com.ufcspa.unasus.appportfolio.Model.Singleton;
 import com.ufcspa.unasus.appportfolio.Model.Team;
 import com.ufcspa.unasus.appportfolio.R;
@@ -29,6 +30,7 @@ public class SelectClassActivity extends AppActivity implements AdapterView.OnIt
     private List<Team> classes;
     private DataBaseAdapter source;
     private Singleton singleton;
+    private List<PortfolioClass> portclasses;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -46,29 +48,32 @@ public class SelectClassActivity extends AppActivity implements AdapterView.OnIt
 
         source = new DataBaseAdapter(getApplicationContext());
         try {
-            classes = source.getClasses(singleton.user.getIdUser(), singleton.user.getUserType());
+            //classes = source.getClasses(singleton.user.getIdUser(), singleton.user.getUserType());
+            portclasses=source.selectListClassAndUserType(singleton.user.getIdUser());
+            Log.d("lista","tam portlis:"+portclasses.size());
+
             //source.close();
         }catch (Exception e){
 
             Log.wtf("ERRO",e.getMessage());
         }
 
-        ArrayList<String>codTurmas = new ArrayList<String>();
-        for(int i=0;i<classes.size();i++){
-            if(!codTurmas.contains(classes.get(i).getCode()))
-                codTurmas.add(classes.get(i).getCode());
-        }
-        Log.d("Class:","cod Turmas:"+codTurmas.toString());
-        LinkedHashMap<String,Team> itens = new LinkedHashMap<>(classes.size());
-        for(int i=0;i<classes.size();i++){
-            itens.put(classes.get(i).getCode(),classes.get(i));
-        }
-        Log.d("Class","itens hashmap"+itens.toString());
+//        ArrayList<String>codTurmas = new ArrayList<String>();
+//        for(int i=0;i<classes.size();i++){
+//            if(!codTurmas.contains(classes.get(i).getCode()))
+//                codTurmas.add(classes.get(i).getCode());
+//        }
+//        Log.d("Class:","cod Turmas:"+codTurmas.toString());
+//        LinkedHashMap<String,Team> itens = new LinkedHashMap<>(classes.size());
+//        for(int i=0;i<classes.size();i++){
+//            itens.put(classes.get(i).getCode(),classes.get(i));
+//        }
+//        Log.d("Class","itens hashmap"+itens.toString());
 
 
 
-        SelectClassAdapter gridAdapter = new SelectClassAdapter(this, classes);
-
+        //SelectClassAdapter gridAdapter = new SelectClassAdapter(this, classes);
+        SelectPortfolioClassAdapter gridAdapter= new SelectPortfolioClassAdapter(this,portclasses);
         grid_classes = (GridView) findViewById(R.id.grid_classes);
         grid_classes.setAdapter(gridAdapter);
         grid_classes.setOnItemClickListener(this);
@@ -77,10 +82,10 @@ public class SelectClassActivity extends AppActivity implements AdapterView.OnIt
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id)
     {
-        singleton.team = classes.get(position);
-        Log.d("BANCO", "ID da Turma " + singleton.team.getIdClass());
-        Toast.makeText(getApplicationContext(),"clicou em:"+classes.get(position).getCode(),Toast.LENGTH_SHORT).show();
-        startActivity(new Intent(this,SelectPortfolioActivity.class));
+        singleton.portfolioClass = portclasses.get(position);
+        Log.d("BANCO", "ID do portfolioClass " + singleton.portfolioClass.getIdPortClass());
+        Toast.makeText(getApplicationContext(),"clicou em:"+portclasses.get(position).getClassCode(),Toast.LENGTH_SHORT).show();
+        startActivity(new Intent(this,SelectActivitiesActivity.class));
         //finish();
     }
 }

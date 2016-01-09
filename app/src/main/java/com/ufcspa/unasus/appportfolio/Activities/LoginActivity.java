@@ -32,7 +32,9 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.ufcspa.unasus.appportfolio.Model.PortfolioClass;
 import com.ufcspa.unasus.appportfolio.Model.Singleton;
+import com.ufcspa.unasus.appportfolio.Model.StudFrPortClass;
 import com.ufcspa.unasus.appportfolio.Model.User;
 import com.ufcspa.unasus.appportfolio.R;
 import com.ufcspa.unasus.appportfolio.database.DataBaseAdapter;
@@ -98,6 +100,11 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             }
         });
 
+        DataBaseAdapter data= new DataBaseAdapter(this);
+//        ArrayList<PortfolioClass> lista= (ArrayList<PortfolioClass>) data.selectListClassAndUserType(5);
+//        Log.d("lista","tamanho:"+lista.size());
+//
+//        Log.d("lista","portfolio:"+lista.toString());
         /*********************************************************/
         /*********************************************************/
         /**************************TESTE**************************/
@@ -117,9 +124,9 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                     session.user = user;
 
                     char userType = checkUserType(user.getIdUser());
-                    if(userType == 'U')
+                    if(userType == 'W')
                     {
-                        showChooseTutorOrStudentPopup();
+                        //showChooseTutorOrStudentPopup();
                     }
                     else
                     {

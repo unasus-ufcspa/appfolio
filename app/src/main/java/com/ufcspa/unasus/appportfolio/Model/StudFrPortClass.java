@@ -11,7 +11,7 @@ import java.util.List;
 
 public class StudFrPortClass {
     private String nameStudent;
-    private List listActivities;
+    private List<Activity> listActivities;
 
     public String getNameStudent() {
         return nameStudent;
@@ -21,19 +21,28 @@ public class StudFrPortClass {
         this.nameStudent = nameStudent;
     }
 
-    public List<ActivityStudent> getListActivities() {
+    public List<Activity> getListActivities() {
         return listActivities;
     }
 
-    public void setListActivities(List<ActivityStudent> listActivities) {
+    public void setListActivities(List<Activity> listActivities) {
         this.listActivities = listActivities;
     }
 
     public StudFrPortClass() {
-        listActivities= new ArrayList<ActivityStudent>();
+        listActivities= new ArrayList<Activity>();
     }
+
+
     public void add(Activity a){
         listActivities.add(a);
     }
 
+    @Override
+    public String toString() {
+        return "StudFrPortClass{" +
+                "nameStudent='" + nameStudent + '\'' +
+                ", listActivities=" + listActivities +
+                '}';
+    }
 }
