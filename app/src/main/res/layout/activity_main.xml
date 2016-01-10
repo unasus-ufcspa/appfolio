@@ -5,76 +5,79 @@
     android:layout_height="match_parent"
     tools:context="com.ufcspa.unasus.appportfolio.Activities.MainActivity">
 
-    <LinearLayout
-        android:id="@+id/mini_drawer"
-        android:layout_width="100dp"
+    <com.ufcspa.unasus.appportfolio.Model.DragLayout
+        android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
-        android:background="@color/gray_2"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:animateLayoutChanges="true"
+        android:id="@+id/drag">
 
-        <ImageView
-            android:id="@+id/img_logo"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:layout_gravity="center_horizontal"
-            android:layout_weight="1"
-            android:src="@drawable/icon" />
+        <LinearLayout
+            android:id="@+id/mini_drawer"
+            android:layout_width="100dp"
+            android:layout_height="match_parent"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:background="@color/gray_1"
+            android:orientation="vertical"
+            android:animateLayoutChanges="true">
 
-        <ImageButton
-            android:id="@+id/btn_members"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:layout_weight="1"
-            android:background="@android:color/transparent"
-            android:src="@drawable/drawer_integrantes" />
+            <ImageView
+                android:id="@+id/img_logo"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_gravity="center_horizontal"
+                android:layout_weight="1"
+                android:src="@drawable/icon" />
 
-        <ImageButton
-            android:id="@+id/btn_reports"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:layout_weight="1"
-            android:background="@android:color/transparent"
-            android:src="@drawable/drawer_relatorios" />
+            <ImageButton
+                android:id="@+id/btn_members"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_weight="1"
+                android:background="@android:color/transparent"
+                android:src="@drawable/drawer_integrantes" />
 
-        <ImageButton
-            android:id="@+id/btn_activities"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:layout_weight="1"
-            android:background="@android:color/transparent"
-            android:src="@drawable/drawer_atividades" />
+            <ImageButton
+                android:id="@+id/btn_reports"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_weight="1"
+                android:background="@android:color/transparent"
+                android:src="@drawable/drawer_relatorios" />
 
-        <ImageButton
-            android:id="@+id/btn_config"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:layout_weight="1"
-            android:background="@android:color/transparent"
-            android:src="@drawable/drawer_congiguracoes" />
+            <ImageButton
+                android:id="@+id/btn_activities"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_weight="1"
+                android:background="@android:color/transparent"
+                android:src="@drawable/drawer_atividades" />
 
-        <ImageButton
-            android:id="@+id/btn_attachments"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:layout_weight="1"
-            android:background="@android:color/transparent"
-            android:src="@drawable/drawer_anexos" />
-    </LinearLayout>
+            <ImageButton
+                android:id="@+id/btn_config"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_weight="1"
+                android:background="@android:color/transparent"
+                android:src="@drawable/drawer_congiguracoes" />
 
-    <Button
-        android:id="@+id/button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentRight="true"
-        android:layout_centerVertical="true"
-        android:text="New Button" />
+            <ImageButton
+                android:id="@+id/btn_attachments"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_weight="1"
+                android:background="@android:color/transparent"
+                android:src="@drawable/drawer_anexos" />
+        </LinearLayout>
+    </com.ufcspa.unasus.appportfolio.Model.DragLayout>
 </RelativeLayout>
