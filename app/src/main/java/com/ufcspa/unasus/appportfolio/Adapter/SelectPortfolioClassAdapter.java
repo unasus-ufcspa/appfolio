@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.ufcspa.unasus.appportfolio.Activities.SelectActivitiesActivity;
 import com.ufcspa.unasus.appportfolio.Activities.SelectClassActivity;
@@ -83,6 +84,13 @@ public class SelectPortfolioClassAdapter extends BaseAdapter {
                 Singleton singleton = Singleton.getInstance();
                 singleton.portfolioClass = portClass;
                 context.startActivity(new Intent(context, SelectActivitiesActivity.class));
+            }
+        });
+
+        holder.btnInfo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(context, portClass.getClassCode() + "\n" + portClass.getPortfolioTitle(), Toast.LENGTH_SHORT).show();
             }
         });
 

@@ -18,6 +18,7 @@ import com.ufcspa.unasus.appportfolio.R;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Random;
 
 /**
  * Created by arthurzettler on 1/5/16.
@@ -42,6 +43,7 @@ public class ActivitiesAdapter extends RecyclerView.Adapter<ActivitiesAdapter.Vi
         vh.title = (TextView)v.findViewById(R.id.adapter_item_class_txv_ds_title);
         vh.moreInfo = (ImageButton)v.findViewById(R.id.btn_info);
         vh.description = "";
+        vh.notificationIcon = (TextView)v.findViewById(R.id.item_notification_icon);
         return vh;
     }
 
@@ -66,6 +68,10 @@ public class ActivitiesAdapter extends RecyclerView.Adapter<ActivitiesAdapter.Vi
                 context.startActivity(new Intent(context, EditActivity.class));
             }
         });
+
+        int r = (int) (Math.random() * (100 - 0)) + 0;
+        if(r > 50)
+            holder.notificationIcon.setVisibility(View.INVISIBLE);
     }
 
     @Override
@@ -78,6 +84,7 @@ public class ActivitiesAdapter extends RecyclerView.Adapter<ActivitiesAdapter.Vi
         public ImageButton moreInfo;
         public String description;
         public View view;
+        public TextView notificationIcon;
         public ViewHolder(View v) {
             super(v);
             view = v;
