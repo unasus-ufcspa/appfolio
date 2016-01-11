@@ -46,6 +46,26 @@ public class Activity implements Comparable<Activity>
         return ds_description;
     }
 
+    public void setId_activity(int id_activity) {
+        this.id_activity = id_activity;
+    }
+
+    public void setId_portfolio(int id_portfolio) {
+        this.id_portfolio = id_portfolio;
+    }
+
+    public void setNu_order(int nu_order) {
+        this.nu_order = nu_order;
+    }
+
+    public void setDs_title(String ds_title) {
+        this.ds_title = ds_title;
+    }
+
+    public void setDs_description(String ds_description) {
+        this.ds_description = ds_description;
+    }
+
     @Override
     public int compareTo(Activity another)
     {

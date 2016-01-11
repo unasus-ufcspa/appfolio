@@ -182,7 +182,7 @@ public class DataBaseAdapter {
         cv.put("tx_reference",c.getTxtReference());
         cv.put("dt_comment", c.getDateComment());
         try{
-            db.update("tb_comment",cv,"id_comment=?",new String[]{""+c.getIdComment()});
+            db.update("tb_comment", cv, "id_comment=?", new String[]{"" + c.getIdComment()});
         }catch (Exception e ){
             Log.d(tag, e.getMessage());
         }
@@ -470,8 +470,8 @@ public class DataBaseAdapter {
                 "u.id_user,\n" +
                 "a.ds_title,\n" +
                 "a.ds_description,\n" +
-                "u.nm_user as nm_student\n" +
-                "\n" +
+                "u.nm_user as nm_student,\n" +
+                "tas.id_portfolio_student\n" +
                 "FROM\n" +
                 "\ttb_activity_student as tas\n" +
                 "\tjoin tb_activity a on tas.id_activity = a.id_activity\n" +
@@ -494,6 +494,7 @@ public class DataBaseAdapter {
 
                 String nameStudent=c.getString(4);
                 Activity a = new Activity(c.getInt(0),c.getString(2),c.getString(3));
+                a.setId_portfolio(c.getInt(5));
 
                 if(lastid==idUser){
                     students.get(cont).setNameStudent(nameStudent);
@@ -581,10 +582,11 @@ public class DataBaseAdapter {
 
         Cursor cursor = db.rawQuery(query, null);
 
-        if(cursor.moveToFirst())
+        if(cursor.moveToFirst()) {
+            Log.d(tag,"idAcStudent:"+cursor.getInt(0));
             return cursor.getInt(0);
-
-//        db.close();
+        }
+        db.close();
         cursor.close();
         return -1;
     }

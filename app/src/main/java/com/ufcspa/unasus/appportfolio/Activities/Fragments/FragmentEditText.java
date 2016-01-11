@@ -48,7 +48,6 @@ public class FragmentEditText extends Frag {
         View view = inflater.inflate(R.layout.fragment_edit_text, null);
         //btSave=(Button)view.findViewById(R.id.edit_acttivity_bt_msg);
         source = new DataBaseAdapter(getActivity());
-
         singleton = Singleton.getInstance();
         singleton.idActivityStudent = source.getActivityStudentID(singleton.activity.getIdAtivity(),singleton.portfolioClass.getIdPortfolioStudent());
 
@@ -256,7 +255,7 @@ public class FragmentEditText extends Frag {
             }
         });
         mEditor.setHtml(acStudent.getTxtActivity());
-//        loadLastText();
+        loadLastText();
 //        Log.d("Cycle", "On Resume");
     }
 

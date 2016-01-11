@@ -62,6 +62,7 @@ public class ActivitiesAdapter extends RecyclerView.Adapter<ActivitiesAdapter.Vi
             @Override
             public void onClick(View v) {
                 singleton.activity = list.get(position);
+                singleton.portfolioClass.setIdPortfolioStudent(list.get(position).getIdPortfolio());
                 System.out.println(position);
                 context.startActivity(new Intent(context, EditActivity.class));
             }
