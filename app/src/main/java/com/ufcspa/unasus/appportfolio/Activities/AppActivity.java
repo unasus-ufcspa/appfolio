@@ -111,10 +111,10 @@ public class AppActivity extends AppCompatActivity implements Drawer.OnDrawerIte
     public boolean onItemClick(View view, int position, IDrawerItem drawerItem) {
         System.out.println(position);
         switch (position) {
-            case 1:
-                startActivity(new Intent(this, SelectPortfolioActivity.class));
-                break;
             case 2:
+                startActivity(new Intent(this, SelectClassActivity.class));
+                break;
+            case 3:
                 startActivity(new Intent(this, SelectActivitiesActivity.class));
                 break;
             default:
