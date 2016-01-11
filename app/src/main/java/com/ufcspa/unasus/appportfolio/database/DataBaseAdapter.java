@@ -464,7 +464,7 @@ public class DataBaseAdapter {
         return array_activity;
     }
 
-    public ArrayList<StudFrPortClass> selectListActivitiesAndStudents(int idPortfolioClass){
+    public ArrayList<StudFrPortClass> selectListActivitiesAndStudents(int idPortfolioClass,String perfil,int idUsuario){
         String query="select \n" +
                 "tas.id_activity_student,\n" +
                 "u.id_user,\n" +
@@ -479,6 +479,8 @@ public class DataBaseAdapter {
                 "\tjoin tb_user u on u.id_user = ps.id_student\n" +
                 "WHERE \n" +
                 "\tps.id_portfolio_class="+idPortfolioClass;
+        if(perfil.equalsIgnoreCase("S"))
+            query+=" AND u.id_user = "+idUsuario;
         ArrayList<StudFrPortClass> students = new ArrayList<>();
         Cursor c = db.rawQuery(query, null);
         if(c.moveToFirst()){

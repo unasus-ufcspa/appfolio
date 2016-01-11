@@ -52,7 +52,7 @@ public class SelectActivitiesActivity extends AppActivity //implements AdapterVi
         source = new DataBaseAdapter(getApplicationContext());
         try {
 
-            list = source.selectListActivitiesAndStudents(singleton.portfolioClass.getIdPortClass());
+            list = source.selectListActivitiesAndStudents(singleton.portfolioClass.getIdPortClass(),singleton.portfolioClass.getPerfil(),singleton.user.getIdUser());
             //source.close();
         } catch (Exception e) {
             Log.e("BANCO", "falha em pegar atividades (SelectActivitiesAactivity):" + e.getMessage());
