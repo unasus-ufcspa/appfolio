@@ -2,6 +2,7 @@ package com.ufcspa.unasus.appportfolio.Adapter;
 
 import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -64,6 +65,8 @@ public class ActivitiesAdapter extends RecyclerView.Adapter<ActivitiesAdapter.Vi
             @Override
             public void onClick(View v) {
                 singleton.activity = list.get(position);
+                singleton.idActivityStudent=singleton.activity.getIdAtivity();
+                Log.d("adp","single act"+singleton.activity.toString());
                 singleton.portfolioClass.setIdPortfolioStudent(list.get(position).getIdPortfolio());
                 System.out.println(position);
                 context.startActivity(new Intent(context, EditActivity.class));

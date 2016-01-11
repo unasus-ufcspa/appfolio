@@ -49,7 +49,7 @@ public class FragmentEditText extends Frag {
         //btSave=(Button)view.findViewById(R.id.edit_acttivity_bt_msg);
         source = new DataBaseAdapter(getActivity());
         singleton = Singleton.getInstance();
-        singleton.idActivityStudent = source.getActivityStudentID(singleton.activity.getIdAtivity(),singleton.portfolioClass.getIdPortfolioStudent());
+        //singleton.idActivityStudent = source.getActivityStudentID(singleton.activity.getIdAtivity(),singleton.portfolioClass.getIdPortfolioStudent());
 
         mEditor = (RichEditor) view.findViewById(R.id.editor);
 
@@ -336,7 +336,7 @@ public class FragmentEditText extends Frag {
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         Log.d("telaEditActivity", "Vai salvar o texto");
-        saveText();
+        //saveText();
     }
 
     @Override
@@ -350,6 +350,7 @@ public class FragmentEditText extends Frag {
     }
 
     public void saveText() {
+        source = new DataBaseAdapter(getActivity());
         acStudent.setTxtActivity(mEditor.getHtml());
         source.updateActivityStudent(acStudent);
     }

@@ -236,21 +236,23 @@ public class DataBaseAdapter {
         ActivityStudent acStudent = new ActivityStudent();
         String query = "select tx_activity from tb_activity_student WHERE id_activity_student = " + idActivityStudent + ";";
         Cursor c = null;
+        Log.d(tag, "query lista act Stu:"+query);
         try {
             c = db.rawQuery(query, null);
+            if (c.moveToFirst()) {
+                acStudent.setIdActivityStudent(idActivityStudent);
+                acStudent.setTxtActivity(c.getString(0));
+            } else {
+                Log.d(tag, "não há texto da atividade no banco");
+                acStudent.setIdActivityStudent(idActivityStudent);
+                acStudent.setTxtActivity("");
+            }
+            c.close();
         } catch (Exception e) {
             Log.e(tag, "erro ao listar atividade do estudante:" + e.getMessage());
         }
 
-        if (c.moveToFirst()) {
-            acStudent.setIdActivityStudent(idActivityStudent);
-            acStudent.setTxtActivity(c.getString(0));
-        } else {
-            Log.d(tag, "não há texto da atividade no banco");
-            acStudent.setIdActivityStudent(idActivityStudent);
-            acStudent.setTxtActivity("");
-        }
-        c.close();
+
 //        db.close();
         return acStudent;
     }
@@ -579,14 +581,14 @@ public class DataBaseAdapter {
     {
         String query = "SELECT  id_activity_student FROM tb_activity_student WHERE \n" +
                 "\tid_portfolio_student = " + idPortfolioStudent + " and id_activity = " + idActivity + ";";
-
+        Log.d(tag,"query getActStuID:"+query);
         Cursor cursor = db.rawQuery(query, null);
 
         if(cursor.moveToFirst()) {
             Log.d(tag,"idAcStudent:"+cursor.getInt(0));
             return cursor.getInt(0);
         }
-        db.close();
+        //db.close();
         cursor.close();
         return -1;
     }

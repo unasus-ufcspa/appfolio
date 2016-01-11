@@ -6,6 +6,7 @@ package com.ufcspa.unasus.appportfolio.Model;
 public class Activity implements Comparable<Activity>
 {
     private int id_activity;
+    private int id_activity_student;
     private int id_portfolio;
     private int nu_order;
     private String ds_title;
