@@ -27,7 +27,6 @@ import java.util.List;
 public class SelectClassActivity extends AppActivity implements AdapterView.OnItemClickListener
 {
     private GridView grid_classes;
-    private List<Team> classes;
     private DataBaseAdapter source;
     private Singleton singleton;
     private List<PortfolioClass> portclasses;

@@ -1,5 +1,6 @@
 package com.ufcspa.unasus.appportfolio.Adapter;
 
+import android.content.Context;
 import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -26,10 +27,10 @@ import java.util.Random;
  */
 public class ActivitiesAdapter extends RecyclerView.Adapter<ActivitiesAdapter.ViewHolder> {
     private List<Activity> list;
-    private SelectActivitiesActivity context;
+    private Context context;
     private Singleton singleton;
 
-    public ActivitiesAdapter(SelectActivitiesActivity context, List<Activity> list) {
+    public ActivitiesAdapter(Context context, List<Activity> list) {
         this.list = list;
         this.context = context;
         this.singleton = Singleton.getInstance();

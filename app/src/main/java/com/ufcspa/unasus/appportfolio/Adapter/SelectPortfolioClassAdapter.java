@@ -25,10 +25,10 @@ import java.util.List;
  */
 public class SelectPortfolioClassAdapter extends BaseAdapter {
     private static LayoutInflater inflater = null;
-    private SelectClassActivity context;
+    private Context context;
     private List<PortfolioClass> portclasses;
 
-    public SelectPortfolioClassAdapter(SelectClassActivity context, List<PortfolioClass> classes)
+    public SelectPortfolioClassAdapter(Context context, List<PortfolioClass> classes)
     {
         this.context = context;
         this.portclasses = classes;
