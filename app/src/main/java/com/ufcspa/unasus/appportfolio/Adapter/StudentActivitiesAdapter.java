@@ -24,10 +24,10 @@ import java.util.List;
 public class StudentActivitiesAdapter extends BaseAdapter
 {
     private static LayoutInflater inflater = null;
-    private SelectActivitiesActivity context;
+    private Context context;
     private List<StudFrPortClass> list;
 
-    public StudentActivitiesAdapter(SelectActivitiesActivity context, List<StudFrPortClass> list)
+    public StudentActivitiesAdapter(Context context, List<StudFrPortClass> list)
     {
         this.context = context;
         this.list = list;
