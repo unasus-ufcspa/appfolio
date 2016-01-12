@@ -46,9 +46,7 @@ public class FragmentStudentActivities extends Frag {
         source = new DataBaseAdapter(getActivity());
         try {
 
-            list = source.selectListActivitiesAndStudents(singleton.portfolioClass.getIdPortClass()
-                    ,singleton.portfolioClass.getPerfil(),singleton.user.getIdUser());
-            //source.close();
+            list = source.selectListActivitiesAndStudents(singleton.portfolioClass.getIdPortClass(),singleton.portfolioClass.getPerfil(),singleton.user.getIdUser());
         } catch (Exception e) {
             Log.e("BANCO", "falha em pegar atividades (SelectActivitiesAactivity):" + e.getMessage());
         }
@@ -59,7 +57,7 @@ public class FragmentStudentActivities extends Frag {
         className.setText(singleton.portfolioClass.getClassCode());
         portfolioName.setText(singleton.portfolioClass.getPortfolioTitle());
 
-        StudentActivitiesAdapter gridAdapter = new StudentActivitiesAdapter((SelectActivitiesActivity) getActivity(), list);
+        StudentActivitiesAdapter gridAdapter = new StudentActivitiesAdapter(getActivity(), list);
 
         list_activities = (ListView) getView().findViewById(R.id.list_activities);
         list_activities.setAdapter(gridAdapter);

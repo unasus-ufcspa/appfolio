@@ -2,6 +2,7 @@ package com.ufcspa.unasus.appportfolio.Adapter;
 
 import android.content.Context;
 import android.content.Intent;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -67,10 +68,8 @@ public class ActivitiesAdapter extends RecyclerView.Adapter<ActivitiesAdapter.Vi
             public void onClick(View v) {
                 singleton.activity = list.get(position);
                 singleton.idActivityStudent=singleton.activity.getIdAtivity();
-                Log.d("adp","single act"+singleton.activity.toString());
                 singleton.portfolioClass.setIdPortfolioStudent(list.get(position).getIdPortfolio());
-                System.out.println(position);
-                context.startActivity(new Intent(context, EditActivity.class));
+                LocalBroadcastManager.getInstance(context).sendBroadcast(new Intent("call.fragments.action").putExtra("ID",5));
             }
         });
 

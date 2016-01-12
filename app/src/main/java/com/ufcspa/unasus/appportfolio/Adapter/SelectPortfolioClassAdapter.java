@@ -3,6 +3,7 @@ package com.ufcspa.unasus.appportfolio.Adapter;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
+import android.support.v4.content.LocalBroadcastManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -83,7 +84,7 @@ public class SelectPortfolioClassAdapter extends BaseAdapter {
             public void onClick(View v) {
                 Singleton singleton = Singleton.getInstance();
                 singleton.portfolioClass = portClass;
-                context.startActivity(new Intent(context, SelectActivitiesActivity.class));
+                LocalBroadcastManager.getInstance(context).sendBroadcast(new Intent("call.fragments.action").putExtra("ID",1));
             }
         });
 
