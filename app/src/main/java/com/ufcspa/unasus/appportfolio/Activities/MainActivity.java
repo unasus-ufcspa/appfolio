@@ -43,7 +43,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         singleton = Singleton.getInstance();
 
-        LayoutInflater inflater = (LayoutInflater)getApplicationContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        LayoutInflater inflater = (LayoutInflater) getApplicationContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
         bigDrawer = inflater.inflate(R.layout.big_drawer, null);
         initBigDrawer();
@@ -56,12 +56,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 .withContent(fragmentContainer)
                 .withFirst(bigDrawer, 450)
                 .withSecond(miniDrawer, 150)
+                .withGmailStyleSwiping()
                 .withSavedInstance(savedInstanceState)
                 .build();
 
         LocalBroadcastManager.getInstance(this).registerReceiver(broadcastReceiver, new IntentFilter("call.fragments.action"));
 
-        changeFragment(0);
+        if(savedInstanceState == null)
+            changeFragment(0);
     }
 
     private void initMiniDrawer() {

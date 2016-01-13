@@ -18,7 +18,7 @@
             android:columnWidth="150dp"
             android:contextClickable="false"
             android:gravity="center"
-            android:horizontalSpacing="50dp"
+            android:horizontalSpacing="30dp"
             android:numColumns="auto_fit"
             android:verticalSpacing="30dp"
             android:layout_margin="50dp" />
