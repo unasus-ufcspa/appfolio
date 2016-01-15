@@ -14,6 +14,7 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -56,7 +57,7 @@ public class FragmentRTEditor extends Frag {
 
     private RTManager mRTManager;
     private RTEditText mRTMessageField;
-
+    private Button btCopyTxt;
     private boolean mUseDarkTheme;
     private boolean mSplitToolbar;
 
@@ -66,11 +67,14 @@ public class FragmentRTEditor extends Frag {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // read extras
+        super.onCreate(savedInstanceState);
         if (savedInstanceState == null) {
+            Log.d("editor", "OnCreateView saved instance null entrou");
             Intent intent = getActivity().getIntent();
             mUseDarkTheme = intent.getBooleanExtra("mUseDarkTheme", false);
             mSplitToolbar = intent.getBooleanExtra("mSplitToolbar", false);
         } else {
+            Log.d("editor", "OnCreateView recuperando extras...");
             mUseDarkTheme = savedInstanceState.getBoolean("mUseDarkTheme", false);
             mSplitToolbar = savedInstanceState.getBoolean("mSplitToolbar", false);
             boolean tmp = savedInstanceState.getBoolean("mRequestPermissionsInProcess", false);
@@ -80,7 +84,9 @@ public class FragmentRTEditor extends Frag {
         // set theme
         getActivity().setTheme(R.style.RTE_ThemeLight);
 
-        super.onCreate(savedInstanceState);
+
+
+
 
         // set layout
         View view = inflater.inflate(R.layout.fragment_rteditor, null);
@@ -88,13 +94,31 @@ public class FragmentRTEditor extends Frag {
         // initialize rich text manager
         RTApi rtApi = new RTApi(getActivity(), new RTProxyImpl(getActivity()), new RTMediaFactoryImpl(getActivity(), true));
         mRTManager = new RTManager(rtApi, savedInstanceState);
-
+        Log.d("editor", "OnCreateView retornando view...");
         return view;
+    }
+
+
+    @Override
+    public void onViewCreated(View view, Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        Log.d("editor", "OnviewCreated registrando RTMessage");
+        mRTMessageField = (RTEditText) getView().findViewById(R.id.rtEditText);
+        mRTManager.registerEditor(mRTMessageField, true);
+        mRTMessageField.requestFocus();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        Log.d("editor", "OnResume entrou");
     }
 
     @Override
     public void onStart() {
         super.onStart();
+        Log.d("editor", "OnStart entrou");
 
         ViewGroup toolbarContainer = (ViewGroup) getView().findViewById(R.id.rte_toolbar_container);
 
@@ -105,13 +129,30 @@ public class FragmentRTEditor extends Frag {
         }
 
         // register message editor
-        mRTMessageField = (RTEditText) getView().findViewById(R.id.rtEditText);
-        mRTManager.registerEditor(mRTMessageField, true);
 
-        mRTMessageField.requestFocus();
+
 
         checkPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE});
+        btCopyTxt=(Button)getView().findViewById(R.id.btCopyText);
+        btCopyTxt.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(mRTMessageField.getText().toString().isEmpty()) {
+                    int startSelection = mRTMessageField.getSelectionStart();
+                    int endSelection = mRTMessageField.getSelectionEnd();
+                    String selectedText = mRTMessageField.getText().toString().substring(startSelection, endSelection);
+                    if(!selectedText.isEmpty()){
+                        if(selectedText.length()>0)
+                            Toast.makeText(getActivity(),"texto:"+selectedText,Toast.LENGTH_SHORT).show();
+                        else
+                            Toast.makeText(getActivity(),"texto:null",Toast.LENGTH_SHORT).show();
+                    }else{
+                        Toast.makeText(getActivity(),"Nenhum texto selecionado!",Toast.LENGTH_SHORT).show();
+                    }
 
+                }
+            }
+        });
     }
 
     private String getStringExtra(Intent intent, String key) {
@@ -124,6 +165,9 @@ public class FragmentRTEditor extends Frag {
         super.onDestroy();
         if (mRTManager != null) {
             mRTManager.onDestroy(true);
+            Log.d("editor", "On destroy mRTManager");
+        }else{
+            Log.d("editor","On destroy mRTManager null");
         }
     }
 

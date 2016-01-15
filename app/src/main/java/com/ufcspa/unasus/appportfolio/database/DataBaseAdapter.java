@@ -39,19 +39,7 @@ public class DataBaseAdapter {
         db = helper.getDatabase();
     }
 
-    public String getTestData() {
-        //String sql ="SELECT name FROM sqlite_master WHERE type='table'";
-        String sql = "SELECT Count(*) FROM tb_activity_student";
 
-        Cursor mCur = db.rawQuery(sql, null);
-        String tabelas = "";
-        if (mCur.moveToFirst()) {
-            do {
-                tabelas += mCur.getString(0) + "\n";
-            } while (mCur.moveToNext());
-        }
-        return tabelas;
-    }
 
     public User verifyPass(String email, String pass) {
         int id = 0;
