@@ -101,7 +101,7 @@ public class EditActivity extends AppCompatActivity {
 //        slider.requestLayout();
 //
 //        slider.addTab(slider.newTabSpec("Comments").setIndicator(null, getResources().getDrawable(R.drawable.ic_announcement_black_24dp)), FragmentComments.class, null);
-//        slider.addTab(slider.newTabSpec("New Edit Text").setIndicator(null, getResources().getDrawable(R.drawable.ic_copy)), FragEditText.class, null);
+//        slider.addTab(slider.newTabSpec("New Edit Text").setIndicator(null, getResources().getDrawable(R.drawable.ic_copy)), FragmentEditText.class, null);
 //        slider.addTab(slider.newTabSpec("Old Edit Text").setIndicator(null, getResources().getDrawable(R.drawable.ic_share)), FragmentEditText.class, null);
 //
 //        animLeft = AnimationUtils.loadAnimation(this, R.anim.anim_right);

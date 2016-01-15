@@ -14,6 +14,7 @@ import android.widget.ImageButton;
 import android.widget.LinearLayout;
 
 import com.mikepenz.crossfader.Crossfader;
+import com.ufcspa.unasus.appportfolio.Activities.Fragments.FragmentRTEditor;
 import com.ufcspa.unasus.appportfolio.Activities.Fragments.FragmentSelectPortfolio;
 import com.ufcspa.unasus.appportfolio.Activities.Fragments.FragmentStudentActivities;
 import com.ufcspa.unasus.appportfolio.Model.Singleton;
@@ -148,7 +149,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             case 4:
                 break;
             case 5://EditText
-                startActivity(new Intent(this, EditActivity.class));
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new FragmentRTEditor()).commit();
+//                startActivity(new Intent(this, EditActivity.class));
                 break;
             default:
                 break;
