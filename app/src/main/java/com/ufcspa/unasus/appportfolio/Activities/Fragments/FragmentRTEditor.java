@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,8 +12,9 @@ import com.onegravity.rteditor.RTEditText;
 import com.onegravity.rteditor.RTManager;
 import com.onegravity.rteditor.RTToolbar;
 import com.onegravity.rteditor.api.RTApi;
-import com.onegravity.rteditor.api.RTMediaFactoryImpl;
 import com.onegravity.rteditor.api.RTProxyImpl;
+import com.onegravity.rteditor.api.format.RTFormat;
+import com.ufcspa.unasus.appportfolio.Model.NewRTMediaFactoryImpl;
 import com.ufcspa.unasus.appportfolio.R;
 
 
@@ -29,7 +29,8 @@ public class FragmentRTEditor extends Fragment {
         View view = inflater.inflate(R.layout.fragment_rteditor, null);
 
         // create RTManager
-        RTApi rtApi = new RTApi(getActivity(), new RTProxyImpl(getActivity()), new RTMediaFactoryImpl(getActivity(), true));
+        RTApi rtApi = new RTApi(getActivity(), new RTProxyImpl(getActivity()), new NewRTMediaFactoryImpl(getActivity(), true));
+
         mRTManager = new RTManager(rtApi, savedInstanceState);
 
         ViewGroup toolbarContainer = (ViewGroup) view.findViewById(R.id.rte_toolbar_container);
@@ -67,7 +68,8 @@ public class FragmentRTEditor extends Fragment {
        // Log.d("app", "Fragment StartActivityOnResult entrou");
         if(resultCode== Activity.RESULT_OK){
            // Log.d("app","Fragment StartActivityOnResult RESULT_OK");
-            mRTManager.onActivityResult(requestCode,resultCode,data);
+            mRTManager.onActivityResult(requestCode, resultCode, data);
+            System.out.println(mRTMessageField.getText(RTFormat.HTML));
         }else if(resultCode== Activity.RESULT_CANCELED){
          //   Log.d("app","Fragment StartActivityOnResult RESULT_CANCELED");
         }
