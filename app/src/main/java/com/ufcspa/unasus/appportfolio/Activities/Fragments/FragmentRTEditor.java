@@ -13,7 +13,6 @@ import com.onegravity.rteditor.RTManager;
 import com.onegravity.rteditor.RTToolbar;
 import com.onegravity.rteditor.api.RTApi;
 import com.onegravity.rteditor.api.RTProxyImpl;
-import com.onegravity.rteditor.api.format.RTFormat;
 import com.ufcspa.unasus.appportfolio.Model.NewRTMediaFactoryImpl;
 import com.ufcspa.unasus.appportfolio.R;
 
@@ -65,13 +64,13 @@ public class FragmentRTEditor extends Fragment {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-       // Log.d("app", "Fragment StartActivityOnResult entrou");
-        if(resultCode== Activity.RESULT_OK){
-           // Log.d("app","Fragment StartActivityOnResult RESULT_OK");
+
+        if(resultCode == Activity.RESULT_OK)
+        {
             mRTManager.onActivityResult(requestCode, resultCode, data);
-            System.out.println(mRTMessageField.getText(RTFormat.HTML));
-        }else if(resultCode== Activity.RESULT_CANCELED){
-         //   Log.d("app","Fragment StartActivityOnResult RESULT_CANCELED");
+        }
+        else if(resultCode == Activity.RESULT_CANCELED)
+        {
         }
     }
 }
