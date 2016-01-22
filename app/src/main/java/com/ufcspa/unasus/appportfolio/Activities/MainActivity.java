@@ -56,8 +56,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         crossFader = new Crossfader()
                 .withContent(fragmentContainer)
-                .withFirst(bigDrawer, 450)
-                .withSecond(miniDrawer, 150)
+                .withFirst(bigDrawer, 460)
+                .withSecond(miniDrawer, 140)
                 .withGmailStyleSwiping()
                 .withSavedInstance(savedInstanceState)
                 .build();

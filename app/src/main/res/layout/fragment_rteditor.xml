@@ -27,7 +27,8 @@
                 android:gravity="top"
                 android:hint="Boa Atividade!"
                 android:imeOptions="actionDone|flagNoEnterAction"
-                android:inputType="textMultiLine|textAutoCorrect|textCapSentences" />
+                android:inputType="textMultiLine|textAutoCorrect|textCapSentences"
+                android:background="@android:color/white"/>
         </RelativeLayout>
     </ScrollView>
 

@@ -1,6 +1,6 @@
 <LinearLayout
     android:id="@+id/big_drawer"
-    android:layout_width="250dp"
+    android:layout_width="230dp"
     android:layout_height="match_parent"
     android:layout_alignParentLeft="true"
     android:layout_alignParentStart="true"
@@ -31,25 +31,26 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:id="@+id/portfolios">
+            android:id="@+id/portfolios"
+            android:gravity="center">
 
             <ImageButton
                 android:id="@+id/imageButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
-                android:layout_weight="1"
                 android:background="@android:color/transparent"
                 android:src="@drawable/drawer_integrantes" />
 
             <TextView
-                android:layout_width="110dp"
+                android:layout_width="150dp"
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceMedium"
                 android:text="@string/drawer_portfolio"
                 android:id="@+id/textView5"
                 android:textColor="@color/gray_3"
-                android:layout_gravity="center_vertical" />
+                android:layout_gravity="center_vertical"
+                android:gravity="center" />
         </LinearLayout>
 
         <LinearLayout
@@ -57,25 +58,26 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:id="@+id/activities">
+            android:id="@+id/activities"
+            android:gravity="center">
 
             <ImageButton
                 android:id="@+id/imageButton2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
-                android:layout_weight="1"
                 android:background="@android:color/transparent"
                 android:src="@drawable/drawer_relatorios" />
 
             <TextView
-                android:layout_width="110dp"
+                android:layout_width="150dp"
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceMedium"
                 android:text="@string/drawer_activities"
                 android:id="@+id/textView6"
                 android:textColor="@color/gray_3"
-                android:layout_gravity="center_vertical" />
+                android:layout_gravity="center_vertical"
+                android:gravity="center" />
         </LinearLayout>
 
         <LinearLayout
@@ -83,25 +85,26 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:id="@+id/reports">
+            android:id="@+id/reports"
+            android:gravity="center">
 
             <ImageButton
                 android:id="@+id/imageButton3"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
-                android:layout_weight="1"
                 android:background="@android:color/transparent"
                 android:src="@drawable/drawer_atividades" />
 
             <TextView
-                android:layout_width="110dp"
+                android:layout_width="150dp"
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceMedium"
                 android:text="@string/drawer_reports"
                 android:id="@+id/textView7"
                 android:textColor="@color/gray_3"
-                android:layout_gravity="center_vertical" />
+                android:layout_gravity="center_vertical"
+                android:gravity="center" />
         </LinearLayout>
 
         <LinearLayout
@@ -109,26 +112,27 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:id="@+id/settings">
+            android:id="@+id/settings"
+            android:gravity="center">
 
             <ImageButton
                 android:id="@+id/imageButton4"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
-                android:layout_weight="1"
                 android:background="@android:color/transparent"
                 android:src="@drawable/drawer_congiguracoes" />
 
             <TextView
-                android:layout_width="110dp"
+                android:layout_width="150dp"
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceMedium"
                 android:text="@string/drawer_settings"
                 android:id="@+id/textView8"
                 android:textColor="@color/gray_3"
                 android:layout_gravity="center_vertical"
-                android:textSize="16dp" />
+                android:textSize="16dp"
+                android:gravity="center" />
         </LinearLayout>
 
         <LinearLayout
@@ -136,24 +140,25 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:id="@+id/attachments">
+            android:id="@+id/attachments"
+            android:gravity="center">
 
             <ImageButton
                 android:id="@+id/imageButton5"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
-                android:layout_weight="1"
                 android:background="@android:color/transparent"
                 android:src="@drawable/drawer_anexos" />
 
             <TextView
-                android:layout_width="110dp"
+                android:layout_width="150dp"
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceMedium"
                 android:text="@string/drawer_files"
                 android:id="@+id/textView9"
                 android:textColor="@color/gray_3"
-                android:layout_gravity="center_vertical" />
+                android:layout_gravity="center_vertical"
+                android:gravity="center" />
         </LinearLayout>
     </LinearLayout>
