@@ -67,22 +67,32 @@ public class FragmentRTEditor extends Fragment {
         mRTMessageField.setCustomSelectionActionModeCallback(new ActionBarCallBack());
 
         mRTMessageField.addTextChangedListener(new TextWatcher() {
+            private float posStart;
+            private float posEnd;
+
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                System.out.println("beforeTextChanged");
+                posStart = getCaretYPosition(mRTMessageField.getSelectionStart());
             }
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                System.out.println("onTextChanged");
             }
 
             @Override
             public void afterTextChanged(Editable s) {
-                System.out.println("afterTextChanged");
+                posEnd = getCaretYPosition(mRTMessageField.getSelectionEnd());
+
+                for(int i = 0; i < specificCommentsNotes.size(); i++)
+                {
+                    Button aux = specificCommentsNotes.get(i);
+                    if(aux.getY() > posStart)
+                    {
+                        aux.setY(aux.getY() - (posStart - posEnd));
+                    }
+                }
             }
         });
-
         return view;
     }
 
@@ -131,13 +141,7 @@ public class FragmentRTEditor extends Fragment {
                     if(!selectedText.isEmpty()){
                         if(selectedText.length() > 0)
                         {
-                            Layout layout = mRTMessageField.getLayout();
-                            int line = layout.getLineForOffset(startSelection);
-                            int baseline = layout.getLineBaseline(line);
-                            int ascent = layout.getLineAscent(line);
-                            float y = baseline + ascent;
-
-                            createSpecificCommentNote(y);
+                            createSpecificCommentNote(getCaretYPosition(startSelection));
                         }
                     }
                 }
@@ -201,5 +205,14 @@ public class FragmentRTEditor extends Fragment {
             params.leftMargin = 60;
             mRTMessageField.setLayoutParams(params);
         }
+    }
+
+    private float getCaretYPosition(int position)
+    {
+        Layout layout = mRTMessageField.getLayout();
+        int line = layout.getLineForOffset(position);
+        int baseline = layout.getLineBaseline(line);
+        int ascent = layout.getLineAscent(line);
+        return baseline + ascent;
     }
 }
