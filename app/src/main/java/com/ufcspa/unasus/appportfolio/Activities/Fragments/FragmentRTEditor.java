@@ -1,6 +1,7 @@
 package com.ufcspa.unasus.appportfolio.Activities.Fragments;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -114,8 +115,10 @@ public class FragmentRTEditor extends Fragment {
                             float y = baseline + ascent;
 
                             ViewGroup scrollview = (ViewGroup) getView().findViewById(R.id.comments);
+
+                            LayoutInflater inflater = (LayoutInflater)getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
                             Button bt = new Button(getContext());
-                            bt.setCompoundDrawablesWithIntrinsicBounds(getContext().getResources().getDrawable(R.drawable.rounded_student), null, null, null);
+                            bt = (Button) inflater.inflate(R.layout.btn_specific_comment, scrollview, false);
 
                             bt.setText("A");
                             bt.setY(y);

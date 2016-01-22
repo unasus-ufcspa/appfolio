@@ -18,7 +18,7 @@ import android.widget.TextView;
 import com.ufcspa.unasus.appportfolio.Model.ActivityStudent;
 import com.ufcspa.unasus.appportfolio.Model.Singleton;
 import com.ufcspa.unasus.appportfolio.R;
-import com.ufcspa.unasus.appportfolio.Database.DataBaseAdapter;
+import com.ufcspa.unasus.appportfolio.database.DataBaseAdapter;
 
 import jp.wasabeef.richeditor.RichEditor;
 
