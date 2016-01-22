@@ -15,7 +15,7 @@ import com.ufcspa.unasus.appportfolio.Model.HttpClient;
 import com.ufcspa.unasus.appportfolio.Model.OneComment;
 import com.ufcspa.unasus.appportfolio.Model.Singleton;
 import com.ufcspa.unasus.appportfolio.R;
-import com.ufcspa.unasus.appportfolio.database.DataBaseAdapter;
+import com.ufcspa.unasus.appportfolio.Database.DataBaseAdapter;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;

@@ -4,22 +4,34 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.text.Layout;
+import android.view.ActionMode;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.ImageButton;
+import android.widget.Toast;
 
 import com.onegravity.rteditor.RTEditText;
 import com.onegravity.rteditor.RTManager;
 import com.onegravity.rteditor.RTToolbar;
 import com.onegravity.rteditor.api.RTApi;
 import com.onegravity.rteditor.api.RTProxyImpl;
+import com.onegravity.rteditor.api.format.RTFormat;
 import com.ufcspa.unasus.appportfolio.Model.NewRTMediaFactoryImpl;
 import com.ufcspa.unasus.appportfolio.R;
+
+import java.sql.SQLOutput;
 
 
 public class FragmentRTEditor extends Fragment {
     private RTManager mRTManager;
     private RTEditText mRTMessageField;
+    private RTToolbar rtToolbar;
 
     public FragmentRTEditor() {}
 
@@ -35,13 +47,15 @@ public class FragmentRTEditor extends Fragment {
         ViewGroup toolbarContainer = (ViewGroup) view.findViewById(R.id.rte_toolbar_container);
 
         // register toolbar (if it exists)
-        RTToolbar rtToolbar = (RTToolbar) view.findViewById(R.id.rte_toolbar);
+        rtToolbar = (RTToolbar) view.findViewById(R.id.rte_toolbar);
         if (rtToolbar != null) {
             mRTManager.registerToolbar(toolbarContainer, rtToolbar);
         }
         // register message editor
         mRTMessageField = (RTEditText) view.findViewById(R.id.rtEditText);
         mRTManager.registerEditor(mRTMessageField, true);
+
+        mRTMessageField.setCustomSelectionActionModeCallback(new ActionBarCallBack());
 
         return view;
     }
@@ -71,6 +85,69 @@ public class FragmentRTEditor extends Fragment {
         }
         else if(resultCode == Activity.RESULT_CANCELED)
         {
+        }
+    }
+
+    class ActionBarCallBack implements ActionMode.Callback {
+
+        @Override
+        public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
+            if (item.getItemId() == R.id.action_favorite)
+            {
+                if(!mRTMessageField.getText().toString().isEmpty())
+                {
+                    int startSelection = mRTMessageField.getSelectionStart();
+                    int endSelection = mRTMessageField.getSelectionEnd();
+                    String selectedText = mRTMessageField.getText().toString().substring(startSelection, endSelection);
+
+//                    mRTMessageField.setRichTextEditing(true, "<b" + mRTMessageField.getText(RTFormat.PLAIN_TEXT).substring(startSelection,endSelection) + "/>");
+
+                    if(!selectedText.isEmpty()){
+                        if(selectedText.length() > 0)
+                        {
+                            Toast.makeText(getActivity(), "texto:" + selectedText, Toast.LENGTH_SHORT).show();
+
+                            Layout layout = mRTMessageField.getLayout();
+                            int line = layout.getLineForOffset(startSelection);
+                            int baseline = layout.getLineBaseline(line);
+                            int ascent = layout.getLineAscent(line);
+                            float y = baseline + ascent;
+
+                            ViewGroup scrollview = (ViewGroup) getView().findViewById(R.id.comments);
+                            Button bt = new Button(getContext());
+                            bt.setCompoundDrawablesWithIntrinsicBounds(getContext().getResources().getDrawable(R.drawable.rounded_student), null, null, null);
+
+                            bt.setText("A");
+                            bt.setY(y);
+                            bt.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    System.out.println(v.getY());
+                                }
+                            });
+                            scrollview.addView(bt);
+                        }
+                    }
+                }
+                return true;
+            }
+            return false;
+        }
+
+        @Override
+        public boolean onCreateActionMode(ActionMode mode, Menu menu) {
+            menu.clear();
+            mode.getMenuInflater().inflate(R.menu.menu, menu);
+            return true;
+        }
+
+        @Override
+        public void onDestroyActionMode(ActionMode mode) {
+        }
+
+        @Override
+        public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
+            return false;
         }
     }
 }

@@ -24,7 +24,7 @@ import android.widget.Toast;
 
 import com.ufcspa.unasus.appportfolio.Model.Singleton;
 import com.ufcspa.unasus.appportfolio.R;
-import com.ufcspa.unasus.appportfolio.database.DataBaseAdapter;
+import com.ufcspa.unasus.appportfolio.Database.DataBaseAdapter;
 
 import java.io.File;
 import java.io.FileNotFoundException;

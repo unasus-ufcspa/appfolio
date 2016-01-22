@@ -1,25 +1,19 @@
 package com.ufcspa.unasus.appportfolio.Activities;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
 
 import com.ufcspa.unasus.appportfolio.Adapter.StudentActivitiesAdapter;
-import com.ufcspa.unasus.appportfolio.Model.Activity;
 import com.ufcspa.unasus.appportfolio.Model.Singleton;
 import com.ufcspa.unasus.appportfolio.Model.StudFrPortClass;
 import com.ufcspa.unasus.appportfolio.R;
-import com.ufcspa.unasus.appportfolio.database.DataBaseAdapter;
-
-import org.w3c.dom.Text;
+import com.ufcspa.unasus.appportfolio.Database.DataBaseAdapter;
 
 import java.util.ArrayList;
-import java.util.Collections;
 
 /**
  * Created by UNASUS on 10/11/2015.
