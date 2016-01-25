@@ -12,12 +12,10 @@ import android.text.TextWatcher;
 import android.view.ActionMode;
 import android.view.LayoutInflater;
 import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.ImageButton;
 import android.widget.Toast;
 
 import com.onegravity.rteditor.RTEditText;
@@ -25,11 +23,9 @@ import com.onegravity.rteditor.RTManager;
 import com.onegravity.rteditor.RTToolbar;
 import com.onegravity.rteditor.api.RTApi;
 import com.onegravity.rteditor.api.RTProxyImpl;
-import com.onegravity.rteditor.api.format.RTFormat;
 import com.ufcspa.unasus.appportfolio.Model.NewRTMediaFactoryImpl;
 import com.ufcspa.unasus.appportfolio.R;
 
-import java.sql.SQLOutput;
 import java.util.ArrayList;
 
 
@@ -37,6 +33,7 @@ public class FragmentRTEditor extends Fragment {
     private RTManager mRTManager;
     private RTEditText mRTMessageField;
     private RTToolbar rtToolbar;
+    private int currentSpecificComment;
 
     private ArrayList<Button> specificCommentsNotes;
 
@@ -82,17 +79,11 @@ public class FragmentRTEditor extends Fragment {
             @Override
             public void afterTextChanged(Editable s) {
                 posEnd = getCaretYPosition(mRTMessageField.getSelectionEnd());
-
-                for(int i = 0; i < specificCommentsNotes.size(); i++)
-                {
-                    Button aux = specificCommentsNotes.get(i);
-                    if(aux.getY() > posStart)
-                    {
-                        aux.setY(aux.getY() - (posStart - posEnd));
-                    }
-                }
+                changePositionOfNotes(posStart, posEnd);
             }
         });
+
+        currentSpecificComment = 0;
         return view;
     }
 
@@ -117,14 +108,17 @@ public class FragmentRTEditor extends Fragment {
 
         if(resultCode == Activity.RESULT_OK)
         {
+            float posStart = getCaretYPosition(mRTMessageField.getSelectionStart());
             mRTManager.onActivityResult(requestCode, resultCode, data);
+            float posEnd = getCaretYPosition(mRTMessageField.getSelectionEnd());
+            changePositionOfNotes(posStart,posEnd);
         }
         else if(resultCode == Activity.RESULT_CANCELED)
         {
         }
     }
 
-    class ActionBarCallBack implements ActionMode.Callback {
+    private class ActionBarCallBack implements ActionMode.Callback {
 
         @Override
         public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
@@ -136,6 +130,9 @@ public class FragmentRTEditor extends Fragment {
                     int endSelection = mRTMessageField.getSelectionEnd();
                     String selectedText = mRTMessageField.getText().toString().substring(startSelection, endSelection);
 
+                    /**
+                     * PINTAR O TEXTO!
+                     */
 //                    mRTMessageField.setRichTextEditing(true, "<b" + mRTMessageField.getText(RTFormat.PLAIN_TEXT).substring(startSelection,endSelection) + "/>");
 
                     if(!selectedText.isEmpty()){
@@ -176,10 +173,12 @@ public class FragmentRTEditor extends Fragment {
 
             specificCommentsNotes.add(note);
 
+            currentSpecificComment++;
+
             if(yPosition != 0)
                 note.setY(yPosition - 2);
-            note.setText(specificCommentsNotes.size() + "");
-            note.setId(specificCommentsNotes.size());
+            note.setText(currentSpecificComment + "");
+            note.setId(currentSpecificComment);
 
             note.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -210,9 +209,24 @@ public class FragmentRTEditor extends Fragment {
     private float getCaretYPosition(int position)
     {
         Layout layout = mRTMessageField.getLayout();
-        int line = layout.getLineForOffset(position);
-        int baseline = layout.getLineBaseline(line);
-        int ascent = layout.getLineAscent(line);
-        return baseline + ascent;
+        if(layout != null) {
+            int line = layout.getLineForOffset(position);
+            int baseline = layout.getLineBaseline(line);
+            int ascent = layout.getLineAscent(line);
+            return baseline + ascent;
+        }
+        return 0;
+    }
+
+    private void changePositionOfNotes(float posStart, float posEnd)
+    {
+        for(int i = 0; i < specificCommentsNotes.size(); i++)
+        {
+            Button aux = specificCommentsNotes.get(i);
+            if(aux.getY() > posStart)
+            {
+                aux.setY(aux.getY() - (posStart - posEnd));
+            }
+        }
     }
 }
