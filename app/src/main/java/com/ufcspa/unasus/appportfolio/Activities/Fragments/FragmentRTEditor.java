@@ -23,7 +23,9 @@ import com.onegravity.rteditor.RTManager;
 import com.onegravity.rteditor.RTToolbar;
 import com.onegravity.rteditor.api.RTApi;
 import com.onegravity.rteditor.api.RTProxyImpl;
+import com.onegravity.rteditor.effects.Effects;
 import com.ufcspa.unasus.appportfolio.Model.NewRTMediaFactoryImpl;
+import com.ufcspa.unasus.appportfolio.Model.Note;
 import com.ufcspa.unasus.appportfolio.R;
 
 import java.util.ArrayList;
@@ -34,8 +36,9 @@ public class FragmentRTEditor extends Fragment {
     private RTEditText mRTMessageField;
     private RTToolbar rtToolbar;
     private int currentSpecificComment;
+    private ViewGroup scrollview;
 
-    private ArrayList<Button> specificCommentsNotes;
+    private ArrayList<Note> specificCommentsNotes;
 
     public FragmentRTEditor() {}
 
@@ -44,6 +47,8 @@ public class FragmentRTEditor extends Fragment {
         View view = inflater.inflate(R.layout.fragment_rteditor, null);
 
         specificCommentsNotes = new ArrayList<>();
+
+        scrollview = (ViewGroup) view.findViewById(R.id.comments);
 
         // create RTManager
         RTApi rtApi = new RTApi(getActivity(), new RTProxyImpl(getActivity()), new NewRTMediaFactoryImpl(getActivity(), true));
@@ -118,27 +123,43 @@ public class FragmentRTEditor extends Fragment {
         }
     }
 
+    private float getCaretYPosition(int position) {
+        Layout layout = mRTMessageField.getLayout();
+        if (layout != null) {
+            int line = layout.getLineForOffset(position);
+            int baseline = layout.getLineBaseline(line);
+            int ascent = layout.getLineAscent(line);
+            return baseline + ascent;
+        }
+        return 0;
+    }
+
+    private void changePositionOfNotes(float posStart, float posEnd) {
+        if (specificCommentsNotes != null) {
+            for (int i = 0; i < specificCommentsNotes.size(); i++) {
+                Button aux = (Button) getView().findViewById(specificCommentsNotes.get(i).getBtId());
+                if (aux.getY() > posStart) {
+                    aux.setY(aux.getY() - (posStart - posEnd));
+                }
+            }
+        }
+    }
+
     private class ActionBarCallBack implements ActionMode.Callback {
 
         @Override
         public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
             if (item.getItemId() == R.id.action_favorite)
             {
-                if(!mRTMessageField.getText().toString().isEmpty())
-                {
+                if (!mRTMessageField.getText().toString().isEmpty()) {
                     int startSelection = mRTMessageField.getSelectionStart();
                     int endSelection = mRTMessageField.getSelectionEnd();
                     String selectedText = mRTMessageField.getText().toString().substring(startSelection, endSelection);
 
-                    /**
-                     * PINTAR O TEXTO!
-                     */
-//                    mRTMessageField.setRichTextEditing(true, "<b" + mRTMessageField.getText(RTFormat.PLAIN_TEXT).substring(startSelection,endSelection) + "/>");
-
-                    if(!selectedText.isEmpty()){
-                        if(selectedText.length() > 0)
-                        {
-                            createSpecificCommentNote(getCaretYPosition(startSelection));
+                    if (!selectedText.isEmpty()) {
+                        if (selectedText.length() > 0) {
+                            createSpecificCommentNote(getCaretYPosition(startSelection), selectedText);
+                            mRTManager.onEffectSelected(Effects.BGCOLOR, getResources().getColor(R.color.base_green));
                         }
                     }
                 }
@@ -156,6 +177,7 @@ public class FragmentRTEditor extends Fragment {
 
         @Override
         public void onDestroyActionMode(ActionMode mode) {
+            mRTManager.onEffectSelected(Effects.BGCOLOR, Color.WHITE);
         }
 
         @Override
@@ -163,19 +185,14 @@ public class FragmentRTEditor extends Fragment {
             return false;
         }
 
-        private void createSpecificCommentNote(float yPosition)
-        {
-            ViewGroup scrollview = (ViewGroup) getView().findViewById(R.id.comments);
-
-            LayoutInflater inflater = (LayoutInflater)getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        private void createSpecificCommentNote(float yPosition, String selectedText) {
+            LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             Button note = new Button(getContext());
             note = (Button) inflater.inflate(R.layout.btn_specific_comment, scrollview, false);
 
-            specificCommentsNotes.add(note);
-
             currentSpecificComment++;
 
-            if(yPosition != 0)
+            if (yPosition != 0)
                 note.setY(yPosition - 2);
             note.setText(currentSpecificComment + "");
             note.setId(currentSpecificComment);
@@ -184,12 +201,13 @@ public class FragmentRTEditor extends Fragment {
                 @Override
                 public void onClick(View v) {
                     Toast.makeText(getActivity(), "Abrir aba de comentário específico!", Toast.LENGTH_SHORT).show();
+
                     Button btn = (Button) v;
                     btn.setBackgroundResource(R.drawable.rounded_corner);
                     btn.setTextColor(Color.WHITE);
 
                     for (int i = 0; i < specificCommentsNotes.size(); i++) {
-                        Button aux = specificCommentsNotes.get(i);
+                        Button aux = (Button) getView().findViewById(specificCommentsNotes.get(i).getBtId());
                         if (aux.getId() != btn.getId()) {
                             aux.setBackgroundResource(R.drawable.btn_border);
                             aux.setTextColor(getResources().getColor(R.color.base_green));
@@ -198,35 +216,13 @@ public class FragmentRTEditor extends Fragment {
                 }
             });
 
+            specificCommentsNotes.add(new Note(currentSpecificComment, selectedText, note.getY()));
+
             scrollview.addView(note);
 
             ViewGroup.MarginLayoutParams params = (ViewGroup.MarginLayoutParams) mRTMessageField.getLayoutParams();
-            params.leftMargin = 60;
+            params.leftMargin = 70;
             mRTMessageField.setLayoutParams(params);
-        }
-    }
-
-    private float getCaretYPosition(int position)
-    {
-        Layout layout = mRTMessageField.getLayout();
-        if(layout != null) {
-            int line = layout.getLineForOffset(position);
-            int baseline = layout.getLineBaseline(line);
-            int ascent = layout.getLineAscent(line);
-            return baseline + ascent;
-        }
-        return 0;
-    }
-
-    private void changePositionOfNotes(float posStart, float posEnd)
-    {
-        for(int i = 0; i < specificCommentsNotes.size(); i++)
-        {
-            Button aux = specificCommentsNotes.get(i);
-            if(aux.getY() > posStart)
-            {
-                aux.setY(aux.getY() - (posStart - posEnd));
-            }
         }
     }
 }
