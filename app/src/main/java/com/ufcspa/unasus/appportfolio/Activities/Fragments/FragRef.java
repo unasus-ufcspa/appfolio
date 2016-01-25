@@ -114,7 +114,7 @@ public class FragRef extends Fragment {
 //        edtRef.setText(tx);
         Singleton singleton = Singleton.getInstance();
         DataBaseAdapter data = DataBaseAdapter.getInstance(getActivity());
-        references=(ArrayList)data.getReferences(singleton.idActivityStudent);
+        references = (ArrayList)data.getReferences(singleton.idActivityStudent);
     }
 
     @Override
