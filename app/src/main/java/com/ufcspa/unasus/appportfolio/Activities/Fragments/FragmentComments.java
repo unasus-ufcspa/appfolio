@@ -36,7 +36,7 @@ public class FragmentComments extends Frag {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_messages, null);
 
-        source = new DataBaseAdapter(getActivity());
+        source = DataBaseAdapter.getInstance(getActivity());
 
         singleton = Singleton.getInstance();
         singleton.idActivityStudent = source.getActivityStudentID(singleton.activity.getIdAtivity(), singleton.portfolioClass.getIdPortfolioStudent());
@@ -111,7 +111,7 @@ public class FragmentComments extends Frag {
     public void addItems() {
         try {
             adapter.clearAdapter();
-            DataBaseAdapter db = new DataBaseAdapter(getActivity());
+            DataBaseAdapter db = DataBaseAdapter.getInstance(getActivity());
             Singleton singleton = Singleton.getInstance();
             ArrayList<Comentario> lista = (ArrayList<Comentario>) db.listComments(singleton.activity.getIdAtivity());
             if (lista.size() != 0) {
@@ -142,7 +142,7 @@ public class FragmentComments extends Frag {
 //        System.out.println("comentario inserido:" + c);
 
         try {
-            DataBaseAdapter db = new DataBaseAdapter(getActivity());
+            DataBaseAdapter db = DataBaseAdapter.getInstance(getActivity());
             db.insertComment(c);
             Log.d("Banco:", "comentario inserido no bd interno com sucesso");
         }

@@ -42,7 +42,7 @@ public class FragmentSelectPortfolio extends Frag {
 
     public void init(){
         singleton = Singleton.getInstance();
-        source = new DataBaseAdapter(getActivity().getApplicationContext());
+        source = DataBaseAdapter.getInstance(getActivity());
 
         try
         {

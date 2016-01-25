@@ -85,7 +85,7 @@ public class HttpClient {
                         c.setIdComment(json.getInt("id_comment"));
                         c.setDateComment(json.getString("tx_comment"));
                         c.setTxtComment(json.getString(""));
-                        DataBaseAdapter dao = new DataBaseAdapter(context);
+                        DataBaseAdapter dao = DataBaseAdapter.getInstance(context);
                         if (dao.getCommentById(c.getIdComment()) != null) {
                             dao.updateComment(c);
                         } else {
@@ -124,7 +124,7 @@ public class HttpClient {
                     e.printStackTrace();
                     Log.e(tag,"erro ao pegar na request:"+e.getMessage());
                 }
-                DataBaseAdapter dao = new DataBaseAdapter(context);
+                DataBaseAdapter dao = DataBaseAdapter.getInstance(context);
                 if (dao.getCommentById(c.getIdComment()) != null) {
                     dao.updateComment(c);
                 } else {

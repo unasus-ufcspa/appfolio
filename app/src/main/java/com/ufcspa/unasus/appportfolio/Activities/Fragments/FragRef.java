@@ -98,7 +98,7 @@ public class FragRef extends Fragment {
     public boolean salvar(){
         boolean result = false;
         Singleton singleton = Singleton.getInstance();
-        DataBaseAdapter data = new DataBaseAdapter(getContext());
+        DataBaseAdapter data = DataBaseAdapter.getInstance(getActivity());
         Reference refer=new Reference();
         refer.setDsUrl(edtRef.getText().toString());
         refer.setIdActStudent(singleton.idActivityStudent);
@@ -113,7 +113,7 @@ public class FragRef extends Fragment {
 //        String tx="http://port.com";
 //        edtRef.setText(tx);
         Singleton singleton = Singleton.getInstance();
-        DataBaseAdapter data = new DataBaseAdapter(getContext());
+        DataBaseAdapter data = DataBaseAdapter.getInstance(getActivity());
         references=(ArrayList)data.getReferences(singleton.idActivityStudent);
     }
 

@@ -42,7 +42,7 @@ public class FragmentStudentActivities extends Frag {
     public void init(){
         singleton = Singleton.getInstance();
 
-        source = new DataBaseAdapter(getActivity());
+        source = DataBaseAdapter.getInstance(getActivity());
         try {
 
             list = source.selectListActivitiesAndStudents(singleton.portfolioClass.getIdPortClass(),singleton.portfolioClass.getPerfil(),singleton.user.getIdUser());

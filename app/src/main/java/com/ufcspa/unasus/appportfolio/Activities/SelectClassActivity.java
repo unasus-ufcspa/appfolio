@@ -42,7 +42,7 @@ public class SelectClassActivity extends AppActivity implements AdapterView.OnIt
     private void init() {
         singleton = Singleton.getInstance();
 
-        source = new DataBaseAdapter(getApplicationContext());
+        source = DataBaseAdapter.getInstance(this);
         try {
             //classes = source.getClasses(singleton.user.getIdUser(), singleton.user.getUserType());
             portclasses=source.selectListClassAndUserType(singleton.user.getIdUser());

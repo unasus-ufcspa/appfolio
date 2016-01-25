@@ -10,8 +10,8 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.ufcspa.unasus.appportfolio.Model.PortfolioClass;
 import com.ufcspa.unasus.appportfolio.Adapter.SelectPortfolioAdapter;
+import com.ufcspa.unasus.appportfolio.Model.PortfolioClass;
 import com.ufcspa.unasus.appportfolio.Model.Singleton;
 import com.ufcspa.unasus.appportfolio.R;
 import com.ufcspa.unasus.appportfolio.database.DataBaseAdapter;
@@ -57,7 +57,7 @@ public class SelectPortfolioActivity extends AppActivity {
 
     public void init() {
         single = Singleton.getInstance();
-        data = new DataBaseAdapter(this);
+        data = DataBaseAdapter.getInstance(this);
         try {
             portfolios = data.listarPortfolio(single.team.getIdClass(), single.user.getUserType(), single.user.getIdUser());
             //data.close();

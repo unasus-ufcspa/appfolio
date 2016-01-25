@@ -98,7 +98,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             }
         });
 
-        DataBaseAdapter data= new DataBaseAdapter(this);
+        DataBaseAdapter data = DataBaseAdapter.getInstance(this);
 //        ArrayList<PortfolioClass> lista= (ArrayList<PortfolioClass>) data.selectListClassAndUserType(5);
 //        Log.d("lista","tamanho:"+lista.size());
 //
@@ -163,14 +163,14 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
     private void loginSuccess()
     {
-        Log.d("singletonn","id:"+session.user.getIdUser()+" uT:" +session.user.getUserType());
-        startActivity(new Intent(getApplicationContext(), MainActivity.class)); //SelectClassActivity
+        Log.d("singletonn", "id:" + session.user.getIdUser() + " uT:" + session.user.getUserType());
+        startActivity(new Intent(getApplicationContext(), MainActivity.class));
         finish();
     }
 
     private char checkUserType(int idUser)
     {
-        DataBaseAdapter bd = new DataBaseAdapter(getApplicationContext());
+        DataBaseAdapter bd = DataBaseAdapter.getInstance(this);
         return bd.verifyUserType(idUser);
     }
 
@@ -190,13 +190,13 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     }
 
     private void criarBD(){
-        bd=new DataBaseAdapter(getApplicationContext());
+        bd = DataBaseAdapter.getInstance(this);
     }
 
     private int verificarLogin(){
        int result=0;
         try {
-            DataBaseAdapter bd = new DataBaseAdapter(getApplicationContext());
+            DataBaseAdapter bd = DataBaseAdapter.getInstance(this);
             user=bd.verifyPass(mEmailView.getText().toString(),mPasswordView.getText().toString());
             result=user.getIdUser();
             //Log.d("BANCO", " pass:" + result);

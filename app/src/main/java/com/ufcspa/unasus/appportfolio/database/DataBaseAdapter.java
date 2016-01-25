@@ -13,7 +13,6 @@ import com.ufcspa.unasus.appportfolio.Model.Comentario;
 import com.ufcspa.unasus.appportfolio.Model.PortfolioClass;
 import com.ufcspa.unasus.appportfolio.Model.Reference;
 import com.ufcspa.unasus.appportfolio.Model.StudFrPortClass;
-import com.ufcspa.unasus.appportfolio.Model.Student;
 import com.ufcspa.unasus.appportfolio.Model.Team;
 import com.ufcspa.unasus.appportfolio.Model.User;
 
@@ -29,17 +28,22 @@ import java.util.List;
  * Created by UNASUS on 11/11/2015.
  */
 public class DataBaseAdapter {
+    private static DataBaseAdapter mInstance = null;
     private SQLiteDatabase db;
     private DataBase helper;
-
     private String tag = "BANCO DE DADOS";
 
-    public DataBaseAdapter(Context context) {
-        helper = new DataBase(context);
+    private DataBaseAdapter(Context ctx) {
+        helper = new DataBase(ctx);
         db = helper.getDatabase();
     }
 
-
+    public static DataBaseAdapter getInstance(Context ctx) {
+        if (mInstance == null) {
+            mInstance = new DataBaseAdapter(ctx);
+        }
+        return mInstance;
+    }
 
     public User verifyPass(String email, String pass) {
         int id = 0;
@@ -63,7 +67,7 @@ public class DataBaseAdapter {
         } catch (Exception e) {
             Log.d(tag, "erro query:" + e.getMessage());
         } finally {
-            db.close();
+//            db.close();
             return user;
         }
     }
@@ -76,7 +80,7 @@ public class DataBaseAdapter {
         cv.put("id_activity_student",ref.getIdActStudent());
         try {
             db.insert("tb_reference", null, cv);
-            db.close();
+//            db.close();
             Log.d(tag, "inseriu referencia no banco");
             return true;
         }catch (Exception e){
@@ -111,19 +115,12 @@ public class DataBaseAdapter {
                 //add references
             } while (c.moveToNext());
             c.close();
-            db.close();
+//            db.close();
         } else {
             Log.d(tag, "não retornoun nada");
         }
         return refs;
     }
-
-
-
-
-
-
-
 
     public void insertComment(Comentario c) {
         ContentValues cv = new ContentValues();
@@ -135,7 +132,7 @@ public class DataBaseAdapter {
         cv.put("dt_comment", c.getDateComment());
         db.insert("tb_comment", null, cv);
         try {
-            db.close();
+//            db.close();
             Log.d(tag, "inseriu comentario no banco");
         } catch (Exception e) {
             Log.e(tag, "erro ao inserir:" + e.getMessage());
@@ -200,7 +197,7 @@ public class DataBaseAdapter {
                 //add comment
             } while (c.moveToNext());
             c.close();
-            db.close();
+//            db.close();
         } else {
             Log.d(tag, "não retornoun nada");
         }
@@ -254,7 +251,7 @@ public class DataBaseAdapter {
         cv.put("ds_email", "icaro@1234");
         cv.put("ds_password", "1234");
         db.insert("tb_user", null, cv);
-        db.close();
+//        db.close();
         Log.d(tag, "inseriu no banco");
     }
 
@@ -272,7 +269,7 @@ public class DataBaseAdapter {
             r = "Não há users!";
         }
         c.close();
-        db.close();
+//        db.close();
         Log.d(tag, "resultado string:" + r);
         return r;
 
@@ -291,7 +288,7 @@ public class DataBaseAdapter {
             r = "não há tabelas";
         }
 
-        db.close();
+//        db.close();
 
         return r;
     }
@@ -327,7 +324,7 @@ public class DataBaseAdapter {
             }while(c.moveToNext());
         }
 
-        db.close();
+//        db.close();
         return portfolios;
     }
 
@@ -358,7 +355,7 @@ public class DataBaseAdapter {
             userType = cursor.getString(0).charAt(0);
         }
 
-        db.close();
+//        db.close();
         return userType;
     }
 
@@ -392,7 +389,7 @@ public class DataBaseAdapter {
 
         if(cursor.moveToFirst()) { do { array_team.add(cursorToTeam(cursor)); } while (cursor.moveToNext());}
 
-        db.close();
+//        db.close();
         return array_team;
     }
 
@@ -416,7 +413,7 @@ public class DataBaseAdapter {
             Log.d(tag,"Data em formato errado! (cursorToTeam())");
         }
 
-        db.close();
+//        db.close();
         return team;
     }
 
@@ -450,7 +447,7 @@ public class DataBaseAdapter {
 
         do{ array_activity.add(cursorToActivity(cursor)); } while(cursor.moveToNext());
 
-        db.close();
+//        db.close();
         return array_activity;
     }
 

@@ -40,7 +40,7 @@ public class FragmentAttachment extends Frag {
 
     private void init()
     {
-        source = new DataBaseAdapter(getActivity());
+        source = DataBaseAdapter.getInstance(getActivity());
 
         singleton = Singleton.getInstance();
         singleton.idActivityStudent = source.getActivityStudentID(singleton.activity.getIdAtivity(), singleton.portfolioClass.getIdPortfolioStudent());

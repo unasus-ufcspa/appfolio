@@ -47,7 +47,7 @@ public class FragmentEditText extends Frag {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_edit_text, null);
         //btSave=(Button)view.findViewById(R.id.edit_acttivity_bt_msg);
-        source = new DataBaseAdapter(getActivity());
+        source = DataBaseAdapter.getInstance(getActivity());
         singleton = Singleton.getInstance();
         //singleton.idActivityStudent = source.getActivityStudentID(singleton.activity.getIdAtivity(),singleton.portfolioClass.getIdPortfolioStudent());
 
@@ -350,7 +350,7 @@ public class FragmentEditText extends Frag {
     }
 
     public void saveText() {
-        source = new DataBaseAdapter(getActivity());
+        source = DataBaseAdapter.getInstance(getActivity());
         acStudent.setTxtActivity(mEditor.getHtml());
         source.updateActivityStudent(acStudent);
     }

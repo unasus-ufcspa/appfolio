@@ -13,7 +13,6 @@ import com.ufcspa.unasus.appportfolio.Model.StudFrPortClass;
 import com.ufcspa.unasus.appportfolio.R;
 import com.ufcspa.unasus.appportfolio.database.DataBaseAdapter;
 
-
 import java.util.ArrayList;
 
 /**
@@ -44,7 +43,7 @@ public class SelectActivitiesActivity extends AppActivity //implements AdapterVi
     {
         singleton = Singleton.getInstance();
 
-        source = new DataBaseAdapter(getApplicationContext());
+        source = DataBaseAdapter.getInstance(this);
         try {
 
             list = source.selectListActivitiesAndStudents(singleton.portfolioClass.getIdPortClass(),singleton.portfolioClass.getPerfil(),singleton.user.getIdUser());
