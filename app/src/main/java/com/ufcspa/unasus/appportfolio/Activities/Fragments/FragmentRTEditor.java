@@ -9,6 +9,7 @@ import android.support.v4.app.Fragment;
 import android.text.Editable;
 import android.text.Layout;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.ActionMode;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -23,7 +24,9 @@ import com.onegravity.rteditor.RTManager;
 import com.onegravity.rteditor.RTToolbar;
 import com.onegravity.rteditor.api.RTApi;
 import com.onegravity.rteditor.api.RTProxyImpl;
+import com.onegravity.rteditor.api.format.RTFormat;
 import com.onegravity.rteditor.effects.Effects;
+import com.ufcspa.unasus.appportfolio.Activities.LoginActivity;
 import com.ufcspa.unasus.appportfolio.Model.NewRTMediaFactoryImpl;
 import com.ufcspa.unasus.appportfolio.Model.Note;
 import com.ufcspa.unasus.appportfolio.R;
@@ -131,21 +134,21 @@ public class FragmentRTEditor extends Fragment {
         }
     }
 
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-
-        if(resultCode == Activity.RESULT_OK)
-        {
-            float posStart = getCaretYPosition(mRTMessageField.getSelectionStart());
-            mRTManager.onActivityResult(requestCode, resultCode, data);
-            float posEnd = getCaretYPosition(mRTMessageField.getSelectionEnd());
-            changePositionOfNotes(posStart,posEnd);
-        }
-        else if(resultCode == Activity.RESULT_CANCELED)
-        {
-        }
-    }
+//    @Override
+//    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+//        super.onActivityResult(requestCode, resultCode, data);
+//
+//        if(resultCode == Activity.RESULT_OK)
+//        {
+//            float posStart = getCaretYPosition(mRTMessageField.getSelectionStart());
+//            mRTManager.onActivityResult(requestCode, resultCode, data);
+//            float posEnd = getCaretYPosition(mRTMessageField.getSelectionEnd());
+//            changePositionOfNotes(posStart,posEnd);
+//        }
+//        else if(resultCode == Activity.RESULT_CANCELED)
+//        {
+//        }
+//    }
 
     private float getCaretYPosition(int position) {
         Layout layout = mRTMessageField.getLayout();
@@ -224,9 +227,6 @@ public class FragmentRTEditor extends Fragment {
                     if (!selectedText.isEmpty()) {
                         if (selectedText.length() > 0) {
                             createSpecificCommentNote(getCaretYPosition(startSelection), selectedText);
-                            mRTManager.onEffectSelected(Effects.BGCOLOR, getResources().getColor(R.color.base_green));
-                            mRTMessageField.setSelection(endSelection);
-                            mRTMessageField.setSelected(false);
                         }
                     }
                 }
@@ -244,7 +244,7 @@ public class FragmentRTEditor extends Fragment {
 
         @Override
         public void onDestroyActionMode(ActionMode mode) {
-            Effects.BGCOLOR.applyToSelection(mRTMessageField, null);
+//            Effects.BGCOLOR.applyToSelection(mRTMessageField, null);
         }
 
         @Override
@@ -262,7 +262,6 @@ public class FragmentRTEditor extends Fragment {
             if (yPosition != 0)
                 yButton = yPosition - 2;
 
-            String.valueOf(currentSpecificComment);
             idButton = currentSpecificComment;
 
             specificCommentsNotes.add(new Note(idButton, selectedText, yButton));
@@ -270,6 +269,11 @@ public class FragmentRTEditor extends Fragment {
             scrollview.addView(createButton(idButton, String.valueOf(currentSpecificComment), yButton));
 
             createMarginForRTEditor();
+
+            //mRTManager.onEffectSelected(Effects.BGCOLOR, getResources().getColor(R.color.base_green));
+            mRTManager.onEffectSelected(Effects.LINK, String.valueOf(currentSpecificComment));
+            mRTMessageField.setSelection(endSelection);
+            mRTMessageField.setSelected(false);
         }
     }
 }
