@@ -29,7 +29,18 @@
                 android:hint="Boa Atividade!"
                 android:imeOptions="actionDone|flagNoEnterAction"
                 android:inputType="textMultiLine|textAutoCorrect|textCapSentences"
-                android:background="@android:color/white"/>
+                android:background="@android:color/white"
+                android:layout_below="@+id/fullscreen" />
+
+            <ImageButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/fullscreen"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:background="@drawable/fullscreen_text" />
+
         </RelativeLayout>
     </ScrollView>
 

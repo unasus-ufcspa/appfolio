@@ -24,7 +24,6 @@ import com.onegravity.rteditor.spans.BoldSpan;
 import com.onegravity.rteditor.spans.ForegroundColorSpan;
 import com.onegravity.rteditor.spans.ItalicSpan;
 import com.onegravity.rteditor.spans.LinkSpan;
-import com.onegravity.rteditor.spans.SpecificCommentSpan;
 import com.onegravity.rteditor.spans.StrikethroughSpan;
 import com.onegravity.rteditor.spans.SubscriptSpan;
 import com.onegravity.rteditor.spans.SuperscriptSpan;
@@ -46,7 +45,6 @@ public class Effects {
     public static final Effect<Integer, BackgroundColorSpan> BGCOLOR = new BackgroundColorEffect();    // non-boolean effect
     public static final Effect<RTTypeface, TypefaceSpan> TYPEFACE = new TypefaceEffect();              // non-boolean effect
     public static final Effect<String, LinkSpan> LINK = new LinkEffect();
-    public static final Effect<String, SpecificCommentSpan> SPECIFICCOMMENT = new SpecificCommentEffect();                               // non-boolean effect
 
     // paragraph effects
     public static final BulletEffect BULLET = new BulletEffect();                                      // boolean effect
@@ -72,7 +70,6 @@ public class Effects {
         ALL_EFFECTS.add(BGCOLOR);
         ALL_EFFECTS.add(TYPEFACE);
         ALL_EFFECTS.add(LINK);
-        ALL_EFFECTS.add(SPECIFICCOMMENT);
 
         // paragraph effects
         ALL_EFFECTS.add(BULLET);
@@ -99,7 +96,6 @@ public class Effects {
         FORMATTING_EFFECTS.add(BGCOLOR);
         FORMATTING_EFFECTS.add(TYPEFACE);
         FORMATTING_EFFECTS.add(LINK);
-        FORMATTING_EFFECTS.add(SPECIFICCOMMENT);
 
         // paragraph effects
         FORMATTING_EFFECTS.add(BULLET);

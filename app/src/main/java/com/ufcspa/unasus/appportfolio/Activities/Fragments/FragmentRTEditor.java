@@ -15,6 +15,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.Toast;
 
 
@@ -22,6 +23,7 @@ import com.onegravity.rteditor.*;
 import com.onegravity.rteditor.api.*;
 import com.onegravity.rteditor.api.format.RTFormat;
 import com.onegravity.rteditor.effects.Effects;
+import com.ufcspa.unasus.appportfolio.Activities.MainActivity;
 import com.ufcspa.unasus.appportfolio.Model.Note;
 import com.ufcspa.unasus.appportfolio.R;
 
@@ -34,6 +36,7 @@ public class FragmentRTEditor extends Fragment {
     private RTToolbar rtToolbar;
     private int currentSpecificComment;
     private ViewGroup scrollview;
+    private ImageButton fullScreen;
 
     private ArrayList<Note> specificCommentsNotes;
 
@@ -86,6 +89,9 @@ public class FragmentRTEditor extends Fragment {
         });
 
         currentSpecificComment = 0;
+
+        fullScreen = (ImageButton) view.findViewById(R.id.fullscreen);
+        fullScreen.setOnClickListener(new FullScreen());
 
         return view;
     }
@@ -249,9 +255,18 @@ public class FragmentRTEditor extends Fragment {
             createMarginForRTEditor();
 
 //            mRTManager.onEffectSelected(Effects.BGCOLOR, getResources().getColor(R.color.base_green));
-            mRTManager.onEffectSelected(Effects.SPECIFICCOMMENT, String.valueOf(currentSpecificComment));
+            mRTManager.onEffectSelected(Effects.LINK, "SpecificComment "+ String.valueOf(currentSpecificComment));
             mRTMessageField.setSelection(endSelection);
             mRTMessageField.setSelected(false);
+        }
+    }
+
+    private class FullScreen implements View.OnClickListener
+    {
+        @Override
+        public void onClick(View v)
+        {
+            Log.d("rteditor",mRTMessageField.getText(RTFormat.HTML));
         }
     }
 }

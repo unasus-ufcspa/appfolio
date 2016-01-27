@@ -447,34 +447,11 @@ public class RTManager implements RTToolbarListener, RTEditTextListener {
                 linkText = getLinkText(editor, linkSpan);
             }
 
+            if(url != null)
+                if(url.contains("SpecificComment"))
+                    return;
+
             mRTApi.openDialogFragment(ID_01_LINK_FRAGMENT, LinkFragment.newInstance(linkText, url));
-        }
-    }
-
-    public void onCreateSpecificComment() {
-        RTEditText editor = getActiveEditor();
-        if (editor != null) {
-            String url = null;
-            String linkText = null;
-
-            List<RTSpan<String>> links = Effects.SPECIFICCOMMENT.getSpans(editor.getText(), new Selection(editor), SpanCollectMode.EXACT);
-            if (links.isEmpty()) {
-                // default values if no link is found at selection
-                linkText = editor.getSelectedText();
-                try {
-                    // if this succeeds we have a valid URL and will use it for the link
-                    new URL(linkText);
-                    url = linkText;
-                } catch (MalformedURLException ignore) {
-                }
-                mLinkSelection = editor.getSelection();
-            } else {
-                // values if a link already exists
-                RTSpan<String> linkSpan = links.get(0);
-                url = linkSpan.getValue();
-                linkText = getLinkText(editor, linkSpan);
-            }
-
         }
     }
 
@@ -707,7 +684,8 @@ public class RTManager implements RTToolbarListener, RTEditTextListener {
     public void onClick(RTEditText editor, LinkSpan span) {
         if (editor != null) {
             String linkText = getLinkText(editor, span);
-            mRTApi.openDialogFragment(ID_01_LINK_FRAGMENT, LinkFragment.newInstance(linkText, span.getURL()));
+            if(!span.getURL().contains("SpecificComment"))
+                mRTApi.openDialogFragment(ID_01_LINK_FRAGMENT, LinkFragment.newInstance(linkText, span.getURL()));
         }
     }
 
