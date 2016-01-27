@@ -1,27 +1,20 @@
-package com.ufcspa.unasus.appportfolio.Model;
+/*
+ * Copyright (C) 2015-2016 Emanuel Moecklin
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 
-import android.content.Context;
-import android.util.Log;
-
-import com.onegravity.rteditor.api.RTMediaFactory;
-import com.onegravity.rteditor.api.media.RTAudio;
-import com.onegravity.rteditor.api.media.RTAudioImpl;
-import com.onegravity.rteditor.api.media.RTImage;
-import com.onegravity.rteditor.api.media.RTImageImpl;
-import com.onegravity.rteditor.api.media.RTMediaSource;
-import com.onegravity.rteditor.api.media.RTMediaType;
-import com.onegravity.rteditor.api.media.RTVideo;
-import com.onegravity.rteditor.api.media.RTVideoImpl;
-import com.onegravity.rteditor.media.MediaUtils;
-import com.onegravity.rteditor.utils.Helper;
-import com.onegravity.rteditor.utils.io.IOUtils;
-
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-
+package com.onegravity.rteditor.api;
 
 import android.content.Context;
 import android.util.Log;
@@ -50,16 +43,16 @@ import java.io.OutputStream;
  * internal (as in Context.context.getFilesDir() or the primary external
  * file system (as in Context.getExternalFilesDir(String).
  */
-public class NewRTMediaFactoryImpl implements RTMediaFactory<RTImage, RTAudio, RTVideo> {
+public class RTMediaFactoryImpl implements RTMediaFactory<RTImage, RTAudio, RTVideo> {
     private static final long serialVersionUID = 6970361368051595063L;
 
     private File mStoragePath;
 
-    public NewRTMediaFactoryImpl(Context context) {
+    public RTMediaFactoryImpl(Context context) {
         this(context, true);    // use external storage as default
     }
 
-    public NewRTMediaFactoryImpl(Context context, boolean externalStorage) {
+    public RTMediaFactoryImpl(Context context, boolean externalStorage) {
         mStoragePath = externalStorage ?
                 context.getExternalFilesDir(null) :
                 context.getFilesDir();
@@ -81,7 +74,7 @@ public class NewRTMediaFactoryImpl implements RTMediaFactory<RTImage, RTAudio, R
 
 	/*
      * Use case 1: Inserting media objects into the rich text editor.
-	 *
+	 * 
 	 * This default implementation copies all files into the dedicated media
 	 * storage area.
 	 */
@@ -90,7 +83,6 @@ public class NewRTMediaFactoryImpl implements RTMediaFactory<RTImage, RTAudio, R
 	/* @inheritDoc */
     public RTImage createImage(RTMediaSource mediaSource) {
         File targetFile = loadMedia(mediaSource);
-        Log.d("NewRTMediaFactoryImpl", targetFile.getAbsolutePath());
         return targetFile == null ? null :
                 new RTImageImpl(targetFile.getAbsolutePath());
     }
@@ -139,10 +131,10 @@ public class NewRTMediaFactoryImpl implements RTMediaFactory<RTImage, RTAudio, R
 	/*
 	 * Use case 2: Load a rich text with referenced media objects into the rich
 	 * text editor.
-	 *
+	 * 
 	 * This default implementation doesn't apply any transformations to the path
 	 * because the files are stored in the file system where they can be
-	 * accessed directly by the rich text editor (via ImageSpan).
+	 * accessed directly by the rich text editor (via ImageSpan).  
 	 */
 
     @Override

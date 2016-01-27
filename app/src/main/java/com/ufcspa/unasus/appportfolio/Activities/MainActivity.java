@@ -5,7 +5,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
@@ -149,19 +148,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 break;
             case 4:
                 break;
-            case 5://EditText
+            case 5:
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new FragmentRTEditor()).commit();
-//                startActivity(new Intent(this, EditActivity.class));
                 break;
             default:
                 break;
         }
     }
 
-//    @Override
-//    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-//        super.onActivityResult(requestCode, resultCode, data);
-//        Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.fragment_container);
-//        fragment.onActivityResult(requestCode, resultCode, data);
-//    }
 }
