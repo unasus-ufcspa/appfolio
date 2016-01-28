@@ -147,8 +147,6 @@ public class FragmentRTEditor extends Fragment {
         return 0;
     }
 
-
-
     private void findText(String selTxt,String texto){
         String tag="Processing text:";
         Log.d(tag,"finding selected text:"+selTxt +"\n in text:"+texto);
@@ -242,7 +240,6 @@ public class FragmentRTEditor extends Fragment {
 
         @Override
         public void onDestroyActionMode(ActionMode mode) {
-//            Effects.BGCOLOR.applyToSelection(mRTMessageField, null);
         }
 
         @Override
@@ -269,7 +266,6 @@ public class FragmentRTEditor extends Fragment {
             createMarginForRTEditor();
 
             mRTManager.onEffectSelected(Effects.BGCOLOR, getResources().getColor(R.color.base_green), idButton);
-//            mRTManager.onEffectSelected(Effects.LINK, "SpecificComment "+ String.valueOf(currentSpecificComment));
             mRTMessageField.setSelection(endSelection);
             mRTMessageField.setSelected(false);
         }
@@ -280,14 +276,6 @@ public class FragmentRTEditor extends Fragment {
         @Override
         public void onClick(View v) {
             Log.d("rteditor", mRTMessageField.getText(RTFormat.HTML));
-            //((MainActivity)getActivity()).hideDrawer();
-
-//            String text = mRTMessageField.getText(RTFormat.HTML);
-            //Encontrar a posição do texto e o id do botão
-//            mRTMessageField.setSelection(10);
-//            float y = getCaretYPosition(mRTMessageField.getSelectionStart());
-            //Procurar o botão e colocar ele na posição y
-            //Fazer isso para todos os outros.
         }
     }
 }
