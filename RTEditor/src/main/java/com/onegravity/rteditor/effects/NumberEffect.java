@@ -109,4 +109,8 @@ public class NumberEffect extends ParagraphEffect<Boolean, NumberSpan> {
         mSpans2Process.process(str);
     }
 
+    @Override
+    public void applyToSelection(RTEditText editor, Boolean value, int id) {
+
+    }
 }

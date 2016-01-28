@@ -348,6 +348,13 @@ public class RTManager implements RTToolbarListener, RTEditTextListener {
         }
     }
 
+    public <V, C extends RTSpan<V>> void onEffectSelected(Effect<V, C> effect, V value, int id) {
+        RTEditText editor = getActiveEditor();
+        if (editor != null) {
+            editor.applyEffect(effect, value, id);
+        }
+    }
+
     // ****************************************** RTToolbarListener *******************************************
 
     @Override
@@ -414,9 +421,9 @@ public class RTManager implements RTToolbarListener, RTEditTextListener {
                 linkText = getLinkText(editor, linkSpan);
             }
 
-            if(url != null)
-                if(url.contains("SpecificComment"))
-                    return;
+//            if(url != null)
+//                if(url.contains("SpecificComment"))
+//                    return;
 
             mRTApi.openDialogFragment(ID_01_LINK_FRAGMENT, LinkFragment.newInstance(linkText, url));
         }
@@ -651,8 +658,8 @@ public class RTManager implements RTToolbarListener, RTEditTextListener {
     public void onClick(RTEditText editor, LinkSpan span) {
         if (editor != null) {
             String linkText = getLinkText(editor, span);
-            if(!span.getURL().contains("SpecificComment"))
-                mRTApi.openDialogFragment(ID_01_LINK_FRAGMENT, LinkFragment.newInstance(linkText, span.getURL()));
+//            if(!span.getURL().contains("SpecificComment"))
+            mRTApi.openDialogFragment(ID_01_LINK_FRAGMENT, LinkFragment.newInstance(linkText, span.getURL()));
         }
     }
 

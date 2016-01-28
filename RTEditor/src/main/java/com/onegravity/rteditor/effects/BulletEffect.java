@@ -69,4 +69,8 @@ public class BulletEffect extends ParagraphEffect<Boolean, BulletSpan> {
         mSpans2Process.process(str);
     }
 
+    @Override
+    public void applyToSelection(RTEditText editor, Boolean value, int id) {
+
+    }
 }

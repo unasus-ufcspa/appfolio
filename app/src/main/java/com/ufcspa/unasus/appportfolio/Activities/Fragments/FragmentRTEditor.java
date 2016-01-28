@@ -245,7 +245,8 @@ public class FragmentRTEditor extends Fragment {
             float yButton = 0;
             int idButton = -1;
 
-            yButton = yPosition - 2 + fullScreen.getHeight();
+            if (yPosition != 0)
+                yButton = yPosition - 2;
 
             idButton = currentSpecificComment;
 
@@ -255,8 +256,8 @@ public class FragmentRTEditor extends Fragment {
 
             createMarginForRTEditor();
 
-//            mRTManager.onEffectSelected(Effects.BGCOLOR, getResources().getColor(R.color.base_green));
-            mRTManager.onEffectSelected(Effects.LINK, "SpecificComment "+ String.valueOf(currentSpecificComment));
+            mRTManager.onEffectSelected(Effects.BGCOLOR, getResources().getColor(R.color.base_green), idButton);
+//            mRTManager.onEffectSelected(Effects.LINK, "SpecificComment "+ String.valueOf(currentSpecificComment));
             mRTMessageField.setSelection(endSelection);
             mRTMessageField.setSelected(false);
         }

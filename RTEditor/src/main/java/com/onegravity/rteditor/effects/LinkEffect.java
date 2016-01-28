@@ -35,19 +35,24 @@ public class LinkEffect extends CharacterEffect<String, LinkSpan> {
     }
 
     @Override
+    protected RTSpan<String> newSpan(String value, int id) {
+        return null;
+    }
+
+    @Override
     public void applyToSelection(RTEditText editor, String url) {
         Selection selection = getSelection(editor);
         Spannable str = editor.getText();
 
         if (url == null) {
             // adjacent links need to be removed --> expand the selection by [1, 1]
-            if (!url.contains("SpecificComment"))
+            //if (!url.contains("SpecificComment"))
                 for (RTSpan<String> span : getSpans(str, selection.offset(1, 1), SpanCollectMode.EXACT)) {
                     str.removeSpan(span);
                 }
         }
         else {
-            if (!url.contains("SpecificComment"))
+            //if (!url.contains("SpecificComment"))
                 for (RTSpan<String> span : getSpans(str, selection, SpanCollectMode.EXACT)) {
                     str.removeSpan(span);
                 }

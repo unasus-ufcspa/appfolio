@@ -16,9 +16,15 @@
 
 package com.onegravity.rteditor.effects;
 
+import com.onegravity.rteditor.spans.RTSpan;
 import com.onegravity.rteditor.spans.UnderlineSpan;
 
 /**
  * Underlined text
  */
-public class UnderlineEffect extends BooleanEffect<UnderlineSpan> {}
+public class UnderlineEffect extends BooleanEffect<UnderlineSpan> {
+    @Override
+    protected RTSpan<Boolean> newSpan(Boolean value, int id) {
+        return null;
+    }
+}

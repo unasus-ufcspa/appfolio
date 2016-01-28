@@ -16,9 +16,15 @@
 
 package com.onegravity.rteditor.effects;
 
+import com.onegravity.rteditor.spans.RTSpan;
 import com.onegravity.rteditor.spans.SuperscriptSpan;
 
 /**
  * Superscript text
  */
-public class SuperscriptEffect extends BooleanEffect<SuperscriptSpan> {}
+public class SuperscriptEffect extends BooleanEffect<SuperscriptSpan> {
+    @Override
+    protected RTSpan<Boolean> newSpan(Boolean value, int id) {
+        return null;
+    }
+}

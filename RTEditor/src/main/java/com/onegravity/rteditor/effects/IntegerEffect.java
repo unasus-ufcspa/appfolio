@@ -18,6 +18,7 @@ package com.onegravity.rteditor.effects;
 
 import android.util.Log;
 
+import com.onegravity.rteditor.spans.BackgroundColorSpan;
 import com.onegravity.rteditor.spans.RTSpan;
 
 import java.lang.reflect.Constructor;
@@ -40,10 +41,17 @@ abstract class IntegerEffect<C extends RTSpan<Integer>> extends CharacterEffect<
     final protected RTSpan<Integer> newSpan(Integer value) {
         try {
             if (value != null) {
+                if(mSpanClazz.getSimpleName().equalsIgnoreCase("BackgroundColorSpan"))
+                {
+                    Class[] paramTypes = {int.class, int.class};
+                    Constructor<? extends RTSpan<Integer>> constructor = mSpanClazz.getDeclaredConstructor(paramTypes);
+                    Integer[] params = {value};
+                    return constructor.newInstance(params[0], -1);
+                }
                 Class[] paramTypes = {int.class};
                 Constructor<? extends RTSpan<Integer>> constructor = mSpanClazz.getDeclaredConstructor(paramTypes);
                 Integer[] params = {value};
-                return constructor.newInstance(params);
+                return constructor.newInstance(params[0]);
             }
         } catch (IllegalAccessException e) {
             Log.e(getClass().getSimpleName(), "Exception instantiating " + mSpanClazz.getSimpleName(), e);

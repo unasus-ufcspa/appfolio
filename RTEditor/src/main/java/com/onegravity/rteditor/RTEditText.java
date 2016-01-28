@@ -27,6 +27,7 @@ import android.text.Spanned;
 import android.text.TextWatcher;
 import android.text.style.ParagraphStyle;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.widget.EditText;
 import android.widget.TextView;
 
@@ -616,6 +617,28 @@ public class RTEditText extends EditText implements TextWatcher, SpanWatcher, Li
                     Spannable newSpannable = cloneSpannable();
                     mListener.onTextChanged(this, oldSpannable, newSpannable, getSelectionStart(), getSelectionEnd(),
                                             getSelectionStart(), getSelectionEnd());
+                }
+                mLayoutChanged = true;
+            }
+        }
+    }
+
+    /**
+     * Call this to have an effect applied to the current selection.
+     * You get the Effect object via the static data members (e.g., RTEditText.BOLD).
+     * The value for most effects is a Boolean, indicating whether to add or remove the effect.
+     */
+    public <V extends Object, C extends RTSpan<V>> void applyEffect(Effect<V, C> effect, V value, int id) {
+        if (mUseRTFormatting && !mIsSelectionChanging && !mIsSaving) {
+            Spannable oldSpannable = mIgnoreTextChanges ? null : cloneSpannable();
+
+            effect.applyToSelection(this, value, id);
+
+            synchronized (this) {
+                if (mListener != null && !mIgnoreTextChanges) {
+                    Spannable newSpannable = cloneSpannable();
+                    mListener.onTextChanged(this, oldSpannable, newSpannable, getSelectionStart(), getSelectionEnd(),
+                            getSelectionStart(), getSelectionEnd());
                 }
                 mLayoutChanged = true;
             }

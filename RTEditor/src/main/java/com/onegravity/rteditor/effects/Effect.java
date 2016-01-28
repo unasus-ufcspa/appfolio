@@ -131,5 +131,6 @@ abstract public class Effect<V, C extends RTSpan<V>> {
      * @param value The value to apply (depends on the Effect)
      */
     abstract public void applyToSelection(RTEditText editor, V value);
+    abstract public void applyToSelection(RTEditText editor, V value, int id);
 
 }

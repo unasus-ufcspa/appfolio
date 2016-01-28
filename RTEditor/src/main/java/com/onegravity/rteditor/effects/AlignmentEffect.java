@@ -55,7 +55,7 @@ public class AlignmentEffect extends ParagraphEffect<Layout.Alignment, Alignment
             // if the paragraph is selected then we sure have an alignment
             boolean hasExistingSpans = !existingSpans.isEmpty();
             Alignment newAlignment = paragraph.isSelected(selectedParagraphs) ? alignment :
-                                     hasExistingSpans ? existingSpans.get(0).getValue() : null;
+                    hasExistingSpans ? existingSpans.get(0).getValue() : null;
 
             if (newAlignment != null) {
                 boolean isRTL = Helper.isRTL(str, paragraph.start(), paragraph.end());
@@ -68,4 +68,9 @@ public class AlignmentEffect extends ParagraphEffect<Layout.Alignment, Alignment
         mSpans2Process.process(str);
     }
 
+
+    @Override
+    public void applyToSelection(RTEditText editor, Alignment value, int id) {
+
+    }
 }

@@ -46,13 +46,13 @@ public class LinkSpan extends URLSpan implements RTSpan<String> {
 
     @Override
     public void updateDrawState(TextPaint ds) {
-        if (getURL() != null && !getURL().contains("SpecificComment")) {
-            ds.setColor(Color.BLUE);
-            ds.setUnderlineText(true);
-            return;
-        }
+        //if (getURL() != null && !getURL().contains("SpecificComment")) {
+        ds.setColor(Color.BLUE);
+        ds.setUnderlineText(true);
+       //     return;
+       // }
 
-        ds.bgColor = Color.parseColor("#70E7D0");
+        //ds.bgColor = Color.parseColor("#70E7D0");
     }
 
     public interface LinkSpanListener {
