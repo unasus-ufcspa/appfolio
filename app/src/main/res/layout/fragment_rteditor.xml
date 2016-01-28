@@ -1,6 +1,5 @@
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:onegravity="http://schemas.android.com/apk/res-auto"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/rteditor_fragment"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -10,35 +9,35 @@
         android:id="@+id/rte_content"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_alignParentTop="true"
         android:layout_above="@id/rte_toolbar_container"
+        android:layout_alignParentTop="true"
         android:fillViewport="true"
         android:scrollbarStyle="insideOverlay">
         <RelativeLayout
-            android:orientation="vertical"
+            android:id="@+id/comments"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:id="@+id/comments">
+            android:orientation="vertical">
 
             <com.onegravity.rteditor.RTEditText
                 android:id="@+id/rtEditText"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:layout_below="@+id/fullscreen"
                 android:layout_weight="1"
+                android:background="@android:color/white"
                 android:gravity="top"
                 android:hint="Boa Atividade!"
                 android:imeOptions="actionDone|flagNoEnterAction"
-                android:inputType="textMultiLine|textAutoCorrect|textCapSentences"
-                android:background="@android:color/white"
-                android:layout_below="@+id/fullscreen" />
+                android:inputType="textMultiLine|textAutoCorrect|textCapSentences" />
 
             <ImageButton
+                android:id="@+id/fullscreen"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/fullscreen"
-                android:layout_alignParentTop="true"
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true"
                 android:background="@drawable/fullscreen_text" />
 
         </RelativeLayout>

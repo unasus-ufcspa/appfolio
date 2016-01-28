@@ -84,33 +84,7 @@ public class RTManager implements RTToolbarListener, RTEditTextListener {
      * Identifies the link dialog / fragment
      */
     private static final String ID_01_LINK_FRAGMENT = "ID_01_LINK_FRAGMENT";
-
-    /*
-     * The toolbar(s) may automatically be shown or hidden when a rich text
-     * editor gains or loses focus depending on the ToolbarVisibility setting.
-     */
-    public enum ToolbarVisibility {
-        /*
-         * Toolbar(s) are shown/hidden automatically depending on whether an
-         * editor that uses rich text gains/loses focus.
-         *
-         * This is the default.
-         */
-        AUTOMATIC,
-
-        /*
-         * Toolbar(s) are always shown.
-         */
-        SHOW,
-
-        /*
-         * Toolbar(s) are never shown.
-         */
-        HIDE;
-    }
-
     private ToolbarVisibility mToolbarVisibility = ToolbarVisibility.AUTOMATIC;
-
     /*
      * To set the visibility of the toolbar(s) we call setToolbarVisibility(boolean).
      * To change the visibility we start an animation. Before the animation ends
@@ -122,48 +96,39 @@ public class RTManager implements RTToolbarListener, RTEditTextListener {
      * animation has already started the onAnimationEnd is still called.
      */
     private boolean mToolbarIsVisible;
-
     /*
      * When an Activity is started (e.g. to pick an image),
      * we need to know which editor gets the result
      */
     private int mActiveEditor = Integer.MAX_VALUE;
-
     /*
      * This defines what Selection link operations are applied to
      * (inserting, editing, removing links).
      */
     private Selection mLinkSelection;
-
     /*
      * We need these to delay hiding the toolbar after a focus loss of an editor
      */
     transient private Handler mHandler;
     transient private boolean mIsPendingFocusLoss;
     transient private boolean mCancelPendingFocusLoss;
-
     /*
      * Map the registered editors by editor id (RTEditText.getId())
      */
     transient private Map<Integer, RTEditText> mEditors;
-
     /*
      * Map the registered toolbars by toolbar id (RTToolbar.getId())
      */
     transient private Map<Integer, RTToolbar> mToolbars;
-
     /*
      * That's our link to "the outside world" to perform operations that need
      * access to a Context or an Activity
      */
     transient private RTApi mRTApi;
-
     /*
      * The RTOperationManager is used to undo/redo operations
      */
     transient private RTOperationManager mOPManager;
-
-    // ****************************************** Lifecycle Methods *******************************************
 
     /**
      * @param rtApi              The proxy to "the outside world"
@@ -191,6 +156,8 @@ public class RTManager implements RTToolbarListener, RTEditTextListener {
 
         EventBus.getDefault().register(this);
     }
+
+    // ****************************************** Lifecycle Methods *******************************************
 
     /**
      * Called to retrieve per-instance state before being killed so that the
@@ -231,8 +198,6 @@ public class RTManager implements RTToolbarListener, RTEditTextListener {
         mRTApi = null;
     }
 
-    // ****************************************** Public Methods *******************************************
-
     /**
      * Register a rich text editor.
      * <p>
@@ -249,6 +214,8 @@ public class RTManager implements RTToolbarListener, RTEditTextListener {
 
         updateToolbarVisibility();
     }
+
+    // ****************************************** Public Methods *******************************************
 
     /**
      * Unregister a rich text editor.
@@ -372,8 +339,6 @@ public class RTManager implements RTToolbarListener, RTEditTextListener {
         }
     }
 
-    // ****************************************** RTToolbarListener *******************************************
-
     @Override
     /* @inheritDoc */
     public <V, C extends RTSpan<V>> void onEffectSelected(Effect<V, C> effect, V value) {
@@ -382,6 +347,8 @@ public class RTManager implements RTToolbarListener, RTEditTextListener {
             editor.applyEffect(effect, value);
         }
     }
+
+    // ****************************************** RTToolbarListener *******************************************
 
     @Override
     /* @inheritDoc */
@@ -528,8 +495,6 @@ public class RTManager implements RTToolbarListener, RTEditTextListener {
         return null;
     }
 
-    // ****************************************** RTEditTextListener *******************************************
-
     @Override
 	/* @inheritDoc */
     public void onFocusChanged(RTEditText editor, boolean focused) {
@@ -553,6 +518,8 @@ public class RTManager implements RTToolbarListener, RTEditTextListener {
             }
         }
     }
+
+    // ****************************************** RTEditTextListener *******************************************
 
     private void changeFocus() {
         synchronized (this) {
@@ -754,6 +721,30 @@ public class RTManager implements RTToolbarListener, RTEditTextListener {
     @Override
     public void onRichTextEditingChanged(RTEditText editor, boolean useRichText) {
         updateToolbarVisibility();
+    }
+
+    /*
+     * The toolbar(s) may automatically be shown or hidden when a rich text
+     * editor gains or loses focus depending on the ToolbarVisibility setting.
+     */
+    public enum ToolbarVisibility {
+        /*
+         * Toolbar(s) are shown/hidden automatically depending on whether an
+         * editor that uses rich text gains/loses focus.
+         *
+         * This is the default.
+         */
+        AUTOMATIC,
+
+        /*
+         * Toolbar(s) are always shown.
+         */
+        SHOW,
+
+        /*
+         * Toolbar(s) are never shown.
+         */
+        HIDE;
     }
 
 }
