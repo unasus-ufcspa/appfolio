@@ -147,6 +147,17 @@ public class FragmentRTEditor extends Fragment {
         return 0;
     }
 
+
+
+    private void findText(String selTxt,String texto){
+        String tag="Processing text:";
+        Log.d(tag,"finding selected text:"+selTxt +"\n in text:"+texto);
+        int start=texto.indexOf(selTxt);
+        int end =start+selTxt.length();
+        Log.d(tag,"selected text starts at position '"+start+"' ends at position '"+end+"'");
+        Log.d(tag,"substring generated:"+texto.substring(start,end));
+    }
+
     private void changePositionOfNotes(float posStart, float posEnd) {
         if (specificCommentsNotes != null) {
             for (int i = 0; i < specificCommentsNotes.size(); i++) {
@@ -208,11 +219,12 @@ public class FragmentRTEditor extends Fragment {
                 if (!mRTMessageField.getText().toString().isEmpty()) {
                     startSelection = mRTMessageField.getSelectionStart();
                     endSelection = mRTMessageField.getSelectionEnd();
-                    String selectedText = mRTMessageField.getText().toString().substring(startSelection, endSelection);
+                    String selectedText = mRTMessageField.getText(RTFormat.HTML).substring(startSelection, endSelection);
 
                     if (!selectedText.isEmpty()) {
                         if (selectedText.length() > 0) {
-                            createSpecificCommentNote(getCaretYPosition(startSelection), selectedText);
+                            findText(selectedText, mRTMessageField.getText(RTFormat.HTML));
+                           // createSpecificCommentNote(getCaretYPosition(startSelection), selectedText);
                         }
                     }
                 }
