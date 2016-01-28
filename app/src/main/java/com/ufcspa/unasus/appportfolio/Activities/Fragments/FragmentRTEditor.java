@@ -26,6 +26,7 @@ import com.onegravity.rteditor.api.RTMediaFactoryImpl;
 import com.onegravity.rteditor.api.RTProxyImpl;
 import com.onegravity.rteditor.api.format.RTFormat;
 import com.onegravity.rteditor.effects.Effects;
+import com.ufcspa.unasus.appportfolio.Activities.MainActivity;
 import com.ufcspa.unasus.appportfolio.Model.Note;
 import com.ufcspa.unasus.appportfolio.R;
 
@@ -183,6 +184,7 @@ public class FragmentRTEditor extends Fragment {
             @Override
             public void onClick(View v) {
                 Toast.makeText(getActivity(), "Abrir aba de comentário específico!", Toast.LENGTH_SHORT).show();
+                ((MainActivity)getActivity()).showCommentsTab();
 
                 Button btn = (Button) v;
                 btn.setBackgroundResource(R.drawable.rounded_corner);

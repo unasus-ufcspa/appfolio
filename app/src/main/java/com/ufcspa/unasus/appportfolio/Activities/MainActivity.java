@@ -5,14 +5,21 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
+import android.support.v4.app.FragmentTabHost;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
+import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 
 import com.mikepenz.crossfader.Crossfader;
+import com.ufcspa.unasus.appportfolio.Activities.Fragments.FragRef;
+import com.ufcspa.unasus.appportfolio.Activities.Fragments.FragmentAttachment;
+import com.ufcspa.unasus.appportfolio.Activities.Fragments.FragmentComments;
 import com.ufcspa.unasus.appportfolio.Activities.Fragments.FragmentRTEditor;
 import com.ufcspa.unasus.appportfolio.Activities.Fragments.FragmentSelectPortfolio;
 import com.ufcspa.unasus.appportfolio.Activities.Fragments.FragmentStudentActivities;
@@ -27,6 +34,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private View bigDrawer;
     private View miniDrawer;
     private Singleton singleton;
+
+    // View lateral (Comentário específico / Comentário geral)
+    private FragmentTabHost slider;
+    private Animation animLeft;
+    private Animation animRight;
+    private boolean visible;
 
     private BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
         @Override
@@ -66,6 +79,31 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         if(savedInstanceState == null)
             changeFragment(0);
+
+        initCommentsTab();
+    }
+
+    private void initCommentsTab()
+    {
+        slider = (FragmentTabHost) findViewById(R.id.slider);
+        slider.setup(this, getSupportFragmentManager(), R.id.realtabcontent);
+        slider.setVisibility(View.GONE);
+
+        DisplayMetrics dm = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(dm);
+        int width = dm.widthPixels;
+
+        slider.getLayoutParams().width = width / 2;
+        slider.requestLayout();
+        slider.bringToFront();
+
+        slider.addTab(slider.newTabSpec("Comments").setIndicator(null, getResources().getDrawable(R.drawable.ic_announcement_black_24dp)), FragmentComments.class, null);
+        slider.addTab(slider.newTabSpec("References").setIndicator(null, getResources().getDrawable(R.drawable.ic_copy)), FragRef.class, null);
+
+        animLeft = AnimationUtils.loadAnimation(this, R.anim.anim_right);
+        animRight = AnimationUtils.loadAnimation(this, R.anim.anim_left);
+
+        visible = false;
     }
 
     private void initMiniDrawer() {
@@ -160,5 +198,21 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void hideDrawer() {
         miniDrawer.setVisibility(View.GONE);
         bigDrawer.setVisibility(View.GONE);
+    }
+
+    public void showCommentsTab()
+    {
+        if(!visible)
+        {
+            slider.setVisibility(View.VISIBLE);
+            slider.startAnimation(animLeft);
+            visible = true;
+        }
+        else
+        {
+            slider.startAnimation(animRight);
+            slider.setVisibility(View.GONE);
+            visible = false;
+        }
     }
 }

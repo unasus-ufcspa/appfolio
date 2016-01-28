@@ -330,7 +330,7 @@ public class ConverterSpannedToHtml {
             mOut.append("\">");
         } else if (style instanceof BackgroundColorSpan) {
             int id = ((BackgroundColorSpan) style).getId();
-            mOut.append("<font id= " + id + " style=\"background-color:#");
+            mOut.append("<font id=\"" + id + "\" style=\"background-color:#");
             String color = Integer.toHexString(((BackgroundColorSpan) style).getBackgroundColor() + 0x01000000);
             while (color.length() < 6) {
                 color = "0" + color;
@@ -373,7 +373,7 @@ public class ConverterSpannedToHtml {
             mOut.append("</font>");
         } else if (style instanceof BackgroundColorSpan) {
             int id = ((BackgroundColorSpan) style).getId();
-            mOut.append("</ id= " + id + " font>");
+            mOut.append("<id=\"" + id + "\" /font>");
         } else if (style instanceof AbsoluteSizeSpan) {
             mOut.append("</font>");
         } else if (style instanceof StrikethroughSpan) {
