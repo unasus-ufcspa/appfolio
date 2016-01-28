@@ -222,7 +222,7 @@ public class FragmentRTEditor extends Fragment {
                     if (!selectedText.isEmpty()) {
                         if (selectedText.length() > 0) {
                             findText(selectedText, mRTMessageField.getText(RTFormat.HTML));
-                           // createSpecificCommentNote(getCaretYPosition(startSelection), selectedText);
+                            createSpecificCommentNote(getCaretYPosition(startSelection), selectedText);
                         }
                     }
                 }
