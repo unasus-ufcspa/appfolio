@@ -39,7 +39,7 @@ public class FragmentComments extends Frag {
         source = DataBaseAdapter.getInstance(getActivity());
 
         singleton = Singleton.getInstance();
-        singleton.idActivityStudent = source.getActivityStudentID(singleton.activity.getIdAtivity(), singleton.portfolioClass.getIdPortfolioStudent());
+//        singleton.idActivityStudent = source.getActivityStudentID(singleton.activity.getIdAtivity(), singleton.portfolioClass.getIdPortfolioStudent());
 
 
         //btGenMess.setOnClickListener(new View.OnClickListener() {
