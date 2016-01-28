@@ -33,4 +33,9 @@ public class TypefaceEffect extends CharacterEffect<RTTypeface, TypefaceSpan> {
         return value == null ? null : new TypefaceSpan(value);
     }
 
+    @Override
+    protected RTSpan<RTTypeface> newSpan(RTTypeface value, int id) {
+        return null;
+    }
+
 }

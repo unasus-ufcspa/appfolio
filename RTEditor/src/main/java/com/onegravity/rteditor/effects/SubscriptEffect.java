@@ -16,9 +16,15 @@
 
 package com.onegravity.rteditor.effects;
 
+import com.onegravity.rteditor.spans.RTSpan;
 import com.onegravity.rteditor.spans.SubscriptSpan;
 
 /**
  * Subscript text
  */
-public class SubscriptEffect extends BooleanEffect<SubscriptSpan> {}
+public class SubscriptEffect extends BooleanEffect<SubscriptSpan> {
+    @Override
+    protected RTSpan<Boolean> newSpan(Boolean value, int id) {
+        return null;
+    }
+}

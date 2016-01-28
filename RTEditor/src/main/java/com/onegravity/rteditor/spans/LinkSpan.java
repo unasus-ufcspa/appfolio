@@ -16,6 +16,8 @@
 
 package com.onegravity.rteditor.spans;
 
+import android.graphics.Color;
+import android.text.TextPaint;
 import android.text.style.URLSpan;
 import android.view.View;
 
@@ -25,10 +27,6 @@ import android.view.View;
  * That View is the RTEditText which implements the LinkSpanListener interface.
  */
 public class LinkSpan extends URLSpan implements RTSpan<String> {
-
-    public interface LinkSpanListener {
-        public void onClick(LinkSpan linkSpan);
-    }
 
     public LinkSpan(String url) {
         super(url);
@@ -44,6 +42,21 @@ public class LinkSpan extends URLSpan implements RTSpan<String> {
     @Override
     public String getValue() {
         return getURL();
+    }
+
+    @Override
+    public void updateDrawState(TextPaint ds) {
+        //if (getURL() != null && !getURL().contains("SpecificComment")) {
+        ds.setColor(Color.BLUE);
+        ds.setUnderlineText(true);
+       //     return;
+       // }
+
+        //ds.bgColor = Color.parseColor("#70E7D0");
+    }
+
+    public interface LinkSpanListener {
+        public void onClick(LinkSpan linkSpan);
     }
 
 }

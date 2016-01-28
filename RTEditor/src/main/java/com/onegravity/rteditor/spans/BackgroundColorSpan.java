@@ -21,13 +21,19 @@ package com.onegravity.rteditor.spans;
  */
 public class BackgroundColorSpan extends android.text.style.BackgroundColorSpan implements RTSpan<Integer> {
 
-    public BackgroundColorSpan(int color) {
+    private int id;
+    public BackgroundColorSpan(int color, int mID) {
         super(color);
+        id = mID;
     }
 
     @Override
     public Integer getValue() {
         return getBackgroundColor();
+    }
+    public int getId()
+    {
+        return id;
     }
 
 }

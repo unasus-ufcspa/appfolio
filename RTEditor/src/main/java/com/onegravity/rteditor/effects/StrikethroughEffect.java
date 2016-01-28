@@ -16,9 +16,15 @@
 
 package com.onegravity.rteditor.effects;
 
+import com.onegravity.rteditor.spans.RTSpan;
 import com.onegravity.rteditor.spans.StrikethroughSpan;
 
 /**
  * Strike-through text
  */
-public class StrikethroughEffect extends BooleanEffect<StrikethroughSpan> {}
+public class StrikethroughEffect extends BooleanEffect<StrikethroughSpan> {
+    @Override
+    protected RTSpan<Boolean> newSpan(Boolean value, int id) {
+        return null;
+    }
+}

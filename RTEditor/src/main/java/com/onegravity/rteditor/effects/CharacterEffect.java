@@ -85,6 +85,47 @@ abstract class CharacterEffect<V, C extends RTSpan<V>> extends Effect<V, C> {
         }
     }
 
+    public void applyToSelection(RTEditText editor, V value, int id) {
+        Selection selection = getSelection(editor);
+        // SPAN_INCLUSIVE_INCLUSIVE is default for empty spans
+        int flags = Spanned.SPAN_EXCLUSIVE_EXCLUSIVE;
+
+        Spannable str = editor.getText();
+
+//        for (RTSpan<V> span : getSpans(str, selection, SpanCollectMode.SPAN_FLAGS)) {
+//            boolean sameSpan = span.getValue().equals(value);
+//            int spanStart = str.getSpanStart(span);
+//            if (spanStart < selection.start()) {
+//                // process preceding spans
+//                if (sameSpan) {
+//                    // we have a preceding span --> use SPAN_EXCLUSIVE_INCLUSIVE instead of SPAN_INCLUSIVE_INCLUSIVE
+//                    flags = Spanned.SPAN_EXCLUSIVE_INCLUSIVE;
+//                    selection.offset(selection.start() - spanStart, 0);
+//                } else {
+//                    str.setSpan(newSpan(span.getValue()), spanStart, selection.start(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+//                }
+//            }
+//            int spanEnd = str.getSpanEnd(span);
+//            if (spanEnd > selection.end()) {
+//                // process succeeding spans
+//                if (sameSpan) {
+//                    selection.offset(0, spanEnd - selection.end());
+//                } else {
+//                    str.setSpan(newSpan(span.getValue()), selection.end(), spanEnd, Spanned.SPAN_EXCLUSIVE_INCLUSIVE);
+//                }
+//            }
+//            str.removeSpan(span);
+//        }
+
+        if (value != null) {
+            RTSpan<V> newSpan = newSpan(value, id);
+            if (newSpan != null) {
+                str.setSpan(newSpan, selection.start(), selection.end(), flags);
+            }
+        }
+    }
+
+
 
     /**
      * Create an RTSpan for this effect.
@@ -96,5 +137,6 @@ abstract class CharacterEffect<V, C extends RTSpan<V>> extends Effect<V, C> {
      * override applyToSelection(RTEditText, V)
      */
     abstract protected RTSpan<V> newSpan(V value);
+    abstract protected RTSpan<V> newSpan(V value, int id);
 
 }

@@ -18,12 +18,14 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
-
-import com.onegravity.rteditor.*;
-import com.onegravity.rteditor.api.*;
+import com.onegravity.rteditor.RTEditText;
+import com.onegravity.rteditor.RTManager;
+import com.onegravity.rteditor.RTToolbar;
+import com.onegravity.rteditor.api.RTApi;
+import com.onegravity.rteditor.api.RTMediaFactoryImpl;
+import com.onegravity.rteditor.api.RTProxyImpl;
 import com.onegravity.rteditor.api.format.RTFormat;
 import com.onegravity.rteditor.effects.Effects;
-import com.ufcspa.unasus.appportfolio.Activities.MainActivity;
 import com.ufcspa.unasus.appportfolio.Model.Note;
 import com.ufcspa.unasus.appportfolio.R;
 
@@ -145,6 +147,15 @@ public class FragmentRTEditor extends Fragment {
         return 0;
     }
 
+    private void findText(String selTxt,String texto){
+        String tag="Processing text:";
+        Log.d(tag,"finding selected text:"+selTxt +"\n in text:"+texto);
+        int start=texto.indexOf(selTxt);
+        int end =start+selTxt.length();
+        Log.d(tag,"selected text starts at position '"+start+"' ends at position '"+end+"'");
+        Log.d(tag,"substring generated:"+texto.substring(start,end));
+    }
+
     private void changePositionOfNotes(float posStart, float posEnd) {
         if (specificCommentsNotes != null) {
             for (int i = 0; i < specificCommentsNotes.size(); i++) {
@@ -206,10 +217,11 @@ public class FragmentRTEditor extends Fragment {
                 if (!mRTMessageField.getText().toString().isEmpty()) {
                     startSelection = mRTMessageField.getSelectionStart();
                     endSelection = mRTMessageField.getSelectionEnd();
-                    String selectedText = mRTMessageField.getText().toString().substring(startSelection, endSelection);
+                    String selectedText = mRTMessageField.getText(RTFormat.HTML).substring(startSelection, endSelection);
 
                     if (!selectedText.isEmpty()) {
                         if (selectedText.length() > 0) {
+                            findText(selectedText, mRTMessageField.getText(RTFormat.HTML));
                             createSpecificCommentNote(getCaretYPosition(startSelection), selectedText);
                         }
                     }
@@ -228,7 +240,6 @@ public class FragmentRTEditor extends Fragment {
 
         @Override
         public void onDestroyActionMode(ActionMode mode) {
-//            Effects.BGCOLOR.applyToSelection(mRTMessageField, null);
         }
 
         @Override
@@ -254,8 +265,7 @@ public class FragmentRTEditor extends Fragment {
 
             createMarginForRTEditor();
 
-//            mRTManager.onEffectSelected(Effects.BGCOLOR, getResources().getColor(R.color.base_green));
-            mRTManager.onEffectSelected(Effects.LINK, "SpecificComment "+ String.valueOf(currentSpecificComment));
+            mRTManager.onEffectSelected(Effects.BGCOLOR, getResources().getColor(R.color.base_green), idButton);
             mRTMessageField.setSelection(endSelection);
             mRTMessageField.setSelected(false);
         }
@@ -264,9 +274,8 @@ public class FragmentRTEditor extends Fragment {
     private class FullScreen implements View.OnClickListener
     {
         @Override
-        public void onClick(View v)
-        {
-            Log.d("rteditor",mRTMessageField.getText(RTFormat.HTML));
+        public void onClick(View v) {
+            Log.d("rteditor", mRTMessageField.getText(RTFormat.HTML));
         }
     }
 }

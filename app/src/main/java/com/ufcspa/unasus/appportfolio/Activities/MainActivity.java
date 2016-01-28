@@ -156,4 +156,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 break;
         }
     }
+
+    public void hideDrawer() {
+        miniDrawer.setVisibility(View.GONE);
+        bigDrawer.setVisibility(View.GONE);
+    }
 }

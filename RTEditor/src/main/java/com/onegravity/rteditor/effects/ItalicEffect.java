@@ -17,8 +17,14 @@
 package com.onegravity.rteditor.effects;
 
 import com.onegravity.rteditor.spans.ItalicSpan;
+import com.onegravity.rteditor.spans.RTSpan;
 
 /**
  * Italic text
  */
-public class ItalicEffect extends BooleanEffect<ItalicSpan> {}
+public class ItalicEffect extends BooleanEffect<ItalicSpan> {
+    @Override
+    protected RTSpan<Boolean> newSpan(Boolean value, int id) {
+        return null;
+    }
+}

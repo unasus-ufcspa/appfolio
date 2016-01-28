@@ -17,8 +17,14 @@
 package com.onegravity.rteditor.effects;
 
 import com.onegravity.rteditor.spans.BoldSpan;
+import com.onegravity.rteditor.spans.RTSpan;
 
 /**
  * Bold text
  */
-public class BoldEffect extends BooleanEffect<BoldSpan> {}
+public class BoldEffect extends BooleanEffect<BoldSpan> {
+    @Override
+    protected RTSpan<Boolean> newSpan(Boolean value, int id) {
+        return null;
+    }
+}
