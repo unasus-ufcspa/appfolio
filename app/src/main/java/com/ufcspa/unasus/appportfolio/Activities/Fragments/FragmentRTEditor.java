@@ -4,9 +4,11 @@ import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTabHost;
 import android.text.Editable;
 import android.text.Layout;
 import android.text.TextWatcher;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.ActionMode;
 import android.view.LayoutInflater;
@@ -14,8 +16,11 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.onegravity.rteditor.RTEditText;
@@ -42,6 +47,12 @@ public class FragmentRTEditor extends Fragment {
     private ImageButton fullScreen;
 
     private ArrayList<Note> specificCommentsNotes;
+
+    // View lateral (Comentário específico / Comentário geral)
+    private RelativeLayout slider;
+    private Animation animLeft;
+    private Animation animRight;
+    private boolean visible;
 
     public FragmentRTEditor() {}
 
@@ -96,6 +107,8 @@ public class FragmentRTEditor extends Fragment {
         fullScreen = (ImageButton) view.findViewById(R.id.fullscreen);
         fullScreen.setOnClickListener(new FullScreen());
 
+        initCommentsTab(view);
+
         return view;
     }
 
@@ -120,9 +133,6 @@ public class FragmentRTEditor extends Fragment {
                     Note aux = specificCommentsNotes.get(i);
                     scrollview.addView(createButton(aux.getBtId(), String.valueOf(aux.getBtId()), aux.getBtY()));
                 }
-
-                if (specificCommentsNotes.size() > 0)
-                    createMarginForRTEditor();
             }
 
             currentSpecificComment = savedInstanceState.getInt("currentSpecificComment", -1);
@@ -135,6 +145,44 @@ public class FragmentRTEditor extends Fragment {
         if (mRTManager != null) {
             mRTManager.onDestroy(true);
         }
+    }
+
+    private void initCommentsTab(View view)
+    {
+        slider = (RelativeLayout) view.findViewById(R.id.slider);
+        slider.setVisibility(View.GONE);
+
+        DisplayMetrics dm = new DisplayMetrics();
+        getActivity().getWindowManager().getDefaultDisplay().getMetrics(dm);
+        int width = dm.widthPixels;
+
+        slider.getLayoutParams().width = width / 2;
+        slider.requestLayout();
+        slider.bringToFront();
+
+        ImageButton geral = (ImageButton)view.findViewById(R.id.btn_geral);
+        ImageButton specific = (ImageButton)view.findViewById(R.id.btn_specific);
+
+        getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.comments_container, new FragmentComments()).commit();
+
+        geral.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.comments_container, new FragmentComments()).commit();
+            }
+        });
+
+        specific.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.comments_container, new FragRef()).commit();
+            }
+        });
+
+        animLeft = AnimationUtils.loadAnimation(getActivity(), R.anim.anim_right);
+        animRight = AnimationUtils.loadAnimation(getActivity(), R.anim.anim_left);
+
+        visible = false;
     }
 
     private float getCaretYPosition(int position) {
@@ -169,12 +217,6 @@ public class FragmentRTEditor extends Fragment {
         }
     }
 
-    private void createMarginForRTEditor() {
-        ViewGroup.MarginLayoutParams params = (ViewGroup.MarginLayoutParams) mRTMessageField.getLayoutParams();
-        params.leftMargin = 70;
-        mRTMessageField.setLayoutParams(params);
-    }
-
     private Button createButton(int id, String value, float yPosition) {
         LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         Button note = new Button(getContext());
@@ -183,8 +225,7 @@ public class FragmentRTEditor extends Fragment {
         note.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(getActivity(), "Abrir aba de comentário específico!", Toast.LENGTH_SHORT).show();
-                ((MainActivity)getActivity()).showCommentsTab();
+                showCommentsTab(true);
 
                 Button btn = (Button) v;
                 btn.setBackgroundResource(R.drawable.rounded_corner);
@@ -265,8 +306,6 @@ public class FragmentRTEditor extends Fragment {
 
             scrollview.addView(createButton(idButton, String.valueOf(currentSpecificComment), yButton));
 
-            createMarginForRTEditor();
-
             mRTManager.onEffectSelected(Effects.BGCOLOR, getResources().getColor(R.color.base_green), idButton);
             mRTMessageField.setSelection(endSelection);
             mRTMessageField.setSelected(false);
@@ -278,6 +317,27 @@ public class FragmentRTEditor extends Fragment {
         @Override
         public void onClick(View v) {
             Log.d("rteditor", mRTMessageField.getText(RTFormat.HTML));
+        }
+    }
+
+    public void showCommentsTab(Boolean isSpecificComment)
+    {
+        if(isSpecificComment)
+            getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.comments_container, new FragRef()).commit();
+        else
+            getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.comments_container, new FragmentComments()).commit();
+
+        if(!visible)
+        {
+            slider.setVisibility(View.VISIBLE);
+            slider.startAnimation(animLeft);
+            visible = true;
+        }
+        else
+        {
+            slider.startAnimation(animRight);
+            slider.setVisibility(View.GONE);
+            visible = false;
         }
     }
 }

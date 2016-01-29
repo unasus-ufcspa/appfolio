@@ -28,7 +28,8 @@
                 android:gravity="top"
                 android:hint="Boa Atividade!"
                 android:imeOptions="actionDone|flagNoEnterAction"
-                android:inputType="textMultiLine|textAutoCorrect|textCapSentences" />
+                android:inputType="textMultiLine|textAutoCorrect|textCapSentences"
+                android:layout_marginLeft="35dp" />
 
         </RelativeLayout>
     </ScrollView>
@@ -41,5 +42,48 @@
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
         android:background="@drawable/fullscreen_text" />
+
+    <RelativeLayout
+        android:id="@+id/slider"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentRight="true"
+        android:background="@android:color/transparent"
+        android:visibility="gone">
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@android:color/transparent"
+            android:id="@+id/button_container">
+
+            <ImageButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/btn_geral"
+                android:layout_weight="1"
+                android:background="@android:color/transparent"
+                android:src="@drawable/specific_comment_right_tab"
+                android:adjustViewBounds="false" />
+
+            <ImageButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/btn_specific"
+                android:layout_weight="1"
+                android:background="@android:color/transparent"
+                android:src="@drawable/specific_comment_right_tab"
+                android:adjustViewBounds="false" />
+        </LinearLayout>
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@+id/button_container"
+            android:layout_centerHorizontal="true"
+            android:id="@+id/comments_container"></FrameLayout>
+
+    </RelativeLayout>
 
 </RelativeLayout>
