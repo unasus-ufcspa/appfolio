@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.text.Editable;
 import android.text.Layout;
+import android.text.Spannable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.ActionMode;
@@ -25,6 +26,11 @@ import com.onegravity.rteditor.api.RTApi;
 import com.onegravity.rteditor.api.RTMediaFactoryImpl;
 import com.onegravity.rteditor.api.RTProxyImpl;
 import com.onegravity.rteditor.api.format.RTFormat;
+import com.onegravity.rteditor.api.format.RTHtml;
+import com.onegravity.rteditor.api.media.RTAudio;
+import com.onegravity.rteditor.api.media.RTImage;
+import com.onegravity.rteditor.api.media.RTVideo;
+import com.onegravity.rteditor.converter.ConverterSpannedToHtml;
 import com.onegravity.rteditor.effects.Effects;
 import com.ufcspa.unasus.appportfolio.Activities.MainActivity;
 import com.ufcspa.unasus.appportfolio.Model.Note;
@@ -148,14 +154,33 @@ public class FragmentRTEditor extends Fragment {
         return 0;
     }
 
-    private void findText(String selTxt,String texto){
+    private int findText(String selTxt,String texto){
         String tag="Processing text:";
         Log.d(tag,"finding selected text:"+selTxt +"\n in text:"+texto);
         int start=texto.indexOf(selTxt);
         int end =start+selTxt.length();
         Log.d(tag,"selected text starts at position '"+start+"' ends at position '"+end+"'");
         Log.d(tag,"substring generated:"+texto.substring(start,end));
+        return start;
     }
+
+
+    public String changeColor(String text,String color){
+        //return color.toCharArray();
+        int start=text.indexOf("#");
+        Log.d("changeColor","text:"+text);
+        Log.d("changeColor","cor:"+color);
+        Log.d("changeColor","encontrou # na posição:"+start);
+        String textWChColor=text;
+        int j=1;
+        for (int i=start+1;i<start+6;i++){
+            textWChColor.replace(text.charAt(start), color.charAt(j));
+            j++;
+        }
+        Log.d("changeColor","text is now:"+textWChColor);
+        return textWChColor;
+    }
+
 
     private void changePositionOfNotes(float posStart, float posEnd) {
         if (specificCommentsNotes != null) {
@@ -179,10 +204,13 @@ public class FragmentRTEditor extends Fragment {
         LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         Button note = new Button(getContext());
         note = (Button) inflater.inflate(R.layout.btn_specific_comment, scrollview, false);
-
+        String tagID="id='"+id+"'";
+        //changeColor(tagID,"#FFFFFF");
         note.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+
                 Toast.makeText(getActivity(), "Abrir aba de comentário específico!", Toast.LENGTH_SHORT).show();
                 ((MainActivity)getActivity()).showCommentsTab();
 
@@ -207,6 +235,18 @@ public class FragmentRTEditor extends Fragment {
         return note;
     }
 
+    private String getSelectedText(){
+        int selStart = mRTMessageField.getSelectionStart();
+        int selEnd = mRTMessageField.getSelectionEnd();
+        Spannable text = (Spannable) mRTMessageField.getText().subSequence(selStart, selEnd);
+        RTHtml<RTImage, RTAudio, RTVideo> rtHtml = new ConverterSpannedToHtml().convert(text, RTFormat.HTML);
+        String thatsMySelectionInHTML = rtHtml.getText();
+        return thatsMySelectionInHTML;
+    }
+
+
+
+
     private class ActionBarCallBack implements ActionMode.Callback {
 
         int startSelection;
@@ -217,14 +257,17 @@ public class FragmentRTEditor extends Fragment {
             if (item.getItemId() == R.id.action_favorite)
             {
                 if (!mRTMessageField.getText().toString().isEmpty()) {
-                    startSelection = mRTMessageField.getSelectionStart();
-                    endSelection = mRTMessageField.getSelectionEnd();
-                    String selectedText = mRTMessageField.getText(RTFormat.HTML).substring(startSelection, endSelection);
+//                    startSelection = mRTMessageField.getSelectionStart();
+//                    endSelection = mRTMessageField.getSelectionEnd();
+                    String selectedText =getSelectedText();
+                            //mRTMessageField.getText(RTFormat.HTML).substring(startSelection, endSelection);
 
                     if (!selectedText.isEmpty()) {
                         if (selectedText.length() > 0) {
                             findText(selectedText, mRTMessageField.getText(RTFormat.HTML));
                             createSpecificCommentNote(getCaretYPosition(startSelection), selectedText);
+                            //changeColor(selectedText,"#FFFFFF");
+                            Log.d("editor", mRTMessageField.getText(RTFormat.HTML));
                         }
                     }
                 }
