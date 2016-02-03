@@ -212,7 +212,7 @@ public class FragmentRTEditor extends Fragment {
 
 
                 Toast.makeText(getActivity(), "Abrir aba de comentário específico!", Toast.LENGTH_SHORT).show();
-                ((MainActivity)getActivity()).showCommentsTab();
+                //((MainActivity)getActivity()).showCommentsTab();
 
                 Button btn = (Button) v;
                 btn.setBackgroundResource(R.drawable.rounded_corner);
