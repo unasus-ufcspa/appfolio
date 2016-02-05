@@ -20,6 +20,7 @@ import com.mikepenz.crossfader.Crossfader;
 import com.ufcspa.unasus.appportfolio.Activities.Fragments.FragRef;
 import com.ufcspa.unasus.appportfolio.Activities.Fragments.FragmentAttachment;
 import com.ufcspa.unasus.appportfolio.Activities.Fragments.FragmentComments;
+import com.ufcspa.unasus.appportfolio.Activities.Fragments.FragmentEditText;
 import com.ufcspa.unasus.appportfolio.Activities.Fragments.FragmentRTEditor;
 import com.ufcspa.unasus.appportfolio.Activities.Fragments.FragmentSelectPortfolio;
 import com.ufcspa.unasus.appportfolio.Activities.Fragments.FragmentStudentActivities;
