@@ -26,6 +26,8 @@ import android.text.style.StrikethroughSpan;
 import android.text.style.SubscriptSpan;
 import android.text.style.SuperscriptSpan;
 import android.text.style.URLSpan;
+
+import com.onegravity.rteditor.spans.BackgroundColorSpan;
 import com.onegravity.rteditor.spans.UnderlineSpan;
 
 import com.onegravity.rteditor.api.format.RTFormat;
@@ -272,32 +274,16 @@ public class ConverterSpannedToHtml {
 
             } else {
 
-//                boolean isBackgroundSpan = span instanceof com.onegravity.rteditor.spans.BackgroundColorSpan;
-//                if (isBackgroundSpan){
-//                    spans.remove(span);
-//
-//                    if(!((com.onegravity.rteditor.spans.BackgroundColorSpan)span).isOpen)
-//                    {
-//                        handleStartTag(span);
-//                        ((com.onegravity.rteditor.spans.BackgroundColorSpan) span).isOpen = true;
-//                    }
-//
-//                    convertText(text, Math.max(spanStart, start), Math.min(spanEnd, end), spans);
-//
-//                    handleEndTag(span);
-//
-//                    start = spanEnd;
-//                }else {
-                    // CharacterStyle found
-                    spans.remove(span);
+                // CharacterStyle found
 
-                    if (handleStartTag(span)) {
-                        convertText(text, Math.max(spanStart, start), Math.min(spanEnd, end), spans);
-                    }
-                    handleEndTag(span);
+                spans.remove(span);
 
-                    start = spanEnd;
-//                }
+                if (handleStartTag(span)) {
+                    convertText(text, Math.max(spanStart, start), Math.min(spanEnd, end), spans);
+                }
+                handleEndTag(span);
+
+                start = spanEnd;
             }
 
         }
