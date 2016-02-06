@@ -18,6 +18,7 @@ package com.onegravity.rteditor.converter;
 
 import android.text.Spanned;
 import android.text.style.AbsoluteSizeSpan;
+import android.text.style.BackgroundColorSpan;
 import android.text.style.CharacterStyle;
 import android.text.style.ForegroundColorSpan;
 import android.text.style.ParagraphStyle;
@@ -25,8 +26,6 @@ import android.text.style.StrikethroughSpan;
 import android.text.style.SubscriptSpan;
 import android.text.style.SuperscriptSpan;
 import android.text.style.URLSpan;
-
-import com.onegravity.rteditor.spans.BackgroundColorSpan;
 import com.onegravity.rteditor.spans.UnderlineSpan;
 
 import com.onegravity.rteditor.api.format.RTFormat;
@@ -273,16 +272,32 @@ public class ConverterSpannedToHtml {
 
             } else {
 
-                // CharacterStyle found
+//                boolean isBackgroundSpan = span instanceof com.onegravity.rteditor.spans.BackgroundColorSpan;
+//                if (isBackgroundSpan){
+//                    spans.remove(span);
+//
+//                    if(!((com.onegravity.rteditor.spans.BackgroundColorSpan)span).isOpen)
+//                    {
+//                        handleStartTag(span);
+//                        ((com.onegravity.rteditor.spans.BackgroundColorSpan) span).isOpen = true;
+//                    }
+//
+//                    convertText(text, Math.max(spanStart, start), Math.min(spanEnd, end), spans);
+//
+//                    handleEndTag(span);
+//
+//                    start = spanEnd;
+//                }else {
+                    // CharacterStyle found
+                    spans.remove(span);
 
-                spans.remove(span);
+                    if (handleStartTag(span)) {
+                        convertText(text, Math.max(spanStart, start), Math.min(spanEnd, end), spans);
+                    }
+                    handleEndTag(span);
 
-                if (handleStartTag(span)) {
-                    convertText(text, Math.max(spanStart, start), Math.min(spanEnd, end), spans);
-                }
-                handleEndTag(span);
-
-                start = spanEnd;
+                    start = spanEnd;
+//                }
             }
 
         }
@@ -329,8 +344,7 @@ public class ConverterSpannedToHtml {
             mOut.append(color);
             mOut.append("\">");
         } else if (style instanceof BackgroundColorSpan) {
-            int id = ((BackgroundColorSpan) style).getId();
-            mOut.append("<font id='"+ id + "' style=\"background-color:#");
+            mOut.append("<!--1--><font style=\"background-color:#");
             String color = Integer.toHexString(((BackgroundColorSpan) style).getBackgroundColor() + 0x01000000);
             while (color.length() < 6) {
                 color = "0" + color;
@@ -372,8 +386,7 @@ public class ConverterSpannedToHtml {
         } else if (style instanceof ForegroundColorSpan) {
             mOut.append("</font>");
         } else if (style instanceof BackgroundColorSpan) {
-            int id = ((BackgroundColorSpan) style).getId();
-            mOut.append("<id='" + id + "' /font>");
+            mOut.append("</font><!--1-->");
         } else if (style instanceof AbsoluteSizeSpan) {
             mOut.append("</font>");
         } else if (style instanceof StrikethroughSpan) {
