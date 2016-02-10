@@ -18,7 +18,7 @@ package com.onegravity.rteditor.converter;
 
 import android.text.Spanned;
 import android.text.style.AbsoluteSizeSpan;
-import android.text.style.BackgroundColorSpan;
+//import android.text.style.BackgroundColorSpan;
 import android.text.style.CharacterStyle;
 import android.text.style.ForegroundColorSpan;
 import android.text.style.ParagraphStyle;
@@ -330,7 +330,8 @@ public class ConverterSpannedToHtml {
             mOut.append(color);
             mOut.append("\">");
         } else if (style instanceof BackgroundColorSpan) {
-            mOut.append("<!--1--><font style=\"background-color:#");
+            int id = ((BackgroundColorSpan)style).getId();
+            mOut.append("<font id=" + id + " style=\"background-color:#");
             String color = Integer.toHexString(((BackgroundColorSpan) style).getBackgroundColor() + 0x01000000);
             while (color.length() < 6) {
                 color = "0" + color;
@@ -372,7 +373,8 @@ public class ConverterSpannedToHtml {
         } else if (style instanceof ForegroundColorSpan) {
             mOut.append("</font>");
         } else if (style instanceof BackgroundColorSpan) {
-            mOut.append("</font><!--1-->");
+            int id = ((BackgroundColorSpan)style).getId();
+            mOut.append("</font id=" + id + ">");
         } else if (style instanceof AbsoluteSizeSpan) {
             mOut.append("</font>");
         } else if (style instanceof StrikethroughSpan) {
