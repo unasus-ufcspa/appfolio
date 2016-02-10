@@ -93,7 +93,7 @@ public class FragmentRTEditor extends Fragment {
 
         mRTMessageField.setCustomSelectionActionModeCallback(new ActionBarCallBack());
 
-        mRTMessageField.setRichTextEditing(true, "<!--1--><font style=\"background-color:#70e7d0\">Geeg</font><!--1-->");
+//        mRTMessageField.setRichTextEditing(true, "<!--1--><font style=\"background-color:#70e7d0\">Geeg</font><!--1--><!--2--><font style=\"background-color:#70e7d0\">Geeg</font><!--2--><!--3--><font style=\"background-color:#70e7d0\">Geeg</font><!--3-->");
 
         mRTMessageField.addTextChangedListener(new TextWatcher() {
             private float posStart;
@@ -343,9 +343,6 @@ public class FragmentRTEditor extends Fragment {
         String thatsMySelectionInHTML = rtHtml.getText();
         return thatsMySelectionInHTML;
     }
-
-
-
 
     private class ActionBarCallBack implements ActionMode.Callback {
 

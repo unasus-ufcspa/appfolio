@@ -64,8 +64,10 @@
                 android:id="@+id/btn_geral"
                 android:layout_weight="1"
                 android:background="@android:color/transparent"
-                android:src="@drawable/specific_comment_right_tab"
-                android:adjustViewBounds="false" />
+                android:src="@drawable/geral_comment_right_tab"
+                android:adjustViewBounds="false"
+                android:visibility="visible"
+                android:scaleType="fitCenter" />
 
             <ImageButton
                 android:layout_width="wrap_content"
@@ -74,7 +76,8 @@
                 android:layout_weight="1"
                 android:background="@android:color/transparent"
                 android:src="@drawable/specific_comment_right_tab"
-                android:adjustViewBounds="false" />
+                android:adjustViewBounds="false"
+                android:scaleType="fitCenter" />
         </LinearLayout>
 
         <FrameLayout
