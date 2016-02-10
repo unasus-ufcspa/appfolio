@@ -27,7 +27,7 @@ import android.text.style.SubscriptSpan;
 import android.text.style.SuperscriptSpan;
 import android.text.style.URLSpan;
 
-import com.onegravity.rteditor.spans.BackgroundColorSpan;
+//import com.onegravity.rteditor.spans.BackgroundColorSpan;
 import com.onegravity.rteditor.spans.UnderlineSpan;
 
 import com.onegravity.rteditor.api.format.RTFormat;

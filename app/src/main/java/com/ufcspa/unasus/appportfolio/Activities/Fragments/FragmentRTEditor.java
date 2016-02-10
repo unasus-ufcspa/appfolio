@@ -71,6 +71,7 @@ public class FragmentRTEditor extends Fragment {
         View view = inflater.inflate(R.layout.fragment_rteditor, null);
 
         specificCommentsNotes = new ArrayList<>();
+        btLastNote= new Note(0,"null",0);
 
         scrollview = (ViewGroup) view.findViewById(R.id.comments);
 
@@ -220,7 +221,6 @@ public class FragmentRTEditor extends Fragment {
 
 
     public String changeColor(String text,String tag,String color){
-        //return color.toCharArray();
 
         int start=text.indexOf("#",text.indexOf(tag));
         int end=start+7;
@@ -278,21 +278,32 @@ public class FragmentRTEditor extends Fragment {
         LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         Button note = new Button(getContext());
         note = (Button) inflater.inflate(R.layout.btn_specific_comment, scrollview, false);
-        final String tagID="id='"+id+"'";
+        final String tagID="<!--"+id+"-->";
         //changeColor(tagID,Color.DKGRAY);
         note.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showCommentsTab(true);
+                String amarelo= "#FFFF00";
+                String azul="#0080FF";
+                //showCommentsTab(true);
                 String newColoredText=null;
+                Log.d("editor", "clicou na nota com id:" + id);
                 if(btNoteFirtClicked==false){
                     btNoteNow= new Note(id,value,yPosition);
                     //newColoredText=changeColor(mRTMessageField.getText(RTFormat.HTML), tagID, "#3763c8");
+                    Log.d("editor", "primeira vez que clica no bt:" + id);
+                    //btNoteFirtClicked=true; troca flag botao ja foi clicado
                 }else{
                     copyNoteObject();
                     btNoteNow=new Note(id,value,yPosition);
-                    //newColoredText=changeColor(mRTMessageField.getText(RTFormat.HTML), btLastNote.getId, "#FF3F3F"); // altera a cor do texto vinculado a ultima nota clicada para claro
-                    //newColoredText=changeColor(newColoredText,""+btNoteNow.getBtId(), "#3763c8"); //altera a cor do texto vinculado a nota atual clicada para cor de marcacao
+                    String txtOld=changeColor(mRTMessageField.getText(RTFormat.HTML), "font id="+btLastNote.getBtId(), amarelo); // altera a cor do texto vinculado a ultima nota clicada para claro
+                    Log.d("editor","text old with color yellow:"+txtOld);
+                    newColoredText=changeColor(txtOld, "font id="+btNoteNow.getBtId(), azul); //altera a cor do texto vinculado a nota atual clicada para cor de marcacao
+                    Log.d("editor","new colored text with yellow and blue:"+newColoredText);
+                    mRTMessageField.setRichTextEditing(true, newColoredText);
+                    Log.d("editor", "text now in HTML is:" + mRTMessageField.getText(RTFormat.HTML));
+                    //newColoredText=changeColor(mRTMessageField.getText(RTFormat.HTML), btLastNote.getId, "#FF3F3F");
+                    //newColoredText=changeColor(newColoredText,""+btNoteNow.getBtId(), "#3763c8");
                 }
 
                 
@@ -318,7 +329,7 @@ public class FragmentRTEditor extends Fragment {
     }
 
 
-    public void copyNoteObject(){
+    public void copyNoteObject(){//ultima nota recebe a atual
         btLastNote.setBtId(btNoteNow.getBtId());
         btLastNote.setSelectedText(btNoteNow.getSelectedText());
         btLastNote.setBtY(btNoteNow.getBtY());
@@ -346,7 +357,7 @@ public class FragmentRTEditor extends Fragment {
             if (item.getItemId() == R.id.action_favorite)
             {
                 if (!mRTMessageField.getText().toString().isEmpty()) {
-//                    startSelection = mRTMessageField.getSelectionStart();
+                    startSelection = mRTMessageField.getSelectionStart();
                     endSelection = mRTMessageField.getSelectionEnd();
                     String selectedText =getSelectedText();
                             //mRTMessageField.getText(RTFormat.HTML).substring(startSelection, endSelection);
