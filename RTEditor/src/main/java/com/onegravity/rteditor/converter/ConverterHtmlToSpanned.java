@@ -679,10 +679,6 @@ public class ConverterHtmlToSpanned implements ContentHandler {
         Object obj = getLast(Font.class);
         int where = mResult.getSpanStart(obj);
 
-        Spannable text = (Spannable) Html.fromHtml(mSource).subSequence(where, len);
-        RTHtml<RTImage, RTAudio, RTVideo> rtHtml = new ConverterSpannedToHtml().convert(text, RTFormat.HTML);
-        String thatsMySelectionInHTML = rtHtml.getText();
-
         mResult.removeSpan(obj);
 
         if (where != len) {
@@ -788,6 +784,12 @@ public class ConverterHtmlToSpanned implements ContentHandler {
             int end = builder.getSpanEnd(this);
             builder.removeSpan(this);
             if (start >= 0 && end > start && end <= builder.length()) {
+                if(mSpan instanceof BackgroundColorSpan)
+                    if(((BackgroundColorSpan) mSpan).getId() >= 1)
+                    {
+                        builder.setSpan(mSpan, start, end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                        return;
+                    }
                 builder.setSpan(mSpan, start, end, Spanned.SPAN_EXCLUSIVE_INCLUSIVE);
             }
         }

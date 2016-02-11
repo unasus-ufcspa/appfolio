@@ -285,6 +285,7 @@ public class ConverterSpannedToHtml {
                     convertText(text, Math.max(spanStart, start), Math.min(spanEnd, end), spans);
                 }
 
+//                if(end >= spanEnd)
                 handleEndTag(span);
 
                 start = spanEnd;
