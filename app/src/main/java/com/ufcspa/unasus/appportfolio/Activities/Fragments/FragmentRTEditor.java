@@ -268,12 +268,6 @@ public class FragmentRTEditor extends Fragment {
         }
     }
 
-    private void createMarginForRTEditor() {
-        ViewGroup.MarginLayoutParams params = (ViewGroup.MarginLayoutParams) mRTMessageField.getLayoutParams();
-        params.leftMargin = 70;
-        mRTMessageField.setLayoutParams(params);
-    }
-
     private Button createButton(final int id, final String value, final float yPosition) {
         LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         Button note = new Button(getContext());

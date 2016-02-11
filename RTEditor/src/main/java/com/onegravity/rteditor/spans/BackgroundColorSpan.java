@@ -22,12 +22,16 @@ package com.onegravity.rteditor.spans;
 public class BackgroundColorSpan extends android.text.style.BackgroundColorSpan implements RTSpan<Integer> {
 
     private int id;
+    private boolean isOpen;
+
     public BackgroundColorSpan(int color, int mID) {
         super(color);
         id = mID;
+        isOpen = false;
     }
 
     @Override
+
     public Integer getValue() {
         return getBackgroundColor();
     }
@@ -35,5 +39,6 @@ public class BackgroundColorSpan extends android.text.style.BackgroundColorSpan 
     {
         return id;
     }
-
+    public void setOpen(boolean open){ isOpen = open; }
+    public boolean isOpen(){return isOpen; }
 }

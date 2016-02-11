@@ -27,7 +27,7 @@ import android.text.style.SubscriptSpan;
 import android.text.style.SuperscriptSpan;
 import android.text.style.URLSpan;
 
-//import com.onegravity.rteditor.spans.BackgroundColorSpan;
+import com.onegravity.rteditor.spans.BackgroundColorSpan;
 import com.onegravity.rteditor.spans.UnderlineSpan;
 
 import com.onegravity.rteditor.api.format.RTFormat;
@@ -96,6 +96,11 @@ public class ConverterSpannedToHtml {
 
     private void convertParagraphs() {
         RTLayout rtLayout = new RTLayout(mText);
+
+        for(BackgroundColorSpan bcs : mText.getSpans(0,mText.length(), BackgroundColorSpan.class))
+        {
+            bcs.setOpen(false);
+        }
 
         for (Paragraph paragraph : rtLayout.getParagraphs()) {
             // retrieve all spans for this paragraph
@@ -267,20 +272,19 @@ public class ConverterSpannedToHtml {
             int spanEnd = span == null ? Integer.MAX_VALUE : text.getSpanEnd(span);
 
             if (start < spanStart) {
-
                 // no paragraph, just plain text
                 escape(text, start, Math.min(end, spanStart));
                 start = spanStart;
 
             } else {
-
                 // CharacterStyle found
-
                 spans.remove(span);
 
-                if (handleStartTag(span)) {
+                if (handleStartTag(span))
+                {
                     convertText(text, Math.max(spanStart, start), Math.min(spanEnd, end), spans);
                 }
+
                 handleEndTag(span);
 
                 start = spanEnd;
@@ -330,6 +334,10 @@ public class ConverterSpannedToHtml {
             mOut.append(color);
             mOut.append("\">");
         } else if (style instanceof BackgroundColorSpan) {
+            if(((BackgroundColorSpan) style).isOpen())
+                return true;
+            else
+                ((BackgroundColorSpan) style).setOpen(true);
             int id = ((BackgroundColorSpan)style).getId();
             mOut.append("<font id=" + id + " style=\"background-color:#");
             String color = Integer.toHexString(((BackgroundColorSpan) style).getBackgroundColor() + 0x01000000);
