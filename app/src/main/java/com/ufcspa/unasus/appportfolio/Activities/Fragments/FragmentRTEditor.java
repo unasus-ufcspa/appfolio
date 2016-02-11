@@ -94,7 +94,7 @@ public class FragmentRTEditor extends Fragment {
 
         mRTMessageField.setCustomSelectionActionModeCallback(new ActionBarCallBack());
 
-//        mRTMessageField.setRichTextEditing(true, "<!--1--><font style=\"background-color:#70e7d0\">Geeg</font><!--1--><!--2--><font style=\"background-color:#70e7d0\">Geeg</font><!--2--><!--3--><font style=\"background-color:#70e7d0\">Geeg</font><!--3-->");
+        mRTMessageField.setRichTextEditing(true, "<font id=1 style=\"background-color:#ffff00\">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris convallis ipsum vel sagittis scelerisque. Phasellus vestibulum sed felis quis faucibus. <font id=-1 style=\"background-color:#ff0000\">Nunc egestas dictum fermentum. Proin pharetra libero nisl, id venenatis magna pretium <font id=2 style=\"background-color:#0080ff\">nec. Donec scelerisque enim a sapien finibus, et elementum leo sagittis. Vivamus quis dictum libero, eu blandit ligula. Mo</font></font>rbi vel lorem quis nibh sodales mattis ut imperdiet velit. Phasellus at condimentum diam. Curabitur eleifend nunc at est pulvinar, id iaculis quam finibus. Vestibulum fringilla lacus non facilisis tincidunt. Quisque in egestas elit. Donec hendrerit maximus justo, sit amet ultrices urna egestas in. Fusce sed justo leo. Duis quis gravida purus.</font>");
 
         mRTMessageField.addTextChangedListener(new TextWatcher() {
             private float posStart;

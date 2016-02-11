@@ -68,6 +68,8 @@ import org.xml.sax.SAXNotSupportedException;
 import java.io.File;
 import java.io.IOException;
 import java.io.StringReader;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Locale;
@@ -148,7 +150,10 @@ public class ConverterHtmlToSpanned implements ContentHandler {
         removeTrailingLineBreaks();
 
         // replace all TemporarySpans by the "real" spans
-        for (TemporarySpan span : mResult.getSpans(0, mResult.length(), TemporarySpan.class)) {
+        java.util.List<TemporarySpan> tmp = Arrays.asList(mResult.getSpans(0, mResult.length(), TemporarySpan.class));
+        Collections.reverse(tmp);
+        for (TemporarySpan span : tmp) {
+//        for (TemporarySpan span : mResult.getSpans(0, mResult.length(), TemporarySpan.class)) {
             span.swapIn(mResult);
         }
 
