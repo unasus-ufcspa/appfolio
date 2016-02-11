@@ -23,6 +23,7 @@ public class BackgroundColorSpan extends android.text.style.BackgroundColorSpan 
 
     private int id;
     private boolean isOpen;
+    public int end;
 
     public BackgroundColorSpan(int color, int mID) {
         super(color);

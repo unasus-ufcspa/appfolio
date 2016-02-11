@@ -285,6 +285,7 @@ public class ConverterSpannedToHtml {
                     convertText(text, Math.max(spanStart, start), Math.min(spanEnd, end), spans);
                 }
 
+//                if(end >= spanEnd)
                 handleEndTag(span);
 
                 start = spanEnd;
@@ -382,7 +383,7 @@ public class ConverterSpannedToHtml {
             mOut.append("</font>");
         } else if (style instanceof BackgroundColorSpan) {
             int id = ((BackgroundColorSpan)style).getId();
-            mOut.append("</font id=" + id + ">");
+            mOut.append("</font><!--id=" + id + "-->");
         } else if (style instanceof AbsoluteSizeSpan) {
             mOut.append("</font>");
         } else if (style instanceof StrikethroughSpan) {
