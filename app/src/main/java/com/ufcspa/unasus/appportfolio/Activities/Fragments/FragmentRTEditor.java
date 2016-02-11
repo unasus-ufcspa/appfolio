@@ -39,6 +39,7 @@ import com.onegravity.rteditor.converter.ConverterSpannedToHtml;
 import com.onegravity.rteditor.effects.Effect;
 import com.onegravity.rteditor.effects.Effects;
 import com.ufcspa.unasus.appportfolio.Activities.MainActivity;
+import com.ufcspa.unasus.appportfolio.Model.FormatedText;
 import com.ufcspa.unasus.appportfolio.Model.Note;
 import com.ufcspa.unasus.appportfolio.R;
 
@@ -94,7 +95,7 @@ public class FragmentRTEditor extends Fragment {
         mRTMessageField.setCustomSelectionActionModeCallback(new ActionBarCallBack());
 
 //        mRTMessageField.setRichTextEditing(true, "<!--1--><font style=\"background-color:#70e7d0\">Geeg</font><!--1--><!--2--><font style=\"background-color:#70e7d0\">Geeg</font><!--2--><!--3--><font style=\"background-color:#70e7d0\">Geeg</font><!--3-->");
-
+        mRTMessageField.setRichTextEditing(true,FormatedText.frase);
         mRTMessageField.addTextChangedListener(new TextWatcher() {
             private float posStart;
             private float posEnd;
@@ -286,12 +287,13 @@ public class FragmentRTEditor extends Fragment {
                     btNoteNow= new Note(id,value,yPosition);
                     //newColoredText=changeColor(mRTMessageField.getText(RTFormat.HTML), tagID, "#3763c8");
                     Log.d("editor", "primeira vez que clica no bt:" + id);
-                    //btNoteFirtClicked=true; troca flag botao ja foi clicado
+                    btNoteFirtClicked=true; //troca flag botao ja foi clicado
                 }else{
                     copyNoteObject();
                     btNoteNow=new Note(id,value,yPosition);
-                    String txtOld=changeColor(mRTMessageField.getText(RTFormat.HTML), "font id="+btLastNote.getBtId(), amarelo); // altera a cor do texto vinculado a ultima nota clicada para claro
-                    Log.d("editor","text old with color yellow:"+txtOld);
+                    String txtOld=changeColor(mRTMessageField.getText(RTFormat.HTML), "id="+btLastNote.getBtId(), amarelo); // altera a cor do texto vinculado a ultima nota clicada para claro
+                    Log.d("tag","text old with color yellow:"+txtOld);
+                    Log.e("editor","text temp with color yellow:"+txtOld);
                     newColoredText=changeColor(txtOld, "font id="+btNoteNow.getBtId(), azul); //altera a cor do texto vinculado a nota atual clicada para cor de marcacao
                     Log.d("editor","new colored text with yellow and blue:"+newColoredText);
                     mRTMessageField.setRichTextEditing(true, newColoredText);

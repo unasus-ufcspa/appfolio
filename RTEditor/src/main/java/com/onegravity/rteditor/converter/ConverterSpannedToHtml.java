@@ -382,7 +382,8 @@ public class ConverterSpannedToHtml {
             mOut.append("</font>");
         } else if (style instanceof BackgroundColorSpan) {
             int id = ((BackgroundColorSpan)style).getId();
-            mOut.append("</font id=" + id + ">");
+           // mOut.append("</font><!--id=" + id + "-->");
+            mOut.append("</font>");
         } else if (style instanceof AbsoluteSizeSpan) {
             mOut.append("</font>");
         } else if (style instanceof StrikethroughSpan) {
