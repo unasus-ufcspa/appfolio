@@ -94,7 +94,7 @@ public class FragmentRTEditor extends Fragment {
 
         mRTMessageField.setCustomSelectionActionModeCallback(new ActionBarCallBack());
 
-        mRTMessageField.setRichTextEditing(true, "<font id=1 style=\"background-color:#ffff00\">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris convallis ipsum vel sagittis scelerisque. Phasellus vestibulum sed felis quis faucibus. <font id=-1 style=\"background-color:#ff0000\">Nunc egestas dictum fermentum. Proin pharetra libero nisl, id venenatis magna pretium <font id=2 style=\"background-color:#0080ff\">nec. Donec scelerisque enim a sapien finibus, et elementum leo sagittis. Vivamus quis dictum libero, eu blandit ligula. Mo</font></font>rbi vel lorem quis nibh sodales mattis ut imperdiet velit. Phasellus at condimentum diam. Curabitur eleifend nunc at est pulvinar, id iaculis quam finibus. Vestibulum fringilla lacus non facilisis tincidunt. Quisque in egestas elit. Donec hendrerit maximus justo, sit amet ultrices urna egestas in. Fusce sed justo leo. Duis quis gravida purus.</font>");
+        mRTMessageField.setRichTextEditing(true, "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce euismod nibh in dignissim sagittis. Etiam tincidunt eu libero eget porta. In tempus, tellus eget convallis maximus, lorem nulla tristique ligula, nec luctus lectus nisl ac lectus. Nullam sit amet fringilla quam. Nunc volutpat neque leo, non rutrum nibh pulvinar vel. Donec posuere ex ut commodo mattis. Nunc auctor, velit eu interdum sollicitudin, lorem nunc condimentum quam, a mollis felis magna non purus. Vivamus rhoncus tempus accumsan. Curabitur eget ante condimentum, ornare augue euismod, consectetur dui. Etiam vel rutrum orci, in interdum arcu. Suspendisse ultrices, tellus non ultrices feugiat, elit est hendrerit purus, sed dapibus sem magna ut lectus. Suspendisse cursus non orci et gravida. Vivamus et congue elit. Curabitur molestie sed nulla sit amet dapibus.");
 
         mRTMessageField.addTextChangedListener(new TextWatcher() {
             private float posStart;
@@ -278,9 +278,8 @@ public class FragmentRTEditor extends Fragment {
         note.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String amarelo= "#FFFF00";
-                String azul="#0080FF";
-                //showCommentsTab(true);
+                String amarelo= "#d9fce6";
+                String azul="#70E7D0";
                 String newColoredText=null;
                 Log.d("editor", "clicou na nota com id:" + id);
                 if(btNoteFirtClicked==false){
@@ -314,6 +313,14 @@ public class FragmentRTEditor extends Fragment {
                         aux.setTextColor(getResources().getColor(R.color.base_green));
                     }
                 }
+            }
+        });
+
+        note.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                showCommentsTab(true);
+                return false;
             }
         });
 
@@ -401,7 +408,7 @@ public class FragmentRTEditor extends Fragment {
 
             scrollview.addView(createButton(idButton, String.valueOf(currentSpecificComment), yButton));
 
-            mRTManager.onEffectSelected(Effects.BGCOLOR, getResources().getColor(R.color.base_green), idButton);
+            mRTManager.onEffectSelected(Effects.BGCOLOR, getResources().getColor(R.color.base_green_light), idButton);
             mRTMessageField.setSelection(endSelection);
             mRTMessageField.setSelected(false);
         }
