@@ -19,7 +19,7 @@ package com.onegravity.rteditor.spans;
 /**
  * Implementation for a background color span (android.text.style.BackgroundColorSpan)
  */
-public class BackgroundColorSpan extends android.text.style.BackgroundColorSpan implements RTSpan<Integer> {
+public class BackgroundColorSpan extends MyBackgroundColorSpan implements RTSpan<Integer> {
 
     private int id;
     private boolean isOpen;
@@ -32,13 +32,16 @@ public class BackgroundColorSpan extends android.text.style.BackgroundColorSpan 
     }
 
     @Override
-
     public Integer getValue() {
         return getBackgroundColor();
     }
     public int getId()
     {
         return id;
+    }
+    public void setId(int i)
+    {
+        id = i;
     }
     public void setOpen(boolean open){ isOpen = open; }
     public boolean isOpen(){return isOpen; }

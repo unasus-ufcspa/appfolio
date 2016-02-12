@@ -7,6 +7,7 @@ import android.support.v4.app.Fragment;
 import android.text.Editable;
 import android.text.Layout;
 import android.text.Spannable;
+import android.text.TextPaint;
 import android.text.TextWatcher;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -38,6 +39,7 @@ import com.onegravity.rteditor.api.media.RTVideo;
 import com.onegravity.rteditor.converter.ConverterSpannedToHtml;
 import com.onegravity.rteditor.effects.Effect;
 import com.onegravity.rteditor.effects.Effects;
+import com.onegravity.rteditor.spans.BackgroundColorSpan;
 import com.ufcspa.unasus.appportfolio.Activities.MainActivity;
 import com.ufcspa.unasus.appportfolio.Model.FormatedText;
 import com.ufcspa.unasus.appportfolio.Model.Note;
@@ -290,12 +292,13 @@ public class FragmentRTEditor extends Fragment {
                 }else{
                     copyNoteObject();
                     btNoteNow=new Note(id,value,yPosition);
-                    String txtOld=changeColor(mRTMessageField.getText(RTFormat.HTML), "id="+btLastNote.getBtId(), amarelo); // altera a cor do texto vinculado a ultima nota clicada para claro
-                    Log.d("tag","text old with color yellow:"+txtOld);
-                    Log.e("editor","text temp with color yellow:"+txtOld);
-                    newColoredText=changeColor(txtOld, "font id="+btNoteNow.getBtId(), azul); //altera a cor do texto vinculado a nota atual clicada para cor de marcacao
-                    Log.d("editor","new colored text with yellow and blue:"+newColoredText);
-                    mRTMessageField.setRichTextEditing(true, newColoredText);
+                    //String txtOld=changeColor(mRTMessageField.getText(RTFormat.HTML), "id="+btLastNote.getBtId(), amarelo); // altera a cor do texto vinculado a ultima nota clicada para claro
+                    //Log.d("tag","text old with color yellow:"+txtOld);
+                    //Log.e("editor","text temp with color yellow:"+txtOld);
+                    //newColoredText=changeColor(txtOld, "font id="+btNoteNow.getBtId(), azul); //altera a cor do texto vinculado a nota atual clicada para cor de marcacao
+                    //Log.d("editor","new colored text with yellow and blue:"+newColoredText);
+                   // mRTMessageField.setRichTextEditing(true, newColoredText);
+                    changeColor(id);
                     Log.d("editor", "text now in HTML is:" + mRTMessageField.getText(RTFormat.HTML));
                     //newColoredText=changeColor(mRTMessageField.getText(RTFormat.HTML), btLastNote.getId, "#FF3F3F");
                     //newColoredText=changeColor(newColoredText,""+btNoteNow.getBtId(), "#3763c8");
@@ -345,6 +348,24 @@ public class FragmentRTEditor extends Fragment {
         RTHtml<RTImage, RTAudio, RTVideo> rtHtml = new ConverterSpannedToHtml().convert(text, RTFormat.HTML);
         String thatsMySelectionInHTML = rtHtml.getText();
         return thatsMySelectionInHTML;
+    }
+
+    private void changeColor(int id)
+    {
+        Spannable textSpanned = (Spannable) mRTMessageField.getText();
+        BackgroundColorSpan[] spans = textSpanned.getSpans(0, textSpanned.length(), BackgroundColorSpan.class);
+        for(BackgroundColorSpan spm : spans)
+        {
+            if(spm.getId() == id)
+            {
+                spm.setColor(getResources().getColor(R.color.base_green));
+            }
+            else
+            {
+                if(spm.getId() != -1)
+                    spm.setColor(getResources().getColor(R.color.base_green_light));
+            }
+        }
     }
 
     private class ActionBarCallBack implements ActionMode.Callback {
@@ -418,6 +439,7 @@ public class FragmentRTEditor extends Fragment {
     {
         @Override
         public void onClick(View v) {
+            Log.d("rteditor", mRTMessageField.getText(RTFormat.HTML));
             Log.d("rteditor", mRTMessageField.getText(RTFormat.HTML));
         }
     }
