@@ -265,7 +265,6 @@ public class ConverterSpannedToHtml {
 
     private void convertText(Spanned text, int start, int end, SortedSet<CharacterStyle> spans) {
         while (start < end) {
-
             // get first CharacterStyle
             CharacterStyle span = spans.isEmpty() ? null : spans.first();
             int spanStart = span == null ? Integer.MAX_VALUE : text.getSpanStart(span);
@@ -280,12 +279,16 @@ public class ConverterSpannedToHtml {
                 // CharacterStyle found
                 spans.remove(span);
 
-                if (handleStartTag(span))
-                {
-                    convertText(text, Math.max(spanStart, start), Math.min(spanEnd, end), spans);
-                }
+                boolean hst = handleStartTag(span);
 
-//                if(end >= spanEnd)
+                if (hst)
+                    convertText(text, Math.max(spanStart, start), Math.min(spanEnd, end), spans);
+//                if (hst)
+//                    convertText(text, Math.max(spanStart, start), Math.min(spanEnd, end), spans);
+
+//                if(end < spanEnd && hst)
+//                    escape(text, start, Math.min(end, spanEnd));
+
                 handleEndTag(span);
 
                 start = spanEnd;

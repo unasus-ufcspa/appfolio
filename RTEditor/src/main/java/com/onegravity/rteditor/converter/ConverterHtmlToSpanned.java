@@ -150,10 +150,10 @@ public class ConverterHtmlToSpanned implements ContentHandler {
         removeTrailingLineBreaks();
 
         // replace all TemporarySpans by the "real" spans
-        java.util.List<TemporarySpan> tmp = Arrays.asList(mResult.getSpans(0, mResult.length(), TemporarySpan.class));
-        Collections.reverse(tmp);
-        for (TemporarySpan span : tmp) {
-//        for (TemporarySpan span : mResult.getSpans(0, mResult.length(), TemporarySpan.class)) {
+//        java.util.List<TemporarySpan> tmp = Arrays.asList(mResult.getSpans(0, mResult.length(), TemporarySpan.class));
+//        Collections.reverse(tmp);
+//        for (TemporarySpan span : tmp) {
+        for (TemporarySpan span : mResult.getSpans(0, mResult.length(), TemporarySpan.class)) {
             span.swapIn(mResult);
         }
 

@@ -7,7 +7,6 @@ import android.support.v4.app.Fragment;
 import android.text.Editable;
 import android.text.Layout;
 import android.text.Spannable;
-import android.text.TextPaint;
 import android.text.TextWatcher;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -23,7 +22,6 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
-import android.widget.Toast;
 
 import com.onegravity.rteditor.RTEditText;
 import com.onegravity.rteditor.RTManager;
@@ -37,11 +35,8 @@ import com.onegravity.rteditor.api.media.RTAudio;
 import com.onegravity.rteditor.api.media.RTImage;
 import com.onegravity.rteditor.api.media.RTVideo;
 import com.onegravity.rteditor.converter.ConverterSpannedToHtml;
-import com.onegravity.rteditor.effects.Effect;
 import com.onegravity.rteditor.effects.Effects;
 import com.onegravity.rteditor.spans.BackgroundColorSpan;
-import com.ufcspa.unasus.appportfolio.Activities.MainActivity;
-import com.ufcspa.unasus.appportfolio.Model.FormatedText;
 import com.ufcspa.unasus.appportfolio.Model.Note;
 import com.ufcspa.unasus.appportfolio.R;
 
@@ -67,11 +62,17 @@ public class FragmentRTEditor extends Fragment {
     private Animation animRight;
     private boolean visible;
 
+    private int greenLight;
+    private int greenDark;
+
     public FragmentRTEditor() {}
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_rteditor, null);
+
+        greenLight = getResources().getColor(R.color.base_green_light);
+        greenDark = getResources().getColor(R.color.base_green);
 
         specificCommentsNotes = new ArrayList<>();
         btLastNote= new Note(0,"null",0);
@@ -150,7 +151,6 @@ public class FragmentRTEditor extends Fragment {
                     scrollview.addView(createButton(aux.getBtId(), String.valueOf(aux.getBtId()), aux.getBtY()));
                 }
             }
-
             currentSpecificComment = savedInstanceState.getInt("currentSpecificComment", -1);
         }
     }
@@ -280,31 +280,31 @@ public class FragmentRTEditor extends Fragment {
         note.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String amarelo= "#d9fce6";
-                String azul="#70E7D0";
-                String newColoredText=null;
-                Log.d("editor", "clicou na nota com id:" + id);
-                if(btNoteFirtClicked==false){
-                    btNoteNow= new Note(id,value,yPosition);
-                    //newColoredText=changeColor(mRTMessageField.getText(RTFormat.HTML), tagID, "#3763c8");
-                    Log.d("editor", "primeira vez que clica no bt:" + id);
-                    btNoteFirtClicked=true; //troca flag botao ja foi clicado
-                }else{
-                    copyNoteObject();
-                    btNoteNow=new Note(id,value,yPosition);
-                    //String txtOld=changeColor(mRTMessageField.getText(RTFormat.HTML), "id="+btLastNote.getBtId(), amarelo); // altera a cor do texto vinculado a ultima nota clicada para claro
-                    //Log.d("tag","text old with color yellow:"+txtOld);
-                    //Log.e("editor","text temp with color yellow:"+txtOld);
-                    //newColoredText=changeColor(txtOld, "font id="+btNoteNow.getBtId(), azul); //altera a cor do texto vinculado a nota atual clicada para cor de marcacao
-                    //Log.d("editor","new colored text with yellow and blue:"+newColoredText);
-                   // mRTMessageField.setRichTextEditing(true, newColoredText);
-                    changeColor(id);
-                    Log.d("editor", "text now in HTML is:" + mRTMessageField.getText(RTFormat.HTML));
-                    //newColoredText=changeColor(mRTMessageField.getText(RTFormat.HTML), btLastNote.getId, "#FF3F3F");
-                    //newColoredText=changeColor(newColoredText,""+btNoteNow.getBtId(), "#3763c8");
-                }
+//                String amarelo= "#d9fce6";
+//                String azul="#70E7D0";
+//                String newColoredText=null;
+//                Log.d("editor", "clicou na nota com id:" + id);
+//                if(btNoteFirtClicked==false){
+//                    btNoteNow= new Note(id,value,yPosition);
+//                    //newColoredText=changeColor(mRTMessageField.getText(RTFormat.HTML), tagID, "#3763c8");
+//                    Log.d("editor", "primeira vez que clica no bt:" + id);
+//                    btNoteFirtClicked=true; //troca flag botao ja foi clicado
+//                }else{
+//                    copyNoteObject();
+//                    btNoteNow = new Note(id,value,yPosition);
+//                    //String txtOld=changeColor(mRTMessageField.getText(RTFormat.HTML), "id="+btLastNote.getBtId(), amarelo); // altera a cor do texto vinculado a ultima nota clicada para claro
+//                    //Log.d("tag","text old with color yellow:"+txtOld);
+//                    //Log.e("editor","text temp with color yellow:"+txtOld);
+//                    //newColoredText=changeColor(txtOld, "font id="+btNoteNow.getBtId(), azul); //altera a cor do texto vinculado a nota atual clicada para cor de marcacao
+//                    //Log.d("editor","new colored text with yellow and blue:"+newColoredText);
+//                   // mRTMessageField.setRichTextEditing(true, newColoredText);
+//                    changeColor(id);
+//                    Log.d("editor", "text now in HTML is:" + mRTMessageField.getText(RTFormat.HTML));
+//                    //newColoredText=changeColor(mRTMessageField.getText(RTFormat.HTML), btLastNote.getId, "#FF3F3F");
+//                    //newColoredText=changeColor(newColoredText,""+btNoteNow.getBtId(), "#3763c8");
+//                }
+                changeColor(id);
 
-                
                 Button btn = (Button) v;
                 btn.setBackgroundResource(R.drawable.rounded_corner);
                 btn.setTextColor(Color.WHITE);
@@ -313,7 +313,7 @@ public class FragmentRTEditor extends Fragment {
                     Button aux = (Button) getView().findViewById(specificCommentsNotes.get(i).getBtId());
                     if (aux.getId() != btn.getId()) {
                         aux.setBackgroundResource(R.drawable.btn_border);
-                        aux.setTextColor(getResources().getColor(R.color.base_green));
+                        aux.setTextColor(greenDark);
                     }
                 }
             }
@@ -354,17 +354,30 @@ public class FragmentRTEditor extends Fragment {
     {
         Spannable textSpanned = (Spannable) mRTMessageField.getText();
         BackgroundColorSpan[] spans = textSpanned.getSpans(0, textSpanned.length(), BackgroundColorSpan.class);
+
+        BackgroundColorSpan aux = null;
+        int auxStart = 0;
+        int auxEnd = 0;
+
         for(BackgroundColorSpan spm : spans)
         {
             if(spm.getId() == id)
             {
-                spm.setColor(getResources().getColor(R.color.base_green));
+                aux = spm;
+                auxStart = textSpanned.getSpanStart(spm);
+                auxEnd = textSpanned.getSpanEnd(spm);
             }
-            else
-            {
-                if(spm.getId() != -1)
-                    spm.setColor(getResources().getColor(R.color.base_green_light));
+            else {
+                if (spm.getId() != -1 && spm.getBackgroundColor() != greenLight)
+                    spm.setColor(greenLight);
             }
+        }
+
+        if(aux != null)
+        {
+            textSpanned.removeSpan(aux);
+            aux.setColor(greenDark);
+            textSpanned.setSpan(aux, auxStart, auxEnd, 1);
         }
     }
 
@@ -439,7 +452,6 @@ public class FragmentRTEditor extends Fragment {
     {
         @Override
         public void onClick(View v) {
-            Log.d("rteditor", mRTMessageField.getText(RTFormat.HTML));
             Log.d("rteditor", mRTMessageField.getText(RTFormat.HTML));
         }
     }
