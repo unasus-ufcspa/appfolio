@@ -283,11 +283,6 @@ public class ConverterSpannedToHtml {
 
                 if (hst)
                     convertText(text, Math.max(spanStart, start), Math.min(spanEnd, end), spans);
-//                if (hst)
-//                    convertText(text, Math.max(spanStart, start), Math.min(spanEnd, end), spans);
-
-//                if(end < spanEnd && hst)
-//                    escape(text, start, Math.min(end, spanEnd));
 
                 handleEndTag(span);
 

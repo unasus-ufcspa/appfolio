@@ -17,6 +17,7 @@
 package com.onegravity.rteditor.converter;
 
 import android.annotation.SuppressLint;
+import android.graphics.Color;
 import android.text.Html;
 import android.text.Layout;
 import android.text.Spannable;
@@ -33,6 +34,7 @@ import android.text.style.SubscriptSpan;
 import android.text.style.SuperscriptSpan;
 import android.util.Log;
 
+import com.onegravity.rteditor.R;
 import com.onegravity.rteditor.api.RTMediaFactory;
 import com.onegravity.rteditor.api.format.RTFormat;
 import com.onegravity.rteditor.api.format.RTHtml;
@@ -150,10 +152,10 @@ public class ConverterHtmlToSpanned implements ContentHandler {
         removeTrailingLineBreaks();
 
         // replace all TemporarySpans by the "real" spans
-//        java.util.List<TemporarySpan> tmp = Arrays.asList(mResult.getSpans(0, mResult.length(), TemporarySpan.class));
-//        Collections.reverse(tmp);
-//        for (TemporarySpan span : tmp) {
-        for (TemporarySpan span : mResult.getSpans(0, mResult.length(), TemporarySpan.class)) {
+        java.util.List<TemporarySpan> tmp = Arrays.asList(mResult.getSpans(0, mResult.length(), TemporarySpan.class));
+        Collections.reverse(tmp);
+        for (TemporarySpan span : tmp) {
+//        for (TemporarySpan span : mResult.getSpans(0, mResult.length(), TemporarySpan.class)) {
             span.swapIn(mResult);
         }
 
@@ -792,6 +794,7 @@ public class ConverterHtmlToSpanned implements ContentHandler {
                 if(mSpan instanceof BackgroundColorSpan)
                     if(((BackgroundColorSpan) mSpan).getId() >= 1)
                     {
+                        ((BackgroundColorSpan) mSpan).setColor(-2491162); //Cor base_green_light
                         builder.setSpan(mSpan, start, end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
                         return;
                     }

@@ -98,7 +98,7 @@ public class FragmentRTEditor extends Fragment {
 
         mRTMessageField.setCustomSelectionActionModeCallback(new ActionBarCallBack());
 
-        mRTMessageField.setRichTextEditing(true, "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce euismod nibh in dignissim sagittis. Etiam tincidunt eu libero eget porta. In tempus, tellus eget convallis maximus, lorem nulla tristique ligula, nec luctus lectus nisl ac lectus. Nullam sit amet fringilla quam. Nunc volutpat neque leo, non rutrum nibh pulvinar vel. Donec posuere ex ut commodo mattis. Nunc auctor, velit eu interdum sollicitudin, lorem nunc condimentum quam, a mollis felis magna non purus. Vivamus rhoncus tempus accumsan. Curabitur eget ante condimentum, ornare augue euismod, consectetur dui. Etiam vel rutrum orci, in interdum arcu. Suspendisse ultrices, tellus non ultrices feugiat, elit est hendrerit purus, sed dapibus sem magna ut lectus. Suspendisse cursus non orci et gravida. Vivamus et congue elit. Curabitur molestie sed nulla sit amet dapibus.");
+        mRTMessageField.setRichTextEditing(true, "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin ligula dolor, egestas quis purus et, tristique congue libero. Nulla ultrices urna nibh, facilisis aliquet nunc porta vel." );
 
         mRTMessageField.addTextChangedListener(new TextWatcher() {
             private float posStart;
@@ -225,7 +225,6 @@ public class FragmentRTEditor extends Fragment {
 
 
     public String changeColor(String text,String tag,String color){
-
         int start=text.indexOf("#",text.indexOf(tag));
         int end=start+7;
         Log.d("changeColor","text:"+text);
@@ -341,7 +340,6 @@ public class FragmentRTEditor extends Fragment {
 
         return note;
     }
-
 
     public void copyNoteObject(){//ultima nota recebe a atual
         btLastNote.setBtId(btNoteNow.getBtId());
