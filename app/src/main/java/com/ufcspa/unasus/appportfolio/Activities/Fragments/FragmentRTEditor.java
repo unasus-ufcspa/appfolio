@@ -23,6 +23,7 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.onegravity.rteditor.RTEditText;
 import com.onegravity.rteditor.RTManager;
@@ -188,8 +189,8 @@ public class FragmentRTEditor extends Fragment {
         slider.requestLayout();
         slider.bringToFront();
 
-        ImageView geral = (ImageView)view.findViewById(R.id.btn_geral);
-        ImageView specific = (ImageView)view.findViewById(R.id.btn_specific);
+        TextView geral = (TextView)view.findViewById(R.id.btn_geral);
+        TextView specific = (TextView)view.findViewById(R.id.btn_specific);
 
         getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.comments_container, new FragmentComments()).commit();
 
