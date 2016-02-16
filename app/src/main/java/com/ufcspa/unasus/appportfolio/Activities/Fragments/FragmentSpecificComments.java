@@ -58,7 +58,7 @@ public class FragmentSpecificComments extends Frag {
         noteNow=single.note;
 
         edtMessage.setText("\"" + noteNow.getSelectedText() + "\"");
-        edtMessage.setFocusable(true);
+//        edtMessage.setFocusable(true);
         //edtMessage.setShowSoftInputOnFocus(true);
         edtMessage.requestFocus();
         InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(getActivity().INPUT_METHOD_SERVICE);

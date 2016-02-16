@@ -57,7 +57,7 @@ public class FragmentRTEditor extends Fragment {
     private ImageButton fullScreen;
 
     private HashMap<Integer,Note> specificCommentsNotes;
-    private String selectedActualText="null";
+    private String selectedActualText = "null";
     private Note btNoteNow;
     private Note btLastNote;
 
@@ -123,7 +123,6 @@ public class FragmentRTEditor extends Fragment {
                 changeNotePosition();
             }
         });
-
 
         mRTMessageField.post(new Runnable() {
             @Override
@@ -442,7 +441,7 @@ public class FragmentRTEditor extends Fragment {
             scrollview.addView(createButton(aux.getBtId(), String.valueOf(aux.getBtId()), aux.getBtY()));
         }
     }
-
+/*
 
     private int findText(String selTxt,String texto){
         String tag="Processing text:";
@@ -492,7 +491,7 @@ public class FragmentRTEditor extends Fragment {
         btLastNote.setSelectedText(btNoteNow.getSelectedText());
         btLastNote.setBtY(btNoteNow.getBtY());
     }
-
+*/
 //    private Button createButton(final int id, final String value, final float yPosition) {
 //        LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 //        Button note = new Button(getContext());
