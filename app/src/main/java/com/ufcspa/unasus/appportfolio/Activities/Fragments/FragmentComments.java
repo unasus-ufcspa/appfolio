@@ -93,7 +93,7 @@ public class FragmentComments extends Frag {
                 }
             }
         });
-        edtMessage = (EditText) getView().findViewById(R.id.editText1);
+        edtMessage = (EditText) getView().findViewById(R.id.edtMessage);
         addItems();
     }
 
