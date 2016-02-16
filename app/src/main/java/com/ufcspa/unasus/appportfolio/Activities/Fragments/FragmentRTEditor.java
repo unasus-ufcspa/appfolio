@@ -17,7 +17,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewTreeObserver;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
@@ -40,6 +39,7 @@ import com.onegravity.rteditor.converter.ConverterSpannedToHtml;
 import com.onegravity.rteditor.effects.Effects;
 import com.onegravity.rteditor.spans.BackgroundColorSpan;
 import com.ufcspa.unasus.appportfolio.Model.Note;
+import com.ufcspa.unasus.appportfolio.Model.Singleton;
 import com.ufcspa.unasus.appportfolio.R;
 
 import java.util.ArrayList;
@@ -56,6 +56,7 @@ public class FragmentRTEditor extends Fragment {
     private ImageButton fullScreen;
 
     private HashMap<Integer,Note> specificCommentsNotes;
+    private String selectedActualText="null";
     private Note btNoteNow;
     private Note btLastNote;
 
@@ -201,7 +202,7 @@ public class FragmentRTEditor extends Fragment {
         specific.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.comments_container, new FragRef()).commit();
+                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.comments_container, new FragmentSpecificComments()).commit();
             }
         });
 
@@ -234,7 +235,7 @@ public class FragmentRTEditor extends Fragment {
             }
         }
     }
-
+    
     private Button createButton(final int id, final String value, final float yPosition) {
         LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         Button note = new Button(getContext());
@@ -288,7 +289,12 @@ public class FragmentRTEditor extends Fragment {
         note.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
+                Singleton single= Singleton.getInstance();
+                single.note.setBtY(yPosition);
+                single.note.setSelectedText(selectedActualText);
+                single.note.setBtId(id);
                 showCommentsTab(true);
+
                 return false;
             }
         });
@@ -359,6 +365,8 @@ public class FragmentRTEditor extends Fragment {
                         if (selectedText.length() > 0) {
                             //findText(selectedText, mRTMessageField.getText(RTFormat.HTML));
                             createSpecificCommentNote(getCaretYPosition(startSelection), selectedText);
+                            Singleton single=Singleton.getInstance();
+                            single.selectedText = mRTMessageField.getText().toString().substring(startSelection,endSelection);
                             //changeColor(selectedText,"#FFFFFF");
                             Log.d("editor", "text:" + mRTMessageField.getText(RTFormat.HTML));
                         }
@@ -396,8 +404,11 @@ public class FragmentRTEditor extends Fragment {
                 yButton = yPosition - 2;
 
             idButton = currentSpecificComment;
-
+            
+            selectedActualText = selectedText;
             specificCommentsNotes.put(idButton, new Note(idButton, selectedText, yButton));
+
+            Log.d("note","note text:"+selectedText);
 
             scrollview.addView(createButton(idButton, String.valueOf(currentSpecificComment), yButton));
 
@@ -410,7 +421,7 @@ public class FragmentRTEditor extends Fragment {
     public void showCommentsTab(Boolean isSpecificComment)
     {
         if(isSpecificComment)
-            getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.comments_container, new FragRef()).commit();
+            getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.comments_container, new FragmentSpecificComments()).commit();
         else
             getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.comments_container, new FragmentComments()).commit();
 
