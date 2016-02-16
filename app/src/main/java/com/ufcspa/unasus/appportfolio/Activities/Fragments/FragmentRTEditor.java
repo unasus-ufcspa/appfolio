@@ -1,6 +1,7 @@
 package com.ufcspa.unasus.appportfolio.Activities.Fragments;
 
 import android.content.Context;
+import android.content.res.Configuration;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -16,6 +17,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
@@ -41,6 +43,7 @@ import com.ufcspa.unasus.appportfolio.Model.Note;
 import com.ufcspa.unasus.appportfolio.R;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 
 public class FragmentRTEditor extends Fragment {
@@ -52,7 +55,7 @@ public class FragmentRTEditor extends Fragment {
     private ViewGroup scrollview;
     private ImageButton fullScreen;
 
-    private ArrayList<Note> specificCommentsNotes;
+    private HashMap<Integer,Note> specificCommentsNotes;
     private Note btNoteNow;
     private Note btLastNote;
 
@@ -74,8 +77,8 @@ public class FragmentRTEditor extends Fragment {
         greenLight = getResources().getColor(R.color.base_green_light);
         greenDark = getResources().getColor(R.color.base_green);
 
-        specificCommentsNotes = new ArrayList<>();
-        btLastNote= new Note(0,"null",0);
+        specificCommentsNotes = new HashMap<>();
+        btLastNote = new Note(0,"null",0);
 
         scrollview = (ViewGroup) view.findViewById(R.id.comments);
 
@@ -119,10 +122,22 @@ public class FragmentRTEditor extends Fragment {
             }
         });
 
+        mRTMessageField.post(new Runnable() {
+            @Override
+            public void run() {
+                noteFollowText(true);
+            }
+        });
+
         currentSpecificComment = 0;
 
         fullScreen = (ImageButton) view.findViewById(R.id.fullscreen);
-        fullScreen.setOnClickListener(new FullScreen());
+        fullScreen.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.d("rteditor", mRTMessageField.getText(RTFormat.HTML));
+            }
+        });
 
         initCommentsTab(view);
 
@@ -144,12 +159,7 @@ public class FragmentRTEditor extends Fragment {
 
         if (savedInstanceState != null) {
             if (savedInstanceState.getSerializable("specificCommentsNotes") != null) {
-                specificCommentsNotes = (ArrayList<Note>) savedInstanceState.getSerializable("specificCommentsNotes");
-
-                for (int i = 0; i < specificCommentsNotes.size(); i++) {
-                    Note aux = specificCommentsNotes.get(i);
-                    scrollview.addView(createButton(aux.getBtId(), String.valueOf(aux.getBtId()), aux.getBtY()));
-                }
+                specificCommentsNotes = (HashMap<Integer,Note>) savedInstanceState.getSerializable("specificCommentsNotes" );
             }
             currentSpecificComment = savedInstanceState.getInt("currentSpecificComment", -1);
         }
@@ -212,59 +222,14 @@ public class FragmentRTEditor extends Fragment {
         return 0;
     }
 
-    private int findText(String selTxt,String texto){
-        String tag="Processing text:";
-        Log.d(tag,"finding selected text:"+selTxt +"\n in text:"+texto);
-        int start=texto.indexOf(selTxt);
-        int end =start+selTxt.length();
-        Log.d(tag,"selected text starts at position '"+start+"' ends at position '"+end+"'");
-        Log.d(tag,"substring generated:"+texto.substring(start,end));
-        return start;
-    }
-
-
-    public String changeColor(String text,String tag,String color){
-        int start=text.indexOf("#",text.indexOf(tag));
-        int end=start+7;
-        Log.d("changeColor","text:"+text);
-        Log.d("changeColor","cor:"+color);
-        Log.d("changeColor","encontrou # na posição:"+start);
-        String textWChColor=text;
-        Log.d("changeColor","bg color in text:"+text.subSequence(start,start+7));
-//        int j=1;
-//        for (int i=start+1;i<start+6;i++){
-//            char old=text.charAt(i);
-//            char newChar=color.charAt(j);
-//            textWChColor.replace(old, newChar);
-//            j++;
-//        }
-        StringBuffer buf = new StringBuffer(textWChColor);
-        buf.replace(start, end, color);
-
-
-        Log.d("changeColor", "text is now:" + buf.toString());
-        textWChColor=buf.toString();
-        return textWChColor;
-
-//        int start=text.indexOf(tag);
-//        int end=text.lastIndexOf(tag,start);
-//        Log.d("changeColor","text:"+text);
-//        Log.d("changeColor","tag:"+tag);
-//        mRTMessageField.setSelection(start, end);
-        //rtToolbar.setBGColor(color);
-        //mRTManager.onEffectSelected(Effects.BGCOLOR,color);
-
-
-    }
-
-
     private void changePositionOfNotes(float posStart, float posEnd) {
         if (specificCommentsNotes != null) {
-            for (int i = 0; i < specificCommentsNotes.size(); i++) {
-                Button aux = (Button) getView().findViewById(specificCommentsNotes.get(i).getBtId());
+            ArrayList<Note> arrayAux = new ArrayList<>(specificCommentsNotes.values());
+            for (int i = 0; i < arrayAux.size(); i++) {
+                Button aux = (Button) getView().findViewById(arrayAux.get(i).getBtId());
                 if (aux != null && aux.getY() > posStart) {
                     aux.setY(aux.getY() - (posStart - posEnd));
-                    specificCommentsNotes.get(i).setBtY(aux.getY());
+                    arrayAux.get(i).setBtY(aux.getY());
                 }
             }
         }
@@ -308,8 +273,10 @@ public class FragmentRTEditor extends Fragment {
                 btn.setBackgroundResource(R.drawable.rounded_corner);
                 btn.setTextColor(Color.WHITE);
 
-                for (int i = 0; i < specificCommentsNotes.size(); i++) {
-                    Button aux = (Button) getView().findViewById(specificCommentsNotes.get(i).getBtId());
+                ArrayList<Note> arrayAux = new ArrayList<>(specificCommentsNotes.values());
+
+                for (int i = 0; i < arrayAux.size(); i++) {
+                    Button aux = (Button) getView().findViewById(arrayAux.get(i).getBtId());
                     if (aux.getId() != btn.getId()) {
                         aux.setBackgroundResource(R.drawable.btn_border);
                         aux.setTextColor(greenDark);
@@ -331,12 +298,6 @@ public class FragmentRTEditor extends Fragment {
         note.setId(id);
 
         return note;
-    }
-
-    public void copyNoteObject(){//ultima nota recebe a atual
-        btLastNote.setBtId(btNoteNow.getBtId());
-        btLastNote.setSelectedText(btNoteNow.getSelectedText());
-        btLastNote.setBtY(btNoteNow.getBtY());
     }
 
     private String getSelectedText(){
@@ -391,7 +352,7 @@ public class FragmentRTEditor extends Fragment {
                 if (!mRTMessageField.getText().toString().isEmpty()) {
                     startSelection = mRTMessageField.getSelectionStart();
                     endSelection = mRTMessageField.getSelectionEnd();
-                    String selectedText =getSelectedText();
+                    String selectedText = getSelectedText();
                             //mRTMessageField.getText(RTFormat.HTML).substring(startSelection, endSelection);
 
                     if (!selectedText.isEmpty()) {
@@ -399,7 +360,7 @@ public class FragmentRTEditor extends Fragment {
                             //findText(selectedText, mRTMessageField.getText(RTFormat.HTML));
                             createSpecificCommentNote(getCaretYPosition(startSelection), selectedText);
                             //changeColor(selectedText,"#FFFFFF");
-                            Log.d("editor","text:"+ mRTMessageField.getText(RTFormat.HTML));
+                            Log.d("editor", "text:" + mRTMessageField.getText(RTFormat.HTML));
                         }
                     }
                 }
@@ -436,21 +397,13 @@ public class FragmentRTEditor extends Fragment {
 
             idButton = currentSpecificComment;
 
-            specificCommentsNotes.add(new Note(idButton, selectedText, yButton));
+            specificCommentsNotes.put(idButton, new Note(idButton, selectedText, yButton));
 
             scrollview.addView(createButton(idButton, String.valueOf(currentSpecificComment), yButton));
 
             mRTManager.onEffectSelected(Effects.BGCOLOR, getResources().getColor(R.color.base_green_light), idButton);
             mRTMessageField.setSelection(endSelection);
             mRTMessageField.setSelected(false);
-        }
-    }
-
-    private class FullScreen implements View.OnClickListener
-    {
-        @Override
-        public void onClick(View v) {
-            Log.d("rteditor", mRTMessageField.getText(RTFormat.HTML));
         }
     }
 
@@ -473,5 +426,80 @@ public class FragmentRTEditor extends Fragment {
             slider.setVisibility(View.GONE);
             visible = false;
         }
+    }
+
+    private void noteFollowText(boolean createNote)
+    {
+        Spannable textSpanned = (Spannable) mRTMessageField.getText();
+        BackgroundColorSpan[] spans = textSpanned.getSpans(0, textSpanned.length(), BackgroundColorSpan.class);
+
+        for(BackgroundColorSpan spm : spans)
+        {
+            if(spm.getId() != -1)
+            {
+                Note aux = specificCommentsNotes.get(spm.getId());
+                aux.setBtY(getCaretYPosition(textSpanned.getSpanStart(spm)));
+            }
+        }
+
+        if(createNote)
+        {
+            ArrayList<Note> arrayAux = new ArrayList<>(specificCommentsNotes.values());
+
+            for (int i = 0; i < arrayAux.size(); i++) {
+                Note aux = arrayAux.get(i);
+                scrollview.addView(createButton(aux.getBtId(), String.valueOf(aux.getBtId()), aux.getBtY()));
+            }
+        }
+    }
+
+
+    private int findText(String selTxt,String texto){
+        String tag="Processing text:";
+        Log.d(tag,"finding selected text:"+selTxt +"\n in text:"+texto);
+        int start=texto.indexOf(selTxt);
+        int end =start+selTxt.length();
+        Log.d(tag,"selected text starts at position '"+start+"' ends at position '"+end+"'");
+        Log.d(tag,"substring generated:"+texto.substring(start,end));
+        return start;
+    }
+
+
+    public String changeColor(String text,String tag,String color){
+        int start=text.indexOf("#",text.indexOf(tag));
+        int end=start+7;
+        Log.d("changeColor","text:"+text);
+        Log.d("changeColor","cor:"+color);
+        Log.d("changeColor","encontrou # na posição:"+start);
+        String textWChColor=text;
+        Log.d("changeColor","bg color in text:"+text.subSequence(start,start+7));
+//        int j=1;
+//        for (int i=start+1;i<start+6;i++){
+//            char old=text.charAt(i);
+//            char newChar=color.charAt(j);
+//            textWChColor.replace(old, newChar);
+//            j++;
+//        }
+        StringBuffer buf = new StringBuffer(textWChColor);
+        buf.replace(start, end, color);
+
+
+        Log.d("changeColor", "text is now:" + buf.toString());
+        textWChColor=buf.toString();
+        return textWChColor;
+
+//        int start=text.indexOf(tag);
+//        int end=text.lastIndexOf(tag,start);
+//        Log.d("changeColor","text:"+text);
+//        Log.d("changeColor","tag:"+tag);
+//        mRTMessageField.setSelection(start, end);
+        //rtToolbar.setBGColor(color);
+        //mRTManager.onEffectSelected(Effects.BGCOLOR,color);
+    }
+
+    public void copyNoteObject(){//ultima nota recebe a atual
+        btLastNote.setBtId(btNoteNow.getBtId());
+        btLastNote.setSelectedText(btNoteNow.getSelectedText());
+        btLastNote.setBtY(btNoteNow.getBtY());
     }
 }
