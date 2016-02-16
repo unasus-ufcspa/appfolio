@@ -58,7 +58,7 @@ public class SpecificCommentArrayAdapter extends ArrayAdapter<OneComment>{
 
         messageText.setText(coment.comment);
 
-        messageText.setBackgroundResource(coment.orientation ? R.drawable.tutor_ballon : R.drawable.my_ballon);
+        messageText.setBackgroundResource(coment.orientation ? R.drawable.tutor_ballon_specific_comment : R.drawable.my_ballon_specific_comment);
         wrapper.setGravity(coment.orientation ? Gravity.LEFT : Gravity.RIGHT);
 
         return row;
