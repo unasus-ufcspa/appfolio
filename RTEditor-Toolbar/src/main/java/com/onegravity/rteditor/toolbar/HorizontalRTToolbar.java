@@ -557,7 +557,7 @@ public class HorizontalRTToolbar extends LinearLayout implements RTToolbar, View
                         spinnerItem.setColor(color);
                         mBGColorAdapter.notifyDataSetChanged();
                         if (mListener != null) {
-                            mListener.onEffectSelected(Effects.BGCOLOR, color);
+                            mListener.onEffectSelected(Effects.BGCOLOR, color, -1);
                         }
                     }
                 };
@@ -565,7 +565,7 @@ public class HorizontalRTToolbar extends LinearLayout implements RTToolbar, View
                 EventBus.getDefault().post(new SetColorChangedListenerEvent(mPickerId, mColorChangedlistener));
             } else if (mListener != null) {
                 Integer color = spinnerItem.isEmpty() ? null : spinnerItem.getColor();
-                mListener.onEffectSelected(Effects.BGCOLOR, color);
+                mListener.onEffectSelected(Effects.BGCOLOR, color, -1);
             }
         }
     };

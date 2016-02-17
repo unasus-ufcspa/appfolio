@@ -18,6 +18,7 @@ package com.onegravity.rteditor.converter;
 
 import android.text.Spanned;
 import android.text.style.AbsoluteSizeSpan;
+//import android.text.style.BackgroundColorSpan;
 import android.text.style.CharacterStyle;
 import android.text.style.ForegroundColorSpan;
 import android.text.style.ParagraphStyle;
@@ -95,6 +96,11 @@ public class ConverterSpannedToHtml {
 
     private void convertParagraphs() {
         RTLayout rtLayout = new RTLayout(mText);
+
+        for(BackgroundColorSpan bcs : mText.getSpans(0,mText.length(), BackgroundColorSpan.class))
+        {
+            bcs.setOpen(false);
+        }
 
         for (Paragraph paragraph : rtLayout.getParagraphs()) {
             // retrieve all spans for this paragraph
@@ -233,53 +239,54 @@ public class ConverterSpannedToHtml {
      */
     private void withinParagraph(final Spanned text, int start, int end) {
         // create sorted set of CharacterStyles
-        SortedSet<CharacterStyle> sortedSpans = new TreeSet<CharacterStyle>(new Comparator<CharacterStyle>() {
-            @Override
-            public int compare(CharacterStyle s1, CharacterStyle s2) {
-                int start1 = text.getSpanStart(s1);
-                int start2 = text.getSpanStart(s2);
-                if (start1 != start2)
-                    return start1 - start2;        // span which starts first comes first
-
-                int end1 = text.getSpanEnd(s1);
-                int end2 = text.getSpanEnd(s2);
-                if (end1 != end2) return end2 - end1;                // longer span comes first
-
-                // if the paragraphs have the same span [start, end] we compare their name
-                // compare the name only because local + anonymous classes have no canonical name
-                return s1.getClass().getName().compareTo(s2.getClass().getName());
-            }
-        });
+//        SortedSet<CharacterStyle> sortedSpans = new TreeSet<CharacterStyle>(new Comparator<CharacterStyle>() {
+//            @Override
+//            public int compare(CharacterStyle s1, CharacterStyle s2) {
+//                int start1 = text.getSpanStart(s1);
+//                int start2 = text.getSpanStart(s2);
+//                if (start1 != start2)
+//                    return start1 - start2;        // span which starts first comes first
+//
+//                int end1 = text.getSpanEnd(s1);
+//                int end2 = text.getSpanEnd(s2);
+//                if (end1 != end2) return end2 - end1;                // longer span comes first
+//
+//                // if the paragraphs have the same span [start, end] we compare their name
+//                // compare the name only because local + anonymous classes have no canonical name
+//                return s1.getClass().getName().compareTo(s2.getClass().getName());
+//            }
+//        });
         List<CharacterStyle> spanList = Arrays.asList(text.getSpans(start, end, CharacterStyle.class));
-        sortedSpans.addAll(spanList);
+//        sortedSpans.addAll(spanList);
+
+        ArrayList<CharacterStyle> aux = new ArrayList<>();
+        aux.addAll(spanList);
 
         // process paragraphs/divs
-        convertText(text, start, end, sortedSpans);
+        convertText(text, start, end, aux);
     }
 
-    private void convertText(Spanned text, int start, int end, SortedSet<CharacterStyle> spans) {
+    private void convertText(Spanned text, int start, int end, ArrayList<CharacterStyle> spans) {
         while (start < end) {
-
             // get first CharacterStyle
-            CharacterStyle span = spans.isEmpty() ? null : spans.first();
+            CharacterStyle span = spans.isEmpty() ? null : spans.get(0);
             int spanStart = span == null ? Integer.MAX_VALUE : text.getSpanStart(span);
             int spanEnd = span == null ? Integer.MAX_VALUE : text.getSpanEnd(span);
 
             if (start < spanStart) {
-
                 // no paragraph, just plain text
                 escape(text, start, Math.min(end, spanStart));
                 start = spanStart;
 
             } else {
-
                 // CharacterStyle found
-
                 spans.remove(span);
 
-                if (handleStartTag(span)) {
+                boolean hst = handleStartTag(span);
+
+                if (hst)
                     convertText(text, Math.max(spanStart, start), Math.min(spanEnd, end), spans);
-                }
+
                 handleEndTag(span);
 
                 start = spanEnd;
@@ -329,8 +336,12 @@ public class ConverterSpannedToHtml {
             mOut.append(color);
             mOut.append("\">");
         } else if (style instanceof BackgroundColorSpan) {
-            int id = ((BackgroundColorSpan) style).getId();
-            mOut.append("<font id=\"" + id + "\" style=\"background-color:#");
+            if(((BackgroundColorSpan) style).isOpen())
+                return true;
+            else
+                ((BackgroundColorSpan) style).setOpen(true);
+            int id = ((BackgroundColorSpan)style).getId();
+            mOut.append("<font id=" + id + " style=\"background-color:#");
             String color = Integer.toHexString(((BackgroundColorSpan) style).getBackgroundColor() + 0x01000000);
             while (color.length() < 6) {
                 color = "0" + color;
@@ -372,8 +383,9 @@ public class ConverterSpannedToHtml {
         } else if (style instanceof ForegroundColorSpan) {
             mOut.append("</font>");
         } else if (style instanceof BackgroundColorSpan) {
-            int id = ((BackgroundColorSpan) style).getId();
-            mOut.append("<id=\"" + id + "\" /font>");
+            int id = ((BackgroundColorSpan)style).getId();
+           // mOut.append("</font><!--id=" + id + "-->");
+            mOut.append("</font>");
         } else if (style instanceof AbsoluteSizeSpan) {
             mOut.append("</font>");
         } else if (style instanceof StrikethroughSpan) {

@@ -78,7 +78,48 @@ public class FragmentEditText extends Frag {
     @Override
     public void onStart() {
         super.onStart();
-        loadLastText();
+        //loadLastText();
+        String text="<form action=\"#\" method=\"post\">\n" +
+                "    <div>\n" +
+                "         <label for=\"name\">Text Input:</label>\n" +
+                "         <input type=\"text\" name=\"name\" id=\"name\" value=\"\" tabindex=\"1\" />\n" +
+                "    </div>\n" +
+                "\n" +
+                "    <div>\n" +
+                "         <h4>Radio Button Choice</h4>\n" +
+                "\n" +
+                "         <label for=\"radio-choice-1\">Choice 1</label>\n" +
+                "         <input type=\"radio\" name=\"radio-choice-1\" id=\"radio-choice-1\" tabindex=\"2\" value=\"choice-1\" />\n" +
+                "\n" +
+                "\t\t <label for=\"radio-choice-2\">Choice 2</label>\n" +
+                "         <input type=\"radio\" name=\"radio-choice-2\" id=\"radio-choice-2\" tabindex=\"3\" value=\"choice-2\" />\n" +
+                "    </div>\n" +
+                "\n" +
+                "\t<div>\n" +
+                "\t\t<label for=\"select-choice\">Select Dropdown Choice:</label>\n" +
+                "\t\t<select name=\"select-choice\" id=\"select-choice\">\n" +
+                "\t\t\t<option value=\"Choice 1\">Choice 1</option>\n" +
+                "\t\t\t<option value=\"Choice 2\">Choice 2</option>\n" +
+                "\t\t\t<option value=\"Choice 3\">Choice 3</option>\n" +
+                "\t\t</select>\n" +
+                "\t</div>\n" +
+                "\t\n" +
+                "\t<div>\n" +
+                "\t\t<label for=\"textarea\">Textarea:</label>\n" +
+                "\t\t<textarea cols=\"40\" rows=\"8\" name=\"textarea\" id=\"textarea\"></textarea>\n" +
+                "\t</div>\n" +
+                "\t\n" +
+                "\t<div>\n" +
+                "\t    <label for=\"checkbox\">Checkbox:</label>\n" +
+                "\t\t<input type=\"checkbox\" name=\"checkbox\" id=\"checkbox\" />\n" +
+                "    </div>\n" +
+                "\n" +
+                "\t<div>\n" +
+                "\t    <input type=\"submit\" value=\"Submit\" />\n" +
+                "    </div>\n" +
+                "</form>";
+        mEditor.setHtml(text);
+
         Log.d("FragmentEditText", "onStart");
     }
 
@@ -254,8 +295,8 @@ public class FragmentEditText extends Frag {
 //                openFileBrowser();
             }
         });
-        mEditor.setHtml(acStudent.getTxtActivity());
-        loadLastText();
+     //   mEditor.setHtml(acStudent.getTxtActivity());
+       // loadLastText();
 //        Log.d("Cycle", "On Resume");
     }
 

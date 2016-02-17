@@ -20,6 +20,7 @@ import android.text.Spannable;
 import android.text.Spanned;
 
 import com.onegravity.rteditor.RTEditText;
+import com.onegravity.rteditor.spans.BackgroundColorSpan;
 import com.onegravity.rteditor.spans.RTSpan;
 import com.onegravity.rteditor.utils.Selection;
 

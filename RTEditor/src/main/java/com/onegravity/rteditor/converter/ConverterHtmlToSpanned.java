@@ -17,19 +17,24 @@
 package com.onegravity.rteditor.converter;
 
 import android.annotation.SuppressLint;
+import android.graphics.Color;
+import android.text.Html;
 import android.text.Layout;
+import android.text.Spannable;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
 import android.text.TextUtils;
 import android.text.style.AbsoluteSizeSpan;
-import android.text.style.BackgroundColorSpan;
+//import android.text.style.BackgroundColorSpan;
 import android.text.style.ForegroundColorSpan;
 import android.text.style.QuoteSpan;
 import android.text.style.RelativeSizeSpan;
 import android.text.style.StrikethroughSpan;
 import android.text.style.SubscriptSpan;
 import android.text.style.SuperscriptSpan;
+import android.util.Log;
 
+import com.onegravity.rteditor.R;
 import com.onegravity.rteditor.api.RTMediaFactory;
 import com.onegravity.rteditor.api.format.RTFormat;
 import com.onegravity.rteditor.api.format.RTHtml;
@@ -42,6 +47,7 @@ import com.onegravity.rteditor.converter.tagsoup.Parser;
 import com.onegravity.rteditor.fonts.FontManager;
 import com.onegravity.rteditor.fonts.RTTypeface;
 import com.onegravity.rteditor.spans.AlignmentSpan;
+import com.onegravity.rteditor.spans.BackgroundColorSpan;
 import com.onegravity.rteditor.spans.BoldSpan;
 import com.onegravity.rteditor.spans.BulletSpan;
 import com.onegravity.rteditor.spans.ImageSpan;
@@ -64,6 +70,8 @@ import org.xml.sax.SAXNotSupportedException;
 import java.io.File;
 import java.io.IOException;
 import java.io.StringReader;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Locale;
@@ -144,7 +152,10 @@ public class ConverterHtmlToSpanned implements ContentHandler {
         removeTrailingLineBreaks();
 
         // replace all TemporarySpans by the "real" spans
-        for (TemporarySpan span : mResult.getSpans(0, mResult.length(), TemporarySpan.class)) {
+        java.util.List<TemporarySpan> tmp = Arrays.asList(mResult.getSpans(0, mResult.length(), TemporarySpan.class));
+        Collections.reverse(tmp);
+        for (TemporarySpan span : tmp) {
+//        for (TemporarySpan span : mResult.getSpans(0, mResult.length(), TemporarySpan.class)) {
             span.swapIn(mResult);
         }
 
@@ -626,6 +637,7 @@ public class ConverterHtmlToSpanned implements ContentHandler {
         String fontName = null;
 
         String style = attributes.getValue("", "style");
+        String id = "-1";
         if (style != null) {
             for (String part : style.toLowerCase(Locale.ENGLISH).split(";")) {
                 if (part.startsWith("font-size")) {
@@ -652,6 +664,7 @@ public class ConverterHtmlToSpanned implements ContentHandler {
                         int end = matcher.end();
                         bgColor = part.substring(start, end);
                     }
+                    id = attributes.getValue("","id");
                 }
             }
         }
@@ -663,7 +676,8 @@ public class ConverterHtmlToSpanned implements ContentHandler {
                 .setSize(size)
                 .setFGColor(fgColor)
                 .setBGColor(bgColor)
-                .setFontFace(fontName);
+                .setFontFace(fontName)
+                .setID(Integer.valueOf(id));
         mResult.setSpan(font, len, len, Spanned.SPAN_MARK_MARK);
     }
 
@@ -710,7 +724,7 @@ public class ConverterHtmlToSpanned implements ContentHandler {
                 int c = getHtmlColor(font.mBGColor);
                 if (c != -1) {
                     // Note: use SPAN_EXCLUSIVE_EXCLUSIVE, the TemporarySpan will be replaced by a SPAN_EXCLUSIVE_INCLUSIVE span
-                    TemporarySpan span = new TemporarySpan(new BackgroundColorSpan(c | 0xFF000000));
+                    TemporarySpan span = new TemporarySpan(new BackgroundColorSpan(c | 0xFF000000, font.mId));
                     mResult.setSpan(span, where, len, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
                 }
             }
@@ -777,6 +791,13 @@ public class ConverterHtmlToSpanned implements ContentHandler {
             int end = builder.getSpanEnd(this);
             builder.removeSpan(this);
             if (start >= 0 && end > start && end <= builder.length()) {
+                if(mSpan instanceof BackgroundColorSpan)
+                    if(((BackgroundColorSpan) mSpan).getId() >= 1)
+                    {
+                        ((BackgroundColorSpan) mSpan).setColor(-2491162); //Cor base_green_light
+                        builder.setSpan(mSpan, start, end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                        return;
+                    }
                 builder.setSpan(mSpan, start, end, Spanned.SPAN_EXCLUSIVE_INCLUSIVE);
             }
         }
@@ -847,6 +868,7 @@ public class ConverterHtmlToSpanned implements ContentHandler {
         String mFGColor;
         String mBGColor;
         String mFontFace;
+        int mId;
 
         Font setSize(int size) {
             mSize = size;
@@ -860,6 +882,11 @@ public class ConverterHtmlToSpanned implements ContentHandler {
 
         Font setBGColor(String color) {
             mBGColor = color;
+            return this;
+        }
+
+        Font setID(int id) {
+            mId = id;
             return this;
         }
         

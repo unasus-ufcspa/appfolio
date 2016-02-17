@@ -1,7 +1,9 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/rteditor_fragment"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:focusableInTouchMode="true"
+    android:focusable="true">
 
     <include android:id="@+id/rte_toolbar_container" layout="@layout/rte_toolbar" />
 
@@ -28,7 +30,8 @@
                 android:gravity="top"
                 android:hint="Boa Atividade!"
                 android:imeOptions="actionDone|flagNoEnterAction"
-                android:inputType="textMultiLine|textAutoCorrect|textCapSentences" />
+                android:inputType="textMultiLine|textAutoCorrect|textCapSentences"
+                android:layout_marginLeft="35dp" />
 
         </RelativeLayout>
     </ScrollView>
@@ -41,5 +44,57 @@
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
         android:background="@drawable/fullscreen_text" />
+
+    <RelativeLayout
+        android:id="@+id/slider"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentRight="true"
+        android:background="@android:color/transparent"
+        android:visibility="gone">
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@android:color/transparent"
+            android:id="@+id/button_container"
+            android:gravity="bottom">
+            <me.grantland.widget.AutofitTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/btn_geral"
+                android:layout_weight="1"
+                android:background="@drawable/geral_comment_tab"
+                android:adjustViewBounds="false"
+                android:visibility="visible"
+                android:scaleType="fitEnd"
+                android:gravity="center"
+                android:text="Geral"
+                android:textColor="#ffffff"
+                android:textStyle="bold"
+                />
+            <me.grantland.widget.AutofitTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/btn_specific"
+                android:layout_weight="1"
+                android:background="@drawable/specific_comment_tab"
+                android:adjustViewBounds="false"
+                android:scaleType="fitEnd"
+                android:gravity="center"
+                android:text="Observações"
+                android:textColor="@color/base_green"
+                android:textStyle="bold" />
+        </LinearLayout>
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@+id/button_container"
+            android:layout_centerHorizontal="true"
+            android:id="@+id/comments_container"></FrameLayout>
+
+    </RelativeLayout>
 
 </RelativeLayout>
