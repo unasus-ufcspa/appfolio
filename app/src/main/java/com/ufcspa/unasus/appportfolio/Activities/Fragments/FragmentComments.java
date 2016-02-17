@@ -150,13 +150,12 @@ public class FragmentComments extends Frag {
             Log.e("Erro:", e.getMessage());
         }
 
+        Log.d("Banco:", c.toJSON().toString());
         try{
             HttpClient client = new HttpClient(getActivity().getApplicationContext(),c);
             System.out.println(c.toJSON().toString());
             client.postJson(c.toJSON());
-            //Log.d("Banco:", "comentario enviado ao bd externo com sucesso");
-        }
-        catch (Exception e){
+        } catch (Exception e){
             Log.e("JSON act",e.getMessage());
         }
 

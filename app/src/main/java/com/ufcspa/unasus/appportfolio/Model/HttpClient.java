@@ -24,8 +24,9 @@ import java.util.List;
  * Created by Desenvolvimento on 18/12/2015.
  */
 public class HttpClient {
-    private static final String ip = "192.168.0.169";
-    private static final String URL = "http://" + ip + "/portfolio/";
+    private static final String ip = "192.168.0.25";
+    private static final String URL = "http://" + ip + "/webfolio/app_dev.php/addComment";
+    //private static final String URL = "http://" + ip + "/portfolio/volley.php";
     private Context context;
     private Comentario comentario = null;
     private String tag="JSON";
@@ -41,23 +42,24 @@ public class HttpClient {
 
 
     public void postJson(JSONObject jsonBody){
-        JsonObjectRequest jsObjReq = new JsonObjectRequest(Request.Method.POST, URL + "volley.php", jsonBody, new Response.Listener<JSONObject>() {
+        Log.d(tag, "URL: " + URL);
+        JsonObjectRequest jsObjReq = new JsonObjectRequest(Request.Method.POST, URL, jsonBody, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
                 Log.d(tag,"Retornou do request");
-                //try {
+                try {
                     Log.d(tag,"JSON RESPONSE: "+ response.toString());
-//                    if(response.getString("result").equals(0)) {
-//                        Log.e(tag, "JSON POST erro");
-//                    }else{
-//                        Log.d(tag,"JSON POST foi");
-//                        if(comentario!=null){
-//                            comentario.setIdComment(response.getInt("result"));
-//                        }
-//                    }
-//                } catch (JSONException e) {
-//                    Log.e(tag,"JSON on response:"+e.getMessage());
-//                }
+                    if(response.getString("result").equals(0)) {
+                        Log.e(tag, "JSON POST erro");
+                    }else{
+                        Log.d(tag,"JSON POST foi");
+                        if(comentario!=null){
+                            comentario.setIdComment(response.getInt("result"));
+                        }
+                    }
+                } catch (JSONException e) {
+                    Log.e(tag,"JSON on response:"+e.getMessage());
+                }
             }
         }, new Response.ErrorListener() {
             @Override
@@ -74,7 +76,7 @@ public class HttpClient {
 
     public void getJsonList( final FragmentComments fComm){
 
-        JsonArrayRequest jsonArtRequest = new JsonArrayRequest(URL + "list.php",new Response.Listener<JSONArray>() {
+        JsonArrayRequest jsonArtRequest = new JsonArrayRequest(URL,new Response.Listener<JSONArray>() {
             @Override
             public void onResponse(JSONArray response) {
                 List comments = new ArrayList<Comentario>();
@@ -111,7 +113,7 @@ public class HttpClient {
 
 
     public void getMessage(final FragmentComments fComm){
-        JsonObjectRequest jsObjReq = new JsonObjectRequest(Request.Method.GET, URL + "volley.php", null, new Response.Listener<JSONObject>() {
+        JsonObjectRequest jsObjReq = new JsonObjectRequest(Request.Method.GET, URL, null, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject json) {
                 Log.d(tag,"Retornou do request");
