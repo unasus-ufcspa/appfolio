@@ -17,6 +17,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewParent;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.Button;
@@ -39,6 +40,7 @@ import com.onegravity.rteditor.api.media.RTVideo;
 import com.onegravity.rteditor.converter.ConverterSpannedToHtml;
 import com.onegravity.rteditor.effects.Effects;
 import com.onegravity.rteditor.spans.BackgroundColorSpan;
+import com.ufcspa.unasus.appportfolio.Activities.MainActivity;
 import com.ufcspa.unasus.appportfolio.Model.Note;
 import com.ufcspa.unasus.appportfolio.Model.Singleton;
 import com.ufcspa.unasus.appportfolio.R;
@@ -131,6 +133,8 @@ public class FragmentRTEditor extends Fragment {
             }
         });
 
+        mRTMessageField.setLineSpacing(15, 1);
+
         currentSpecificComment = 0;
 
         fullScreen = (ImageButton) view.findViewById(R.id.fullscreen);
@@ -138,6 +142,7 @@ public class FragmentRTEditor extends Fragment {
             @Override
             public void onClick(View v) {
                 Log.d("rteditor", mRTMessageField.getText(RTFormat.HTML));
+                ((MainActivity)getActivity()).hideDrawer();
             }
         });
 
