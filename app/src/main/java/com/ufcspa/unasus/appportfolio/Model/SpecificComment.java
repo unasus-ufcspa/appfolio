@@ -1,11 +1,15 @@
 package com.ufcspa.unasus.appportfolio.Model;
 
-public class OneComment {
+/**
+ * Created by icaromsc on 17/02/2016.
+ */
+public class SpecificComment {
     public boolean orientation; // true to left, false to right
     public String comment;
+    public String reference;
 
 
-    public OneComment(boolean orientation, String comment) {
+    public SpecificComment(boolean orientation, String comment,String reference) {
         super();
         this.orientation = orientation;
         this.comment = comment;
