@@ -239,37 +239,37 @@ public class ConverterSpannedToHtml {
      */
     private void withinParagraph(final Spanned text, int start, int end) {
         // create sorted set of CharacterStyles
-//        SortedSet<CharacterStyle> sortedSpans = new TreeSet<CharacterStyle>(new Comparator<CharacterStyle>() {
-//            @Override
-//            public int compare(CharacterStyle s1, CharacterStyle s2) {
-//                int start1 = text.getSpanStart(s1);
-//                int start2 = text.getSpanStart(s2);
-//                if (start1 != start2)
-//                    return start1 - start2;        // span which starts first comes first
-//
-//                int end1 = text.getSpanEnd(s1);
-//                int end2 = text.getSpanEnd(s2);
-//                if (end1 != end2) return end2 - end1;                // longer span comes first
-//
-//                // if the paragraphs have the same span [start, end] we compare their name
-//                // compare the name only because local + anonymous classes have no canonical name
-//                return s1.getClass().getName().compareTo(s2.getClass().getName());
-//            }
-//        });
-        List<CharacterStyle> spanList = Arrays.asList(text.getSpans(start, end, CharacterStyle.class));
-//        sortedSpans.addAll(spanList);
+        SortedSet<CharacterStyle> sortedSpans = new TreeSet<CharacterStyle>(new Comparator<CharacterStyle>() {
+            @Override
+            public int compare(CharacterStyle s1, CharacterStyle s2) {
+                int start1 = text.getSpanStart(s1);
+                int start2 = text.getSpanStart(s2);
+                if (start1 != start2)
+                    return start1 - start2;        // span which starts first comes first
 
-        ArrayList<CharacterStyle> aux = new ArrayList<>();
-        aux.addAll(spanList);
+                int end1 = text.getSpanEnd(s1);
+                int end2 = text.getSpanEnd(s2);
+                if (end1 != end2) return end2 - end1;                // longer span comes first
+
+                // if the paragraphs have the same span [start, end] we compare their name
+                // compare the name only because local + anonymous classes have no canonical name
+                return s1.getClass().getName().compareTo(s2.getClass().getName());
+            }
+        });
+        List<CharacterStyle> spanList = Arrays.asList(text.getSpans(start, end, CharacterStyle.class));
+        sortedSpans.addAll(spanList);
+
+//        ArrayList<CharacterStyle> aux = new ArrayList<>();
+//        aux.addAll(spanList);
 
         // process paragraphs/divs
-        convertText(text, start, end, aux);
+        convertText(text, start, end, sortedSpans);
     }
 
-    private void convertText(Spanned text, int start, int end, ArrayList<CharacterStyle> spans) {
+    private void convertText(Spanned text, int start, int end, SortedSet<CharacterStyle> spans) {
         while (start < end) {
             // get first CharacterStyle
-            CharacterStyle span = spans.isEmpty() ? null : spans.get(0);
+            CharacterStyle span = spans.isEmpty() ? null : spans.first();
             int spanStart = span == null ? Integer.MAX_VALUE : text.getSpanStart(span);
             int spanEnd = span == null ? Integer.MAX_VALUE : text.getSpanEnd(span);
 

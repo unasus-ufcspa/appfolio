@@ -9,6 +9,7 @@ import android.support.v4.app.FragmentTabHost;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.DisplayMetrics;
+import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.animation.Animation;
@@ -166,7 +167,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     public void hideDrawer() {
-        miniDrawer.setVisibility(View.GONE);
-        bigDrawer.setVisibility(View.GONE);
+//        miniDrawer.setVisibility(View.GONE);
+//        bigDrawer.setVisibility(View.GONE);
+//        fragmentContainer.
     }
 }
