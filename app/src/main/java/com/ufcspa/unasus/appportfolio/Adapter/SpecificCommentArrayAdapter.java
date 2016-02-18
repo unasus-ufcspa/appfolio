@@ -26,14 +26,8 @@ public class SpecificCommentArrayAdapter extends ArrayAdapter<OneComment>{
     private TextView referenceText;
     private List<OneComment> comment = new ArrayList<OneComment>();
     private LinearLayout wrapper;
-    private boolean insertingReference=false;
 
-    public boolean isInsertingReference() {
-        return insertingReference;
-    }
-    public void setInsertingReference(boolean insertingReference) {
-        this.insertingReference = insertingReference;
-    }
+
 
     @Override
     public void add(OneComment object) {
@@ -65,20 +59,9 @@ public class SpecificCommentArrayAdapter extends ArrayAdapter<OneComment>{
         OneComment coment = getItem(position);
 
         messageText = (TextView) row.findViewById(R.id.comment);
-
-        messageText.setText(coment.comment);
-            if(insertingReference) {
-                messageText.setText(coment.comment);
-                insertingReference=false;
-            }else{
-                if(position!=0) {
+                    messageText.setText(coment.comment);
                     messageText.setBackgroundResource(coment.orientation ? R.drawable.tutor_ballon_specific_comment : R.drawable.my_ballon_specific_comment);
                     wrapper.setGravity(coment.orientation ? Gravity.LEFT : Gravity.RIGHT);
-                }else{
-                    Log.d("view","fisrt position");
-                }
-
-            }
         return row;
     }
 

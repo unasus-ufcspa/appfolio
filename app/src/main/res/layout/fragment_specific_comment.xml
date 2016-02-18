@@ -8,18 +8,49 @@
     android:focusableInTouchMode="true"
     android:focusable="true">
 
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="70px"
+        android:text="Referência \n "
+        android:textAlignment="center"
+        android:textColor="@color/md_black_1000"
+        android:background="@color/gray_3"
+        android:textSize="16dp"
+        android:layout_marginRight="5dp"
+        android:layout_marginLeft="5dp"
+        android:layout_marginTop="5dp"
+        android:elegantTextHeight="@bool/md_is_tablet"
+        android:id="@+id/txSelectedNote"
+        android:minHeight="70px"
+        android:transcriptMode="alwaysScroll"
+        android:layout_marginBottom="10dp"
+        android:scrollbars = "vertical"
+        />
+
+    <ImageButton
+        android:id="@+id/btn_expand_ref"
+        android:layout_width="50dp"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/txSelectedNote"
+        android:layout_alignEnd="@+id/txSelectedNote"
+        android:layout_alignRight="@+id/txSelectedNote"
+        android:adjustViewBounds="true"
+        android:background="@color/gray_3"
+        android:paddingLeft="25dp"
+        android:scaleType="fitCenter"
+        android:src="@drawable/three_dots" />
+
     <ListView
         android:id="@+id/listView1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_above="@+id/form"
+        android:layout_below="@id/txSelectedNote"
         android:transcriptMode="alwaysScroll"
         android:stackFromBottom="true"
-        android:layout_alignParentTop="true"
         android:divider="@null"
         android:dividerHeight="0dp">
     </ListView>
-
 
     <RelativeLayout
         android:id="@+id/form"
