@@ -191,7 +191,6 @@ public class FragmentRTEditor extends Fragment {
         SlidingPaneLayout.LayoutParams relativeParams = new SlidingPaneLayout.LayoutParams(new SlidingPaneLayout.LayoutParams(SlidingPaneLayout.LayoutParams.MATCH_PARENT, SlidingPaneLayout.LayoutParams.MATCH_PARENT));
         relativeParams.setMargins(width, 0, 0, 0);
         slider.setLayoutParams(relativeParams);
-        slider.requestLayout();
 
         slider.requestLayout();
         slider.bringToFront();
