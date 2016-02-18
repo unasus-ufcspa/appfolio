@@ -146,7 +146,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         switch (id)
         {
             case 0:
-                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new FragmentSelectPortfolio()).commit();//FragmentRTEditor
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new FragmentRTEditor()).commit();//FragmentRTEditor
                 break;
             case 1:
                 if(singleton.portfolioClass != null)
@@ -170,5 +170,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 //        miniDrawer.setVisibility(View.GONE);
 //        bigDrawer.setVisibility(View.GONE);
 //        fragmentContainer.
+    }
+
+    public int getMiniDrawerWidth() {
+        return miniDrawer.getWidth();
     }
 }

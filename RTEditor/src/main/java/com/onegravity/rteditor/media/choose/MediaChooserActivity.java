@@ -143,6 +143,10 @@ public class MediaChooserActivity extends MonitoredActivity implements
                     EventBus.getDefault().post( new MediaEvent(mSelectedMedia) );
                     finish();
                 }
+            }else if(requestCode == MediaAction.PICK_VIDEO.requestCode() && data != null) {
+                mMediaChooserMgr.processMedia(MediaAction.PICK_VIDEO, data);
+            }else if(requestCode == MediaAction.CAPTURE_VIDEO.requestCode() && data != null){
+                mMediaChooserMgr.processMedia(MediaAction.CAPTURE_VIDEO, data);
             }
 
         } else {
@@ -159,7 +163,7 @@ public class MediaChooserActivity extends MonitoredActivity implements
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                if (mMediaAction == MediaAction.CAPTURE_PICTURE) {
+//                if (mMediaAction == MediaAction.CAPTURE_PICTURE) {
                     String filePath = image.getFilePath(RTFormat.SPANNED);
 
                     Intent intent = new Intent(MediaChooserActivity.this, CropImageActivity.class)
@@ -178,10 +182,10 @@ public class MediaChooserActivity extends MonitoredActivity implements
 
                     // start activity CropImageActivity
                     startActivityForResult(intent, Constants.CROP_IMAGE);
-                } else {
-                    EventBus.getDefault().post( new MediaEvent(mSelectedMedia) );
-                    finish();
-                }
+//                } else {
+//                    EventBus.getDefault().post( new MediaEvent(mSelectedMedia) );
+//                    finish();
+//                }
             }
         });
     }
@@ -195,9 +199,36 @@ public class MediaChooserActivity extends MonitoredActivity implements
 
     @Override
 	/* VideoChooserListener */
-    public void onVideoChosen(RTVideo video) {
+    public void onVideoChosen(final RTVideo video) {
         mSelectedMedia = video;
-        setWorkInProgress(false);
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+//                if (mMediaAction == MediaAction.CAPTURE_VIDEO) {
+//                    String filePath = video.getFilePath(RTFormat.SPANNED);
+//
+//                    Intent intent = new Intent(MediaChooserActivity.this, CropImageActivity.class)
+//
+//                            // tell CropImage activity to look for image to crop
+//                            .putExtra(CropImageActivity.IMAGE_SOURCE_FILE, filePath)
+//                            .putExtra(CropImageActivity.IMAGE_DESTINATION_FILE, filePath)
+//
+//                                    // allow CropImage activity to re-scale image
+//                            .putExtra(CropImageActivity.SCALE, true)
+//                            .putExtra(CropImageActivity.SCALE_UP_IF_NEEDED, false)
+//
+//                                    // no fixed aspect ratio
+//                            .putExtra(CropImageActivity.ASPECT_X, 0)
+//                            .putExtra(CropImageActivity.ASPECT_Y, 0);
+//
+//                    // start activity CropImageActivity
+//                    startActivityForResult(intent, Constants.CROP_IMAGE);
+//                } else {
+                    EventBus.getDefault().post(new MediaEvent(mSelectedMedia));
+                    finish();
+//                }
+            }
+        });
     }
 
     @Override

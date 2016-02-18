@@ -77,7 +77,7 @@ class ImageChooserManager extends MediaChooserManager implements ImageProcessorL
     private boolean pickPicture() {
         Intent intent = new Intent(Intent.ACTION_GET_CONTENT, null)
                 .addCategory(Intent.CATEGORY_OPENABLE)
-                .setType("image/*");
+                .setType("image/*");//"image/* video/*" "media/*"
         String title = mActivity.getString(R.string.rte_pick_image);
         startActivity(Intent.createChooser(intent, title));
         return true;

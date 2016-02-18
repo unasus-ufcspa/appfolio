@@ -155,6 +155,7 @@ public class HorizontalRTToolbar extends LinearLayout implements RTToolbar, View
         initImageButton(R.id.toolbar_dec_indent);
         initImageButton(R.id.toolbar_link);
         initImageButton(R.id.toolbar_image);
+        initImageButton(R.id.toolbar_video_picker);
         initImageButton(R.id.toolbar_undo);
         initImageButton(R.id.toolbar_redo);
         initImageButton(R.id.toolbar_clear);
@@ -164,9 +165,12 @@ public class HorizontalRTToolbar extends LinearLayout implements RTToolbar, View
         PackageManager packageMgr = getContext().getPackageManager();
         if (packageMgr.hasSystemFeature(PackageManager.FEATURE_CAMERA)) {
             initImageButton(R.id.toolbar_image_capture);
+            initImageButton(R.id.toolbar_video_capture);
         } else {
             View imageCapture = findViewById(R.id.toolbar_image_capture);
             if (imageCapture != null) imageCapture.setVisibility(View.GONE);
+            View videoCapture = findViewById(R.id.toolbar_video_capture);
+            if (videoCapture != null) videoCapture.setVisibility(View.GONE);
         }
 
         // configure font button
@@ -670,6 +674,14 @@ public class HorizontalRTToolbar extends LinearLayout implements RTToolbar, View
 
             else if (id == R.id.toolbar_image_capture) {
                 mListener.onCaptureImage();
+            }
+
+            else if (id == R.id.toolbar_video_picker) {
+                mListener.onPickVideo();
+            }
+
+            else if (id == R.id.toolbar_video_capture) {
+                mListener.onCaptureVideo();
             }
 
             else if (id == R.id.toolbar_clear) {

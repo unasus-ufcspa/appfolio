@@ -138,10 +138,15 @@
             style="@style/RTE_ToolbarButton"
             android:background="?attr/rte_icToolbarCapture" />
 
-        <!-- myrteditoror.toolbar.RTToolbarImageButton
-            android:id="@+id/toolbar_audio"
-            style="@style/ToolbarButton"
-            android:background="?attr/rte_icToolbarAudio" /-->
+         <com.onegravity.rteditor.toolbar.RTToolbarImageButton
+            android:id="@+id/toolbar_video_capture"
+            style="@style/RTE_ToolbarButton"
+            android:background="?attr/rte_icToolbarCaptureVideo" />
+
+        <com.onegravity.rteditor.toolbar.RTToolbarImageButton
+            android:id="@+id/toolbar_video_picker"
+            style="@style/RTE_ToolbarButton"
+            android:background="?attr/rte_icToolbarVideo" />
         
         <!-- myrteditoror.toolbar.RTToolbarImageButton
             android:id="@+id/toolbar_video"

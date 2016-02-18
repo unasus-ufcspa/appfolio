@@ -1,58 +1,63 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.v4.widget.SlidingPaneLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/rteditor_fragment"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:focusableInTouchMode="true"
     android:focusable="true">
 
-    <include android:id="@+id/rte_toolbar_container" layout="@layout/rte_toolbar" />
-
-    <ScrollView
-        android:id="@+id/rte_content"
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_above="@id/rte_toolbar_container"
-        android:fillViewport="true"
-        android:scrollbarStyle="insideOverlay"
-        android:layout_below="@+id/fullscreen">
-        <RelativeLayout
-            android:id="@+id/comments"
+        android:layout_height="match_parent">
+
+        <include android:id="@+id/rte_toolbar_container" layout="@layout/rte_toolbar" />
+
+        <ScrollView
+            android:id="@+id/rte_content"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical">
-
-            <com.onegravity.rteditor.RTEditText
-                android:id="@+id/rtEditText"
+            android:layout_above="@id/rte_toolbar_container"
+            android:fillViewport="true"
+            android:scrollbarStyle="insideOverlay"
+            android:layout_below="@+id/fullscreen">
+            <RelativeLayout
+                android:id="@+id/comments"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:background="@android:color/white"
-                android:gravity="top"
-                android:hint="Boa Atividade!"
-                android:imeOptions="actionDone|flagNoEnterAction"
-                android:inputType="textMultiLine|textAutoCorrect|textCapSentences"
-                android:layout_marginLeft="35dp"
-                android:textIsSelectable="false" />
+                android:orientation="vertical">
 
-        </RelativeLayout>
-    </ScrollView>
+                <com.onegravity.rteditor.RTEditText
+                    android:id="@+id/rtEditText"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:background="@android:color/white"
+                    android:gravity="top"
+                    android:hint="Boa Atividade!"
+                    android:imeOptions="actionDone|flagNoEnterAction"
+                    android:inputType="textMultiLine|textAutoCorrect|textCapSentences"
+                    android:layout_marginLeft="35dp"
+                    android:textIsSelectable="false" />
 
-    <ImageButton
-        android:id="@+id/fullscreen"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
-        android:background="@drawable/fullscreen_text" />
+            </RelativeLayout>
+        </ScrollView>
+
+        <ImageButton
+            android:id="@+id/fullscreen"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:background="@drawable/fullscreen_text" />
+    </RelativeLayout>
 
     <RelativeLayout
         android:id="@+id/slider"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_alignParentRight="true"
         android:background="@android:color/transparent"
-        android:visibility="gone">
+        android:visibility="visible"
+        android:layout_weight="1">
 
         <LinearLayout
             android:orientation="horizontal"
@@ -61,6 +66,7 @@
             android:background="@android:color/transparent"
             android:id="@+id/button_container"
             android:gravity="bottom">
+
             <me.grantland.widget.AutofitTextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -73,8 +79,8 @@
                 android:gravity="center"
                 android:text="Geral"
                 android:textColor="#ffffff"
-                android:textStyle="bold"
-                />
+                android:textStyle="bold" />
+
             <me.grantland.widget.AutofitTextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -87,6 +93,7 @@
                 android:text="Observações"
                 android:textColor="@color/base_green"
                 android:textStyle="bold" />
+
         </LinearLayout>
 
         <FrameLayout
@@ -98,4 +105,4 @@
 
     </RelativeLayout>
 
-</RelativeLayout>
+</android.support.v4.widget.SlidingPaneLayout>
