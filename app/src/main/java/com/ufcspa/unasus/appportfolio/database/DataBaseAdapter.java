@@ -174,9 +174,14 @@ public class DataBaseAdapter {
     }
 
 
-    public List<Comentario> listComments(int idActStu) {
+    public List<Comentario> listComments(int idActStu,String typeComment) {
         ArrayList<Comentario> comentarios = new ArrayList<Comentario>();
-        String sql = "select * from tb_comment WHERE id_activity_student =" + idActStu + " ORDER BY dt_comment ASC;";
+        String sql = "select * from tb_comment WHERE id_activity_student =" + idActStu;
+        if(typeComment.equalsIgnoreCase("C")||typeComment.equalsIgnoreCase("O")||typeComment.equalsIgnoreCase("P")){
+            sql+=" AND tp_comment='"+typeComment+"' ";
+        }
+        sql+=" ORDER BY dt_comment ASC;";
+        Log.e(tag, "sql listComments:" + sql);
         Cursor c = db.rawQuery(sql, null);
         Comentario cmm;
         if (c.moveToFirst()) {
