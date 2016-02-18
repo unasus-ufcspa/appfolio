@@ -6,6 +6,7 @@ import android.content.res.Configuration;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SlidingPaneLayout;
 import android.text.Editable;
 import android.text.Layout;
 import android.text.Spannable;
@@ -28,6 +29,7 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.mikepenz.crossfader.Crossfader;
 import com.onegravity.rteditor.RTEditText;
 import com.onegravity.rteditor.RTManager;
 import com.onegravity.rteditor.RTToolbar;
@@ -65,11 +67,7 @@ public class FragmentRTEditor extends Fragment {
     private Note btNoteNow;
     private Note btLastNote;
 
-    // View lateral (Comentário específico / Comentário geral)
     private RelativeLayout slider;
-    private Animation animLeft;
-    private Animation animRight;
-    private boolean visible;
 
     private int greenLight;
     private int greenDark;
@@ -185,13 +183,16 @@ public class FragmentRTEditor extends Fragment {
     private void initCommentsTab(View view)
     {
         slider = (RelativeLayout) view.findViewById(R.id.slider);
-        slider.setVisibility(View.GONE);
 
         DisplayMetrics dm = new DisplayMetrics();
         getActivity().getWindowManager().getDefaultDisplay().getMetrics(dm);
-        int width = dm.widthPixels;
+        int width = dm.widthPixels/3;
 
-        slider.getLayoutParams().width = width / 2;
+        SlidingPaneLayout.LayoutParams relativeParams = new SlidingPaneLayout.LayoutParams(new SlidingPaneLayout.LayoutParams(SlidingPaneLayout.LayoutParams.MATCH_PARENT, SlidingPaneLayout.LayoutParams.MATCH_PARENT));
+        relativeParams.setMargins(width, 0, 0, 0);
+        slider.setLayoutParams(relativeParams);
+        slider.requestLayout();
+
         slider.requestLayout();
         slider.bringToFront();
 
@@ -214,10 +215,10 @@ public class FragmentRTEditor extends Fragment {
             }
         });
 
-        animLeft = AnimationUtils.loadAnimation(getActivity(), R.anim.anim_right);
-        animRight = AnimationUtils.loadAnimation(getActivity(), R.anim.anim_left);
+        SlidingPaneLayout layout = (SlidingPaneLayout) view.findViewById(R.id.rteditor_fragment);
+        layout.setSliderFadeColor(Color.TRANSPARENT);
 
-        visible = false;
+        layout.openPane();
     }
 
     private float getCaretYPosition(int position) {
@@ -253,19 +254,12 @@ public class FragmentRTEditor extends Fragment {
                         aux.setTextColor(greenDark);
                     }
                 }
-            }
-        });
 
-        note.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View v) {
                 Singleton single = Singleton.getInstance();
                 single.note.setBtY(yPosition);
                 single.note.setSelectedText(selectedActualText);
                 single.note.setBtId(id);
                 showCommentsTab(true);
-
-                return false;
             }
         });
 
@@ -379,7 +373,7 @@ public class FragmentRTEditor extends Fragment {
 
             scrollview.addView(createButton(idButton, String.valueOf(currentSpecificComment), yButton));
 
-            mRTManager.onEffectSelected(Effects.BGCOLOR, getResources().getColor(R.color.base_green_light), idButton);
+            mRTManager.onEffectSelected(Effects.BGCOLOR, greenLight, idButton);
             mRTMessageField.setSelection(endSelection);
             mRTMessageField.setSelected(false);
         }
@@ -391,19 +385,6 @@ public class FragmentRTEditor extends Fragment {
             getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.comments_container, new FragmentSpecificComments()).commit();
         else
             getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.comments_container, new FragmentComments()).commit();
-
-        if(!visible)
-        {
-            slider.setVisibility(View.VISIBLE);
-            slider.startAnimation(animLeft);
-            visible = true;
-        }
-        else
-        {
-            slider.startAnimation(animRight);
-            slider.setVisibility(View.GONE);
-            visible = false;
-        }
     }
 
     private void changeNotePosition()
