@@ -3,6 +3,7 @@ package com.ufcspa.unasus.appportfolio.Adapter;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -22,8 +23,17 @@ import java.util.List;
  */
 public class SpecificCommentArrayAdapter extends ArrayAdapter<OneComment>{
     private TextView messageText;
+    private TextView referenceText;
     private List<OneComment> comment = new ArrayList<OneComment>();
     private LinearLayout wrapper;
+    private boolean insertingReference=false;
+
+    public boolean isInsertingReference() {
+        return insertingReference;
+    }
+    public void setInsertingReference(boolean insertingReference) {
+        this.insertingReference = insertingReference;
+    }
 
     @Override
     public void add(OneComment object) {
@@ -57,10 +67,18 @@ public class SpecificCommentArrayAdapter extends ArrayAdapter<OneComment>{
         messageText = (TextView) row.findViewById(R.id.comment);
 
         messageText.setText(coment.comment);
+            if(insertingReference) {
+                messageText.setText(coment.comment);
+                insertingReference=false;
+            }else{
+                if(position!=0) {
+                    messageText.setBackgroundResource(coment.orientation ? R.drawable.tutor_ballon_specific_comment : R.drawable.my_ballon_specific_comment);
+                    wrapper.setGravity(coment.orientation ? Gravity.LEFT : Gravity.RIGHT);
+                }else{
+                    Log.d("view","fisrt position");
+                }
 
-        messageText.setBackgroundResource(coment.orientation ? R.drawable.tutor_ballon_specific_comment : R.drawable.my_ballon_specific_comment);
-        wrapper.setGravity(coment.orientation ? Gravity.LEFT : Gravity.RIGHT);
-
+            }
         return row;
     }
 

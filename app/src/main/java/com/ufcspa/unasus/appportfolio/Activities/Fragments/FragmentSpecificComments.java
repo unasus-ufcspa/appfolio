@@ -29,6 +29,7 @@ public class FragmentSpecificComments extends Frag {
     private Button btAttachment;
     //private LoremIpsum ipsum;
     private EditText edtMessage;
+    private String reference;
     private Note noteNow;
 
 
@@ -56,11 +57,7 @@ public class FragmentSpecificComments extends Frag {
 
         Singleton single= Singleton.getInstance();
         noteNow=single.note;
-
-        edtMessage.setText("\"" + noteNow.getSelectedText() + "\"");
-//        edtMessage.setFocusable(true);
-        //edtMessage.setShowSoftInputOnFocus(true);
-        edtMessage.requestFocus();
+        insertReference();
         InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(getActivity().INPUT_METHOD_SERVICE);
         imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY);
         btGenMess.setOnClickListener(new View.OnClickListener() {
@@ -73,6 +70,19 @@ public class FragmentSpecificComments extends Frag {
 
     private void insertComment(){
         adapter.add(new OneComment(false, edtMessage.getText().toString()));
+        edtMessage.setText("");
+    }
+
+    private void insertReference(){
+        if(adapter!=null) {
+            Singleton single = Singleton.getInstance();
+            noteNow = single.note;
+            if (!noteNow.getSelectedText().equalsIgnoreCase("null")){
+                adapter.setInsertingReference(true);
+                adapter.add(new OneComment(false, "Referência:\n"+noteNow.getSelectedText()));
+                reference=noteNow.getSelectedText();
+            }
+        }
     }
 
 
