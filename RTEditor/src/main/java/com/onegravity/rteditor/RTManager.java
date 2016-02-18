@@ -19,6 +19,7 @@ package com.onegravity.rteditor;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.provider.MediaStore;
 import android.text.Editable;
 import android.text.Layout;
 import android.text.Layout.Alignment;
@@ -37,6 +38,7 @@ import com.onegravity.rteditor.RTOperationManager.TextChangeOperation;
 import com.onegravity.rteditor.api.RTApi;
 import com.onegravity.rteditor.api.media.RTImage;
 import com.onegravity.rteditor.api.media.RTMedia;
+import com.onegravity.rteditor.api.media.RTVideo;
 import com.onegravity.rteditor.effects.AbsoluteSizeEffect;
 import com.onegravity.rteditor.effects.AlignmentEffect;
 import com.onegravity.rteditor.effects.BackgroundColorEffect;
@@ -59,6 +61,7 @@ import com.onegravity.rteditor.media.choose.MediaEvent;
 import com.onegravity.rteditor.spans.ImageSpan;
 import com.onegravity.rteditor.spans.LinkSpan;
 import com.onegravity.rteditor.spans.RTSpan;
+import com.onegravity.rteditor.spans.VideoSpan;
 import com.onegravity.rteditor.utils.Constants.MediaAction;
 import com.onegravity.rteditor.utils.Helper;
 import com.onegravity.rteditor.utils.Selection;
@@ -441,6 +444,30 @@ public class RTManager implements RTToolbarListener, RTEditTextListener {
         onPickCaptureImage(MediaAction.CAPTURE_PICTURE);
     }
 
+    @Override
+    public void onCaptureVideo() {
+        onRecordVideo(MediaAction.CAPTURE_VIDEO);
+    }
+
+    @Override
+    public void onPickVideo() {
+        onRecordVideo(MediaAction.PICK_VIDEO);
+    }
+
+    private void onRecordVideo(MediaAction mediaAction)
+    {
+        RTEditText editor = getActiveEditor();
+        if (editor != null && mRTApi != null) {
+            mActiveEditor = editor.getId();
+
+            Intent intent = new Intent(RTApi.getApplicationContext(), MediaChooserActivity.class)
+                    .putExtra(MediaChooserActivity.EXTRA_MEDIA_ACTION, mediaAction.name())
+                    .putExtra(MediaChooserActivity.EXTRA_MEDIA_FACTORY, mRTApi);
+
+            mRTApi.startActivityForResult(intent, mediaAction.requestCode());
+        }
+    }
+
     private void onPickCaptureImage(MediaAction mediaAction) {
         RTEditText editor = getActiveEditor();
         if (editor != null && mRTApi != null) {
@@ -478,6 +505,45 @@ public class RTManager implements RTToolbarListener, RTEditTextListener {
                         int selStartAfter = editor.getSelectionStart();
                         int selEndAfter = editor.getSelectionEnd();
                         editor.onAddMedia(image);
+
+                        Spannable newSpannable = editor.cloneSpannable();
+
+                        mOPManager.executed(editor, new RTOperationManager.TextChangeOperation(oldSpannable, newSpannable,
+                                selection.start(), selection.end(), selStartAfter, selEndAfter));
+                    } catch (OutOfMemoryError e) {
+                        str.delete(selection.start(), selection.end() + 1);
+                        mRTApi.makeText(R.string.rte_add_image_error, Toast.LENGTH_LONG).show();
+                    }
+                }
+            }
+
+        });
+    }
+
+    /* called from onActivityResult() */
+    private void insertVideo(final RTVideo video) {
+        mRTApi.runOnUiThread(new Runnable() {
+
+            @Override
+            public void run() {
+                RTEditText editor = mEditors.get(mActiveEditor);
+                if (video != null && editor != null) {
+                    Selection selection = new Selection(editor);
+                    Editable str = editor.getText();
+
+                    // Unicode Character 'OBJECT REPLACEMENT CHARACTER' (U+FFFC)
+                    // see http://www.fileformat.info/info/unicode/char/fffc/index.htm
+                    str.insert(selection.start(), "\uFFFC");
+
+                    try {
+                        // now add the actual image and inform the RTOperationManager about the operation
+                        Spannable oldSpannable = editor.cloneSpannable();
+
+                        VideoSpan videoSpan = new VideoSpan(video, false);
+                        str.setSpan(videoSpan, selection.start(), selection.end() + 1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                        int selStartAfter = editor.getSelectionStart();
+                        int selEndAfter = editor.getSelectionEnd();
+                        editor.onAddMedia(video);
 
                         Spannable newSpannable = editor.cloneSpannable();
 
@@ -684,6 +750,9 @@ public class RTManager implements RTToolbarListener, RTEditTextListener {
         RTMedia media = event.getMedia();
         if (media instanceof RTImage) {
             insertImage( (RTImage) media );
+        }else if(media instanceof RTVideo)
+        {
+            insertVideo((RTVideo) media);
         }
     }
 

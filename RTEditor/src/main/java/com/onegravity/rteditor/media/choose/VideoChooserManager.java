@@ -50,6 +50,7 @@ class VideoChooserManager extends MediaChooserManager implements VideoProcessorL
 
     private VideoChooserListener mListener;
 
+
     VideoChooserManager(MonitoredActivity activity, MediaAction mediaAction,
                         RTMediaFactory<RTImage, RTAudio, RTVideo> mediaFactory,
                         VideoChooserListener listener, Bundle savedInstanceState) {
@@ -89,15 +90,15 @@ class VideoChooserManager extends MediaChooserManager implements VideoProcessorL
             File videoFile = MediaUtils.createUniqueFile(videoPath, CAPTURED_VIDEO_TEMPLATE, false);
             videoPath.mkdirs();
 
-            if (videoPath.exists() && videoPath.createNewFile()) {
+//            if (videoPath.exists() && videoPath.createNewFile()) {
                 setOriginalFile(videoFile.getAbsolutePath());
                 Intent intent = new Intent(MediaStore.ACTION_VIDEO_CAPTURE)
                         .putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(new File(getOriginalFile())));
                 startActivity(intent);
-            } else {
-                Toast.makeText(mActivity, "Can't take picture without an sdcard", Toast.LENGTH_SHORT).show();
-                return false;
-            }
+//            } else {
+//                Toast.makeText(mActivity, "Can't capture  without an sdcard", Toast.LENGTH_SHORT).show();
+//                return false;
+//            }
         } catch (Exception e) {
             Log.e(getClass().getSimpleName(), e.getMessage(), e);
         }
