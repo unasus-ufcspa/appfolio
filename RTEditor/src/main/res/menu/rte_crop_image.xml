@@ -19,29 +19,33 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
+        android:title="Rotate Left"
         android:id="@+id/rotate_left"
-        android:icon="?attr/rte_icMenuRotateLeft"
+        android:icon="@drawable/ic_menu_rotate_left_light"
         app:showAsAction="always"
         android:orderInCategory="1"
         android:alphabeticShortcut="l"/>
 
     <item
+        android:title="Rotate Right"
         android:id="@+id/rotate_right"
-        android:icon="?attr/rte_icMenuRotateRight"
+        android:icon="@drawable/ic_menu_rotate_right_light"
         app:showAsAction="always"
         android:orderInCategory="2"
         android:alphabeticShortcut="r"/>
 
     <item
-		android:id="@+id/save"
-		android:icon="?attr/rte_icMenuSave"
+        android:title="Save"
+        android:id="@+id/save"
+        android:icon="@drawable/ic_menu_save_light"
         app:showAsAction="always"
         android:orderInCategory="3"
         android:alphabeticShortcut="s"/>
-    
+
     <item
-		android:id="@+id/cancel"
-		android:icon="?attr/rte_icMenuCloseClearCancel"
+        android:title="Cancel"
+        android:id="@+id/cancel"
+        android:icon="@drawable/ic_menu_close_clear_cancel_light"
         app:showAsAction="always"
         android:orderInCategory="4"
         android:alphabeticShortcut="q"/>
