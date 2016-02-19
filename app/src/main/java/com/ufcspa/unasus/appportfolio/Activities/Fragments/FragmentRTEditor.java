@@ -26,6 +26,7 @@ import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -136,6 +137,9 @@ public class FragmentRTEditor extends Fragment {
         mRTMessageField.setLineSpacing(15, 1);
 
         currentSpecificComment = 0;
+
+        LinearLayout layout = (LinearLayout) view.findViewById(R.id.info_rteditor_container);
+        layout.clearFocus();
 
         fullScreen = (ImageButton) view.findViewById(R.id.fullscreen);
         fullScreen.setOnClickListener(new View.OnClickListener() {
