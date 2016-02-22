@@ -1,6 +1,5 @@
 package com.ufcspa.unasus.appportfolio.Activities.Fragments;
 
-import android.content.ClipData;
 import android.content.Context;
 import android.content.res.Configuration;
 import android.graphics.Color;
@@ -17,19 +16,14 @@ import android.view.ActionMode;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewParent;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.ImageButton;
-import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.mikepenz.crossfader.Crossfader;
 import com.onegravity.rteditor.RTEditText;
 import com.onegravity.rteditor.RTManager;
 import com.onegravity.rteditor.RTToolbar;
@@ -76,6 +70,8 @@ public class FragmentRTEditor extends Fragment {
     private int greenLight;
     private int greenDark;
 
+    private Singleton singleton;
+
     public FragmentRTEditor() {}
 
 
@@ -103,6 +99,8 @@ public class FragmentRTEditor extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_rteditor, null);
 
+        singleton = Singleton.getInstance();
+
         greenLight = getResources().getColor(R.color.base_green_light);
         greenDark = getResources().getColor(R.color.base_green);
 
@@ -115,7 +113,7 @@ public class FragmentRTEditor extends Fragment {
         // create RTManager
         RTApi rtApi = new RTApi(getActivity(), new RTProxyImpl(getActivity()), new RTMediaFactoryImpl(getActivity(), true));
 
-        mRTManager = new RTManager(rtApi, savedInstanceState);
+        mRTManager = new RTManager(rtApi, savedInstanceState, getContext());
 
         ViewGroup toolbarContainer = (ViewGroup) view.findViewById(R.id.rte_toolbar_container);
 
@@ -163,16 +161,20 @@ public class FragmentRTEditor extends Fragment {
 
         //currentSpecificComment = 0;
 
+        LinearLayout layout = (LinearLayout) view.findViewById(R.id.info_rteditor_container);
+        layout.clearFocus();
+
         fullScreen = (ImageButton) view.findViewById(R.id.fullscreen);
         fullScreen.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Log.d("rteditor", mRTMessageField.getText(RTFormat.HTML));
-                ((MainActivity)getActivity()).hideDrawer();
+                ((MainActivity) getActivity()).hideDrawer();
             }
         });
 
         initCommentsTab(view);
+        initTopBar(view);
 
         return view;
     }
@@ -213,7 +215,8 @@ public class FragmentRTEditor extends Fragment {
 
         DisplayMetrics dm = new DisplayMetrics();
         getActivity().getWindowManager().getDefaultDisplay().getMetrics(dm);
-        int width = dm.widthPixels/3;
+
+        int width = getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT ? dm.widthPixels / 4 : dm.widthPixels / 3;
 
         SlidingPaneLayout.LayoutParams relativeParams = new SlidingPaneLayout.LayoutParams(new SlidingPaneLayout.LayoutParams(SlidingPaneLayout.LayoutParams.MATCH_PARENT, SlidingPaneLayout.LayoutParams.MATCH_PARENT));
         relativeParams.setMargins(width, 0, 0, 0);
@@ -243,8 +246,17 @@ public class FragmentRTEditor extends Fragment {
 
         SlidingPaneLayout layout = (SlidingPaneLayout) view.findViewById(R.id.rteditor_fragment);
         layout.setSliderFadeColor(Color.TRANSPARENT);
+        layout.setBackgroundColor(Color.TRANSPARENT);
 
         layout.openPane();
+    }
+
+    private void initTopBar(View view) {
+        TextView studentName = (TextView) view.findViewById(R.id.student_name);
+        TextView activityName = (TextView) view.findViewById(R.id.activity_name);
+
+//        studentName.setText(singleton.portfolioClass.getStudentName());
+        activityName.setText("Atividade " + singleton.activity.getNuOrder() + ": " + singleton.activity.getTitle());
     }
 
     private float getCaretYPosition(int position) {

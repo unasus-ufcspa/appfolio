@@ -284,7 +284,7 @@ public class DataBaseAdapter {
         ActivityStudent acStudent = new ActivityStudent();
         String query = "select tx_activity from tb_activity_student WHERE id_activity_student = " + idActivityStudent + ";";
         Cursor c = null;
-        Log.d(tag, "query lista act Stu:"+query);
+        Log.d(tag, "query lista act Stu:" + query);
         try {
             c = db.rawQuery(query, null);
             if (c.moveToFirst()) {
@@ -630,7 +630,7 @@ public class DataBaseAdapter {
     {
         String query = "SELECT  id_activity_student FROM tb_activity_student WHERE \n" +
                 "\tid_portfolio_student = " + idPortfolioStudent + " and id_activity = " + idActivity + ";";
-        Log.d(tag,"query getActStuID:"+query);
+        Log.d(tag, "query getActStuID:" + query);
         Cursor cursor = db.rawQuery(query, null);
 
         if(cursor.moveToFirst()) {
@@ -661,6 +661,21 @@ public class DataBaseAdapter {
 
     public ArrayList<Attachment> getAttachmentsFromActivityStudent(int idActivityStudent, String type) {
         String query = "SELECT * FROM tb_attachment WHERE id_activity_student = " + idActivityStudent + " and ds_type = '" + type + "';";
+
+        ArrayList<Attachment> array_attachment = new ArrayList<>();
+
+        Cursor cursor = db.rawQuery(query, null);
+
+        do {
+            if (cursor.getCount() != 0)
+                array_attachment.add(cursorToAttachment(cursor));
+        } while (cursor.moveToNext());
+
+        return array_attachment;
+    }
+
+    public ArrayList<Attachment> getAttachmentsFromStudent() {
+        String query = "SELECT * FROM tb_attachment;";
 
         ArrayList<Attachment> array_attachment = new ArrayList<>();
 

@@ -5,25 +5,16 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
-import android.support.v4.app.FragmentTabHost;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
-import android.util.DisplayMetrics;
-import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 
 import com.mikepenz.crossfader.Crossfader;
-import com.ufcspa.unasus.appportfolio.Activities.Fragments.FragRef;
 import com.ufcspa.unasus.appportfolio.Activities.Fragments.FragmentAttachment;
-import com.ufcspa.unasus.appportfolio.Activities.Fragments.FragmentComments;
-import com.ufcspa.unasus.appportfolio.Activities.Fragments.FragmentEditText;
 import com.ufcspa.unasus.appportfolio.Activities.Fragments.FragmentRTEditor;
-import com.ufcspa.unasus.appportfolio.Activities.Fragments.FragmentSelectPortfolio;
 import com.ufcspa.unasus.appportfolio.Activities.Fragments.FragmentStudentActivities;
 import com.ufcspa.unasus.appportfolio.Model.Singleton;
 import com.ufcspa.unasus.appportfolio.R;
@@ -147,7 +138,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         switch (id)
         {
             case 0:
-                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new FragmentRTEditor()).commit();//FragmentRTEditor
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new FragmentRTEditor()).commit();//FragmentSelectPortfolio
                 break;
             case 1:
                 if(singleton.portfolioClass != null)
@@ -158,9 +149,17 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             case 3:
                 break;
             case 4:
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new FragmentAttachment()).commit();
                 break;
             case 5:
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new FragmentRTEditor()).commit();
+                break;
+            case 6:
+                Bundle bundle = new Bundle();
+                bundle.putBoolean("RTEditor", true);
+                FragmentAttachment fragmentAttachment = new FragmentAttachment();
+                fragmentAttachment.setArguments(bundle);
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragmentAttachment).commit();
                 break;
             default:
                 break;
@@ -173,7 +172,4 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 //        fragmentContainer.
     }
 
-    public int getMiniDrawerWidth() {
-        return miniDrawer.getWidth();
-    }
 }

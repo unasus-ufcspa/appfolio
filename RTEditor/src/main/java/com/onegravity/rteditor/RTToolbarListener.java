@@ -43,4 +43,6 @@ public interface RTToolbarListener {
     public void onCaptureVideo();
 
     public void onPickVideo();
+
+    public void onPickAttachment();
 }

@@ -29,7 +29,6 @@ import com.onegravity.rteditor.api.media.RTVideo;
 import com.onegravity.rteditor.api.media.RTVideoImpl;
 import com.onegravity.rteditor.media.MediaUtils;
 import com.onegravity.rteditor.utils.Helper;
-
 import com.onegravity.rteditor.utils.io.IOUtils;
 
 import java.io.File;
@@ -71,6 +70,7 @@ public class RTMediaFactoryImpl implements RTMediaFactory<RTImage, RTAudio, RTVi
         }
         return mediaPath.getAbsolutePath();
     }
+
 
 	/*
      * Use case 1: Inserting media objects into the rich text editor.

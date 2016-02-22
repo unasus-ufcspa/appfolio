@@ -1,24 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:gravity="center">
 
-    <!--<ImageView-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="match_parent"-->
-        <!--android:id="@+id/img_attachment"-->
-        <!--android:layout_gravity="center_horizontal" />-->
-
-    <!--<ImageView-->
-        <!--android:id="@+id/image"-->
-        <!--android:layout_width="100dp"-->
-        <!--android:layout_height="100dp" />-->
-    <TextView
-        android:layout_width="match_parent"
+    <ImageView
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="Medium Text"
-        android:id="@+id/textView"
-        android:layout_gravity="center_horizontal" />
-</LinearLayout>
+        android:id="@+id/img_attachment"
+        android:layout_gravity="center_horizontal"
+        android:src="@drawable/attachment_plus" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="Small Text"
+        android:id="@+id/desc_attachment"
+        android:layout_gravity="center_horizontal"
+        android:lines="2"
+        android:gravity="center"
+        android:layout_below="@+id/img_attachment"
+        android:layout_alignLeft="@+id/img_attachment"
+        android:layout_alignStart="@+id/img_attachment"
+        android:layout_alignRight="@+id/img_attachment"
+        android:layout_alignEnd="@+id/img_attachment" />
+
+</RelativeLayout>
