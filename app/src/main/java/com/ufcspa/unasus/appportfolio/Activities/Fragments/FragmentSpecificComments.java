@@ -24,6 +24,7 @@ import com.ufcspa.unasus.appportfolio.R;
 import com.ufcspa.unasus.appportfolio.database.DataBaseAdapter;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 
 /**
@@ -40,6 +41,7 @@ public class FragmentSpecificComments extends Frag {
     private EditText edtMessage;
     private String reference;
     private Note noteNow;
+    private ArrayList<Comentario> lista;
     private ImageButton btExpand;
     private static boolean EXPANDED_FLAG=false;
 
@@ -67,9 +69,9 @@ public class FragmentSpecificComments extends Frag {
         adapter = new SpecificCommentArrayAdapter(getActivity().getApplicationContext(), R.layout.comment_item);
 
         lv.setAdapter(adapter);
+        loadCommentsFromDB();
+//
 
-        Singleton single= Singleton.getInstance();
-        noteNow=single.note;
         insertReference();
         InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(getActivity().INPUT_METHOD_SERVICE);
         imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY);
@@ -82,16 +84,16 @@ public class FragmentSpecificComments extends Frag {
         btExpand.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(EXPANDED_FLAG==false) {
-                    txNote.getLayoutParams().height=300;
+                if (EXPANDED_FLAG == false) {
+                    txNote.getLayoutParams().height = 300;
                     txNote.setMovementMethod(new ScrollingMovementMethod());
-                    EXPANDED_FLAG=true;
+                    EXPANDED_FLAG = true;
                     txNote.requestLayout();
-                    Log.d("editor","flag true");
-                }else{
-                    txNote.getLayoutParams().height=70;
+                    Log.d("editor", "flag true");
+                } else {
+                    txNote.getLayoutParams().height = 70;
                     txNote.setMovementMethod(null);
-                    EXPANDED_FLAG=false;
+                    EXPANDED_FLAG = false;
                     txNote.requestLayout();
                     Log.d("editor", "flag false");
                 }
@@ -111,12 +113,35 @@ public class FragmentSpecificComments extends Frag {
         return c;
     }
 
+
+    public void loadCommentsFromDB(){
+        try {
+            adapter.clearAdapter();
+            DataBaseAdapter db = DataBaseAdapter.getInstance(getActivity());
+            Singleton singleton = Singleton.getInstance();
+            lista = (ArrayList<Comentario>) db.listComments(singleton.activity.getIdAtivity(),"O",singleton.note.getBtId());//lista comentario gerais filtrando por O
+            if (lista.size() != 0) {
+                for (int i = 0; i < lista.size(); i++) {
+                    adapter.add(new OneComment(lista.get(i).getIdAuthor() != singleton.user.getIdUser(),
+                            lista.get(i).getTxtComment() + "\n" + lista.get(i).getDateComment()));
+                }
+                Log.d("Banco", "Lista populada:" + lista);
+            } else {
+                Log.d("Banco", "Lista retornou vazia!");
+            }
+        } catch (Exception e) {
+
+        }
+    }
+
+
     private void insertComment(Comentario c){
         adapter.add(new OneComment(false, edtMessage.getText().toString()));
         edtMessage.setText("");
         try {
+            c.setTxtReference(txNote.getText().toString());
             DataBaseAdapter db = DataBaseAdapter.getInstance(getActivity());
-            db.insertComment(c);
+            db.insertSpecificComment(c, noteNow.getBtId());
             Log.d("Banco:", "comentario inserido no bd interno com sucesso");
         }
         catch (Exception e) {
@@ -128,9 +153,14 @@ public class FragmentSpecificComments extends Frag {
         if(adapter!=null) {
             Singleton single = Singleton.getInstance();
             noteNow = single.note;
-            if (!noteNow.getSelectedText().equalsIgnoreCase("null")){
+            if(lista.size()!=0) { // se a lista nao estiver vazia quer dizer que a nota de referencia já existe no banco
+                noteNow.setSelectedText(lista.get(0).getTxtReference());
+                Log.d("noteNow","lista:"+lista.get(0).toJSON());
+            }
+
+            if (noteNow.getSelectedText().toString()!=null && !noteNow.getSelectedText().toString().equalsIgnoreCase("null")){
                 reference=noteNow.getSelectedText();
-                txNote.setText("Referência: \n"+"\""+reference+"\"");
+                txNote.setText("Referência: \n" + "\"" + reference + "\"");
             }
         }
     }

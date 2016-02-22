@@ -45,12 +45,15 @@ import com.onegravity.rteditor.converter.ConverterSpannedToHtml;
 import com.onegravity.rteditor.effects.Effects;
 import com.onegravity.rteditor.spans.BackgroundColorSpan;
 import com.ufcspa.unasus.appportfolio.Activities.MainActivity;
+import com.ufcspa.unasus.appportfolio.Model.ActivityStudent;
 import com.ufcspa.unasus.appportfolio.Model.Note;
 import com.ufcspa.unasus.appportfolio.Model.Singleton;
 import com.ufcspa.unasus.appportfolio.R;
+import com.ufcspa.unasus.appportfolio.database.DataBaseAdapter;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 
 public class FragmentRTEditor extends Fragment {
@@ -61,7 +64,8 @@ public class FragmentRTEditor extends Fragment {
     private int currentSpecificComment;
     private ViewGroup scrollview;
     private ImageButton fullScreen;
-
+    private ActivityStudent acStudent;
+    private DataBaseAdapter source;
     private HashMap<Integer,Note> specificCommentsNotes;
     private String selectedActualText = "null";
     private Note btNoteNow;
@@ -74,6 +78,27 @@ public class FragmentRTEditor extends Fragment {
 
     public FragmentRTEditor() {}
 
+
+
+
+    public void loadLastText() {
+        Singleton singleton = Singleton.getInstance();
+        source = DataBaseAdapter.getInstance(getActivity());
+        acStudent = source.listActivityStudent(singleton.idActivityStudent);
+        mRTMessageField.setRichTextEditing(true,acStudent.getTxtActivity());
+    }
+
+    public void saveText() {
+        Log.d("editor DB","salvando texto..");
+        acStudent.toString();
+        source = DataBaseAdapter.getInstance(getActivity());
+        acStudent.setTxtActivity(mRTMessageField.getText(RTFormat.HTML));
+        source.updateActivityStudent(acStudent);
+    }
+
+
+
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_rteditor, null);
@@ -82,6 +107,7 @@ public class FragmentRTEditor extends Fragment {
         greenDark = getResources().getColor(R.color.base_green);
 
         specificCommentsNotes = new HashMap<>();
+        getIdNotesFromDB();
         btLastNote = new Note(0,"null",0);
 
         scrollview = (ViewGroup) view.findViewById(R.id.comments);
@@ -103,8 +129,8 @@ public class FragmentRTEditor extends Fragment {
         mRTManager.registerEditor(mRTMessageField, true);
 
         mRTMessageField.setCustomSelectionActionModeCallback(new ActionBarCallBack());
-
-        mRTMessageField.setRichTextEditing(true, "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin ligula dolor, egestas quis purus et, tristique congue libero. Nulla ultrices urna nibh, facilisis aliquet nunc porta vel.");
+        loadLastText();
+        //mRTMessageField.setRichTextEditing(true, "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin ligula dolor, egestas quis purus et, tristique congue libero. Nulla ultrices urna nibh, facilisis aliquet nunc porta vel.");
 
         mRTMessageField.addTextChangedListener(new TextWatcher() {
             private float posStart;
@@ -135,7 +161,7 @@ public class FragmentRTEditor extends Fragment {
 
         mRTMessageField.setLineSpacing(15, 1);
 
-        currentSpecificComment = 0;
+        //currentSpecificComment = 0;
 
         fullScreen = (ImageButton) view.findViewById(R.id.fullscreen);
         fullScreen.setOnClickListener(new View.OnClickListener() {
@@ -174,6 +200,7 @@ public class FragmentRTEditor extends Fragment {
 
     @Override
     public void onDestroy() {
+        saveText();
         super.onDestroy();
         if (mRTManager != null) {
             mRTManager.onDestroy(true);
@@ -231,6 +258,18 @@ public class FragmentRTEditor extends Fragment {
         return 0;
     }
 
+
+    public void getIdNotesFromDB(){
+        DataBaseAdapter data= DataBaseAdapter.getInstance(getActivity());
+        Singleton single= Singleton.getInstance();
+        ArrayList<Integer>ids = (ArrayList<Integer>) data.listSpecificComments(single.idActivityStudent);
+        for(int id : ids){
+            specificCommentsNotes.put(id,new Note(id,"",0));
+        }
+        currentSpecificComment=specificCommentsNotes.size();
+        Log.d("editor notes","currentSpecificComment:"+currentSpecificComment);
+    }
+
     private Button createButton(final int id, final String value, final float yPosition) {
         LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         Button note = (Button) inflater.inflate(R.layout.btn_specific_comment, scrollview, false);
@@ -258,6 +297,7 @@ public class FragmentRTEditor extends Fragment {
                 single.note.setBtY(yPosition);
                 single.note.setSelectedText(selectedActualText);
                 single.note.setBtId(id);
+                Log.d("editor", "button id in singleton is now:"+single.note.getBtId());
                 showCommentsTab(true);
             }
         });
@@ -331,6 +371,7 @@ public class FragmentRTEditor extends Fragment {
                             createSpecificCommentNote(getCaretYPosition(startSelection), selectedText);
                             Singleton single=Singleton.getInstance();
                             single.selectedText = mRTMessageField.getText().toString().substring(startSelection,endSelection);
+                            DataBaseAdapter data = DataBaseAdapter.getInstance(getActivity());
                         }
                     }
                 }
@@ -358,7 +399,7 @@ public class FragmentRTEditor extends Fragment {
         private void createSpecificCommentNote(float yPosition, String selectedText) {
 
             currentSpecificComment++;
-
+            Log.d("editor ","current note is now:"+currentSpecificComment);
             float yButton = 0;
             int idButton = -1;
 

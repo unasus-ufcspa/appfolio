@@ -113,7 +113,7 @@ public class FragmentComments extends Frag {
             adapter.clearAdapter();
             DataBaseAdapter db = DataBaseAdapter.getInstance(getActivity());
             Singleton singleton = Singleton.getInstance();
-            ArrayList<Comentario> lista = (ArrayList<Comentario>) db.listComments(singleton.activity.getIdAtivity(),"C");//lista comentario gerais filtrando por C
+            ArrayList<Comentario> lista = (ArrayList<Comentario>) db.listComments(singleton.activity.getIdAtivity(),"C",0);//lista comentario gerais filtrando por C
             if (lista.size() != 0) {
                 for (int i = 0; i < lista.size(); i++) {
                     adapter.add(new OneComment(lista.get(i).getIdAuthor() != singleton.user.getIdUser(),

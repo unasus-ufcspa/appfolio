@@ -31,7 +31,7 @@ public class DataBaseAdapter {
     private static DataBaseAdapter mInstance = null;
     private SQLiteDatabase db;
     private DataBase helper;
-    private String tag = "BANCO DE DADOS";
+    private String tag = "BANCO DE DADOS ";
 
     private DataBaseAdapter(Context ctx) {
         helper = new DataBase(ctx);
@@ -139,6 +139,24 @@ public class DataBaseAdapter {
         }
 
     }
+    public void insertSpecificComment(Comentario c,int idNote) {
+        ContentValues cv = new ContentValues();
+        cv.put("id_activity_student", c.getIdActivityStudent());
+        cv.put("id_author", c.getIdAuthor());
+        cv.put("tx_comment", c.getTxtComment());
+        cv.put("tx_reference", c.getTxtReference());
+        cv.put("tp_comment", c.getTypeComment());
+        cv.put("dt_comment", c.getDateComment());
+        cv.put("id_note", idNote);
+        db.insert("tb_comment", null, cv);
+        try {
+//            db.close();
+            Log.d(tag+" insertSpecificComment", "inseriu comentario no banco");
+        } catch (Exception e) {
+            Log.e(tag+ " insertSpecificComment", "erro ao inserir:" + e.getMessage());
+        }
+
+    }
 
     public Comentario getCommentById(int id){
         String sql = "select * from tb_comment WHERE id_comment ="+id+ ";";
@@ -174,13 +192,21 @@ public class DataBaseAdapter {
     }
 
 
-    public List<Comentario> listComments(int idActStu,String typeComment) {
+    public List<Comentario> listComments(int idActStu,String typeComment,int idNote) {
         ArrayList<Comentario> comentarios = new ArrayList<Comentario>();
         String sql = "select * from tb_comment WHERE id_activity_student =" + idActStu;
+        StringBuilder stBuild = new StringBuilder(sql);
         if(typeComment.equalsIgnoreCase("C")||typeComment.equalsIgnoreCase("O")||typeComment.equalsIgnoreCase("P")){
-            sql+=" AND tp_comment='"+typeComment+"' ";
+            //sql+=" AND tp_comment='"+typeComment+"' ";
+            stBuild.append(" AND tp_comment='"+typeComment+"' ");
+            if(typeComment.equalsIgnoreCase("O")){
+                //sql+=" AND id_note="+idNote;
+                stBuild.append(" AND id_note="+idNote);
+            }
         }
-        sql+=" ORDER BY dt_comment ASC;";
+        //sql+=" ORDER BY dt_comment ASC;";
+        stBuild.append(" ORDER BY dt_comment ASC;");
+        sql=stBuild.toString();
         Log.e(tag, "sql listComments:" + sql);
         Cursor c = db.rawQuery(sql, null);
         Comentario cmm;
@@ -210,6 +236,38 @@ public class DataBaseAdapter {
         return comentarios;
     }
 
+    public List<Integer> listSpecificComments(int idActStu) {
+        ArrayList<Integer> comentarios = new ArrayList<Integer>();
+        String sql = "SELECT DISTINCT id_note from tb_comment WHERE id_activity_student =" + idActStu+" AND tp_comment='O'";
+        Log.e(tag, "sql listComments:" + sql);
+        Cursor c = db.rawQuery(sql, null);
+       Integer id;
+        if (c.moveToFirst()) {
+            do {
+                try {
+                    id=c.getInt(0);
+                    Log.e(tag, "listSpecificComments idnow:" +id);
+                    comentarios.add(id);
+                } catch (Exception v) {
+                    Log.e(tag, "erro ao pegar dados do banco:" + v.getMessage());
+                }
+                //add comment
+            } while (c.moveToNext());
+            c.close();
+//            db.close();
+        } else {
+            Log.d(tag+" listSpecific comments", "não retornou nada");
+        }
+        Log.d(tag, "listou notas no banco n:" + comentarios.size());
+        return comentarios;
+    }
+
+
+
+
+
+
+
     public void updateActivityStudent(ActivityStudent activityStudent) {
         ContentValues cv = new ContentValues();
         cv.put("tx_activity", activityStudent.getTxtActivity());
@@ -232,6 +290,7 @@ public class DataBaseAdapter {
             if (c.moveToFirst()) {
                 acStudent.setIdActivityStudent(idActivityStudent);
                 acStudent.setTxtActivity(c.getString(0));
+                Log.d(tag, "há texto da atividade no banco:"+acStudent.getTxtActivity());
             } else {
                 Log.d(tag, "não há texto da atividade no banco");
                 acStudent.setIdActivityStudent(idActivityStudent);

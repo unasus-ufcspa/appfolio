@@ -14,6 +14,15 @@ public class Comentario {
     private int idComment;
     private int idActivityStudent;
     private int idAuthor;
+    private int idNote;
+
+    public int getIdNote() {
+        return idNote;
+    }
+
+    public void setIdNote(int idNote) {
+        this.idNote = idNote;
+    }
 
     public String getTxtReference() {
         return txtReference;
