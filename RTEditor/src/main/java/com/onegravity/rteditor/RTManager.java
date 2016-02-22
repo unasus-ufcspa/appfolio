@@ -16,10 +16,11 @@
 
 package com.onegravity.rteditor;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
-import android.provider.MediaStore;
+import android.support.v4.content.LocalBroadcastManager;
 import android.text.Editable;
 import android.text.Layout;
 import android.text.Layout.Alignment;
@@ -109,6 +110,8 @@ public class RTManager implements RTToolbarListener, RTEditTextListener {
      * (inserting, editing, removing links).
      */
     private Selection mLinkSelection;
+
+    private Context mRTContext;
     /*
      * We need these to delay hiding the toolbar after a focus loss of an editor
      */
@@ -139,9 +142,9 @@ public class RTManager implements RTToolbarListener, RTEditTextListener {
      *                           being shut down then this Bundle contains the data it most
      *                           recently supplied in onSaveInstanceState(Bundle).
      */
-    public RTManager(RTApi rtApi, Bundle savedInstanceState) {
+    public RTManager(RTApi rtApi, Bundle savedInstanceState, Context context) {
         mRTApi = rtApi;
-
+        mRTContext = context;
         mHandler = new Handler();
         mEditors = new ConcurrentHashMap<Integer, RTEditText>();
         mToolbars = new ConcurrentHashMap<Integer, RTToolbar>();
@@ -452,6 +455,11 @@ public class RTManager implements RTToolbarListener, RTEditTextListener {
     @Override
     public void onPickVideo() {
         onRecordVideo(MediaAction.PICK_VIDEO);
+    }
+
+    @Override
+    public void onPickAttachment() {
+        LocalBroadcastManager.getInstance(mRTContext).sendBroadcast(new Intent("call.fragments.action").putExtra("ID", 6));
     }
 
     private void onRecordVideo(MediaAction mediaAction)
