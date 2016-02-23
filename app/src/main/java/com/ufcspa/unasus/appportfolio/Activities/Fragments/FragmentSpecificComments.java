@@ -155,12 +155,18 @@ public class FragmentSpecificComments extends Frag {
             noteNow = single.note;
             if(lista.size()!=0) { // se a lista nao estiver vazia quer dizer que a nota de referencia já existe no banco
                 noteNow.setSelectedText(lista.get(0).getTxtReference());
-                Log.d("noteNow","lista:"+lista.get(0).toJSON());
+                Log.d("comments noteNow","lista:"+lista.get(0).toJSON());
             }
 
             if (noteNow.getSelectedText().toString()!=null && !noteNow.getSelectedText().toString().equalsIgnoreCase("null")){
                 reference=noteNow.getSelectedText();
-                txNote.setText("Referência: \n" + "\"" + reference + "\"");
+                if(reference.contains("Referência:")){
+                    Log.d("editor","specific comments contais referencia 'Referência:' in reference");
+                    txNote.setText(reference);
+                }else {
+                    txNote.setText("Referência: \n" + "\"" + reference + "\"");
+                }
+
             }
         }
     }
