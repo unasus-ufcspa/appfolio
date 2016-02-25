@@ -119,6 +119,7 @@ public class FragmentRTEditor extends Fragment {
 
         // register toolbar (if it exists)
         rtToolbar = (RTToolbar) view.findViewById(R.id.rte_toolbar);
+        //rtApi.startActivityForResult();
         if (rtToolbar != null) {
             mRTManager.registerToolbar(toolbarContainer, rtToolbar);
         }
@@ -177,6 +178,8 @@ public class FragmentRTEditor extends Fragment {
         initTopBar(view);
 
         return view;
+
+
     }
 
     @Override
