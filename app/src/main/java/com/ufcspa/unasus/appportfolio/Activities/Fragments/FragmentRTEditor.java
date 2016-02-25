@@ -103,11 +103,12 @@ public class FragmentRTEditor extends Fragment {
                 switch (type) {
                     case "I":
 //                        mRTManager.insertImage(rtApi.createImage(url));
-                        mRTMessageField.setRichTextEditing(true, "<img src=\"" + url + "\">");
+//                        mRTMessageField.setRichTextEditing(true, "<img src=\"" + url + "\">");
                         break;
                     case "V":
 //                        mRTManager.insertVideo(rtApi.createVideo(url));
-                        mRTMessageField.setRichTextEditing(true,"<img src=\""+url+"\">");
+//                        mRTMessageField.setRichTextEditing(true,"<img src=\""+url+"\">");
+                        onResume();
                         break;
                     case "T":
                         break;
@@ -240,6 +241,11 @@ public class FragmentRTEditor extends Fragment {
         if (mRTManager != null) {
             mRTManager.onDestroy(true);
         }
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
     }
 
     private void initCommentsTab(View view)

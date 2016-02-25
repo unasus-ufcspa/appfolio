@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.res.Configuration;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
@@ -29,6 +30,7 @@ import com.ufcspa.unasus.appportfolio.Model.Singleton;
 import com.ufcspa.unasus.appportfolio.R;
 import com.ufcspa.unasus.appportfolio.database.DataBaseAdapter;
 
+import java.sql.SQLOutput;
 import java.util.ArrayList;
 
 /**
@@ -48,8 +50,6 @@ public class FragmentAttachment extends Frag {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_attachment, null);
-
-        singleton = Singleton.getInstance();
 
         if (singleton.isRTEditor)
         {
@@ -78,8 +78,6 @@ public class FragmentAttachment extends Frag {
     private void init()
     {
         source = DataBaseAdapter.getInstance(getActivity());
-
-        singleton = Singleton.getInstance();
 
         attachmentGrid = (GridView) getView().findViewById(R.id.attachment_gridview);
 
@@ -257,6 +255,24 @@ public class FragmentAttachment extends Frag {
             ViewGroup.MarginLayoutParams p = (ViewGroup.MarginLayoutParams) v.getLayoutParams();
             p.setMargins(l, t, r, b);
             v.requestLayout();
+        }
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        if(isRTEditor)
+            this.dismiss();
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        singleton = Singleton.getInstance();
+        if(singleton.isRTEditor && savedInstanceState != null)
+        {
+            dismiss();
         }
     }
 }
