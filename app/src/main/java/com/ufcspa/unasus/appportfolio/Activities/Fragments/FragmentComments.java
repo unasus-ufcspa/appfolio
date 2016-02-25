@@ -17,9 +17,11 @@ import com.ufcspa.unasus.appportfolio.Model.Singleton;
 import com.ufcspa.unasus.appportfolio.R;
 import com.ufcspa.unasus.appportfolio.database.DataBaseAdapter;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 
 /**
  * Created by Desenvolvimento on 07/12/2015.
@@ -58,6 +60,8 @@ public class FragmentComments extends Frag {
     @Override
     public void onResume() {
         super.onResume();
+        Log.d("comments","data convertida:"+convertDateToDate(getActualTime()));
+
         btGenMess = (Button) getView().findViewById(R.id.gen_messag_bt);
         btAttachment = (Button) getView().findViewById(R.id.bt_add_attachment);
 
@@ -85,7 +89,7 @@ public class FragmentComments extends Frag {
                     addItems();
                     Comentario c = getCommentFromText();
                     insertComment(c);
-                    adapter.add(new OneComment(false, edtMessage.getText().toString() + "\n" + c.getDateComment()));
+                    adapter.add(new OneComment(false, edtMessage.getText().toString(),convertDateToTime(c.getDateComment())));
                     edtMessage.setText("");
                     lv.setAdapter(adapter);
                 }else{
@@ -117,7 +121,7 @@ public class FragmentComments extends Frag {
             if (lista.size() != 0) {
                 for (int i = 0; i < lista.size(); i++) {
                     adapter.add(new OneComment(lista.get(i).getIdAuthor() != singleton.user.getIdUser(),
-                            lista.get(i).getTxtComment() + "\n" + lista.get(i).getDateComment()));
+                            lista.get(i).getTxtComment(),convertDateToTime(lista.get(i).getDateComment()),lista.get(i).getDateComment()));
                 }
                 Log.d("Banco", "Lista populada:" + lista);
             } else {
@@ -178,4 +182,38 @@ public class FragmentComments extends Frag {
         String strDate = sdf.format(c.getTime());
         return strDate;
     }
+    public String convertDateToTime(String atualDate){
+        String shortTimeStr="00:00";
+        Log.d("comments","date receiving :"+atualDate);
+        try {
+            SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            Date date = null;
+            date = df.parse(atualDate);
+            SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
+            shortTimeStr = sdf.format(date);
+            Log.d("comments","date to hour :"+shortTimeStr);
+        } catch (ParseException e) {
+            // To change body of catch statement use File | Settings | File Templates.
+            e.printStackTrace();
+        }
+        return shortTimeStr;
+    }
+
+    public String convertDateToDate(String atualDate){
+        String shortTimeStr="00:00";
+        Log.d("comments","date receiving :"+atualDate);
+        try {
+            SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            Date date = null;
+            date = df.parse(atualDate);
+            SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+            shortTimeStr = sdf.format(date);
+            Log.d("comments","date to other date format :"+shortTimeStr);
+        } catch (ParseException e) {
+            // To change body of catch statement use File | Settings | File Templates.
+            e.printStackTrace();
+        }
+        return shortTimeStr;
+    }
+
 }
