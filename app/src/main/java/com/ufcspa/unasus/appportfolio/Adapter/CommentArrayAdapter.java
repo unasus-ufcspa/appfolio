@@ -72,7 +72,7 @@ public class CommentArrayAdapter extends ArrayAdapter<OneComment> {
             date = (TextView) row.findViewById(R.id.date);
             Log.d("comments","getting date...");
 
-            if (position == 0) {
+           /* if (position == 0) {
                 Log.d("comments","first position");
                 lastDate =convertDateToDate(coment.date);
                 dateNow=lastDate;
@@ -93,6 +93,12 @@ public class CommentArrayAdapter extends ArrayAdapter<OneComment> {
                 date.setVisibility(row.GONE);
                 date.setVisibility(View.GONE);
                 notifyDataSetChanged();
+            }*/
+            lastDate =convertDateToDate(coment.date);
+            date.setText(lastDate);
+            if(position%2==0) {
+                Log.d("comment","item position:"+position);
+                date.setVisibility(View.GONE);
             }
         }
 
