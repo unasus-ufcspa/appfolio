@@ -151,7 +151,7 @@
         <com.onegravity.rteditor.toolbar.RTToolbarImageButton
             android:id="@+id/toolbar_attachment_picker"
             style="@style/RTE_ToolbarButton"
-            android:background="?attr/rte_icToolbarVideo" />
+            android:background="?attr/rte_icToolbarFolio" />
         
         <!-- myrteditoror.toolbar.RTToolbarImageButton
             android:id="@+id/toolbar_video"

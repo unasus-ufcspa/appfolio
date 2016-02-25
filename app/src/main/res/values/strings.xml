@@ -39,4 +39,9 @@
     <string name="popup_login_student">Student</string>
     <string name="popup_login_tutor">Tutor</string>
 
+    <string name="attachment_positive">Utilizar</string>
+    <string name="attachment_fechar">Fechar</string>
+    <string name="attachment_negative">Cancelar</string>
+    <string name="attachment_delete">Deletar</string>
+
 </resources>

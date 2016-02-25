@@ -15,6 +15,7 @@ import android.widget.LinearLayout;
 import com.mikepenz.crossfader.Crossfader;
 import com.ufcspa.unasus.appportfolio.Activities.Fragments.FragmentAttachment;
 import com.ufcspa.unasus.appportfolio.Activities.Fragments.FragmentRTEditor;
+import com.ufcspa.unasus.appportfolio.Activities.Fragments.FragmentSelectPortfolio;
 import com.ufcspa.unasus.appportfolio.Activities.Fragments.FragmentStudentActivities;
 import com.ufcspa.unasus.appportfolio.Model.Singleton;
 import com.ufcspa.unasus.appportfolio.R;
@@ -59,10 +60,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         fragmentContainer = findViewById(R.id.fragment_container);
 
+        final float scale = getResources().getDisplayMetrics().density;
+        int pixelsMini = (int) (60 * scale + 0.5f);
+        int pixelsBig = (int) (230 * scale + 0.5f);
+
         crossFader = new Crossfader()
                 .withContent(fragmentContainer)
-                .withFirst(bigDrawer, 460)
-                .withSecond(miniDrawer, 140)
+                .withFirst(bigDrawer, pixelsBig)
+                .withSecond(miniDrawer, pixelsMini)
                 .withGmailStyleSwiping()
                 .withSavedInstance(savedInstanceState)
                 .build();
@@ -153,17 +158,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             case 3:
                 break;
             case 4:
+                singleton.isRTEditor = false;
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new FragmentAttachment()).commit();
                 break;
             case 5:
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new FragmentRTEditor()).commit();
-                break;
-            case 6:
-                Bundle bundle = new Bundle();
-                bundle.putBoolean("RTEditor", true);
-                FragmentAttachment fragmentAttachment = new FragmentAttachment();
-                fragmentAttachment.setArguments(bundle);
-                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragmentAttachment).commit();
                 break;
             default:
                 break;

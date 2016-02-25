@@ -55,6 +55,7 @@
         <item name="rte_icToolbarImage">@drawable/selector_ic_toolbar_image_light</item>
         <item name="rte_icToolbarVideo">@drawable/ic_toolbar_video_light</item>
         <item name="rte_icToolbarCaptureVideo">@drawable/ic_toolbar_capture_video_light</item>
+        <item name="rte_icToolbarFolio">@drawable/ic_toolbar_folio_light</item>
         <item name="rte_icToolbarCapture">@drawable/selector_ic_toolbar_capture_light</item>
         <item name="rte_icToolbarUndo">@drawable/selector_ic_toolbar_undo_light</item>
         <item name="rte_icToolbarRedo">@drawable/selector_ic_toolbar_redo_light</item>
