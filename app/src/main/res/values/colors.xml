@@ -41,6 +41,7 @@
     <color name="material_drawer_dark_header_selection_text">#FFF</color>
 
     <color name="gray_1">#666666</color>
+    <color name="gray_6">#757575</color>
     <color name="gray_2">#808080</color>
     <color name="gray_3">#CCCCCC</color>
     <color name="gray_4">#F3F4F2</color>

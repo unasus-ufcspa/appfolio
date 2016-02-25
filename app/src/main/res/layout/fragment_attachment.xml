@@ -2,7 +2,10 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:focusableInTouchMode="true"
+    android:focusable="true"
+    android:id="@+id/attachment_layout">
 
     <TextView
         android:layout_width="match_parent"
@@ -20,21 +23,20 @@
         android:textAppearance="?android:attr/textAppearanceSmall"
         android:id="@+id/divider"
         android:background="@color/gray_3"
+        android:layout_marginTop="2dp"
         android:layout_marginLeft="50dp"
-        android:layout_marginRight="50dp"
-        android:layout_marginBottom="5dp"
-        android:layout_marginTop="2dp" />
+        android:layout_marginRight="50dp" />
 
     <GridView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/attachment_gridview"
-        android:layout_marginLeft="50dp"
-        android:layout_marginRight="50dp"
-        android:layout_marginBottom="50dp"
         android:numColumns="auto_fit"
         android:scrollbarAlwaysDrawHorizontalTrack="false"
         android:scrollbarAlwaysDrawVerticalTrack="false"
         android:scrollIndicators="none"
-        android:scrollbars="none" />
+        android:scrollbars="none"
+        android:layout_marginLeft="50dp"
+        android:layout_marginRight="50dp"
+        android:layout_marginBottom="50dp"/>
 </LinearLayout>

@@ -10,8 +10,7 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:visibility="visible">
+        android:layout_height="match_parent">
 
         <include android:id="@+id/rte_toolbar_container" layout="@layout/rte_toolbar" />
 
@@ -36,7 +35,6 @@
                     android:layout_weight="1"
                     android:background="@android:color/white"
                     android:gravity="top"
-                    android:hint="Boa Atividade!"
                     android:imeOptions="actionDone|flagNoEnterAction"
                     android:inputType="textMultiLine|textAutoCorrect|textCapSentences"
                     android:layout_marginLeft="35dp"
@@ -58,7 +56,7 @@
             android:orientation="horizontal"
             android:layout_width="match_parent"
             android:layout_height="30dp"
-            android:background="@color/gray_2"
+            android:background="@color/gray_1"
             android:id="@+id/info_rteditor_container"
             android:layout_alignParentTop="true"
             android:layout_alignParentLeft="true"
@@ -112,7 +110,9 @@
             android:layout_height="wrap_content"
             android:background="@android:color/transparent"
             android:id="@+id/button_container"
-            android:gravity="bottom">
+            android:gravity="bottom"
+            android:layout_toRightOf="@+id/topbar_gray"
+            android:layout_toEndOf="@+id/topbar_gray">
 
             <me.grantland.widget.AutofitTextView
                 android:layout_width="wrap_content"
@@ -148,9 +148,38 @@
             android:layout_height="match_parent"
             android:layout_below="@+id/button_container"
             android:id="@+id/comments_container"
-            android:visibility="visible">
+            android:visibility="visible"
+            android:layout_toRightOf="@+id/topbar_gray"
+            android:layout_toEndOf="@+id/topbar_gray">
 
         </FrameLayout>
+
+        <RelativeLayout
+            android:layout_width="35dp"
+            android:layout_height="match_parent"
+            android:id="@+id/topbar_gray"
+            android:layout_above="@+id/comments_container"
+            android:background="@color/gray_1">
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_toLeftOf="@+id/button_container"
+            android:layout_toStartOf="@+id/button_container"
+            android:layout_alignTop="@+id/comments_container"
+            android:id="@+id/leftbar_white">
+
+            <RelativeLayout
+                android:layout_width="10dp"
+                android:layout_height="match_parent"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentEnd="true"
+                android:background="@color/base_green"
+                android:id="@+id/rightbar_green"></RelativeLayout>
+        </RelativeLayout>
 
     </RelativeLayout>
 

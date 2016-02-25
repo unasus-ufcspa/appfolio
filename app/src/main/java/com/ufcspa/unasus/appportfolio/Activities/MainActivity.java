@@ -15,6 +15,7 @@ import android.widget.LinearLayout;
 import com.mikepenz.crossfader.Crossfader;
 import com.ufcspa.unasus.appportfolio.Activities.Fragments.FragmentAttachment;
 import com.ufcspa.unasus.appportfolio.Activities.Fragments.FragmentRTEditor;
+import com.ufcspa.unasus.appportfolio.Activities.Fragments.FragmentSelectPortfolio;
 import com.ufcspa.unasus.appportfolio.Activities.Fragments.FragmentStudentActivities;
 import com.ufcspa.unasus.appportfolio.Model.Singleton;
 import com.ufcspa.unasus.appportfolio.R;
@@ -149,17 +150,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             case 3:
                 break;
             case 4:
+                singleton.isRTEditor = false;
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new FragmentAttachment()).commit();
                 break;
             case 5:
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new FragmentRTEditor()).commit();
-                break;
-            case 6:
-                Bundle bundle = new Bundle();
-                bundle.putBoolean("RTEditor", true);
-                FragmentAttachment fragmentAttachment = new FragmentAttachment();
-                fragmentAttachment.setArguments(bundle);
-                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragmentAttachment).commit();
                 break;
             default:
                 break;

@@ -459,7 +459,7 @@ public class RTManager implements RTToolbarListener, RTEditTextListener {
 
     @Override
     public void onPickAttachment() {
-        LocalBroadcastManager.getInstance(mRTContext).sendBroadcast(new Intent("call.fragments.action").putExtra("ID", 6));
+        LocalBroadcastManager.getInstance(mRTContext).sendBroadcast(new Intent("call.attachments.action"));
     }
 
     private void onRecordVideo(MediaAction mediaAction)
@@ -490,7 +490,7 @@ public class RTManager implements RTToolbarListener, RTEditTextListener {
     }
 
     /* called from onActivityResult() */
-    private void insertImage(final RTImage image) {
+    public void insertImage(final RTImage image) {
         mRTApi.runOnUiThread(new Runnable() {
 
             @Override
@@ -529,7 +529,7 @@ public class RTManager implements RTToolbarListener, RTEditTextListener {
     }
 
     /* called from onActivityResult() */
-    private void insertVideo(final RTVideo video) {
+    public void insertVideo(final RTVideo video) {
         mRTApi.runOnUiThread(new Runnable() {
 
             @Override

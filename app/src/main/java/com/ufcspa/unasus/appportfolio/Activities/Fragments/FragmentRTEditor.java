@@ -1,10 +1,15 @@
 package com.ufcspa.unasus.appportfolio.Activities.Fragments;
 
+import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.res.Configuration;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.widget.SlidingPaneLayout;
 import android.text.Editable;
 import android.text.Layout;
@@ -53,8 +58,8 @@ import java.util.List;
 public class FragmentRTEditor extends Fragment {
     private RTManager mRTManager;
     private RTEditText mRTMessageField;
+    private RTApi rtApi;
     private RTToolbar rtToolbar;
-    private boolean btNoteFirtClicked=false;
     private int currentSpecificComment;
     private ViewGroup scrollview;
     private ImageButton fullScreen;
@@ -62,8 +67,6 @@ public class FragmentRTEditor extends Fragment {
     private DataBaseAdapter source;
     private HashMap<Integer,Note> specificCommentsNotes;
     private String selectedActualText = "null";
-    private Note btNoteNow;
-    private Note btLastNote;
 
     private RelativeLayout slider;
 
@@ -74,14 +77,11 @@ public class FragmentRTEditor extends Fragment {
 
     public FragmentRTEditor() {}
 
-
-
-
     public void loadLastText() {
         Singleton singleton = Singleton.getInstance();
         source = DataBaseAdapter.getInstance(getActivity());
         acStudent = source.listActivityStudent(singleton.idActivityStudent);
-        mRTMessageField.setRichTextEditing(true,acStudent.getTxtActivity());
+        mRTMessageField.setRichTextEditing(true, acStudent.getTxtActivity());
     }
 
     public void saveText() {
@@ -92,8 +92,37 @@ public class FragmentRTEditor extends Fragment {
         source.updateActivityStudent(acStudent);
     }
 
+    private BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if(intent.hasExtra("URL"))
+            {
+                String url = intent.getStringExtra("URL");
+                String type = intent.getStringExtra("Type");
 
-
+                switch (type) {
+                    case "I":
+//                        mRTManager.insertImage(rtApi.createImage(url));
+//                        mRTMessageField.setRichTextEditing(true,"<img src=\""+url+"\">");
+                        break;
+                    case "V":
+//                        mRTManager.insertVideo(rtApi.createVideo(url));
+                        break;
+                    case "T":
+                        break;
+                    default:
+                        break;
+                }
+            }
+            else
+            {
+                singleton.isRTEditor = true;
+                FragmentAttachment fragmentAttachment = new FragmentAttachment();
+                if (getActivity() != null)
+                    fragmentAttachment.show(getActivity().getSupportFragmentManager(), "Anexos");
+            }
+        }
+    };
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -106,12 +135,11 @@ public class FragmentRTEditor extends Fragment {
 
         specificCommentsNotes = new HashMap<>();
         getIdNotesFromDB();
-        btLastNote = new Note(0,"null",0);
 
         scrollview = (ViewGroup) view.findViewById(R.id.comments);
 
         // create RTManager
-        RTApi rtApi = new RTApi(getActivity(), new RTProxyImpl(getActivity()), new RTMediaFactoryImpl(getActivity(), true));
+        rtApi = new RTApi(getActivity(), new RTProxyImpl(getActivity()), new RTMediaFactoryImpl(getActivity(), true));
 
         mRTManager = new RTManager(rtApi, savedInstanceState, getContext());
 
@@ -128,7 +156,6 @@ public class FragmentRTEditor extends Fragment {
 
         mRTMessageField.setCustomSelectionActionModeCallback(new ActionBarCallBack());
         loadLastText();
-        //mRTMessageField.setRichTextEditing(true, "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin ligula dolor, egestas quis purus et, tristique congue libero. Nulla ultrices urna nibh, facilisis aliquet nunc porta vel.");
 
         mRTMessageField.addTextChangedListener(new TextWatcher() {
             private float posStart;
@@ -159,8 +186,6 @@ public class FragmentRTEditor extends Fragment {
 
         mRTMessageField.setLineSpacing(15, 1);
 
-        //currentSpecificComment = 0;
-
         LinearLayout layout = (LinearLayout) view.findViewById(R.id.info_rteditor_container);
         layout.clearFocus();
 
@@ -169,14 +194,21 @@ public class FragmentRTEditor extends Fragment {
             @Override
             public void onClick(View v) {
                 Log.d("rteditor", mRTMessageField.getText(RTFormat.HTML));
-                ((MainActivity) getActivity()).hideDrawer();
+//                ((MainActivity) getActivity()).hideDrawer();
             }
         });
 
         initCommentsTab(view);
         initTopBar(view);
 
+        LocalBroadcastManager.getInstance(getContext()).registerReceiver(broadcastReceiver, new IntentFilter("call.attachments.action"));
+
         return view;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
     }
 
     @Override

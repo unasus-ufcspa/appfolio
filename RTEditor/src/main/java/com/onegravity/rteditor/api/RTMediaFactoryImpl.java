@@ -17,6 +17,7 @@
 package com.onegravity.rteditor.api;
 
 import android.content.Context;
+import android.os.Environment;
 import android.util.Log;
 
 import com.onegravity.rteditor.api.media.RTAudio;
@@ -36,6 +37,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 /**
  * This is a basic implementation of the RTMediaFactory using either the

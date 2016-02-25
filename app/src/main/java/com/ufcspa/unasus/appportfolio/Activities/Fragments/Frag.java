@@ -3,6 +3,7 @@ package com.ufcspa.unasus.appportfolio.Activities.Fragments;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
+
 import android.content.ActivityNotFoundException;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -13,6 +14,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -37,7 +39,7 @@ import java.util.Date;
 /**
  * Created by desenvolvimento on 10/12/2015.
  */
-public class Frag extends Fragment {
+public class Frag extends DialogFragment {
     static final int REQUEST_IMAGE_CAPTURE = 1;
     static final int RESULT_LOAD_IMAGE = 2;
     static final int PICKFILE_RESULT_CODE = 3;
@@ -109,7 +111,6 @@ public class Frag extends Fragment {
         source = DataBaseAdapter.getInstance(getActivity());
 
         singleton = Singleton.getInstance();
-        singleton.idActivityStudent = source.getActivityStudentID(singleton.activity.getIdAtivity(), singleton.portfolioClass.getIdPortfolioStudent());
 
         return view;
     }
@@ -172,30 +173,24 @@ public class Frag extends Fragment {
     * Public Interface |
     *******************|
     */
-    public void showChooseGalleryOrTakePicture() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        builder.setMessage("Were is your picture?")
-                .setCancelable(false)
-                .setPositiveButton("Gallery", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        dispatchGetPictureFromGallery();
-                        dialog.cancel();
-                    }
-                })
-                .setNegativeButton("Take Picture", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        dispatchTakePictureIntent();
-                        dialog.cancel();
-                    }
-                });
-        AlertDialog alert = builder.create();
-        alert.show();
-    }
 
     public void dispatchTakeVideoIntent() {
         Intent takeVideoIntent = new Intent(MediaStore.ACTION_VIDEO_CAPTURE);
+
         if (takeVideoIntent.resolveActivity(getActivity().getPackageManager()) != null) {
-            startActivityForResult(takeVideoIntent, REQUEST_VIDEO_CAPTURE);
+            File videoFile = null;
+            try {
+                videoFile = createImageFile();
+                Toast.makeText(getActivity(), "Caminho para o vídeo criado com sucesso!", Toast.LENGTH_SHORT).show();
+            } catch (IOException ex) {
+                Toast.makeText(getActivity(), "Impossível criar um caminho para o vídeo!", Toast.LENGTH_SHORT).show();
+                System.out.println(ex.toString());
+            }
+
+            if (videoFile != null) {
+                takeVideoIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(videoFile));
+                startActivityForResult(takeVideoIntent, REQUEST_VIDEO_CAPTURE);
+            }
         }
     }
 
@@ -319,7 +314,7 @@ public class Frag extends Fragment {
     * Others |
     *********|
     */
-    private void openPDF(String filename) {
+    public void openPDF(String filename) {
         File file = new File(filename);
         Intent target = new Intent(Intent.ACTION_VIEW);
         target.setDataAndType(Uri.fromFile(file), "application/pdf");

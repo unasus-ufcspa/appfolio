@@ -95,7 +95,7 @@ public class FragmentAttachmentAdapter extends BaseAdapter {
                 rowView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        context.plusClicked(position);
+                        context.plusClicked();
                     }
                 });
                 components.imgAttachment.setImageResource(R.drawable.attachment_plus);
