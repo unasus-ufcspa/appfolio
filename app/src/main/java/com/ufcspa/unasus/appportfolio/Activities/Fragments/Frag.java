@@ -39,7 +39,7 @@ import java.util.Date;
 /**
  * Created by desenvolvimento on 10/12/2015.
  */
-public class Frag extends DialogFragment {
+public class Frag extends Fragment {
     static final int REQUEST_IMAGE_CAPTURE = 1;
     static final int RESULT_LOAD_IMAGE = 2;
     static final int PICKFILE_RESULT_CODE = 3;

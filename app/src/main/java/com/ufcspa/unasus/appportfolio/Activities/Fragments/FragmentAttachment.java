@@ -22,6 +22,7 @@ import android.widget.ImageView;
 import android.widget.MediaController;
 import android.widget.VideoView;
 
+import com.ufcspa.unasus.appportfolio.Activities.MainActivity;
 import com.ufcspa.unasus.appportfolio.Dialog.FullImageDialog;
 import com.ufcspa.unasus.appportfolio.Dialog.FullVideoDialog;
 import com.ufcspa.unasus.appportfolio.Adapter.FragmentAttachmentAdapter;
@@ -43,6 +44,8 @@ public class FragmentAttachment extends Frag {
     private ArrayList<Attachment> attachments;
 
     private boolean isRTEditor;
+    private int cursorPosition;
+    private String type;
 
     public FragmentAttachment() {
     }
@@ -51,12 +54,15 @@ public class FragmentAttachment extends Frag {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_attachment, null);
 
+        singleton = Singleton.getInstance();
+
         if (singleton.isRTEditor)
         {
+            Bundle bundle = this.getArguments();
+            if (bundle != null) {
+                cursorPosition = bundle.getInt("Position", -1);;
+            }
             isRTEditor = true;
-            setMargins(view.findViewById(R.id.attachment_layout), 0, 0, 0, 0);
-            setMargins(view.findViewById(R.id.attachment_label), 50, 0, 50, 0);
-            setMargins(view.findViewById(R.id.divider), 50, 0, 50, 0);
         }
         else
             isRTEditor = false;
@@ -120,7 +126,7 @@ public class FragmentAttachment extends Frag {
     }
 
     private void createPlusButton() {
-        if (!isRTEditor)
+        if (!isRTEditor && !singleton.isRTEditor)
             attachments.add(new Attachment(-1, -1, -1, "", "", ""));
     }
 
@@ -147,7 +153,7 @@ public class FragmentAttachment extends Frag {
                 @Override
                 public void onClick(View v) {
                     if(isRTEditor)
-                        returnFromDialog(url, position);
+                        returnFromDialog(url, position, "I");
                     dialog.dismiss();
                 }
             });
@@ -156,7 +162,7 @@ public class FragmentAttachment extends Frag {
                 @Override
                 public void onClick(View v) {
                     if (!isRTEditor)
-                        returnFromDialog(url, position);
+                        returnFromDialog(url, position, "I");
                     dialog.dismiss();
                 }
             });
@@ -191,7 +197,7 @@ public class FragmentAttachment extends Frag {
                 @Override
                 public void onClick(View v) {
                     if (isRTEditor)
-                        returnFromDialog(url, position);
+                        returnFromDialog(url, position, "V");
                     dialog.dismiss();
                 }
             });
@@ -200,7 +206,7 @@ public class FragmentAttachment extends Frag {
                 @Override
                 public void onClick(View v) {
                     if (!isRTEditor)
-                        returnFromDialog(url, position);
+                        returnFromDialog(url, position, "V");
                     dialog.dismiss();
                 }
             });
@@ -238,41 +244,14 @@ public class FragmentAttachment extends Frag {
         attachments.remove(position);
     }
 
-    private void returnFromDialog(String url, int position) {
+    private void returnFromDialog(String url, int position, String type) {
         if(isRTEditor)
         {
-            LocalBroadcastManager.getInstance(getContext()).sendBroadcast(new Intent("call.attachments.action").putExtra("URL", url).putExtra("Type", attachments.get(position).getType()));
-            dismiss();
+            ((MainActivity)getActivity()).callRTEditorToAttachSomething(url, cursorPosition, type);
         }
         else
         {
             deleteMedia(position);
-        }
-    }
-
-    public static void setMargins (View v, int l, int t, int r, int b) {
-        if (v.getLayoutParams() instanceof ViewGroup.MarginLayoutParams) {
-            ViewGroup.MarginLayoutParams p = (ViewGroup.MarginLayoutParams) v.getLayoutParams();
-            p.setMargins(l, t, r, b);
-            v.requestLayout();
-        }
-    }
-
-    @Override
-    public void onConfigurationChanged(Configuration newConfig) {
-        super.onConfigurationChanged(newConfig);
-        if(isRTEditor)
-            this.dismiss();
-    }
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
-        singleton = Singleton.getInstance();
-        if(singleton.isRTEditor && savedInstanceState != null)
-        {
-            dismiss();
         }
     }
 }
