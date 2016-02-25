@@ -56,10 +56,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         fragmentContainer = findViewById(R.id.fragment_container);
 
+        final float scale = getResources().getDisplayMetrics().density;
+        int pixelsMini = (int) (60 * scale + 0.5f);
+        int pixelsBig = (int) (230 * scale + 0.5f);
+
         crossFader = new Crossfader()
                 .withContent(fragmentContainer)
-                .withFirst(bigDrawer, 460)
-                .withSecond(miniDrawer, 140)
+                .withFirst(bigDrawer, pixelsBig)
+                .withSecond(miniDrawer, pixelsMini)
                 .withGmailStyleSwiping()
                 .withSavedInstance(savedInstanceState)
                 .build();

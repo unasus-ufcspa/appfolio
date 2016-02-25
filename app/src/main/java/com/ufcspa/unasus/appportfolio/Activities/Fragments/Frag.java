@@ -164,7 +164,8 @@ public class Frag extends DialogFragment {
 
         if (requestCode == REQUEST_VIDEO_CAPTURE && resultCode == Activity.RESULT_OK) {
             insertFileIntoDataBase(data.getData().getPath(), "V");
-            mCurrentPhotoPath = getThumbnailPathForLocalFile(getActivity(), data.getData());
+            galleryAddPic();
+//            mCurrentPhotoPath = getThumbnailPathForLocalFile(getActivity(), data.getData());
         }
     }
 
@@ -180,7 +181,7 @@ public class Frag extends DialogFragment {
         if (takeVideoIntent.resolveActivity(getActivity().getPackageManager()) != null) {
             File videoFile = null;
             try {
-                videoFile = createImageFile();
+                videoFile = createVideoFile();
                 Toast.makeText(getActivity(), "Caminho para o vídeo criado com sucesso!", Toast.LENGTH_SHORT).show();
             } catch (IOException ex) {
                 Toast.makeText(getActivity(), "Impossível criar um caminho para o vídeo!", Toast.LENGTH_SHORT).show();
@@ -309,6 +310,22 @@ public class Frag extends DialogFragment {
         return image;
     }
 
+    private File createVideoFile() throws IOException {
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+        String videoFileName = "MP4_" + timeStamp + "_";
+
+        File storageDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
+
+        File video = File.createTempFile(
+                videoFileName,  /* prefix */
+                ".mp4",         /* suffix */
+                storageDir      /* directory */
+        );
+
+        mCurrentPhotoPath = video.getAbsolutePath();
+        return video;
+    }
+
     /*
     *********|
     * Others |
@@ -329,8 +346,6 @@ public class Frag extends DialogFragment {
     }
 
     public void addAttachmentToComments() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-
         final Dialog dialog = new Dialog(getActivity());
         dialog.setContentView(R.layout.attachment_popup);
         dialog.setTitle(R.string.files_popup_attachment);

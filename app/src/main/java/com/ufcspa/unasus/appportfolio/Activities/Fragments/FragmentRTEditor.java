@@ -103,10 +103,11 @@ public class FragmentRTEditor extends Fragment {
                 switch (type) {
                     case "I":
 //                        mRTManager.insertImage(rtApi.createImage(url));
-//                        mRTMessageField.setRichTextEditing(true,"<img src=\""+url+"\">");
+                        mRTMessageField.setRichTextEditing(true, "<img src=\"" + url + "\">");
                         break;
                     case "V":
 //                        mRTManager.insertVideo(rtApi.createVideo(url));
+                        mRTMessageField.setRichTextEditing(true,"<img src=\""+url+"\">");
                         break;
                     case "T":
                         break;

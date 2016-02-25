@@ -1,10 +1,13 @@
 package com.ufcspa.unasus.appportfolio.Activities.Fragments;
 
+import android.app.Dialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AlertDialog;
@@ -12,8 +15,11 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.GridView;
+import android.widget.ImageView;
 import android.widget.MediaController;
+import android.widget.VideoView;
 
 import com.ufcspa.unasus.appportfolio.Dialog.FullImageDialog;
 import com.ufcspa.unasus.appportfolio.Dialog.FullVideoDialog;
@@ -39,18 +45,6 @@ public class FragmentAttachment extends Frag {
     public FragmentAttachment() {
     }
 
-    private BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            int type = intent.getIntExtra("Type", -1);
-            boolean isPositive = intent.getBooleanExtra("isPositive", false);
-            String url = intent.getStringExtra("URL");
-            int position= intent.getIntExtra("Position", -1);
-
-            returnFromDialog(type, isPositive, url, position);
-        }
-    };
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_attachment, null);
@@ -66,9 +60,6 @@ public class FragmentAttachment extends Frag {
         }
         else
             isRTEditor = false;
-
-
-        LocalBroadcastManager.getInstance(getContext()).registerReceiver(broadcastReceiver, new IntentFilter("call.dialog_close.action"));
 
         return view;
     }
@@ -135,20 +126,89 @@ public class FragmentAttachment extends Frag {
             attachments.add(new Attachment(-1, -1, -1, "", "", ""));
     }
 
-    private void loadPhoto(String url, int position) {
-        Intent intent = new Intent(getContext(), FullImageDialog.class);
-        intent.putExtra("isRTEditor", isRTEditor);
-        intent.putExtra("URL", url);
-        intent.putExtra("Position", position);
-        startActivity(intent);
+    private void loadPhoto(final String url, final int position) {
+        if (url != null) {
+            final Dialog dialog = new Dialog(getActivity());
+            dialog.setContentView(R.layout.custom_fullimage_dialog);
+
+            final ImageView image = (ImageView) dialog.findViewById(R.id.fullimage);
+            image.setImageBitmap(BitmapFactory.decodeFile(url));
+
+            Button btnPositive = (Button) dialog.findViewById(R.id.btn_positive);
+            Button btnNegative = (Button) dialog.findViewById(R.id.btn_negative);
+
+            if (isRTEditor) {
+                btnNegative.setText(getResources().getText(R.string.attachment_negative));
+                btnPositive.setText(getResources().getText(R.string.attachment_positive));
+            } else {
+                btnNegative.setText(getResources().getText(R.string.attachment_delete));
+                btnPositive.setText(getResources().getText(R.string.attachment_fechar));
+            }
+
+            btnPositive.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if(isRTEditor)
+                        returnFromDialog(url, position);
+                    dialog.dismiss();
+                }
+            });
+
+            btnNegative.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (!isRTEditor)
+                        returnFromDialog(url, position);
+                    dialog.dismiss();
+                }
+            });
+
+            dialog.show();
+        }
     }
 
-    private void loadVideo(String url, int position) {
-        Intent intent = new Intent(getContext(), FullVideoDialog.class);
-        intent.putExtra("isRTEditor", isRTEditor);
-        intent.putExtra("URL", url);
-        intent.putExtra("Position", position);
-        startActivity(intent);
+    private void loadVideo(final String url, final int position) {
+        if(url != null) {
+            final Dialog dialog = new Dialog(getActivity());
+            dialog.setContentView(R.layout.custom_fullvideo_dialog);
+
+            VideoView video = (VideoView) dialog.findViewById(R.id.videoView);
+
+            video.setVideoURI(Uri.parse(url));
+            video.requestFocus();
+            video.start();
+
+            Button btnPositive = (Button) dialog.findViewById(R.id.btn_positive_video);
+            Button btnNegative = (Button) dialog.findViewById(R.id.btn_negative_video);
+
+            if (isRTEditor) {
+                btnNegative.setText(getResources().getText(R.string.attachment_negative));
+                btnPositive.setText(getResources().getText(R.string.attachment_positive));
+            } else {
+                btnNegative.setText(getResources().getText(R.string.attachment_delete));
+                btnPositive.setText(getResources().getText(R.string.attachment_fechar));
+            }
+
+            btnPositive.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (isRTEditor)
+                        returnFromDialog(url, position);
+                    dialog.dismiss();
+                }
+            });
+
+            btnNegative.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (!isRTEditor)
+                        returnFromDialog(url, position);
+                    dialog.dismiss();
+                }
+            });
+
+            dialog.show();
+        }
     }
 
     public void showPDFDialog(String url, final int position)
@@ -180,10 +240,11 @@ public class FragmentAttachment extends Frag {
         attachments.remove(position);
     }
 
-    private void returnFromDialog(int type, boolean isPositive, String url, int position) {
+    private void returnFromDialog(String url, int position) {
         if(isRTEditor)
         {
             LocalBroadcastManager.getInstance(getContext()).sendBroadcast(new Intent("call.attachments.action").putExtra("URL", url).putExtra("Type", attachments.get(position).getType()));
+            dismiss();
         }
         else
         {
