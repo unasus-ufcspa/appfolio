@@ -7,9 +7,11 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.res.Configuration;
+import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.ParcelFileDescriptor;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
@@ -31,6 +33,8 @@ import com.ufcspa.unasus.appportfolio.Model.Singleton;
 import com.ufcspa.unasus.appportfolio.R;
 import com.ufcspa.unasus.appportfolio.database.DataBaseAdapter;
 
+import java.io.FileDescriptor;
+import java.io.FileNotFoundException;
 import java.sql.SQLOutput;
 import java.util.ArrayList;
 
@@ -136,7 +140,14 @@ public class FragmentAttachment extends Frag {
             dialog.setContentView(R.layout.custom_fullimage_dialog);
 
             final ImageView image = (ImageView) dialog.findViewById(R.id.fullimage);
-            image.setImageBitmap(BitmapFactory.decodeFile(url));
+            Uri uri = Uri.parse(url);
+            Bitmap bitmap = null;
+            try {
+                bitmap = BitmapFactory.decodeStream(getContext().getContentResolver().openInputStream(uri));
+                image.setImageBitmap(bitmap);
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            }
 
             Button btnPositive = (Button) dialog.findViewById(R.id.btn_positive);
             Button btnNegative = (Button) dialog.findViewById(R.id.btn_negative);
@@ -238,6 +249,7 @@ public class FragmentAttachment extends Frag {
         pdfDialog.create();
         pdfDialog.show();
     }
+
 
     public void deleteMedia(int position)
     {

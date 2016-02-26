@@ -1,15 +1,10 @@
 package com.ufcspa.unasus.appportfolio.Activities.Fragments;
 
-import android.content.BroadcastReceiver;
 import android.content.Context;
-import android.content.Intent;
-import android.content.IntentFilter;
 import android.content.res.Configuration;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
-import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.widget.SlidingPaneLayout;
 import android.text.Editable;
 import android.text.Layout;
@@ -43,7 +38,6 @@ import com.onegravity.rteditor.api.media.RTVideo;
 import com.onegravity.rteditor.converter.ConverterSpannedToHtml;
 import com.onegravity.rteditor.effects.Effects;
 import com.onegravity.rteditor.spans.BackgroundColorSpan;
-import com.ufcspa.unasus.appportfolio.Activities.MainActivity;
 import com.ufcspa.unasus.appportfolio.Model.ActivityStudent;
 import com.ufcspa.unasus.appportfolio.Model.Note;
 import com.ufcspa.unasus.appportfolio.Model.Singleton;
@@ -52,13 +46,11 @@ import com.ufcspa.unasus.appportfolio.database.DataBaseAdapter;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 
 
 public class FragmentRTEditor extends Fragment {
     private RTManager mRTManager;
     private RTEditText mRTMessageField;
-    private RTApi rtApi;
     private RTToolbar rtToolbar;
     private int currentSpecificComment;
     private ViewGroup scrollview;
@@ -92,6 +84,7 @@ public class FragmentRTEditor extends Fragment {
         source.updateActivityStudent(acStudent);
     }
 
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_rteditor, null);
@@ -107,7 +100,7 @@ public class FragmentRTEditor extends Fragment {
         scrollview = (ViewGroup) view.findViewById(R.id.comments);
 
         // create RTManager
-        rtApi = new RTApi(getActivity(), new RTProxyImpl(getActivity()), new RTMediaFactoryImpl(getActivity(), true));
+        RTApi rtApi = new RTApi(getActivity(), new RTProxyImpl(getActivity()), new RTMediaFactoryImpl(getActivity(), true));
 
         mRTManager = new RTManager(rtApi, savedInstanceState, getContext());
 
@@ -170,7 +163,6 @@ public class FragmentRTEditor extends Fragment {
 
         initCommentsTab(view);
         initTopBar(view);
-
         Bundle bundle = this.getArguments();
         if (bundle != null)
         {
@@ -183,8 +175,6 @@ public class FragmentRTEditor extends Fragment {
         }
 
         return view;
-
-
     }
 
     @Override
@@ -297,7 +287,7 @@ public class FragmentRTEditor extends Fragment {
             specificCommentsNotes.put(id,new Note(id,"",0));
         }
         currentSpecificComment=specificCommentsNotes.size();
-        Log.d("editor notes","currentSpecificComment:"+currentSpecificComment);
+        Log.d("editor notes", "currentSpecificComment:" + currentSpecificComment);
     }
 
     private Button createButton(final int id, final String value, final float yPosition) {
@@ -327,7 +317,7 @@ public class FragmentRTEditor extends Fragment {
                 single.note.setBtY(yPosition);
                 single.note.setSelectedText(selectedActualText);
                 single.note.setBtId(id);
-                Log.d("editor", "button id in singleton is now:"+single.note.getBtId());
+                Log.d("editor", "button id in singleton is now:" + single.note.getBtId());
                 showCommentsTab(true);
             }
         });
@@ -399,7 +389,7 @@ public class FragmentRTEditor extends Fragment {
                         if (selectedText.length() > 0) {
                             //findText(selectedText, mRTMessageField.getText(RTFormat.HTML));
                             createSpecificCommentNote(getCaretYPosition(startSelection), selectedText);
-                            Singleton single=Singleton.getInstance();
+                            Singleton single = Singleton.getInstance();
                             single.selectedText = mRTMessageField.getText().toString().substring(startSelection,endSelection);
                             DataBaseAdapter data = DataBaseAdapter.getInstance(getActivity());
                         }
@@ -499,22 +489,33 @@ public class FragmentRTEditor extends Fragment {
             scrollview.addView(createButton(aux.getBtId(), String.valueOf(aux.getBtId()), aux.getBtY()));
         }
     }
-    private void receiveAttachment(String type, String url)
+    private void receiveAttachment(String url, String type)
     {
         switch (type)
         {
             case "I":
-                mRTManager.insertImage(rtApi.createImage(url));
-//                mRTMessageField.setRichTextEditing(true, "<img src=\"" + bundle.getString("URL") + "\">");
+//                mRTManager.insertImage(rtApi.createImage(url));
+                teste(url);
                 break;
             case "V":
-                mRTManager.insertVideo(rtApi.createVideo(url));
+//                mRTManager.insertVideo(rtApi.createVideo(url));
                 break;
             case "T":
                 break;
             default:
                 break;
         }
+    }
+
+    public void teste(String url)
+    {
+        int selStart = mRTMessageField.getSelectionStart();
+        Spannable textBefore = (Spannable) mRTMessageField.getText().subSequence(0, selStart);
+        Spannable textAfter = (Spannable) mRTMessageField.getText().subSequence(selStart, mRTMessageField.length());
+        RTHtml<RTImage, RTAudio, RTVideo> rtHtmlBefore = new ConverterSpannedToHtml().convert(textBefore, RTFormat.HTML);
+        RTHtml<RTImage, RTAudio, RTVideo> rtHtmlAfter = new ConverterSpannedToHtml().convert(textAfter, RTFormat.HTML);
+
+        mRTMessageField.setRichTextEditing(true, rtHtmlBefore.getText() + "<img src=\"" + url +"\">" + rtHtmlAfter.getText());
     }
 /*
 
