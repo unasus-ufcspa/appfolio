@@ -3,6 +3,7 @@ package com.ufcspa.unasus.appportfolio.Adapter;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -94,16 +95,20 @@ public class CommentArrayAdapter extends ArrayAdapter<OneComment> {
                 date.setVisibility(View.GONE);
                 notifyDataSetChanged();
             }*/
+            Log.d("comment", "item position:" + position);
             lastDate =convertDateToDate(coment.date);
             date.setText(lastDate);
             if(position%2==0) {
-                Log.d("comment","item position:"+position);
+
                 date.setVisibility(View.GONE);
+            }else{
+                //countryName.setBackgroundResource(coment.orientation ? R.drawable.tutor_ballon : R.drawable.my_ballon);
+                countryName.setBackgroundColor(Color.BLUE);
+                wrapper.setGravity(coment.orientation ? Gravity.LEFT : Gravity.RIGHT);
             }
         }
 
-        countryName.setBackgroundResource(coment.orientation ? R.drawable.tutor_ballon : R.drawable.my_ballon);
-        wrapper.setGravity(coment.orientation ? Gravity.LEFT : Gravity.RIGHT);
+
 
         return row;
     }

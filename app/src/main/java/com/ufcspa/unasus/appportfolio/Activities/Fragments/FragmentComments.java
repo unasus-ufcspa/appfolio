@@ -5,10 +5,12 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 
+import com.ufcspa.unasus.appportfolio.Adapter.CommentAdapter;
 import com.ufcspa.unasus.appportfolio.Adapter.CommentArrayAdapter;
 import com.ufcspa.unasus.appportfolio.Model.Comentario;
 import com.ufcspa.unasus.appportfolio.Model.HttpClient;
@@ -31,8 +33,10 @@ public class FragmentComments extends Frag {
     private ListView lv;
     private Button btGenMess;
     private Button btAttachment;
+    ArrayList<OneComment> oneComments;
     //private LoremIpsum ipsum;
     private EditText edtMessage;
+    CommentAdapter adapterComments;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -69,9 +73,9 @@ public class FragmentComments extends Frag {
 
         lv = (ListView) getView().findViewById(R.id.listView1);
 
-        adapter = new CommentArrayAdapter(getActivity().getApplicationContext(), R.layout.comment_item);
+        //adapter = new CommentArrayAdapter(getActivity().getApplicationContext(), R.layout.comment_item);
 
-        lv.setAdapter(adapter);
+        //lv.setAdapter(adapter);
 
         btAttachment.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -89,16 +93,18 @@ public class FragmentComments extends Frag {
                     addItems();
                     Comentario c = getCommentFromText();
                     insertComment(c);
-                    adapter.add(new OneComment(false, edtMessage.getText().toString(),convertDateToTime(c.getDateComment())));
+                    oneComments.add(new OneComment(false, edtMessage.getText().toString(),convertDateToTime(c.getDateComment()),convertDateToDate(c.getDateComment())));
                     edtMessage.setText("");
-                    lv.setAdapter(adapter);
+                    //lv.setAdapter(adapter);
+                    adapterComments.notifyDataSetChanged();
                 }else{
                     Log.d(getTag(),"tentou inserir comentario vazio");
                 }
             }
         });
         edtMessage = (EditText) getView().findViewById(R.id.edtMessage);
-        addItems();
+        //addItems();
+        loadCom();
     }
 
     public Comentario getCommentFromText(){
@@ -139,6 +145,35 @@ public class FragmentComments extends Frag {
 //			adapter.add(new OneComment(left, words));
 
         //}
+    }
+
+
+    public void loadCom(){
+        //adapter.clearAdapter();
+        DataBaseAdapter db = DataBaseAdapter.getInstance(getActivity());
+        Singleton singleton = Singleton.getInstance();
+        ArrayList<Comentario> lista = (ArrayList<Comentario>) db.listComments(singleton.activity.getIdAtivity(),"C",0);//lista comentario gerais filtrando por C
+        oneComments = new ArrayList<>(10);
+        if (lista.size() != 0) {
+            for (int i = 0; i < lista.size(); i++) {
+                oneComments.add(new OneComment(lista.get(i).getIdAuthor() != singleton.user.getIdUser(),
+                        lista.get(i).getTxtComment(),convertDateToTime(lista.get(i).getDateComment()),convertDateToDate(lista.get(i).getDateComment())));
+            }
+            Log.d("Banco", "Lista populada:" + lista);
+        } else {
+            Log.d("Banco", "Lista retornou vazia!");
+        }
+        adapterComments = new CommentAdapter(getContext(),oneComments);
+        lv.setAdapter(adapterComments);
+        lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Log.d("comments","clicou no item na position:"+position+" com id:"+id);
+            }
+        });
+        //lv.notify();
+
+
     }
 
     private void insertComment(Comentario c) {

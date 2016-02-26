@@ -45,6 +45,7 @@ import com.onegravity.rteditor.effects.Effects;
 import com.onegravity.rteditor.spans.BackgroundColorSpan;
 import com.ufcspa.unasus.appportfolio.Activities.MainActivity;
 import com.ufcspa.unasus.appportfolio.Model.ActivityStudent;
+import com.ufcspa.unasus.appportfolio.Model.Comentario;
 import com.ufcspa.unasus.appportfolio.Model.Note;
 import com.ufcspa.unasus.appportfolio.Model.Singleton;
 import com.ufcspa.unasus.appportfolio.R;
@@ -345,7 +346,8 @@ public class FragmentRTEditor extends Fragment {
                 single.note.setBtY(yPosition);
                 single.note.setSelectedText(selectedActualText);
                 single.note.setBtId(id);
-                Log.d("editor", "button id in singleton is now:"+single.note.getBtId());
+                Log.d("editor", "button id in singleton is now:" + single.note.getBtId());
+                Log.d("editor", "text select in singleton is now:"+single.note.getSelectedText());
                 showCommentsTab(true);
             }
         });
@@ -416,10 +418,9 @@ public class FragmentRTEditor extends Fragment {
                     if (!selectedText.isEmpty()) {
                         if (selectedText.length() > 0) {
                             //findText(selectedText, mRTMessageField.getText(RTFormat.HTML));
-                            createSpecificCommentNote(getCaretYPosition(startSelection), selectedText);
                             Singleton single=Singleton.getInstance();
                             single.selectedText = mRTMessageField.getText().toString().substring(startSelection,endSelection);
-                            DataBaseAdapter data = DataBaseAdapter.getInstance(getActivity());
+                            createSpecificCommentNote(getCaretYPosition(startSelection), selectedText);
                         }
                     }
                 }
@@ -455,7 +456,7 @@ public class FragmentRTEditor extends Fragment {
                 yButton = yPosition - 2;
 
             idButton = currentSpecificComment;
-            
+
             selectedActualText = selectedText;
             specificCommentsNotes.put(idButton, new Note(idButton, selectedText, yButton));
 
@@ -464,6 +465,20 @@ public class FragmentRTEditor extends Fragment {
             mRTManager.onEffectSelected(Effects.BGCOLOR, greenLight, idButton);
             mRTMessageField.setSelection(endSelection);
             mRTMessageField.setSelected(false);
+//            DataBaseAdapter db =DataBaseAdapter.getInstance(getActivity());
+//            Comentario c= new Comentario();
+//            Singleton s = Singleton.getInstance();
+//
+//            //inserting first note comment
+//            c.setTxtReference(s.selectedText);
+//            c.setIdAuthor(s.user.getIdUser());
+//            c.setIdActivityStudent(s.idActivityStudent);
+//            c.setTypeComment("O");
+//
+//            db.insertSpecificComment(c,idButton);
+//            //clean references from objects
+//            c=null;
+
         }
     }
 
@@ -505,7 +520,9 @@ public class FragmentRTEditor extends Fragment {
             if(spm.getId() != -1)
             {
                 Note aux = specificCommentsNotes.get(spm.getId());
-                aux.setBtY(getCaretYPosition(textSpanned.getSpanStart(spm)));
+                if(currentSpecificComment!=0) {
+                    aux.setBtY(getCaretYPosition(textSpanned.getSpanStart(spm)));
+                }
             }
         }
 
