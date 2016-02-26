@@ -33,7 +33,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         @Override
         public void onReceive(Context context, Intent intent) {
             int id = intent.getIntExtra("ID", 0);
-            changeFragment(id);
+            if(id == 6)
+                callAttachments(intent.getIntExtra("Position", -1));
+            else
+                changeFragment(id);
         }
     };
 
@@ -170,9 +173,29 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     public void hideDrawer() {
-//        miniDrawer.setVisibility(View.GONE);
-//        bigDrawer.setVisibility(View.GONE);
-//        fragmentContainer.
+    }
+
+    public void callRTEditorToAttachSomething(String url, int position, String type)
+    {
+        FragmentRTEditor fragment = new FragmentRTEditor();
+        Bundle args = new Bundle();
+        args.putString("URL",url);
+        args.putString("Type",type);
+        args.putInt("Position",position);
+        fragment.setArguments(args);
+        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment).commit();
+    }
+
+    public void callAttachments(int position)
+    {
+        singleton.isRTEditor = true;
+
+        FragmentAttachment fragment = new FragmentAttachment();
+        Bundle args = new Bundle();
+        args.putInt("Position",position);
+        fragment.setArguments(args);
+
+        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment).commit();
     }
 
 }

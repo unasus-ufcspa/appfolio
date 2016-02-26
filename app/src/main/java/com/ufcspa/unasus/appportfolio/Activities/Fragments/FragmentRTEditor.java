@@ -93,39 +93,6 @@ public class FragmentRTEditor extends Fragment {
         source.updateActivityStudent(acStudent);
     }
 
-    private BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            if(intent.hasExtra("URL"))
-            {
-                String url = intent.getStringExtra("URL");
-                String type = intent.getStringExtra("Type");
-
-                switch (type) {
-                    case "I":
-//                        mRTManager.insertImage(rtApi.createImage(url));
-                        mRTMessageField.setRichTextEditing(true, "<img src=\"" + url + "\">");
-                        break;
-                    case "V":
-//                        mRTManager.insertVideo(rtApi.createVideo(url));
-                        mRTMessageField.setRichTextEditing(true,"<img src=\""+url+"\">");
-                        break;
-                    case "T":
-                        break;
-                    default:
-                        break;
-                }
-            }
-            else
-            {
-                singleton.isRTEditor = true;
-                FragmentAttachment fragmentAttachment = new FragmentAttachment();
-                if (getActivity() != null)
-                    fragmentAttachment.show(getActivity().getSupportFragmentManager(), "Anexos");
-            }
-        }
-    };
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_rteditor, null);
@@ -196,6 +163,7 @@ public class FragmentRTEditor extends Fragment {
         fullScreen.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                mRTMessageField.setSelection(0);
                 Log.d("rteditor", mRTMessageField.getText(RTFormat.HTML));
 //                ((MainActivity) getActivity()).hideDrawer();
             }
@@ -204,7 +172,16 @@ public class FragmentRTEditor extends Fragment {
         initCommentsTab(view);
         initTopBar(view);
 
-        LocalBroadcastManager.getInstance(getContext()).registerReceiver(broadcastReceiver, new IntentFilter("call.attachments.action"));
+        Bundle bundle = this.getArguments();
+        if (bundle != null)
+        {
+            if(singleton.isRTEditor)
+            {
+                mRTMessageField.setSelection(bundle.getInt("Position", -1));
+                receiveAttachment(bundle.getString("URL"), bundle.getString("Type"));
+                singleton.isRTEditor = false;
+            }
+        }
 
         return view;
 
@@ -244,6 +221,11 @@ public class FragmentRTEditor extends Fragment {
         if (mRTManager != null) {
             mRTManager.onDestroy(true);
         }
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
     }
 
     private void initCommentsTab(View view)
@@ -532,6 +514,23 @@ public class FragmentRTEditor extends Fragment {
         for (int i = 0; i < arrayAux.size(); i++) {
             Note aux = arrayAux.get(i);
             scrollview.addView(createButton(aux.getBtId(), String.valueOf(aux.getBtId()), aux.getBtY()));
+        }
+    }
+    private void receiveAttachment(String type, String url)
+    {
+        switch (type)
+        {
+            case "I":
+                mRTManager.insertImage(rtApi.createImage(url));
+//                mRTMessageField.setRichTextEditing(true, "<img src=\"" + bundle.getString("URL") + "\">");
+                break;
+            case "V":
+                mRTManager.insertVideo(rtApi.createVideo(url));
+                break;
+            case "T":
+                break;
+            default:
+                break;
         }
     }
 /*
