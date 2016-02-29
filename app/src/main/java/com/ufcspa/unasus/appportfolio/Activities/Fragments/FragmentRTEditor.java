@@ -491,7 +491,8 @@ public class FragmentRTEditor extends Fragment {
             if(spm.getId() != -1)
             {
                 Note aux = specificCommentsNotes.get(spm.getId());
-                aux.setBtY(getCaretYPosition(textSpanned.getSpanStart(spm)));
+                if(aux != null)
+                    aux.setBtY(getCaretYPosition(textSpanned.getSpanStart(spm)));
             }
         }
 
