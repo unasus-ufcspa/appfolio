@@ -436,20 +436,20 @@ public class FragmentRTEditor extends Fragment {
             mRTManager.onEffectSelected(Effects.BGCOLOR, greenLight, idButton);
             mRTMessageField.setSelection(endSelection);
             mRTMessageField.setSelected(false);
-//            DataBaseAdapter db =DataBaseAdapter.getInstance(getActivity());
-//            Comentario c= new Comentario();
-//            Singleton s = Singleton.getInstance();
-//
-//            //inserting first note comment
-//            c.setTxtReference(s.selectedText);
-//            c.setIdAuthor(s.user.getIdUser());
-//            c.setIdActivityStudent(s.idActivityStudent);
-//            c.setTypeComment("O");
-//
-//            db.insertSpecificComment(c,idButton);
-//            //clean references from objects
-//            c=null;
 
+            DataBaseAdapter db = DataBaseAdapter.getInstance(getActivity());
+            Comentario c= new Comentario();
+            Singleton s = Singleton.getInstance();
+
+            //inserting first note comment
+            c.setTxtReference(s.selectedText);
+            c.setIdAuthor(s.user.getIdUser());
+            c.setIdActivityStudent(s.idActivityStudent);
+            c.setTypeComment("O");
+
+            db.insertSpecificComment(c,idButton);
+            //clean references from objects
+            c = null;
         }
     }
 
