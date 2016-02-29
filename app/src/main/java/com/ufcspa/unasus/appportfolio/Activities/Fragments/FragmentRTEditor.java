@@ -402,7 +402,7 @@ public class FragmentRTEditor extends Fragment {
 
         @Override
         public boolean onCreateActionMode(ActionMode mode, Menu menu) {
-            menu.clear();
+//            menu.clear();
             mode.getMenuInflater().inflate(R.menu.menu, menu);
             return true;
         }
@@ -503,16 +503,18 @@ public class FragmentRTEditor extends Fragment {
             scrollview.addView(createButton(aux.getBtId(), String.valueOf(aux.getBtId()), aux.getBtY()));
         }
     }
+
     private void receiveAttachment(String url, String type)
     {
         switch (type)
         {
             case "I":
 //                mRTManager.insertImage(rtApi.createImage(url));
-                teste(url);
+                putAttachment(url, false);
                 break;
             case "V":
 //                mRTManager.insertVideo(rtApi.createVideo(url));
+                putAttachment(url, true);
                 break;
             case "T":
                 break;
@@ -521,7 +523,7 @@ public class FragmentRTEditor extends Fragment {
         }
     }
 
-    public void teste(String url)
+    private void putAttachment(String url, boolean isVideo)
     {
         int selStart = mRTMessageField.getSelectionStart();
         Spannable textBefore = (Spannable) mRTMessageField.getText().subSequence(0, selStart);
@@ -529,7 +531,10 @@ public class FragmentRTEditor extends Fragment {
         RTHtml<RTImage, RTAudio, RTVideo> rtHtmlBefore = new ConverterSpannedToHtml().convert(textBefore, RTFormat.HTML);
         RTHtml<RTImage, RTAudio, RTVideo> rtHtmlAfter = new ConverterSpannedToHtml().convert(textAfter, RTFormat.HTML);
 
-        mRTMessageField.setRichTextEditing(true, rtHtmlBefore.getText() + "<img src=\"" + url +"\">" + rtHtmlAfter.getText());
+        if(isVideo)
+            mRTMessageField.setRichTextEditing(true, rtHtmlBefore.getText() + "<video src=\"" + url +"\">" + rtHtmlAfter.getText());
+        else
+            mRTMessageField.setRichTextEditing(true, rtHtmlBefore.getText() + "<img src=\"" + url +"\">" + rtHtmlAfter.getText());
     }
 /*
 
