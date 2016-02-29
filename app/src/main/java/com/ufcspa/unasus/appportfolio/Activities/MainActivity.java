@@ -78,7 +78,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         LocalBroadcastManager.getInstance(this).registerReceiver(broadcastReceiver, new IntentFilter("call.fragments.action"));
 
         if(savedInstanceState == null)
-            changeFragment(0);
+            // QUAL FRAGMENT IRA INICIAR APOS LOGIN?
+            // 0 para select portfolio
+            // 5 para rtEditor
+            changeFragment(5);
     }
 
     private void initMiniDrawer() {
@@ -150,7 +153,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         switch (id)
         {
             case 0:
-                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new FragmentRTEditor()).commit();//FragmentSelectPortfolio
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new FragmentSelectPortfolio()).commit();//FragmentSelectPortfolio
                 break;
             case 1:
                 if(singleton.portfolioClass != null)

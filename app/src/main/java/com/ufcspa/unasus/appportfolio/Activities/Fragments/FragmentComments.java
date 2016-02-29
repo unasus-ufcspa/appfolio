@@ -1,6 +1,11 @@
 package com.ufcspa.unasus.appportfolio.Activities.Fragments;
 
+import android.app.Activity;
+import android.content.Intent;
+import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -93,7 +98,8 @@ public class FragmentComments extends Frag {
                     addItems();
                     Comentario c = getCommentFromText();
                     insertComment(c);
-                    oneComments.add(new OneComment(false, edtMessage.getText().toString(),convertDateToTime(c.getDateComment()),convertDateToDate(c.getDateComment())));
+                    OneComment oneComment= new OneComment(false, edtMessage.getText().toString(),convertDateToTime(c.getDateComment()),convertDateToDate(c.getDateComment()));
+                    oneComments.add(oneComment);
                     edtMessage.setText("");
                     //lv.setAdapter(adapter);
                     adapterComments.notifyDataSetChanged();
@@ -106,6 +112,68 @@ public class FragmentComments extends Frag {
         //addItems();
         loadCom();
     }
+
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == Activity.RESULT_OK) {
+            galleryAddPic();
+            insertFileIntoDataBase(mCurrentPhotoPath, "I");
+        }
+
+        // Quando o usuário escolhe a opção Gallery
+        if (requestCode == RESULT_LOAD_IMAGE && resultCode == Activity.RESULT_OK) {
+            Uri selectedUri = data.getData();
+            String[] columns = {MediaStore.Images.Media.DATA, MediaStore.Images.Media.MIME_TYPE};
+
+            Cursor cursor = getActivity().getContentResolver().query(selectedUri, columns, null, null, null);
+            cursor.moveToFirst();
+
+            int pathColumnIndex = cursor.getColumnIndex(columns[0]);
+            int mimeTypeColumnIndex = cursor.getColumnIndex(columns[1]);
+
+            String contentPath = cursor.getString(pathColumnIndex);
+            String mimeType = cursor.getString(mimeTypeColumnIndex);
+
+            cursor.close();
+
+            mCurrentPhotoPath = contentPath;
+
+            if (mimeType.startsWith("image")) {
+                insertFileIntoDataBase(mCurrentPhotoPath, "I");
+            } else if (mimeType.startsWith("video")) {
+                insertFileIntoDataBase(mCurrentPhotoPath, "V");
+                mCurrentPhotoPath = getThumbnailPathForLocalFile(getActivity(), selectedUri);
+            }
+        }
+
+        if (requestCode == PICKFILE_RESULT_CODE && resultCode == Activity.RESULT_OK) {
+            insertFileIntoDataBase(data.getData().getPath(), "T");
+        }
+
+        if (requestCode == REQUEST_VIDEO_CAPTURE && resultCode == Activity.RESULT_OK) {
+            insertFileIntoDataBase(data.getData().getPath(), "V");
+            galleryAddPic();
+//            mCurrentPhotoPath = getThumbnailPathForLocalFile(getActivity(), data.getData());
+        }
+        Log.d(getTag(),"criando item de anexo");
+        insertAtach();
+    }
+
+        public void insertAtach(){
+            lv.setAdapter(adapterComments);
+        addItems();
+        Comentario c = getCommentFromText();
+        insertComment(c);
+        OneComment oneComment= new OneComment(false, edtMessage.getText().toString(),convertDateToTime(c.getDateComment()),convertDateToDate(c.getDateComment()));
+        oneComment.atach = true;
+            oneComments.add(oneComment);
+        adapterComments.notifyDataSetChanged();
+    }
+
+
+
 
     public Comentario getCommentFromText(){
         Singleton singleton = Singleton.getInstance();

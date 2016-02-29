@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.ufcspa.unasus.appportfolio.Model.OneComment;
@@ -27,6 +28,7 @@ public class SpecificCommentAdapter extends BaseAdapter {
         this.context = context;
         this.comments = comments;
         inflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        lastDate="01/01/2001";
     }
 
 
@@ -57,18 +59,21 @@ public class SpecificCommentAdapter extends BaseAdapter {
         holder.message=(TextView)rowView.findViewById(R.id.comment);
         holder.hour=(TextView)rowView.findViewById(R.id.hour);
         holder.date=(TextView)rowView.findViewById(R.id.date);
+        holder.wraper=(RelativeLayout)rowView.findViewById(R.id.wrapper);
 
         //populating
         holder.message.setText(c.comment);
         holder.hour.setText(c.hour);
         holder.date.setText(c.date);
+        Log.d("comment specific","message in holder"+holder.message.getText().toString());
 
         ///////////change visibility////////////////
 
         Log.d("comment", "item position:" + position);
+
         if (position == 0) {
             Log.d("comments","first position");
-            lastDate =c.date;
+            lastDate = c.date;
             holder.date.setText(c.date);
             Log.d("comments", "datenow get:" + lastDate);
             holder.date.setVisibility(rowView.VISIBLE);
@@ -85,8 +90,8 @@ public class SpecificCommentAdapter extends BaseAdapter {
             }
         }
 
-        holder.message.setBackgroundResource(c.orientation ? R.drawable.tutor_ballon : R.drawable.my_ballon);
-        holder.message.setGravity(c.orientation ? Gravity.LEFT : Gravity.RIGHT);
+        holder.message.setBackgroundResource(c.orientation ? R.drawable.my_ballon_specific_comment : R.drawable.tutor_ballon_specific_comment);
+        holder.wraper.setGravity(c.orientation ? Gravity.LEFT : Gravity.RIGHT);
 
         //////////---------------////////////////////
         return rowView;
@@ -102,5 +107,6 @@ public class SpecificCommentAdapter extends BaseAdapter {
         TextView message;
         TextView hour;
         TextView date;
+        RelativeLayout wraper;
     }
 }

@@ -5,6 +5,7 @@ public class OneComment {
     public String comment;
     public String hour;
     public String date;
+    public boolean atach;
 
 
     public OneComment(boolean orientation, String comment) {
