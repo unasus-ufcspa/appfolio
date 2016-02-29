@@ -33,7 +33,7 @@
     <string name="files_popup_text">Texto</string>
     <string name="files_popup_attachment">Anexos</string>
 
-    <string name="cancel">Cancel</string>
+    <string name="cancel">Cancelar</string>
 
     <string name="popup_login">Do you want to enter as Student or Tutor?</string>
     <string name="popup_login_student">Student</string>

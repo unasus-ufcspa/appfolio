@@ -52,7 +52,6 @@ public class FragmentAttachment extends Frag {
 
     private boolean isRTEditor;
     private int cursorPosition;
-    private String type;
 
     public FragmentAttachment() {
     }

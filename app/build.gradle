@@ -82,4 +82,5 @@ dependencies {
     compile 'org.jsoup:jsoup:1.7.3'
     compile 'me.grantland:autofittextview:0.2.+'
     compile 'com.android.support:support-v4:23.1.1'
+    compile project(':RTEditor')
 }

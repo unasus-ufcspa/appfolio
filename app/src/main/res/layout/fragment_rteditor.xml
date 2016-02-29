@@ -169,7 +169,8 @@
             android:layout_toLeftOf="@+id/button_container"
             android:layout_toStartOf="@+id/button_container"
             android:layout_alignTop="@+id/comments_container"
-            android:id="@+id/leftbar_white">
+            android:id="@+id/leftbar_white"
+            android:layout_marginLeft="10dp">
 
             <RelativeLayout
                 android:layout_width="5dp"
@@ -179,6 +180,7 @@
                 android:layout_alignParentEnd="true"
                 android:background="@color/base_green"
                 android:id="@+id/rightbar_green"></RelativeLayout>
+
         </RelativeLayout>
 
     </RelativeLayout>

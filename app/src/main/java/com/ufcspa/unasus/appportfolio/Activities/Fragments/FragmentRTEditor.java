@@ -3,6 +3,7 @@ package com.ufcspa.unasus.appportfolio.Activities.Fragments;
 import android.content.Context;
 import android.content.res.Configuration;
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SlidingPaneLayout;
@@ -45,6 +46,7 @@ import com.ufcspa.unasus.appportfolio.Model.Singleton;
 import com.ufcspa.unasus.appportfolio.R;
 import com.ufcspa.unasus.appportfolio.database.DataBaseAdapter;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -67,6 +69,8 @@ public class FragmentRTEditor extends Fragment {
     private int greenDark;
 
     private Singleton singleton;
+
+    private ViewGroup rightBarSpecificComments;
 
     public FragmentRTEditor() {}
 
@@ -98,6 +102,7 @@ public class FragmentRTEditor extends Fragment {
         getIdNotesFromDB();
 
         scrollview = (ViewGroup) view.findViewById(R.id.comments);
+        rightBarSpecificComments = (ViewGroup) view.findViewById(R.id.leftbar_white);
 
         // create RTManager
         RTApi rtApi = new RTApi(getActivity(), new RTProxyImpl(getActivity()), new RTMediaFactoryImpl(getActivity(), true));
@@ -287,11 +292,11 @@ public class FragmentRTEditor extends Fragment {
             specificCommentsNotes.put(id,new Note(id,"",0));
         }
         currentSpecificComment=specificCommentsNotes.size();
-        Log.d("editor notes","currentSpecificComment:"+currentSpecificComment);
+        Log.d("editor notes", "currentSpecificComment:" + currentSpecificComment);
     }
 
     private Button createButton(final int id, final String value, final float yPosition) {
-        LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        final LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         Button note = (Button) inflater.inflate(R.layout.btn_specific_comment, scrollview, false);
 
         note.setOnClickListener(new View.OnClickListener() {
@@ -309,17 +314,24 @@ public class FragmentRTEditor extends Fragment {
                     Button aux = (Button) getView().findViewById(arrayAux.get(i).getBtId());
                     if (aux.getId() != btn.getId()) {
                         aux.setBackgroundResource(R.drawable.btn_border);
-                        aux.setTextColor(greenDark);
+                        aux.setTextColor(greenLight);
                     }
                 }
 
-                Singleton single = Singleton.getInstance();
-                single.note.setBtY(yPosition);
-                single.note.setSelectedText(selectedActualText);
-                single.note.setBtId(id);
-                Log.d("editor", "button id in singleton is now:" + single.note.getBtId());
-                Log.d("editor", "text select in singleton is now:"+single.note.getSelectedText());
+                singleton.note.setBtY(yPosition);
+                singleton.note.setSelectedText(selectedActualText);
+                singleton.note.setBtId(id);
+                Log.d("editor", "button id in singleton is now:" + singleton.note.getBtId());
+                Log.d("editor", "text select in singleton is now:" + singleton.note.getSelectedText());
                 showCommentsTab(true);
+
+                if(rightBarSpecificComments.getChildCount() > 1)
+                    rightBarSpecificComments.removeViewAt(1);
+                Button btn_view = (Button) inflater.inflate(R.layout.btn_specific_comment, rightBarSpecificComments, false);
+                btn_view.setText(btn.getText());
+                btn_view.setBackgroundResource(R.drawable.rounded_corner);
+                btn_view.setTextColor(Color.WHITE);
+                rightBarSpecificComments.addView(btn_view);
             }
         });
 
@@ -402,7 +414,6 @@ public class FragmentRTEditor extends Fragment {
 
         @Override
         public boolean onCreateActionMode(ActionMode mode, Menu menu) {
-//            menu.clear();
             mode.getMenuInflater().inflate(R.menu.menu, menu);
             return true;
         }
@@ -455,9 +466,11 @@ public class FragmentRTEditor extends Fragment {
 
     public void showCommentsTab(Boolean isSpecificComment)
     {
-        if(isSpecificComment)
+        if(isSpecificComment) {
             getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.comments_container, new FragmentSpecificComments()).commit();
-        else
+            SlidingPaneLayout layout = (SlidingPaneLayout) getView().findViewById(R.id.rteditor_fragment);
+            layout.closePane();
+        }else
             getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.comments_container, new FragmentComments()).commit();
     }
 
@@ -510,11 +523,9 @@ public class FragmentRTEditor extends Fragment {
         switch (type)
         {
             case "I":
-//                mRTManager.insertImage(rtApi.createImage(url));
                 putAttachment(url, false);
                 break;
             case "V":
-//                mRTManager.insertVideo(rtApi.createVideo(url));
                 putAttachment(url, true);
                 break;
             case "T":
