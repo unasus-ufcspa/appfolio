@@ -75,8 +75,8 @@ public class FragmentSpecificComments extends Frag {
         //adapter = new SpecificCommentArrayAdapter(getActivity().getApplicationContext(), R.layout.comment_item);
         loadCommentsFromDB();
         if(oneComments!=null) {
-            spcAdapter = new SpecificCommentAdapter(getActivity(), oneComments);
-            lv.setAdapter(adapter);
+
+
         }
         insertReference();
         ((InputMethodManager)getActivity().getSystemService(Context.INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(getView().getWindowToken(), 0);
@@ -106,6 +106,7 @@ public class FragmentSpecificComments extends Frag {
                 }
             }
         });
+
     }
 
 
@@ -137,6 +138,10 @@ public class FragmentSpecificComments extends Frag {
             } else {
                 Log.d("Banco", "Lista retornou vazia!");
             }
+            Log.d("specific comments","one Comments exist, size:"+oneComments.size());
+            spcAdapter = new SpecificCommentAdapter(getActivity(), oneComments);
+            lv.setAdapter(spcAdapter);
+            Log.d("specific comments", "adapter itens:" + spcAdapter.getCount());
 
 
 

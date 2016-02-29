@@ -31,28 +31,27 @@
             android:layout_height="wrap_content"
             android:layout_margin="5dip"
             android:layout_marginTop="5dp"
+            android:layout_centerInParent="@+id/hour"
             android:paddingBottom="10dp"
-            android:text="kkk"
-            android:background="@drawable/my_ballon_specific_comment"
+            android:text=""
+            android:background="@drawable/att_text"
             android:textColor="#000000"
-            android:gravity="center_horizontal"
+            android:gravity="center"
             />
 
         <TextView
             android:id="@+id/hour"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignBottom="@+id/comment"
+            android:layout_below="@+id/comment"
             android:layout_alignParentLeft="@+id/comment"
             android:adjustViewBounds="true"
-            android:layout_marginTop="7dp"
             android:layout_marginRight="2dp"
             android:text="12:35"
-            android:paddingRight="50dp"
-            android:paddingLeft="50dp"
+            android:paddingLeft="30dp"
             android:scaleType="fitCenter"
             android:textSize="10dp"
-            android:gravity="bottom"
+            android:gravity="center_horizontal"
             android:textColor="#000000" />
 
     </RelativeLayout>

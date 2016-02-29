@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.ufcspa.unasus.appportfolio.Model.OneComment;
@@ -52,20 +53,29 @@ public class CommentAdapter extends BaseAdapter {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        View rowView;
-        rowView = inflater.inflate(R.layout.comment_item, null);
+
         OneComment c = comments.get(position);
+        View rowView;
+        if(c.atach==true){
+            rowView = inflater.inflate(R.layout.atach_item, null);
+            Log.d("comment attach", "atach true:" + position);
+        }else {
+            rowView = inflater.inflate(R.layout.comment_item, null);
+        }
         Holder holder = new Holder();
 
         //getting from xml
         holder.message=(TextView)rowView.findViewById(R.id.comment);
         holder.hour=(TextView)rowView.findViewById(R.id.hour);
         holder.date=(TextView)rowView.findViewById(R.id.date);
+        holder.wraper=(RelativeLayout)rowView.findViewById(R.id.wrapper);
+
 
         //populating
         holder.message.setText(c.comment);
         holder.hour.setText(c.hour);
         holder.date.setText(c.date);
+
 
         ///////////change visibility////////////////
 
@@ -88,10 +98,10 @@ public class CommentAdapter extends BaseAdapter {
                 holder.date.setVisibility(rowView.GONE);
             }
         }
-
-        holder.message.setBackgroundResource(c.orientation ? R.drawable.tutor_ballon : R.drawable.my_ballon);
-        holder.message.setGravity(c.orientation ? Gravity.LEFT : Gravity.RIGHT);
-
+        if(c.atach==false) {
+            holder.message.setBackgroundResource(c.orientation ? R.drawable.my_ballon : R.drawable.tutor_ballon);
+            holder.wraper.setGravity(c.orientation ? Gravity.LEFT : Gravity.RIGHT);
+        }
         //////////---------------////////////////////
         return rowView;
     }
@@ -106,5 +116,6 @@ public class CommentAdapter extends BaseAdapter {
         TextView message;
         TextView hour;
         TextView date;
+        RelativeLayout wraper;
     }
 }
