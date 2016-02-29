@@ -15,6 +15,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.ufcspa.unasus.appportfolio.Adapter.CommentArrayAdapter;
+import com.ufcspa.unasus.appportfolio.Adapter.SpecificCommentAdapter;
 import com.ufcspa.unasus.appportfolio.Adapter.SpecificCommentArrayAdapter;
 import com.ufcspa.unasus.appportfolio.Model.Comentario;
 import com.ufcspa.unasus.appportfolio.Model.Note;
@@ -35,6 +36,7 @@ import java.util.Date;
 public class FragmentSpecificComments extends Frag {
 
     private SpecificCommentArrayAdapter adapter;
+    private SpecificCommentAdapter spcAdapter;
     private ListView lv;
     private Button btGenMess;
     private Button btAttachment;
@@ -44,6 +46,7 @@ public class FragmentSpecificComments extends Frag {
     private String reference;
     private Note noteNow;
     private ArrayList<Comentario> lista;
+    private ArrayList<OneComment> oneComments;
     private ImageButton btExpand;
     private static boolean EXPANDED_FLAG=false;
 
@@ -68,12 +71,12 @@ public class FragmentSpecificComments extends Frag {
 
         lv = (ListView) getView().findViewById(R.id.listView1);
 
-        adapter = new SpecificCommentArrayAdapter(getActivity().getApplicationContext(), R.layout.comment_item);
-
-        lv.setAdapter(adapter);
+        //adapter = new SpecificCommentArrayAdapter(getActivity().getApplicationContext(), R.layout.comment_item);
         loadCommentsFromDB();
-//
-
+        if(oneComments!=null) {
+            spcAdapter = new SpecificCommentAdapter(getActivity(), oneComments);
+            lv.setAdapter(adapter);
+        }
         insertReference();
         InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(getActivity().INPUT_METHOD_SERVICE);
         imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY);
@@ -91,13 +94,13 @@ public class FragmentSpecificComments extends Frag {
                     txNote.setMovementMethod(new ScrollingMovementMethod());
                     EXPANDED_FLAG = true;
                     txNote.requestLayout();
-                    Log.d("editor", "flag true");
+                    Log.d("editor", "layout reference expanded true");
                 } else {
                     txNote.getLayoutParams().height = 70;
                     txNote.setMovementMethod(null);
                     EXPANDED_FLAG = false;
                     txNote.requestLayout();
-                    Log.d("editor", "flag false");
+                    Log.d("editor", "layout reference expanded false");
                 }
             }
         });
@@ -118,19 +121,23 @@ public class FragmentSpecificComments extends Frag {
 
     public void loadCommentsFromDB(){
         try {
-            adapter.clearAdapter();
             DataBaseAdapter db = DataBaseAdapter.getInstance(getActivity());
             Singleton singleton = Singleton.getInstance();
             lista = (ArrayList<Comentario>) db.listComments(singleton.activity.getIdAtivity(),"O",singleton.note.getBtId());//lista comentario gerais filtrando por O
+            oneComments= new ArrayList<>(5);
+
             if (lista.size() != 0) {
                 for (int i = 0; i < lista.size(); i++) {
-                    adapter.add(new OneComment(lista.get(i).getIdAuthor() != singleton.user.getIdUser(),
-                            lista.get(i).getTxtComment(),convertDateToTime(lista.get(i).getDateComment())));
+                    oneComments.add(new OneComment(lista.get(i).getIdAuthor() != singleton.user.getIdUser(),
+                            lista.get(i).getTxtComment(), convertDateToTime(lista.get(i).getDateComment()), convertDateToDate(lista.get(i).getDateComment())));
                 }
                 Log.d("Banco", "Lista populada:" + lista);
             } else {
                 Log.d("Banco", "Lista retornou vazia!");
             }
+
+
+
         } catch (Exception e) {
 
         }
@@ -138,7 +145,7 @@ public class FragmentSpecificComments extends Frag {
 
 
     private void insertComment(Comentario c){
-        adapter.add(new OneComment(false, edtMessage.getText().toString(), convertDateToTime(c.getDateComment())));
+        oneComments.add(new OneComment(false, edtMessage.getText().toString(), convertDateToTime(c.getDateComment()), convertDateToDate(c.getDateComment())));
         edtMessage.setText("");
         try {
             c.setTxtReference(txNote.getText().toString());
@@ -147,12 +154,13 @@ public class FragmentSpecificComments extends Frag {
             Log.d("Banco:", "comentario inserido no bd interno com sucesso");
         }
         catch (Exception e) {
-            Log.e("Erro:", e.getMessage());
+            Log.e("Banco", "Erro:"+e.getMessage());
         }
+        spcAdapter.notifyDataSetChanged();
     }
 
     private void insertReference(){
-        if(adapter!=null) {
+        if(spcAdapter!=null) {
             Singleton single = Singleton.getInstance();
             noteNow = single.note;
             if(lista.size()!=0) { // se a lista nao estiver vazia quer dizer que a nota de referencia já existe no banco
@@ -161,6 +169,7 @@ public class FragmentSpecificComments extends Frag {
             }
 
             if (noteNow.getSelectedText().toString()!=null && !noteNow.getSelectedText().toString().equalsIgnoreCase("null")){
+                Log.d("editor","receiving reference...:"+noteNow.getSelectedText());
                 reference=noteNow.getSelectedText();
                 if(reference.contains("Referência:")){
                     Log.d("editor","specific comments contais referencia 'Referência:' in reference");
@@ -190,6 +199,22 @@ public class FragmentSpecificComments extends Frag {
             SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
             shortTimeStr = sdf.format(date);
             Log.d("comments","date to hour :"+shortTimeStr);
+        } catch (ParseException e) {
+            // To change body of catch statement use File | Settings | File Templates.
+            e.printStackTrace();
+        }
+        return shortTimeStr;
+    }
+    public String convertDateToDate(String atualDate){
+        String shortTimeStr="12/12/2012";
+        Log.d("comments","date receiving :"+atualDate);
+        try {
+            SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            Date date = null;
+            date = df.parse(atualDate);
+            SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+            shortTimeStr = sdf.format(date);
+            Log.d("comments","date to other date format :"+shortTimeStr);
         } catch (ParseException e) {
             // To change body of catch statement use File | Settings | File Templates.
             e.printStackTrace();

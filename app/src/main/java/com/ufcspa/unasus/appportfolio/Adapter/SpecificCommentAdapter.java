@@ -1,8 +1,6 @@
 package com.ufcspa.unasus.appportfolio.Adapter;
 
 import android.content.Context;
-import android.graphics.Color;
-import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -14,24 +12,22 @@ import android.widget.TextView;
 import com.ufcspa.unasus.appportfolio.Model.OneComment;
 import com.ufcspa.unasus.appportfolio.R;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by icaromsc on 25/02/2016.
+ * Created by icaromsc on 26/02/2016.
  */
-public class CommentAdapter extends BaseAdapter {
+public class SpecificCommentAdapter extends BaseAdapter {
     private Context context;
     private static LayoutInflater inflater = null;
     private List<OneComment> comments;
     private String lastDate;
 
-    public CommentAdapter(Context context, List<OneComment> comments) {
+    public SpecificCommentAdapter(Context context, List<OneComment> comments) {
         this.context = context;
         this.comments = comments;
         inflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
-
 
 
 
@@ -53,7 +49,7 @@ public class CommentAdapter extends BaseAdapter {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         View rowView;
-        rowView = inflater.inflate(R.layout.comment_item, null);
+        rowView = inflater.inflate(R.layout.specific_comment_item, null);
         OneComment c = comments.get(position);
         Holder holder = new Holder();
 

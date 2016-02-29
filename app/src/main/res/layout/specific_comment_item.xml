@@ -1,37 +1,55 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
-    android:layout_height="wrap_content"
-    >
+    android:layout_height="fill_parent">
 
-    <LinearLayout
+    <RelativeLayout
         android:id="@+id/wrapper"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center">
+
+    </RelativeLayout>
+    <TextView
+        android:id="@+id/date"
         android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:layout_gravity="center"
-        android:orientation="vertical"
-        >
-        <TextView
-            android:id="@+id/reference"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_margin="5dip"
-            android:background="@color/base_green"
-            android:paddingLeft="10dip"
-            android:text="Reference here!"
-            android:textColor="@android:color/primary_text_light" />
+        android:layout_height="wrap_content"
+        android:adjustViewBounds="true"
+        android:text="17/12/2016"
+        android:scaleType="fitCenter"
+        android:textSize="10dp"
+        android:visibility="visible"
+        android:textColor="#000000"
+        android:gravity="center" />
 
-        <TextView
-            android:id="@+id/comment"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_margin="5dip"
-            android:background="@color/base_green"
-            android:paddingLeft="10dip"
-            android:text="Hello bubbles!"
-            android:textColor="@android:color/primary_text_light" />
-    </LinearLayout>
+    <TextView
+        android:id="@+id/comment"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dip"
+        android:layout_below="@+id/date"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/my_ballon_specific_comment"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:paddingBottom="10dp"
+        android:text="auehuaehuahuaehuaheuaheuhaueh"
+        android:textColor="#000000" />
 
-</LinearLayout>
+    <TextView
+        android:id="@+id/hour"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/comment"
+        android:layout_alignParentLeft="@+id/comment"
+        android:adjustViewBounds="true"
+        android:layout_marginTop="7dp"
+        android:layout_marginRight="2dp"
+        android:paddingLeft="60dp"
+        android:text="12:35"
+        android:scaleType="fitCenter"
+        android:textSize="10dp"
+        android:paddingRight="60dp"
+        android:textColor="#000000" />
+
+</RelativeLayout>
