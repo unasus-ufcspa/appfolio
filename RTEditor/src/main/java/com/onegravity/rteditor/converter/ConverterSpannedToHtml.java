@@ -369,7 +369,7 @@ public class ConverterSpannedToHtml {
             VideoSpan span = ((VideoSpan) style);
             RTVideo video = span.getVideo();
             String filePath = video.getFilePath(mRTFormat);
-            mOut.append("<video controls src=\"" + filePath + "\">");
+            mOut.append("<video src=\"" + filePath + "\">");
             return false;    // don't output the dummy character underlying the video.
         }
         return true;

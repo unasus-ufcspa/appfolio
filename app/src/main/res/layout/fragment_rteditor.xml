@@ -107,7 +107,7 @@
         <LinearLayout
             android:orientation="horizontal"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="30dp"
             android:background="@android:color/transparent"
             android:id="@+id/button_container"
             android:gravity="bottom"
@@ -116,7 +116,7 @@
 
             <me.grantland.widget.AutofitTextView
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="30dp"
                 android:id="@+id/btn_geral"
                 android:layout_weight="1"
                 android:background="@drawable/geral_comment_tab"
@@ -130,7 +130,7 @@
 
             <me.grantland.widget.AutofitTextView
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="30dp"
                 android:id="@+id/btn_specific"
                 android:layout_weight="1"
                 android:background="@drawable/specific_comment_tab"
@@ -156,7 +156,7 @@
 
         <RelativeLayout
             android:layout_width="35dp"
-            android:layout_height="match_parent"
+            android:layout_height="30dp"
             android:id="@+id/topbar_gray"
             android:layout_above="@+id/comments_container"
             android:background="@color/gray_1">
@@ -172,7 +172,7 @@
             android:id="@+id/leftbar_white">
 
             <RelativeLayout
-                android:layout_width="10dp"
+                android:layout_width="5dp"
                 android:layout_height="match_parent"
                 android:layout_alignParentTop="true"
                 android:layout_alignParentRight="true"

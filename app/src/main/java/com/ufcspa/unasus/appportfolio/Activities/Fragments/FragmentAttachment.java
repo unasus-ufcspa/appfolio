@@ -7,15 +7,19 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.res.Configuration;
+import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.ParcelFileDescriptor;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.GridView;
 import android.widget.ImageView;
@@ -31,6 +35,9 @@ import com.ufcspa.unasus.appportfolio.Model.Singleton;
 import com.ufcspa.unasus.appportfolio.R;
 import com.ufcspa.unasus.appportfolio.database.DataBaseAdapter;
 
+import java.io.File;
+import java.io.FileDescriptor;
+import java.io.FileNotFoundException;
 import java.sql.SQLOutput;
 import java.util.ArrayList;
 
@@ -66,6 +73,8 @@ public class FragmentAttachment extends Frag {
         }
         else
             isRTEditor = false;
+
+        ((InputMethodManager)getActivity().getSystemService(Context.INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(view.getWindowToken(), 0);
 
         return view;
     }
@@ -136,7 +145,14 @@ public class FragmentAttachment extends Frag {
             dialog.setContentView(R.layout.custom_fullimage_dialog);
 
             final ImageView image = (ImageView) dialog.findViewById(R.id.fullimage);
-            image.setImageBitmap(BitmapFactory.decodeFile(url));
+            Uri uri = Uri.fromFile(new File(url));//Uri.parse(url);
+            Bitmap bitmap = null;
+            try {
+                bitmap = BitmapFactory.decodeStream(getContext().getContentResolver().openInputStream(uri));
+                image.setImageBitmap(bitmap);
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            }
 
             Button btnPositive = (Button) dialog.findViewById(R.id.btn_positive);
             Button btnNegative = (Button) dialog.findViewById(R.id.btn_negative);
@@ -238,6 +254,7 @@ public class FragmentAttachment extends Frag {
         pdfDialog.create();
         pdfDialog.show();
     }
+
 
     public void deleteMedia(int position)
     {

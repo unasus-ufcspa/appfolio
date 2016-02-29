@@ -17,6 +17,10 @@
 package com.onegravity.rteditor.api;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.media.MediaScannerConnection;
+import android.net.Uri;
 import android.os.Environment;
 import android.util.Log;
 
@@ -39,6 +43,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Random;
 
 /**
  * This is a basic implementation of the RTMediaFactory using either the
@@ -129,6 +134,46 @@ public class RTMediaFactoryImpl implements RTMediaFactory<RTImage, RTAudio, RTVi
             Helper.closeQuietly(out);
             Helper.closeQuietly(in);
         }
+    }
+    private String saveImageToExternalStorage(final String url) {
+//        Bitmap finalBitmap = BitmapFactory.decodeFile(url);
+//        String root = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).toString();
+//        File myDir = new File(root + "/saved_images");
+//        myDir.mkdirs();
+//        Random generator = new Random();
+//        int n = 10000;
+//        n = generator.nextInt(n);
+//        String fname = "Image-" + n + ".jpg";
+//        File file = new File(myDir, fname);
+//        if (file.exists())
+//            file.delete();
+//        try {
+//            FileOutputStream out = new FileOutputStream(file);
+//            finalBitmap.compress(Bitmap.CompressFormat.JPEG, 90, out);
+//            out.flush();
+//            out.close();
+//        }
+//        catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//
+//
+//        final String[] imagePath = {null};
+//
+//        // Tell the media scanner about the new file so that it is
+//        // immediately available to the user.
+//        MediaScannerConnection.scanFile(mContext, new String[]{file.toString()}, null,
+//                new MediaScannerConnection.OnScanCompletedListener() {
+//                    public void onScanCompleted(String path, Uri uri) {
+//                        imagePath[0] = path;
+//                        Log.i("ExternalStorage", "Scanned " + path + ":");
+//                        Log.i("ExternalStorage", "-> uri=" + uri);
+//                    }
+//                });
+//
+//        return imagePath[0];
+
+        return null;
     }
 
 	/*
