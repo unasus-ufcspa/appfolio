@@ -58,7 +58,7 @@ public class CommentAdapter extends BaseAdapter {
         View rowView;
         if(c.atach==true){
             rowView = inflater.inflate(R.layout.atach_item, null);
-            Log.d("comment attach", "atach true:" + position);
+            Log.e("comment attach", "atach true:" + position);
         }else {
             rowView = inflater.inflate(R.layout.comment_item, null);
         }
@@ -79,22 +79,22 @@ public class CommentAdapter extends BaseAdapter {
 
         ///////////change visibility////////////////
 
-        Log.d("comment", "item position:" + position);
+        //Log.d("comment", "item position:" + position);
         if (position == 0) {
-            Log.d("comments","first position");
+            //Log.d("comments","first position");
             lastDate =c.date;
             holder.date.setText(c.date);
-            Log.d("comments", "datenow get:" + lastDate);
+            //Log.d("comments", "datenow get:" + lastDate);
             holder.date.setVisibility(rowView.VISIBLE);
         }else {
 
             if (!lastDate.equals(c.date)) {
-                Log.d("comments", "dateNow:" + c.date + "is diferent to lastDate:" + lastDate);
+                //Log.d("comments", "dateNow:" + c.date + "is diferent to lastDate:" + lastDate);
                 lastDate = c.date;
                 holder.date.setText(c.date);
-                Log.d("comments", "dateNow in component:" + holder.date.getText().toString());
+                //Log.d("comments", "dateNow in component:" + holder.date.getText().toString());
             } else {
-                Log.d("comments", "dateNow:" + c.date + "is equal to lastDate:" + lastDate);
+                //Log.d("comments", "dateNow:" + c.date + "is equal to lastDate:" + lastDate);
                 holder.date.setVisibility(rowView.GONE);
             }
         }
@@ -117,5 +117,12 @@ public class CommentAdapter extends BaseAdapter {
         TextView hour;
         TextView date;
         RelativeLayout wraper;
+    }
+
+
+
+    public void refresh(List<OneComment> comnts){
+        this.comments=comnts;
+        notifyDataSetChanged();
     }
 }

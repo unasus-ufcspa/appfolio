@@ -30,8 +30,8 @@
             android:layout_height="wrap_content"
             android:layout_margin="5dip"
             android:layout_marginTop="5dp"
-            android:paddingBottom="10dp"
-            android:background="@drawable/my_ballon_specific_comment"
+            android:paddingBottom="7dp"
+            android:background="@drawable/my_balllon_comment"
             android:textColor="#000000"
             android:gravity="center_horizontal"
             />

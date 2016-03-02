@@ -65,32 +65,32 @@ public class SpecificCommentAdapter extends BaseAdapter {
         holder.message.setText(c.comment);
         holder.hour.setText(c.hour);
         holder.date.setText(c.date);
-        Log.d("comment specific","message in holder"+holder.message.getText().toString());
+        //Log.d("comment specific","message in holder"+holder.message.getText().toString());
 
         ///////////change visibility////////////////
 
-        Log.d("comment", "item position:" + position);
+        //Log.d("comment", "item position:" + position);
 
         if (position == 0) {
-            Log.d("comments","first position");
+           // Log.d("comments","first position");
             lastDate = c.date;
             holder.date.setText(c.date);
-            Log.d("comments", "datenow get:" + lastDate);
+           // Log.d("comments", "datenow get:" + lastDate);
             holder.date.setVisibility(rowView.VISIBLE);
         }else {
 
             if (!lastDate.equals(c.date)) {
-                Log.d("comments", "dateNow:" + c.date + "is diferent to lastDate:" + lastDate);
+                //Log.d("comments", "dateNow:" + c.date + "is diferent to lastDate:" + lastDate);
                 lastDate = c.date;
                 holder.date.setText(c.date);
-                Log.d("comments", "dateNow in component:" + holder.date.getText().toString());
+               // Log.d("comments", "dateNow in component:" + holder.date.getText().toString());
             } else {
-                Log.d("comments", "dateNow:" + c.date + "is equal to lastDate:" + lastDate);
+                //Log.d("comments", "dateNow:" + c.date + "is equal to lastDate:" + lastDate);
                 holder.date.setVisibility(rowView.GONE);
             }
         }
 
-        holder.message.setBackgroundResource(c.orientation ? R.drawable.my_ballon_specific_comment : R.drawable.tutor_ballon_specific_comment);
+        holder.message.setBackgroundResource(c.orientation ? R.drawable.my_balllon_comment : R.drawable.my_balllon_comment);
         holder.wraper.setGravity(c.orientation ? Gravity.LEFT : Gravity.RIGHT);
 
         //////////---------------////////////////////

@@ -27,5 +27,13 @@ public class OneComment {
         this.hour=h;
         this.date=dt;
     }
+    public OneComment(boolean orientation, String comment,String h,String dt,boolean attach) {
+        super();
+        this.orientation = orientation;
+        this.comment = comment;
+        this.hour=h;
+        this.date=dt;
+        this.atach=attach;
+    }
 
 }
