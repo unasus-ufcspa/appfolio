@@ -94,7 +94,7 @@ public class HttpClient {
                             dao.insertComment(c);
                         }
                     }
-                    fComm.addItems();
+                    //fComm.addItems();
                 } catch (JSONException e) {
                     Log.e("erro:", e.getMessage());
                 }

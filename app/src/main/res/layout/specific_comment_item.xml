@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
-    android:layout_height="fill_parent">
+    android:layout_height="fill_parent"
+    >
 
 
     <TextView
@@ -29,23 +30,25 @@
             android:id="@+id/comment"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="5dip"
             android:layout_marginTop="5dp"
-            android:paddingBottom="10dp"
-            android:text="kkk"
-            android:background="@drawable/my_ballon_specific_comment"
+            android:paddingTop="10dp"
+            android:paddingLeft="10dp"
+            android:paddingRight="30dp"
+            android:text="uaheuahuaheuhaeuhauehuaheuaheuuaheuaheua\n \n \n \n \n \nuaheuaheuaheuhauehuaehuaehuuaehuaehuaheauah"
+            android:background="@drawable/my_balllon_comment"
             android:textColor="#000000"
             android:gravity="center_horizontal"
+            android:typeface="monospace"
             />
 
         <TextView
             android:id="@+id/hour"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignBottom="@+id/comment"
+            android:layout_below="@+id/comment"
             android:layout_alignParentLeft="@+id/comment"
             android:adjustViewBounds="true"
-            android:layout_marginTop="7dp"
+            android:layout_marginBottom="5dp"
             android:layout_marginRight="2dp"
             android:text="12:35"
             android:paddingRight="50dp"
@@ -54,6 +57,7 @@
             android:textSize="10dp"
             android:gravity="bottom"
             android:textColor="#000000" />
+
 
     </RelativeLayout>
 
