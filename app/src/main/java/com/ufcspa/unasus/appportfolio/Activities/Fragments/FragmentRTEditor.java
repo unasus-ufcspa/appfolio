@@ -3,7 +3,6 @@ package com.ufcspa.unasus.appportfolio.Activities.Fragments;
 import android.content.Context;
 import android.content.res.Configuration;
 import android.graphics.Color;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SlidingPaneLayout;
@@ -40,13 +39,11 @@ import com.onegravity.rteditor.converter.ConverterSpannedToHtml;
 import com.onegravity.rteditor.effects.Effects;
 import com.onegravity.rteditor.spans.BackgroundColorSpan;
 import com.ufcspa.unasus.appportfolio.Model.ActivityStudent;
-import com.ufcspa.unasus.appportfolio.Model.Comentario;
 import com.ufcspa.unasus.appportfolio.Model.Note;
 import com.ufcspa.unasus.appportfolio.Model.Singleton;
 import com.ufcspa.unasus.appportfolio.R;
 import com.ufcspa.unasus.appportfolio.database.DataBaseAdapter;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -169,11 +166,11 @@ public class FragmentRTEditor extends Fragment {
         initCommentsTab(view);
         initTopBar(view);
         Bundle bundle = this.getArguments();
-        if (bundle != null)
-        {
-            if(singleton.isRTEditor)
-            {
-                mRTMessageField.setSelection(bundle.getInt("Position", -1));
+        if (bundle != null) {
+            if (singleton.isRTEditor) {
+                int pos = bundle.getInt("Position", -1);
+                pos = pos < mRTMessageField.length() ? pos : mRTMessageField.length();
+                mRTMessageField.setSelection(pos);
                 receiveAttachment(bundle.getString("URL"), bundle.getString("Type"));
                 singleton.isRTEditor = false;
             }
@@ -383,100 +380,17 @@ public class FragmentRTEditor extends Fragment {
         }
     }
 
-    private class ActionBarCallBack implements ActionMode.Callback {
-
-        int startSelection;
-        int endSelection;
-
-        @Override
-        public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
-            if (item.getItemId() == R.id.action_favorite)
-            {
-                if (!mRTMessageField.getText().toString().isEmpty()) {
-                    startSelection = mRTMessageField.getSelectionStart();
-                    endSelection = mRTMessageField.getSelectionEnd();
-                    String selectedText = getSelectedText();
-                    //mRTMessageField.getText(RTFormat.HTML).substring(startSelection, endSelection);
-
-                    if (!selectedText.isEmpty()) {
-                        if (selectedText.length() > 0) {
-                            //findText(selectedText, mRTMessageField.getText(RTFormat.HTML));
-                            Singleton single=Singleton.getInstance();
-                            single.selectedText = mRTMessageField.getText().toString().substring(startSelection,endSelection);
-                            createSpecificCommentNote(getCaretYPosition(startSelection), selectedText);
-                        }
-                    }
-                }
-                return true;
-            }
-            return false;
-        }
-
-        @Override
-        public boolean onCreateActionMode(ActionMode mode, Menu menu) {
-            mode.getMenuInflater().inflate(R.menu.menu, menu);
-            return true;
-        }
-
-        @Override
-        public void onDestroyActionMode(ActionMode mode) {
-        }
-
-        @Override
-        public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
-            return false;
-        }
-
-        private void createSpecificCommentNote(float yPosition, String selectedText) {
-
-            currentSpecificComment++;
-            Log.d("editor ","current note is now:"+currentSpecificComment);
-            float yButton = 0;
-            int idButton = -1;
-
-            if (yPosition != 0)
-                yButton = yPosition - 2;
-
-            idButton = currentSpecificComment;
-
-            selectedActualText = selectedText;
-            specificCommentsNotes.put(idButton, new Note(idButton, selectedText, yButton));
-
-            scrollview.addView(createButton(idButton, String.valueOf(currentSpecificComment), yButton));
-
-            mRTManager.onEffectSelected(Effects.BGCOLOR, greenLight, idButton);
-            mRTMessageField.setSelection(endSelection);
-            mRTMessageField.setSelected(false);
-
-//            DataBaseAdapter db = DataBaseAdapter.getInstance(getActivity());
-//            Comentario c= new Comentario();
-//            Singleton s = Singleton.getInstance();
-//
-//            //inserting first note comment
-//            c.setTxtReference(s.selectedText);
-//            c.setIdAuthor(s.user.getIdUser());
-//            c.setIdActivityStudent(s.idActivityStudent);
-//            c.setTypeComment("O");
-//
-//            db.insertSpecificComment(c,idButton);
-//            //clean references from objects
-//            c = null;
-        }
-    }
-
-    public void showCommentsTab(Boolean isSpecificComment)
-    {
-        if(isSpecificComment) {
+    public void showCommentsTab(Boolean isSpecificComment) {
+        if (isSpecificComment) {
             getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.comments_container, new FragmentSpecificComments()).commit();
             SlidingPaneLayout layout = (SlidingPaneLayout) getView().findViewById(R.id.rteditor_fragment);
             layout.closePane();
-        }else
+        } else
             getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.comments_container, new FragmentComments()).commit();
     }
 
-    private void changeNotePosition()
-    {
-        if(specificCommentsNotes != null && specificCommentsNotes.size() != 0) {
+    private void changeNotePosition() {
+        if (specificCommentsNotes != null && specificCommentsNotes.size() != 0) {
             Spannable textSpanned = (Spannable) mRTMessageField.getText();
             BackgroundColorSpan[] spans = textSpanned.getSpans(0, textSpanned.length(), BackgroundColorSpan.class);
 
@@ -543,10 +457,90 @@ public class FragmentRTEditor extends Fragment {
         RTHtml<RTImage, RTAudio, RTVideo> rtHtmlBefore = new ConverterSpannedToHtml().convert(textBefore, RTFormat.HTML);
         RTHtml<RTImage, RTAudio, RTVideo> rtHtmlAfter = new ConverterSpannedToHtml().convert(textAfter, RTFormat.HTML);
 
-        if(isVideo)
-            mRTMessageField.setRichTextEditing(true, rtHtmlBefore.getText() + "<video src=\"" + url +"\">" + rtHtmlAfter.getText());
-        else
+//        if(isVideo)
+//            mRTMessageField.setRichTextEditing(true, rtHtmlBefore.getText() + "<video src=\"" + url +"\">" + rtHtmlAfter.getText());
+//        else
             mRTMessageField.setRichTextEditing(true, rtHtmlBefore.getText() + "<img src=\"" + url +"\">" + rtHtmlAfter.getText());
+    }
+
+    private class ActionBarCallBack implements ActionMode.Callback {
+
+        int startSelection;
+        int endSelection;
+
+        @Override
+        public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
+            if (item.getItemId() == R.id.action_favorite) {
+                if (!mRTMessageField.getText().toString().isEmpty()) {
+                    startSelection = mRTMessageField.getSelectionStart();
+                    endSelection = mRTMessageField.getSelectionEnd();
+                    String selectedText = getSelectedText();
+                    //mRTMessageField.getText(RTFormat.HTML).substring(startSelection, endSelection);
+
+                    if (!selectedText.isEmpty()) {
+                        if (selectedText.length() > 0) {
+                            //findText(selectedText, mRTMessageField.getText(RTFormat.HTML));
+                            Singleton single = Singleton.getInstance();
+                            single.selectedText = mRTMessageField.getText().toString().substring(startSelection, endSelection);
+                            createSpecificCommentNote(getCaretYPosition(startSelection), selectedText);
+                        }
+                    }
+                }
+                return true;
+            }
+            return false;
+        }
+
+        @Override
+        public boolean onCreateActionMode(ActionMode mode, Menu menu) {
+            mode.getMenuInflater().inflate(R.menu.menu, menu);
+            return true;
+        }
+
+        @Override
+        public void onDestroyActionMode(ActionMode mode) {
+        }
+
+        @Override
+        public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
+            return false;
+        }
+
+        private void createSpecificCommentNote(float yPosition, String selectedText) {
+
+            currentSpecificComment++;
+            Log.d("editor ", "current note is now:" + currentSpecificComment);
+            float yButton = 0;
+            int idButton = -1;
+
+            if (yPosition != 0)
+                yButton = yPosition - 2;
+
+            idButton = currentSpecificComment;
+
+            selectedActualText = selectedText;
+            specificCommentsNotes.put(idButton, new Note(idButton, selectedText, yButton));
+
+            scrollview.addView(createButton(idButton, String.valueOf(currentSpecificComment), yButton));
+
+            mRTManager.onEffectSelected(Effects.BGCOLOR, greenLight, idButton);
+            mRTMessageField.setSelection(endSelection);
+            mRTMessageField.setSelected(false);
+
+//            DataBaseAdapter db = DataBaseAdapter.getInstance(getActivity());
+//            Comentario c= new Comentario();
+//            Singleton s = Singleton.getInstance();
+//
+//            //inserting first note comment
+//            c.setTxtReference(s.selectedText);
+//            c.setIdAuthor(s.user.getIdUser());
+//            c.setIdActivityStudent(s.idActivityStudent);
+//            c.setTypeComment("O");
+//
+//            db.insertSpecificComment(c,idButton);
+//            //clean references from objects
+//            c = null;
+        }
     }
 /*
 

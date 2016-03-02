@@ -37,6 +37,7 @@ import com.onegravity.rteditor.LinkFragment.Link;
 import com.onegravity.rteditor.LinkFragment.LinkEvent;
 import com.onegravity.rteditor.RTOperationManager.TextChangeOperation;
 import com.onegravity.rteditor.api.RTApi;
+import com.onegravity.rteditor.api.format.RTFormat;
 import com.onegravity.rteditor.api.media.RTImage;
 import com.onegravity.rteditor.api.media.RTMedia;
 import com.onegravity.rteditor.api.media.RTVideo;
@@ -505,9 +506,9 @@ public class RTManager implements RTToolbarListener, RTEditTextListener {
                     str.insert(selection.start(), "\uFFFC");
 
                     try {
+                        LocalBroadcastManager.getInstance(mRTContext).sendBroadcast(new Intent("call.fragments.action").putExtra("Image", image.getFilePath(RTFormat.PLAIN_TEXT)));
                         // now add the actual image and inform the RTOperationManager about the operation
                         Spannable oldSpannable = editor.cloneSpannable();
-
                         ImageSpan imageSpan = new ImageSpan(image, false);
                         str.setSpan(imageSpan, selection.start(), selection.end() + 1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
                         int selStartAfter = editor.getSelectionStart();
@@ -544,6 +545,7 @@ public class RTManager implements RTToolbarListener, RTEditTextListener {
                     str.insert(selection.start(), "\uFFFC");
 
                     try {
+                        LocalBroadcastManager.getInstance(mRTContext).sendBroadcast(new Intent("call.fragments.action").putExtra("Video", video.getFilePath(RTFormat.PLAIN_TEXT)));
                         // now add the actual image and inform the RTOperationManager about the operation
                         Spannable oldSpannable = editor.cloneSpannable();
 

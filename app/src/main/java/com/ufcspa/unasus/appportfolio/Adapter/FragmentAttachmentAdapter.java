@@ -18,9 +18,9 @@ import java.util.List;
  * Created by desenvolvimento on 10/12/2015.
  */
 public class FragmentAttachmentAdapter extends BaseAdapter {
+    private static LayoutInflater inflater = null;
     private FragmentAttachment context;
     private List<Attachment> attachments;
-    private static LayoutInflater inflater = null;
 
 
     public FragmentAttachmentAdapter(FragmentAttachment context, List<Attachment> attachment) {
@@ -28,12 +28,6 @@ public class FragmentAttachmentAdapter extends BaseAdapter {
         this.attachments = attachment;
         inflater = (LayoutInflater) context.getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
-
-    private class Holder {
-        ImageView imgAttachment;
-        TextView descAttachment;
-    }
-
 
     @Override
     public int getCount() {
@@ -104,5 +98,15 @@ public class FragmentAttachmentAdapter extends BaseAdapter {
         }
 
         return rowView;
+    }
+
+    public void refresh(List<Attachment> attachments) {
+        this.attachments = attachments;
+        notifyDataSetChanged();
+    }
+
+    private class Holder {
+        ImageView imgAttachment;
+        TextView descAttachment;
     }
 }

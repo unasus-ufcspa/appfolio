@@ -3,9 +3,9 @@ package com.ufcspa.unasus.appportfolio.Activities.Fragments;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
-
 import android.content.ActivityNotFoundException;
-import android.content.ContentUris;
+import android.content.ContentValues;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
@@ -16,7 +16,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
-import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.text.InputType;
 import android.view.LayoutInflater;
@@ -28,7 +27,6 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
-import com.onegravity.rteditor.api.format.RTFormat;
 import com.onegravity.rteditor.media.crop.CropImageActivity;
 import com.onegravity.rteditor.utils.Constants;
 import com.ufcspa.unasus.appportfolio.Model.Singleton;
@@ -58,6 +56,81 @@ public class Frag extends Fragment {
     protected Singleton singleton;
 
     public Frag() {
+    }
+
+    public static String getThumbnailPathForLocalFile(Activity context, Uri fileUri) {
+
+        long fileId = getFileId(context, fileUri);
+
+        MediaStore.Video.Thumbnails.getThumbnail(context.getContentResolver(),
+                fileId, MediaStore.Video.Thumbnails.MICRO_KIND, null);
+
+        Cursor thumbCursor = null;
+        try {
+
+            thumbCursor = context.managedQuery(
+                    MediaStore.Video.Thumbnails.EXTERNAL_CONTENT_URI,
+                    thumbColumns, MediaStore.Video.Thumbnails.VIDEO_ID + " = "
+                            + fileId, null, null);
+
+            if (thumbCursor.moveToFirst()) {
+                String thumbPath = thumbCursor.getString(thumbCursor
+                        .getColumnIndex(MediaStore.Video.Thumbnails.DATA));
+
+                return thumbPath;
+            }
+
+        } finally {
+        }
+
+        return null;
+    }
+
+    public static long getFileId(Activity context, Uri fileUri) {
+
+        Cursor cursor = context.managedQuery(fileUri, mediaColumns, null, null,
+                null);
+
+        if (cursor != null && cursor.moveToFirst()) {
+            int columnIndex = cursor.getColumnIndexOrThrow(MediaStore.Video.Media._ID);
+            int id = cursor.getInt(columnIndex);
+
+            return id;
+        }
+
+        return 0;
+    }
+
+    private static String getMimeType(String url) {
+        String type = null;
+        String extension = MimeTypeMap.getFileExtensionFromUrl(url);
+        if (extension != null) {
+            type = MimeTypeMap.getSingleton().getMimeTypeFromExtension(extension);
+        }
+        return type;
+    }
+
+    public static Uri getImageContentUri(Context context, File imageFile) {
+        String filePath = imageFile.getAbsolutePath();
+        Cursor cursor = context.getContentResolver().query(
+                MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
+                new String[]{MediaStore.Images.Media._ID},
+                MediaStore.Images.Media.DATA + "=? ",
+                new String[]{filePath}, null);
+        if (cursor != null && cursor.moveToFirst()) {
+            int id = cursor.getInt(cursor.getColumnIndex(MediaStore.MediaColumns._ID));
+            cursor.close();
+            return Uri.withAppendedPath(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, "" + id);
+        } else {
+            if (imageFile.exists()) {
+                ContentValues values = new ContentValues();
+                values.put(MediaStore.Images.Media.DATA, filePath);
+                return context.getContentResolver().insert(
+                        MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values);
+            } else {
+                return null;
+            }
+        }
     }
 
     @Override
@@ -165,7 +238,7 @@ public class Frag extends Fragment {
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
         String imageFileName = "JPEG_" + timeStamp + "_";
 
-        File storageDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
+        File storageDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);//getContext().getExternalFilesDir(null);
 
         File image = File.createTempFile(
                 imageFileName,  /* prefix */
@@ -200,7 +273,7 @@ public class Frag extends Fragment {
         try {
             fOutputStream = new FileOutputStream(file);
 
-            Bitmap bitmap = BitmapFactory.decodeFile(mCurrentPhotoPath);
+            Bitmap bitmap = createThumbnailFromPath(mCurrentPhotoPath, MediaStore.Images.Thumbnails.MICRO_KIND);
             mCurrentPhotoPath = path[0] + "." + path[1];
 
             Bitmap resized = Bitmap.createScaledBitmap(bitmap, 320, 240, true);
@@ -221,12 +294,11 @@ public class Frag extends Fragment {
         }
     }
 
-    public Bitmap createThumbnailFromBitmap(String filePath, int width, int height){
+    public Bitmap createThumbnailFromBitmap(String filePath, int width, int height) {
         return ThumbnailUtils.extractThumbnail(BitmapFactory.decodeFile(filePath), width, height);
     }
 
-    public void launchCropImageIntent()
-    {
+    public void launchCropImageIntent() {
         String filePath = mCurrentPhotoPath;
 
         Intent intent = new Intent(getActivity(), CropImageActivity.class)
@@ -288,35 +360,13 @@ public class Frag extends Fragment {
         return video;
     }
 
-    public static String getThumbnailPathForLocalFile(Activity context, Uri fileUri) {
+    /*
+    *********|
+    * Others |
+    *********|
+    */
 
-        long fileId = getFileId(context, fileUri);
-
-        MediaStore.Video.Thumbnails.getThumbnail(context.getContentResolver(),
-                fileId, MediaStore.Video.Thumbnails.MICRO_KIND, null);
-
-        Cursor thumbCursor = null;
-        try {
-
-            thumbCursor = context.managedQuery(
-                    MediaStore.Video.Thumbnails.EXTERNAL_CONTENT_URI,
-                    thumbColumns, MediaStore.Video.Thumbnails.VIDEO_ID + " = "
-                            + fileId, null, null);
-
-            if (thumbCursor.moveToFirst()) {
-                String thumbPath = thumbCursor.getString(thumbCursor
-                        .getColumnIndex(MediaStore.Video.Thumbnails.DATA));
-
-                return thumbPath;
-            }
-
-        } finally {
-        }
-
-        return null;
-    }
-
-    public Bitmap createThumbnailFromPath(String filePath, int type){
+    public Bitmap createThumbnailFromPath(String filePath, int type) {
         return ThumbnailUtils.createVideoThumbnail(filePath, type);
     }
 
@@ -349,12 +399,6 @@ public class Frag extends Fragment {
             // Instruct the user to install a PDF reader here, or something
         }
     }
-
-    /*
-    *********|
-    * Others |
-    *********|
-    */
 
     public void addAttachmentToComments() {
         final Dialog dialog = new Dialog(getActivity());
@@ -412,30 +456,6 @@ public class Frag extends Fragment {
         dialog.show();
     }
 
-    public static long getFileId(Activity context, Uri fileUri) {
-
-        Cursor cursor = context.managedQuery(fileUri, mediaColumns, null, null,
-                null);
-
-        if (cursor != null && cursor.moveToFirst()) {
-            int columnIndex = cursor.getColumnIndexOrThrow(MediaStore.Video.Media._ID);
-            int id = cursor.getInt(columnIndex);
-
-            return id;
-        }
-
-        return 0;
-    }
-
-    private static String getMimeType(String url) {
-        String type = null;
-        String extension = MimeTypeMap.getFileExtensionFromUrl(url);
-        if (extension != null) {
-            type = MimeTypeMap.getSingleton().getMimeTypeFromExtension(extension);
-        }
-        return type;
-    }
-
     public void insertFileIntoDataBase(final String path, final String type) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
         builder.setTitle("Escolha um nome:");
@@ -456,4 +476,50 @@ public class Frag extends Fragment {
 
         builder.show();
     }
+
+    /**
+     * ALTERAR PARA O CAMINHO NECESSÁRIO
+     */
+    public void saveAttachment() {
+        String[] path = mCurrentPhotoPath.split("\\.");
+        path[0] += "_small";
+
+        OutputStream fOutputStream = null;
+        File file = new File(path[0] + "." + path[1]);
+        String name = file.getName();
+        File newFile = new File(getContext().getExternalFilesDir(null) + "/" + name);
+        if (!newFile.exists()) {
+            try {
+                newFile.createNewFile();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+        try {
+            fOutputStream = new FileOutputStream(newFile);
+
+            Bitmap bitmap = BitmapFactory.decodeFile(mCurrentPhotoPath);
+            mCurrentPhotoPath = newFile.getAbsolutePath();
+
+            Bitmap resized = Bitmap.createScaledBitmap(bitmap, 320, 240, true);
+            resized.compress(Bitmap.CompressFormat.PNG, 40, fOutputStream);
+
+            fOutputStream.flush();
+            fOutputStream.close();
+
+//            MediaStore.Images.Media.insertImage(getActivity().getContentResolver(), file.getAbsolutePath(), file.getName(), file.getName());
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+            Toast.makeText(getActivity(), "Save Failed", Toast.LENGTH_SHORT).show();
+            return;
+        } catch (IOException e) {
+            e.printStackTrace();
+            Toast.makeText(getActivity(), "Save Failed", Toast.LENGTH_SHORT).show();
+            return;
+        }
+    }
+    /**
+     * ALTERAR
+     */
 }

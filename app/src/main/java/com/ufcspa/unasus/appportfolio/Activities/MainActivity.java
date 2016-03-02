@@ -1,24 +1,28 @@
 package com.ufcspa.unasus.appportfolio.Activities;
 
+import android.app.AlertDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
+import android.text.InputType;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 
 import com.mikepenz.crossfader.Crossfader;
 import com.ufcspa.unasus.appportfolio.Activities.Fragments.FragmentAttachment;
 import com.ufcspa.unasus.appportfolio.Activities.Fragments.FragmentRTEditor;
-import com.ufcspa.unasus.appportfolio.Activities.Fragments.FragmentSelectPortfolio;
 import com.ufcspa.unasus.appportfolio.Activities.Fragments.FragmentStudentActivities;
 import com.ufcspa.unasus.appportfolio.Model.Singleton;
 import com.ufcspa.unasus.appportfolio.R;
+import com.ufcspa.unasus.appportfolio.database.DataBaseAdapter;
 
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
@@ -32,13 +36,41 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            int id = intent.getIntExtra("ID", 0);
-            if(id == 6)
-                callAttachments(intent.getIntExtra("Position", -1));
-            else
-                changeFragment(id);
+            if (intent.hasExtra("Image"))
+                insertFileIntoDataBase(intent.getStringExtra("Image"), "I");
+            else if (intent.hasExtra("Video"))
+                insertFileIntoDataBase(intent.getStringExtra("Video"), "V");
+            else {
+                int id = intent.getIntExtra("ID", 0);
+                if (id == 6)
+                    callAttachments(intent.getIntExtra("Position", -1));
+                else
+                    changeFragment(id);
+            }
         }
     };
+
+    public void insertFileIntoDataBase(final String path, final String type) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Escolha um nome:");
+
+        // Set up the input
+        final EditText input = new EditText(this);
+        // Specify the type of input expected; this, for example, sets the input as a password, and will mask the text
+        input.setInputType(InputType.TYPE_CLASS_TEXT);
+        builder.setView(input);
+
+        // Set up the buttons
+        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                DataBaseAdapter dataBaseAdapter = DataBaseAdapter.getInstance(getApplicationContext());
+                dataBaseAdapter.saveAttachmentActivityStudent(path, type, singleton.idActivityStudent); //input.getText().toString()
+            }
+        });
+
+        builder.show();
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -153,7 +185,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         switch (id)
         {
             case 0:
-                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new FragmentSelectPortfolio()).commit();//FragmentSelectPortfolio
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new FragmentRTEditor()).commit();//FragmentSelectPortfolio
                 break;
             case 1:
                 if(singleton.portfolioClass != null)
