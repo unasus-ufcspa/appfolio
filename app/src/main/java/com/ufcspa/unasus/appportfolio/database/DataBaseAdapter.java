@@ -195,6 +195,16 @@ public class DataBaseAdapter {
     public List<Comentario> listComments(int idActStu,String typeComment,int idNote) {
         ArrayList<Comentario> comentarios = new ArrayList<Comentario>();
         String sql = "select * from tb_comment WHERE id_activity_student =" + idActStu;
+        String sql2= "SELECT\n" +
+                "\tc.id_comment,\n" +
+                "\tc.id_activity_student,\n" +
+                "\tc.id_author,\n" +
+                "\tc.tx_comment ,\n" +
+                "\tac.id_attachment \n" +
+                "\tFROM tb_comment c \n" +
+                "\t\tLEFT JOIN  tb_attach_comment ac on ac.id_comment = c.id_comment\n" +
+                "\tWHERE 1=1 AND c.id_activity_student="+idNote;
+
         StringBuilder stBuild = new StringBuilder(sql);
         if(typeComment.equalsIgnoreCase("C")||typeComment.equalsIgnoreCase("O")||typeComment.equalsIgnoreCase("P")){
             //sql+=" AND tp_comment='"+typeComment+"' ";
