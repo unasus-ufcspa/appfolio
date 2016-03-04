@@ -29,6 +29,7 @@ import android.widget.Toast;
 
 import com.onegravity.rteditor.media.crop.CropImageActivity;
 import com.onegravity.rteditor.utils.Constants;
+import com.ufcspa.unasus.appportfolio.Model.Attachment;
 import com.ufcspa.unasus.appportfolio.Model.Singleton;
 import com.ufcspa.unasus.appportfolio.R;
 import com.ufcspa.unasus.appportfolio.database.DataBaseAdapter;
@@ -470,7 +471,14 @@ public class Frag extends Fragment {
         builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                source.saveAttachmentActivityStudent(path, type, singleton.idActivityStudent); //input.getText().toString()
+                //source.saveAttachmentActivityStudent(path, type, singleton.idActivityStudent); //input.getText().toString()
+                Singleton single =Singleton.getInstance();
+
+                String name=input.getText().toString();
+                if(name.isEmpty()){
+                    name="Anexo";
+                }
+                single.lastIdAttach=source.insertAttachment(new Attachment(0,path,"",type,name));
             }
         });
 

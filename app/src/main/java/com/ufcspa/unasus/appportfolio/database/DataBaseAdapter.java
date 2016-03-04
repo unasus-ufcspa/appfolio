@@ -122,7 +122,7 @@ public class DataBaseAdapter {
         return refs;
     }
 
-    public void insertComment(Comentario c) {
+    public int insertComment(Comentario c) {
         ContentValues cv = new ContentValues();
         cv.put("id_activity_student", c.getIdActivityStudent());
         cv.put("id_author", c.getIdAuthor());
@@ -137,8 +137,15 @@ public class DataBaseAdapter {
         } catch (Exception e) {
             Log.e(tag, "erro ao inserir:" + e.getMessage());
         }
-
+        Cursor cursor = db.rawQuery("select seq from sqlite_sequence where name='tb_comment'",null);
+        int lastID=0;
+        if(cursor.moveToFirst()){
+            lastID=cursor.getInt(0);
+            Log.d(tag, "last id_comment id table:"+lastID);
+        }
+        return lastID;
     }
+
     public void insertSpecificComment(Comentario c,int idNote) {
         ContentValues cv = new ContentValues();
         cv.put("id_activity_student", c.getIdActivityStudent());
@@ -194,16 +201,17 @@ public class DataBaseAdapter {
 
     public List<Comentario> listComments(int idActStu,String typeComment,int idNote) {
         ArrayList<Comentario> comentarios = new ArrayList<Comentario>();
-        String sql = "select * from tb_comment WHERE id_activity_student =" + idActStu;
-        String sql2= "SELECT\n" +
+        //String sql = "select * from tb_comment WHERE id_activity_student =" + idActStu;
+        String sql= "SELECT\n" +
                 "\tc.id_comment,\n" +
                 "\tc.id_activity_student,\n" +
                 "\tc.id_author,\n" +
-                "\tc.tx_comment ,\n" +
+                "\tc.tx_comment,\n" +
+                "\tc.dt_comment,\n" +
                 "\tac.id_attachment \n" +
                 "\tFROM tb_comment c \n" +
                 "\t\tLEFT JOIN  tb_attach_comment ac on ac.id_comment = c.id_comment\n" +
-                "\tWHERE 1=1 AND c.id_activity_student="+idNote;
+                "\tWHERE 1=1 AND c.id_activity_student = "+idActStu;
 
         StringBuilder stBuild = new StringBuilder(sql);
         if(typeComment.equalsIgnoreCase("C")||typeComment.equalsIgnoreCase("O")||typeComment.equalsIgnoreCase("P")){
@@ -228,9 +236,8 @@ public class DataBaseAdapter {
                     cmm.setIdActivityStudent(c.getInt(1));
                     cmm.setIdAuthor(c.getInt(2));
                     cmm.setTxtComment(c.getString(3));
-                    cmm.setTxtReference(c.getString(4));
-                    cmm.setTypeComment(c.getString(5));
-                    cmm.setDateComment(c.getString(6));
+                    cmm.setDateComment(c.getString(4));
+                    cmm.setIdAttach(c.getInt(5));
                     comentarios.add(cmm);
                 } catch (Exception v) {
                     Log.e(tag, "erro ao pegar dados do banco:" + v.getMessage());
@@ -246,6 +253,7 @@ public class DataBaseAdapter {
         return comentarios;
     }
 
+
     public List<Integer> listSpecificComments(int idActStu) {
         ArrayList<Integer> comentarios = new ArrayList<Integer>();
         String sql = "SELECT DISTINCT id_note from tb_comment WHERE id_activity_student =" + idActStu+" AND tp_comment='O'";
@@ -256,7 +264,7 @@ public class DataBaseAdapter {
             do {
                 try {
                     id=c.getInt(0);
-                    Log.e(tag, "listSpecificComments idnow:" +id);
+                    Log.e(tag, "listSpecificComments idnow:" + id);
                     comentarios.add(id);
                 } catch (Exception v) {
                     Log.e(tag, "erro ao pegar dados do banco:" + v.getMessage());
@@ -270,6 +278,64 @@ public class DataBaseAdapter {
         }
         Log.d(tag, "listou notas no banco n:" + comentarios.size());
         return comentarios;
+    }
+
+    public int insertAttachment(Attachment attach){
+        ContentValues cv = new ContentValues();
+        cv.put("ds_local_path", attach.getDs_local_path());
+        cv.put("ds_server_path",attach.getDs_server_path());
+        cv.put("tp_attachment",attach.getType());
+        cv.put("nm_file", attach.getNameFile());
+
+        try {
+            db.insert("tb_attachment",null,cv);
+            Log.d(tag, "conseguiu salvar id anexo no comentario do bd");
+        }catch (Exception e){
+            Log.e(tag, "erro ao salvar na tabela tb_attach_comment:" + e.getMessage());
+        }
+        Cursor cursor = db.rawQuery("select seq from sqlite_sequence where name='tb_attachment'",null);
+        int lastID=0;
+        if(cursor.moveToFirst()){
+            lastID=cursor.getInt(0);
+            Log.d(tag, "last id_attachment in table:"+lastID);
+        }
+        return lastID;
+    }
+
+    public Attachment getAttachmentByID(int id_attachment){
+        Attachment attch= new Attachment();
+        String sql="SELECT * FROM tb_attachment WHERE id_attachment ="+id_attachment;
+        Cursor c = null;
+            try{
+               c= db.rawQuery(sql,null);
+                if(c.moveToFirst()){
+                    attch.setId_attachment(c.getInt(0));
+                    attch.setDs_local_path(c.getString(1));
+                    attch.setDs_server_path(c.getString(2));
+                    attch.setDs_type(c.getString(3));
+                    attch.setNameFile(c.getString(4));
+                }else{
+                    Log.e(tag, "conseguiu salvar id anexo no comentario do bd");
+                }
+            }catch (Exception e){
+                Log.wtf(tag, "erro ao tentar buscar anexo no banco:" + e.getMessage());
+            }
+        return attch;
+    }
+
+
+
+
+    public void insertAttachComment(int idComment,int idAttach){
+        ContentValues cv = new ContentValues();
+        cv.put("id_attachment",idAttach);
+        cv.put("id_comment",idComment);
+        try {
+            db.insert("tb_attach_comment",null,cv);
+            Log.d(tag, "conseguiu salvar id anexo no comentario do bd");
+        }catch (Exception e){
+            Log.e(tag, "erro ao salvar na tabela tb_attach_comment:" + e.getMessage());
+        }
     }
 
     public void updateActivityStudent(ActivityStudent activityStudent) {

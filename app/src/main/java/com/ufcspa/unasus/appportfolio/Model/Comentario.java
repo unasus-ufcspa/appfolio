@@ -15,6 +15,15 @@ public class Comentario {
     private int idActivityStudent;
     private int idAuthor;
     private int idNote;
+    private int idAttach;
+
+    public int getIdAttach() {
+        return idAttach;
+    }
+
+    public void setIdAttach(int idAttach) {
+        this.idAttach = idAttach;
+    }
 
     public int getIdNote() {
         return idNote;
