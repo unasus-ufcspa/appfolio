@@ -460,6 +460,11 @@ public class FragmentRTEditor extends Fragment {
 
     private void putAttachment(String url, boolean isVideo)
     {
+//        Editable str = mRTMessageField.getText();
+//        str.insert(mRTMessageField.getSelectionStart(), "\uFFFC");
+//        ImageSpan imageSpan = new ImageSpan(new RTImageImpl(url), false);
+//        str.setSpan(imageSpan, mRTMessageField.getSelectionStart(), mRTMessageField.getSelectionStart(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+
         int selStart = mRTMessageField.getSelectionStart();
         Spannable textBefore = (Spannable) mRTMessageField.getText().subSequence(0, selStart);
         Spannable textAfter = (Spannable) mRTMessageField.getText().subSequence(selStart, mRTMessageField.length());

@@ -27,7 +27,6 @@ import android.text.Spanned;
 import android.text.TextWatcher;
 import android.text.style.ParagraphStyle;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.widget.EditText;
 import android.widget.TextView;
 
@@ -145,15 +144,15 @@ public class RTEditText extends EditText implements TextWatcher, SpanWatcher, Li
             mCurrentMedia.add(span.getMedia());
         }
 
-        // now delete all those that aren't needed any longer
-        Set<RTMedia> mMedia2Delete = isSaved ? mOriginalMedia : mCurrentMedia;
-        mMedia2Delete.addAll(mAddedMedia);
-        Set<RTMedia> mMedia2Keep = isSaved ? mCurrentMedia : mOriginalMedia;
-        for (RTMedia media : mMedia2Delete) {
-            if (!mMedia2Keep.contains(media)) {
-                media.remove();
-            }
-        }
+//        // now delete all those that aren't needed any longer
+//        Set<RTMedia> mMedia2Delete = isSaved ? mOriginalMedia : mCurrentMedia;
+//        mMedia2Delete.addAll(mAddedMedia);
+//        Set<RTMedia> mMedia2Keep = isSaved ? mCurrentMedia : mOriginalMedia;
+//        for (RTMedia media : mMedia2Delete) {
+//            if (!mMedia2Keep.contains(media)) {
+//                media.remove();
+//            }
+//        }
     }
 
     /**
@@ -527,51 +526,6 @@ public class RTEditText extends EditText implements TextWatcher, SpanWatcher, Li
         }
     }
 
-    private static class SavedState extends BaseSavedState {
-        private String mContent;
-        private boolean mUseRTFormatting;
-
-        SavedState(Parcelable superState, boolean useRTFormatting, String content) {
-            super(superState);
-
-            mUseRTFormatting = useRTFormatting;
-            mContent = content;
-        }
-
-        private String getContent() {
-            return mContent;
-        }
-
-        private boolean useRTFormatting() {
-            return mUseRTFormatting;
-        }
-
-        private SavedState(Parcel in) {
-            super(in);
-
-            mUseRTFormatting = in.readInt() == 1;
-            mContent = in.readString();
-        }
-
-        @Override
-        public void writeToParcel(Parcel out, int flags) {
-            super.writeToParcel(out, flags);
-
-            out.writeInt(mUseRTFormatting ? 1 : 0);
-            out.writeString(mContent);
-        }
-
-        public static final Parcelable.Creator<SavedState> CREATOR =
-                new Parcelable.Creator<SavedState>() {
-                    public SavedState createFromParcel(Parcel in) {
-                        return new SavedState(in);
-                    }
-                    public SavedState[] newArray(int size) {
-                        return new SavedState[size];
-                    }
-                };
-    }
-
     @Override
     protected void onSelectionChanged(int start, int end) {
         if (mOldSelStart != start || mOldSelEnd != end) {
@@ -616,7 +570,7 @@ public class RTEditText extends EditText implements TextWatcher, SpanWatcher, Li
                 if (mListener != null && !mIgnoreTextChanges) {
                     Spannable newSpannable = cloneSpannable();
                     mListener.onTextChanged(this, oldSpannable, newSpannable, getSelectionStart(), getSelectionEnd(),
-                                            getSelectionStart(), getSelectionEnd());
+                            getSelectionStart(), getSelectionEnd());
                 }
                 mLayoutChanged = true;
             }
@@ -650,6 +604,51 @@ public class RTEditText extends EditText implements TextWatcher, SpanWatcher, Li
     public void onClick(LinkSpan linkSpan) {
         if (mUseRTFormatting && mListener != null) {
             mListener.onClick(this, linkSpan);
+        }
+    }
+
+    private static class SavedState extends BaseSavedState {
+        public static final Parcelable.Creator<SavedState> CREATOR =
+                new Parcelable.Creator<SavedState>() {
+                    public SavedState createFromParcel(Parcel in) {
+                        return new SavedState(in);
+                    }
+
+                    public SavedState[] newArray(int size) {
+                        return new SavedState[size];
+                    }
+                };
+        private String mContent;
+        private boolean mUseRTFormatting;
+
+        SavedState(Parcelable superState, boolean useRTFormatting, String content) {
+            super(superState);
+
+            mUseRTFormatting = useRTFormatting;
+            mContent = content;
+        }
+
+        private SavedState(Parcel in) {
+            super(in);
+
+            mUseRTFormatting = in.readInt() == 1;
+            mContent = in.readString();
+        }
+
+        private String getContent() {
+            return mContent;
+        }
+
+        private boolean useRTFormatting() {
+            return mUseRTFormatting;
+        }
+
+        @Override
+        public void writeToParcel(Parcel out, int flags) {
+            super.writeToParcel(out, flags);
+
+            out.writeInt(mUseRTFormatting ? 1 : 0);
+            out.writeString(mContent);
         }
     }
 
