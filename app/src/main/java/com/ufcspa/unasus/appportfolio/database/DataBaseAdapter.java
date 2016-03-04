@@ -252,7 +252,7 @@ public class DataBaseAdapter {
         Log.d(tag, "listou comentarios no banco n:" + comentarios.size());
         return comentarios;
     }
-    
+
 
     public List<Integer> listSpecificComments(int idActStu) {
         ArrayList<Integer> comentarios = new ArrayList<Integer>();

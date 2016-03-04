@@ -158,6 +158,7 @@ public class FragmentComments extends Frag {
         Comentario c = getCommentFromText();
         OneComment oneComment;
         if(attachment){
+            insertComment(c);
             Log.d("comment attachment ", "é anexo a ser inserido");
             oneComment = new OneComment(false, "Anexo", convertDateToTime(c.getDateComment()), convertDateToDate(c.getDateComment()),true);
         }else {
@@ -288,8 +289,12 @@ public class FragmentComments extends Frag {
 //        System.out.println("comentario inserido:" + c);
 
         try {
+            Singleton single= Singleton.getInstance();
             DataBaseAdapter db = DataBaseAdapter.getInstance(getActivity());
-            db.insertComment(c);
+            int lastID = db.insertComment(c);
+            if(attach){
+                db.insertAttachComment(lastID,single.lastIdAttach);
+            }
             Log.d("Banco:", "comentario inserido no bd interno com sucesso");
         }
         catch (Exception e) {

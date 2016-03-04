@@ -22,5 +22,7 @@ public class Singleton {
 
     public int idActivityStudent = -1;
 
+    public int lastIdAttach= -1;
+
     public boolean isRTEditor = false;
 }
