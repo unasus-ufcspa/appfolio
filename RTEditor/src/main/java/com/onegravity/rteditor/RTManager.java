@@ -569,7 +569,7 @@ public class RTManager implements RTToolbarListener, RTEditTextListener {
         });
     }
 
-    private RTEditText getActiveEditor() {
+    public RTEditText getActiveEditor() {
         for (RTEditText editor : mEditors.values()) {
             if (editor.hasFocus()) {
                 return editor;

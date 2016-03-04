@@ -1,7 +1,10 @@
 package com.ufcspa.unasus.appportfolio.Adapter;
 
 import android.content.Context;
+import android.view.ActionMode;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
@@ -9,9 +12,11 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.ufcspa.unasus.appportfolio.Activities.Fragments.FragmentAttachment;
+import com.ufcspa.unasus.appportfolio.Activities.MainActivity;
 import com.ufcspa.unasus.appportfolio.Model.Attachment;
 import com.ufcspa.unasus.appportfolio.R;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -21,12 +26,16 @@ public class FragmentAttachmentAdapter extends BaseAdapter {
     private static LayoutInflater inflater = null;
     private FragmentAttachment context;
     private List<Attachment> attachments;
+    private boolean canDelete;
+    private List<Integer> shouldDelete;
 
 
     public FragmentAttachmentAdapter(FragmentAttachment context, List<Attachment> attachment) {
         this.context = context;
         this.attachments = attachment;
+        this.shouldDelete = new ArrayList<>();
         inflater = (LayoutInflater) context.getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        canDelete = false;
     }
 
     @Override
@@ -48,9 +57,13 @@ public class FragmentAttachmentAdapter extends BaseAdapter {
     public View getView(final int position, final View convertView, ViewGroup parent) {
         View rowView = inflater.inflate(R.layout.celladapter_fragment_attachment, null);
 
-        Holder components = new Holder();
+        final Holder components = new Holder();
         components.imgAttachment = (ImageView) rowView.findViewById(R.id.img_attachment);
         components.descAttachment = (TextView) rowView.findViewById(R.id.desc_attachment);
+        components.imgDelete = (ImageView) rowView.findViewById(R.id.img_delete);
+
+        if (!canDelete)
+            components.imgDelete.setVisibility(View.GONE);
 
         Attachment aux = attachments.get(position);
 
@@ -59,7 +72,10 @@ public class FragmentAttachmentAdapter extends BaseAdapter {
                 rowView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        context.imageClicked(position);
+                        if (canDelete)
+                            checkIfIsMarked(components, position);
+                        else
+                            context.imageClicked(position);
                     }
                 });
                 components.imgAttachment.setImageResource(R.drawable.attachment_image);
@@ -69,7 +85,10 @@ public class FragmentAttachmentAdapter extends BaseAdapter {
                 rowView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        context.videoClicked(position);
+                        if (canDelete)
+                            checkIfIsMarked(components, position);
+                        else
+                            context.videoClicked(position);
                     }
                 });
                 components.imgAttachment.setImageResource(R.drawable.attachment_video);
@@ -79,25 +98,55 @@ public class FragmentAttachmentAdapter extends BaseAdapter {
                 rowView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        context.textClicked(position);
+                        if (canDelete)
+                            checkIfIsMarked(components, position);
+                        else
+                            context.textClicked(position);
                     }
                 });
                 components.imgAttachment.setImageResource(R.drawable.attachment_file);
                 components.descAttachment.setText("Text");
                 break;
             default:
-                rowView.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        context.plusClicked();
-                    }
-                });
-                components.imgAttachment.setImageResource(R.drawable.attachment_plus);
-                components.descAttachment.setText("Adicionar novo");
+                if (!canDelete) {
+                    rowView.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            context.plusClicked();
+                        }
+                    });
+                    components.imgAttachment.setImageResource(R.drawable.attachment_plus);
+                    components.descAttachment.setText("Adicionar novo");
+                    components.imgDelete.setVisibility(View.GONE);
+                }
                 break;
         }
 
+        if (!canDelete) {
+            rowView.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View v) {
+                    canDelete = true;
+                    context.deleteOneMedia(attachments.size() - 1);
+                    context.getActivity().startActionMode(new ActionBarCallBack());
+                    return true;
+                }
+            });
+        }
+
         return rowView;
+    }
+
+    private void checkIfIsMarked(Holder components, int position) {
+        if (components.imgDelete.getVisibility() == View.VISIBLE) {
+            components.imgDelete.setVisibility(View.GONE);
+            for (int i = 0; i < shouldDelete.size(); i++)
+                if (shouldDelete.get(i).intValue() == position)
+                    shouldDelete.remove(i);
+        } else {
+            components.imgDelete.setVisibility(View.VISIBLE);
+            shouldDelete.add(position);
+        }
     }
 
     public void refresh(List<Attachment> attachments) {
@@ -107,6 +156,36 @@ public class FragmentAttachmentAdapter extends BaseAdapter {
 
     private class Holder {
         ImageView imgAttachment;
+        ImageView imgDelete;
         TextView descAttachment;
+    }
+
+    public class ActionBarCallBack implements ActionMode.Callback {
+        @Override
+        public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
+            context.deleteMedia(shouldDelete);
+            mode.finish();
+            return false;
+        }
+
+        @Override
+        public boolean onCreateActionMode(ActionMode mode, Menu menu) {
+            mode.getMenuInflater().inflate(R.menu.menu_attachment, menu);
+            ((MainActivity) context.getActivity()).hideDrawer();
+            return true;
+        }
+
+        @Override
+        public void onDestroyActionMode(ActionMode mode) {
+            canDelete = false;
+            context.createPlusButton();
+            notifyDataSetChanged();
+            ((MainActivity) context.getActivity()).showDrawer();
+        }
+
+        @Override
+        public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
+            return false;
+        }
     }
 }

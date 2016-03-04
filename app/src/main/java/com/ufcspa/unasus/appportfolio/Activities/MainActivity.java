@@ -12,6 +12,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.text.InputType;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
@@ -182,6 +183,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private void changeFragment(int id)
     {
+        singleton.firsttime = true;
         switch (id)
         {
             case 0:
@@ -208,10 +210,32 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     public void hideDrawer() {
+        setClickable(miniDrawer, false);
+        setClickable(bigDrawer, false);
+        miniDrawer.setAlpha((float) 0.5);
+    }
+
+    public void setClickable(View view, boolean isClickable) {
+        if (view != null) {
+            view.setClickable(isClickable);
+            if (view instanceof ViewGroup) {
+                ViewGroup vg = ((ViewGroup) view);
+                for (int i = 0; i < vg.getChildCount(); i++) {
+                    setClickable(vg.getChildAt(i), isClickable);
+                }
+            }
+        }
+    }
+
+    public void showDrawer() {
+        setClickable(miniDrawer, true);
+        setClickable(bigDrawer, true);
+        miniDrawer.setAlpha(1);
     }
 
     public void callRTEditorToAttachSomething(String url, int position, String type)
     {
+        singleton.firsttime = true;
         FragmentRTEditor fragment = new FragmentRTEditor();
         Bundle args = new Bundle();
         args.putString("URL",url);
@@ -232,5 +256,4 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment).commit();
     }
-
 }

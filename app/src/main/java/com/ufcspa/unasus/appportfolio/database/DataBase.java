@@ -1,13 +1,14 @@
 package com.ufcspa.unasus.appportfolio.database;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
 import android.database.sqlite.SQLiteOpenHelper;
+
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 
 public class DataBase extends SQLiteOpenHelper {
 
@@ -66,8 +67,7 @@ public class DataBase extends SQLiteOpenHelper {
 
         try {
             String path = DBPATH + DBNAME;
-            db =
-                    SQLiteDatabase.openDatabase(path, null, SQLiteDatabase.OPEN_READONLY);
+            db = SQLiteDatabase.openDatabase(path, null, SQLiteDatabase.OPEN_READONLY);
             db.close();
         } catch (SQLiteException e) {
             // O banco não existe

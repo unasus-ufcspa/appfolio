@@ -262,12 +262,6 @@ public class DataBaseAdapter {
         return comentarios;
     }
 
-
-
-
-
-
-
     public void updateActivityStudent(ActivityStudent activityStudent) {
         ContentValues cv = new ContentValues();
         cv.put("tx_activity", activityStudent.getTxtActivity());

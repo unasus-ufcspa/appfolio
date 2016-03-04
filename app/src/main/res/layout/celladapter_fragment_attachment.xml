@@ -5,25 +5,36 @@
     android:gravity="center">
 
     <ImageView
+        android:id="@+id/img_attachment"
         android:layout_width="100dp"
         android:layout_height="100dp"
-        android:id="@+id/img_attachment"
         android:layout_gravity="center_horizontal"
         android:src="@drawable/attachment_plus" />
 
+    <ImageView
+        android:id="@+id/img_delete"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_above="@+id/desc_attachment"
+        android:layout_alignEnd="@+id/img_attachment"
+        android:layout_alignRight="@+id/img_attachment"
+        android:layout_gravity="center_horizontal"
+        android:src="@drawable/delete_x"
+        android:visibility="gone" />
+
     <TextView
+        android:id="@+id/desc_attachment"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceSmall"
-        android:text="Small Text"
-        android:id="@+id/desc_attachment"
-        android:layout_gravity="center_horizontal"
-        android:lines="2"
-        android:gravity="center"
-        android:layout_below="@+id/img_attachment"
+        android:layout_alignEnd="@+id/img_attachment"
         android:layout_alignLeft="@+id/img_attachment"
-        android:layout_alignStart="@+id/img_attachment"
         android:layout_alignRight="@+id/img_attachment"
-        android:layout_alignEnd="@+id/img_attachment" />
+        android:layout_alignStart="@+id/img_attachment"
+        android:layout_below="@+id/img_attachment"
+        android:layout_gravity="center_horizontal"
+        android:gravity="center"
+        android:lines="2"
+        android:text="Small Text"
+        android:textAppearance="?android:attr/textAppearanceSmall" />
 
 </RelativeLayout>

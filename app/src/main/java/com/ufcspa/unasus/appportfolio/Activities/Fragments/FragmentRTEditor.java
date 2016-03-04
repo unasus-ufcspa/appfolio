@@ -75,12 +75,15 @@ public class FragmentRTEditor extends Fragment {
         Singleton singleton = Singleton.getInstance();
         source = DataBaseAdapter.getInstance(getActivity());
         acStudent = source.listActivityStudent(singleton.idActivityStudent);
-        mRTMessageField.setRichTextEditing(true, acStudent.getTxtActivity());
+        if (singleton.firsttime) {
+            mRTMessageField.setRichTextEditing(true, acStudent.getTxtActivity());
+            singleton.firsttime = false;
+        }
     }
 
     public void saveText() {
-        Log.d("editor DB","salvando texto..");
-        acStudent.toString();
+        Log.d("editor DB", "salvando texto..");
+//        acStudent.toString();
         source = DataBaseAdapter.getInstance(getActivity());
         acStudent.setTxtActivity(mRTMessageField.getText(RTFormat.HTML));
         source.updateActivityStudent(acStudent);
@@ -159,6 +162,7 @@ public class FragmentRTEditor extends Fragment {
             public void onClick(View v) {
                 mRTMessageField.setSelection(0);
                 Log.d("rteditor", mRTMessageField.getText(RTFormat.HTML));
+                slider.setVisibility(View.GONE);
 //                ((MainActivity) getActivity()).hideDrawer();
             }
         });
@@ -203,6 +207,11 @@ public class FragmentRTEditor extends Fragment {
             }
             currentSpecificComment = savedInstanceState.getInt("currentSpecificComment", -1);
         }
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
     }
 
     @Override

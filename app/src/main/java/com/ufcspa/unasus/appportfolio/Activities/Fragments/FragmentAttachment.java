@@ -34,6 +34,8 @@ import com.ufcspa.unasus.appportfolio.database.DataBaseAdapter;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 /**
  * Created by desenvolvimento on 10/12/2015.
@@ -117,7 +119,7 @@ public class FragmentAttachment extends Frag {
         if(attachment.getLocalPath() != null && attachment.getLocalPath() != "")
         {
             openPDF(attachment.getLocalPath());
-            showPDFDialog(attachment.getLocalPath(), position);
+            //showPDFDialog(attachment.getLocalPath(), position);
         }
     }
 
@@ -200,113 +202,110 @@ public class FragmentAttachment extends Frag {
         builder.show();
     }
 
-    private void createPlusButton() {
+    public void createPlusButton() {
         if (!isRTEditor && !singleton.isRTEditor)
             attachments.add(new Attachment(-1, -1, -1, "", "", ""));
     }
 
     private void loadPhoto(final String url, final int position) {
         if (url != null) {
-            final Dialog dialog = new Dialog(getActivity());
-            dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-            dialog.setContentView(R.layout.custom_fullimage_dialog);
-
-            Button btnPositive = (Button) dialog.findViewById(R.id.btn_positive);
-            Button btnNegative = (Button) dialog.findViewById(R.id.btn_negative);
-
             if (isRTEditor) {
+                final Dialog dialog = new Dialog(getActivity());
+                dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                dialog.setContentView(R.layout.custom_fullimage_dialog);
+
+                Button btnPositive = (Button) dialog.findViewById(R.id.btn_positive);
+                Button btnNegative = (Button) dialog.findViewById(R.id.btn_negative);
+
                 btnNegative.setText(getResources().getText(R.string.attachment_negative));
                 btnPositive.setText(getResources().getText(R.string.attachment_positive));
+
+                btnPositive.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        returnFromDialog(url, position, "I");
+                        dialog.dismiss();
+                    }
+                });
+
+                btnNegative.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        dialog.dismiss();
+                    }
+                });
+
+                final ImageView image = (ImageView) dialog.findViewById(R.id.fullimage);
+                image.setAdjustViewBounds(true);
+
+                Uri uri = Uri.fromFile(new File(url));
+                Picasso.with(getActivity()).load(uri).into(image, new Callback() {
+                    @Override
+                    public void onSuccess() {
+                        dialog.show();
+                    }
+
+                    @Override
+                    public void onError() {
+
+                    }
+                });
             } else {
-                btnNegative.setText(getResources().getText(R.string.attachment_delete));
-                btnPositive.setText(getResources().getText(R.string.attachment_fechar));
+                Intent intent = new Intent();
+                intent.setAction(Intent.ACTION_VIEW);
+                intent.setDataAndType(Uri.fromFile(new File(url)), "image/*");
+                startActivity(intent);
             }
-
-            btnPositive.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (isRTEditor)
-                        returnFromDialog(url, position, "I");
-                    dialog.dismiss();
-                }
-            });
-
-            btnNegative.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (!isRTEditor)
-                        returnFromDialog(url, position, "I");
-                    dialog.dismiss();
-                }
-            });
-
-            final ImageView image = (ImageView) dialog.findViewById(R.id.fullimage);
-            image.setAdjustViewBounds(true);
-
-            Uri uri = Uri.fromFile(new File(url));
-            Picasso.with(getActivity()).load(uri).into(image, new Callback() {
-                @Override
-                public void onSuccess() {
-                    dialog.show();
-                }
-
-                @Override
-                public void onError() {
-
-                }
-            });
         }
     }
 
     private void loadVideo(final String url, final int position) {
         if(url != null) {
-            final Dialog dialog = new Dialog(getActivity());
-            dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-            dialog.setContentView(R.layout.custom_fullvideo_dialog);
-
-            final VideoView video = (VideoView) dialog.findViewById(R.id.videoView);
-
-            video.setVideoPath(url);
-            video.requestFocus();
-            video.start();
-            video.setOnErrorListener(new MediaPlayer.OnErrorListener() {
-                @Override
-                public boolean onError(MediaPlayer mp, int what, int extra) {
-                    dialog.dismiss();
-                    return false;
-                }
-            });
-
-            Button btnPositive = (Button) dialog.findViewById(R.id.btn_positive_video);
-            Button btnNegative = (Button) dialog.findViewById(R.id.btn_negative_video);
-
             if (isRTEditor) {
+                final Dialog dialog = new Dialog(getActivity());
+                dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                dialog.setContentView(R.layout.custom_fullvideo_dialog);
+
+                final VideoView video = (VideoView) dialog.findViewById(R.id.videoView);
+
+                video.setVideoPath(url);
+                video.requestFocus();
+                video.start();
+                video.setOnErrorListener(new MediaPlayer.OnErrorListener() {
+                    @Override
+                    public boolean onError(MediaPlayer mp, int what, int extra) {
+                        dialog.dismiss();
+                        return false;
+                    }
+                });
+
+                Button btnPositive = (Button) dialog.findViewById(R.id.btn_positive_video);
+                Button btnNegative = (Button) dialog.findViewById(R.id.btn_negative_video);
+
                 btnNegative.setText(getResources().getText(R.string.attachment_negative));
                 btnPositive.setText(getResources().getText(R.string.attachment_positive));
+
+                btnPositive.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        returnFromDialog(url, position, "V");
+                        dialog.dismiss();
+                    }
+                });
+
+                btnNegative.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        dialog.dismiss();
+                    }
+                });
+
+                dialog.show();
             } else {
-                btnNegative.setText(getResources().getText(R.string.attachment_delete));
-                btnPositive.setText(getResources().getText(R.string.attachment_fechar));
+                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.fromFile(new File(url)));
+                intent.setDataAndType(Uri.fromFile(new File(url)), "video/*");
+                startActivity(intent);
             }
-
-            btnPositive.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (isRTEditor)
-                        returnFromDialog(url, position, "V");
-                    dialog.dismiss();
-                }
-            });
-
-            btnNegative.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (!isRTEditor)
-                        returnFromDialog(url, position, "V");
-                    dialog.dismiss();
-                }
-            });
-
-            dialog.show();
         }
     }
 
@@ -325,7 +324,7 @@ public class FragmentAttachment extends Frag {
 
             public void onClick(DialogInterface dialog, int which) {
                 dialog.dismiss();
-                deleteMedia(position);
+//                deleteMedia(position);
             }
 
         });
@@ -335,24 +334,33 @@ public class FragmentAttachment extends Frag {
     }
 
 
-    public void deleteMedia(int position)
+    public void deleteMedia(List<Integer> positions)
     {
+        if (positions != null) {
+            Collections.sort(positions);
+            for (int i = positions.size() - 1; i >= 0; i--)
+                attachments.remove(positions.get(i).intValue());
+
+            listAdapter.refresh(attachments);
+        }
+    }
+
+    public void deleteOneMedia(int position) {
         attachments.remove(position);
+        listAdapter.refresh(attachments);
     }
 
     private void returnFromDialog(String url, int position, String type) {
-        if(isRTEditor)
-        {
-            if (type.equals("V")) {
-                mCurrentPhotoPath = url;
-                saveSmallImage();
-                url = mCurrentPhotoPath;
-            }
-            ((MainActivity)getActivity()).callRTEditorToAttachSomething(url, cursorPosition, type);
+        if (type.equals("V")) {
+            mCurrentPhotoPath = url;
+            saveSmallImage();
+            url = mCurrentPhotoPath;
         }
-        else
-        {
-            deleteMedia(position);
-        }
+        ((MainActivity) getActivity()).callRTEditorToAttachSomething(url, cursorPosition, type);
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
     }
 }
