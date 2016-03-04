@@ -63,12 +63,35 @@ public class FragmentComments extends Frag {
 //        });
         //ipsum = new LoremIpsum();
 
-
+        Log.d("Comments", "On createView entrou");
         return view;
     }
 
     @Override
+    public void onViewCreated(View view, Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        Log.d("Comments", "On view Created entrou");
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        oneComments = new ArrayList<>(70);
+        adapterComments = new CommentAdapter(getContext(),oneComments);
+        loadCom();
+        Log.d("Comments", "On create entrou");
+    }
+
+    @Override
     public void onResume() {
+        Log.d("Comments", "On resume entrou");
         super.onResume();
         edtMessage = (EditText) getView().findViewById(R.id.edtMessage);
         btGenMess = (Button) getView().findViewById(R.id.gen_messag_bt);
@@ -101,27 +124,29 @@ public class FragmentComments extends Frag {
                     loadCom();
                     addOneComment(true);
                     attach=false;
+                    edtMessage.setText("");
                 } else {
 
                     if (!edtMessage.getText().toString().isEmpty()) {
                         //addItems();
-                        loadCom();
+                        //loadCom();
 //                    Comentario c = getCommentFromText();
 //                    insertComment(c);
 //                    OneComment oneComment;
 //                    oneComment = new OneComment(false, edtMessage.getText().toString(), convertDateToTime(c.getDateComment()), convertDateToDate(c.getDateComment()));
                         //oneComments.add(addOneComment(false));
+                        adapterComments.refresh(new ArrayList<OneComment>());
                         addOneComment(false);
                         edtMessage.setText("");
                         //lv.setAdapter(adapter);
                     } else {
-                        Log.d(getTag(), "tentou inserir comentario vazio");
+                        Log.e("comment", "tentou inserir comentario vazio");
                     }
                 }
             }
         });
         //addItems();
-        loadCom();
+        setarListView();
     }
 
     @Override
@@ -140,13 +165,16 @@ public class FragmentComments extends Frag {
             insertComment(c);
             oneComment = new OneComment(false, edtMessage.getText().toString(), convertDateToTime(c.getDateComment()), convertDateToDate(c.getDateComment()));
         }
+        //oneComments.clear();
         oneComments.add(oneComment);
-        adapterComments.notifyDataSetChanged();
+        adapterComments.refresh(oneComments);
+        //adapterComments.notifyDataSetChanged();
     }
     public void addAtach(){
         Log.d("comments attach", "add atach selecionado");
         //adapterComments.refresh(oneComments);
         attach=true;
+        edtMessage.setText("anexo");
         btGenMess.performClick();
     }
 
@@ -202,7 +230,7 @@ public class FragmentComments extends Frag {
             Log.d("comment attachment ", "entrando no insertAtach");
             Comentario c = getCommentFromText();
             insertComment(c);
-            OneComment oneComment= new OneComment(false, edtMessage.getText().toString(),
+            OneComment oneComment= new OneComment(false, "Anexo",
                     convertDateToTime(c.getDateComment()),
                     convertDateToDate(c.getDateComment()),true);
             Log.d("comment attachment ", "itens size:" + oneComments.size());
@@ -233,7 +261,6 @@ public class FragmentComments extends Frag {
         DataBaseAdapter db = DataBaseAdapter.getInstance(getActivity());
         Singleton singleton = Singleton.getInstance();
         ArrayList<Comentario> lista = (ArrayList<Comentario>) db.listComments(singleton.activity.getIdAtivity(),"C",0);//lista comentario gerais filtrando por C
-        oneComments = new ArrayList<>(10);
         if (lista.size() != 0) {
             for (int i = 0; i < lista.size(); i++) {
                 oneComments.add(new OneComment(lista.get(i).getIdAuthor() != singleton.user.getIdUser(),
@@ -243,17 +270,18 @@ public class FragmentComments extends Frag {
         } else {
             Log.d("Banco", "Lista retornou vazia!");
         }
-        adapterComments = new CommentAdapter(getContext(),oneComments);
+    }
+
+
+
+    public void setarListView(){
         lv.setAdapter(adapterComments);
         lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Log.d("comments","clicou no item na position:"+position+" com id:"+id);
+                Log.d("comments","clicou no item na position:"+position+" conteudo:"+oneComments.get(position));
             }
         });
-        //lv.notify();
-
-
     }
 
     private void insertComment(Comentario c) {

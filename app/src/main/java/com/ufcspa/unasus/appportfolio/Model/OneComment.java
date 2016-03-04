@@ -6,6 +6,7 @@ public class OneComment {
     public String hour;
     public String date;
     public boolean atach;
+    public String  path;
 
 
     public OneComment(boolean orientation, String comment) {
@@ -36,4 +37,13 @@ public class OneComment {
         this.atach=attach;
     }
 
+    @Override
+    public String toString() {
+        return "OneComment{" +
+                "comment='" + comment + '\'' +
+                ", hour='" + hour + '\'' +
+                ", date='" + date + '\'' +
+                ", atach=" + atach +
+                '}';
+    }
 }
