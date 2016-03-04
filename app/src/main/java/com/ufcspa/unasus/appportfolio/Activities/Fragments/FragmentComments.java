@@ -138,7 +138,6 @@ public class FragmentComments extends Frag {
                         adapterComments.refresh(new ArrayList<OneComment>());
                         addOneComment(false);
                         edtMessage.setText("");
-                        //lv.setAdapter(adapter);
                     } else {
                         Log.e("comment", "tentou inserir comentario vazio");
                     }
