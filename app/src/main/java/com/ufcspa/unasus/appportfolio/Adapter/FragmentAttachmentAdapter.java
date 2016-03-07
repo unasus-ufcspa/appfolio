@@ -14,10 +14,12 @@ import android.widget.TextView;
 import com.ufcspa.unasus.appportfolio.Activities.Fragments.FragmentAttachment;
 import com.ufcspa.unasus.appportfolio.Activities.MainActivity;
 import com.ufcspa.unasus.appportfolio.Model.Attachment;
+import com.ufcspa.unasus.appportfolio.Model.Singleton;
 import com.ufcspa.unasus.appportfolio.R;
 
-import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Created by desenvolvimento on 10/12/2015.
@@ -27,15 +29,17 @@ public class FragmentAttachmentAdapter extends BaseAdapter {
     private FragmentAttachment context;
     private List<Attachment> attachments;
     private boolean canDelete;
-    private List<Integer> shouldDelete;
+    private Set<Attachment> shouldDelete;
+    private Singleton singleton;
 
 
     public FragmentAttachmentAdapter(FragmentAttachment context, List<Attachment> attachment) {
         this.context = context;
         this.attachments = attachment;
-        this.shouldDelete = new ArrayList<>();
+        this.shouldDelete = new HashSet<>();
         inflater = (LayoutInflater) context.getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         canDelete = false;
+        singleton = Singleton.getInstance();
     }
 
     @Override
@@ -65,7 +69,7 @@ public class FragmentAttachmentAdapter extends BaseAdapter {
         if (!canDelete)
             components.imgDelete.setVisibility(View.GONE);
 
-        Attachment aux = attachments.get(position);
+        final Attachment aux = attachments.get(position);
 
         switch (aux.getType()) {
             case "I":
@@ -73,39 +77,39 @@ public class FragmentAttachmentAdapter extends BaseAdapter {
                     @Override
                     public void onClick(View v) {
                         if (canDelete)
-                            checkIfIsMarked(components, position);
+                            checkIfIsMarked(components, aux);
                         else
                             context.imageClicked(position);
                     }
                 });
                 components.imgAttachment.setImageResource(R.drawable.attachment_image);
-                components.descAttachment.setText("Imagem");
+                components.descAttachment.setText(aux.getNameFile());
                 break;
             case "V":
                 rowView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         if (canDelete)
-                            checkIfIsMarked(components, position);
+                            checkIfIsMarked(components, aux);
                         else
                             context.videoClicked(position);
                     }
                 });
                 components.imgAttachment.setImageResource(R.drawable.attachment_video);
-                components.descAttachment.setText("Video");
+                components.descAttachment.setText(aux.getNameFile());
                 break;
             case "T":
                 rowView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         if (canDelete)
-                            checkIfIsMarked(components, position);
+                            checkIfIsMarked(components, aux);
                         else
                             context.textClicked(position);
                     }
                 });
                 components.imgAttachment.setImageResource(R.drawable.attachment_file);
-                components.descAttachment.setText("Text");
+                components.descAttachment.setText(aux.getNameFile());
                 break;
             default:
                 if (!canDelete) {
@@ -122,7 +126,7 @@ public class FragmentAttachmentAdapter extends BaseAdapter {
                 break;
         }
 
-        if (!canDelete) {
+        if (!canDelete && !singleton.isRTEditor) {
             rowView.setOnLongClickListener(new View.OnLongClickListener() {
                 @Override
                 public boolean onLongClick(View v) {
@@ -137,15 +141,13 @@ public class FragmentAttachmentAdapter extends BaseAdapter {
         return rowView;
     }
 
-    private void checkIfIsMarked(Holder components, int position) {
+    private void checkIfIsMarked(Holder components, Attachment attachment) {
         if (components.imgDelete.getVisibility() == View.VISIBLE) {
             components.imgDelete.setVisibility(View.GONE);
-            for (int i = 0; i < shouldDelete.size(); i++)
-                if (shouldDelete.get(i).intValue() == position)
-                    shouldDelete.remove(i);
+            shouldDelete.remove(attachment);
         } else {
             components.imgDelete.setVisibility(View.VISIBLE);
-            shouldDelete.add(position);
+            shouldDelete.add(attachment);
         }
     }
 

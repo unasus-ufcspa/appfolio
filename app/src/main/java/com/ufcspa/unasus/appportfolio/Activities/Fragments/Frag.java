@@ -258,11 +258,17 @@ public class Frag extends Fragment {
     }
 
     public void saveSmallImage() {
-        String[] path = mCurrentPhotoPath.split("\\.");
-        path[0] += "_small";
+        String[] path = mCurrentPhotoPath.split("/");
+        String[] secondPath = path[path.length - 1].split("\\.");
+        secondPath[0] += "_small";
+        path[path.length - 1] = secondPath[0] + "." + secondPath[1];
+
+        String newPath = "";
+        for (int i = 1; i < path.length; i++)
+            newPath += "/" + path[i];
 
         OutputStream fOutputStream = null;
-        File file = new File(path[0] + "." + path[1]);
+        File file = new File(newPath);
         if (!file.exists()) {
             try {
                 file.createNewFile();
@@ -275,7 +281,7 @@ public class Frag extends Fragment {
             fOutputStream = new FileOutputStream(file);
 
             Bitmap bitmap = createThumbnailFromPath(mCurrentPhotoPath, MediaStore.Images.Thumbnails.MICRO_KIND);
-            mCurrentPhotoPath = path[0] + "." + path[1];
+            mCurrentPhotoPath = newPath;
 
             Bitmap resized = Bitmap.createScaledBitmap(bitmap, 320, 240, true);
             resized.compress(Bitmap.CompressFormat.PNG, 40, fOutputStream);
@@ -472,13 +478,13 @@ public class Frag extends Fragment {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 //source.saveAttachmentActivityStudent(path, type, singleton.idActivityStudent); //input.getText().toString()
-                Singleton single =Singleton.getInstance();
+                Singleton single = Singleton.getInstance();
 
-                String name=input.getText().toString();
-                if(name.isEmpty()){
-                    name="Anexo";
+                String name = input.getText().toString();
+                if (name.isEmpty()) {
+                    name = "Anexo";
                 }
-                single.lastIdAttach=source.insertAttachment(new Attachment(0,path,"",type,name));
+                single.lastIdAttach = source.insertAttachment(new Attachment(0, path, "", type, name, 0));
             }
         });
 

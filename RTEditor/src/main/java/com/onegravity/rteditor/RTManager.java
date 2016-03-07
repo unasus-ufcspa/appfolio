@@ -39,6 +39,7 @@ import com.onegravity.rteditor.RTOperationManager.TextChangeOperation;
 import com.onegravity.rteditor.api.RTApi;
 import com.onegravity.rteditor.api.format.RTFormat;
 import com.onegravity.rteditor.api.media.RTImage;
+import com.onegravity.rteditor.api.media.RTImageImpl;
 import com.onegravity.rteditor.api.media.RTMedia;
 import com.onegravity.rteditor.api.media.RTVideo;
 import com.onegravity.rteditor.effects.AbsoluteSizeEffect;
@@ -63,7 +64,6 @@ import com.onegravity.rteditor.media.choose.MediaEvent;
 import com.onegravity.rteditor.spans.ImageSpan;
 import com.onegravity.rteditor.spans.LinkSpan;
 import com.onegravity.rteditor.spans.RTSpan;
-import com.onegravity.rteditor.spans.VideoSpan;
 import com.onegravity.rteditor.utils.Constants.MediaAction;
 import com.onegravity.rteditor.utils.Helper;
 import com.onegravity.rteditor.utils.Selection;
@@ -150,6 +150,8 @@ public class RTManager implements RTToolbarListener, RTEditTextListener {
         mEditors = new ConcurrentHashMap<Integer, RTEditText>();
         mToolbars = new ConcurrentHashMap<Integer, RTToolbar>();
         mOPManager = new RTOperationManager();
+        RTEditorSingleton singleton = RTEditorSingleton.getInstance();
+        singleton.context = mRTContext;
 
         if (savedInstanceState != null) {
             String tmp = savedInstanceState.getString("mToolbarVisibility");
@@ -549,7 +551,7 @@ public class RTManager implements RTToolbarListener, RTEditTextListener {
                         // now add the actual image and inform the RTOperationManager about the operation
                         Spannable oldSpannable = editor.cloneSpannable();
 
-                        VideoSpan videoSpan = new VideoSpan(video, false);
+                        ImageSpan videoSpan = new ImageSpan(new RTImageImpl(video.getVideoPreviewImage()), false);
                         str.setSpan(videoSpan, selection.start(), selection.end() + 1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
                         int selStartAfter = editor.getSelectionStart();
                         int selEndAfter = editor.getSelectionEnd();

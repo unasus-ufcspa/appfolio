@@ -21,6 +21,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.ImageView;
+import android.widget.Toast;
 import android.widget.VideoView;
 
 import com.squareup.picasso.Callback;
@@ -34,8 +35,7 @@ import com.ufcspa.unasus.appportfolio.database.DataBaseAdapter;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.util.Set;
 
 /**
  * Created by desenvolvimento on 10/12/2015.
@@ -57,6 +57,7 @@ public class FragmentAttachment extends Frag {
         View view = inflater.inflate(R.layout.fragment_attachment, null);
 
         singleton = Singleton.getInstance();
+        source = DataBaseAdapter.getInstance(getContext());
 
         if (singleton.isRTEditor)
         {
@@ -91,7 +92,7 @@ public class FragmentAttachment extends Frag {
 
         attachmentGrid = (GridView) getView().findViewById(R.id.attachment_gridview);
 
-        attachments = source.getAttachmentsFromActivityStudent(singleton.idActivityStudent);
+        attachments = source.getAttachments();
         createPlusButton();
 
         listAdapter = new FragmentAttachmentAdapter(this, attachments);
@@ -192,8 +193,12 @@ public class FragmentAttachment extends Frag {
         builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                source.saveAttachmentActivityStudent(path, type, singleton.idActivityStudent); //input.getText().toString()
-                attachments = source.getAttachmentsFromActivityStudent(singleton.idActivityStudent);
+                String name = input.getText().toString();
+                if (name.isEmpty()) {
+                    name = "Anexo";
+                }
+                singleton.lastIdAttach = source.insertAttachment(new Attachment(0, path, "", type, name, 0));
+                attachments = source.getAttachments();
                 createPlusButton();
                 listAdapter.refresh(attachments);
             }
@@ -204,7 +209,7 @@ public class FragmentAttachment extends Frag {
 
     public void createPlusButton() {
         if (!isRTEditor && !singleton.isRTEditor)
-            attachments.add(new Attachment(-1, -1, -1, "", "", ""));
+            attachments.add(new Attachment(-1, "", "", "", "", 0));
     }
 
     private void loadPhoto(final String url, final int position) {
@@ -334,15 +339,25 @@ public class FragmentAttachment extends Frag {
     }
 
 
-    public void deleteMedia(List<Integer> positions)
+    public void deleteMedia(Set<Attachment> positions)
     {
+        boolean allAttachmentDeleted = true;
         if (positions != null) {
-            Collections.sort(positions);
-            for (int i = positions.size() - 1; i >= 0; i--)
-                attachments.remove(positions.get(i).intValue());
+            for (Attachment attachment : positions) {
+                boolean bool = source.deleteAttachment(attachment);
+                if (allAttachmentDeleted)
+                    allAttachmentDeleted = bool;
+                if (bool)
+                    attachments.remove(attachment);
+            }
 
             listAdapter.refresh(attachments);
         }
+
+        if (!allAttachmentDeleted)
+            Toast.makeText(getActivity(), "Alguns anexos não foram deletados, pois estão sendo utilizados em outra parte do aplicativo.", Toast.LENGTH_SHORT).show();
+        else
+            Toast.makeText(getActivity(), "Anexos deletados com sucesso.", Toast.LENGTH_SHORT).show();
     }
 
     public void deleteOneMedia(int position) {

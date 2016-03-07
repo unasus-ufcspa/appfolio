@@ -16,6 +16,19 @@
 
 package com.onegravity.rteditor.api.media;
 
+import android.content.Context;
+import android.graphics.Bitmap;
+import android.media.ThumbnailUtils;
+import android.provider.MediaStore;
+
+import com.onegravity.rteditor.RTEditorSingleton;
+
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
+
 /**
  * This is a basic implementation of the RTVideo interface.
  */
@@ -26,6 +39,8 @@ public class RTVideoImpl extends RTMediaImpl implements RTVideo {
 
     public RTVideoImpl(String filePath) {
         super(filePath);
+        RTEditorSingleton singleton = RTEditorSingleton.getInstance();
+        this.mVideoPreviewImage = saveSmallImage(filePath, singleton.context);
     }
 
     @Override
@@ -54,4 +69,48 @@ public class RTVideoImpl extends RTMediaImpl implements RTVideo {
         return getWidth(mVideoPreviewImage);
     }
 
+    public String saveSmallImage(String videoPath, Context context) {
+        String[] path = videoPath.split("/");
+        String[] secondPath = path[path.length - 1].split("\\.");
+        secondPath[0] += "_small";
+        path[path.length - 1] = secondPath[0] + "." + secondPath[1];
+
+        String newPath = "";
+        for (int i = 1; i < path.length; i++)
+            newPath += "/" + path[i];
+
+        OutputStream fOutputStream = null;
+        File file = new File(newPath);
+        if (!file.exists()) {
+            try {
+                file.createNewFile();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+        try {
+            fOutputStream = new FileOutputStream(file);
+
+            Bitmap bitmap = createThumbnailFromPath(videoPath, MediaStore.Images.Thumbnails.MICRO_KIND);
+            videoPath = newPath;
+
+            Bitmap resized = Bitmap.createScaledBitmap(bitmap, 320, 240, true);
+            resized.compress(Bitmap.CompressFormat.PNG, 40, fOutputStream);
+
+            fOutputStream.flush();
+            fOutputStream.close();
+
+            MediaStore.Images.Media.insertImage(context.getContentResolver(), file.getAbsolutePath(), file.getName(), file.getName());
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return videoPath;
+    }
+
+    public Bitmap createThumbnailFromPath(String filePath, int type) {
+        return ThumbnailUtils.createVideoThumbnail(filePath, type);
+    }
 }

@@ -21,6 +21,7 @@ import com.mikepenz.crossfader.Crossfader;
 import com.ufcspa.unasus.appportfolio.Activities.Fragments.FragmentAttachment;
 import com.ufcspa.unasus.appportfolio.Activities.Fragments.FragmentRTEditor;
 import com.ufcspa.unasus.appportfolio.Activities.Fragments.FragmentStudentActivities;
+import com.ufcspa.unasus.appportfolio.Model.Attachment;
 import com.ufcspa.unasus.appportfolio.Model.Singleton;
 import com.ufcspa.unasus.appportfolio.R;
 import com.ufcspa.unasus.appportfolio.database.DataBaseAdapter;
@@ -66,7 +67,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 DataBaseAdapter dataBaseAdapter = DataBaseAdapter.getInstance(getApplicationContext());
-                dataBaseAdapter.saveAttachmentActivityStudent(path, type, singleton.idActivityStudent); //input.getText().toString()
+                String name = input.getText().toString();
+                if (name.isEmpty()) {
+                    name = "Anexo";
+                }
+                singleton.lastIdAttach = dataBaseAdapter.insertAttachment(new Attachment(0, path, "", type, name, 0));
             }
         });
 

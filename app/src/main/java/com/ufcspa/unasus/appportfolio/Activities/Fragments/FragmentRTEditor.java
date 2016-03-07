@@ -83,7 +83,6 @@ public class FragmentRTEditor extends Fragment {
 
     public void saveText() {
         Log.d("editor DB", "salvando texto..");
-//        acStudent.toString();
         source = DataBaseAdapter.getInstance(getActivity());
         acStudent.setTxtActivity(mRTMessageField.getText(RTFormat.HTML));
         source.updateActivityStudent(acStudent);
@@ -471,10 +470,7 @@ public class FragmentRTEditor extends Fragment {
         RTHtml<RTImage, RTAudio, RTVideo> rtHtmlBefore = new ConverterSpannedToHtml().convert(textBefore, RTFormat.HTML);
         RTHtml<RTImage, RTAudio, RTVideo> rtHtmlAfter = new ConverterSpannedToHtml().convert(textAfter, RTFormat.HTML);
 
-//        if(isVideo)
-//            mRTMessageField.setRichTextEditing(true, rtHtmlBefore.getText() + "<video src=\"" + url +"\">" + rtHtmlAfter.getText());
-//        else
-            mRTMessageField.setRichTextEditing(true, rtHtmlBefore.getText() + "<img src=\"" + url +"\">" + rtHtmlAfter.getText());
+        mRTMessageField.setRichTextEditing(true, rtHtmlBefore.getText() + "<img src=\"" + url + "\">" + rtHtmlAfter.getText());
     }
 
     private class ActionBarCallBack implements ActionMode.Callback {
@@ -489,11 +485,9 @@ public class FragmentRTEditor extends Fragment {
                     startSelection = mRTMessageField.getSelectionStart();
                     endSelection = mRTMessageField.getSelectionEnd();
                     String selectedText = getSelectedText();
-                    //mRTMessageField.getText(RTFormat.HTML).substring(startSelection, endSelection);
 
                     if (!selectedText.isEmpty()) {
                         if (selectedText.length() > 0) {
-                            //findText(selectedText, mRTMessageField.getText(RTFormat.HTML));
                             Singleton single = Singleton.getInstance();
                             single.selectedText = mRTMessageField.getText().toString().substring(startSelection, endSelection);
                             createSpecificCommentNote(getCaretYPosition(startSelection), selectedText);

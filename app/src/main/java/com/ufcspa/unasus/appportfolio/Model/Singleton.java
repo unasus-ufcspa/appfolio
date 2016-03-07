@@ -12,7 +12,7 @@ public class Singleton {
     public String selectedText="null";
     public Note note= new Note(0,"null",0);
     public int idActivityStudent = -1;
-    public int lastIdAttach= -1;
+    public int lastIdAttach = -1;
     public boolean isRTEditor = false;
     public boolean firsttime = false;
 

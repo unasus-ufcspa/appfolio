@@ -1,12 +1,8 @@
 package com.ufcspa.unasus.appportfolio.Activities.Fragments;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.database.Cursor;
-import android.net.Uri;
 import android.os.Bundle;
-import android.provider.MediaStore;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,9 +13,7 @@ import android.widget.EditText;
 import android.widget.ListView;
 
 import com.ufcspa.unasus.appportfolio.Adapter.CommentAdapter;
-import com.ufcspa.unasus.appportfolio.Adapter.CommentArrayAdapter;
 import com.ufcspa.unasus.appportfolio.Model.Comentario;
-import com.ufcspa.unasus.appportfolio.Model.HttpClient;
 import com.ufcspa.unasus.appportfolio.Model.OneComment;
 import com.ufcspa.unasus.appportfolio.Model.Singleton;
 import com.ufcspa.unasus.appportfolio.R;
@@ -35,14 +29,14 @@ import java.util.Date;
  * Created by Desenvolvimento on 07/12/2015.
  */
 public class FragmentComments extends Frag {
+    ArrayList<OneComment> oneComments;
+    CommentAdapter adapterComments;
+    boolean attach;
     private ListView lv;
     private Button btGenMess;
     private Button btAttachment;
-    ArrayList<OneComment> oneComments;
     //private LoremIpsum ipsum;
     private EditText edtMessage;
-    CommentAdapter adapterComments;
-    boolean attach;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -289,11 +283,11 @@ public class FragmentComments extends Frag {
 //        System.out.println("comentario inserido:" + c);
 
         try {
-            Singleton single= Singleton.getInstance();
+            Singleton single = Singleton.getInstance();
             DataBaseAdapter db = DataBaseAdapter.getInstance(getActivity());
             int lastID = db.insertComment(c);
-            if(attach){
-                db.insertAttachComment(lastID,single.lastIdAttach);
+            if (attach) {
+                db.insertAttachComment(lastID, single.lastIdAttach);
             }
             Log.d("Banco:", "comentario inserido no bd interno com sucesso");
         }
