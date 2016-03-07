@@ -5,7 +5,7 @@ import java.io.Serializable;
 /**
  * Created by icaromsc on 25/01/2016.
  */
-public class Note implements Serializable {
+public class Note implements Serializable, Comparable<Note> {
     private int btId;
     private String selectedText;
     private float btY;
@@ -38,5 +38,15 @@ public class Note implements Serializable {
 
     public void setBtY(float btY) {
         this.btY = btY;
+    }
+
+
+    @Override
+    public int compareTo(Note another) {
+        if (this.btY < another.btY)
+            return -1;
+        if (this.btY > another.btY)
+            return 1;
+        return 0;
     }
 }

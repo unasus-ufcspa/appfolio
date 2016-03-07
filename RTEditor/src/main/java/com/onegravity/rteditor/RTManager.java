@@ -515,7 +515,7 @@ public class RTManager implements RTToolbarListener, RTEditTextListener {
                         str.setSpan(imageSpan, selection.start(), selection.end() + 1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
                         int selStartAfter = editor.getSelectionStart();
                         int selEndAfter = editor.getSelectionEnd();
-                        editor.onAddMedia(image);
+                        //editor.onAddMedia(image);
 
                         Spannable newSpannable = editor.cloneSpannable();
 
@@ -555,7 +555,7 @@ public class RTManager implements RTToolbarListener, RTEditTextListener {
                         str.setSpan(videoSpan, selection.start(), selection.end() + 1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
                         int selStartAfter = editor.getSelectionStart();
                         int selEndAfter = editor.getSelectionEnd();
-                        editor.onAddMedia(video);
+                        //editor.onAddMedia(video);
 
                         Spannable newSpannable = editor.cloneSpannable();
 

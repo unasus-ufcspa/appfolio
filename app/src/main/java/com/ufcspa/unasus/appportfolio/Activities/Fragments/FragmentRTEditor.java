@@ -140,6 +140,7 @@ public class FragmentRTEditor extends Fragment {
             public void afterTextChanged(Editable s) {
                 posEnd = getCaretYPosition(mRTMessageField.getSelectionEnd());
                 changeNotePosition();
+                setSpecificCommentNoteValue();
             }
         });
 
@@ -147,10 +148,11 @@ public class FragmentRTEditor extends Fragment {
             @Override
             public void run() {
                 noteFollowText();
+                setSpecificCommentNoteValue();
             }
         });
 
-        mRTMessageField.setLineSpacing(15, 1);
+//        mRTMessageField.setLineSpacing(15, 1);
 
         LinearLayout layout = (LinearLayout) view.findViewById(R.id.info_rteditor_container);
         layout.clearFocus();
@@ -326,26 +328,98 @@ public class FragmentRTEditor extends Fragment {
                 singleton.note.setBtY(yPosition);
                 singleton.note.setSelectedText(selectedActualText);
                 singleton.note.setBtId(id);
-                Log.d("editor", "button id in singleton is now:" + singleton.note.getBtId());
-                Log.d("editor", "text select in singleton is now:" + singleton.note.getSelectedText());
+
                 showCommentsTab(true);
 
-                if(rightBarSpecificComments.getChildCount() > 1)
-                    rightBarSpecificComments.removeViewAt(1);
-                Button btn_view = (Button) inflater.inflate(R.layout.btn_specific_comment, rightBarSpecificComments, false);
-                btn_view.setText(btn.getText());
-                btn_view.setBackgroundResource(R.drawable.rounded_corner);
-                btn_view.setTextColor(Color.WHITE);
-                rightBarSpecificComments.addView(btn_view);
+                int childs = rightBarSpecificComments.getChildCount();
+                for (int i = childs - 1; i > 0; i--)
+                    rightBarSpecificComments.removeViewAt(i);
+
+                if (btn.getText().equals("..."))
+                    createMultiButtonsRightTabBar(inflater, btn);
+                else {
+                    Button btn_view = (Button) inflater.inflate(R.layout.btn_specific_comment, rightBarSpecificComments, false);
+                    btn_view.setText(btn.getText());
+                    btn_view.setBackgroundResource(R.drawable.rounded_corner);
+                    btn_view.setTextColor(Color.WHITE);
+                    rightBarSpecificComments.addView(btn_view);
+                }
             }
         });
 
         note.setY(yPosition);
         note.setX(5);
-        note.setText(value);
         note.setId(id);
+        note.setText(value);
 
         return note;
+    }
+
+    private void createMultiButtonsRightTabBar(LayoutInflater inflater, Button current) {
+        int i = 0;
+        for (final Note n : specificCommentsNotes.values()) {
+            if (n.getBtY() == current.getY()) {
+                Button btn_view = (Button) inflater.inflate(R.layout.btn_specific_comment, rightBarSpecificComments, false);
+
+                btn_view.setText(String.valueOf(n.getBtId()));
+                btn_view.setBackgroundResource(R.drawable.btn_border);
+                btn_view.setTextColor(greenLight);
+                btn_view.setY(i);
+                btn_view.setTag(n.getBtId());
+
+                btn_view.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        changeColor((int) v.getTag());
+
+                        Button btn = (Button) v;
+                        btn.setBackgroundResource(R.drawable.rounded_corner);
+                        btn.setTextColor(Color.WHITE);
+
+                        ArrayList<Note> arrayAux = new ArrayList<>(specificCommentsNotes.values());
+
+                        for (int i = 0; i < arrayAux.size(); i++) {
+                            Button aux = (Button) getView().findViewWithTag(arrayAux.get(i).getBtId());
+                            if (aux != null && aux.getTag() != btn.getTag()) {
+                                aux.setBackgroundResource(R.drawable.btn_border);
+                                aux.setTextColor(greenLight);
+                            }
+                        }
+                        singleton.note.setBtY(n.getBtY());
+                        singleton.note.setSelectedText(selectedActualText);
+                        singleton.note.setBtId((int) btn.getTag());
+
+                        showCommentsTab(true);
+                    }
+                });
+
+                rightBarSpecificComments.addView(btn_view);
+
+                i += 50;
+            }
+        }
+    }
+
+    private void setSpecificCommentNoteValue() {
+        ArrayList<Note> aux = new ArrayList<>();
+        aux.addAll(specificCommentsNotes.values());
+
+        for (int i = 0; i < aux.size(); i++) {
+            Note first = aux.get(i);
+            boolean enter = false;
+            for (int j = aux.size() - 1; j > i; j--) {
+                Note second = aux.get(j);
+                if (first.compareTo(second) == 0) {
+                    ((Button) getView().findViewById(first.getBtId())).setText("...");
+                    ((Button) getView().findViewById(second.getBtId())).setText("...");
+
+                    aux.remove(second);
+                    enter = true;
+                }
+            }
+            if (!enter)
+                ((Button) getView().findViewById(first.getBtId())).setText(String.valueOf(first.getBtId()));
+        }
     }
 
     private String getSelectedText(){
@@ -527,14 +601,15 @@ public class FragmentRTEditor extends Fragment {
             idButton = currentSpecificComment;
 
             selectedActualText = selectedText;
-            specificCommentsNotes.put(idButton, new Note(idButton, selectedText, yButton));
 
+            specificCommentsNotes.put(idButton, new Note(idButton, selectedText, yButton));
             scrollview.addView(createButton(idButton, String.valueOf(currentSpecificComment), yButton));
 
             mRTManager.onEffectSelected(Effects.BGCOLOR, greenLight, idButton);
             mRTMessageField.setSelection(endSelection);
             mRTMessageField.setSelected(false);
 
+            setSpecificCommentNoteValue();
 //            DataBaseAdapter db = DataBaseAdapter.getInstance(getActivity());
 //            Comentario c= new Comentario();
 //            Singleton s = Singleton.getInstance();
