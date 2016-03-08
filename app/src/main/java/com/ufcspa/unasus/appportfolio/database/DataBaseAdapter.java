@@ -315,7 +315,7 @@ public class DataBaseAdapter {
                 attch.setType(c.getString(3));
                 attch.setNameFile(c.getString(4));
             } else {
-                Log.e(tag, "conseguiu salvar id anexo no comentario do bd");
+                Log.e(tag, "não encontrou a id relacionada a este anexo no banco");
             }
         } catch (Exception e) {
             Log.wtf(tag, "erro ao tentar buscar anexo no banco:" + e.getMessage());

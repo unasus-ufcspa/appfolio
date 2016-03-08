@@ -1,8 +1,12 @@
 package com.ufcspa.unasus.appportfolio.Activities.Fragments;
 
+import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.InputType;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,6 +17,7 @@ import android.widget.EditText;
 import android.widget.ListView;
 
 import com.ufcspa.unasus.appportfolio.Adapter.CommentAdapter;
+import com.ufcspa.unasus.appportfolio.Model.Attachment;
 import com.ufcspa.unasus.appportfolio.Model.Comentario;
 import com.ufcspa.unasus.appportfolio.Model.OneComment;
 import com.ufcspa.unasus.appportfolio.Model.Singleton;
@@ -37,6 +42,7 @@ public class FragmentComments extends Frag {
     private Button btAttachment;
     //private LoremIpsum ipsum;
     private EditText edtMessage;
+    int lastID;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -117,7 +123,7 @@ public class FragmentComments extends Frag {
                     Log.d("Comments attach", "tentando inserir view anexo");
                     loadCom();
                     addOneComment(true);
-                    attach=false;
+                    attach = false;
                     edtMessage.setText("");
                 } else {
 
@@ -217,7 +223,10 @@ public class FragmentComments extends Frag {
 //            galleryAddPic();
 ////            mCurrentPhotoPath = getThumbnailPathForLocalFile(getActivity(), data.getData());
 //        }
-        addAtach();
+        if(resultCode == Activity.RESULT_OK)
+            addAtach();
+        else
+            Log.d("comment attachment ", "attach cancelado");
     }
 
         public void insertAtach(){
@@ -255,15 +264,23 @@ public class FragmentComments extends Frag {
         DataBaseAdapter db = DataBaseAdapter.getInstance(getActivity());
         Singleton singleton = Singleton.getInstance();
         ArrayList<Comentario> lista = (ArrayList<Comentario>) db.listComments(singleton.activity.getIdAtivity(),"C",0);//lista comentario gerais filtrando por C
+        oneComments= new ArrayList<OneComment>(20);
         if (lista.size() != 0) {
             for (int i = 0; i < lista.size(); i++) {
-                oneComments.add(new OneComment(lista.get(i).getIdAuthor() != singleton.user.getIdUser(),
-                        lista.get(i).getTxtComment(),convertDateToTime(lista.get(i).getDateComment()),convertDateToDate(lista.get(i).getDateComment())));
+                OneComment one = new OneComment(lista.get(i).getIdAuthor() != singleton.user.getIdUser(),
+                        lista.get(i).getTxtComment(),convertDateToTime(lista.get(i).getDateComment()),convertDateToDate(lista.get(i).getDateComment()));
+                if(lista.get(i).getIdAttach()!=0) {
+                    one.atach = true;
+                    one.idAttach=lista.get(i).getIdAttach();
+                    Log.d("comments", "id attach:" + one.idAttach);
+                }
+                oneComments.add(one);
             }
-            Log.d("Banco", "Lista populada:" + lista);
+            Log.d("Banco", "Lista populada:" + lista.size());
         } else {
             Log.d("Banco", "Lista retornou vazia!");
         }
+        adapterComments.refresh(oneComments);
     }
 
 
@@ -273,7 +290,24 @@ public class FragmentComments extends Frag {
         lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Log.d("comments","clicou no item na position:"+position+" conteudo:"+oneComments.get(position));
+                Log.d("comments", "clicou no item na position:" + position + " conteudo:" + oneComments.get(position));
+                if (oneComments.get(position).idAttach != 0) {
+                    Log.d("comments", "selecionou um anexo");
+                    Attachment att = DataBaseAdapter.getInstance(getActivity()).getAttachmentByID(oneComments.get(position).idAttach);
+                    if (att.getType() != null) {
+                        if (att.getType().equals(Attachment.TYPE_TEXT)) {
+                            Log.d("comments", "anexo do tipo texto");
+                            showPDFDialog(att.getLocalPath());
+                        } else if (att.getType().equals(Attachment.TYPE_IMAGE)) {
+                            Log.d("comments", "anexo do tipo imagem");
+                            loadPhoto(att.getLocalPath());
+                        } else if (att.getType().equals(Attachment.TYPE_VIDEO)) {
+                            Log.d("comments", "anexo do tipo video");
+                            loadVideo(att.getLocalPath());
+                        }
+                    }
+                }
+
             }
         });
     }
@@ -285,9 +319,9 @@ public class FragmentComments extends Frag {
         try {
             Singleton single = Singleton.getInstance();
             DataBaseAdapter db = DataBaseAdapter.getInstance(getActivity());
-            int lastID = db.insertComment(c);
+            lastID = db.insertComment(c);
             if (attach) {
-                db.insertAttachComment(lastID, single.lastIdAttach);
+                //db.insertAttachComment(lastID, single.lastIdAttach);
             }
             Log.d("Banco:", "comentario inserido no bd interno com sucesso");
         }
@@ -304,6 +338,37 @@ public class FragmentComments extends Frag {
 //            Log.e("JSON act",e.getMessage());
 //        }
 
+    }
+
+    public void insertFileIntoDataBase(final String path, final String type) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+        builder.setTitle("Escolha um nome:");
+
+        // Set up the input
+        final EditText input = new EditText(getContext());
+        // Specify the type of input expected; this, for example, sets the input as a password, and will mask the text
+        input.setInputType(InputType.TYPE_CLASS_TEXT);
+        builder.setView(input);
+
+        // Set up the buttons
+        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                //source.saveAttachmentActivityStudent(path, type, singleton.idActivityStudent); //input.getText().toString()
+                Singleton single = Singleton.getInstance();
+
+                String name = input.getText().toString();
+                if (name.isEmpty()) {
+                    name = "Anexo";
+                }
+                single.lastIdAttach = source.insertAttachment(new Attachment(0, path, "", type, name, 0));
+                if(lastID!=0 && single.lastIdAttach!=-1 && single.lastIdAttach!=0) {
+                    DataBaseAdapter.getInstance(getActivity()).insertAttachComment(lastID, single.lastIdAttach);
+                }
+            }
+        });
+
+        builder.show();
     }
 
 

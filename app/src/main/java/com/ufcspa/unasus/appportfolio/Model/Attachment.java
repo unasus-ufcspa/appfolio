@@ -10,6 +10,10 @@ public class Attachment {
     private String ds_type;
     private String nameFile;
     private int id_attachment_srv;
+    public static final String TYPE_VIDEO="V";
+    public static final String TYPE_IMAGE="I";
+    public static final String TYPE_TEXT="T";
+
 
     public Attachment(int id_attachment, String ds_local_path, String ds_server_path, String ds_type, String nameFile, int id_attachment_srv) {
         this.id_attachment = id_attachment;
