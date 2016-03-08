@@ -72,6 +72,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     name = "Anexo";
                 }
                 singleton.lastIdAttach = dataBaseAdapter.insertAttachment(new Attachment(0, path, "", type, name, 0));
+                dataBaseAdapter.insertAttachActivity(singleton.lastIdAttach, singleton.idActivityStudent);
             }
         });
 

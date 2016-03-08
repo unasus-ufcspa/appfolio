@@ -3,38 +3,38 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:orientation="vertical"
     android:background="@color/gray_4"
+    android:focusable="true"
     android:focusableInTouchMode="true"
-    android:focusable="true">
+    android:orientation="vertical">
 
     <TextView
+        android:id="@+id/txSelectedNote"
         android:layout_width="match_parent"
         android:layout_height="70px"
+        android:layout_marginBottom="10dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="10dp"
+        android:background="@color/gray_3"
+        android:elegantTextHeight="@bool/md_is_tablet"
+        android:minHeight="70px"
+        android:scrollbars="vertical"
         android:text="Referência \n "
         android:textAlignment="center"
         android:textColor="@color/md_black_1000"
-        android:background="@color/gray_3"
         android:textSize="16dp"
-        android:layout_marginRight="10dp"
-        android:layout_marginLeft="10dp"
-        android:layout_marginTop="10dp"
-        android:elegantTextHeight="@bool/md_is_tablet"
-        android:id="@+id/txSelectedNote"
-        android:minHeight="70px"
         android:transcriptMode="alwaysScroll"
-        android:layout_marginBottom="10dp"
-        android:scrollbars = "vertical"
         />
 
     <ImageButton
         android:id="@+id/btn_expand_ref"
-        android:layout_marginTop="10dp"
         android:layout_width="50dp"
-        android:layout_height="wrap_content"
+        android:layout_height="50dp"
         android:layout_alignBottom="@+id/txSelectedNote"
         android:layout_alignEnd="@+id/txSelectedNote"
         android:layout_alignRight="@+id/txSelectedNote"
+        android:layout_marginTop="10dp"
         android:adjustViewBounds="true"
         android:background="@color/gray_3"
         android:paddingLeft="1dp"
@@ -47,10 +47,10 @@
         android:layout_height="wrap_content"
         android:layout_above="@+id/form"
         android:layout_below="@id/txSelectedNote"
-        android:transcriptMode="alwaysScroll"
-        android:stackFromBottom="true"
         android:divider="@null"
-        android:dividerHeight="0dp">
+        android:dividerHeight="0dp"
+        android:stackFromBottom="true"
+        android:transcriptMode="alwaysScroll">
     </ListView>
 
     <RelativeLayout
@@ -59,12 +59,12 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
+        android:layout_marginBottom="10dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="10dp"
         android:background="@color/gray_3"
         android:orientation="horizontal"
-        android:layout_marginBottom="10dp"
-        android:layout_marginRight="10dp"
-        android:layout_marginLeft="10dp"
-        android:layout_marginTop="10dp"
         >
 
 
@@ -75,17 +75,17 @@
             android:layout_height="30dp"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
-            android:background="@drawable/bt_send_message"
-            android:layout_marginRight="5dp" />
+            android:layout_marginRight="5dp"
+            android:background="@drawable/bt_send_message" />
 
         <Button
             android:id="@+id/bt_add_attachment"
             style="?android:attr/buttonStyleSmall"
             android:layout_width="30dp"
             android:layout_height="30dp"
-            android:layout_marginRight="5dp"
-            android:layout_marginLeft="5dp"
             android:layout_centerVertical="true"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
             android:layout_toLeftOf="@+id/gen_messag_bt"
             android:background="@drawable/chat_attachment_icon" />
 
@@ -93,19 +93,19 @@
             android:id="@+id/edtMessage"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_alignParentBottom="false"
             android:layout_alignParentLeft="false"
             android:layout_alignParentStart="true"
-            android:layout_toLeftOf="@+id/bt_add_attachment"
-            android:ems="20"
-            android:layout_alignParentBottom="false"
             android:layout_alignParentTop="false"
             android:layout_alignWithParentIfMissing="false"
-            android:inputType="textMultiLine|textLongMessage"
-            android:layout_marginRight="5dp"
             android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:layout_toLeftOf="@+id/bt_add_attachment"
+            android:ems="20"
+            android:inputType="textMultiLine|textLongMessage"
             android:isScrollContainer="true"
-            android:minHeight="50dp"
             android:maxHeight="150dp"
+            android:minHeight="50dp"
             />
     </RelativeLayout>
 

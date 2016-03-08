@@ -674,10 +674,6 @@ public class DataBaseAdapter {
         return lista;
     }
 
-
-
-
-
     private Activity cursorToActivity(Cursor cursor)
     {
         Activity activity = new Activity(cursor.getInt(0), cursor.getInt(1), cursor.getInt(2), cursor.getString(3), cursor.getString(4));
@@ -787,9 +783,15 @@ public class DataBaseAdapter {
     }
 
 
+    public void insertAttachActivity(int lastIdAttach, int idActivityStudent) {
+        ContentValues cv = new ContentValues();
+        cv.put("id_attachment", lastIdAttach);
+        cv.put("id_activity_student", idActivityStudent);
 
-
-
-
-
+        try {
+            db.insert("tb_attach_activity", null, cv);
+        } catch (Exception e) {
+            Log.e(tag, "erro ao salvar na tabela tb_attach_activity:" + e.getMessage());
+        }
+    }
 }

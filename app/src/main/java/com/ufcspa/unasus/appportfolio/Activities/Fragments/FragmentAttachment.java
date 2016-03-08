@@ -371,6 +371,7 @@ public class FragmentAttachment extends Frag {
             saveSmallImage();
             url = mCurrentPhotoPath;
         }
+        source.insertAttachActivity(attachments.get(position).getIdAttachment(), singleton.idActivityStudent);
         ((MainActivity) getActivity()).callRTEditorToAttachSomething(url, cursorPosition, type);
     }
 
