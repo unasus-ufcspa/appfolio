@@ -217,11 +217,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         switch (id)
         {
             case 0:
-                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new FragmentRTEditor()).commit();//FragmentSelectPortfolio
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new FragmentRTEditor()).addToBackStack("Frag").commit();//FragmentSelectPortfolio
                 break;
             case 1:
                 if(singleton.portfolioClass != null)
-                    getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new FragmentStudentActivities()).commit();
+                    getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new FragmentStudentActivities()).addToBackStack("Frag").commit();
                 break;
             case 2:
                 break;
@@ -229,10 +229,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 break;
             case 4:
                 singleton.isRTEditor = false;
-                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new FragmentAttachment()).commit();
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new FragmentAttachment()).addToBackStack("Frag").commit();
                 break;
             case 5:
-                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new FragmentRTEditor()).commit();
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new FragmentRTEditor()).addToBackStack("Frag").commit();
                 break;
             default:
                 break;
@@ -288,7 +288,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         fragment.setArguments(args);
 
         if (!isFinishing()) {
-            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment).commit();
+            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment).addToBackStack("FragmentRTEditor").commit();
         }
     }
 
@@ -303,5 +303,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         overridePendingTransition(0, 0);
         finish();
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (!singleton.isFullscreen)
+            if (getSupportFragmentManager().getBackStackEntryCount() > 1)
+                super.onBackPressed();
     }
 }
