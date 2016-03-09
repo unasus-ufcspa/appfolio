@@ -123,7 +123,7 @@ public class FragmentAttachment extends Frag {
     }
 
     public void plusClicked() {
-        addAttachmentToComments();
+        addAttachment();
     }
 
     @Override
