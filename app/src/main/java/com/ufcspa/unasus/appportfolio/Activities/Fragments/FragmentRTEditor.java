@@ -85,8 +85,10 @@ public class FragmentRTEditor extends Fragment {
     public void saveText() {
         Log.d("editor DB", "salvando texto..");
         source = DataBaseAdapter.getInstance(getActivity());
-        acStudent.setTxtActivity(mRTMessageField.getText(RTFormat.HTML));
-        source.updateActivityStudent(acStudent);
+        if (mRTMessageField != null) {
+            acStudent.setTxtActivity(mRTMessageField.getText(RTFormat.HTML));
+            source.updateActivityStudent(acStudent);
+        }
     }
 
     @Override
@@ -193,8 +195,8 @@ public class FragmentRTEditor extends Fragment {
 
     @Override
     public void onResume() {
-        super.onResume();
         saveText();
+        super.onResume();
     }
 
     @Override
@@ -225,16 +227,17 @@ public class FragmentRTEditor extends Fragment {
 
     @Override
     public void onDestroyView() {
+        saveText();
         super.onDestroyView();
     }
 
     @Override
     public void onDestroy() {
         saveText();
-        super.onDestroy();
         if (mRTManager != null) {
             mRTManager.onDestroy(true);
         }
+        super.onDestroy();
     }
 
     @Override
