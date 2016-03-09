@@ -295,9 +295,11 @@ public class FragmentComments extends Frag {
                     Log.d("comments", "selecionou um anexo");
                     Attachment att = DataBaseAdapter.getInstance(getActivity()).getAttachmentByID(oneComments.get(position).idAttach);
                     if (att.getType() != null) {
+                        Log.d("comments", "localpath attach:"+att.getLocalPath());
                         if (att.getType().equals(Attachment.TYPE_TEXT)) {
                             Log.d("comments", "anexo do tipo texto");
-                            showPDFDialog(att.getLocalPath());
+                            //showPDFDialog(att.getLocalPath());
+                            openPDF(att.getLocalPath());
                         } else if (att.getType().equals(Attachment.TYPE_IMAGE)) {
                             Log.d("comments", "anexo do tipo imagem");
                             loadPhoto(att.getLocalPath());
