@@ -175,17 +175,22 @@ public class FragmentSpecificComments extends Frag {
                 Log.d("comments noteNow","lista:"+lista.get(0).toJSON());
             }
 
-            if (noteNow.getSelectedText().toString()!=null && !noteNow.getSelectedText().toString().equalsIgnoreCase("null")){
-                Log.d("editor","receiving reference...:"+noteNow.getSelectedText());
-                reference=noteNow.getSelectedText();
-                if(reference.contains("Referência:")){
-                    Log.d("editor","specific comments contais referencia 'Referência:' in reference");
-                    txNote.setText(reference);
-                }else {
-                    txNote.setText("Referência: \n" + "\"" + reference + "\"");
-                }
 
+            if(noteNow!=null){
+                if (noteNow.getSelectedText()!=null && !noteNow.getSelectedText().toString().equalsIgnoreCase("null")){
+                    Log.d("editor","receiving reference...:"+noteNow.getSelectedText());
+                    reference=noteNow.getSelectedText();
+                    if(reference.contains("Referência:")){
+                        Log.d("editor","specific comments contais referencia 'Referência:' in reference");
+                        txNote.setText(reference);
+                    }else {
+                        txNote.setText("Referência: \n" + "\"" + reference + "\"");
+                    }
+
+                }
             }
+
+
         }
     }
 

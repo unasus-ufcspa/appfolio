@@ -11,6 +11,7 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.media.MediaPlayer;
 import android.media.ThumbnailUtils;
 import android.net.Uri;
 import android.os.Bundle;
@@ -21,14 +22,19 @@ import android.text.InputType;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.webkit.MimeTypeMap;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.Toast;
+import android.widget.VideoView;
 
 import com.onegravity.rteditor.media.crop.CropImageActivity;
 import com.onegravity.rteditor.utils.Constants;
+import com.squareup.picasso.Callback;
+import com.squareup.picasso.Picasso;
 import com.ufcspa.unasus.appportfolio.Model.Attachment;
 import com.ufcspa.unasus.appportfolio.Model.Singleton;
 import com.ufcspa.unasus.appportfolio.R;
@@ -492,6 +498,8 @@ public class Frag extends Fragment {
         builder.show();
     }
 
+
+
     /**
      * ALTERAR PARA O CAMINHO NECESSÁRIO
      */
@@ -537,4 +545,49 @@ public class Frag extends Fragment {
     /**
      * ALTERAR
      */
+
+
+    public void loadPhoto(final String url) {
+        if (url != null) {
+
+                Intent intent = new Intent();
+                intent.setAction(Intent.ACTION_VIEW);
+                intent.setDataAndType(Uri.fromFile(new File(url)), "image/*");
+                startActivity(intent);
+        }
+    }
+
+    public void loadVideo(final String url) {
+        if(url != null) {
+
+                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.fromFile(new File(url)));
+                intent.setDataAndType(Uri.fromFile(new File(url)), "video/*");
+                startActivity(intent);
+        }
+
+    }
+
+    public void showPDFDialog(String url)
+    {
+        android.support.v7.app.AlertDialog.Builder pdfDialog = new android.support.v7.app.AlertDialog.Builder(getActivity());
+
+        pdfDialog.setPositiveButton("Fechar", new DialogInterface.OnClickListener() {
+
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+
+        });
+        pdfDialog.setNegativeButton("Deletar", new DialogInterface.OnClickListener() {
+
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+//                deleteMedia(position);
+            }
+
+        });
+
+        pdfDialog.create();
+        pdfDialog.show();
+    }
 }

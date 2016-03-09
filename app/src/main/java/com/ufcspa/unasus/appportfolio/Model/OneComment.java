@@ -7,6 +7,7 @@ public class OneComment {
     public String date;
     public boolean atach;
     public String  path;
+    public int idAttach;
 
 
     public OneComment(boolean orientation, String comment) {
