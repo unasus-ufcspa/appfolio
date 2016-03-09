@@ -34,6 +34,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private View bigDrawer;
     private View miniDrawer;
     private Singleton singleton;
+    private boolean shouldCreateDrawer;
 
     private BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
         @Override
@@ -86,42 +87,55 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         setContentView(R.layout.activity_main);
         getSupportActionBar().hide();
 
-        singleton = Singleton.getInstance();
+        if (savedInstanceState == null) {
+            Bundle extras = getIntent().getExtras();
+            if (extras == null) {
+                shouldCreateDrawer = true;
+            } else {
+                shouldCreateDrawer = extras.getBoolean("shouldCreateDrawer", true);
+            }
+        } else {
+            shouldCreateDrawer = savedInstanceState.getBoolean("shouldCreateDrawer", true);
+        }
 
+        singleton = Singleton.getInstance();
         //////////ID activity do MARIO///////////
         singleton.idActivityStudent=1;
         /////////--------------------///////////
 
-
-        LayoutInflater inflater = (LayoutInflater) getApplicationContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-
-        bigDrawer = inflater.inflate(R.layout.big_drawer, null);
-        initBigDrawer();
-        miniDrawer = inflater.inflate(R.layout.mini_drawer, null);
-        initMiniDrawer();
-
         fragmentContainer = findViewById(R.id.fragment_container);
+        if (shouldCreateDrawer) {
+            LayoutInflater inflater = (LayoutInflater) getApplicationContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
-        final float scale = getResources().getDisplayMetrics().density;
-        int pixelsMini = (int) (60 * scale + 0.5f);
-        int pixelsBig = (int) (230 * scale + 0.5f);
+            bigDrawer = inflater.inflate(R.layout.big_drawer, null);
+            initBigDrawer();
+            miniDrawer = inflater.inflate(R.layout.mini_drawer, null);
+            initMiniDrawer();
 
-        crossFader = new Crossfader()
-                .withContent(fragmentContainer)
-                .withFirst(bigDrawer, pixelsBig)
-                .withSecond(miniDrawer, pixelsMini)
-                .withGmailStyleSwiping()
-                .withSavedInstance(savedInstanceState)
-                .build();
+            final float scale = getResources().getDisplayMetrics().density;
+            int pixelsMini = (int) (60 * scale + 0.5f);
+            int pixelsBig = (int) (230 * scale + 0.5f);
 
+
+            crossFader = new Crossfader()
+                    .withContent(fragmentContainer)
+                    .withFirst(bigDrawer, pixelsBig)
+                    .withSecond(miniDrawer, pixelsMini)
+                    .withGmailStyleSwiping()
+                    .withSavedInstance(savedInstanceState)
+                    .build();
+        }
         LocalBroadcastManager.getInstance(this).registerReceiver(broadcastReceiver, new IntentFilter("call.fragments.action"));
 
-        if(savedInstanceState == null)
+        if (!shouldCreateDrawer)
+            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new FragmentRTEditor()).commit();
+        else if (savedInstanceState == null)
             // QUAL FRAGMENT IRA INICIAR APOS LOGIN?
             // 0 para select portfolio
             // 5 para rtEditor
-            changeFragment(5);
+            changeFragment(0);
     }
+
 
     private void initMiniDrawer() {
         ImageButton portfolios = (ImageButton) miniDrawer.findViewById(R.id.btn_members);
@@ -177,8 +191,18 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
-        outState = crossFader.saveInstanceState(outState);
+        if (shouldCreateDrawer)
+            outState = crossFader.saveInstanceState(outState);
+        outState.putBoolean("shouldCreateDrawer", shouldCreateDrawer);
         super.onSaveInstanceState(outState);
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+
+        if (savedInstanceState != null)
+            shouldCreateDrawer = savedInstanceState.getBoolean("shouldCreateDrawer");
     }
 
     @Override
@@ -245,21 +269,39 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         FragmentRTEditor fragment = new FragmentRTEditor();
         Bundle args = new Bundle();
         args.putString("URL",url);
-        args.putString("Type",type);
-        args.putInt("Position",position);
+        args.putString("Type", type);
+        args.putInt("Position", position);
         fragment.setArguments(args);
-        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment).commit();
+
+        if (!isFinishing()) {
+            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment).commit();
+        }
     }
 
     public void callAttachments(int position)
     {
         singleton.isRTEditor = true;
 
-        FragmentAttachment fragment = new FragmentAttachment();
+        final FragmentAttachment fragment = new FragmentAttachment();
         Bundle args = new Bundle();
-        args.putInt("Position",position);
+        args.putInt("Position", position);
         fragment.setArguments(args);
 
-        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment).commit();
+        if (!isFinishing()) {
+            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment).commit();
+        }
+    }
+
+    public void dontCreateCrossfader() {
+        singleton.firsttime = true;
+        if (singleton.isFullscreen) {
+            Intent main = new Intent(this, MainActivity.class);
+            main.putExtra("shouldCreateDrawer", false);
+            startActivity(main);
+        } else
+            startActivity(new Intent(this, MainActivity.class));
+
+        overridePendingTransition(0, 0);
+        finish();
     }
 }

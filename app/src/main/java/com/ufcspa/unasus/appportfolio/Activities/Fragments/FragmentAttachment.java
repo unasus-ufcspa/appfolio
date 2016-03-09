@@ -254,6 +254,7 @@ public class FragmentAttachment extends Frag {
                     public void onError() {
 
                     }
+
                 });
             } else {
                 Intent intent = new Intent();

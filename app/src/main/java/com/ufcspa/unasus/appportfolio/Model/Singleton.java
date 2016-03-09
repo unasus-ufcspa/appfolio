@@ -15,6 +15,7 @@ public class Singleton {
     public int lastIdAttach = -1;
     public boolean isRTEditor = false;
     public boolean firsttime = false;
+    public boolean isFullscreen = false;
 
     private Singleton() {
     }

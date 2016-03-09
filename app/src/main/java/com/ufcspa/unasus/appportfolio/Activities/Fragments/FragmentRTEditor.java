@@ -38,6 +38,7 @@ import com.onegravity.rteditor.api.media.RTVideo;
 import com.onegravity.rteditor.converter.ConverterSpannedToHtml;
 import com.onegravity.rteditor.effects.Effects;
 import com.onegravity.rteditor.spans.BackgroundColorSpan;
+import com.ufcspa.unasus.appportfolio.Activities.MainActivity;
 import com.ufcspa.unasus.appportfolio.Model.ActivityStudent;
 import com.ufcspa.unasus.appportfolio.Model.Note;
 import com.ufcspa.unasus.appportfolio.Model.Singleton;
@@ -158,13 +159,19 @@ public class FragmentRTEditor extends Fragment {
         layout.clearFocus();
 
         fullScreen = (ImageButton) view.findViewById(R.id.fullscreen);
+        if (singleton.isFullscreen)
+            fullScreen.setImageResource(R.drawable.fullscreen_back);
         fullScreen.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mRTMessageField.setSelection(0);
-                Log.d("rteditor", mRTMessageField.getText(RTFormat.HTML));
-                slider.setVisibility(View.GONE);
-//                ((MainActivity) getActivity()).hideDrawer();
+                saveText();
+
+                if (singleton.isFullscreen)
+                    singleton.isFullscreen = false;
+                else
+                    singleton.isFullscreen = true;
+
+                ((MainActivity) getActivity()).dontCreateCrossfader();
             }
         });
 
@@ -192,7 +199,7 @@ public class FragmentRTEditor extends Fragment {
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-
+        saveText();
         mRTManager.onSaveInstanceState(outState);
         outState.putInt("currentSpecificComment", currentSpecificComment);
         outState.putSerializable("specificCommentsNotes", specificCommentsNotes);
@@ -201,6 +208,11 @@ public class FragmentRTEditor extends Fragment {
     @Override
     public void onViewStateRestored(Bundle savedInstanceState) {
         super.onViewStateRestored(savedInstanceState);
+
+        if (singleton.isFullscreen) {
+            singleton.firsttime = true;
+            loadLastText();
+        }
 
         if (savedInstanceState != null) {
             if (savedInstanceState.getSerializable("specificCommentsNotes") != null) {
@@ -265,8 +277,8 @@ public class FragmentRTEditor extends Fragment {
         });
 
         SlidingPaneLayout layout = (SlidingPaneLayout) view.findViewById(R.id.rteditor_fragment);
-        layout.setSliderFadeColor(Color.TRANSPARENT);
-        layout.setBackgroundColor(Color.TRANSPARENT);
+        layout.setSliderFadeColor(getResources().getColor(android.R.color.transparent));
+        layout.setBackgroundColor(getResources().getColor(android.R.color.transparent));
 
         layout.openPane();
     }
