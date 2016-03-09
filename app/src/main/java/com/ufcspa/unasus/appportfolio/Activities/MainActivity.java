@@ -307,8 +307,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     public void onBackPressed() {
-        if (!singleton.isFullscreen)
-            if (getSupportFragmentManager().getBackStackEntryCount() > 1)
+        if (getSupportFragmentManager().getBackStackEntryCount() > 1)
+            super.onBackPressed();
+
+        if (singleton.isFullscreen)
+            if (getSupportFragmentManager().getBackStackEntryCount() > 0)
                 super.onBackPressed();
     }
 }

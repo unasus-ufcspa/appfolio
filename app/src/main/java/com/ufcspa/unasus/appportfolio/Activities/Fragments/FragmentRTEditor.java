@@ -316,56 +316,60 @@ public class FragmentRTEditor extends Fragment {
     }
 
     private Button createButton(final int id, final String value, final float yPosition) {
-        final LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        Button note = (Button) inflater.inflate(R.layout.btn_specific_comment, scrollview, false);
+        Context context = getContext();
+        if (context != null) {
+            final LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            Button note = (Button) inflater.inflate(R.layout.btn_specific_comment, scrollview, false);
 
-        note.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                changeColor(id);
+            note.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    changeColor(id);
 
-                Button btn = (Button) v;
-                btn.setBackgroundResource(R.drawable.rounded_corner);
-                btn.setTextColor(Color.WHITE);
+                    Button btn = (Button) v;
+                    btn.setBackgroundResource(R.drawable.rounded_corner);
+                    btn.setTextColor(Color.WHITE);
 
-                ArrayList<Note> arrayAux = new ArrayList<>(specificCommentsNotes.values());
+                    ArrayList<Note> arrayAux = new ArrayList<>(specificCommentsNotes.values());
 
-                for (int i = 0; i < arrayAux.size(); i++) {
-                    Button aux = (Button) getView().findViewById(arrayAux.get(i).getBtId());
-                    if (aux.getId() != btn.getId()) {
-                        aux.setBackgroundResource(R.drawable.btn_border);
-                        aux.setTextColor(greenLight);
+                    for (int i = 0; i < arrayAux.size(); i++) {
+                        Button aux = (Button) getView().findViewById(arrayAux.get(i).getBtId());
+                        if (aux.getId() != btn.getId()) {
+                            aux.setBackgroundResource(R.drawable.btn_border);
+                            aux.setTextColor(greenLight);
+                        }
+                    }
+
+                    singleton.note.setBtY(yPosition);
+                    singleton.note.setSelectedText(selectedActualText);
+                    singleton.note.setBtId(id);
+
+                    showCommentsTab(true);
+
+                    int childs = rightBarSpecificComments.getChildCount();
+                    for (int i = childs - 1; i > 0; i--)
+                        rightBarSpecificComments.removeViewAt(i);
+
+                    if (btn.getText().equals("..."))
+                        createMultiButtonsRightTabBar(inflater, btn);
+                    else {
+                        Button btn_view = (Button) inflater.inflate(R.layout.btn_specific_comment, rightBarSpecificComments, false);
+                        btn_view.setText(btn.getText());
+                        btn_view.setBackgroundResource(R.drawable.rounded_corner);
+                        btn_view.setTextColor(Color.WHITE);
+                        rightBarSpecificComments.addView(btn_view);
                     }
                 }
+            });
 
-                singleton.note.setBtY(yPosition);
-                singleton.note.setSelectedText(selectedActualText);
-                singleton.note.setBtId(id);
+            note.setY(yPosition);
+            note.setX(5);
+            note.setId(id);
+            note.setText(value);
 
-                showCommentsTab(true);
-
-                int childs = rightBarSpecificComments.getChildCount();
-                for (int i = childs - 1; i > 0; i--)
-                    rightBarSpecificComments.removeViewAt(i);
-
-                if (btn.getText().equals("..."))
-                    createMultiButtonsRightTabBar(inflater, btn);
-                else {
-                    Button btn_view = (Button) inflater.inflate(R.layout.btn_specific_comment, rightBarSpecificComments, false);
-                    btn_view.setText(btn.getText());
-                    btn_view.setBackgroundResource(R.drawable.rounded_corner);
-                    btn_view.setTextColor(Color.WHITE);
-                    rightBarSpecificComments.addView(btn_view);
-                }
-            }
-        });
-
-        note.setY(yPosition);
-        note.setX(5);
-        note.setId(id);
-        note.setText(value);
-
-        return note;
+            return note;
+        }
+        return null;
     }
 
     private void createMultiButtonsRightTabBar(LayoutInflater inflater, Button current) {
@@ -414,24 +418,36 @@ public class FragmentRTEditor extends Fragment {
     }
 
     private void setSpecificCommentNoteValue() {
-        ArrayList<Note> aux = new ArrayList<>();
-        aux.addAll(specificCommentsNotes.values());
+        View v = getView();
 
-        for (int i = 0; i < aux.size(); i++) {
-            Note first = aux.get(i);
-            boolean enter = false;
-            for (int j = aux.size() - 1; j > i; j--) {
-                Note second = aux.get(j);
-                if (first.compareTo(second) == 0) {
-                    ((Button) getView().findViewById(first.getBtId())).setText("...");
-                    ((Button) getView().findViewById(second.getBtId())).setText("...");
+        if (v != null) {
+            ArrayList<Note> aux = new ArrayList<>();
+            aux.addAll(specificCommentsNotes.values());
 
-                    aux.remove(second);
-                    enter = true;
+            for (int i = 0; i < aux.size(); i++) {
+                Note first = aux.get(i);
+                boolean enter = false;
+                for (int j = aux.size() - 1; j > i; j--) {
+                    Note second = aux.get(j);
+                    if (first.compareTo(second) == 0) {
+                        Button btnFirst = (Button) v.findViewById(first.getBtId());
+                        Button btnSecond = (Button) v.findViewById(second.getBtId());
+
+                        if (btnFirst != null)
+                            btnFirst.setText("...");
+                        if (btnSecond != null)
+                            btnSecond.setText("...");
+
+                        aux.remove(second);
+                        enter = true;
+                    }
+                }
+                if (!enter) {
+                    Button b = (Button) v.findViewById(first.getBtId());
+                    if (b != null)
+                        b.setText(String.valueOf(first.getBtId()));
                 }
             }
-            if (!enter)
-                ((Button) getView().findViewById(first.getBtId())).setText(String.valueOf(first.getBtId()));
         }
     }
 
@@ -493,7 +509,7 @@ public class FragmentRTEditor extends Fragment {
                 if (spm.getId() != -1) {
                     Note aux = specificCommentsNotes.get(spm.getId());
                     float bcsPosition = getCaretYPosition(textSpanned.getSpanStart(spm));
-                    if (bcsPosition != aux.getBtY()) {
+                    if (aux != null && bcsPosition != aux.getBtY()) {
                         aux.setBtY(bcsPosition);
                         Button btn = (Button) scrollview.findViewById(aux.getBtId());
                         btn.setY(bcsPosition);
@@ -523,7 +539,9 @@ public class FragmentRTEditor extends Fragment {
 
         for (int i = 0; i < arrayAux.size(); i++) {
             Note aux = arrayAux.get(i);
-            scrollview.addView(createButton(aux.getBtId(), String.valueOf(aux.getBtId()), aux.getBtY()));
+            Button btn = createButton(aux.getBtId(), String.valueOf(aux.getBtId()), aux.getBtY());
+            if (btn != null)
+                scrollview.addView(btn);
         }
     }
 
@@ -570,8 +588,7 @@ public class FragmentRTEditor extends Fragment {
 
                     if (!selectedText.isEmpty()) {
                         if (selectedText.length() > 0) {
-                            Singleton single = Singleton.getInstance();
-                            single.selectedText = mRTMessageField.getText().toString().substring(startSelection, endSelection);
+                            singleton.selectedText = mRTMessageField.getText().toString().substring(startSelection, endSelection);
                             createSpecificCommentNote(getCaretYPosition(startSelection), selectedText);
                         }
                     }
@@ -611,24 +628,24 @@ public class FragmentRTEditor extends Fragment {
             selectedActualText = selectedText;
 
             specificCommentsNotes.put(idButton, new Note(idButton, selectedText, yButton));
-            scrollview.addView(createButton(idButton, String.valueOf(currentSpecificComment), yButton));
+            Button btn = createButton(idButton, String.valueOf(currentSpecificComment), yButton);
+            if (btn != null)
+                scrollview.addView(btn);
 
             mRTManager.onEffectSelected(Effects.BGCOLOR, greenLight, idButton);
             mRTMessageField.setSelection(endSelection);
             mRTMessageField.setSelected(false);
 
             setSpecificCommentNoteValue();
-//            DataBaseAdapter db = DataBaseAdapter.getInstance(getActivity());
-//            Comentario c= new Comentario();
-//            Singleton s = Singleton.getInstance();
+//            Comentario c = new Comentario();
 //
 //            //inserting first note comment
-//            c.setTxtReference(s.selectedText);
-//            c.setIdAuthor(s.user.getIdUser());
-//            c.setIdActivityStudent(s.idActivityStudent);
+//            c.setTxtReference(singleton.selectedText);
+//            c.setIdAuthor(singleton.user.getIdUser());
+//            c.setIdActivityStudent(singleton.idActivityStudent);
 //            c.setTypeComment("O");
 //
-//            db.insertSpecificComment(c,idButton);
+//            source.insertSpecificComment(c,idButton);
 //            //clean references from objects
 //            c = null;
         }
