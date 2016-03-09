@@ -10,7 +10,6 @@ import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.support.v7.app.AlertDialog;
 import android.text.InputType;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -119,8 +118,7 @@ public class FragmentAttachment extends Frag {
         Attachment attachment = attachments.get(position);
         if(attachment.getLocalPath() != null && attachment.getLocalPath() != "")
         {
-            openPDF(attachment.getLocalPath());
-            //showPDFDialog(attachment.getLocalPath(), position);
+            loadPDF(attachment.getLocalPath(), position);
         }
     }
 
@@ -254,6 +252,7 @@ public class FragmentAttachment extends Frag {
                     public void onError() {
 
                     }
+
                 });
             } else {
                 Intent intent = new Intent();
@@ -314,28 +313,45 @@ public class FragmentAttachment extends Frag {
         }
     }
 
-    public void showPDFDialog(String url, final int position)
+    public void loadPDF(final String url, final int position)
     {
-        AlertDialog.Builder pdfDialog = new AlertDialog.Builder(getActivity());
+        if (url != null) {
+            if (isRTEditor) {
+                final Dialog dialog = new Dialog(getActivity());
+                dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                dialog.setContentView(R.layout.custom_pdf_dialog);
 
-        pdfDialog.setPositiveButton("Fechar", new DialogInterface.OnClickListener() {
+                Button btnPositive = (Button) dialog.findViewById(R.id.btn_pdf_util);
+                Button btnNegative = (Button) dialog.findViewById(R.id.btn_pdf_cancel);
+                Button btnView = (Button) dialog.findViewById(R.id.btn_pdf_view);
 
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.dismiss();
+                btnPositive.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        returnFromDialog(url, position, "T");
+                        dialog.dismiss();
+                    }
+                });
+
+                btnNegative.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        dialog.dismiss();
+                    }
+                });
+
+                btnView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        openPDF(url);
+                    }
+                });
+
+                dialog.show();
+            } else {
+                openPDF(url);
             }
-
-        });
-        pdfDialog.setNegativeButton("Deletar", new DialogInterface.OnClickListener() {
-
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.dismiss();
-//                deleteMedia(position);
-            }
-
-        });
-
-        pdfDialog.create();
-        pdfDialog.show();
+        }
     }
 
 

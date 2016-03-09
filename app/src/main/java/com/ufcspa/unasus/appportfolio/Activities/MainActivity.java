@@ -1,16 +1,12 @@
 package com.ufcspa.unasus.appportfolio.Activities;
 
-import android.Manifest;
 import android.app.AlertDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.pm.PackageManager;
 import android.os.Bundle;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
 import android.text.InputType;
@@ -30,8 +26,6 @@ import com.ufcspa.unasus.appportfolio.Model.Singleton;
 import com.ufcspa.unasus.appportfolio.R;
 import com.ufcspa.unasus.appportfolio.database.DataBaseAdapter;
 
-import java.security.Permission;
-
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -40,7 +34,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private View bigDrawer;
     private View miniDrawer;
     private Singleton singleton;
-    private static final int MY_PERMISSIONS_REQUEST_WRITE_EXTERNAL=13;
+    private boolean shouldCreateDrawer;
 
     private BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
         @Override
@@ -93,69 +87,55 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         setContentView(R.layout.activity_main);
         getSupportActionBar().hide();
 
-        singleton = Singleton.getInstance();
+        if (savedInstanceState == null) {
+            Bundle extras = getIntent().getExtras();
+            if (extras == null) {
+                shouldCreateDrawer = true;
+            } else {
+                shouldCreateDrawer = extras.getBoolean("shouldCreateDrawer", true);
+            }
+        } else {
+            shouldCreateDrawer = savedInstanceState.getBoolean("shouldCreateDrawer", true);
+        }
 
+        singleton = Singleton.getInstance();
         //////////ID activity do MARIO///////////
         singleton.idActivityStudent=1;
         /////////--------------------///////////
 
-
-        LayoutInflater inflater = (LayoutInflater) getApplicationContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-
-        bigDrawer = inflater.inflate(R.layout.big_drawer, null);
-        initBigDrawer();
-        miniDrawer = inflater.inflate(R.layout.mini_drawer, null);
-        initMiniDrawer();
-
         fragmentContainer = findViewById(R.id.fragment_container);
+        if (shouldCreateDrawer) {
+            LayoutInflater inflater = (LayoutInflater) getApplicationContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
-        final float scale = getResources().getDisplayMetrics().density;
-        int pixelsMini = (int) (60 * scale + 0.5f);
-        int pixelsBig = (int) (230 * scale + 0.5f);
+            bigDrawer = inflater.inflate(R.layout.big_drawer, null);
+            initBigDrawer();
+            miniDrawer = inflater.inflate(R.layout.mini_drawer, null);
+            initMiniDrawer();
 
-        crossFader = new Crossfader()
-                .withContent(fragmentContainer)
-                .withFirst(bigDrawer, pixelsBig)
-                .withSecond(miniDrawer, pixelsMini)
-                .withGmailStyleSwiping()
-                .withSavedInstance(savedInstanceState)
-                .build();
+            final float scale = getResources().getDisplayMetrics().density;
+            int pixelsMini = (int) (60 * scale + 0.5f);
+            int pixelsBig = (int) (230 * scale + 0.5f);
 
+
+            crossFader = new Crossfader()
+                    .withContent(fragmentContainer)
+                    .withFirst(bigDrawer, pixelsBig)
+                    .withSecond(miniDrawer, pixelsMini)
+                    .withGmailStyleSwiping()
+                    .withSavedInstance(savedInstanceState)
+                    .build();
+        }
         LocalBroadcastManager.getInstance(this).registerReceiver(broadcastReceiver, new IntentFilter("call.fragments.action"));
 
-        if(savedInstanceState == null)
+        if (!shouldCreateDrawer)
+            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new FragmentRTEditor()).commit();
+        else if (savedInstanceState == null)
             // QUAL FRAGMENT IRA INICIAR APOS LOGIN?
             // 0 para select portfolio
             // 5 para rtEditor
-            changeFragment(5);
-
-        // Here, thisActivity is the current activity
-        if (ContextCompat.checkSelfPermission(this,
-                Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                != PackageManager.PERMISSION_GRANTED) {
-
-            // Should we show an explanation?
-            if (ActivityCompat.shouldShowRequestPermissionRationale(this,
-                    Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
-
-                // Show an expanation to the user *asynchronously* -- don't block
-                // this thread waiting for the user's response! After the user
-                // sees the explanation, try again to request the permission.
-
-            } else {
-
-                // No explanation needed, we can request the permission.
-
-                ActivityCompat.requestPermissions(this,
-                        new String[]{Manifest.permission.READ_CONTACTS},
-                        MY_PERMISSIONS_REQUEST_WRITE_EXTERNAL);
-
-                // MY_PERMISSIONS_REQUEST_READ_CONTACTS is an
-                // app-defined int constant. The callback method gets the
-                // result of the request.
-            }
-        }
+            changeFragment(0);
     }
+
 
     private void initMiniDrawer() {
         ImageButton portfolios = (ImageButton) miniDrawer.findViewById(R.id.btn_members);
@@ -211,8 +191,18 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
-        outState = crossFader.saveInstanceState(outState);
+        if (shouldCreateDrawer)
+            outState = crossFader.saveInstanceState(outState);
+        outState.putBoolean("shouldCreateDrawer", shouldCreateDrawer);
         super.onSaveInstanceState(outState);
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+
+        if (savedInstanceState != null)
+            shouldCreateDrawer = savedInstanceState.getBoolean("shouldCreateDrawer");
     }
 
     @Override
@@ -227,11 +217,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         switch (id)
         {
             case 0:
-                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new FragmentRTEditor()).commit();//FragmentSelectPortfolio
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new FragmentRTEditor()).addToBackStack("Frag").commit();//FragmentSelectPortfolio
                 break;
             case 1:
                 if(singleton.portfolioClass != null)
-                    getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new FragmentStudentActivities()).commit();
+                    getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new FragmentStudentActivities()).addToBackStack("Frag").commit();
                 break;
             case 2:
                 break;
@@ -239,10 +229,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 break;
             case 4:
                 singleton.isRTEditor = false;
-                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new FragmentAttachment()).commit();
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new FragmentAttachment()).addToBackStack("Frag").commit();
                 break;
             case 5:
-                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new FragmentRTEditor()).commit();
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new FragmentRTEditor()).addToBackStack("Frag").commit();
                 break;
             default:
                 break;
@@ -279,48 +269,49 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         FragmentRTEditor fragment = new FragmentRTEditor();
         Bundle args = new Bundle();
         args.putString("URL",url);
-        args.putString("Type",type);
-        args.putInt("Position",position);
+        args.putString("Type", type);
+        args.putInt("Position", position);
         fragment.setArguments(args);
-        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment).commit();
+
+        if (!isFinishing()) {
+            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment).commit();
+        }
     }
 
     public void callAttachments(int position)
     {
         singleton.isRTEditor = true;
 
-        FragmentAttachment fragment = new FragmentAttachment();
+        final FragmentAttachment fragment = new FragmentAttachment();
         Bundle args = new Bundle();
-        args.putInt("Position",position);
+        args.putInt("Position", position);
         fragment.setArguments(args);
 
-        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment).commit();
+        if (!isFinishing()) {
+            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment).addToBackStack("FragmentRTEditor").commit();
+        }
     }
 
+    public void dontCreateCrossfader() {
+        singleton.firsttime = true;
+        if (singleton.isFullscreen) {
+            Intent main = new Intent(this, MainActivity.class);
+            main.putExtra("shouldCreateDrawer", false);
+            startActivity(main);
+        } else
+            startActivity(new Intent(this, MainActivity.class));
 
+        overridePendingTransition(0, 0);
+        finish();
+    }
 
     @Override
-    public void onRequestPermissionsResult(int requestCode,
-                                           String permissions[], int[] grantResults) {
-        switch (requestCode) {
-            case MY_PERMISSIONS_REQUEST_WRITE_EXTERNAL: {
-                // If request is cancelled, the result arrays are empty.
-                if (grantResults.length > 0
-                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+    public void onBackPressed() {
+        if (getSupportFragmentManager().getBackStackEntryCount() > 1)
+            super.onBackPressed();
 
-                    // permission was granted, yay! Do the
-                    // contacts-related task you need to do.
-
-                } else {
-
-                    // permission denied, boo! Disable the
-                    // functionality that depends on this permission.
-                }
-                return;
-            }
-
-            // other 'case' lines to check for other
-            // permissions this app might request
-        }
+        if (singleton.isFullscreen)
+            if (getSupportFragmentManager().getBackStackEntryCount() > 0)
+                super.onBackPressed();
     }
 }

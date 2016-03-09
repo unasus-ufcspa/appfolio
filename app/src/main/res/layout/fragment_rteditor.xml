@@ -3,9 +3,9 @@
     android:id="@+id/rteditor_fragment"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:focusableInTouchMode="true"
-    android:focusable="true"
     android:background="@android:color/transparent"
+    android:focusable="true"
+    android:focusableInTouchMode="true"
     sothree:umanoOverlay="true">
 
     <RelativeLayout
@@ -19,9 +19,9 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_above="@id/rte_toolbar_container"
+            android:layout_below="@+id/fullscreen"
             android:fillViewport="true"
-            android:scrollbarStyle="insideOverlay"
-            android:layout_below="@+id/fullscreen">
+            android:scrollbarStyle="insideOverlay">
             <RelativeLayout
                 android:id="@+id/comments"
                 android:layout_width="match_parent"
@@ -32,12 +32,12 @@
                     android:id="@+id/rtEditText"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:layout_marginLeft="35dp"
                     android:layout_weight="1"
                     android:background="@android:color/white"
                     android:gravity="top"
                     android:imeOptions="actionDone|flagNoEnterAction"
                     android:inputType="textMultiLine|textAutoCorrect|textCapSentences"
-                    android:layout_marginLeft="35dp"
                     android:textIsSelectable="false" />
 
             </RelativeLayout>
@@ -47,50 +47,50 @@
             android:id="@+id/fullscreen"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@drawable/fullscreen_text"
-            android:layout_below="@+id/info_rteditor_container"
             android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true" />
+            android:layout_alignParentStart="true"
+            android:layout_below="@+id/info_rteditor_container"
+            android:background="@drawable/fullscreen_text" />
 
         <LinearLayout
-            android:orientation="horizontal"
+            android:id="@+id/info_rteditor_container"
             android:layout_width="match_parent"
             android:layout_height="30dp"
-            android:background="@color/gray_1"
-            android:id="@+id/info_rteditor_container"
-            android:layout_alignParentTop="true"
             android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true">
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:background="@color/gray_1"
+            android:orientation="horizontal">
 
             <me.grantland.widget.AutofitTextView
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:textAppearance="?android:attr/textAppearanceMedium"
-                android:text="Atividade 1: imunologia"
                 android:id="@+id/activity_name"
-                android:textColor="@color/white"
-                android:gravity="bottom"
-                android:layout_weight="1"
-                android:paddingLeft="10dp"
-                android:paddingRight="10dp"
-                android:visibility="visible"
-                android:singleLine="true"
-                android:paddingBottom="2dp" />
-
-            <me.grantland.widget.AutofitTextView
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:textAppearance="?android:attr/textAppearanceMedium"
-                android:text="Daiane dos Santos"
-                android:id="@+id/student_name"
-                android:textColor="@color/white"
-                android:gravity="bottom|right"
                 android:layout_weight="1"
-                android:paddingRight="10dp"
+                android:gravity="bottom"
+                android:paddingBottom="2dp"
                 android:paddingLeft="10dp"
-                android:textStyle="bold"
+                android:paddingRight="10dp"
                 android:singleLine="true"
-                android:paddingBottom="2dp" />
+                android:text="Atividade 1: imunologia"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textColor="@color/white"
+                android:visibility="visible" />
+
+            <me.grantland.widget.AutofitTextView
+                android:id="@+id/student_name"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="bottom|right"
+                android:paddingBottom="2dp"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:singleLine="true"
+                android:text="Daiane dos Santos"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textColor="@color/white"
+                android:textStyle="bold" />
 
         </LinearLayout>
 
@@ -100,43 +100,43 @@
         android:id="@+id/slider"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_weight="1"
         android:background="#00000000"
-        android:visibility="visible"
-        android:layout_weight="1">
+        android:visibility="visible">
 
         <LinearLayout
-            android:orientation="horizontal"
+            android:id="@+id/button_container"
             android:layout_width="match_parent"
             android:layout_height="30dp"
-            android:background="@android:color/transparent"
-            android:id="@+id/button_container"
-            android:gravity="bottom"
+            android:layout_toEndOf="@+id/topbar_gray"
             android:layout_toRightOf="@+id/topbar_gray"
-            android:layout_toEndOf="@+id/topbar_gray">
+            android:background="@android:color/transparent"
+            android:gravity="bottom"
+            android:orientation="horizontal">
 
             <me.grantland.widget.AutofitTextView
+                android:id="@+id/btn_geral"
                 android:layout_width="wrap_content"
                 android:layout_height="30dp"
-                android:id="@+id/btn_geral"
                 android:layout_weight="1"
-                android:background="@drawable/geral_comment_tab"
                 android:adjustViewBounds="false"
-                android:visibility="visible"
-                android:scaleType="fitEnd"
+                android:background="@drawable/geral_comment_tab"
                 android:gravity="center"
+                android:scaleType="fitEnd"
                 android:text="Geral"
                 android:textColor="#ffffff"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                android:visibility="visible" />
 
             <me.grantland.widget.AutofitTextView
+                android:id="@+id/btn_specific"
                 android:layout_width="wrap_content"
                 android:layout_height="30dp"
-                android:id="@+id/btn_specific"
                 android:layout_weight="1"
-                android:background="@drawable/specific_comment_tab"
                 android:adjustViewBounds="false"
-                android:scaleType="fitEnd"
+                android:background="@drawable/specific_comment_tab"
                 android:gravity="center"
+                android:scaleType="fitEnd"
                 android:text="Observações"
                 android:textColor="@color/base_green"
                 android:textStyle="bold" />
@@ -144,42 +144,43 @@
         </LinearLayout>
 
         <FrameLayout
+            android:id="@+id/comments_container"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_below="@+id/button_container"
-            android:id="@+id/comments_container"
-            android:visibility="visible"
+            android:layout_toEndOf="@+id/topbar_gray"
             android:layout_toRightOf="@+id/topbar_gray"
-            android:layout_toEndOf="@+id/topbar_gray">
+            android:visibility="visible">
 
         </FrameLayout>
 
         <RelativeLayout
+            android:id="@+id/topbar_gray"
             android:layout_width="35dp"
             android:layout_height="30dp"
-            android:id="@+id/topbar_gray"
             android:layout_above="@+id/comments_container"
             android:background="@color/gray_1">
 
         </RelativeLayout>
 
         <RelativeLayout
+            android:id="@+id/leftbar_white"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:layout_alignTop="@+id/comments_container"
+            android:layout_marginLeft="10dp"
             android:layout_toLeftOf="@+id/button_container"
             android:layout_toStartOf="@+id/button_container"
-            android:layout_alignTop="@+id/comments_container"
-            android:id="@+id/leftbar_white"
-            android:layout_marginLeft="10dp">
+            android:background="@android:color/transparent">
 
             <RelativeLayout
+                android:id="@+id/rightbar_green"
                 android:layout_width="5dp"
                 android:layout_height="match_parent"
-                android:layout_alignParentTop="true"
-                android:layout_alignParentRight="true"
                 android:layout_alignParentEnd="true"
-                android:background="@color/base_green"
-                android:id="@+id/rightbar_green"></RelativeLayout>
+                android:layout_alignParentRight="true"
+                android:layout_alignParentTop="true"
+                android:background="@color/base_green"></RelativeLayout>
 
         </RelativeLayout>
 
