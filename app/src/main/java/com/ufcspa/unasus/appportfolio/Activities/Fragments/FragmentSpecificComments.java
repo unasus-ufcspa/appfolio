@@ -116,6 +116,8 @@ public class FragmentSpecificComments extends Frag {
         c.setDateComment(getActualTime());
         c.setIdAuthor(singleton.user.getIdUser());
         c.setTypeComment("O");
+        Log.d("comments","reference setting in C spcific comment:"+txNote.getText().toString());
+        c.setTxtReference(txNote.getText().toString());
         c.setTxtComment(edtMessage.getText().toString());
         c.setIdActivityStudent(singleton.activity.getIdAtivity());
         return c;
@@ -155,7 +157,6 @@ public class FragmentSpecificComments extends Frag {
         oneComments.add(new OneComment(false, edtMessage.getText().toString(), convertDateToTime(c.getDateComment()), convertDateToDate(c.getDateComment())));
         edtMessage.setText("");
         try {
-            c.setTxtReference(txNote.getText().toString());
             DataBaseAdapter db = DataBaseAdapter.getInstance(getActivity());
             db.insertSpecificComment(c, noteNow.getBtId());
             Log.d("Banco:", "comentario inserido no bd interno com sucesso");
@@ -171,6 +172,9 @@ public class FragmentSpecificComments extends Frag {
             Singleton single = Singleton.getInstance();
             noteNow = single.note;
             if(lista.size()!=0) { // se a lista nao estiver vazia quer dizer que a nota de referencia já existe no banco
+                for (Comentario c:lista) {
+                    Log.d("comments noteNow","referencia é :"+c.toString());
+                }
                 noteNow.setSelectedText(lista.get(0).getTxtReference());
                 Log.d("comments noteNow","lista:"+lista.get(0).toJSON());
             }
@@ -178,16 +182,18 @@ public class FragmentSpecificComments extends Frag {
 
             if(noteNow!=null){
                 if (noteNow.getSelectedText()!=null && !noteNow.getSelectedText().toString().equalsIgnoreCase("null")){
-                    Log.d("editor","receiving reference...:"+noteNow.getSelectedText());
+                    Log.d("comments","receiving reference...:"+noteNow.getSelectedText());
                     reference=noteNow.getSelectedText();
                     if(reference.contains("Referência:")){
-                        Log.d("editor","specific comments contais referencia 'Referência:' in reference");
+                        Log.d("comments ","specific comments contais referencia 'Referência:' in reference");
                         txNote.setText(reference);
                     }else {
                         txNote.setText("Referência: \n" + "\"" + reference + "\"");
                     }
 
                 }
+            }else{
+                Log.d("comments","NoteNow is NULL");
             }
 
 

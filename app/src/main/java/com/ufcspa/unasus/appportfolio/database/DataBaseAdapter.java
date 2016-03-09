@@ -206,6 +206,7 @@ public class DataBaseAdapter {
                 "\tc.id_comment,\n" +
                 "\tc.id_activity_student,\n" +
                 "\tc.id_author,\n" +
+                "\tc.tx_reference,\n" +
                 "\tc.tx_comment,\n" +
                 "\tc.dt_comment,\n" +
                 "\tac.id_attachment \n" +
@@ -235,9 +236,10 @@ public class DataBaseAdapter {
                     cmm.setIdComment(c.getInt(0));
                     cmm.setIdActivityStudent(c.getInt(1));
                     cmm.setIdAuthor(c.getInt(2));
-                    cmm.setTxtComment(c.getString(3));
-                    cmm.setDateComment(c.getString(4));
-                    cmm.setIdAttach(c.getInt(5));
+                    cmm.setTxtReference(c.getString(3));
+                    cmm.setTxtComment(c.getString(4));
+                    cmm.setDateComment(c.getString(5));
+                    cmm.setIdAttach(c.getInt(6));
                     comentarios.add(cmm);
                 } catch (Exception v) {
                     Log.e(tag, "erro ao pegar dados do banco:" + v.getMessage());
