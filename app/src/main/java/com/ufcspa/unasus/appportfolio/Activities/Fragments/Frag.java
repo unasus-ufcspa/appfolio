@@ -404,6 +404,7 @@ public class Frag extends Fragment {
             startActivity(intent);
         } catch (ActivityNotFoundException e) {
             // Instruct the user to install a PDF reader here, or something
+            Toast.makeText(getActivity(), "Nenhum leitor de PDF instalado.", Toast.LENGTH_SHORT).show();
         }
     }
 
