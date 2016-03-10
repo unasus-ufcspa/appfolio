@@ -51,8 +51,15 @@ public class SpecificCommentAdapter extends BaseAdapter {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         View rowView;
-        rowView = inflater.inflate(R.layout.specific_comment_item, null);
         OneComment c = comments.get(position);
+        if(c.atach)
+            rowView = inflater.inflate(R.layout.atach_item, null);
+        else
+            rowView = inflater.inflate(R.layout.specific_comment_item, null);
+
+
+
+
         Holder holder = new Holder();
 
         //getting from xml
@@ -89,10 +96,10 @@ public class SpecificCommentAdapter extends BaseAdapter {
                 holder.date.setVisibility(rowView.GONE);
             }
         }
-
-        holder.message.setBackgroundResource(c.orientation ? R.drawable.my_balllon_comment : R.drawable.my_balllon_comment);
-        holder.wraper.setGravity(c.orientation ? Gravity.LEFT : Gravity.RIGHT);
-
+        if(c.atach==false) {
+            holder.message.setBackgroundResource(c.orientation ? R.drawable.my_balllon_comment : R.drawable.my_balllon_comment);
+            holder.wraper.setGravity(c.orientation ? Gravity.LEFT : Gravity.RIGHT);
+        }
         //////////---------------////////////////////
         return rowView;
     }
@@ -109,4 +116,10 @@ public class SpecificCommentAdapter extends BaseAdapter {
         TextView date;
         RelativeLayout wraper;
     }
+
+    public void refresh(List<OneComment> comnts){
+        this.comments=comnts;
+        notifyDataSetChanged();
+    }
+
 }
