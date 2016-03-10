@@ -454,6 +454,15 @@ public class Frag extends Fragment {
             }
         });
 
+        ImageButton img_folio = (ImageButton) dialog.findViewById(R.id.img_my_gallery);
+        img_folio.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(getContext(), "Folio", Toast.LENGTH_SHORT).show();
+                dialog.dismiss();
+            }
+        });
+
         Button bt_cancel = (Button) dialog.findViewById(R.id.btn_cancel);
         bt_cancel.setOnClickListener(new View.OnClickListener() {
             @Override
