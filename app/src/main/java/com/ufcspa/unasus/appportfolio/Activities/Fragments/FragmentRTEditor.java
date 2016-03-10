@@ -73,8 +73,6 @@ public class FragmentRTEditor extends Fragment {
     public FragmentRTEditor() {}
 
     public void loadLastText() {
-        Singleton singleton = Singleton.getInstance();
-        source = DataBaseAdapter.getInstance(getActivity());
         acStudent = source.listActivityStudent(singleton.idActivityStudent);
         if (singleton.firsttime) {
             mRTMessageField.setRichTextEditing(true, acStudent.getTxtActivity());
@@ -84,9 +82,10 @@ public class FragmentRTEditor extends Fragment {
 
     public void saveText() {
         Log.d("editor DB", "salvando texto..");
-        source = DataBaseAdapter.getInstance(getActivity());
-        acStudent.setTxtActivity(mRTMessageField.getText(RTFormat.HTML));
-        source.updateActivityStudent(acStudent);
+        if (mRTMessageField != null) {
+            acStudent.setTxtActivity(mRTMessageField.getText(RTFormat.HTML));
+            source.updateActivityStudent(acStudent);
+        }
     }
 
     @Override
@@ -94,6 +93,7 @@ public class FragmentRTEditor extends Fragment {
         View view = inflater.inflate(R.layout.fragment_rteditor, null);
 
         singleton = Singleton.getInstance();
+        source = DataBaseAdapter.getInstance(getActivity());
 
         greenLight = getResources().getColor(R.color.base_green_light);
         greenDark = getResources().getColor(R.color.base_green);
@@ -153,7 +153,7 @@ public class FragmentRTEditor extends Fragment {
             }
         });
 
-//        mRTMessageField.setLineSpacing(15, 1);
+        mRTMessageField.setLineSpacing(15, 1);
 
         LinearLayout layout = (LinearLayout) view.findViewById(R.id.info_rteditor_container);
         layout.clearFocus();
@@ -172,6 +172,7 @@ public class FragmentRTEditor extends Fragment {
                     singleton.isFullscreen = true;
 
                 ((MainActivity) getActivity()).dontCreateCrossfader();
+//                Log.d("rteditor", mRTMessageField.getText(RTFormat.HTML));
             }
         });
 
@@ -193,8 +194,8 @@ public class FragmentRTEditor extends Fragment {
 
     @Override
     public void onResume() {
-        super.onResume();
         saveText();
+        super.onResume();
     }
 
     @Override
@@ -225,16 +226,17 @@ public class FragmentRTEditor extends Fragment {
 
     @Override
     public void onDestroyView() {
+        saveText();
         super.onDestroyView();
     }
 
     @Override
     public void onDestroy() {
         saveText();
-        super.onDestroy();
         if (mRTManager != null) {
             mRTManager.onDestroy(true);
         }
+        super.onDestroy();
     }
 
     @Override
@@ -305,9 +307,7 @@ public class FragmentRTEditor extends Fragment {
 
 
     public void getIdNotesFromDB(){
-        DataBaseAdapter data= DataBaseAdapter.getInstance(getActivity());
-        Singleton single= Singleton.getInstance();
-        ArrayList<Integer>ids = (ArrayList<Integer>) data.listSpecificComments(single.idActivityStudent);
+        ArrayList<Integer> ids = (ArrayList<Integer>) source.listSpecificComments(singleton.idActivityStudent);
         for(int id : ids){
             specificCommentsNotes.put(id,new Note(id,"",0));
         }
@@ -531,9 +531,13 @@ public class FragmentRTEditor extends Fragment {
                 Note aux = specificCommentsNotes.get(spm.getId());
                 if(aux != null)
                     aux.setBtY(getCaretYPosition(textSpanned.getSpanStart(spm)));
+                else
+                    textSpanned.removeSpan(spm);
             }
         }
 
+        RTHtml<RTImage, RTAudio, RTVideo> rtHtml = new ConverterSpannedToHtml().convert(textSpanned, RTFormat.HTML);
+        mRTMessageField.setRichTextEditing(true, rtHtml.getText());
 
         ArrayList<Note> arrayAux = new ArrayList<>(specificCommentsNotes.values());
 
@@ -637,17 +641,16 @@ public class FragmentRTEditor extends Fragment {
             mRTMessageField.setSelected(false);
 
             setSpecificCommentNoteValue();
+
 //            Comentario c = new Comentario();
 //
 //            //inserting first note comment
-//            c.setTxtReference(singleton.selectedText);
+//            c.setTxtReference(selectedText);
 //            c.setIdAuthor(singleton.user.getIdUser());
 //            c.setIdActivityStudent(singleton.idActivityStudent);
 //            c.setTypeComment("O");
 //
 //            source.insertSpecificComment(c,idButton);
-//            //clean references from objects
-//            c = null;
         }
     }
 /*

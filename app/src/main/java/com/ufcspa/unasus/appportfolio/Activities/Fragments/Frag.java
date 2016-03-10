@@ -11,7 +11,6 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.media.MediaPlayer;
 import android.media.ThumbnailUtils;
 import android.net.Uri;
 import android.os.Bundle;
@@ -27,14 +26,10 @@ import android.webkit.MimeTypeMap;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.Toast;
-import android.widget.VideoView;
 
 import com.onegravity.rteditor.media.crop.CropImageActivity;
 import com.onegravity.rteditor.utils.Constants;
-import com.squareup.picasso.Callback;
-import com.squareup.picasso.Picasso;
 import com.ufcspa.unasus.appportfolio.Model.Attachment;
 import com.ufcspa.unasus.appportfolio.Model.Singleton;
 import com.ufcspa.unasus.appportfolio.R;
@@ -416,8 +411,64 @@ public class Frag extends Fragment {
 
     public void addAttachmentToComments() {
         final Dialog dialog = new Dialog(getActivity());
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(R.layout.attachment_popup_comments);
+
+        ImageButton img_gallery = (ImageButton) dialog.findViewById(R.id.img_gallery);
+        img_gallery.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                System.out.println("Gallery");
+                dispatchGetPictureFromGallery();
+                dialog.dismiss();
+            }
+        });
+
+        ImageButton img_photos = (ImageButton) dialog.findViewById(R.id.img_photos);
+        img_photos.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                System.out.println("Photos");
+                dispatchTakePictureIntent();
+                dialog.dismiss();
+            }
+        });
+
+        ImageButton img_videos = (ImageButton) dialog.findViewById(R.id.img_videos);
+        img_videos.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                System.out.println("Videos");
+                dispatchTakeVideoIntent();
+                dialog.dismiss();
+            }
+        });
+
+        ImageButton img_text = (ImageButton) dialog.findViewById(R.id.img_text);
+        img_text.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                System.out.println("Text");
+                dispatchFileBrowserIntent();
+                dialog.dismiss();
+            }
+        });
+
+        Button bt_cancel = (Button) dialog.findViewById(R.id.btn_cancel);
+        bt_cancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+
+        dialog.show();
+    }
+
+    public void addAttachment() {
+        final Dialog dialog = new Dialog(getActivity());
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setContentView(R.layout.attachment_popup);
-        dialog.setTitle(R.string.files_popup_attachment);
 
         ImageButton img_gallery = (ImageButton) dialog.findViewById(R.id.img_gallery);
         img_gallery.setOnClickListener(new View.OnClickListener() {
