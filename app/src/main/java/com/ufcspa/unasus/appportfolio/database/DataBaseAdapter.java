@@ -146,7 +146,7 @@ public class DataBaseAdapter {
         return lastID;
     }
 
-    public void insertSpecificComment(Comentario c,int idNote) {
+    public int insertSpecificComment(Comentario c,int idNote) {
         ContentValues cv = new ContentValues();
         cv.put("id_activity_student", c.getIdActivityStudent());
         cv.put("id_author", c.getIdAuthor());
@@ -162,6 +162,13 @@ public class DataBaseAdapter {
         } catch (Exception e) {
             Log.e(tag+ " insertSpecificComment", "erro ao inserir:" + e.getMessage());
         }
+        Cursor cursor = db.rawQuery("select seq from sqlite_sequence where name='tb_comment'", null);
+        int lastID = 0;
+        if (cursor.moveToFirst()) {
+            lastID = cursor.getInt(0);
+            Log.d(tag, "last id_comment id table:" + lastID);
+        }
+        return lastID;
 
     }
 

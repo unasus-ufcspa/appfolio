@@ -16,6 +16,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 
+import com.onegravity.rteditor.utils.Constants;
 import com.ufcspa.unasus.appportfolio.Adapter.CommentAdapter;
 import com.ufcspa.unasus.appportfolio.Model.Attachment;
 import com.ufcspa.unasus.appportfolio.Model.Comentario;
@@ -36,7 +37,7 @@ import java.util.Date;
 public class FragmentComments extends Frag {
     ArrayList<OneComment> oneComments;
     CommentAdapter adapterComments;
-    boolean attach;
+    private boolean attach;
     private ListView lv;
     private Button btGenMess;
     private Button btAttachment;
@@ -118,7 +119,7 @@ public class FragmentComments extends Frag {
             public void onClick(View v) {
                 //addRandomItem();
                 //lv.setAdapter(adapter);
-
+                Log.d("Comments attach", "inserindo comentario");
                 if (attach) {
                     Log.d("Comments attach", "tentando inserir view anexo");
                     loadCom();
@@ -128,6 +129,7 @@ public class FragmentComments extends Frag {
                 } else {
 
                     if (!edtMessage.getText().toString().isEmpty()) {
+                        Log.d("Comments attach", "tentando inserir comentario normal");
                         //addItems();
                         //loadCom();
 //                    Comentario c = getCommentFromText();
@@ -183,47 +185,9 @@ public class FragmentComments extends Frag {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode,resultCode,data);
         Log.d("comment attachment ", "entrando no onActivity for Result");
-//        if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == Activity.RESULT_OK) {
-//            galleryAddPic();
-//            insertFileIntoDataBase(mCurrentPhotoPath, "I");
-//        }
 //
-//        // Quando o usuário escolhe a opção Gallery
-//        if (requestCode == RESULT_LOAD_IMAGE && resultCode == Activity.RESULT_OK) {
-//            Uri selectedUri = data.getData();
-//            String[] columns = {MediaStore.Images.Media.DATA, MediaStore.Images.Media.MIME_TYPE};
-//
-//            Cursor cursor = getActivity().getContentResolver().query(selectedUri, columns, null, null, null);
-//            cursor.moveToFirst();
-//
-//            int pathColumnIndex = cursor.getColumnIndex(columns[0]);
-//            int mimeTypeColumnIndex = cursor.getColumnIndex(columns[1]);
-//
-//            String contentPath = cursor.getString(pathColumnIndex);
-//            String mimeType = cursor.getString(mimeTypeColumnIndex);
-//
-//            cursor.close();
-//
-//            mCurrentPhotoPath = contentPath;
-//
-//            if (mimeType.startsWith("image")) {
-//                insertFileIntoDataBase(mCurrentPhotoPath, "I");
-//            } else if (mimeType.startsWith("video")) {
-//                insertFileIntoDataBase(mCurrentPhotoPath, "V");
-//                mCurrentPhotoPath = getThumbnailPathForLocalFile(getActivity(), selectedUri);
-//            }
-//        }
-//
-//        if (requestCode == PICKFILE_RESULT_CODE && resultCode == Activity.RESULT_OK) {
-//            insertFileIntoDataBase(data.getData().getPath(), "T");
-//        }
-//
-//        if (requestCode == REQUEST_VIDEO_CAPTURE && resultCode == Activity.RESULT_OK) {
-//            insertFileIntoDataBase(data.getData().getPath(), "V");
-//            galleryAddPic();
-////            mCurrentPhotoPath = getThumbnailPathForLocalFile(getActivity(), data.getData());
-//        }
-        if(resultCode == Activity.RESULT_OK)
+        if(resultCode == Activity.RESULT_OK && requestCode!= Constants.CROP_IMAGE)
+            //Log.d("comments","request code:"+requestCode);
             addAtach();
         else
             Log.d("comment attachment ", "attach cancelado");
