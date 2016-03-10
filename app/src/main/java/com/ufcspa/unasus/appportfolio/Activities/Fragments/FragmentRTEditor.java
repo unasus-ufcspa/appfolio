@@ -536,8 +536,10 @@ public class FragmentRTEditor extends Fragment {
             }
         }
 
-        RTHtml<RTImage, RTAudio, RTVideo> rtHtml = new ConverterSpannedToHtml().convert(textSpanned, RTFormat.HTML);
-        mRTMessageField.setRichTextEditing(true, rtHtml.getText());
+        if (mRTManager.getActiveEditor() != null) {
+            RTHtml<RTImage, RTAudio, RTVideo> rtHtml = new ConverterSpannedToHtml().convert(textSpanned, RTFormat.HTML);
+            mRTMessageField.setRichTextEditing(true, rtHtml.getText());
+        }
 
         ArrayList<Note> arrayAux = new ArrayList<>(specificCommentsNotes.values());
 

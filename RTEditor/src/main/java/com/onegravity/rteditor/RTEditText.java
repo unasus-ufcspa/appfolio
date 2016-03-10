@@ -183,6 +183,10 @@ public class RTEditText extends EditText implements TextWatcher, SpanWatcher, Li
         mMediaFactory = null;
     }
 
+    public RTMediaFactory isMediaFactoryRegister() {
+        return mMediaFactory;
+    }
+
     /**
      * Return all paragraphs as as array of selection objects
      */
