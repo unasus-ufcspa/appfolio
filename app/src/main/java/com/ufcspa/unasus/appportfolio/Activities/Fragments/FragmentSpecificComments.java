@@ -1,6 +1,5 @@
 package com.ufcspa.unasus.appportfolio.Activities.Fragments;
 
-import android.app.Fragment;
 import android.content.Context;
 import android.os.Bundle;
 import android.text.method.ScrollingMovementMethod;
@@ -15,7 +14,6 @@ import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.ufcspa.unasus.appportfolio.Adapter.CommentArrayAdapter;
 import com.ufcspa.unasus.appportfolio.Adapter.SpecificCommentAdapter;
 import com.ufcspa.unasus.appportfolio.Adapter.SpecificCommentArrayAdapter;
 import com.ufcspa.unasus.appportfolio.Model.Comentario;
@@ -36,6 +34,7 @@ import java.util.Date;
  */
 public class FragmentSpecificComments extends Frag {
 
+    private static boolean EXPANDED_FLAG = false;
     private SpecificCommentArrayAdapter adapter;
     private SpecificCommentAdapter spcAdapter;
     private ListView lv;
@@ -49,10 +48,6 @@ public class FragmentSpecificComments extends Frag {
     private ArrayList<Comentario> lista;
     private ArrayList<OneComment> oneComments;
     private ImageButton btExpand;
-    private static boolean EXPANDED_FLAG=false;
-
-
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -108,7 +103,6 @@ public class FragmentSpecificComments extends Frag {
         });
 
     }
-
 
     public Comentario getCommentFromText(){
         Singleton singleton = Singleton.getInstance();
