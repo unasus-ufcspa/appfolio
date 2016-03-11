@@ -99,7 +99,7 @@ public class DataBaseAdapter {
     }
 
     public List getReferences(int idActivity){
-        List refs= new ArrayList<Reference>();
+        List refs= new ArrayList<Reference>(5);
         String sql="SELECT * FROM tb_reference WHERE id_activity_student ="+idActivity+";";
         Cursor c = db.rawQuery(sql, null);
         Reference r;

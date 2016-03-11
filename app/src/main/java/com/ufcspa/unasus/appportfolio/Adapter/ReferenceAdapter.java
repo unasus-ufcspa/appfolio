@@ -37,11 +37,9 @@ public class ReferenceAdapter extends BaseAdapter {
 
     public void add(Reference obj) {
         refs.add(obj);
-        notifyDataSetChanged();
     }
     public void delete(int position){
         refs.remove(position);
-        notifyDataSetChanged();
     }
 
 
@@ -73,5 +71,9 @@ public class ReferenceAdapter extends BaseAdapter {
     public void clearAdapter(){
         refs.clear();
         notifyDataSetChanged();
+    }
+
+    public void refresh(List r){
+        this.refs=r;
     }
 }

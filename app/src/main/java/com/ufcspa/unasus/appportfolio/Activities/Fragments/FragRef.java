@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -26,7 +27,7 @@ import java.util.ArrayList;
 /**
  * Created by Desenvolvimento on 23/12/2015.
  */
-public class FragRef extends Fragment {
+public class FragRef extends Frag {
     private Button btSave;
     private EditText edtRef;
     private ListView list;
@@ -50,13 +51,14 @@ public class FragRef extends Fragment {
         recuperar();
         gerarLista();
 
+
         btSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if(salvar()){
                     //adapter.clearAdapter();
-                    Reference r=new Reference();
-                    r.setDsUrl(edtRef.getText().toString());
+//                    Reference r=new Reference();
+//                    r.setDsUrl(edtRef.getText().toString());
                     Toast.makeText(getActivity(),"Referências salvas com sucesso!",Toast.LENGTH_SHORT).show();
                 }else {
                     Toast.makeText(getActivity(),"Erro ao salvar referências",Toast.LENGTH_SHORT).show();
@@ -81,15 +83,14 @@ public class FragRef extends Fragment {
     private void gerarLista(){
         adapter= new ReferenceAdapter(getContext(),references);
         list.setAdapter(adapter);
-        list.setClickable(true);
-        list.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+        list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 refSelected = (Reference) adapter.getItem(position);
                 registerForContextMenu(list);
-                return true;
             }
         });
+
     }
 
 
@@ -115,6 +116,10 @@ public class FragRef extends Fragment {
         Singleton singleton = Singleton.getInstance();
         DataBaseAdapter data = DataBaseAdapter.getInstance(getActivity());
         references = (ArrayList)data.getReferences(singleton.idActivityStudent);
+        //adapter.refresh(references);
+        for (Reference ref:references) {
+            Log.d("Frag Reference", "ref:"+ref.toString());
+        }
     }
 
     @Override
