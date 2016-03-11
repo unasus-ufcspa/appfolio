@@ -23,6 +23,7 @@ import android.widget.ImageView;
 import android.widget.Toast;
 import android.widget.VideoView;
 
+import com.onegravity.rteditor.utils.Constants;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 import com.ufcspa.unasus.appportfolio.Activities.MainActivity;
@@ -128,51 +129,43 @@ public class FragmentAttachment extends Frag {
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        // Quando o usuário escolhe a opção Take Picture
-        if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == Activity.RESULT_OK) {
-            galleryAddPic();
-            insertFileIntoDataBase(mCurrentPhotoPath, "I");
-            launchCropImageIntent();
-        }
-
-        // Quando o usuário escolhe a opção Gallery
-        if (requestCode == RESULT_LOAD_IMAGE && resultCode == Activity.RESULT_OK) {
-            Uri selectedUri = data.getData();
-            String[] columns = {MediaStore.Images.Media.DATA, MediaStore.Images.Media.MIME_TYPE};
-
-            Cursor cursor = getActivity().getContentResolver().query(selectedUri, columns, null, null, null);
-            cursor.moveToFirst();
-
-            int pathColumnIndex = cursor.getColumnIndex(columns[0]);
-            int mimeTypeColumnIndex = cursor.getColumnIndex(columns[1]);
-
-            String contentPath = cursor.getString(pathColumnIndex);
-            String mimeType = cursor.getString(mimeTypeColumnIndex);
-
-            cursor.close();
-
-            mCurrentPhotoPath = contentPath;
-
-            if (mimeType.startsWith("image")) {
-//                saveAttachment();
+        if (resultCode == Activity.RESULT_OK) {
+            if (requestCode == Constants.CROP_IMAGE) {
+                galleryAddPic();
+                saveImageOnAppDir();
                 insertFileIntoDataBase(mCurrentPhotoPath, "I");
+            } else if (requestCode == REQUEST_IMAGE_CAPTURE) {
                 launchCropImageIntent();
-            } else if (mimeType.startsWith("video")) {
-                insertFileIntoDataBase(mCurrentPhotoPath, "V");
-                mCurrentPhotoPath = getThumbnailPathForLocalFile(getActivity(), selectedUri);
+            } else if (requestCode == RESULT_LOAD_IMAGE) {
+                Uri selectedUri = data.getData();
+                String[] columns = {MediaStore.Images.Media.DATA, MediaStore.Images.Media.MIME_TYPE};
+
+                Cursor cursor = getActivity().getContentResolver().query(selectedUri, columns, null, null, null);
+                cursor.moveToFirst();
+
+                int pathColumnIndex = cursor.getColumnIndex(columns[0]);
+                int mimeTypeColumnIndex = cursor.getColumnIndex(columns[1]);
+
+                String contentPath = cursor.getString(pathColumnIndex);
+                String mimeType = cursor.getString(mimeTypeColumnIndex);
+
+                cursor.close();
+
+                mCurrentPhotoPath = contentPath;
+
+                if (mimeType.startsWith("image")) {
+                    saveImage();
+                    launchCropImageIntent();
+                } else if (mimeType.startsWith("video")) {
+                    insertFileIntoDataBase(mCurrentPhotoPath, "V");
+                }
+
+            } else if (requestCode == PICKFILE_RESULT_CODE) {
+                insertFileIntoDataBase(data.getData().getPath(), "T");
+            } else if (requestCode == REQUEST_VIDEO_CAPTURE) {
+                galleryAddPic();
+                insertFileIntoDataBase(data.getData().getPath(), "V");
             }
-        }
-
-        // Quando o usuário escolhe a opção Text
-        if (requestCode == PICKFILE_RESULT_CODE && resultCode == Activity.RESULT_OK) {
-            insertFileIntoDataBase(data.getData().getPath(), "T");
-        }
-
-        // Quando o usuário escolhe a opção Videos
-        if (requestCode == REQUEST_VIDEO_CAPTURE && resultCode == Activity.RESULT_OK) {
-            insertFileIntoDataBase(data.getData().getPath(), "V");
-            galleryAddPic();
-//            mCurrentPhotoPath = getThumbnailPathForLocalFile(getActivity(), data.getData());
         }
     }
 
@@ -363,8 +356,12 @@ public class FragmentAttachment extends Frag {
                 boolean bool = source.deleteAttachment(attachment);
                 if (allAttachmentDeleted)
                     allAttachmentDeleted = bool;
-                if (bool)
+                if (bool) {
                     attachments.remove(attachment);
+                    File file = new File(attachment.getLocalPath());
+                    if (file.exists())
+                        file.delete();
+                }
             }
 
             listAdapter.refresh(attachments);

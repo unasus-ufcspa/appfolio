@@ -1,21 +1,20 @@
-<LinearLayout
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/big_drawer"
     android:layout_width="230dp"
     android:layout_height="match_parent"
     android:layout_alignParentLeft="true"
     android:layout_alignParentStart="true"
     android:layout_alignParentTop="true"
+    android:animateLayoutChanges="true"
     android:background="@color/gray_1"
     android:orientation="vertical"
-    android:animateLayoutChanges="true"
-    android:visibility="visible"
-    xmlns:android="http://schemas.android.com/apk/res/android">
+    android:visibility="visible">
 
         <LinearLayout
-            android:orientation="horizontal"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_weight="1">
+            android:layout_weight="1"
+            android:orientation="horizontal">
 
             <ImageView
                 android:id="@+id/big_logo"
@@ -27,12 +26,12 @@
         </LinearLayout>
 
         <LinearLayout
-            android:orientation="horizontal"
+            android:id="@+id/portfolios"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:id="@+id/portfolios"
-            android:gravity="center">
+            android:gravity="center"
+            android:orientation="horizontal">
 
             <ImageButton
                 android:id="@+id/imageButton"
@@ -43,23 +42,23 @@
                 android:src="@drawable/drawer_integrantes" />
 
             <TextView
+                android:id="@+id/textView5"
                 android:layout_width="150dp"
                 android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceMedium"
-                android:text="@string/drawer_portfolio"
-                android:id="@+id/textView5"
-                android:textColor="@color/gray_3"
                 android:layout_gravity="center_vertical"
-                android:gravity="center" />
+                android:gravity="center"
+                android:text="@string/drawer_portfolio"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textColor="@color/gray_3" />
         </LinearLayout>
 
         <LinearLayout
-            android:orientation="horizontal"
+            android:id="@+id/activities"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:id="@+id/activities"
-            android:gravity="center">
+            android:gravity="center"
+            android:orientation="horizontal">
 
             <ImageButton
                 android:id="@+id/imageButton2"
@@ -70,23 +69,23 @@
                 android:src="@drawable/drawer_relatorios" />
 
             <TextView
+                android:id="@+id/textView6"
                 android:layout_width="150dp"
                 android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceMedium"
-                android:text="@string/drawer_activities"
-                android:id="@+id/textView6"
-                android:textColor="@color/gray_3"
                 android:layout_gravity="center_vertical"
-                android:gravity="center" />
+                android:gravity="center"
+                android:text="@string/drawer_activities"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textColor="@color/gray_3" />
         </LinearLayout>
 
         <LinearLayout
-            android:orientation="horizontal"
+            android:id="@+id/reports"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:id="@+id/reports"
-            android:gravity="center">
+            android:gravity="center"
+            android:orientation="horizontal">
 
             <ImageButton
                 android:id="@+id/imageButton3"
@@ -97,23 +96,23 @@
                 android:src="@drawable/drawer_atividades" />
 
             <TextView
+                android:id="@+id/textView7"
                 android:layout_width="150dp"
                 android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceMedium"
-                android:text="@string/drawer_reports"
-                android:id="@+id/textView7"
-                android:textColor="@color/gray_3"
                 android:layout_gravity="center_vertical"
-                android:gravity="center" />
+                android:gravity="center"
+                android:text="@string/drawer_reports"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textColor="@color/gray_3" />
         </LinearLayout>
 
         <LinearLayout
-            android:orientation="horizontal"
+            android:id="@+id/settings"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:id="@+id/settings"
-            android:gravity="center">
+            android:gravity="center"
+            android:orientation="horizontal">
 
             <ImageButton
                 android:id="@+id/imageButton4"
@@ -124,24 +123,24 @@
                 android:src="@drawable/drawer_congiguracoes" />
 
             <TextView
+                android:id="@+id/textView8"
                 android:layout_width="150dp"
                 android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceMedium"
-                android:text="@string/drawer_settings"
-                android:id="@+id/textView8"
-                android:textColor="@color/gray_3"
                 android:layout_gravity="center_vertical"
-                android:textSize="16dp"
-                android:gravity="center" />
+                android:gravity="center"
+                android:text="@string/drawer_settings"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textColor="@color/gray_3"
+                android:textSize="16dp" />
         </LinearLayout>
 
         <LinearLayout
-            android:orientation="horizontal"
+            android:id="@+id/attachments"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:id="@+id/attachments"
-            android:gravity="center">
+            android:gravity="center"
+            android:orientation="horizontal">
 
             <ImageButton
                 android:id="@+id/imageButton5"
@@ -152,13 +151,13 @@
                 android:src="@drawable/drawer_anexos" />
 
             <TextView
+                android:id="@+id/textView9"
                 android:layout_width="150dp"
                 android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceMedium"
-                android:text="@string/drawer_files"
-                android:id="@+id/textView9"
-                android:textColor="@color/gray_3"
                 android:layout_gravity="center_vertical"
-                android:gravity="center" />
+                android:gravity="center"
+                android:text="@string/drawer_files"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textColor="@color/gray_3" />
         </LinearLayout>
     </LinearLayout>
