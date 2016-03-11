@@ -38,6 +38,7 @@ import com.onegravity.rteditor.api.media.RTVideo;
 import com.onegravity.rteditor.converter.ConverterSpannedToHtml;
 import com.onegravity.rteditor.effects.Effects;
 import com.onegravity.rteditor.spans.BackgroundColorSpan;
+import com.ufcspa.unasus.appportfolio.Activities.MainActivity;
 import com.ufcspa.unasus.appportfolio.Model.ActivityStudent;
 import com.ufcspa.unasus.appportfolio.Model.Note;
 import com.ufcspa.unasus.appportfolio.Model.Singleton;
@@ -163,14 +164,14 @@ public class FragmentRTEditor extends Fragment {
         fullScreen.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                saveText();
-//
-//                if (singleton.isFullscreen)
-//                    singleton.isFullscreen = false;
-//                else
-//                    singleton.isFullscreen = true;
-//
-//                ((MainActivity) getActivity()).dontCreateCrossfader();
+                saveText();
+
+                if (singleton.isFullscreen)
+                    singleton.isFullscreen = false;
+                else
+                    singleton.isFullscreen = true;
+
+                ((MainActivity) getActivity()).dontCreateCrossfader();
                 Log.d("rteditor", mRTMessageField.getText(RTFormat.HTML));
             }
         });
