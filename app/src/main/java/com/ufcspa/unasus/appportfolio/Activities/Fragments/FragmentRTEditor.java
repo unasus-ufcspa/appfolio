@@ -166,10 +166,13 @@ public class FragmentRTEditor extends Fragment {
             public void onClick(View v) {
                 saveText();
 
-                if (singleton.isFullscreen)
+                if (singleton.isFullscreen) {
+                    singleton.wasFullscreen = true;
                     singleton.isFullscreen = false;
-                else
+                } else {
+                    singleton.wasFullscreen = false;
                     singleton.isFullscreen = true;
+                }
 
                 ((MainActivity) getActivity()).dontCreateCrossfader();
                 Log.d("rteditor", mRTMessageField.getText(RTFormat.HTML));

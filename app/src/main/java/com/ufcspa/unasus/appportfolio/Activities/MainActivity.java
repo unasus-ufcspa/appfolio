@@ -128,7 +128,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
         LocalBroadcastManager.getInstance(this).registerReceiver(broadcastReceiver, new IntentFilter("call.fragments.action"));
 
-        if (!shouldCreateDrawer)
+        if (!shouldCreateDrawer || singleton.wasFullscreen)
             getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new FragmentRTEditor()).commit();
         else if (savedInstanceState == null)
             // QUAL FRAGMENT IRA INICIAR APOS LOGIN?

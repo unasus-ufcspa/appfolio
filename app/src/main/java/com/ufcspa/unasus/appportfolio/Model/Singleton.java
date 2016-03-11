@@ -16,6 +16,8 @@ public class Singleton {
     public boolean isRTEditor = false;
     public boolean firsttime = false;
     public boolean isFullscreen = false;
+    public boolean wasFullscreen = false;
+
 
     private Singleton() {
     }
