@@ -166,13 +166,16 @@ public class FragmentRTEditor extends Fragment {
             public void onClick(View v) {
                 saveText();
 
-                if (singleton.isFullscreen)
+                if (singleton.isFullscreen) {
+                    singleton.wasFullscreen = true;
                     singleton.isFullscreen = false;
-                else
+                } else {
+                    singleton.wasFullscreen = false;
                     singleton.isFullscreen = true;
+                }
 
                 ((MainActivity) getActivity()).dontCreateCrossfader();
-//                Log.d("rteditor", mRTMessageField.getText(RTFormat.HTML));
+                Log.d("rteditor", mRTMessageField.getText(RTFormat.HTML));
             }
         });
 
@@ -202,7 +205,8 @@ public class FragmentRTEditor extends Fragment {
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         saveText();
-        mRTManager.onSaveInstanceState(outState);
+        if (mRTManager != null)
+            mRTManager.onSaveInstanceState(outState);
         outState.putInt("currentSpecificComment", currentSpecificComment);
         outState.putSerializable("specificCommentsNotes", specificCommentsNotes);
     }
@@ -536,8 +540,10 @@ public class FragmentRTEditor extends Fragment {
             }
         }
 
-        RTHtml<RTImage, RTAudio, RTVideo> rtHtml = new ConverterSpannedToHtml().convert(textSpanned, RTFormat.HTML);
-        mRTMessageField.setRichTextEditing(true, rtHtml.getText());
+        if (mRTManager.getActiveEditor() != null) {
+            RTHtml<RTImage, RTAudio, RTVideo> rtHtml = new ConverterSpannedToHtml().convert(textSpanned, RTFormat.HTML);
+            mRTMessageField.setRichTextEditing(true, rtHtml.getText());
+        }
 
         ArrayList<Note> arrayAux = new ArrayList<>(specificCommentsNotes.values());
 

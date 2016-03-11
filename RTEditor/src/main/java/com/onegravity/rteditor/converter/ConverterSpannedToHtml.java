@@ -18,7 +18,6 @@ package com.onegravity.rteditor.converter;
 
 import android.text.Spanned;
 import android.text.style.AbsoluteSizeSpan;
-//import android.text.style.BackgroundColorSpan;
 import android.text.style.CharacterStyle;
 import android.text.style.ForegroundColorSpan;
 import android.text.style.ParagraphStyle;
@@ -27,9 +26,6 @@ import android.text.style.SubscriptSpan;
 import android.text.style.SuperscriptSpan;
 import android.text.style.URLSpan;
 
-import com.onegravity.rteditor.spans.BackgroundColorSpan;
-import com.onegravity.rteditor.spans.UnderlineSpan;
-
 import com.onegravity.rteditor.api.format.RTFormat;
 import com.onegravity.rteditor.api.format.RTHtml;
 import com.onegravity.rteditor.api.media.RTAudio;
@@ -37,11 +33,13 @@ import com.onegravity.rteditor.api.media.RTImage;
 import com.onegravity.rteditor.api.media.RTVideo;
 import com.onegravity.rteditor.converter.tagsoup.util.StringEscapeUtils;
 import com.onegravity.rteditor.spans.AudioSpan;
+import com.onegravity.rteditor.spans.BackgroundColorSpan;
 import com.onegravity.rteditor.spans.BoldSpan;
-import com.onegravity.rteditor.spans.TypefaceSpan;
 import com.onegravity.rteditor.spans.ImageSpan;
 import com.onegravity.rteditor.spans.ItalicSpan;
 import com.onegravity.rteditor.spans.LinkSpan;
+import com.onegravity.rteditor.spans.TypefaceSpan;
+import com.onegravity.rteditor.spans.UnderlineSpan;
 import com.onegravity.rteditor.spans.VideoSpan;
 import com.onegravity.rteditor.utils.Helper;
 import com.onegravity.rteditor.utils.Paragraph;
@@ -57,6 +55,8 @@ import java.util.Set;
 import java.util.SortedSet;
 import java.util.Stack;
 import java.util.TreeSet;
+
+//import android.text.style.BackgroundColorSpan;
 
 /**
  * Converts Spanned text to html
@@ -74,6 +74,9 @@ public class ConverterSpannedToHtml {
     private RTFormat mRTFormat;
     private List<RTImage> mImages;
     private Stack<AccumulatedParagraphStyle> mParagraphStyles = new Stack<AccumulatedParagraphStyle>();
+    private ArrayList<CharacterStyle> util = new ArrayList<>();
+
+    // ****************************************** Process Paragraphs *******************************************
 
     /**
      * Converts a spanned text to HTML
@@ -91,8 +94,6 @@ public class ConverterSpannedToHtml {
 
         return new RTHtml<RTImage, RTAudio, RTVideo>(rtFormat, mOut.toString(), mImages);
     }
-
-    // ****************************************** Process Paragraphs *******************************************
 
     private void convertParagraphs() {
         RTLayout rtLayout = new RTLayout(mText);
@@ -138,7 +139,7 @@ public class ConverterSpannedToHtml {
             if (alignmentType != null) {
                 mOut.append(alignmentType.getStartTag());
             }
-			
+
 			/*
 			 * Convert the plain text
 			 */
@@ -223,6 +224,8 @@ public class ConverterSpannedToHtml {
         return 0;
     }
 
+    // ****************************************** Process Text *******************************************
+
     private void addParagraph(AccumulatedParagraphStyle style) {
         String tag = style.getType().getStartTag();
         int indent = style.getRelativeIndent();
@@ -232,8 +235,6 @@ public class ConverterSpannedToHtml {
         mParagraphStyles.push(style);
     }
 
-    // ****************************************** Process Text *******************************************
-
     /**
      * Convert a spanned text within a paragraph
      */
@@ -242,14 +243,14 @@ public class ConverterSpannedToHtml {
         SortedSet<CharacterStyle> sortedSpans = new TreeSet<CharacterStyle>(new Comparator<CharacterStyle>() {
             @Override
             public int compare(CharacterStyle s1, CharacterStyle s2) {
+                int end1 = text.getSpanEnd(s1);
+                int end2 = text.getSpanEnd(s2);
+                if (end1 != end2) return end2 - end1;                // longer span comes first
+
                 int start1 = text.getSpanStart(s1);
                 int start2 = text.getSpanStart(s2);
                 if (start1 != start2)
                     return start1 - start2;        // span which starts first comes first
-
-                int end1 = text.getSpanEnd(s1);
-                int end2 = text.getSpanEnd(s2);
-                if (end1 != end2) return end2 - end1;                // longer span comes first
 
                 // if the paragraphs have the same span [start, end] we compare their name
                 // compare the name only because local + anonymous classes have no canonical name
@@ -273,26 +274,82 @@ public class ConverterSpannedToHtml {
             int spanStart = span == null ? Integer.MAX_VALUE : text.getSpanStart(span);
             int spanEnd = span == null ? Integer.MAX_VALUE : text.getSpanEnd(span);
 
-            if (start < spanStart) {
-                // no paragraph, just plain text
-                escape(text, start, Math.min(end, spanStart));
-                start = spanStart;
+            CharacterStyle newSpan = null;
+            for (CharacterStyle s : spans) {
+                if (text.getSpanStart(s) < spanStart && !verifyIfExists(s))
+                    newSpan = s;
+            }
 
+            if (newSpan != null) {
+                int newSpanStart = text.getSpanStart(newSpan);
+                if (start < newSpanStart) {
+                    escape(text, start, Math.min(end, newSpanStart));
+                    start = newSpanStart;
+                } else {
+                    handleStartTag(newSpan);
+                    util.add(newSpan);
+                }
             } else {
-                // CharacterStyle found
-                spans.remove(span);
 
-                boolean hst = handleStartTag(span);
+                if (start < spanStart) {
+                    // no paragraph, just plain text
+                    escape(text, start, Math.min(end, spanStart));
+                    start = spanStart;
 
-                if (hst)
-                    convertText(text, Math.max(spanStart, start), Math.min(spanEnd, end), spans);
+                } else {
+                    // CharacterStyle found
+                    spans.remove(span);
 
-                handleEndTag(span);
 
-                start = spanEnd;
+                    boolean hst = true;
+
+                    if (!verifyIfExists(span))
+                        hst = handleStartTag(span);
+
+                    if (hst)
+                        convertText(text, Math.max(spanStart, start), Math.min(spanEnd, end), spans);
+
+                    handleEndTag(span);
+
+                    start = spanEnd;
+                }
             }
 
         }
+    }
+
+    /*
+    Versão anterior
+    int start1 = text.getSpanStart(s1);
+    int start2 = text.getSpanStart(s2);
+    if (start1 != start2)
+    return start1 - start2;        // span which starts first comes first
+
+    if (start < spanStart) {
+        // no paragraph, just plain text
+        escape(text, start, Math.min(end, spanStart));
+        start = spanStart;
+    } else {
+        // CharacterStyle found
+        spans.remove(span);
+
+
+        boolean hst = handleStartTag(span);
+
+        if (hst)
+            convertText(text, Math.max(spanStart, start), Math.min(spanEnd, end), spans);
+
+        handleEndTag(span);
+
+        start = spanEnd;
+    }
+     */
+
+    private boolean verifyIfExists(CharacterStyle cstyle) {
+        for (CharacterStyle s : util)
+            if (s.equals(cstyle))
+                return true;
+        return false;
     }
 
     /**

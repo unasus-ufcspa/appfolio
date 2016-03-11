@@ -180,7 +180,6 @@ public class Frag extends Fragment {
             cursor.close();
 
             mCurrentPhotoPath = contentPath;
-
             if (mimeType.startsWith("image")) {
                 insertFileIntoDataBase(mCurrentPhotoPath, "I");
                 launchCropImageIntent();
@@ -454,6 +453,16 @@ public class Frag extends Fragment {
             }
         });
 
+        ImageButton img_folio = (ImageButton) dialog.findViewById(R.id.img_my_gallery);
+        img_folio.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(getContext(), "Folio", Toast.LENGTH_SHORT).show();
+
+                dialog.dismiss();
+            }
+        });
+
         Button bt_cancel = (Button) dialog.findViewById(R.id.btn_cancel);
         bt_cancel.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -549,40 +558,72 @@ public class Frag extends Fragment {
         builder.show();
     }
 
-
-
-    /**
-     * ALTERAR PARA O CAMINHO NECESSÁRIO
-     */
-    public void saveAttachment() {
-        String[] path = mCurrentPhotoPath.split("\\.");
-        path[0] += "_small";
+    public void saveImageOnAppDir() {
+        String[] path = mCurrentPhotoPath.split("/");
 
         OutputStream fOutputStream = null;
-        File file = new File(path[0] + "." + path[1]);
-        String name = file.getName();
-        File newFile = new File(getContext().getExternalFilesDir(null) + "/" + name);
-        if (!newFile.exists()) {
+        File file = new File(getContext().getExternalFilesDir(null) + "/" + path[path.length - 1]);
+        if (!file.exists()) {
             try {
-                newFile.createNewFile();
+                file.createNewFile();
             } catch (IOException e) {
                 e.printStackTrace();
             }
         }
 
         try {
-            fOutputStream = new FileOutputStream(newFile);
+            fOutputStream = new FileOutputStream(file);
 
             Bitmap bitmap = BitmapFactory.decodeFile(mCurrentPhotoPath);
-            mCurrentPhotoPath = newFile.getAbsolutePath();
+            mCurrentPhotoPath = file.getAbsolutePath();
 
-            Bitmap resized = Bitmap.createScaledBitmap(bitmap, 320, 240, true);
-            resized.compress(Bitmap.CompressFormat.PNG, 40, fOutputStream);
+            bitmap.compress(Bitmap.CompressFormat.PNG, 100, fOutputStream);
+
+            fOutputStream.flush();
+            fOutputStream.close();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+            Toast.makeText(getActivity(), "O salvamento falhou.", Toast.LENGTH_SHORT).show();
+            return;
+        } catch (IOException e) {
+            e.printStackTrace();
+            Toast.makeText(getActivity(), "O salvamento falhou.", Toast.LENGTH_SHORT).show();
+            return;
+        }
+    }
+
+    public void saveImage() {
+        String[] path = mCurrentPhotoPath.split("/");
+        String[] secondPath = path[path.length - 1].split("\\.");
+        secondPath[0] += "_new";
+        path[path.length - 1] = secondPath[0] + "." + secondPath[1];
+
+        String newPath = "";
+        for (int i = 1; i < path.length; i++)
+            newPath += "/" + path[i];
+
+        OutputStream fOutputStream = null;
+        File file = new File(newPath);
+        if (!file.exists()) {
+            try {
+                file.createNewFile();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+        try {
+            fOutputStream = new FileOutputStream(file);
+
+            Bitmap bitmap = BitmapFactory.decodeFile(mCurrentPhotoPath);
+            mCurrentPhotoPath = newPath;
+
+            bitmap.compress(Bitmap.CompressFormat.PNG, 100, fOutputStream);
 
             fOutputStream.flush();
             fOutputStream.close();
 
-//            MediaStore.Images.Media.insertImage(getActivity().getContentResolver(), file.getAbsolutePath(), file.getName(), file.getName());
+            MediaStore.Images.Media.insertImage(getActivity().getContentResolver(), file.getAbsolutePath(), file.getName(), file.getName());
         } catch (FileNotFoundException e) {
             e.printStackTrace();
             Toast.makeText(getActivity(), "Save Failed", Toast.LENGTH_SHORT).show();
@@ -593,10 +634,6 @@ public class Frag extends Fragment {
             return;
         }
     }
-    /**
-     * ALTERAR
-     */
-
 
     public void loadPhoto(final String url) {
         if (url != null) {
@@ -616,29 +653,5 @@ public class Frag extends Fragment {
                 startActivity(intent);
         }
 
-    }
-
-    public void showPDFDialog(String url)
-    {
-        android.support.v7.app.AlertDialog.Builder pdfDialog = new android.support.v7.app.AlertDialog.Builder(getActivity());
-
-        pdfDialog.setPositiveButton("Fechar", new DialogInterface.OnClickListener() {
-
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.dismiss();
-            }
-
-        });
-        pdfDialog.setNegativeButton("Deletar", new DialogInterface.OnClickListener() {
-
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.dismiss();
-//                deleteMedia(position);
-            }
-
-        });
-
-        pdfDialog.create();
-        pdfDialog.show();
     }
 }
