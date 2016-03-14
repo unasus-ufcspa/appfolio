@@ -99,7 +99,7 @@ public class CommentAdapter extends BaseAdapter {
             }
         }
         if(c.atach==false) {
-            holder.message.setBackgroundResource(c.orientation ? R.drawable.my_ballon : R.drawable.tutor_ballon);
+            holder.message.setBackgroundResource(c.orientation ? R.drawable.my_ballon : R.drawable.teste);
             holder.wraper.setGravity(c.orientation ? Gravity.LEFT : Gravity.RIGHT);
         }
         //////////---------------////////////////////
