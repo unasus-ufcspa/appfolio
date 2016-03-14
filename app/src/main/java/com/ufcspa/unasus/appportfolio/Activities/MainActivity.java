@@ -132,9 +132,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         if (!shouldCreateDrawer || singleton.wasFullscreen)
             getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new FragmentRTEditor()).commit();
         else if (savedInstanceState == null)
-            // QUAL FRAGMENT IRA INICIAR APOS LOGIN?
-            // 0 para select portfolio
-            // 5 para rtEditor
+           /*
+             QUAL FRAGMENT IRA INICIAR APOS LOGIN?
+             0 para select portfolio
+             5 para rtEditor
+             */
             changeFragment(0);
     }
 

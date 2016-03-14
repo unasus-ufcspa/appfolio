@@ -53,17 +53,6 @@ public class FragmentComments extends Frag {
 
         singleton = Singleton.getInstance();
 //        singleton.idActivityStudent = source.getActivityStudentID(singleton.activity.getIdAtivity(), singleton.portfolioClass.getIdPortfolioStudent());
-
-
-        //btGenMess.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                addRandomItem();
-//                lv.setAdapter(adapter);
-//            }
-//        });
-        //ipsum = new LoremIpsum();
-
         Log.d("Comments", "On createView entrou");
         return view;
     }
@@ -81,14 +70,21 @@ public class FragmentComments extends Frag {
 
     }
 
+
+
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         oneComments = new ArrayList<>(70);
-        adapterComments = new CommentAdapter(getContext(),oneComments);
+        adapterComments = new CommentAdapter(getContext(), oneComments);
         loadCom();
         Log.d("Comments", "On create entrou");
     }
+
+
+
+
 
     @Override
     public void onResume() {
@@ -97,28 +93,16 @@ public class FragmentComments extends Frag {
         edtMessage = (EditText) getView().findViewById(R.id.edtMessage);
         btGenMess = (Button) getView().findViewById(R.id.gen_messag_bt);
         btAttachment = (Button) getView().findViewById(R.id.bt_add_attachment);
-
-        //btGenMess.setVisibility(View.INVISIBLE);
-
         lv = (ListView) getView().findViewById(R.id.listView1);
-
-        //adapter = new CommentArrayAdapter(getActivity().getApplicationContext(), R.layout.comment_item);
-
-        //lv.setAdapter(adapter);
-
         btAttachment.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 addAttachmentToComments();
             }
         });
-
-
         btGenMess.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //addRandomItem();
-                //lv.setAdapter(adapter);
                 Log.d("Comments attach", "inserindo comentario");
                 if (attach) {
                     Log.d("Comments attach", "tentando inserir view anexo");
@@ -130,13 +114,6 @@ public class FragmentComments extends Frag {
 
                     if (!edtMessage.getText().toString().isEmpty()) {
                         Log.d("Comments attach", "tentando inserir comentario normal");
-                        //addItems();
-                        //loadCom();
-//                    Comentario c = getCommentFromText();
-//                    insertComment(c);
-//                    OneComment oneComment;
-//                    oneComment = new OneComment(false, edtMessage.getText().toString(), convertDateToTime(c.getDateComment()), convertDateToDate(c.getDateComment()));
-                        //oneComments.add(addOneComment(false));
                         adapterComments.refresh(new ArrayList<OneComment>());
                         addOneComment(false);
                         edtMessage.setText("");
@@ -156,14 +133,21 @@ public class FragmentComments extends Frag {
         Log.d("comment frag ", "pausou a fragment");
     }
 
-    public void addOneComment(boolean attachment){
+
+    /**
+     *  MÉTODO PARA ADICIONAR UM COMENTARIO NA VIEW, CASO PASSE TRUE POR PARAMETRO SERÁ INSERIDO UM ANEXO
+     *
+     *
+     * */
+
+    public void addOneComment(boolean attachment) {
         Comentario c = getCommentFromText();
         OneComment oneComment;
-        if(attachment){
+        if (attachment) {
             insertComment(c);
             Log.d("comment attachment ", "é anexo a ser inserido");
-            oneComment = new OneComment(false, "Anexo", convertDateToTime(c.getDateComment()), convertDateToDate(c.getDateComment()),true);
-        }else {
+            oneComment = new OneComment(false, "Anexo", convertDateToTime(c.getDateComment()), convertDateToDate(c.getDateComment()), true);
+        } else {
             insertComment(c);
             oneComment = new OneComment(false, edtMessage.getText().toString(), convertDateToTime(c.getDateComment()), convertDateToDate(c.getDateComment()));
         }
@@ -172,44 +156,60 @@ public class FragmentComments extends Frag {
         adapterComments.refresh(oneComments);
         //adapterComments.notifyDataSetChanged();
     }
-    public void addAtach(){
+
+
+
+    /**
+     *  MÉTODO PARA INSERIR UM NOVO ANEXO
+     *
+     *
+     * */
+    public void addAtach() {
         Log.d("comments attach", "add atach selecionado");
         //adapterComments.refresh(oneComments);
-        attach=true;
+        attach = true;
         edtMessage.setText("anexo");
-        btGenMess.performClick();
+        //btGenMess.performClick();
+        insertAtach();
     }
 
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode,resultCode,data);
+        super.onActivityResult(requestCode, resultCode, data);
         Log.d("comment attachment ", "entrando no onActivity for Result");
 //
-        if(resultCode == Activity.RESULT_OK && requestCode!= Constants.CROP_IMAGE)
+        if (resultCode == Activity.RESULT_OK && requestCode != Constants.CROP_IMAGE)
             //Log.d("comments","request code:"+requestCode);
             addAtach();
         else
             Log.d("comment attachment ", "attach cancelado");
     }
 
-        public void insertAtach(){
-            Log.d("comment attachment ", "entrando no insertAtach");
-            Comentario c = getCommentFromText();
-            insertComment(c);
-            OneComment oneComment= new OneComment(false, "Anexo",
-                    convertDateToTime(c.getDateComment()),
-                    convertDateToDate(c.getDateComment()),true);
-            Log.d("comment attachment ", "itens size:" + oneComments.size());
-            oneComments.add(oneComment);
-            Log.d("comment attachment ", "itens size is now:" + oneComments.size());
-            adapterComments.notifyDataSetChanged();
-        }
 
 
 
+    /**
+     *  MÉTODO PARA INSERIR ANEXO NA VIEW
+     *
+     *
+     * */
+    public void insertAtach() {
+        Log.d("Comments attach", "tentando inserir view anexo");
+        loadCom();
+        addOneComment(true);
+        attach = false;
+        edtMessage.setText("");
+    }
 
-    public Comentario getCommentFromText(){
+
+
+    /**
+     *  MÉTODOS PARA RECUPERAR OBJETO COMENTARIO DA VIEW
+     *
+     *
+     * */
+    public Comentario getCommentFromText() {
         Singleton singleton = Singleton.getInstance();
         Comentario c = new Comentario();
         c.setDateComment(getActualTime());
@@ -221,25 +221,24 @@ public class FragmentComments extends Frag {
     }
 
 
-
-
-    public void loadCom(){
-        //adapter.clearAdapter();
+    public void loadCom() {
         DataBaseAdapter db = DataBaseAdapter.getInstance(getActivity());
         Singleton singleton = Singleton.getInstance();
-        ArrayList<Comentario> lista = (ArrayList<Comentario>) db.listComments(singleton.activity.getIdAtivity(),"C",0);//lista comentario gerais filtrando por C
-        oneComments= new ArrayList<OneComment>(20);
+        ArrayList<Comentario> lista = (ArrayList<Comentario>) db.listComments(singleton.activity.getIdAtivity(), "C", 0);//lista comentario gerais filtrando por C
+        oneComments = new ArrayList<OneComment>(20);
         if (lista.size() != 0) {
-            for (int i = 0; i < lista.size(); i++) {
-                OneComment one = new OneComment(lista.get(i).getIdAuthor() != singleton.user.getIdUser(),
-                        lista.get(i).getTxtComment(),convertDateToTime(lista.get(i).getDateComment()),convertDateToDate(lista.get(i).getDateComment()));
-                if(lista.get(i).getIdAttach()!=0) {
+
+            for (Comentario c : lista) {
+                OneComment one = new OneComment(c.getIdAuthor() != singleton.user.getIdUser(),
+                        c.getTxtComment(), convertDateToTime(c.getDateComment()), convertDateToDate(c.getDateComment()));
+                if (c.getIdAttach() != 0) {
                     one.atach = true;
-                    one.idAttach=lista.get(i).getIdAttach();
+                    one.idAttach = c.getIdAttach();
                     Log.d("comments", "id attach:" + one.idAttach);
                 }
                 oneComments.add(one);
             }
+
             Log.d("Banco", "Lista populada:" + lista.size());
         } else {
             Log.d("Banco", "Lista retornou vazia!");
@@ -247,9 +246,12 @@ public class FragmentComments extends Frag {
         adapterComments.refresh(oneComments);
     }
 
-
-
-    public void setarListView(){
+    /**
+     *  MÉTODO PARA SETAR O ADAPTER COMMENTS NA LISTVIEW E ABRIR O ANEXO CONFORME SEU TIPO
+     *
+     *
+     * */
+    public void setarListView() {
         lv.setAdapter(adapterComments);
         lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -259,7 +261,7 @@ public class FragmentComments extends Frag {
                     Log.d("comments", "selecionou um anexo");
                     Attachment att = DataBaseAdapter.getInstance(getActivity()).getAttachmentByID(oneComments.get(position).idAttach);
                     if (att.getType() != null) {
-                        Log.d("comments", "localpath attach:"+att.getLocalPath());
+                        Log.d("comments", "localpath attach:" + att.getLocalPath());
                         if (att.getType().equals(Attachment.TYPE_TEXT)) {
                             Log.d("comments", "anexo do tipo texto");
                             //showPDFDialog(att.getLocalPath());
@@ -278,10 +280,15 @@ public class FragmentComments extends Frag {
         });
     }
 
-    private void insertComment(Comentario c) {
-//        System.out.println("id:" + c.getIdActivityStudent());
-//        System.out.println("comentario inserido:" + c);
 
+
+
+    /**
+     *  MÉTODO PARA SALVAR COMENTARIO NO BANCO E ENVIAR VIA JSON
+     *
+     *
+     * */
+    private void insertComment(Comentario c) {
         try {
             Singleton single = Singleton.getInstance();
             DataBaseAdapter db = DataBaseAdapter.getInstance(getActivity());
@@ -290,8 +297,7 @@ public class FragmentComments extends Frag {
                 //db.insertAttachComment(lastID, single.lastIdAttach);
             }
             Log.d("Banco:", "comentario inserido no bd interno com sucesso");
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             Log.e("Erro:", e.getMessage());
         }
 
@@ -306,6 +312,17 @@ public class FragmentComments extends Frag {
 
     }
 
+
+
+
+    /**
+     *  REESCRITA DO MÉTODO DA CLASSE FRAG, USADO PARA SALVAR COMETARIO COM ANEXO NA TABELA ATTACH_COMMENT
+     *
+     *
+     * */
+
+
+    @Override
     public void insertFileIntoDataBase(final String path, final String type) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
         builder.setTitle("Escolha um nome:");
@@ -320,24 +337,24 @@ public class FragmentComments extends Frag {
         builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                //source.saveAttachmentActivityStudent(path, type, singleton.idActivityStudent); //input.getText().toString()
                 Singleton single = Singleton.getInstance();
-
                 String name = input.getText().toString();
                 if (name.isEmpty()) {
                     name = "Anexo";
                 }
                 single.lastIdAttach = source.insertAttachment(new Attachment(0, path, "", type, name, 0));
-                if(lastID!=0 && single.lastIdAttach!=-1 && single.lastIdAttach!=0) {
+                if (lastID != 0 && single.lastIdAttach != -1 && single.lastIdAttach != 0) {
                     DataBaseAdapter.getInstance(getActivity()).insertAttachComment(lastID, single.lastIdAttach);
                 }
             }
         });
-
         builder.show();
     }
 
 
+    /**
+     * MÉTODO PARA PEGAR A DATA ATUAL
+     */
 
     public String getActualTime() {
         Calendar c = Calendar.getInstance();
@@ -345,8 +362,15 @@ public class FragmentComments extends Frag {
         String strDate = sdf.format(c.getTime());
         return strDate;
     }
-    public String convertDateToTime(String atualDate){
-        String shortTimeStr="00:00";
+
+
+    /**
+     * MÉTODOS PARA CONVERTER O FORMATO DE DATA VINDO DO BANCO PARA EXIBIR NA VIEW
+     */
+
+
+    public String convertDateToTime(String atualDate) {
+        String shortTimeStr = "00:00";
         //Log.d("comments","date receiving :"+atualDate);
         try {
             SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -354,29 +378,26 @@ public class FragmentComments extends Frag {
             date = df.parse(atualDate);
             SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
             shortTimeStr = sdf.format(date);
-            //Log.d("comments","date to hour :"+shortTimeStr);
         } catch (ParseException e) {
-            // To change body of catch statement use File | Settings | File Templates.
             e.printStackTrace();
         }
         return shortTimeStr;
     }
 
-    public String convertDateToDate(String atualDate){
-        String shortTimeStr="00:00";
-        //Log.d("comments","date receiving :"+atualDate);
+    public String convertDateToDate(String atualDate) {
+        String shortDateStr = "12/12/2012";
         try {
             SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             Date date = null;
             date = df.parse(atualDate);
             SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-            shortTimeStr = sdf.format(date);
-            //Log.d("comments","date to other date format :"+shortTimeStr);
+            shortDateStr = sdf.format(date);
         } catch (ParseException e) {
-            // To change body of catch statement use File | Settings | File Templates.
             e.printStackTrace();
         }
-        return shortTimeStr;
+        return shortDateStr;
     }
+
+
 
 }

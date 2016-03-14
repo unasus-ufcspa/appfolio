@@ -163,6 +163,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
     private void loginSuccess()
     {
+        showProgress(true);
         Log.d("singletonn", "id:" + session.user.getIdUser() + " uT:" + session.user.getUserType());
         startActivity(new Intent(getApplicationContext(), MainActivity.class));
         finish();
@@ -220,7 +221,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         }
         if (shouldShowRequestPermissionRationale(READ_CONTACTS)) {
             Snackbar.make(mEmailView, R.string.permission_rationale, Snackbar.LENGTH_INDEFINITE)
-                    .setAction(android.R.string.ok, new View.OnClickListener() {
+                    .setAction(android.R.string.ok, new OnClickListener() {
                         @Override
                         @TargetApi(Build.VERSION_CODES.M)
                         public void onClick(View v) {
@@ -319,6 +320,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         // the progress spinner.
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB_MR2) {
             int shortAnimTime = getResources().getInteger(android.R.integer.config_shortAnimTime);
+            int shortTime = 75;
 
 //            mLoginFormView.setVisibility(show ? View.GONE : View.VISIBLE);
 //            mLoginFormView.animate().setDuration(shortAnimTime).alpha(

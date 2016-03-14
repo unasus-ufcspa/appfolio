@@ -21,9 +21,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.onegravity.rteditor.utils.Constants;
-import com.ufcspa.unasus.appportfolio.Adapter.CommentAdapter;
 import com.ufcspa.unasus.appportfolio.Adapter.SpecificCommentAdapter;
-import com.ufcspa.unasus.appportfolio.Adapter.SpecificCommentArrayAdapter;
 import com.ufcspa.unasus.appportfolio.Model.Attachment;
 import com.ufcspa.unasus.appportfolio.Model.Comentario;
 import com.ufcspa.unasus.appportfolio.Model.Note;
@@ -81,21 +79,14 @@ public class FragmentSpecificComments extends Frag {
         btAttachment = (Button) getView().findViewById(R.id.bt_add_attachment);
         edtMessage = (EditText) getView().findViewById(R.id.edtMessage);
         txNote = (TextView) getView().findViewById(R.id.txSelectedNote);
-        //btGenMess.setVisibility(View.INVISIBLE);
         btExpand = (ImageButton) getView().findViewById(R.id.btn_expand_ref);
-
         lv = (ListView) getView().findViewById(R.id.listView1);
         lv.setAdapter(spcAdapter);
-
-        //adapter = new SpecificCommentArrayAdapter(getActivity().getApplicationContext(), R.layout.comment_item);
         loadCommentsFromDB();
-        if(oneComments!=null) {
-
-        }
         insertReference();
         ((InputMethodManager)getActivity().getSystemService(Context.INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(getView().getWindowToken(), 0);
-//        InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(getActivity().INPUT_METHOD_SERVICE);
-//        imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY);
+        InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(getActivity().INPUT_METHOD_SERVICE);
+        imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY);
         btGenMess.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -130,7 +121,6 @@ public class FragmentSpecificComments extends Frag {
                 addAttachmentToComments();
             }
         });
-
         setarListView();
     }
 
@@ -167,17 +157,10 @@ public class FragmentSpecificComments extends Frag {
                     }
                     oneComments.add(one);
                 }
-//                for (int i = 0; i < lista.size(); i++) {
-//                    oneComments.add(new OneComment(lista.get(i).getIdAuthor() != singleton.user.getIdUser(),
-//                            lista.get(i).getTxtComment(), convertDateToTime(lista.get(i).getDateComment()), convertDateToDate(lista.get(i).getDateComment())));
-//                }
-                Log.d("Banco", "Lista populada:" + lista);
             } else {
                 Log.d("Banco", "Lista retornou vazia!");
             }
             Log.d("specific comments","one Comments exist, size:"+oneComments.size());
-            //spcAdapter = new SpecificCommentAdapter(getActivity(), oneComments);
-            //lv.setAdapter(spcAdapter);
             spcAdapter.refresh(oneComments);
             Log.d("specific comments", "adapter itens:" + spcAdapter.getCount());
 

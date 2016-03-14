@@ -54,18 +54,6 @@ public class SelectClassActivity extends AppActivity implements AdapterView.OnIt
             Log.wtf("ERRO",e.getMessage());
         }
 
-//        ArrayList<String>codTurmas = new ArrayList<String>();
-//        for(int i=0;i<classes.size();i++){
-//            if(!codTurmas.contains(classes.get(i).getCode()))
-//                codTurmas.add(classes.get(i).getCode());
-//        }
-//        Log.d("Class:","cod Turmas:"+codTurmas.toString());
-//        LinkedHashMap<String,Team> itens = new LinkedHashMap<>(classes.size());
-//        for(int i=0;i<classes.size();i++){
-//            itens.put(classes.get(i).getCode(),classes.get(i));
-//        }
-//        Log.d("Class","itens hashmap"+itens.toString());
-
 
 
         //SelectClassAdapter gridAdapter = new SelectClassAdapter(this, classes);
