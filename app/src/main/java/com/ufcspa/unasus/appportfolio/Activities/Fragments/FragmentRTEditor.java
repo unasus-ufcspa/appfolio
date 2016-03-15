@@ -74,8 +74,6 @@ public class FragmentRTEditor extends Fragment {
     public FragmentRTEditor() {}
 
 
-
-
     /**
      *  MÉTODO PARA CARREGAR  A ULTIMA VERSÃO DO TEXTO
      *
@@ -358,7 +356,7 @@ public class FragmentRTEditor extends Fragment {
                         Button aux = (Button) getView().findViewById(arrayAux.get(i).getBtId());
                         if (aux.getId() != btn.getId()) {
                             aux.setBackgroundResource(R.drawable.btn_border);
-                            aux.setTextColor(greenLight);
+                            aux.setTextColor(greenDark);
                         }
                     }
 
@@ -402,7 +400,7 @@ public class FragmentRTEditor extends Fragment {
 
                 btn_view.setText(String.valueOf(n.getBtId()));
                 btn_view.setBackgroundResource(R.drawable.btn_border);
-                btn_view.setTextColor(greenLight);
+                btn_view.setTextColor(greenDark);
                 btn_view.setY(i);
                 btn_view.setTag(n.getBtId());
 
@@ -434,7 +432,10 @@ public class FragmentRTEditor extends Fragment {
 
                 rightBarSpecificComments.addView(btn_view);
 
-                i += 50;
+                final float scale = getResources().getDisplayMetrics().density;
+                int btnHeight = (int) (25 * scale + 0.5f);
+
+                i += btnHeight;
             }
         }
     }

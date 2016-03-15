@@ -283,7 +283,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         switch (id)
         {
             case 0:
-                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new FragmentRTEditor()).addToBackStack("Frag").commit();//FragmentSelectPortfolio
+                    getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new FragmentRTEditor()).addToBackStack("Frag").commit();//FragmentSelectPortfolio
                 break;
             case 1:
                 if(singleton.portfolioClass != null)

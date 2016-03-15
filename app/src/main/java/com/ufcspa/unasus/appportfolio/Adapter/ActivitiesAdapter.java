@@ -30,12 +30,14 @@ public class ActivitiesAdapter extends RecyclerView.Adapter<ActivitiesAdapter.Vi
     private List<Activity> list;
     private Context context;
     private Singleton singleton;
+    private String studentName;
 
-    public ActivitiesAdapter(Context context, List<Activity> list) {
+    public ActivitiesAdapter(Context context, List<Activity> list, String studName) {
         this.list = list;
         this.context = context;
         this.singleton = Singleton.getInstance();
         Collections.sort(this.list);
+        this.studentName = studName;
     }
 
     @Override
@@ -52,7 +54,7 @@ public class ActivitiesAdapter extends RecyclerView.Adapter<ActivitiesAdapter.Vi
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, final int position) {
-        Activity aux = this.list.get(position);
+        Activity aux = list.get(position);
 
         holder.title.setText(aux.getTitle());
         holder.description = aux.getDescription();
@@ -69,6 +71,7 @@ public class ActivitiesAdapter extends RecyclerView.Adapter<ActivitiesAdapter.Vi
                 singleton.activity = list.get(position);
                 singleton.idActivityStudent=singleton.activity.getIdAtivity();
                 singleton.portfolioClass.setIdPortfolioStudent(list.get(position).getIdPortfolio());
+                singleton.portfolioClass.setStudentName(studentName);
                 LocalBroadcastManager.getInstance(context).sendBroadcast(new Intent("call.fragments.action").putExtra("ID",5));
             }
         });
