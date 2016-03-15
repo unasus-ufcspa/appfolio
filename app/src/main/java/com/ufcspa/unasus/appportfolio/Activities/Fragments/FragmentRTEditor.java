@@ -649,6 +649,21 @@ public class FragmentRTEditor extends Fragment {
         mRTMessageField.setRichTextEditing(true, rtHtmlBefore.getText() + "<img src=\"" + url + "\">" + rtHtmlAfter.getText());
     }
 
+    private boolean canCreateButton(int start, int end) {
+        boolean canCreate = true;
+        Spannable textSpanned = (Spannable) mRTMessageField.getText();
+        BackgroundColorSpan[] spans = textSpanned.getSpans(start, end, BackgroundColorSpan.class);
+
+        for (BackgroundColorSpan bcs : spans) {
+            if (textSpanned.getSpanStart(bcs) == start && textSpanned.getSpanEnd(bcs) == end) {
+                canCreate = false;
+                break;
+            }
+        }
+
+        return canCreate;
+    }
+
     private class ActionBarCallBack implements ActionMode.Callback {
 
         int startSelection;
@@ -664,8 +679,10 @@ public class FragmentRTEditor extends Fragment {
 
                     if (!selectedText.isEmpty()) {
                         if (selectedText.length() > 0) {
-                            singleton.selectedText = mRTMessageField.getText().toString().substring(startSelection, endSelection);
-                            createSpecificCommentNote(getCaretYPosition(startSelection), selectedText);
+                            if (canCreateButton(startSelection, endSelection)) {
+                                singleton.selectedText = mRTMessageField.getText().toString().substring(startSelection, endSelection);
+                                createSpecificCommentNote(getCaretYPosition(startSelection), selectedText);
+                            }
                         }
                     }
                 }
