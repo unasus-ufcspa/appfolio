@@ -9,8 +9,8 @@ public class Singleton {
     public Team team = new Team(0,0,null,null,'Z',null,null) ;
     public PortfolioClass portfolioClass = null;//new PortfolioClass(1,"212","artur","ARRAY");
     public Activity activity = new Activity(1,1,1,"Atividade final","legal");
-    public String selectedText="null";
-    public Note note= new Note(0,"null",0);
+    public String selectedText = "null";
+    public Note note = new Note(0,"null",0);
     public int idActivityStudent = -1;
     public int lastIdAttach = -1;
     public boolean isRTEditor = false;

@@ -13,6 +13,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.media.ThumbnailUtils;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
@@ -36,6 +37,7 @@ import com.ufcspa.unasus.appportfolio.R;
 import com.ufcspa.unasus.appportfolio.database.DataBaseAdapter;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -533,6 +535,10 @@ public class Frag extends Fragment {
     public void insertFileIntoDataBase(final String path, final String type) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
         builder.setTitle("Escolha um nome:");
+        builder.setCancelable(false);
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+//            builder.setOnDismissListener(null);
+//        }
 
         // Set up the input
         final EditText input = new EditText(getContext());
@@ -592,6 +598,44 @@ public class Frag extends Fragment {
         }
     }
 
+    public void saveVideoOnAppDir() {
+        String[] path = mCurrentPhotoPath.split("/");
+
+        File file = new File(getContext().getExternalFilesDir(null) + "/" + path[path.length - 1]);
+        if (!file.exists()) {
+            try {
+                file.createNewFile();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        try {
+            FileOutputStream newFile = new FileOutputStream(file);
+            //path 0 = current path of the video
+            FileInputStream oldFile = new FileInputStream(mCurrentPhotoPath);
+
+            // Transfer bytes from in to out
+            byte[] buf = new byte[1024];
+            int len;
+            while ((len = oldFile.read(buf)) > 0) {
+                newFile.write(buf, 0, len);
+            }
+
+            mCurrentPhotoPath = file.getAbsolutePath();
+            newFile.flush();
+            newFile.close();
+            oldFile.close();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+            Toast.makeText(getActivity(), "O salvamento falhou.", Toast.LENGTH_SHORT).show();
+            return;
+        } catch (IOException e) {
+            e.printStackTrace();
+            Toast.makeText(getActivity(), "O salvamento falhou.", Toast.LENGTH_SHORT).show();
+            return;
+        }
+    }
+
     public void saveImage() {
         String[] path = mCurrentPhotoPath.split("/");
         String[] secondPath = path[path.length - 1].split("\\.");
@@ -638,19 +682,19 @@ public class Frag extends Fragment {
     public void loadPhoto(final String url) {
         if (url != null) {
 
-                Intent intent = new Intent();
-                intent.setAction(Intent.ACTION_VIEW);
-                intent.setDataAndType(Uri.fromFile(new File(url)), "image/*");
-                startActivity(intent);
+            Intent intent = new Intent();
+            intent.setAction(Intent.ACTION_VIEW);
+            intent.setDataAndType(Uri.fromFile(new File(url)), "image/*");
+            startActivity(intent);
         }
     }
 
     public void loadVideo(final String url) {
         if(url != null) {
 
-                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.fromFile(new File(url)));
-                intent.setDataAndType(Uri.fromFile(new File(url)), "video/*");
-                startActivity(intent);
+            Intent intent = new Intent(Intent.ACTION_VIEW, Uri.fromFile(new File(url)));
+            intent.setDataAndType(Uri.fromFile(new File(url)), "video/*");
+            startActivity(intent);
         }
 
     }

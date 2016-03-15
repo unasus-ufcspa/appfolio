@@ -5,6 +5,7 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.text.InputType;
 import android.text.method.ScrollingMovementMethod;
@@ -176,6 +177,10 @@ public class FragmentSpecificComments extends Frag {
     public void insertFileIntoDataBase(final String path, final String type) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
         builder.setTitle("Escolha um nome:");
+        builder.setCancelable(false);
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+//            builder.setOnDismissListener(null);
+//        }
 
         // Set up the input
         final EditText input = new EditText(getContext());
