@@ -13,7 +13,6 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.media.ThumbnailUtils;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
@@ -158,49 +157,89 @@ public class Frag extends Fragment {
      */
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        // Quando o usuário escolhe a opção Take Picture
-        if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == Activity.RESULT_OK) {
-            galleryAddPic();
-            insertFileIntoDataBase(mCurrentPhotoPath, "I");
-            launchCropImageIntent();
-        }
-
-        // Quando o usuário escolhe a opção Gallery
-        if (requestCode == RESULT_LOAD_IMAGE && resultCode == Activity.RESULT_OK) {
-            Uri selectedUri = data.getData();
-            String[] columns = {MediaStore.Images.Media.DATA, MediaStore.Images.Media.MIME_TYPE};
-
-            Cursor cursor = getActivity().getContentResolver().query(selectedUri, columns, null, null, null);
-            cursor.moveToFirst();
-
-            int pathColumnIndex = cursor.getColumnIndex(columns[0]);
-            int mimeTypeColumnIndex = cursor.getColumnIndex(columns[1]);
-
-            String contentPath = cursor.getString(pathColumnIndex);
-            String mimeType = cursor.getString(mimeTypeColumnIndex);
-
-            cursor.close();
-
-            mCurrentPhotoPath = contentPath;
-            if (mimeType.startsWith("image")) {
+//        // Quando o usuário escolhe a opção Take Picture
+//        if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == Activity.RESULT_OK) {
+//            galleryAddPic();
+//            insertFileIntoDataBase(mCurrentPhotoPath, "I");
+//            launchCropImageIntent();
+//        }
+//
+//        // Quando o usuário escolhe a opção Gallery
+//        if (requestCode == RESULT_LOAD_IMAGE && resultCode == Activity.RESULT_OK) {
+//            Uri selectedUri = data.getData();
+//            String[] columns = {MediaStore.Images.Media.DATA, MediaStore.Images.Media.MIME_TYPE};
+//
+//            Cursor cursor = getActivity().getContentResolver().query(selectedUri, columns, null, null, null);
+//            cursor.moveToFirst();
+//
+//            int pathColumnIndex = cursor.getColumnIndex(columns[0]);
+//            int mimeTypeColumnIndex = cursor.getColumnIndex(columns[1]);
+//
+//            String contentPath = cursor.getString(pathColumnIndex);
+//            String mimeType = cursor.getString(mimeTypeColumnIndex);
+//
+//            cursor.close();
+//
+//            mCurrentPhotoPath = contentPath;
+//            if (mimeType.startsWith("image")) {
+//                insertFileIntoDataBase(mCurrentPhotoPath, "I");
+//                launchCropImageIntent();
+//            } else if (mimeType.startsWith("video")) {
+//                insertFileIntoDataBase(mCurrentPhotoPath, "V");
+//                mCurrentPhotoPath = getThumbnailPathForLocalFile(getActivity(), selectedUri);
+//            }
+//        }
+//
+//        // Quando o usuário escolhe a opção Text
+//        if (requestCode == PICKFILE_RESULT_CODE && resultCode == Activity.RESULT_OK) {
+//            insertFileIntoDataBase(data.getData().getPath(), "T");
+//        }
+//
+//        // Quando o usuário escolhe a opção Videos
+//        if (requestCode == REQUEST_VIDEO_CAPTURE && resultCode == Activity.RESULT_OK) {
+//            insertFileIntoDataBase(data.getData().getPath(), "V");
+//            galleryAddPic();
+////            mCurrentPhotoPath = getThumbnailPathForLocalFile(getActivity(), data.getData());
+//        }
+        if (resultCode == Activity.RESULT_OK) {
+            if (requestCode == Constants.CROP_IMAGE) {
+                saveImageOnAppDir();
                 insertFileIntoDataBase(mCurrentPhotoPath, "I");
+            } else if (requestCode == REQUEST_IMAGE_CAPTURE) {
+                galleryAddPic();
                 launchCropImageIntent();
-            } else if (mimeType.startsWith("video")) {
+            } else if (requestCode == RESULT_LOAD_IMAGE) {
+                Uri selectedUri = data.getData();
+                String[] columns = {MediaStore.Images.Media.DATA, MediaStore.Images.Media.MIME_TYPE};
+
+                Cursor cursor = getActivity().getContentResolver().query(selectedUri, columns, null, null, null);
+                cursor.moveToFirst();
+
+                int pathColumnIndex = cursor.getColumnIndex(columns[0]);
+                int mimeTypeColumnIndex = cursor.getColumnIndex(columns[1]);
+
+                String contentPath = cursor.getString(pathColumnIndex);
+                String mimeType = cursor.getString(mimeTypeColumnIndex);
+
+                cursor.close();
+
+                mCurrentPhotoPath = contentPath;
+
+                if (mimeType.startsWith("image")) {
+                    saveImage();
+                    launchCropImageIntent();
+                } else if (mimeType.startsWith("video")) {
+                    saveVideoOnAppDir();
+                    insertFileIntoDataBase(mCurrentPhotoPath, "V");
+                }
+
+            } else if (requestCode == PICKFILE_RESULT_CODE) {
+                insertFileIntoDataBase(data.getData().getPath(), "T");
+            } else if (requestCode == REQUEST_VIDEO_CAPTURE) {
+                galleryAddPic();
+                saveVideoOnAppDir();
                 insertFileIntoDataBase(mCurrentPhotoPath, "V");
-                mCurrentPhotoPath = getThumbnailPathForLocalFile(getActivity(), selectedUri);
             }
-        }
-
-        // Quando o usuário escolhe a opção Text
-        if (requestCode == PICKFILE_RESULT_CODE && resultCode == Activity.RESULT_OK) {
-            insertFileIntoDataBase(data.getData().getPath(), "T");
-        }
-
-        // Quando o usuário escolhe a opção Videos
-        if (requestCode == REQUEST_VIDEO_CAPTURE && resultCode == Activity.RESULT_OK) {
-            insertFileIntoDataBase(data.getData().getPath(), "V");
-            galleryAddPic();
-//            mCurrentPhotoPath = getThumbnailPathForLocalFile(getActivity(), data.getData());
         }
     }
 
