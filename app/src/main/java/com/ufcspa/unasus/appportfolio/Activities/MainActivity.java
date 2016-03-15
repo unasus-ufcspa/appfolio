@@ -6,7 +6,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
@@ -19,16 +18,15 @@ import android.view.ViewConfiguration;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
 import com.mikepenz.crossfader.Crossfader;
 import com.ufcspa.unasus.appportfolio.Activities.Fragments.FragRef;
 import com.ufcspa.unasus.appportfolio.Activities.Fragments.FragmentAttachment;
 import com.ufcspa.unasus.appportfolio.Activities.Fragments.FragmentRTEditor;
-import com.ufcspa.unasus.appportfolio.Activities.Fragments.FragmentSelectPortfolio;
 import com.ufcspa.unasus.appportfolio.Activities.Fragments.FragmentStudentActivities;
 import com.ufcspa.unasus.appportfolio.Model.Attachment;
+import com.ufcspa.unasus.appportfolio.Model.Note;
 import com.ufcspa.unasus.appportfolio.Model.Singleton;
 import com.ufcspa.unasus.appportfolio.R;
 import com.ufcspa.unasus.appportfolio.database.DataBaseAdapter;
@@ -112,6 +110,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
 
         singleton = Singleton.getInstance();
+        singleton.note = new Note(0, "null", 0);
         //////////ID activity do MARIO///////////
         singleton.idActivityStudent=1;
         /////////--------------------///////////
@@ -260,6 +259,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         if (shouldCreateDrawer)
             outState = crossFader.saveInstanceState(outState);
         outState.putBoolean("shouldCreateDrawer", shouldCreateDrawer);
+        singleton.note = new Note(0, "null", 0);
         super.onSaveInstanceState(outState);
     }
 

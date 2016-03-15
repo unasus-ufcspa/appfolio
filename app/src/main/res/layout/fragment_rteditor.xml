@@ -55,7 +55,7 @@
         <LinearLayout
             android:id="@+id/info_rteditor_container"
             android:layout_width="match_parent"
-            android:layout_height="30dp"
+            android:layout_height="35dp"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
             android:layout_alignParentTop="true"
@@ -81,18 +81,31 @@
                 android:id="@+id/student_name"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
+                android:layout_marginRight="35dp"
                 android:layout_weight="1"
                 android:gravity="bottom|right"
                 android:paddingBottom="2dp"
                 android:paddingLeft="10dp"
                 android:paddingRight="10dp"
                 android:singleLine="true"
-                android:text="Daiane dos Santos"
+                android:text="Anitta Maltatti"
                 android:textAppearance="?android:attr/textAppearanceMedium"
                 android:textColor="@color/white"
                 android:textStyle="bold" />
 
         </LinearLayout>
+
+        <ImageView
+            android:id="@+id/usr_photo_left"
+            android:layout_width="70dp"
+            android:layout_height="70dp"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginRight="-35dp"
+            android:background="@drawable/rounded_corner"
+            android:src="@drawable/ex_user_img"
+            android:visibility="visible" />
 
     </RelativeLayout>
 
@@ -107,7 +120,7 @@
         <LinearLayout
             android:id="@+id/button_container"
             android:layout_width="match_parent"
-            android:layout_height="30dp"
+            android:layout_height="35dp"
             android:layout_toEndOf="@+id/topbar_gray"
             android:layout_toRightOf="@+id/topbar_gray"
             android:background="@android:color/transparent"
@@ -117,7 +130,7 @@
             <me.grantland.widget.AutofitTextView
                 android:id="@+id/btn_geral"
                 android:layout_width="wrap_content"
-                android:layout_height="30dp"
+                android:layout_height="35dp"
                 android:layout_weight="1"
                 android:adjustViewBounds="false"
                 android:background="@drawable/geral_comment_tab"
@@ -131,7 +144,7 @@
             <me.grantland.widget.AutofitTextView
                 android:id="@+id/btn_specific"
                 android:layout_width="wrap_content"
-                android:layout_height="30dp"
+                android:layout_height="35dp"
                 android:layout_weight="1"
                 android:adjustViewBounds="false"
                 android:background="@drawable/specific_comment_tab"
@@ -157,7 +170,7 @@
         <RelativeLayout
             android:id="@+id/topbar_gray"
             android:layout_width="35dp"
-            android:layout_height="30dp"
+            android:layout_height="35dp"
             android:layout_above="@+id/comments_container"
             android:background="@color/gray_1">
 
@@ -168,14 +181,14 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_alignTop="@+id/comments_container"
-            android:layout_marginLeft="10dp"
+            android:layout_marginLeft="5dp"
             android:layout_toLeftOf="@+id/button_container"
             android:layout_toStartOf="@+id/button_container"
             android:background="@android:color/transparent">
 
             <RelativeLayout
                 android:id="@+id/rightbar_green"
-                android:layout_width="5dp"
+                android:layout_width="8dp"
                 android:layout_height="match_parent"
                 android:layout_alignParentEnd="true"
                 android:layout_alignParentRight="true"
@@ -183,6 +196,18 @@
                 android:background="@color/base_green"></RelativeLayout>
 
         </RelativeLayout>
+
+        <ImageView
+            android:id="@+id/usr_photo_right"
+            android:layout_width="70dp"
+            android:layout_height="70dp"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginLeft="-35dp"
+            android:background="@drawable/rounded_corner"
+            android:src="@drawable/ex_user_img"
+            android:visibility="visible" />
 
     </RelativeLayout>
 

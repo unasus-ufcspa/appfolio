@@ -38,9 +38,7 @@ import com.onegravity.rteditor.api.media.RTVideo;
 import com.onegravity.rteditor.converter.ConverterSpannedToHtml;
 import com.onegravity.rteditor.effects.Effects;
 import com.onegravity.rteditor.spans.BackgroundColorSpan;
-import com.ufcspa.unasus.appportfolio.Activities.MainActivity;
 import com.ufcspa.unasus.appportfolio.Model.ActivityStudent;
-import com.ufcspa.unasus.appportfolio.Model.Comentario;
 import com.ufcspa.unasus.appportfolio.Model.Note;
 import com.ufcspa.unasus.appportfolio.Model.Singleton;
 import com.ufcspa.unasus.appportfolio.R;
@@ -176,17 +174,17 @@ public class FragmentRTEditor extends Fragment {
         fullScreen.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                saveText();
-
-                if (singleton.isFullscreen) {
-                    singleton.wasFullscreen = true;
-                    singleton.isFullscreen = false;
-                } else {
-                    singleton.wasFullscreen = false;
-                    singleton.isFullscreen = true;
-                }
-
-                ((MainActivity) getActivity()).dontCreateCrossfader();
+//                saveText();
+//
+//                if (singleton.isFullscreen) {
+//                    singleton.wasFullscreen = true;
+//                    singleton.isFullscreen = false;
+//                } else {
+//                    singleton.wasFullscreen = false;
+//                    singleton.isFullscreen = true;
+//                }
+//
+//                ((MainActivity) getActivity()).dontCreateCrossfader();
                 Log.d("rteditor", mRTMessageField.getText(RTFormat.HTML));
             }
         });
@@ -260,7 +258,7 @@ public class FragmentRTEditor extends Fragment {
         super.onStart();
     }
 
-    private void initCommentsTab(View view)
+    private void initCommentsTab(final View view)
     {
         slider = (RelativeLayout) view.findViewById(R.id.slider);
 
@@ -295,7 +293,35 @@ public class FragmentRTEditor extends Fragment {
             }
         });
 
-        SlidingPaneLayout layout = (SlidingPaneLayout) view.findViewById(R.id.rteditor_fragment);
+        final SlidingPaneLayout layout = (SlidingPaneLayout) view.findViewById(R.id.rteditor_fragment);
+        layout.post(new Runnable() {
+            @Override
+            public void run() {
+                if (!layout.isOpen()) {
+                    layout.findViewById(R.id.usr_photo_right).setVisibility(View.GONE);
+                    view.findViewById(R.id.usr_photo_left).setVisibility(View.GONE);
+                }
+            }
+        });
+        layout.setPanelSlideListener(new SlidingPaneLayout.PanelSlideListener() {
+            @Override
+            public void onPanelSlide(View panel, float slideOffset) {
+                panel.findViewById(R.id.usr_photo_right).setVisibility(View.GONE);
+                view.findViewById(R.id.usr_photo_left).setVisibility(View.GONE);
+            }
+
+            @Override
+            public void onPanelOpened(View panel) {
+                panel.findViewById(R.id.usr_photo_right).setVisibility(View.VISIBLE);
+                view.findViewById(R.id.usr_photo_left).setVisibility(View.VISIBLE);
+            }
+
+            @Override
+            public void onPanelClosed(View panel) {
+                panel.findViewById(R.id.usr_photo_right).setVisibility(View.GONE);
+                view.findViewById(R.id.usr_photo_left).setVisibility(View.GONE);
+            }
+        });
         layout.setSliderFadeColor(getResources().getColor(android.R.color.transparent));
         layout.setBackgroundColor(getResources().getColor(android.R.color.transparent));
 
@@ -366,15 +392,19 @@ public class FragmentRTEditor extends Fragment {
 
                     showCommentsTab(true);
 
+                    final float scale = getResources().getDisplayMetrics().density;
+                    int btnBegin = (int) (40 * scale + 0.5f);
+
                     int childs = rightBarSpecificComments.getChildCount();
                     for (int i = childs - 1; i > 0; i--)
                         rightBarSpecificComments.removeViewAt(i);
 
                     if (btn.getText().equals("..."))
-                        createMultiButtonsRightTabBar(inflater, btn);
+                        createMultiButtonsRightTabBar(inflater, btn, btnBegin);
                     else {
                         Button btn_view = (Button) inflater.inflate(R.layout.btn_specific_comment, rightBarSpecificComments, false);
                         btn_view.setText(btn.getText());
+                        btn_view.setY(btnBegin);
                         btn_view.setBackgroundResource(R.drawable.rounded_corner);
                         btn_view.setTextColor(Color.WHITE);
                         rightBarSpecificComments.addView(btn_view);
@@ -392,8 +422,8 @@ public class FragmentRTEditor extends Fragment {
         return null;
     }
 
-    private void createMultiButtonsRightTabBar(LayoutInflater inflater, Button current) {
-        int i = 0;
+    private void createMultiButtonsRightTabBar(LayoutInflater inflater, Button current, int beginHeight) {
+        int i = beginHeight;
         for (final Note n : specificCommentsNotes.values()) {
             if (n.getBtY() == current.getY()) {
                 Button btn_view = (Button) inflater.inflate(R.layout.btn_specific_comment, rightBarSpecificComments, false);
@@ -419,7 +449,7 @@ public class FragmentRTEditor extends Fragment {
                             Button aux = (Button) getView().findViewWithTag(arrayAux.get(i).getBtId());
                             if (aux != null && aux.getTag() != btn.getTag()) {
                                 aux.setBackgroundResource(R.drawable.btn_border);
-                                aux.setTextColor(greenLight);
+                                aux.setTextColor(greenDark);
                             }
                         }
                         singleton.note.setBtY(n.getBtY());
@@ -433,7 +463,7 @@ public class FragmentRTEditor extends Fragment {
                 rightBarSpecificComments.addView(btn_view);
 
                 final float scale = getResources().getDisplayMetrics().density;
-                int btnHeight = (int) (25 * scale + 0.5f);
+                int btnHeight = (int) (27 * scale + 0.5f);
 
                 i += btnHeight;
             }
@@ -684,6 +714,8 @@ public class FragmentRTEditor extends Fragment {
 
             setSpecificCommentNoteValue();
 
+            btn.callOnClick();
+
           /* // INSERIR NOTA AO SER CLICADA NO BANCO
 
             Comentario c = new Comentario();
@@ -699,13 +731,6 @@ public class FragmentRTEditor extends Fragment {
             */
         }
     }
-
-
-
-
-
-
-
 
 
 /*

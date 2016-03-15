@@ -5,7 +5,6 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
 import android.text.InputType;
 import android.text.method.ScrollingMovementMethod;
@@ -43,6 +42,7 @@ import java.util.Date;
 public class FragmentSpecificComments extends Frag {
 
     private static boolean EXPANDED_FLAG = false;
+    int lastID;
     private SpecificCommentAdapter spcAdapter;
     private ListView lv;
     private boolean attach;
@@ -56,7 +56,6 @@ public class FragmentSpecificComments extends Frag {
     private ArrayList<Comentario> lista;
     private ArrayList<OneComment> oneComments;
     private ImageButton btExpand;
-    int lastID;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -73,9 +72,27 @@ public class FragmentSpecificComments extends Frag {
         Log.d("Comments", "On create entrou");
     }
 
+    private void hide() {
+        btGenMess = (Button) getView().findViewById(R.id.gen_messag_bt);
+        btAttachment = (Button) getView().findViewById(R.id.bt_add_attachment);
+        edtMessage = (EditText) getView().findViewById(R.id.edtMessage);
+        txNote = (TextView) getView().findViewById(R.id.txSelectedNote);
+        btExpand = (ImageButton) getView().findViewById(R.id.btn_expand_ref);
+        lv = (ListView) getView().findViewById(R.id.listView1);
+
+        btGenMess.setVisibility(View.GONE);
+        btAttachment.setVisibility(View.GONE);
+        edtMessage.setVisibility(View.GONE);
+        txNote.setVisibility(View.GONE);
+        btExpand.setVisibility(View.GONE);
+        lv.setVisibility(View.GONE);
+    }
+
     @Override
     public void onResume() {
         super.onResume();
+        if (Singleton.getInstance().note.getBtId() == 0)
+            hide();
         btGenMess = (Button) getView().findViewById(R.id.gen_messag_bt);
         btAttachment = (Button) getView().findViewById(R.id.bt_add_attachment);
         edtMessage = (EditText) getView().findViewById(R.id.edtMessage);
