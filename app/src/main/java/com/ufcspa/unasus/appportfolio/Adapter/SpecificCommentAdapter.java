@@ -97,7 +97,7 @@ public class SpecificCommentAdapter extends BaseAdapter {
             }
         }
         if(c.atach==false) {
-            holder.message.setBackgroundResource(c.orientation ? R.drawable.tutor_ballon_specific_comment : R.drawable.my_balllon_comment);
+            holder.message.setBackgroundResource(c.orientation ? R.drawable.tutor_ballon_specific_comment : R.drawable.student_new_ballon);
             holder.wraper.setGravity(c.orientation ? Gravity.LEFT : Gravity.RIGHT);
         }
         //////////---------------////////////////////
