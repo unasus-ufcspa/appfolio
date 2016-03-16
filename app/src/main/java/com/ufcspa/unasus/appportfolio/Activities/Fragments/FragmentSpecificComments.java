@@ -275,7 +275,9 @@ public class FragmentSpecificComments extends Frag {
                 }
 
             } else if (requestCode == PICKFILE_RESULT_CODE) {
-                insertFileIntoDataBase(data.getData().getPath(), "T");
+                mCurrentPhotoPath = getPDFPath(getContext(), data.getData());
+                savePDFOnAppDir();
+                insertFileIntoDataBase(mCurrentPhotoPath, "T");
                 addAtach();
             } else if (requestCode == REQUEST_VIDEO_CAPTURE) {
                 galleryAddPic();

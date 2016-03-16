@@ -9,7 +9,6 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.media.MediaPlayer;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.text.InputType;
@@ -159,7 +158,9 @@ public class FragmentAttachment extends Frag {
                 }
 
             } else if (requestCode == PICKFILE_RESULT_CODE) {
-                insertFileIntoDataBase(data.getData().getPath(), "T");
+                mCurrentPhotoPath = getPDFPath(getContext(), data.getData());
+                savePDFOnAppDir();
+                insertFileIntoDataBase(mCurrentPhotoPath, "T");
             } else if (requestCode == REQUEST_VIDEO_CAPTURE) {
                 galleryAddPic();
                 saveVideoOnAppDir();
