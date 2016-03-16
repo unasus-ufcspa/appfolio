@@ -72,7 +72,7 @@ public class StudentActivitiesAdapter extends BaseAdapter
         holder.recyclerView.setLayoutManager(layoutManager);
         holder.recyclerView.addItemDecoration(new DividerItemDecoration(context, DividerItemDecoration.HORIZONTAL_LIST, 100));
 
-        holder.recyclerView.setAdapter(new ActivitiesAdapter(context, aux.getListActivities()));
+        holder.recyclerView.setAdapter(new ActivitiesAdapter(context, aux.getListActivities(), aux.getNameStudent()));
 
         holder.studentName = (TextView) rowView.findViewById(R.id.student_name);
         holder.studentName.setText(aux.getNameStudent());

@@ -76,11 +76,11 @@
             android:id="@+id/toolbar_fontcolor"
             style="?attr/rte_ToolbarSpinner"
             android:background="?attr/rte_icToolbarFontColor" />
-		
-        <Spinner
-            android:id="@+id/toolbar_bgcolor"
-            style="?attr/rte_ToolbarSpinner"
-            android:background="?attr/rte_icToolbarBGColor" />
+
+        <!--<Spinner-->
+        <!--android:id="@+id/toolbar_bgcolor"-->
+        <!--style="?attr/rte_ToolbarSpinner"-->
+        <!--android:background="?attr/rte_icToolbarBGColor" />-->
 		
 		<include layout="@layout/rte_toolbar_divider"/>
 		

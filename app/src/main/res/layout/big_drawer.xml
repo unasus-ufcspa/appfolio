@@ -1,6 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/big_drawer"
-    android:layout_width="230dp"
+    android:layout_width="200dp"
     android:layout_height="match_parent"
     android:layout_alignParentLeft="true"
     android:layout_alignParentStart="true"
@@ -10,154 +11,176 @@
     android:orientation="vertical"
     android:visibility="visible">
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
+    <ImageView
+        android:id="@+id/img_logo"
+        android:layout_width="150dp"
+        android:layout_height="50dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_weight="1"
+        android:src="@drawable/logo" />
+
+    <RelativeLayout
+        android:id="@+id/portfolios"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:gravity="center|left">
+
+        <ImageButton
+            android:id="@+id/btn_members"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
             android:layout_weight="1"
-            android:orientation="horizontal">
+            android:background="@android:color/transparent"
+            android:src="@drawable/drawer_integrantes" />
 
-            <ImageView
-                android:id="@+id/big_logo"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:layout_weight="1"
-                android:src="@drawable/logo" />
-        </LinearLayout>
+        <TextView
+            android:id="@+id/textView5"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/btn_members"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignTop="@+id/btn_members"
+            android:layout_marginLeft="20dp"
+            android:layout_toRightOf="@+id/btn_members"
+            android:gravity="center|left"
+            android:text="@string/drawer_portfolio"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:textColor="@color/gray_3" />
+    </RelativeLayout>
 
-        <LinearLayout
-            android:id="@+id/portfolios"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
+    <RelativeLayout
+        android:id="@+id/activities"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:gravity="center|left">
+
+        <ImageButton
+            android:id="@+id/btn_activities"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
             android:layout_weight="1"
-            android:gravity="center"
-            android:orientation="horizontal">
+            android:background="@android:color/transparent"
+            android:src="@drawable/drawer_relatorios" />
 
-            <ImageButton
-                android:id="@+id/imageButton"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:background="@android:color/transparent"
-                android:src="@drawable/drawer_integrantes" />
+        <TextView
+            android:id="@+id/textView6"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/btn_activities"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignTop="@+id/btn_activities"
+            android:layout_marginLeft="20dp"
+            android:layout_toEndOf="@+id/btn_activities"
+            android:layout_toRightOf="@+id/btn_activities"
+            android:gravity="center|left"
+            android:text="@string/drawer_activities"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:textColor="@color/gray_3" />
+    </RelativeLayout>
 
-            <TextView
-                android:id="@+id/textView5"
-                android:layout_width="150dp"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:gravity="center"
-                android:text="@string/drawer_portfolio"
-                android:textAppearance="?android:attr/textAppearanceMedium"
-                android:textColor="@color/gray_3" />
-        </LinearLayout>
+    <RelativeLayout
+        android:id="@+id/reports"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:gravity="center|left">
 
-        <LinearLayout
-            android:id="@+id/activities"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
+        <ImageButton
+            android:id="@+id/btn_reports"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
             android:layout_weight="1"
-            android:gravity="center"
-            android:orientation="horizontal">
+            android:background="@android:color/transparent"
+            android:src="@drawable/drawer_atividades" />
 
-            <ImageButton
-                android:id="@+id/imageButton2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:background="@android:color/transparent"
-                android:src="@drawable/drawer_relatorios" />
+        <TextView
+            android:id="@+id/textView7"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/btn_reports"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignTop="@+id/btn_reports"
+            android:layout_marginLeft="20dp"
+            android:layout_toEndOf="@+id/btn_reports"
+            android:layout_toRightOf="@+id/btn_reports"
+            android:gravity="center|left"
+            android:text="@string/drawer_reports"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:textColor="@color/gray_3" />
+    </RelativeLayout>
 
-            <TextView
-                android:id="@+id/textView6"
-                android:layout_width="150dp"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:gravity="center"
-                android:text="@string/drawer_activities"
-                android:textAppearance="?android:attr/textAppearanceMedium"
-                android:textColor="@color/gray_3" />
-        </LinearLayout>
+    <RelativeLayout
+        android:id="@+id/settings"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:gravity="center|left">
 
-        <LinearLayout
-            android:id="@+id/reports"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
+        <ImageButton
+            android:id="@+id/btn_config"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
             android:layout_weight="1"
-            android:gravity="center"
-            android:orientation="horizontal">
+            android:background="@android:color/transparent"
+            android:src="@drawable/drawer_congiguracoes" />
 
-            <ImageButton
-                android:id="@+id/imageButton3"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:background="@android:color/transparent"
-                android:src="@drawable/drawer_atividades" />
+        <TextView
+            android:id="@+id/textView8"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/btn_config"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignTop="@+id/btn_config"
+            android:layout_marginLeft="20dp"
+            android:layout_toEndOf="@+id/btn_config"
+            android:layout_toRightOf="@+id/btn_config"
+            android:gravity="center|left"
+            android:text="@string/drawer_settings"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:textColor="@color/gray_3" />
+    </RelativeLayout>
 
-            <TextView
-                android:id="@+id/textView7"
-                android:layout_width="150dp"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:gravity="center"
-                android:text="@string/drawer_reports"
-                android:textAppearance="?android:attr/textAppearanceMedium"
-                android:textColor="@color/gray_3" />
-        </LinearLayout>
+    <RelativeLayout
+        android:id="@+id/attachments"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:gravity="center|left">
 
-        <LinearLayout
-            android:id="@+id/settings"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
+        <ImageButton
+            android:id="@+id/btn_attachments"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
             android:layout_weight="1"
-            android:gravity="center"
-            android:orientation="horizontal">
+            android:background="@android:color/transparent"
+            android:src="@drawable/drawer_anexos" />
 
-            <ImageButton
-                android:id="@+id/imageButton4"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:background="@android:color/transparent"
-                android:src="@drawable/drawer_congiguracoes" />
+        <TextView
+            android:id="@+id/textView9"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/btn_attachments"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignTop="@+id/btn_attachments"
+            android:layout_marginLeft="20dp"
+            android:layout_toEndOf="@+id/btn_attachments"
+            android:layout_toRightOf="@+id/btn_attachments"
+            android:gravity="center|left"
+            android:text="@string/drawer_files"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:textColor="@color/gray_3" />
+    </RelativeLayout>
 
-            <TextView
-                android:id="@+id/textView8"
-                android:layout_width="150dp"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:gravity="center"
-                android:text="@string/drawer_settings"
-                android:textAppearance="?android:attr/textAppearanceMedium"
-                android:textColor="@color/gray_3"
-                android:textSize="16dp" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/attachments"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:orientation="horizontal">
-
-            <ImageButton
-                android:id="@+id/imageButton5"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:background="@android:color/transparent"
-                android:src="@drawable/drawer_anexos" />
-
-            <TextView
-                android:id="@+id/textView9"
-                android:layout_width="150dp"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:gravity="center"
-                android:text="@string/drawer_files"
-                android:textAppearance="?android:attr/textAppearanceMedium"
-                android:textColor="@color/gray_3" />
-        </LinearLayout>
-    </LinearLayout>
+</LinearLayout>

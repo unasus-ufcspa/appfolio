@@ -1,6 +1,7 @@
 package com.ufcspa.unasus.appportfolio.Activities.Fragments;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -59,18 +60,17 @@ public class FragmentAttachment extends Frag {
         singleton = Singleton.getInstance();
         source = DataBaseAdapter.getInstance(getContext());
 
-        if (singleton.isRTEditor)
-        {
+        if (singleton.isRTEditor) {
             Bundle bundle = this.getArguments();
             if (bundle != null) {
-                cursorPosition = bundle.getInt("Position", -1);;
+                cursorPosition = bundle.getInt("Position", -1);
+                ;
             }
             isRTEditor = true;
-        }
-        else
+        } else
             isRTEditor = false;
 
-        ((InputMethodManager)getActivity().getSystemService(Context.INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(view.getWindowToken(), 0);
+        ((InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(view.getWindowToken(), 0);
 
         return view;
     }
@@ -86,8 +86,7 @@ public class FragmentAttachment extends Frag {
         super.onSaveInstanceState(outState);
     }
 
-    private void init()
-    {
+    private void init() {
         source = DataBaseAdapter.getInstance(getActivity());
 
         attachmentGrid = (GridView) getView().findViewById(R.id.attachment_gridview);
@@ -101,24 +100,21 @@ public class FragmentAttachment extends Frag {
 
     public void imageClicked(int position) {
         Attachment attachment = attachments.get(position);
-        if(attachment.getLocalPath() != null && attachment.getLocalPath() != "")
-        {
+        if (attachment.getLocalPath() != null && attachment.getLocalPath() != "") {
             loadPhoto(attachment.getLocalPath(), position);
         }
     }
 
     public void videoClicked(int position) {
         Attachment attachment = attachments.get(position);
-        if(attachment.getLocalPath() != null && attachment.getLocalPath() != "")
-        {
+        if (attachment.getLocalPath() != null && attachment.getLocalPath() != "") {
             loadVideo(attachment.getLocalPath(), position);
         }
     }
 
     public void textClicked(int position) {
         Attachment attachment = attachments.get(position);
-        if(attachment.getLocalPath() != null && attachment.getLocalPath() != "")
-        {
+        if (attachment.getLocalPath() != null && attachment.getLocalPath() != "") {
             loadPDF(attachment.getLocalPath(), position);
         }
     }
@@ -131,10 +127,10 @@ public class FragmentAttachment extends Frag {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (resultCode == Activity.RESULT_OK) {
             if (requestCode == Constants.CROP_IMAGE) {
-                galleryAddPic();
                 saveImageOnAppDir();
                 insertFileIntoDataBase(mCurrentPhotoPath, "I");
             } else if (requestCode == REQUEST_IMAGE_CAPTURE) {
+                galleryAddPic();
                 launchCropImageIntent();
             } else if (requestCode == RESULT_LOAD_IMAGE) {
                 Uri selectedUri = data.getData();
@@ -157,22 +153,30 @@ public class FragmentAttachment extends Frag {
                     saveImage();
                     launchCropImageIntent();
                 } else if (mimeType.startsWith("video")) {
+                    saveVideoOnAppDir();
                     insertFileIntoDataBase(mCurrentPhotoPath, "V");
                 }
 
             } else if (requestCode == PICKFILE_RESULT_CODE) {
-                insertFileIntoDataBase(data.getData().getPath(), "T");
+                mCurrentPhotoPath = getPDFPath(getContext(), data.getData());
+                savePDFOnAppDir();
+                insertFileIntoDataBase(mCurrentPhotoPath, "T");
             } else if (requestCode == REQUEST_VIDEO_CAPTURE) {
                 galleryAddPic();
-                insertFileIntoDataBase(data.getData().getPath(), "V");
+                saveVideoOnAppDir();
+                insertFileIntoDataBase(mCurrentPhotoPath, "V");
             }
         }
     }
 
     @Override
     public void insertFileIntoDataBase(final String path, final String type) {
-        android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(getContext());
+        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
         builder.setTitle("Escolha um nome:");
+        builder.setCancelable(false);
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+//            builder.setOnDismissListener(null);
+//        }
 
         // Set up the input
         final EditText input = new EditText(getContext());
@@ -248,16 +252,13 @@ public class FragmentAttachment extends Frag {
 
                 });
             } else {
-                Intent intent = new Intent();
-                intent.setAction(Intent.ACTION_VIEW);
-                intent.setDataAndType(Uri.fromFile(new File(url)), "image/*");
-                startActivity(intent);
+                loadPhoto(url);
             }
         }
     }
 
     private void loadVideo(final String url, final int position) {
-        if(url != null) {
+        if (url != null) {
             if (isRTEditor) {
                 final Dialog dialog = new Dialog(getActivity());
                 dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -299,15 +300,12 @@ public class FragmentAttachment extends Frag {
 
                 dialog.show();
             } else {
-                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.fromFile(new File(url)));
-                intent.setDataAndType(Uri.fromFile(new File(url)), "video/*");
-                startActivity(intent);
+                loadVideo(url);
             }
         }
     }
 
-    public void loadPDF(final String url, final int position)
-    {
+    public void loadPDF(final String url, final int position) {
         if (url != null) {
             if (isRTEditor) {
                 final Dialog dialog = new Dialog(getActivity());
@@ -348,8 +346,7 @@ public class FragmentAttachment extends Frag {
     }
 
 
-    public void deleteMedia(Set<Attachment> positions)
-    {
+    public void deleteMedia(Set<Attachment> positions) {
         boolean allAttachmentDeleted = true;
         if (positions != null) {
             for (Attachment attachment : positions) {

@@ -10,12 +10,15 @@ import android.os.Bundle;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
 import android.text.InputType;
+import android.view.GestureDetector;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewConfiguration;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 
 import com.mikepenz.crossfader.Crossfader;
 import com.ufcspa.unasus.appportfolio.Activities.Fragments.FragRef;
@@ -24,6 +27,7 @@ import com.ufcspa.unasus.appportfolio.Activities.Fragments.FragmentRTEditor;
 import com.ufcspa.unasus.appportfolio.Activities.Fragments.FragmentSelectPortfolio;
 import com.ufcspa.unasus.appportfolio.Activities.Fragments.FragmentStudentActivities;
 import com.ufcspa.unasus.appportfolio.Model.Attachment;
+import com.ufcspa.unasus.appportfolio.Model.Note;
 import com.ufcspa.unasus.appportfolio.Model.Singleton;
 import com.ufcspa.unasus.appportfolio.R;
 import com.ufcspa.unasus.appportfolio.database.DataBaseAdapter;
@@ -31,12 +35,14 @@ import com.ufcspa.unasus.appportfolio.database.DataBaseAdapter;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
+    final GestureDetector gestureDetector = new GestureDetector(new GestureListener());
     private Crossfader crossFader;
     private View fragmentContainer;
     private View bigDrawer;
     private View miniDrawer;
     private Singleton singleton;
     private boolean shouldCreateDrawer;
+    private View clicked;
 
     private BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
         @Override
@@ -58,6 +64,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void insertFileIntoDataBase(final String path, final String type) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Escolha um nome:");
+        builder.setCancelable(false);
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+//            builder.setOnDismissListener(null);
+//        }
 
         // Set up the input
         final EditText input = new EditText(this);
@@ -101,6 +111,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
 
         singleton = Singleton.getInstance();
+        singleton.note = new Note(0, "null", 0);
         //////////ID activity do MARIO///////////
         singleton.idActivityStudent=1;
         /////////--------------------///////////
@@ -115,8 +126,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             initMiniDrawer();
 
             final float scale = getResources().getDisplayMetrics().density;
-            int pixelsMini = (int) (60 * scale + 0.5f);
-            int pixelsBig = (int) (230 * scale + 0.5f);
+            int pixelsMini = (int) (65 * scale + 0.5f);
+            int pixelsBig = (int) (200 * scale + 0.5f);
 
 
             crossFader = new Crossfader()
@@ -156,17 +167,68 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void initBigDrawer() {
-        LinearLayout portfolios = (LinearLayout) bigDrawer.findViewById(R.id.portfolios);
-        LinearLayout activities  = (LinearLayout) bigDrawer.findViewById(R.id.activities);
-        LinearLayout reports = (LinearLayout) bigDrawer.findViewById(R.id.reports);
-        LinearLayout config = (LinearLayout) bigDrawer.findViewById(R.id.settings);
-        LinearLayout attachments = (LinearLayout) bigDrawer.findViewById(R.id.attachments);
+        RelativeLayout portfolios = (RelativeLayout) bigDrawer.findViewById(R.id.portfolios);
+        RelativeLayout activities = (RelativeLayout) bigDrawer.findViewById(R.id.activities);
+        RelativeLayout reports = (RelativeLayout) bigDrawer.findViewById(R.id.reports);
+        RelativeLayout config = (RelativeLayout) bigDrawer.findViewById(R.id.settings);
+        RelativeLayout attachments = (RelativeLayout) bigDrawer.findViewById(R.id.attachments);
 
         portfolios.setOnClickListener(this);
         activities.setOnClickListener(this);
         reports.setOnClickListener(this);
         config.setOnClickListener(this);
         attachments.setOnClickListener(this);
+
+        portfolios.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(final View view, final MotionEvent event) {
+                clicked = view;
+                if (gestureDetector.onTouchEvent(event)) {
+                    return false;
+                }
+                return true;
+            }
+        });
+        activities.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(final View view, final MotionEvent event) {
+                clicked = view;
+                if (gestureDetector.onTouchEvent(event)) {
+                    return false;
+                }
+                return true;
+            }
+        });
+        reports.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(final View view, final MotionEvent event) {
+                clicked = view;
+                if (gestureDetector.onTouchEvent(event)) {
+                    return false;
+                }
+                return true;
+            }
+        });
+        config.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(final View view, final MotionEvent event) {
+                clicked = view;
+                if (gestureDetector.onTouchEvent(event)) {
+                    return false;
+                }
+                return true;
+            }
+        });
+        attachments.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(final View view, final MotionEvent event) {
+                clicked = view;
+                if (gestureDetector.onTouchEvent(event)) {
+                    return false;
+                }
+                return true;
+            }
+        });
     }
 
     @Override
@@ -198,6 +260,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         if (shouldCreateDrawer)
             outState = crossFader.saveInstanceState(outState);
         outState.putBoolean("shouldCreateDrawer", shouldCreateDrawer);
+        singleton.note = new Note(0, "null", 0);
         super.onSaveInstanceState(outState);
     }
 
@@ -318,5 +381,35 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         if (singleton.isFullscreen)
             if (getSupportFragmentManager().getBackStackEntryCount() > 0)
                 super.onBackPressed();
+    }
+
+    private class GestureListener extends GestureDetector.SimpleOnGestureListener {
+        @Override
+        public boolean onSingleTapConfirmed(MotionEvent event) {
+            // Trigger the touch event on the calendar
+            clicked.callOnClick();
+            return super.onSingleTapUp(event);
+        }
+
+        @Override
+        public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
+            ViewConfiguration viewConfiguration = ViewConfiguration.get(MainActivity.this);
+            int minSwipeDistance = viewConfiguration.getScaledPagingTouchSlop();
+            int minSwipeVelocity = viewConfiguration.getScaledMinimumFlingVelocity();
+            int maxSwipeOffPath = viewConfiguration.getScaledTouchSlop();
+
+            if (Math.abs(e1.getY() - e2.getY()) > maxSwipeOffPath) {
+                return false;
+            }
+
+            if (Math.abs(velocityX) > minSwipeVelocity) {
+                // Right to left swipe
+                if (e1.getX() - e2.getX() > minSwipeDistance) {
+                    crossFader.crossFade();
+                }
+            }
+
+            return false;
+        }
     }
 }

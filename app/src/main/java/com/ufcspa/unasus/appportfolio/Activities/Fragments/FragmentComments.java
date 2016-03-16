@@ -5,7 +5,10 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.text.InputType;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -37,13 +40,13 @@ import java.util.Date;
 public class FragmentComments extends Frag {
     ArrayList<OneComment> oneComments;
     CommentAdapter adapterComments;
+    int lastID;
     private boolean attach;
     private ListView lv;
     private Button btGenMess;
     private Button btAttachment;
     //private LoremIpsum ipsum;
     private EditText edtMessage;
-    int lastID;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -176,14 +179,60 @@ public class FragmentComments extends Frag {
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        Log.d("comment attachment ", "entrando no onActivity for Result");
-//
-        if (resultCode == Activity.RESULT_OK && requestCode != Constants.CROP_IMAGE)
-            //Log.d("comments","request code:"+requestCode);
-            addAtach();
-        else
-            Log.d("comment attachment ", "attach cancelado");
+//        super.onActivityResult(requestCode, resultCode, data);
+//        Log.d("comment attachment ", "entrando no onActivity for Result");
+////
+//        if (resultCode == Activity.RESULT_OK && requestCode != Constants.CROP_IMAGE)
+//            //Log.d("comments","request code:"+requestCode);
+//            addAtach();
+//        else
+//            Log.d("comment attachment ", "attach cancelado");
+        if (resultCode == Activity.RESULT_OK) {
+            if (requestCode == Constants.CROP_IMAGE) {
+                saveImageOnAppDir();
+                insertFileIntoDataBase(mCurrentPhotoPath, "I");
+                addAtach();
+            } else if (requestCode == REQUEST_IMAGE_CAPTURE) {
+                galleryAddPic();
+                launchCropImageIntent();
+            } else if (requestCode == RESULT_LOAD_IMAGE) {
+                Uri selectedUri = data.getData();
+                String[] columns = {MediaStore.Images.Media.DATA, MediaStore.Images.Media.MIME_TYPE};
+
+                Cursor cursor = getActivity().getContentResolver().query(selectedUri, columns, null, null, null);
+                cursor.moveToFirst();
+
+                int pathColumnIndex = cursor.getColumnIndex(columns[0]);
+                int mimeTypeColumnIndex = cursor.getColumnIndex(columns[1]);
+
+                String contentPath = cursor.getString(pathColumnIndex);
+                String mimeType = cursor.getString(mimeTypeColumnIndex);
+
+                cursor.close();
+
+                mCurrentPhotoPath = contentPath;
+
+                if (mimeType.startsWith("image")) {
+                    saveImage();
+                    launchCropImageIntent();
+                } else if (mimeType.startsWith("video")) {
+                    saveVideoOnAppDir();
+                    insertFileIntoDataBase(mCurrentPhotoPath, "V");
+                    addAtach();
+                }
+
+            } else if (requestCode == PICKFILE_RESULT_CODE) {
+                mCurrentPhotoPath = getPDFPath(getContext(), data.getData());
+                savePDFOnAppDir();
+                insertFileIntoDataBase(mCurrentPhotoPath, "T");
+                addAtach();
+            } else if (requestCode == REQUEST_VIDEO_CAPTURE) {
+                galleryAddPic();
+                saveVideoOnAppDir();
+                insertFileIntoDataBase(mCurrentPhotoPath, "V");
+                addAtach();
+            }
+        }
     }
 
 
@@ -326,6 +375,10 @@ public class FragmentComments extends Frag {
     public void insertFileIntoDataBase(final String path, final String type) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
         builder.setTitle("Escolha um nome:");
+        builder.setCancelable(false);
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+//            builder.setOnDismissListener(null);
+//        }
 
         // Set up the input
         final EditText input = new EditText(getContext());
