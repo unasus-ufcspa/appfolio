@@ -64,7 +64,6 @@ public class FragmentAttachment extends Frag {
             Bundle bundle = this.getArguments();
             if (bundle != null) {
                 cursorPosition = bundle.getInt("Position", -1);
-                ;
             }
             isRTEditor = true;
         } else

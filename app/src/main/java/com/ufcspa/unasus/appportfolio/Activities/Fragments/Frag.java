@@ -19,6 +19,7 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.provider.DocumentsContract;
 import android.provider.MediaStore;
+import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.text.InputType;
 import android.view.LayoutInflater;
@@ -55,6 +56,7 @@ public class Frag extends Fragment {
     static final int RESULT_LOAD_IMAGE = 2;
     static final int PICKFILE_RESULT_CODE = 3;
     static final int REQUEST_VIDEO_CAPTURE = 4;
+    static final int REQUEST_FOLIO_ATTACHMENT = 5;
     public static String[] thumbColumns = {MediaStore.Video.Thumbnails.DATA};
     public static String[] mediaColumns = {MediaStore.Video.Media._ID};
     protected String mCurrentPhotoPath;
@@ -284,7 +286,7 @@ public class Frag extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_edit_text, null);
+        View view = inflater.inflate(R.layout.fragment_attachment_dialog, null);
         source = DataBaseAdapter.getInstance(getActivity());
 
         singleton = Singleton.getInstance();
@@ -387,6 +389,17 @@ public class Frag extends Fragment {
                 galleryAddPic();
                 saveVideoOnAppDir();
                 insertFileIntoDataBase(mCurrentPhotoPath, "V");
+            } else if (requestCode == REQUEST_FOLIO_ATTACHMENT) {
+                String url, type, smallImagePath = null;
+
+                if (data.hasExtra("url"))
+                    url = data.getStringExtra("url");
+                if (data.hasExtra("type"))
+                    type = data.getStringExtra("type");
+                if (data.hasExtra("smallImagePath"))
+                    smallImagePath = data.getStringExtra("smallImagePath");
+
+                // Adiciona no banco o arquivo e utiliza ele dependendo de qual fragment o arquivo está. Por exemplo, se na FragmentRTEditor, coloca o anexo no texto,....
             }
         }
     }
@@ -646,9 +659,10 @@ public class Frag extends Fragment {
         img_folio.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(getContext(), "Folio", Toast.LENGTH_SHORT).show();
-
-                dialog.dismiss();
+                DialogFragment newFragment = new FragmentAttachmentDialog();
+                newFragment.setTargetFragment(getParentFragment(), REQUEST_FOLIO_ATTACHMENT);
+                newFragment.show(getChildFragmentManager(), "Attachment");
+//                dialog.dismiss();
             }
         });
 

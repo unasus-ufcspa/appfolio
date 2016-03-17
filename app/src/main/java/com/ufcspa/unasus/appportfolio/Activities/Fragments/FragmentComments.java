@@ -18,6 +18,7 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.onegravity.rteditor.utils.Constants;
 import com.ufcspa.unasus.appportfolio.Adapter.CommentAdapter;
@@ -73,9 +74,6 @@ public class FragmentComments extends Frag {
 
     }
 
-
-
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -84,10 +82,6 @@ public class FragmentComments extends Frag {
         loadCom();
         Log.d("Comments", "On create entrou");
     }
-
-
-
-
 
     @Override
     public void onResume() {
@@ -142,7 +136,6 @@ public class FragmentComments extends Frag {
      *
      *
      * */
-
     public void addOneComment(boolean attachment) {
         Comentario c = getCommentFromText();
         OneComment oneComment;
@@ -231,6 +224,8 @@ public class FragmentComments extends Frag {
                 saveVideoOnAppDir();
                 insertFileIntoDataBase(mCurrentPhotoPath, "V");
                 addAtach();
+            } else if (requestCode == REQUEST_FOLIO_ATTACHMENT) {
+                Toast.makeText(getActivity(), "Folio", Toast.LENGTH_SHORT).show();
             }
         }
     }
