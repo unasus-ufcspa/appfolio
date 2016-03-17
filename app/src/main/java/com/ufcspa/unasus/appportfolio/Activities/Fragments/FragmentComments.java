@@ -142,6 +142,7 @@ public class FragmentComments extends Frag {
             insertComment(c);
             Log.d("comment attachment ", "é anexo a ser inserido");
             oneComment = new OneComment(false, "Anexo", convertDateToTime(c.getDateComment()), convertDateToDate(c.getDateComment()), true);
+            oneComment.idAttach= Singleton.getInstance().lastIdAttach;
         } else {
             insertComment(c);
             oneComment = new OneComment(false, edtMessage.getText().toString(), convertDateToTime(c.getDateComment()), convertDateToDate(c.getDateComment()));
