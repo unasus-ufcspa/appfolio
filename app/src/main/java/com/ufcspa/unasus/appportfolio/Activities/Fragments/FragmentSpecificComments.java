@@ -286,37 +286,13 @@ public class FragmentSpecificComments extends Frag {
                 addAtach();
             }
             if (requestCode == REQUEST_FOLIO_ATTACHMENT) {
-                String url = null;
-                String type = null;
-                String smallImagePath = null;//Imagem do vídeo
-
                 int idAttachment = data.getIntExtra("idAttachment", -1);
-
-                if (data.hasExtra("url"))
-                    url = data.getStringExtra("url");
-                if (data.hasExtra("type"))
-                    type = data.getStringExtra("type");
-                if (data.hasExtra("smallImagePath"))
-                    smallImagePath = data.getStringExtra("smallImagePath");
-
-                switch (type) {
-                    case "I":
-                        if (url != null)
-                            //Faz algo com a imagem
-                            break;
-                    case "V":
-                        if (smallImagePath != null)
-                            //Faz algo com o video
-                            break;
-                    case "T":
-                        break;
-                    default:
-                        break;
+                if (idAttachment != -1) {
+                    Singleton.getInstance().lastIdAttach = idAttachment;
+                    addAtach();
+                    if (lastID != 0)
+                        DataBaseAdapter.getInstance(getActivity()).insertAttachComment(lastID, idAttachment);
                 }
-
-                if (idAttachment != -1)
-                    //Inserir no banco
-                    System.out.println();
             }
         }
     }
@@ -334,6 +310,7 @@ public class FragmentSpecificComments extends Frag {
         loadCommentsFromDB();
         insertComment(c);
         OneComment oneComment = new OneComment(false, "Anexo", convertDateToTime(c.getDateComment()), convertDateToDate(c.getDateComment()),true);
+        oneComment.idAttach = Singleton.getInstance().lastIdAttach;
         Log.d("comment attachment ", "itens size:" + oneComments.size());
         oneComments.add(oneComment);
         Log.d("comment attachment ", "itens size is now:" + oneComments.size());
