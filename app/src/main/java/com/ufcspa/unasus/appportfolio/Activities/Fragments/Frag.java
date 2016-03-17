@@ -346,7 +346,11 @@ public class Frag extends Fragment {
                 saveVideoOnAppDir();
                 insertFileIntoDataBase(mCurrentPhotoPath, "V");
             } else if (requestCode == REQUEST_FOLIO_ATTACHMENT) {
-                String url, type, smallImagePath = null;
+                String url = null;
+                String type = null;
+                String smallImagePath = null;//Imagem do vídeo
+
+                int idAttachment = data.getIntExtra("idAttachment", -1);
 
                 if (data.hasExtra("url"))
                     url = data.getStringExtra("url");
@@ -355,7 +359,24 @@ public class Frag extends Fragment {
                 if (data.hasExtra("smallImagePath"))
                     smallImagePath = data.getStringExtra("smallImagePath");
 
-                // Adiciona no banco o arquivo e utiliza ele dependendo de qual fragment o arquivo está. Por exemplo, se na FragmentRTEditor, coloca o anexo no texto,....
+                switch (type) {
+                    case "I":
+                        if (url != null)
+                            //Faz algo com a imagem
+                            break;
+                    case "V":
+                        if (smallImagePath != null)
+                            //Faz algo com o video
+                            break;
+                    case "T":
+                        break;
+                    default:
+                        break;
+                }
+
+                if (idAttachment != -1)
+                    //Inserir no banco
+                    System.out.println();
             }
         }
     }

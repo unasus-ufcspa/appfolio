@@ -314,7 +314,6 @@ public class ConverterSpannedToHtml {
                     start = spanEnd;
                 }
             }
-
         }
     }
 
@@ -325,24 +324,33 @@ public class ConverterSpannedToHtml {
     if (start1 != start2)
     return start1 - start2;        // span which starts first comes first
 
-    if (start < spanStart) {
-        // no paragraph, just plain text
-        escape(text, start, Math.min(end, spanStart));
-        start = spanStart;
-    } else {
-        // CharacterStyle found
-        spans.remove(span);
+    private void convertText(Spanned text, int start, int end, SortedSet<CharacterStyle> spans) {
+        while (start < end) {
+            // get first CharacterStyle
+            CharacterStyle span = spans.isEmpty() ? null : spans.first();
+            int spanStart = span == null ? Integer.MAX_VALUE : text.getSpanStart(span);
+            int spanEnd = span == null ? Integer.MAX_VALUE : text.getSpanEnd(span);
+
+            if (start < spanStart) {
+                // no paragraph, just plain text
+                escape(text, start, Math.min(end, spanStart));
+                start = spanStart;
+            } else {
+                // CharacterStyle found
+                spans.remove(span);
 
 
-        boolean hst = handleStartTag(span);
+                boolean hst = handleStartTag(span);
 
-        if (hst)
-            convertText(text, Math.max(spanStart, start), Math.min(spanEnd, end), spans);
+                if (hst)
+                    convertText(text, Math.max(spanStart, start), Math.min(spanEnd, end), spans);
 
-        handleEndTag(span);
+                handleEndTag(span);
 
-        start = spanEnd;
-    }
+                start = spanEnd;
+            }
+            }
+            }
      */
 
     private boolean verifyIfExists(CharacterStyle cstyle) {
