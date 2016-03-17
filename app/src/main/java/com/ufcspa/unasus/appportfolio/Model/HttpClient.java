@@ -49,12 +49,12 @@ public class HttpClient {
                 Log.d(tag,"Retornou do request");
                 try {
                     Log.d(tag,"JSON RESPONSE: "+ response.toString());
-                    if(response.getString("result").equals(0)) {
+                    if(response.getString("id_comment").equals("0")) {
                         Log.e(tag, "JSON POST erro");
                     }else{
                         Log.d(tag,"JSON POST foi");
                         if(comentario!=null){
-                            comentario.setIdComment(response.getInt("result"));
+                            comentario.setIdComment(response.getInt("id_comment"));
                         }
                     }
                 } catch (JSONException e) {
