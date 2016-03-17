@@ -53,10 +53,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 insertFileIntoDataBase(intent.getStringExtra("Video"), "V");
             else {
                 int id = intent.getIntExtra("ID", 0);
-                if (id == 6)
-                    callAttachments(intent.getIntExtra("Position", -1));
-                else
-                    changeFragment(id);
+                changeFragment(id);
             }
         }
     };
@@ -65,9 +62,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Escolha um nome:");
         builder.setCancelable(false);
-//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
-//            builder.setOnDismissListener(null);
-//        }
 
         // Set up the input
         final EditText input = new EditText(this);
@@ -296,7 +290,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             case 3:
                 break;
             case 4:
-                singleton.isRTEditor = false;
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new FragmentAttachment()).addToBackStack("Frag").commit();
                 break;
             case 5:
@@ -329,35 +322,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         setClickable(miniDrawer, true);
         setClickable(bigDrawer, true);
         miniDrawer.setAlpha(1);
-    }
-
-    public void callRTEditorToAttachSomething(String url, int position, String type)
-    {
-        singleton.firsttime = true;
-        FragmentRTEditor fragment = new FragmentRTEditor();
-        Bundle args = new Bundle();
-        args.putString("URL",url);
-        args.putString("Type", type);
-        args.putInt("Position", position);
-        fragment.setArguments(args);
-
-        if (!isFinishing()) {
-            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment).commit();
-        }
-    }
-
-    public void callAttachments(int position)
-    {
-        singleton.isRTEditor = true;
-
-        final FragmentAttachment fragment = new FragmentAttachment();
-        Bundle args = new Bundle();
-        args.putInt("Position", position);
-        fragment.setArguments(args);
-
-        if (!isFinishing()) {
-            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, fragment).addToBackStack("FragmentRTEditor").commit();
-        }
     }
 
     public void dontCreateCrossfader() {

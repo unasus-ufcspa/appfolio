@@ -2,12 +2,10 @@ package com.ufcspa.unasus.appportfolio.Activities.Fragments;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
-import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -15,19 +13,12 @@ import android.text.InputType;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.GridView;
-import android.widget.ImageView;
 import android.widget.Toast;
-import android.widget.VideoView;
 
 import com.onegravity.rteditor.utils.Constants;
-import com.squareup.picasso.Callback;
-import com.squareup.picasso.Picasso;
-import com.ufcspa.unasus.appportfolio.Activities.MainActivity;
 import com.ufcspa.unasus.appportfolio.Adapter.FragmentAttachmentAdapter;
 import com.ufcspa.unasus.appportfolio.Model.Attachment;
 import com.ufcspa.unasus.appportfolio.Model.Singleton;
@@ -47,9 +38,6 @@ public class FragmentAttachment extends Frag {
     private FragmentAttachmentAdapter listAdapter;
     private ArrayList<Attachment> attachments;
 
-    private boolean isRTEditor;
-    private int cursorPosition;
-
     public FragmentAttachment() {
     }
 
@@ -59,15 +47,6 @@ public class FragmentAttachment extends Frag {
 
         singleton = Singleton.getInstance();
         source = DataBaseAdapter.getInstance(getContext());
-
-        if (singleton.isRTEditor) {
-            Bundle bundle = this.getArguments();
-            if (bundle != null) {
-                cursorPosition = bundle.getInt("Position", -1);
-            }
-            isRTEditor = true;
-        } else
-            isRTEditor = false;
 
         ((InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(view.getWindowToken(), 0);
 
@@ -202,145 +181,24 @@ public class FragmentAttachment extends Frag {
     }
 
     public void createPlusButton() {
-        if (!isRTEditor && !singleton.isRTEditor)
-            attachments.add(new Attachment(-1, "", "", "", "", 0));
+        attachments.add(new Attachment(-1, "", "", "", "", 0));
     }
 
     private void loadPhoto(final String url, final int position) {
         if (url != null) {
-            if (isRTEditor) {
-                final Dialog dialog = new Dialog(getActivity());
-                dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-                dialog.setContentView(R.layout.custom_fullimage_dialog);
-
-                Button btnPositive = (Button) dialog.findViewById(R.id.btn_positive);
-                Button btnNegative = (Button) dialog.findViewById(R.id.btn_negative);
-
-                btnNegative.setText(getResources().getText(R.string.attachment_negative));
-                btnPositive.setText(getResources().getText(R.string.attachment_positive));
-
-                btnPositive.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        returnFromDialog(url, position, "I");
-                        dialog.dismiss();
-                    }
-                });
-
-                btnNegative.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        dialog.dismiss();
-                    }
-                });
-
-                final ImageView image = (ImageView) dialog.findViewById(R.id.fullimage);
-                image.setAdjustViewBounds(true);
-
-                Uri uri = Uri.fromFile(new File(url));
-                Picasso.with(getActivity()).load(uri).into(image, new Callback() {
-                    @Override
-                    public void onSuccess() {
-                        dialog.show();
-                    }
-
-                    @Override
-                    public void onError() {
-
-                    }
-
-                });
-            } else {
-                loadPhoto(url);
-            }
+            loadPhoto(url);
         }
     }
 
     private void loadVideo(final String url, final int position) {
         if (url != null) {
-            if (isRTEditor) {
-                final Dialog dialog = new Dialog(getActivity());
-                dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-                dialog.setContentView(R.layout.custom_fullvideo_dialog);
-
-                final VideoView video = (VideoView) dialog.findViewById(R.id.videoView);
-
-                video.setVideoPath(url);
-                video.requestFocus();
-                video.start();
-                video.setOnErrorListener(new MediaPlayer.OnErrorListener() {
-                    @Override
-                    public boolean onError(MediaPlayer mp, int what, int extra) {
-                        dialog.dismiss();
-                        return false;
-                    }
-                });
-
-                Button btnPositive = (Button) dialog.findViewById(R.id.btn_positive_video);
-                Button btnNegative = (Button) dialog.findViewById(R.id.btn_negative_video);
-
-                btnNegative.setText(getResources().getText(R.string.attachment_negative));
-                btnPositive.setText(getResources().getText(R.string.attachment_positive));
-
-                btnPositive.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        returnFromDialog(url, position, "V");
-                        dialog.dismiss();
-                    }
-                });
-
-                btnNegative.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        dialog.dismiss();
-                    }
-                });
-
-                dialog.show();
-            } else {
-                loadVideo(url);
-            }
+            loadVideo(url);
         }
     }
 
     public void loadPDF(final String url, final int position) {
         if (url != null) {
-            if (isRTEditor) {
-                final Dialog dialog = new Dialog(getActivity());
-                dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-                dialog.setContentView(R.layout.custom_pdf_dialog);
-
-                Button btnPositive = (Button) dialog.findViewById(R.id.btn_pdf_util);
-                Button btnNegative = (Button) dialog.findViewById(R.id.btn_pdf_cancel);
-                Button btnView = (Button) dialog.findViewById(R.id.btn_pdf_view);
-
-                btnPositive.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        returnFromDialog(url, position, "T");
-                        dialog.dismiss();
-                    }
-                });
-
-                btnNegative.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        dialog.dismiss();
-                    }
-                });
-
-                btnView.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        openPDF(url);
-                    }
-                });
-
-                dialog.show();
-            } else {
-                openPDF(url);
-            }
+            openPDF(url);
         }
     }
 
@@ -372,16 +230,6 @@ public class FragmentAttachment extends Frag {
     public void deleteOneMedia(int position) {
         attachments.remove(position);
         listAdapter.refresh(attachments);
-    }
-
-    private void returnFromDialog(String url, int position, String type) {
-        if (type.equals("V")) {
-            mCurrentPhotoPath = url;
-            saveSmallImage();
-            url = mCurrentPhotoPath;
-        }
-        source.insertAttachActivity(attachments.get(position).getIdAttachment(), singleton.idActivityStudent);
-        ((MainActivity) getActivity()).callRTEditorToAttachSomething(url, cursorPosition, type);
     }
 
     @Override

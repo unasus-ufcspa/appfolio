@@ -14,7 +14,6 @@ import android.widget.TextView;
 import com.ufcspa.unasus.appportfolio.Activities.Fragments.FragmentAttachment;
 import com.ufcspa.unasus.appportfolio.Activities.MainActivity;
 import com.ufcspa.unasus.appportfolio.Model.Attachment;
-import com.ufcspa.unasus.appportfolio.Model.Singleton;
 import com.ufcspa.unasus.appportfolio.R;
 
 import java.util.HashSet;
@@ -30,7 +29,6 @@ public class FragmentAttachmentAdapter extends BaseAdapter {
     private List<Attachment> attachments;
     private boolean canDelete;
     private Set<Attachment> shouldDelete;
-    private Singleton singleton;
 
 
     public FragmentAttachmentAdapter(FragmentAttachment context, List<Attachment> attachment) {
@@ -39,7 +37,6 @@ public class FragmentAttachmentAdapter extends BaseAdapter {
         this.shouldDelete = new HashSet<>();
         inflater = (LayoutInflater) context.getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         canDelete = false;
-        singleton = Singleton.getInstance();
     }
 
     @Override
@@ -126,7 +123,7 @@ public class FragmentAttachmentAdapter extends BaseAdapter {
                 break;
         }
 
-        if (!canDelete && !singleton.isRTEditor) {
+        if (!canDelete) {
             rowView.setOnLongClickListener(new View.OnLongClickListener() {
                 @Override
                 public boolean onLongClick(View v) {

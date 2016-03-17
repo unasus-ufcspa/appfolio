@@ -1,10 +1,16 @@
 package com.ufcspa.unasus.appportfolio.Activities.Fragments;
 
+import android.app.Activity;
+import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.res.Configuration;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.widget.SlidingPaneLayout;
 import android.text.Editable;
 import android.text.Layout;
@@ -49,6 +55,7 @@ import java.util.HashMap;
 
 
 public class FragmentRTEditor extends Fragment {
+    static final int REQUEST_FOLIO_ATTACHMENT = 5;
     private RTManager mRTManager;
     private RTEditText mRTMessageField;
     private RTToolbar rtToolbar;
@@ -59,18 +66,60 @@ public class FragmentRTEditor extends Fragment {
     private DataBaseAdapter source;
     private HashMap<Integer,Note> specificCommentsNotes;
     private String selectedActualText = "null";
-
     private RelativeLayout slider;
-
     private int greenLight;
     private int greenDark;
-
     private Singleton singleton;
-
     private ViewGroup rightBarSpecificComments;
+    private BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            DialogFragment newFragment = new FragmentAttachmentDialog();
+            newFragment.setTargetFragment(getParentFragment(), REQUEST_FOLIO_ATTACHMENT);
+            newFragment.show(getChildFragmentManager(), "Attachment");
+        }
+    };
+
 
     public FragmentRTEditor() {}
 
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (resultCode == Activity.RESULT_OK) {
+            if (requestCode == REQUEST_FOLIO_ATTACHMENT) {
+                String url = null;
+                String type = null;
+                String smallImagePath = null;
+
+                int idAttachment = data.getIntExtra("idAttachment", -1);
+
+                if (data.hasExtra("url"))
+                    url = data.getStringExtra("url");
+                if (data.hasExtra("type"))
+                    type = data.getStringExtra("type");
+                if (data.hasExtra("smallImagePath"))
+                    smallImagePath = data.getStringExtra("smallImagePath");
+
+                switch (type) {
+                    case "I":
+                        if (url != null)
+                            putAttachment(url);
+                        break;
+                    case "V":
+                        if (smallImagePath != null)
+                            putAttachment(smallImagePath);
+                        break;
+                    case "T":
+                        break;
+                    default:
+                        break;
+                }
+
+                if (idAttachment != -1)
+                    source.insertAttachActivity(idAttachment, singleton.idActivityStudent);
+            }
+        }
+    }
 
     /**
      *  MÉTODO PARA CARREGAR  A ULTIMA VERSÃO DO TEXTO
@@ -191,16 +240,8 @@ public class FragmentRTEditor extends Fragment {
 
         initCommentsTab(view);
         initTopBar(view);
-        Bundle bundle = this.getArguments();
-        if (bundle != null) {
-            if (singleton.isRTEditor) {
-                int pos = bundle.getInt("Position", -1);
-                pos = pos < mRTMessageField.length() ? pos : mRTMessageField.length();
-                mRTMessageField.setSelection(pos);
-                receiveAttachment(bundle.getString("URL"), bundle.getString("Type"));
-                singleton.isRTEditor = false;
-            }
-        }
+
+        LocalBroadcastManager.getInstance(getActivity()).registerReceiver(broadcastReceiver, new IntentFilter("call.attachmentdialog.action"));
 
         return view;
     }
@@ -250,6 +291,7 @@ public class FragmentRTEditor extends Fragment {
         if (mRTManager != null) {
             mRTManager.onDestroy(true);
         }
+        LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(broadcastReceiver);
         super.onDestroy();
     }
 
@@ -589,17 +631,14 @@ public class FragmentRTEditor extends Fragment {
         }
     }
 
-    private void noteFollowText()
-    {
+    private void noteFollowText() {
         Spannable textSpanned = (Spannable) mRTMessageField.getText();
         BackgroundColorSpan[] spans = textSpanned.getSpans(0, textSpanned.length(), BackgroundColorSpan.class);
 
-        for(BackgroundColorSpan spm : spans)
-        {
-            if(spm.getId() != -1)
-            {
+        for (BackgroundColorSpan spm : spans) {
+            if (spm.getId() != -1) {
                 Note aux = specificCommentsNotes.get(spm.getId());
-                if(aux != null)
+                if (aux != null)
                     aux.setBtY(getCaretYPosition(textSpanned.getSpanStart(spm)));
                 else
                     textSpanned.removeSpan(spm);
@@ -618,23 +657,6 @@ public class FragmentRTEditor extends Fragment {
             Button btn = createButton(aux.getBtId(), String.valueOf(aux.getBtId()), aux.getBtY());
             if (btn != null)
                 scrollview.addView(btn);
-        }
-    }
-
-    private void receiveAttachment(String url, String type)
-    {
-        switch (type)
-        {
-            case "I":
-                putAttachment(url);
-                break;
-            case "V":
-                putAttachment(url);
-                break;
-            case "T":
-                break;
-            default:
-                break;
         }
     }
 

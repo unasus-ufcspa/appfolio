@@ -126,7 +126,7 @@ public class FragmentAttachmentDialog extends DialogFragment {
             btnPositive.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    returnFromDialog(url, "I");
+                    returnFromDialog(url, "I", attachments.get(position).getIdAttachment());
                     dialog.dismiss();
                 }
             });
@@ -182,7 +182,7 @@ public class FragmentAttachmentDialog extends DialogFragment {
             btnPositive.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    returnFromDialog(url, "V");
+                    returnFromDialog(url, "V", attachments.get(position).getIdAttachment());
                     dialog.dismiss();
                 }
             });
@@ -211,7 +211,7 @@ public class FragmentAttachmentDialog extends DialogFragment {
             btnPositive.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    returnFromDialog(url, "T");
+                    returnFromDialog(url, "T", attachments.get(position).getIdAttachment());
                     dialog.dismiss();
                 }
             });
@@ -234,10 +234,11 @@ public class FragmentAttachmentDialog extends DialogFragment {
         }
     }
 
-    private void returnFromDialog(String url, String type) {
+    private void returnFromDialog(String url, String type, int idAttachment) {
         Intent data = new Intent();
         data.putExtra("url", url);
         data.putExtra("type", type);
+        data.putExtra("idAttachment", idAttachment);
 
         if (type.equals("V")) {
             String smallImagePath = saveSmallImage(url);
@@ -247,7 +248,6 @@ public class FragmentAttachmentDialog extends DialogFragment {
 
         getParentFragment().onActivityResult(getTargetRequestCode(), Activity.RESULT_OK, data);
         dismiss();
-        //        source.insertAttachActivity(attachments.get(position).getIdAttachment(), singleton.idActivityStudent);
     }
 
     @Override
