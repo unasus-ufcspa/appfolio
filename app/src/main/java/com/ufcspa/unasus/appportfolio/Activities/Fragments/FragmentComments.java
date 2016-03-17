@@ -18,7 +18,6 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import com.onegravity.rteditor.utils.Constants;
 import com.ufcspa.unasus.appportfolio.Adapter.CommentAdapter;
@@ -224,8 +223,39 @@ public class FragmentComments extends Frag {
                 saveVideoOnAppDir();
                 insertFileIntoDataBase(mCurrentPhotoPath, "V");
                 addAtach();
-            } else if (requestCode == REQUEST_FOLIO_ATTACHMENT) {
-                Toast.makeText(getActivity(), "Folio", Toast.LENGTH_SHORT).show();
+            }
+            if (requestCode == REQUEST_FOLIO_ATTACHMENT) {
+                String url = null;
+                String type = null;
+                String smallImagePath = null;//Imagem do vídeo
+
+                int idAttachment = data.getIntExtra("idAttachment", -1);
+
+                if (data.hasExtra("url"))
+                    url = data.getStringExtra("url");
+                if (data.hasExtra("type"))
+                    type = data.getStringExtra("type");
+                if (data.hasExtra("smallImagePath"))
+                    smallImagePath = data.getStringExtra("smallImagePath");
+
+                switch (type) {
+                    case "I":
+                        if (url != null)
+                            //Faz algo com a imagem
+                            break;
+                    case "V":
+                        if (smallImagePath != null)
+                            //Faz algo com o video
+                            break;
+                    case "T":
+                        break;
+                    default:
+                        break;
+                }
+
+                if (idAttachment != -1)
+                    //Inserir no banco
+                    System.out.println();
             }
         }
     }
