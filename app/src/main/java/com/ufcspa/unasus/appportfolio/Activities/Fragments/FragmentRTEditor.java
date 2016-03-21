@@ -220,7 +220,6 @@ public class FragmentRTEditor extends Fragment {
         });
 
         mRTMessageField.setLineSpacing(15, 1);
-        mRTMessageField.setRichTextEditing(true, "Esse é o meu portfolio");
 
         mRTMessageField.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
@@ -282,6 +281,7 @@ public class FragmentRTEditor extends Fragment {
             mRTMessageField.setInputType(InputType.TYPE_NULL);
             mRTMessageField.setTextIsSelectable(true);
             mRTManager.setToolbarVisibility(RTManager.ToolbarVisibility.HIDE);
+            mRTMessageField.setRichTextEditing(true, "Esse é o meu portfolio");
         }
         LinearLayout layout = (LinearLayout) view.findViewById(R.id.info_rteditor_container);
         layout.clearFocus();
