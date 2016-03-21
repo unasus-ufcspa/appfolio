@@ -13,6 +13,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.widget.SlidingPaneLayout;
 import android.text.Editable;
+import android.text.InputType;
 import android.text.Layout;
 import android.text.Spannable;
 import android.text.TextWatcher;
@@ -24,6 +25,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
@@ -44,7 +46,9 @@ import com.onegravity.rteditor.api.media.RTVideo;
 import com.onegravity.rteditor.converter.ConverterSpannedToHtml;
 import com.onegravity.rteditor.effects.Effects;
 import com.onegravity.rteditor.spans.BackgroundColorSpan;
+import com.ufcspa.unasus.appportfolio.Activities.MainActivity;
 import com.ufcspa.unasus.appportfolio.Model.ActivityStudent;
+import com.ufcspa.unasus.appportfolio.Model.Comentario;
 import com.ufcspa.unasus.appportfolio.Model.Note;
 import com.ufcspa.unasus.appportfolio.Model.Singleton;
 import com.ufcspa.unasus.appportfolio.R;
@@ -71,6 +75,7 @@ public class FragmentRTEditor extends Fragment {
     private int greenDark;
     private Singleton singleton;
     private ViewGroup rightBarSpecificComments;
+    private boolean specificCommentsOpen;
     private BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -154,6 +159,8 @@ public class FragmentRTEditor extends Fragment {
         singleton = Singleton.getInstance();
         source = DataBaseAdapter.getInstance(getActivity());
 
+        specificCommentsOpen = false;
+
         greenLight = getResources().getColor(R.color.base_green_light);
         greenDark = getResources().getColor(R.color.base_green);
 
@@ -172,10 +179,10 @@ public class FragmentRTEditor extends Fragment {
 
         // register toolbar (if it exists)
         rtToolbar = (RTToolbar) view.findViewById(R.id.rte_toolbar);
-        //rtApi.startActivityForResult();
         if (rtToolbar != null) {
             mRTManager.registerToolbar(toolbarContainer, rtToolbar);
         }
+
         // register message editor
         mRTMessageField = (RTEditText) view.findViewById(R.id.rtEditText);
         mRTManager.registerEditor(mRTMessageField, true);
@@ -213,7 +220,69 @@ public class FragmentRTEditor extends Fragment {
         });
 
         mRTMessageField.setLineSpacing(15, 1);
+        mRTMessageField.setRichTextEditing(true, "Esse é o meu portfolio");
 
+        mRTMessageField.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (v.getId() == R.id.rtEditText && hasFocus) {
+                    ((InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(getView().getWindowToken(), 0);
+                    View view = getView();
+                    if (view != null) {
+                        SlidingPaneLayout layout = (SlidingPaneLayout) view.findViewById(R.id.rteditor_fragment);
+                        layout.openPane();
+
+                        int id = singleton.note.getBtId();
+                        if (specificCommentsOpen) {
+                            if (id > 0) {
+                                ArrayList<Comentario> lista = (ArrayList<Comentario>) source.listComments(singleton.activity.getIdAtivity(), "O", id);
+                                if (lista == null || lista.size() == 0) {
+                                    //Remove note from hash map
+                                    specificCommentsNotes.remove(id);
+                                    currentSpecificComment--;
+
+                                    //Remove background color from text
+                                    Spannable textSpanned = (Spannable) mRTMessageField.getText();
+                                    BackgroundColorSpan[] spans = textSpanned.getSpans(0, textSpanned.length(), BackgroundColorSpan.class);
+
+                                    for (BackgroundColorSpan s : spans) {
+                                        if (s.getId() == id) {
+                                            textSpanned.removeSpan(s);
+                                            break;
+                                        }
+                                    }
+
+                                    //Remove button from right drawer
+                                    Button btn = (Button) scrollview.findViewById(id);
+                                    singleton.note = new Note(0, "null", 0);
+
+                                    int childs = rightBarSpecificComments.getChildCount();
+                                    for (int i = childs - 1; i > 0; i--)
+                                        rightBarSpecificComments.removeViewAt(i);
+
+                                    final float scale = getResources().getDisplayMetrics().density;
+                                    int btnBegin = (int) (40 * scale + 0.5f);
+                                    if (btn.getText().equals("..."))
+                                        createMultiButtonsRightTabBar((LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE), btn, btnBegin);
+
+                                    showCommentsTab(false);
+
+                                    //Remove button from rteditor
+                                    scrollview.removeView(btn);
+                                    setSpecificCommentNoteValue();
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        });
+
+        if (singleton.portfolioClass.getPerfil().equals("T")) {
+            mRTMessageField.setInputType(InputType.TYPE_NULL);
+            mRTMessageField.setTextIsSelectable(true);
+            mRTManager.setToolbarVisibility(RTManager.ToolbarVisibility.HIDE);
+        }
         LinearLayout layout = (LinearLayout) view.findViewById(R.id.info_rteditor_container);
         layout.clearFocus();
 
@@ -223,17 +292,17 @@ public class FragmentRTEditor extends Fragment {
         fullScreen.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                saveText();
-//
-//                if (singleton.isFullscreen) {
-//                    singleton.wasFullscreen = true;
-//                    singleton.isFullscreen = false;
-//                } else {
-//                    singleton.wasFullscreen = false;
-//                    singleton.isFullscreen = true;
-//                }
-//
-//                ((MainActivity) getActivity()).dontCreateCrossfader();
+                saveText();
+
+                if (singleton.isFullscreen) {
+                    singleton.wasFullscreen = true;
+                    singleton.isFullscreen = false;
+                } else {
+                    singleton.wasFullscreen = false;
+                    singleton.isFullscreen = true;
+                }
+
+                ((MainActivity) getActivity()).dontCreateCrossfader();
                 Log.d("rteditor", mRTMessageField.getText(RTFormat.HTML));
             }
         });
@@ -350,6 +419,7 @@ public class FragmentRTEditor extends Fragment {
             public void onPanelSlide(View panel, float slideOffset) {
                 panel.findViewById(R.id.usr_photo_right).setVisibility(View.GONE);
                 view.findViewById(R.id.usr_photo_left).setVisibility(View.GONE);
+                ((InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(getView().getWindowToken(), 0);
             }
 
             @Override
@@ -374,7 +444,7 @@ public class FragmentRTEditor extends Fragment {
         TextView studentName = (TextView) view.findViewById(R.id.student_name);
         TextView activityName = (TextView) view.findViewById(R.id.activity_name);
 
-//        studentName.setText(singleton.portfolioClass.getStudentName());
+        studentName.setText(singleton.portfolioClass.getStudentName());
         activityName.setText("Atividade " + singleton.activity.getNuOrder() + ": " + singleton.activity.getTitle());
     }
 
@@ -449,6 +519,7 @@ public class FragmentRTEditor extends Fragment {
                         btn_view.setY(btnBegin);
                         btn_view.setBackgroundResource(R.drawable.rounded_corner);
                         btn_view.setTextColor(Color.WHITE);
+                        btn_view.setId(id);
                         rightBarSpecificComments.addView(btn_view);
                     }
                 }
@@ -471,10 +542,16 @@ public class FragmentRTEditor extends Fragment {
                 Button btn_view = (Button) inflater.inflate(R.layout.btn_specific_comment, rightBarSpecificComments, false);
 
                 btn_view.setText(String.valueOf(n.getBtId()));
-                btn_view.setBackgroundResource(R.drawable.btn_border);
-                btn_view.setTextColor(greenDark);
+                if (n.getBtId() == current.getId()) {
+                    btn_view.setBackgroundResource(R.drawable.rounded_corner);
+                    btn_view.setTextColor(Color.WHITE);
+                } else {
+                    btn_view.setBackgroundResource(R.drawable.btn_border);
+                    btn_view.setTextColor(greenDark);
+                }
                 btn_view.setY(i);
                 btn_view.setTag(n.getBtId());
+                btn_view.setId(n.getBtId());
 
                 btn_view.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -547,8 +624,6 @@ public class FragmentRTEditor extends Fragment {
     }
 
 
-
-
     /**
      *  MÉTODO PARA RECUPERAR O TEXTO SELECIONADO NO FORMATO HTML
      *
@@ -604,6 +679,7 @@ public class FragmentRTEditor extends Fragment {
     }
 
     public void showCommentsTab(Boolean isSpecificComment) {
+        specificCommentsOpen = isSpecificComment;
         if (isSpecificComment) {
             getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.comments_container, new FragmentSpecificComments()).commit();
             SlidingPaneLayout layout = (SlidingPaneLayout) getView().findViewById(R.id.rteditor_fragment);
@@ -715,7 +791,12 @@ public class FragmentRTEditor extends Fragment {
 
         @Override
         public boolean onCreateActionMode(ActionMode mode, Menu menu) {
-            mode.getMenuInflater().inflate(R.menu.menu, menu);
+            if (singleton.portfolioClass.getPerfil().equals("T")) {
+                ((InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(getView().getWindowToken(), 0);
+                mode.getMenuInflater().inflate(R.menu.menu, menu);
+                menu.removeItem(android.R.id.paste);
+                menu.removeItem(android.R.id.cut);
+            }
             return true;
         }
 
@@ -729,7 +810,6 @@ public class FragmentRTEditor extends Fragment {
         }
 
         private void createSpecificCommentNote(float yPosition, String selectedText) {
-
             currentSpecificComment++;
             Log.d("editor ", "current note is now:" + currentSpecificComment);
             float yButton = 0;
@@ -748,8 +828,8 @@ public class FragmentRTEditor extends Fragment {
                 scrollview.addView(btn);
 
             mRTManager.onEffectSelected(Effects.BGCOLOR, greenLight, idButton);
-            mRTMessageField.setSelection(endSelection);
             mRTMessageField.setSelected(false);
+            mRTMessageField.clearFocus();
 
             setSpecificCommentNoteValue();
 

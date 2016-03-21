@@ -16,8 +16,10 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewConfiguration;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
 import com.mikepenz.crossfader.Crossfader;
@@ -161,6 +163,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void initBigDrawer() {
+        ImageView logo = (ImageView) bigDrawer.findViewById(R.id.img_logo);
         RelativeLayout portfolios = (RelativeLayout) bigDrawer.findViewById(R.id.portfolios);
         RelativeLayout activities = (RelativeLayout) bigDrawer.findViewById(R.id.activities);
         RelativeLayout reports = (RelativeLayout) bigDrawer.findViewById(R.id.reports);
@@ -173,6 +176,26 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         config.setOnClickListener(this);
         attachments.setOnClickListener(this);
 
+        logo.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(final View view, final MotionEvent event) {
+                clicked = view;
+                if (gestureDetector.onTouchEvent(event)) {
+                    return false;
+                }
+                return true;
+            }
+        });
+        bigDrawer.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(final View view, final MotionEvent event) {
+                clicked = view;
+                if (gestureDetector.onTouchEvent(event)) {
+                    return false;
+                }
+                return true;
+            }
+        });
         portfolios.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(final View view, final MotionEvent event) {
@@ -275,6 +298,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private void changeFragment(int id)
     {
         singleton.firsttime = true;
+        ((InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(findViewById(R.id.fragment_container).getWindowToken(), 0);
         switch (id)
         {
             case 0:

@@ -655,5 +655,4 @@ public class RTEditText extends EditText implements TextWatcher, SpanWatcher, Li
             out.writeString(mContent);
         }
     }
-
 }

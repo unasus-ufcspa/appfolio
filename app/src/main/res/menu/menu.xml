@@ -6,7 +6,8 @@
     <item
         android:id="@+id/action_favorite"
         android:icon="@drawable/ic_announcement_black_24dp"
+        android:orderInCategory="1"
         android:title="Comments"
-        app:showAsAction="ifRoom" />
+        app:showAsAction="always" />
 
 </menu>
