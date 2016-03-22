@@ -243,14 +243,14 @@ public class ConverterSpannedToHtml {
         SortedSet<CharacterStyle> sortedSpans = new TreeSet<CharacterStyle>(new Comparator<CharacterStyle>() {
             @Override
             public int compare(CharacterStyle s1, CharacterStyle s2) {
-                int end1 = text.getSpanEnd(s1);
-                int end2 = text.getSpanEnd(s2);
-                if (end1 != end2) return end2 - end1;                // longer span comes first
-
                 int start1 = text.getSpanStart(s1);
                 int start2 = text.getSpanStart(s2);
                 if (start1 != start2)
                     return start1 - start2;        // span which starts first comes first
+
+                int end1 = text.getSpanEnd(s1);
+                int end2 = text.getSpanEnd(s2);
+                if (end1 != end2) return end2 - end1;                // longer span comes first
 
                 // if the paragraphs have the same span [start, end] we compare their name
                 // compare the name only because local + anonymous classes have no canonical name
@@ -267,55 +267,55 @@ public class ConverterSpannedToHtml {
         convertText(text, start, end, sortedSpans);
     }
 
-    private void convertText(Spanned text, int start, int end, SortedSet<CharacterStyle> spans) {
-        while (start < end) {
-            // get first CharacterStyle
-            CharacterStyle span = spans.isEmpty() ? null : spans.first();
-            int spanStart = span == null ? Integer.MAX_VALUE : text.getSpanStart(span);
-            int spanEnd = span == null ? Integer.MAX_VALUE : text.getSpanEnd(span);
-
-            CharacterStyle newSpan = null;
-            for (CharacterStyle s : spans) {
-                if (text.getSpanStart(s) < spanStart && !verifyIfExists(s))
-                    newSpan = s;
-            }
-
-            if (newSpan != null) {
-                int newSpanStart = text.getSpanStart(newSpan);
-                if (start < newSpanStart) {
-                    escape(text, start, Math.min(end, newSpanStart));
-                    start = newSpanStart;
-                } else {
-                    handleStartTag(newSpan);
-                    util.add(newSpan);
-                }
-            } else {
-
-                if (start < spanStart) {
-                    // no paragraph, just plain text
-                    escape(text, start, Math.min(end, spanStart));
-                    start = spanStart;
-
-                } else {
-                    // CharacterStyle found
-                    spans.remove(span);
-
-
-                    boolean hst = true;
-
-                    if (!verifyIfExists(span))
-                        hst = handleStartTag(span);
-
-                    if (hst)
-                        convertText(text, Math.max(spanStart, start), Math.min(spanEnd, end), spans);
-
-                    handleEndTag(span);
-
-                    start = spanEnd;
-                }
-            }
-        }
-    }
+//    private void convertText(Spanned text, int start, int end, SortedSet<CharacterStyle> spans) {
+//        while (start < end) {
+//            // get first CharacterStyle
+//            CharacterStyle span = spans.isEmpty() ? null : spans.first();
+//            int spanStart = span == null ? Integer.MAX_VALUE : text.getSpanStart(span);
+//            int spanEnd = span == null ? Integer.MAX_VALUE : text.getSpanEnd(span);
+//
+//            CharacterStyle newSpan = null;
+//            for (CharacterStyle s : spans) {
+//                if (text.getSpanStart(s) < spanStart && !verifyIfExists(s))
+//                    newSpan = s;
+//            }
+//
+//            if (newSpan != null) {
+//                int newSpanStart = text.getSpanStart(newSpan);
+//                if (start < newSpanStart) {
+//                    escape(text, start, Math.min(end, newSpanStart));
+//                    start = newSpanStart;
+//                } else {
+//                    handleStartTag(newSpan);
+//                    util.add(newSpan);
+//                }
+//            } else {
+//
+//                if (start < spanStart) {
+//                    // no paragraph, just plain text
+//                    escape(text, start, Math.min(end, spanStart));
+//                    start = spanStart;
+//
+//                } else {
+//                    // CharacterStyle found
+//                    spans.remove(span);
+//
+//
+//                    boolean hst = true;
+//
+//                    if (!verifyIfExists(span))
+//                        hst = handleStartTag(span);
+//
+//                    if (hst)
+//                        convertText(text, Math.max(spanStart, start), Math.min(spanEnd, end), spans);
+//
+//                    handleEndTag(span);
+//
+//                    start = spanEnd;
+//                }
+//            }
+//        }
+//    }
 
     /*
     Versão anterior
@@ -323,7 +323,7 @@ public class ConverterSpannedToHtml {
     int start2 = text.getSpanStart(s2);
     if (start1 != start2)
     return start1 - start2;        // span which starts first comes first
-
+*/
     private void convertText(Spanned text, int start, int end, SortedSet<CharacterStyle> spans) {
         while (start < end) {
             // get first CharacterStyle
@@ -351,7 +351,7 @@ public class ConverterSpannedToHtml {
             }
             }
             }
-     */
+
 
     private boolean verifyIfExists(CharacterStyle cstyle) {
         for (CharacterStyle s : util)
