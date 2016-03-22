@@ -281,7 +281,7 @@ public class FragmentRTEditor extends Fragment {
             mRTMessageField.setInputType(InputType.TYPE_NULL);
             mRTMessageField.setTextIsSelectable(true);
             mRTManager.setToolbarVisibility(RTManager.ToolbarVisibility.HIDE);
-            mRTMessageField.setRichTextEditing(true, "Esse é o meu portfolio");
+//            mRTMessageField.setRichTextEditing(true, "Esse é o meu portfolio \n Muito bom esse App");
         }
         LinearLayout layout = (LinearLayout) view.findViewById(R.id.info_rteditor_container);
         layout.clearFocus();
@@ -292,6 +292,7 @@ public class FragmentRTEditor extends Fragment {
         fullScreen.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Log.d("rteditor", mRTMessageField.getText(RTFormat.HTML));
                 saveText();
 
                 if (singleton.isFullscreen) {
@@ -303,7 +304,6 @@ public class FragmentRTEditor extends Fragment {
                 }
 
                 ((MainActivity) getActivity()).dontCreateCrossfader();
-                Log.d("rteditor", mRTMessageField.getText(RTFormat.HTML));
             }
         });
 
@@ -834,20 +834,6 @@ public class FragmentRTEditor extends Fragment {
             setSpecificCommentNoteValue();
 
             btn.callOnClick();
-
-          /* // INSERIR NOTA AO SER CLICADA NO BANCO
-
-            Comentario c = new Comentario();
-
-            //inserting first note comment
-            c.setTxtReference(selectedText);
-            c.setIdAuthor(singleton.user.getIdUser());
-            c.setIdActivityStudent(singleton.idActivityStudent);
-            c.setTypeComment("O");
-
-            source.insertSpecificComment(c,idButton);
-
-            */
         }
     }
 

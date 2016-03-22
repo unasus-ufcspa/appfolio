@@ -109,7 +109,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         singleton = Singleton.getInstance();
         singleton.note = new Note(0, "null", 0);
         //////////ID activity do MARIO///////////
-        singleton.idActivityStudent=1;
+//        singleton.idActivityStudent=1;
         /////////--------------------///////////
 
         fragmentContainer = findViewById(R.id.fragment_container);
