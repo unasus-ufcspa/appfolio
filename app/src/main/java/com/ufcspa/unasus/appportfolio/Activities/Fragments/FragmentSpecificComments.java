@@ -89,6 +89,9 @@ public class FragmentSpecificComments extends Frag {
         txNote.setVisibility(View.GONE);
         btExpand.setVisibility(View.GONE);
         lv.setVisibility(View.GONE);
+        TextView txMsgHide= (TextView) getView().findViewById(R.id.txtWhenHiDE);
+        txMsgHide.setVisibility(View.VISIBLE);
+
     }
 
     @Override
