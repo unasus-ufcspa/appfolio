@@ -12,14 +12,24 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <include android:id="@+id/rte_toolbar_container" layout="@layout/rte_toolbar" />
+        <!--<include android:id="@+id/rte_toolbar_container" layout="@layout/rte_toolbar" />-->
+        <!--android:layout_above="@id/rte_toolbar_container"-->
+        <ImageButton
+            android:id="@+id/fullscreen"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:background="@drawable/fullscreen_text" />
 
         <ScrollView
             android:id="@+id/rte_content"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_above="@id/rte_toolbar_container"
-            android:layout_below="@+id/fullscreen"
+
+            android:layout_above="@+id/fullscreen"
+            android:layout_below="@+id/student_name"
             android:fillViewport="true"
             android:scrollbarStyle="insideOverlay">
             <RelativeLayout
@@ -42,14 +52,25 @@
             </RelativeLayout>
         </ScrollView>
 
-        <ImageButton
-            android:id="@+id/fullscreen"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+        <me.grantland.widget.AutofitTextView
+            android:id="@+id/student_name"
+            android:layout_width="match_parent"
+            android:layout_height="35dp"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
             android:layout_below="@+id/info_rteditor_container"
-            android:background="@drawable/fullscreen_text" />
+            android:layout_marginRight="35dp"
+            android:layout_weight="1"
+            android:gravity="right"
+            android:paddingBottom="2dp"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:singleLine="true"
+            android:text="Anitta Maltatti"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:textColor="@color/gray_2"
+            android:textSize="15dp"
+            android:textStyle="bold" />
 
         <LinearLayout
             android:id="@+id/info_rteditor_container"
@@ -66,31 +87,26 @@
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:gravity="bottom"
+                android:gravity="center|left"
                 android:paddingBottom="2dp"
                 android:paddingLeft="10dp"
                 android:paddingRight="10dp"
                 android:singleLine="true"
                 android:text="Atividade 1: imunologia"
                 android:textAppearance="?android:attr/textAppearanceMedium"
-                android:textColor="@color/white"
+                android:textColor="@color/gray_4"
+                android:textSize="15dp"
                 android:visibility="visible" />
 
-            <me.grantland.widget.AutofitTextView
-                android:id="@+id/student_name"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
+            <ImageButton
+                android:id="@+id/imageButton"
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
                 android:layout_marginRight="35dp"
-                android:layout_weight="1"
-                android:gravity="bottom|right"
-                android:paddingBottom="2dp"
-                android:paddingLeft="10dp"
-                android:paddingRight="10dp"
-                android:singleLine="true"
-                android:text="Anitta Maltatti"
-                android:textAppearance="?android:attr/textAppearanceMedium"
-                android:textColor="@color/white"
-                android:textStyle="bold" />
+                android:background="@drawable/fullscreen_text" />
 
         </LinearLayout>
 
@@ -105,6 +121,21 @@
             android:background="@drawable/rounded_corner"
             android:src="@drawable/ex_user_img"
             android:visibility="visible" />
+
+        <RelativeLayout
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_below="@+id/rte_content"
+            android:layout_toLeftOf="@+id/fullscreen"
+            android:layout_toStartOf="@+id/fullscreen">
+
+            <include
+                android:id="@+id/rte_toolbar_container"
+                layout="@layout/rte_toolbar" />
+        </RelativeLayout>
 
     </RelativeLayout>
 

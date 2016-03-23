@@ -446,7 +446,7 @@ public class FragmentRTEditor extends Fragment {
         TextView activityName = (TextView) view.findViewById(R.id.activity_name);
 
         studentName.setText(singleton.portfolioClass.getStudentName());
-        activityName.setText("Atividade " + singleton.activity.getNuOrder() + ": " + singleton.activity.getTitle());
+        activityName.setText("Ativ. " + singleton.activity.getNuOrder() + ": " + singleton.activity.getTitle());
     }
 
     private float getCaretYPosition(int position) {
