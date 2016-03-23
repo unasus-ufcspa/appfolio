@@ -277,11 +277,12 @@ public class FragmentRTEditor extends Fragment {
             }
         });
 
+        mRTMessageField.setCanPaste(true);
         if (singleton.portfolioClass.getPerfil().equals("T")) {
             mRTMessageField.setInputType(InputType.TYPE_NULL);
             mRTMessageField.setTextIsSelectable(true);
             mRTManager.setToolbarVisibility(RTManager.ToolbarVisibility.HIDE);
-//            mRTMessageField.setRichTextEditing(true, "Esse é o meu portfolio \n Muito bom esse App");
+            mRTMessageField.setCanPaste(false);
         }
         LinearLayout layout = (LinearLayout) view.findViewById(R.id.info_rteditor_container);
         layout.clearFocus();

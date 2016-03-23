@@ -112,19 +112,19 @@ public class FontManager {
         /*
          * Fonts from the system
          */
-        Map<String, String> systemFonts = getSystemFonts();
-        for (String fontName : systemFonts.keySet()) {
-            String filePath = systemFonts.get(fontName);
-            if (!ALL_FONTS.contains(fontName)) {
-                try {
-                    Typeface typeface = Typeface.createFromFile(filePath);
-                    ALL_FONTS.add(new RTTypeface(fontName, typeface));
-                }
-                catch (Exception e) {
-                    // this can happen if we don't have access to the font or it's not a font or...
-                }
-            }
-        }
+//        Map<String, String> systemFonts = getSystemFonts();
+//        for (String fontName : systemFonts.keySet()) {
+//            String filePath = systemFonts.get(fontName);
+//            if (!ALL_FONTS.contains(fontName)) {
+//                try {
+//                    Typeface typeface = Typeface.createFromFile(filePath);
+//                    ALL_FONTS.add(new RTTypeface(fontName, typeface));
+//                }
+//                catch (Exception e) {
+//                    // this can happen if we don't have access to the font or it's not a font or...
+//                }
+//            }
+//        }
 
         return ALL_FONTS;
     }

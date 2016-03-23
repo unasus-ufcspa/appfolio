@@ -106,6 +106,8 @@ public class RTEditText extends EditText implements TextWatcher, SpanWatcher, Li
     private Set<RTMedia> mOriginalMedia = new HashSet<RTMedia>();
     private Set<RTMedia> mAddedMedia = new HashSet<RTMedia>();
 
+    private boolean canPaste = true;
+
     // ****************************************** Lifecycle Methods *******************************************
 
     public RTEditText(Context context) {
@@ -378,6 +380,10 @@ public class RTEditText extends EditText implements TextWatcher, SpanWatcher, Li
         }
     }
 
+    public void setCanPaste(boolean value) {
+        canPaste = value;
+    }
+
     // ****************************************** TextWatcher / SpanWatcher *******************************************
 
     public boolean hasChanged() {
@@ -609,6 +615,18 @@ public class RTEditText extends EditText implements TextWatcher, SpanWatcher, Li
         if (mUseRTFormatting && mListener != null) {
             mListener.onClick(this, linkSpan);
         }
+    }
+
+    @Override
+    public boolean onTextContextMenuItem(int id) {
+        if (!canPaste)
+            switch (id) {
+                case android.R.id.paste:
+                    return false;
+                case android.R.id.pasteAsPlainText:
+                    return false;
+            }
+        return super.onTextContextMenuItem(id);
     }
 
     private static class SavedState extends BaseSavedState {

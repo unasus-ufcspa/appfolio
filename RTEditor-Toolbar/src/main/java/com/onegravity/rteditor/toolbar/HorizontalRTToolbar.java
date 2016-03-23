@@ -113,6 +113,70 @@ public class HorizontalRTToolbar extends LinearLayout implements RTToolbar, View
     private OnColorChangedListener mColorChangedlistener;
 
     // ****************************************** Initialize Methods *******************************************
+    private DropDownNavListener<FontSpinnerItem> mFontListener = new DropDownNavListener<FontSpinnerItem>() {
+        @Override
+        public void onItemSelected(FontSpinnerItem spinnerItem, int position) {
+            RTTypeface typeface = spinnerItem.getTypeface();
+            mListener.onEffectSelected(Effects.TYPEFACE, typeface);
+        }
+    };
+    private DropDownNavListener<FontSizeSpinnerItem> mFontSizeListener = new DropDownNavListener<FontSizeSpinnerItem>() {
+        @Override
+        public void onItemSelected(FontSizeSpinnerItem spinnerItem, int position) {
+            int size = spinnerItem.getFontSize();
+            mFontSizeAdapter.updateSpinnerTitle(spinnerItem.isEmpty() ? "" : Integer.toString(size));
+            size = Helper.convertPxToSp(size);
+            mListener.onEffectSelected(Effects.FONTSIZE, size);
+        }
+    };
+    private DropDownNavListener<FontColorSpinnerItem> mFontColorListener = new DropDownNavListener<FontColorSpinnerItem>() {
+        @Override
+        public void onItemSelected(final FontColorSpinnerItem spinnerItem, int position) {
+            if (spinnerItem.isCustom()) {
+                mColorChangedlistener = new OnColorChangedListener() {
+                    @Override
+                    public void onColorChanged(int color) {
+                        mCustomColorFont = color;
+                        spinnerItem.setColor(color);
+                        mFontColorAdapter.notifyDataSetChanged();
+                        if (mListener != null) {
+                            mListener.onEffectSelected(Effects.FONTCOLOR, color);
+                        }
+                    }
+                };
+                ColorPickerDialog dialog = new ColorPickerDialog(getContext(), mCustomColorFont, false).show();
+                mPickerId = dialog.getId();
+                EventBus.getDefault().post(new SetColorChangedListenerEvent(mPickerId, mColorChangedlistener));
+            } else if (mListener != null) {
+                Integer color = spinnerItem.isEmpty() ? null : spinnerItem.getColor();
+                mListener.onEffectSelected(Effects.FONTCOLOR, color);
+            }
+        }
+    };
+    private DropDownNavListener<BGColorSpinnerItem> mBGColorListener = new DropDownNavListener<BGColorSpinnerItem>() {
+        @Override
+        public void onItemSelected(final BGColorSpinnerItem spinnerItem, int position) {
+            if (spinnerItem.isCustom()) {
+                ColorPickerDialog dialog = new ColorPickerDialog(getContext(), mCustomColorBG, false).show();
+                mColorChangedlistener = new OnColorChangedListener() {
+                    @Override
+                    public void onColorChanged(int color) {
+                        mCustomColorBG = color;
+                        spinnerItem.setColor(color);
+                        mBGColorAdapter.notifyDataSetChanged();
+                        if (mListener != null) {
+                            mListener.onEffectSelected(Effects.BGCOLOR, color, -1);
+                        }
+                    }
+                };
+                mPickerId = dialog.getId();
+                EventBus.getDefault().post(new SetColorChangedListenerEvent(mPickerId, mColorChangedlistener));
+            } else if (mListener != null) {
+                Integer color = spinnerItem.isEmpty() ? null : spinnerItem.getColor();
+                mListener.onEffectSelected(Effects.BGCOLOR, color, -1);
+            }
+        }
+    };
 
     public HorizontalRTToolbar(Context context) {
         super(context);
@@ -229,7 +293,7 @@ public class HorizontalRTToolbar extends LinearLayout implements RTToolbar, View
         return spinnerItems;
     }
 
-        private SpinnerItems<FontSizeSpinnerItem> getTextSizeItems() {
+    private SpinnerItems<FontSizeSpinnerItem> getTextSizeItems() {
         SpinnerItems<FontSizeSpinnerItem> spinnerItems = new SpinnerItems<FontSizeSpinnerItem>();
         Resources res = getResources();
 
@@ -245,6 +309,8 @@ public class HorizontalRTToolbar extends LinearLayout implements RTToolbar, View
 
         return spinnerItems;
     }
+
+    // ****************************************** RTToolbar Methods *******************************************
 
     private SpinnerItems<FontColorSpinnerItem> getFontColorItems() {
         SpinnerItems<FontColorSpinnerItem> spinnerItems = new SpinnerItems<FontColorSpinnerItem>();
@@ -340,16 +406,14 @@ public class HorizontalRTToolbar extends LinearLayout implements RTToolbar, View
         }
     }
 
-    // ****************************************** RTToolbar Methods *******************************************
+    @Override
+    public ViewGroup getToolbarContainer() {
+        return mToolbarContainer == null ? this : mToolbarContainer;
+    }
 
     @Override
     public void setToolbarContainer(ViewGroup toolbarContainer) {
         mToolbarContainer = toolbarContainer;
-    }
-
-    @Override
-    public ViewGroup getToolbarContainer() {
-        return mToolbarContainer == null ? this : mToolbarContainer;
     }
 
     @Override
@@ -468,6 +532,8 @@ public class HorizontalRTToolbar extends LinearLayout implements RTToolbar, View
         if (mFontColor != null) setFontColor(color, mFontColor, mFontColorAdapter);
     }
 
+    // ****************************************** Item Selected Methods *******************************************
+
     @Override
     public void setBGColor(int color) {
         if (mBGColor != null) setFontColor(color, mBGColor, mBGColorAdapter);
@@ -500,80 +566,6 @@ public class HorizontalRTToolbar extends LinearLayout implements RTToolbar, View
             }
         }
     }
-
-    // ****************************************** Item Selected Methods *******************************************
-
-    interface DropDownNavListener<T extends SpinnerItem> {
-        void onItemSelected(T spinnerItem, int position);
-    }
-
-    private DropDownNavListener<FontSpinnerItem> mFontListener = new DropDownNavListener<FontSpinnerItem>() {
-        @Override
-        public void onItemSelected(FontSpinnerItem spinnerItem, int position) {
-            RTTypeface typeface = spinnerItem.getTypeface();
-            mListener.onEffectSelected(Effects.TYPEFACE, typeface);
-        }
-    };
-
-    private DropDownNavListener<FontSizeSpinnerItem> mFontSizeListener = new DropDownNavListener<FontSizeSpinnerItem>() {
-        @Override
-        public void onItemSelected(FontSizeSpinnerItem spinnerItem, int position) {
-            int size = spinnerItem.getFontSize();
-            mFontSizeAdapter.updateSpinnerTitle(spinnerItem.isEmpty() ? "" : Integer.toString(size));
-            size = Helper.convertPxToSp(size);
-            mListener.onEffectSelected(Effects.FONTSIZE, size);
-        }
-    };
-
-    private DropDownNavListener<FontColorSpinnerItem> mFontColorListener = new DropDownNavListener<FontColorSpinnerItem>() {
-        @Override
-        public void onItemSelected(final FontColorSpinnerItem spinnerItem, int position) {
-            if (spinnerItem.isCustom()) {
-                mColorChangedlistener = new OnColorChangedListener() {
-                    @Override
-                    public void onColorChanged(int color) {
-                        mCustomColorFont = color;
-                        spinnerItem.setColor(color);
-                        mFontColorAdapter.notifyDataSetChanged();
-                        if (mListener != null) {
-                            mListener.onEffectSelected(Effects.FONTCOLOR, color);
-                        }
-                    }
-                };
-                ColorPickerDialog dialog = new ColorPickerDialog(getContext(), mCustomColorFont, false).show();
-                mPickerId = dialog.getId();
-                EventBus.getDefault().post(new SetColorChangedListenerEvent(mPickerId, mColorChangedlistener));
-            } else if (mListener != null) {
-                Integer color = spinnerItem.isEmpty() ? null : spinnerItem.getColor();
-                mListener.onEffectSelected(Effects.FONTCOLOR, color);
-            }
-        }
-    };
-
-    private DropDownNavListener<BGColorSpinnerItem> mBGColorListener = new DropDownNavListener<BGColorSpinnerItem>() {
-        @Override
-        public void onItemSelected(final BGColorSpinnerItem spinnerItem, int position) {
-            if (spinnerItem.isCustom()) {
-                ColorPickerDialog dialog = new ColorPickerDialog(getContext(), mCustomColorBG, false).show();
-                mColorChangedlistener = new OnColorChangedListener() {
-                    @Override
-                    public void onColorChanged(int color) {
-                        mCustomColorBG = color;
-                        spinnerItem.setColor(color);
-                        mBGColorAdapter.notifyDataSetChanged();
-                        if (mListener != null) {
-                            mListener.onEffectSelected(Effects.BGCOLOR, color, -1);
-                        }
-                    }
-                };
-                mPickerId = dialog.getId();
-                EventBus.getDefault().post(new SetColorChangedListenerEvent(mPickerId, mColorChangedlistener));
-            } else if (mListener != null) {
-                Integer color = spinnerItem.isEmpty() ? null : spinnerItem.getColor();
-                mListener.onEffectSelected(Effects.BGCOLOR, color, -1);
-            }
-        }
-    };
 
     @Override
     public void onClick(View v) {
@@ -699,6 +691,10 @@ public class HorizontalRTToolbar extends LinearLayout implements RTToolbar, View
                 mListener.onRedo();
             }
         }
+    }
+
+    interface DropDownNavListener<T extends SpinnerItem> {
+        void onItemSelected(T spinnerItem, int position);
     }
 
 }
