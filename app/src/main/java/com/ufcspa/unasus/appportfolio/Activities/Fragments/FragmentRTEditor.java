@@ -13,6 +13,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.widget.SlidingPaneLayout;
 import android.text.Editable;
+import android.text.InputType;
 import android.text.Layout;
 import android.text.Spannable;
 import android.text.TextWatcher;
@@ -45,6 +46,7 @@ import com.onegravity.rteditor.api.media.RTVideo;
 import com.onegravity.rteditor.converter.ConverterSpannedToHtml;
 import com.onegravity.rteditor.effects.Effects;
 import com.onegravity.rteditor.spans.BackgroundColorSpan;
+import com.ufcspa.unasus.appportfolio.Activities.MainActivity;
 import com.ufcspa.unasus.appportfolio.Model.ActivityStudent;
 import com.ufcspa.unasus.appportfolio.Model.Comentario;
 import com.ufcspa.unasus.appportfolio.Model.Note;
@@ -277,10 +279,10 @@ public class FragmentRTEditor extends Fragment {
 
         mRTMessageField.setCanPaste(true);
         if (singleton.portfolioClass.getPerfil().equals("T")) {
-//            mRTMessageField.setInputType(InputType.TYPE_NULL);
-//            mRTMessageField.setTextIsSelectable(true);
-//            mRTManager.setToolbarVisibility(RTManager.ToolbarVisibility.HIDE);
-//            mRTMessageField.setCanPaste(false);
+            mRTMessageField.setInputType(InputType.TYPE_NULL);
+            mRTMessageField.setTextIsSelectable(true);
+            mRTManager.setToolbarVisibility(RTManager.ToolbarVisibility.HIDE);
+            mRTMessageField.setCanPaste(false);
         }
         LinearLayout layout = (LinearLayout) view.findViewById(R.id.info_rteditor_container);
         layout.clearFocus();
@@ -292,17 +294,17 @@ public class FragmentRTEditor extends Fragment {
             @Override
             public void onClick(View v) {
                 Log.d("rteditor", mRTMessageField.getText(RTFormat.HTML));
-//                saveText();
-//
-//                if (singleton.isFullscreen) {
-//                    singleton.wasFullscreen = true;
-//                    singleton.isFullscreen = false;
-//                } else {
-//                    singleton.wasFullscreen = false;
-//                    singleton.isFullscreen = true;
-//                }
-//
-//                ((MainActivity) getActivity()).dontCreateCrossfader();
+                saveText();
+
+                if (singleton.isFullscreen) {
+                    singleton.wasFullscreen = true;
+                    singleton.isFullscreen = false;
+                } else {
+                    singleton.wasFullscreen = false;
+                    singleton.isFullscreen = true;
+                }
+
+                ((MainActivity) getActivity()).dontCreateCrossfader();
             }
         });
 
