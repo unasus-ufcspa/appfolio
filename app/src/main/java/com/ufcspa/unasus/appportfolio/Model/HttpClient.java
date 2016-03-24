@@ -41,9 +41,17 @@ public class HttpClient {
     }
 
 
-    public void postJson(JSONObject jsonBody){
+    public void postJson(JSONObject jsonComment,JSONObject jsonSync){
         Log.d(tag, "URL: " + URL);
-        JsonObjectRequest jsObjReq = new JsonObjectRequest(Request.Method.POST, URL, jsonBody, new Response.Listener<JSONObject>() {
+        JSONObject jsonFinal= new JSONObject();
+        try {
+            jsonFinal.put("sync",jsonSync);
+            jsonFinal.put("comment",jsonComment);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        JsonObjectRequest jsObjReq = new JsonObjectRequest(Request.Method.POST, URL, jsonComment, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
                 Log.d(tag,"Retornou do request");

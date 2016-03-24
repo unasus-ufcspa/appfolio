@@ -13,6 +13,7 @@ import com.ufcspa.unasus.appportfolio.Model.Comentario;
 import com.ufcspa.unasus.appportfolio.Model.PortfolioClass;
 import com.ufcspa.unasus.appportfolio.Model.Reference;
 import com.ufcspa.unasus.appportfolio.Model.StudFrPortClass;
+import com.ufcspa.unasus.appportfolio.Model.Sync;
 import com.ufcspa.unasus.appportfolio.Model.Team;
 import com.ufcspa.unasus.appportfolio.Model.User;
 
@@ -72,6 +73,11 @@ public class DataBaseAdapter {
         }
     }
 
+/*
+
+    *************************CRUD REFERENCIAS***********************************
+
+*/
 
     public boolean insertReference(Reference ref){
         ContentValues cv = new ContentValues();
@@ -121,7 +127,11 @@ public class DataBaseAdapter {
         }
         return refs;
     }
+/*
 
+    *************************CRUD COMENTARIOS***********************************
+
+*/
     public int insertComment(Comentario c) {
         ContentValues cv = new ContentValues();
         cv.put("id_activity_student", c.getIdActivityStudent());
@@ -204,6 +214,8 @@ public class DataBaseAdapter {
             Log.d(tag, e.getMessage());
         }
     }
+
+
 
 
     public List<Comentario> listComments(int idActStu,String typeComment,int idNote) {
@@ -289,6 +301,15 @@ public class DataBaseAdapter {
         return comentarios;
     }
 
+
+
+
+    /*
+
+    *************************CRUD ANEXOS***********************************
+
+*/
+
     public int insertAttachment(Attachment attach) {
         ContentValues cv = new ContentValues();
         cv.put("ds_local_path", attach.getLocalPath());
@@ -344,6 +365,14 @@ public class DataBaseAdapter {
             Log.e(tag, "erro ao salvar na tabela tb_attach_comment:" + e.getMessage());
         }
     }
+
+
+
+    /*
+
+    *************************CRUD ACTIVITY STUDENT***********************************
+
+*/
 
     public void updateActivityStudent(ActivityStudent activityStudent) {
         ContentValues cv = new ContentValues();
@@ -475,6 +504,16 @@ public class DataBaseAdapter {
         return pc;
     }
 
+
+
+
+
+    /*
+
+    *************************MÉTODO DESCOBRIR PERFIL DO USUÀRIO***********************************
+
+*/
+
     public char verifyUserType(int idUser)
     {
         String query = "select \n" +
@@ -499,6 +538,14 @@ public class DataBaseAdapter {
 //        db.close();
         return userType;
     }
+
+
+    /*
+
+    *************************CRUD TURMAS***********************************
+
+*/
+
 
     public List<Team> getClasses(int idUser, char userType)
     {
@@ -558,6 +605,14 @@ public class DataBaseAdapter {
         return team;
     }
 
+
+
+    /*
+
+    *************************OBTER ATIVIDADES***********************************
+
+*/
+
     public ArrayList<Activity> getActivities(int userId, int portfolioStudentId, char userType)
     {
         String query = "select \n" +
@@ -591,7 +646,11 @@ public class DataBaseAdapter {
 //        db.close();
         return array_activity;
     }
+    /*
 
+        *************************MÉTODO PARA SELECIONAR ALUNOS E AS ATIVIDADES QUE POSSUEM***********************************
+
+    */
     public ArrayList<StudFrPortClass> selectListActivitiesAndStudents(int idPortfolioClass,String perfil,int idUsuario){
         String query="select \n" +
                 "tas.id_activity_student,\n" +
@@ -643,7 +702,13 @@ public class DataBaseAdapter {
         }
         return students;
     }
+    /*
 
+        ************************* retorna uma lista com as turmas que o usuário ***************
+        * ********************** esta cadastro e seu papel nela(tutor ou aluno) ***************
+        *********************** perfil S- Student T-tutor ***********************************
+
+    */
     public List<PortfolioClass> selectListClassAndUserType(int idUser){
         //retorna uma lista com as turmas que o usuário esta cadastro e seu papel nela(tutor ou aluno);
         // perfil S- Student T-tutor
@@ -803,4 +868,59 @@ public class DataBaseAdapter {
             Log.e(tag, "erro ao salvar na tabela tb_attach_activity:" + e.getMessage());
         }
     }
+
+
+    /*
+        ************************* CRUD TB_SYNC ***************************
+    */
+
+
+    public void insertIntoTBSync(Sync sync) {
+        ContentValues cv = new ContentValues();
+        cv.put("id_device",sync.getId_device());
+        cv.put("nm_table",sync.getNm_table());
+        cv.put("co_id_table",sync.getCo_id_table());
+        cv.put("dt_sync",sync.getDt_sync());
+        try {
+            db.insert("tb_sync", null, cv);
+        } catch (Exception e) {
+            Log.e(tag, "erro ao salvar na tabela tb_attach_activity:" + e.getMessage());
+        }
+    }
+
+    public ArrayList getSyncs() {
+        String query = "SELECT * from tb_sync";
+        ArrayList syncs= new ArrayList<Sync>();
+        Cursor c = db.rawQuery(query, null);
+        if (c.moveToFirst()) {
+            do {
+                Sync s = new Sync(c.getInt(0),c.getString(1),c.getInt(2),c.getString(3),c.getString(4));
+                syncs.add(s);
+            } while (c.moveToNext());
+        } else {
+
+        }
+
+//        db.close();
+
+        return syncs;
+    }
+
+
+    public void updateTableBySync(Object updateObj,String nameTable,int colunmID){
+        switch (nameTable){
+            case "tb_comment":
+                updateComment((Comentario) updateObj);
+                break;
+            default:
+                Log.d("banco updateTableBySync","Nome de tabela inválido");
+
+        }
+
+    }
+
+
+
+
+
 }
