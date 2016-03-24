@@ -324,33 +324,53 @@ public class ConverterSpannedToHtml {
     if (start1 != start2)
     return start1 - start2;        // span which starts first comes first
 */
+//    private void convertText(Spanned text, int start, int end, SortedSet<CharacterStyle> spans) {
+//        while (start < end) {
+//            // get first CharacterStyle
+//            CharacterStyle span = spans.isEmpty() ? null : spans.first();
+//            int spanStart = span == null ? Integer.MAX_VALUE : text.getSpanStart(span);
+//            int spanEnd = span == null ? Integer.MAX_VALUE : text.getSpanEnd(span);
+//
+//            if (start < spanStart) {
+//                // no paragraph, just plain text
+//                escape(text, start, Math.min(end, spanStart));
+//                start = spanStart;
+//            } else {
+//                // CharacterStyle found
+//                spans.remove(span);
+//
+//
+//                boolean hst = handleStartTag(span);
+//
+//                if (hst)
+//                    convertText(text, Math.max(spanStart, start), Math.min(spanEnd, end), spans);
+//
+//                handleEndTag(span);
+//
+//                start = spanEnd;
+//            }
+//        }
+//    }
     private void convertText(Spanned text, int start, int end, SortedSet<CharacterStyle> spans) {
-        while (start < end) {
-            // get first CharacterStyle
-            CharacterStyle span = spans.isEmpty() ? null : spans.first();
-            int spanStart = span == null ? Integer.MAX_VALUE : text.getSpanStart(span);
-            int spanEnd = span == null ? Integer.MAX_VALUE : text.getSpanEnd(span);
+        String textRTEditor = text.toString();
+        for (int i = 0; i < textRTEditor.length(); i++) {
+            for (CharacterStyle span : spans) {
+                int spanStart = text.getSpanStart(span);
+                int spanEnd = text.getSpanEnd(span);
 
-            if (start < spanStart) {
-                // no paragraph, just plain text
-                escape(text, start, Math.min(end, spanStart));
-                start = spanStart;
-            } else {
-                // CharacterStyle found
-                spans.remove(span);
+                if (spanStart == i) {
+                    if (!handleStartTag(span)) {
+                        i++;
+                    }
+                }
 
-
-                boolean hst = handleStartTag(span);
-
-                if (hst)
-                    convertText(text, Math.max(spanStart, start), Math.min(spanEnd, end), spans);
-
-                handleEndTag(span);
-
-                start = spanEnd;
+                if (spanEnd == i) {
+                    handleEndTag(span);
+                }
             }
-            }
-            }
+            mOut.append(textRTEditor.charAt(i));
+        }
+    }
 
 
     private boolean verifyIfExists(CharacterStyle cstyle) {
