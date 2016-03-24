@@ -394,14 +394,15 @@ public class FragmentRTEditor extends Fragment {
         geral.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.comments_container, new FragmentComments()).commit();
+                showCommentsTab(false);
             }
         });
 
         specific.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.comments_container, new FragmentSpecificComments()).commit();
+//                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.comments_container, new FragmentSpecificComments()).commit();
+                showCommentsTab(true);
             }
         });
 
@@ -640,8 +641,6 @@ public class FragmentRTEditor extends Fragment {
         return thatsMySelectionInHTML;
     }
 
-
-
     /**
      *  MÉTODO PARA ALTERAR A COR DO TEXTO PELA ID DE UMA NOTA
      *
@@ -682,11 +681,18 @@ public class FragmentRTEditor extends Fragment {
     public void showCommentsTab(Boolean isSpecificComment) {
         specificCommentsOpen = isSpecificComment;
         if (isSpecificComment) {
+            int childs = rightBarSpecificComments.getChildCount();
+            for (int i = childs - 1; i > 0; i--)
+                rightBarSpecificComments.getChildAt(i).setVisibility(View.VISIBLE);
             getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.comments_container, new FragmentSpecificComments()).commit();
             SlidingPaneLayout layout = (SlidingPaneLayout) getView().findViewById(R.id.rteditor_fragment);
             layout.closePane();
-        } else
+        } else {
+            int childs = rightBarSpecificComments.getChildCount();
+            for (int i = childs - 1; i > 0; i--)
+                rightBarSpecificComments.getChildAt(i).setVisibility(View.GONE);
             getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.comments_container, new FragmentComments()).commit();
+        }
     }
 
     private void changeNotePosition() {
