@@ -10,6 +10,7 @@ import com.ufcspa.unasus.appportfolio.Model.Activity;
 import com.ufcspa.unasus.appportfolio.Model.ActivityStudent;
 import com.ufcspa.unasus.appportfolio.Model.Attachment;
 import com.ufcspa.unasus.appportfolio.Model.Comentario;
+import com.ufcspa.unasus.appportfolio.Model.Device;
 import com.ufcspa.unasus.appportfolio.Model.PortfolioClass;
 import com.ufcspa.unasus.appportfolio.Model.Reference;
 import com.ufcspa.unasus.appportfolio.Model.StudFrPortClass;
@@ -906,7 +907,6 @@ public class DataBaseAdapter {
         return syncs;
     }
 
-
     public void updateTableBySync(Object updateObj,String nameTable,int colunmID){
         switch (nameTable){
             case "tb_comment":
@@ -917,6 +917,36 @@ public class DataBaseAdapter {
 
         }
 
+    }
+
+
+     /*
+        ************************* CRUD TB_DEVICE ***************************
+    */
+
+    public void insertIntoTbDevice(Device d) {
+        ContentValues cv = new ContentValues();
+        cv.put("id_device",d.get_id_device());
+        cv.put("id_user",d.get_id_user());
+        cv.put("tp_device",d.get_tp_device());
+        try {
+            db.insert("tb_device", null, cv);
+        } catch (Exception e) {
+            Log.e(tag, "erro ao salvar na tabela tb_device:" + e.getMessage());
+        }
+    }
+
+
+    public Device getDevice() {
+        String query = "SELECT * from tb_device";
+        Device device = new Device();
+        Cursor c = db.rawQuery(query, null);
+        if (c.moveToFirst()) {
+            device= new Device(c.getString(0),c.getInt(1),c.getInt(2));
+        } else {
+            Log.e(tag, "não há registros na tabela tb_device");
+        }
+        return device;
     }
 
 

@@ -17,13 +17,13 @@ public class SplashActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Log.d("ANDROID ID", "getting android ID...");
+       /* Log.d("ANDROID ID", "getting android ID...");
         android_id = Secure.getString(this.getContentResolver(),Secure.ANDROID_ID);
         Log.d("ANDROID ID","Android ID:"+android_id);
         TelephonyManager telephonyManager = (TelephonyManager)getSystemService(Context.TELEPHONY_SERVICE);
         String id =telephonyManager.getDeviceId();
         Log.d("ANDROID ID", "getting android ID BY IMEI...");
-        Log.d("ANDROID ID","Android ID IMEI:"+id);
+        Log.d("ANDROID ID","Android ID IMEI:"+id);*/
 
         Intent intent = new Intent(this, LoginActivity.class);
         startActivity(intent);
