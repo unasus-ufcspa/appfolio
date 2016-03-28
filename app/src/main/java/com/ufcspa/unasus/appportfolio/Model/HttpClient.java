@@ -47,11 +47,12 @@ public class HttpClient {
         try {
             jsonFinal.put("sync",jsonSync);
             jsonFinal.put("comment",jsonComment);
+            Log.wtf("JSON", "json gerado:" + jsonFinal.toString());
         } catch (JSONException e) {
             e.printStackTrace();
         }
 
-        JsonObjectRequest jsObjReq = new JsonObjectRequest(Request.Method.POST, URL, jsonComment, new Response.Listener<JSONObject>() {
+        JsonObjectRequest jsObjReq = new JsonObjectRequest(Request.Method.POST, URL, jsonFinal, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
                 Log.d(tag,"Retornou do request");
@@ -61,6 +62,7 @@ public class HttpClient {
                         Log.e(tag, "JSON POST erro");
                     }else{
                         Log.d(tag,"JSON POST foi");
+                        Log.d(tag,"alterando id_comment...");
                         if(comentario!=null){
                             comentario.setIdComment(response.getInt("id_comment"));
                         }
