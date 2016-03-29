@@ -16,7 +16,7 @@
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
         android:layout_marginTop="10dp"
-        android:background="@color/gray_3"
+        android:background="@color/gray_5"
         android:elegantTextHeight="@bool/md_is_tablet"
         android:minHeight="70px"
         android:scrollbars="vertical"
@@ -27,19 +27,19 @@
         android:transcriptMode="alwaysScroll"
         />
 
-    <ImageButton
-        android:id="@+id/btn_expand_ref"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:layout_alignBottom="@+id/txSelectedNote"
-        android:layout_alignEnd="@+id/txSelectedNote"
-        android:layout_alignRight="@+id/txSelectedNote"
-        android:layout_marginTop="10dp"
-        android:adjustViewBounds="true"
-        android:background="@color/gray_3"
-        android:paddingLeft="1dp"
-        android:scaleType="fitCenter"
-        android:src="@drawable/three_dots" />
+    <!--<ImageButton-->
+    <!--android:id="@+id/btn_expand_ref"-->
+    <!--android:layout_width="50dp"-->
+    <!--android:layout_height="50dp"-->
+    <!--android:layout_alignBottom="@+id/txSelectedNote"-->
+    <!--android:layout_alignEnd="@+id/txSelectedNote"-->
+    <!--android:layout_alignRight="@+id/txSelectedNote"-->
+    <!--android:layout_marginTop="10dp"-->
+    <!--android:adjustViewBounds="true"-->
+    <!--android:background="@color/gray_3"-->
+    <!--android:paddingLeft="1dp"-->
+    <!--android:scaleType="fitCenter"-->
+    <!--android:src="@drawable/three_dots" />-->
 
     <ListView
         android:id="@+id/listView1"
@@ -71,23 +71,22 @@
         <Button
             android:id="@+id/gen_messag_bt"
             style="?android:attr/buttonStyleSmall"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
             android:layout_marginRight="5dp"
-            android:background="@drawable/bt_send_message" />
+            android:background="@drawable/chat_send" />
 
         <Button
             android:id="@+id/bt_add_attachment"
             style="?android:attr/buttonStyleSmall"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
             android:layout_centerVertical="true"
             android:layout_marginLeft="5dp"
-            android:layout_marginRight="5dp"
             android:layout_toLeftOf="@+id/gen_messag_bt"
-            android:background="@drawable/chat_attachment_icon" />
+            android:background="@drawable/chat_attachment" />
 
         <EditText
             android:id="@+id/edtMessage"
@@ -101,21 +100,21 @@
             android:layout_marginLeft="5dp"
             android:layout_marginRight="5dp"
             android:layout_toLeftOf="@+id/bt_add_attachment"
+            android:background="@android:color/transparent"
             android:ems="20"
             android:inputType="textMultiLine|textLongMessage"
             android:isScrollContainer="true"
             android:maxHeight="150dp"
-            android:minHeight="50dp"
-            />
+            android:minHeight="50dp" />
     </RelativeLayout>
 
     <TextView
+        android:id="@+id/txtWhenHiDE"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Você não possui nenhuma nota criada"
-        android:id="@+id/txtWhenHiDE"
-        android:layout_centerVertical="true"
         android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:text="Você não possui nenhuma nota criada"
         android:visibility="gone"
         />
 

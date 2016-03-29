@@ -19,7 +19,6 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -58,7 +57,7 @@ public class FragmentSpecificComments extends Frag {
     private Note noteNow;
     private ArrayList<Comentario> lista;
     private ArrayList<OneComment> oneComments;
-    private ImageButton btExpand;
+//    private ImageButton btExpand;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -80,14 +79,14 @@ public class FragmentSpecificComments extends Frag {
         btAttachment = (Button) getView().findViewById(R.id.bt_add_attachment);
         edtMessage = (EditText) getView().findViewById(R.id.edtMessage);
         txNote = (TextView) getView().findViewById(R.id.txSelectedNote);
-        btExpand = (ImageButton) getView().findViewById(R.id.btn_expand_ref);
+//        btExpand = (ImageButton) getView().findViewById(R.id.btn_expand_ref);
         lv = (ListView) getView().findViewById(R.id.listView1);
 
         btGenMess.setVisibility(View.GONE);
         btAttachment.setVisibility(View.GONE);
         edtMessage.setVisibility(View.GONE);
         txNote.setVisibility(View.GONE);
-        btExpand.setVisibility(View.GONE);
+//        btExpand.setVisibility(View.GONE);
         lv.setVisibility(View.GONE);
         TextView txMsgHide= (TextView) getView().findViewById(R.id.txtWhenHiDE);
         txMsgHide.setVisibility(View.VISIBLE);
@@ -103,7 +102,7 @@ public class FragmentSpecificComments extends Frag {
         btAttachment = (Button) getView().findViewById(R.id.bt_add_attachment);
         edtMessage = (EditText) getView().findViewById(R.id.edtMessage);
         txNote = (TextView) getView().findViewById(R.id.txSelectedNote);
-        btExpand = (ImageButton) getView().findViewById(R.id.btn_expand_ref);
+//        btExpand = (ImageButton) getView().findViewById(R.id.btn_expand_ref);
         lv = (ListView) getView().findViewById(R.id.listView1);
         lv.setAdapter(spcAdapter);
         loadCommentsFromDB();
@@ -120,7 +119,7 @@ public class FragmentSpecificComments extends Frag {
                 insertComment(c);
             }
         });
-        btExpand.setOnClickListener(new View.OnClickListener() {
+        txNote.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (EXPANDED_FLAG == false) {
@@ -131,7 +130,7 @@ public class FragmentSpecificComments extends Frag {
                     Log.d("editor", "layout reference expanded true");
                 } else {
                     txNote.getLayoutParams().height = 70;
-                    txNote.setMovementMethod(null);
+                    //txNote.setMovementMethod(null);
                     EXPANDED_FLAG = false;
                     txNote.requestLayout();
                     Log.d("editor", "layout reference expanded false");

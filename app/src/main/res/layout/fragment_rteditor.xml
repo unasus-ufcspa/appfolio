@@ -9,6 +9,7 @@
     sothree:umanoOverlay="true">
 
     <RelativeLayout
+        android:id="@+id/rteditor"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
@@ -21,36 +22,67 @@
             android:layout_alignParentBottom="true"
             android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true"
-            android:background="@drawable/fullscreen_text" />
+            android:background="@drawable/fullscreen1" />
 
-        <ScrollView
-            android:id="@+id/rte_content"
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:layout_alignParentBottom="true"
+            android:layout_below="@+id/info_rteditor_container"
+            android:layout_toLeftOf="@+id/fullscreen"
+            android:layout_toStartOf="@+id/fullscreen"
+            android:background="@drawable/rteditor_shadow"
+            android:focusable="false">
 
-            android:layout_above="@+id/fullscreen"
-            android:layout_below="@+id/student_name"
-            android:fillViewport="true"
-            android:scrollbarStyle="insideOverlay">
             <RelativeLayout
-                android:id="@+id/comments"
+                android:id="@+id/toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_alignEnd="@+id/rte_content"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true"
+                android:layout_alignRight="@+id/rte_content"
+                android:layout_marginLeft="35dp"
+                android:layout_marginRight="35dp"
+                android:layout_marginTop="10dp">
+
+                <include
+                    android:id="@+id/rte_toolbar_container"
+                    layout="@layout/rte_toolbar" />
+            </RelativeLayout>
+
+            <ScrollView
+                android:id="@+id/rte_content"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:orientation="vertical">
 
-                <com.onegravity.rteditor.RTEditText
-                    android:id="@+id/rtEditText"
+                android:layout_alignParentBottom="true"
+                android:layout_below="@+id/toolbar"
+                android:fillViewport="true"
+                android:scrollbarStyle="insideOverlay">
+
+                <RelativeLayout
+                    android:id="@+id/comments"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_marginLeft="35dp"
-                    android:layout_weight="1"
-                    android:background="@android:color/white"
-                    android:gravity="top"
-                    android:imeOptions="actionDone|flagNoEnterAction"
-                    android:inputType="textMultiLine|textAutoCorrect|textCapSentences" />
+                    android:orientation="vertical">
 
-            </RelativeLayout>
-        </ScrollView>
+                    <com.onegravity.rteditor.RTEditText
+                        android:id="@+id/rtEditText"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginLeft="35dp"
+                        android:layout_marginRight="35dp"
+                        android:layout_weight="1"
+                        android:background="@android:color/white"
+                        android:gravity="top"
+                        android:imeOptions="actionDone|flagNoEnterAction"
+                        android:inputType="textMultiLine|textAutoCorrect|textCapSentences" />
+
+                </RelativeLayout>
+            </ScrollView>
+        </RelativeLayout>
 
         <me.grantland.widget.AutofitTextView
             android:id="@+id/student_name"
@@ -59,7 +91,7 @@
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
             android:layout_below="@+id/info_rteditor_container"
-            android:layout_marginRight="35dp"
+            android:layout_marginRight="99dp"
             android:layout_weight="1"
             android:gravity="right"
             android:paddingBottom="2dp"
@@ -69,13 +101,13 @@
             android:text="Anitta Maltatti"
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:textColor="@color/gray_2"
-            android:textSize="15dp"
+            android:textSize="20dp"
             android:textStyle="bold" />
 
         <LinearLayout
             android:id="@+id/info_rteditor_container"
             android:layout_width="match_parent"
-            android:layout_height="35dp"
+            android:layout_height="50dp"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
             android:layout_alignParentTop="true"
@@ -94,48 +126,47 @@
                 android:singleLine="true"
                 android:text="Atividade 1: imunologia"
                 android:textAppearance="?android:attr/textAppearanceMedium"
-                android:textColor="@color/gray_4"
-                android:textSize="15dp"
+                android:textColor="@color/gray_3"
+                android:textSize="20dp"
                 android:visibility="visible" />
 
             <ImageButton
                 android:id="@+id/imageButton"
-                android:layout_width="35dp"
-                android:layout_height="35dp"
+                android:layout_width="110dp"
+                android:layout_height="50dp"
                 android:layout_alignParentBottom="true"
                 android:layout_alignParentEnd="true"
                 android:layout_alignParentRight="true"
-                android:layout_marginRight="35dp"
-                android:background="@drawable/fullscreen_text" />
+                android:background="@android:color/transparent"
+                android:scaleType="fitXY"
+                android:src="@drawable/versions" />
+
+            <ImageButton
+                android:id="@+id/imageButton2"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:layout_marginRight="99dp"
+                android:background="@android:color/transparent"
+                android:scaleType="fitXY"
+                android:src="@drawable/personal_comment" />
 
         </LinearLayout>
 
         <ImageView
             android:id="@+id/usr_photo_left"
-            android:layout_width="70dp"
-            android:layout_height="70dp"
+            android:layout_width="75dp"
+            android:layout_height="75dp"
             android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true"
             android:layout_alignParentTop="true"
-            android:layout_marginRight="-35dp"
+            android:layout_marginRight="24dp"
+            android:layout_marginTop="10dp"
             android:background="@drawable/rounded_corner"
             android:src="@drawable/ex_user_img"
             android:visibility="visible" />
-
-        <RelativeLayout
-            android:id="@+id/toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
-            android:layout_below="@+id/rte_content"
-            android:layout_toLeftOf="@+id/fullscreen"
-            android:layout_toStartOf="@+id/fullscreen">
-
-            <include
-                android:id="@+id/rte_toolbar_container"
-                layout="@layout/rte_toolbar" />
-        </RelativeLayout>
 
     </RelativeLayout>
 
@@ -144,29 +175,28 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_weight="1"
-        android:background="#00000000"
         android:visibility="visible">
 
         <LinearLayout
             android:id="@+id/button_container"
             android:layout_width="match_parent"
-            android:layout_height="35dp"
+            android:layout_height="50dp"
             android:layout_toEndOf="@+id/topbar_gray"
             android:layout_toRightOf="@+id/topbar_gray"
-            android:background="@android:color/transparent"
+            android:background="@color/gray_1"
             android:gravity="bottom"
             android:orientation="horizontal">
 
             <me.grantland.widget.AutofitTextView
                 android:id="@+id/btn_geral"
                 android:layout_width="wrap_content"
-                android:layout_height="35dp"
+                android:layout_height="45dp"
                 android:layout_weight="1"
                 android:adjustViewBounds="false"
                 android:background="@drawable/geral_comment_tab"
                 android:gravity="center"
                 android:scaleType="fitEnd"
-                android:text="Geral"
+                android:text="geral"
                 android:textColor="#ffffff"
                 android:textStyle="bold"
                 android:visibility="visible" />
@@ -174,14 +204,14 @@
             <me.grantland.widget.AutofitTextView
                 android:id="@+id/btn_specific"
                 android:layout_width="wrap_content"
-                android:layout_height="35dp"
+                android:layout_height="45dp"
                 android:layout_weight="1"
                 android:adjustViewBounds="false"
                 android:background="@drawable/specific_comment_tab"
                 android:gravity="center"
                 android:scaleType="fitEnd"
-                android:text="Observações"
-                android:textColor="@color/base_green"
+                android:text="observações"
+                android:textColor="@color/gray_2"
                 android:textStyle="bold" />
 
         </LinearLayout>
@@ -199,10 +229,12 @@
 
         <RelativeLayout
             android:id="@+id/topbar_gray"
-            android:layout_width="35dp"
+            android:layout_width="40dp"
             android:layout_height="35dp"
             android:layout_above="@+id/comments_container"
-            android:background="@color/gray_1">
+            android:layout_alignParentTop="true"
+            android:background="@color/gray_1"
+            android:visibility="visible">
 
         </RelativeLayout>
 
@@ -214,11 +246,12 @@
             android:layout_marginLeft="5dp"
             android:layout_toLeftOf="@+id/button_container"
             android:layout_toStartOf="@+id/button_container"
-            android:background="@android:color/transparent">
+            android:background="@android:color/transparent"
+            android:visibility="visible">
 
             <RelativeLayout
                 android:id="@+id/rightbar_green"
-                android:layout_width="8dp"
+                android:layout_width="5dp"
                 android:layout_height="match_parent"
                 android:layout_alignParentEnd="true"
                 android:layout_alignParentRight="true"
@@ -229,15 +262,15 @@
 
         <ImageView
             android:id="@+id/usr_photo_right"
-            android:layout_width="70dp"
-            android:layout_height="70dp"
+            android:layout_width="75dp"
+            android:layout_height="75dp"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
             android:layout_alignParentTop="true"
-            android:layout_marginLeft="-35dp"
+            android:layout_marginTop="10dp"
             android:background="@drawable/rounded_corner"
             android:src="@drawable/ex_user_img"
-            android:visibility="visible" />
+            android:visibility="gone" />
 
     </RelativeLayout>
 

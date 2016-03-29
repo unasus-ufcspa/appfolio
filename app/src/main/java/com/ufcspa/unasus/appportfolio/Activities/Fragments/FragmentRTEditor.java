@@ -288,8 +288,10 @@ public class FragmentRTEditor extends Fragment {
         layout.clearFocus();
 
         fullScreen = (ImageButton) view.findViewById(R.id.fullscreen);
-        if (singleton.isFullscreen)
-            fullScreen.setImageResource(R.drawable.fullscreen_back);
+        if (!singleton.isFullscreen)
+            fullScreen.setBackgroundResource(R.drawable.fullscreen1);
+        else
+            fullScreen.setBackgroundResource(R.drawable.fullscreen2);
         fullScreen.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -372,6 +374,8 @@ public class FragmentRTEditor extends Fragment {
 
     private void initCommentsTab(final View view)
     {
+        view.findViewById(R.id.usr_photo_left).bringToFront();
+
         slider = (RelativeLayout) view.findViewById(R.id.slider);
 
         DisplayMetrics dm = new DisplayMetrics();
@@ -419,20 +423,28 @@ public class FragmentRTEditor extends Fragment {
         layout.setPanelSlideListener(new SlidingPaneLayout.PanelSlideListener() {
             @Override
             public void onPanelSlide(View panel, float slideOffset) {
-                panel.findViewById(R.id.usr_photo_right).setVisibility(View.GONE);
-                view.findViewById(R.id.usr_photo_left).setVisibility(View.GONE);
+                int usr_photo_x = (int) view.findViewById(R.id.usr_photo_right).getX();
+
+                if (panel.getX() <= usr_photo_x) {
+                    panel.findViewById(R.id.usr_photo_right).setVisibility(View.GONE);
+                    view.findViewById(R.id.usr_photo_left).setVisibility(View.VISIBLE);
+                } else {
+                    panel.findViewById(R.id.usr_photo_right).setVisibility(View.VISIBLE);
+                    view.findViewById(R.id.usr_photo_left).setVisibility(View.GONE);
+                }
+
                 ((InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(getView().getWindowToken(), 0);
             }
 
             @Override
             public void onPanelOpened(View panel) {
-                panel.findViewById(R.id.usr_photo_right).setVisibility(View.VISIBLE);
+                panel.findViewById(R.id.usr_photo_right).setVisibility(View.GONE);
                 view.findViewById(R.id.usr_photo_left).setVisibility(View.VISIBLE);
             }
 
             @Override
             public void onPanelClosed(View panel) {
-                panel.findViewById(R.id.usr_photo_right).setVisibility(View.GONE);
+                panel.findViewById(R.id.usr_photo_right).setVisibility(View.VISIBLE);
                 view.findViewById(R.id.usr_photo_left).setVisibility(View.GONE);
             }
         });
