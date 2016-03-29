@@ -1,4 +1,4 @@
-package com.ufcspa.unasus.appportfolio.Model;
+package com.ufcspa.unasus.appportfolio.Model.WebClient;
 
 import android.content.Context;
 import android.util.Log;
@@ -11,6 +11,7 @@ import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.ufcspa.unasus.appportfolio.Activities.Fragments.FragmentComments;
+import com.ufcspa.unasus.appportfolio.Model.Comentario;
 import com.ufcspa.unasus.appportfolio.database.DataBaseAdapter;
 
 import org.json.JSONArray;
@@ -23,20 +24,17 @@ import java.util.List;
 /**
  * Created by Desenvolvimento on 18/12/2015.
  */
-public class HttpClient {
-    private static final String ip = "192.168.0.25";
-    private static final String URL = "http://" + ip + "/webfolio/app_dev.php/addComment";
-    //private static final String URL = "http://" + ip + "/portfolio/volley.php";
+public class CommentClient extends HttpClient{
     private Context context;
     private Comentario comentario = null;
-    private String tag="JSON";
+    private String method="addComment";
 
-    public HttpClient(Context context) {
-        this.context = context;
+    public CommentClient(Context context) {
+        super(context);
     }
 
-    public HttpClient(Context context, Comentario comentario) {
-        this.context = context;
+    public CommentClient(Context context, Comentario comentario) {
+        super(context);
         this.comentario = comentario;
     }
 
@@ -52,7 +50,7 @@ public class HttpClient {
             e.printStackTrace();
         }
 
-        JsonObjectRequest jsObjReq = new JsonObjectRequest(Request.Method.POST, URL, jsonFinal, new Response.Listener<JSONObject>() {
+        JsonObjectRequest jsObjReq = new JsonObjectRequest(Request.Method.POST, URL+method, jsonFinal, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
                 Log.d(tag,"Retornou do request");
@@ -86,7 +84,7 @@ public class HttpClient {
 
     public void getJsonList( final FragmentComments fComm){
 
-        JsonArrayRequest jsonArtRequest = new JsonArrayRequest(URL,new Response.Listener<JSONArray>() {
+        JsonArrayRequest jsonArtRequest = new JsonArrayRequest(URL+method,new Response.Listener<JSONArray>() {
             @Override
             public void onResponse(JSONArray response) {
                 List comments = new ArrayList<Comentario>();
@@ -123,7 +121,7 @@ public class HttpClient {
 
 
     public void getMessage(final FragmentComments fComm){
-        JsonObjectRequest jsObjReq = new JsonObjectRequest(Request.Method.GET, URL, null, new Response.Listener<JSONObject>() {
+        JsonObjectRequest jsObjReq = new JsonObjectRequest(Request.Method.GET, URL+method, null, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject json) {
                 Log.d(tag,"Retornou do request");

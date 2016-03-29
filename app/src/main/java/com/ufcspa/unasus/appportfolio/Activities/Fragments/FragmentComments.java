@@ -24,7 +24,7 @@ import com.onegravity.rteditor.utils.Constants;
 import com.ufcspa.unasus.appportfolio.Adapter.CommentAdapter;
 import com.ufcspa.unasus.appportfolio.Model.Attachment;
 import com.ufcspa.unasus.appportfolio.Model.Comentario;
-import com.ufcspa.unasus.appportfolio.Model.HttpClient;
+import com.ufcspa.unasus.appportfolio.Model.WebClient.CommentClient;
 import com.ufcspa.unasus.appportfolio.Model.OneComment;
 import com.ufcspa.unasus.appportfolio.Model.Singleton;
 import com.ufcspa.unasus.appportfolio.Model.Sync;
@@ -354,7 +354,7 @@ public class FragmentComments extends Frag {
 
         Log.d("Banco:", c.toJSON().toString());
         try{
-            HttpClient client = new HttpClient(getActivity().getApplicationContext(),c);
+            CommentClient client = new CommentClient(getActivity().getApplicationContext(),c);
             System.out.println(c.toJSON().toString());
             String idDevice= Settings.Secure.getString(getActivity().getContentResolver(), Settings.Secure.ANDROID_ID);
             Sync sync = new Sync(idDevice,"tb_comment",42);
