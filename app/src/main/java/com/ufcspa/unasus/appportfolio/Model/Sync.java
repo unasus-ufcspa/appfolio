@@ -78,7 +78,7 @@ public class Sync {
                 '}';
     }
 
-    public String toJSON(){
+    public JSONObject toJSON(){
         JSONObject sync = new JSONObject();
         try {
             sync.put("id_device",getId_device());
@@ -90,7 +90,7 @@ public class Sync {
             e.printStackTrace();
         }
 
-        return sync.toString();
+        return sync;
     }
 
 }

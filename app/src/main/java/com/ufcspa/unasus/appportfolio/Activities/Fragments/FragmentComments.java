@@ -9,6 +9,7 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.provider.Settings;
 import android.text.InputType;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -23,8 +24,10 @@ import com.onegravity.rteditor.utils.Constants;
 import com.ufcspa.unasus.appportfolio.Adapter.CommentAdapter;
 import com.ufcspa.unasus.appportfolio.Model.Attachment;
 import com.ufcspa.unasus.appportfolio.Model.Comentario;
+import com.ufcspa.unasus.appportfolio.Model.WebClient.CommentClient;
 import com.ufcspa.unasus.appportfolio.Model.OneComment;
 import com.ufcspa.unasus.appportfolio.Model.Singleton;
+import com.ufcspa.unasus.appportfolio.Model.Sync;
 import com.ufcspa.unasus.appportfolio.R;
 import com.ufcspa.unasus.appportfolio.database.DataBaseAdapter;
 
@@ -349,14 +352,16 @@ public class FragmentComments extends Frag {
             Log.e("Erro:", e.getMessage());
         }
 
-//        Log.d("Banco:", c.toJSON().toString());
-//        try{
-//            HttpClient client = new HttpClient(getActivity().getApplicationContext(),c);
-//            System.out.println(c.toJSON().toString());
-//            client.postJson(c.toJSON());
-//        } catch (Exception e){
-//            Log.e("JSON act",e.getMessage());
-//        }
+        Log.d("Banco:", c.toJSON().toString());
+        try{
+            CommentClient client = new CommentClient(getActivity().getApplicationContext(),c);
+            System.out.println(c.toJSON().toString());
+            String idDevice= Settings.Secure.getString(getActivity().getContentResolver(), Settings.Secure.ANDROID_ID);
+            Sync sync = new Sync(idDevice,"tb_comment",42);
+            client.postJson(c.toJSON(),sync.toJSON());
+        } catch (Exception e){
+            Log.e("JSON act",e.getMessage());
+        }
 
     }
 

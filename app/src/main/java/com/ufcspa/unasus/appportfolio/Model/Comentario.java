@@ -107,6 +107,9 @@ public class Comentario {
             c.put("id_author",getIdAuthor());
             c.put("tx_comment",getTxtComment());
             c.put("dt_comment",getDateComment());
+            c.put("tx_reference",getTxtReference());
+            c.put("tp_comment",getTypeComment());
+            c.put("nu_comment_activity",getIdNote());
         } catch (JSONException e) {
             e.printStackTrace();
         }
