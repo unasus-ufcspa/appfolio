@@ -71,6 +71,7 @@ public class FragmentRTEditor extends Fragment {
     private HashMap<Integer,Note> specificCommentsNotes;
     private String selectedActualText = "null";
     private RelativeLayout slider;
+    private RelativeLayout rteditor;
     private int greenLight;
     private int greenDark;
     private Singleton singleton;
@@ -168,7 +169,7 @@ public class FragmentRTEditor extends Fragment {
         getIdNotesFromDB();
 
         scrollview = (ViewGroup) view.findViewById(R.id.comments);
-        rightBarSpecificComments = (ViewGroup) view.findViewById(R.id.leftbar_white);
+        rightBarSpecificComments = (ViewGroup) view.findViewById(R.id.obs_view);
 
         // create RTManager
         RTApi rtApi = new RTApi(getActivity(), new RTProxyImpl(getActivity()), new RTMediaFactoryImpl(getActivity(), true));
@@ -256,7 +257,7 @@ public class FragmentRTEditor extends Fragment {
                                     singleton.note = new Note(0, "null", 0);
 
                                     int childs = rightBarSpecificComments.getChildCount();
-                                    for (int i = childs - 1; i > 0; i--)
+                                    for (int i = childs - 1; i >= 0; i--)
                                         rightBarSpecificComments.removeViewAt(i);
 
                                     final float scale = getResources().getDisplayMetrics().density;
@@ -283,6 +284,10 @@ public class FragmentRTEditor extends Fragment {
             mRTMessageField.setTextIsSelectable(true);
             mRTManager.setToolbarVisibility(RTManager.ToolbarVisibility.HIDE);
             mRTMessageField.setCanPaste(false);
+
+
+            mRTMessageField.setText("Sou tutor");
+
         }
         LinearLayout layout = (LinearLayout) view.findViewById(R.id.info_rteditor_container);
         layout.clearFocus();
@@ -405,7 +410,6 @@ public class FragmentRTEditor extends Fragment {
         specific.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.comments_container, new FragmentSpecificComments()).commit();
                 showCommentsTab(true);
             }
         });
@@ -415,8 +419,9 @@ public class FragmentRTEditor extends Fragment {
             @Override
             public void run() {
                 if (!layout.isOpen()) {
-                    layout.findViewById(R.id.usr_photo_right).setVisibility(View.GONE);
+                    layout.findViewById(R.id.usr_photo_right).setVisibility(View.VISIBLE);
                     view.findViewById(R.id.usr_photo_left).setVisibility(View.GONE);
+                    layout.findViewById(R.id.drawer_indicator).setVisibility(View.GONE);
                 }
             }
         });
@@ -433,6 +438,7 @@ public class FragmentRTEditor extends Fragment {
                     view.findViewById(R.id.usr_photo_left).setVisibility(View.GONE);
                 }
 
+                panel.findViewById(R.id.drawer_indicator).setVisibility(View.GONE);
                 ((InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(getView().getWindowToken(), 0);
             }
 
@@ -440,12 +446,15 @@ public class FragmentRTEditor extends Fragment {
             public void onPanelOpened(View panel) {
                 panel.findViewById(R.id.usr_photo_right).setVisibility(View.GONE);
                 view.findViewById(R.id.usr_photo_left).setVisibility(View.VISIBLE);
+                panel.findViewById(R.id.drawer_indicator).setVisibility(View.VISIBLE);
+                showCommentsTab(false);
             }
 
             @Override
             public void onPanelClosed(View panel) {
                 panel.findViewById(R.id.usr_photo_right).setVisibility(View.VISIBLE);
                 view.findViewById(R.id.usr_photo_left).setVisibility(View.GONE);
+                panel.findViewById(R.id.drawer_indicator).setVisibility(View.GONE);
             }
         });
         layout.setSliderFadeColor(getResources().getColor(android.R.color.transparent));
@@ -522,7 +531,7 @@ public class FragmentRTEditor extends Fragment {
                     int btnBegin = (int) (40 * scale + 0.5f);
 
                     int childs = rightBarSpecificComments.getChildCount();
-                    for (int i = childs - 1; i > 0; i--)
+                    for (int i = childs - 1; i >= 0; i--)
                         rightBarSpecificComments.removeViewAt(i);
 
                     if (btn.getText().equals("..."))
@@ -534,6 +543,9 @@ public class FragmentRTEditor extends Fragment {
                         btn_view.setBackgroundResource(R.drawable.rounded_corner);
                         btn_view.setTextColor(Color.WHITE);
                         btn_view.setId(id);
+                        RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) btn_view.getLayoutParams();
+                        params.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
+                        btn_view.setLayoutParams(params);
                         rightBarSpecificComments.addView(btn_view);
                     }
                 }
@@ -566,6 +578,10 @@ public class FragmentRTEditor extends Fragment {
                 btn_view.setY(i);
                 btn_view.setTag(n.getBtId());
                 btn_view.setId(n.getBtId());
+
+                RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) btn_view.getLayoutParams();
+                params.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
+                btn_view.setLayoutParams(params);
 
                 btn_view.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -694,14 +710,14 @@ public class FragmentRTEditor extends Fragment {
         specificCommentsOpen = isSpecificComment;
         if (isSpecificComment) {
             int childs = rightBarSpecificComments.getChildCount();
-            for (int i = childs - 1; i > 0; i--)
+            for (int i = childs - 1; i >= 0; i--)
                 rightBarSpecificComments.getChildAt(i).setVisibility(View.VISIBLE);
             getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.comments_container, new FragmentSpecificComments()).commit();
             SlidingPaneLayout layout = (SlidingPaneLayout) getView().findViewById(R.id.rteditor_fragment);
             layout.closePane();
         } else {
             int childs = rightBarSpecificComments.getChildCount();
-            for (int i = childs - 1; i > 0; i--)
+            for (int i = childs - 1; i >= 0; i--)
                 rightBarSpecificComments.getChildAt(i).setVisibility(View.GONE);
             getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.comments_container, new FragmentComments()).commit();
         }
