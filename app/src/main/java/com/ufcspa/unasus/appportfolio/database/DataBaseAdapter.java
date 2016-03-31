@@ -414,16 +414,16 @@ public class DataBaseAdapter {
     }
 
 
-    public void criarUser() {
+    public void insertUser(User u) {
         ContentValues cv = new ContentValues();
-        cv.put("nm_user", "Icaro");
-        cv.put("nu_identification", "467");
-        cv.put("tp_user", "S");
-        cv.put("ds_email", "icaro@1234");
-        cv.put("ds_password", "1234");
+        cv.put("nm_user", u.getName());
+        cv.put("id_user",u.getIdUser());
+        cv.put("nu_identification", u.getIdCode());
+        cv.put("ds_email", u.getEmail());
+        cv.put("nu_cellphone",u.getCellphone());
         db.insert("tb_user", null, cv);
 //        db.close();
-        Log.d(tag, "inseriu no banco");
+        Log.d(tag, "inseriu no banco user "+u.getName()+"  no banco");
     }
 
 

@@ -34,6 +34,8 @@ import android.widget.Toast;
 
 import com.ufcspa.unasus.appportfolio.Model.Singleton;
 import com.ufcspa.unasus.appportfolio.Model.User;
+import com.ufcspa.unasus.appportfolio.Model.WebClient.FirstLogin;
+import com.ufcspa.unasus.appportfolio.Model.WebClient.FistLoginClient;
 import com.ufcspa.unasus.appportfolio.R;
 import com.ufcspa.unasus.appportfolio.database.DataBaseAdapter;
 
@@ -46,6 +48,7 @@ import static android.Manifest.permission.READ_CONTACTS;
  * A login screen that offers login via email/password.
  */
 public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<Cursor> {
+    public static boolean isLoginSucessful;
 
     /**
      * Id to identity READ_CONTACTS permission request.
@@ -117,7 +120,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             @Override
             public void onClick(View view) {
                 //attemptLogin();
-                if (verificarLogin()!=0) {
+                if (verificarLogin()) {
                     session = Singleton.getInstance();
                     session.user = user;
 
@@ -194,17 +197,24 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         bd = DataBaseAdapter.getInstance(this);
     }
 
-    private int verificarLogin(){
-       int result=0;
+    private boolean verificarLogin(){
+
         try {
-            DataBaseAdapter bd = DataBaseAdapter.getInstance(this);
-            user=bd.verifyPass(mEmailView.getText().toString(),mPasswordView.getText().toString());
-            result=user.getIdUser();
+//            DataBaseAdapter bd = DataBaseAdapter.getInstance(this);
+//            user=bd.verifyPass(mEmailView.getText().toString(),mPasswordView.getText().toString());
+//            result=user.getIdUser();
             //Log.d("BANCO", " pass:" + result);
+            FirstLogin first= new FirstLogin();
+            first.setEmail(mEmailView.getText().toString());
+            first.setIdDevice("XYZER");
+            first.setTpDevice("T");
+            first.setPasswd(mPasswordView.getText().toString());
+            FistLoginClient client = new FistLoginClient(this);
+            client.postJson(first.toJSON());
         }catch (Exception e){
             Log.d("BANCO","verificando pass:"+e.getMessage());
         }finally {
-            return result;
+            return isLoginSucessful;
         }
 
 
