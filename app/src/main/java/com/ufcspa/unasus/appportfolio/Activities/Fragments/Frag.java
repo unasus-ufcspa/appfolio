@@ -591,6 +591,7 @@ public class Frag extends Fragment {
         final Dialog dialog = new Dialog(getActivity());
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setContentView(R.layout.attachment_popup_comments);
+        dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
 
         ImageButton img_gallery = (ImageButton) dialog.findViewById(R.id.img_gallery);
         img_gallery.setOnClickListener(new View.OnClickListener() {
@@ -658,6 +659,7 @@ public class Frag extends Fragment {
         final Dialog dialog = new Dialog(getActivity());
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setContentView(R.layout.attachment_popup);
+        dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
 
         ImageButton img_gallery = (ImageButton) dialog.findViewById(R.id.img_gallery);
         img_gallery.setOnClickListener(new View.OnClickListener() {

@@ -386,7 +386,6 @@ public class FragmentSpecificComments extends Frag {
                     }else {
                         txNote.setText("Referência: \n" + "\"" + reference + "\"");
                     }
-
                 }
             }else{
                 Log.d("comments","NoteNow is NULL");

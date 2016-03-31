@@ -34,6 +34,7 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -53,6 +54,7 @@ import com.onegravity.rteditor.converter.ConverterSpannedToHtml;
 import com.onegravity.rteditor.effects.Effects;
 import com.onegravity.rteditor.spans.BackgroundColorSpan;
 import com.ufcspa.unasus.appportfolio.Activities.MainActivity;
+import com.ufcspa.unasus.appportfolio.Adapter.VersionsAdapter;
 import com.ufcspa.unasus.appportfolio.Model.ActivityStudent;
 import com.ufcspa.unasus.appportfolio.Model.Comentario;
 import com.ufcspa.unasus.appportfolio.Model.Note;
@@ -489,12 +491,24 @@ public class FragmentRTEditor extends Fragment {
         TextView activityName = (TextView) view.findViewById(R.id.activity_name);
         ImageView usrPhoto = (ImageView) view.findViewById(R.id.usr_photo_left);
         ImageButton personalCommentButton = (ImageButton) view.findViewById(R.id.personal_comment);
+        ImageButton versionsButton = (ImageButton) view.findViewById(R.id.btn_versions);
 
         usrPhoto.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                ((InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(getView().getWindowToken(), 0);
-                displayPersonalComment(getView().findViewById(R.id.btn_versions));
+                displayPersonalComment(getView().findViewById(R.id.usr_photo_left));
+            }
+        });
+        personalCommentButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                displayPersonalComment(getView().findViewById(R.id.usr_photo_left));
+            }
+        });
+        versionsButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                displayVersionsDialog(getView().findViewById(R.id.usr_photo_left));
             }
         });
 
@@ -825,7 +839,7 @@ public class FragmentRTEditor extends Fragment {
 
     private void displayPersonalComment(View anchorView) {
         PopupWindow popup = new PopupWindow(getActivity());
-        View layout = getActivity().getLayoutInflater().inflate(R.layout.versions_dialog, null);
+        View layout = getActivity().getLayoutInflater().inflate(R.layout.personal_comment_dialog, null);
         popup.setContentView(layout);
         // Set content width and height
         popup.setHeight(WindowManager.LayoutParams.WRAP_CONTENT);
@@ -843,8 +857,37 @@ public class FragmentRTEditor extends Fragment {
         Rect rect = locateView(anchorView);
 
         popup.showAtLocation(anchorView, Gravity.NO_GRAVITY, rect.left, rect.bottom); //xOffset, yOffset);
+    }
 
-        getView().findViewById(R.id.usr_photo_left).bringToFront();
+    private void displayVersionsDialog(View anchorView) {
+        PopupWindow popup = new PopupWindow(getActivity());
+        View layout = getActivity().getLayoutInflater().inflate(R.layout.versions_dialog, null);
+        popup.setContentView(layout);
+
+        ArrayList<String> list = new ArrayList<>();
+        for (int i = 0; i < 10; i++)
+            list.add("");
+
+        ListView versionList = (ListView) layout.findViewById(R.id.version_list);
+        versionList.setAdapter(new VersionsAdapter(getContext(), list));
+
+
+        // Set content width and height
+        popup.setHeight(WindowManager.LayoutParams.WRAP_CONTENT);
+        popup.setWidth(WindowManager.LayoutParams.WRAP_CONTENT);
+        // Closes the popup window when touch outside of it - when looses focus
+        popup.setOutsideTouchable(true);
+        popup.setFocusable(true);
+        // Show anchored to button
+        popup.setBackgroundDrawable(new BitmapDrawable());
+
+        final float scale = getResources().getDisplayMetrics().density;
+        int xOffset = (int) (96 * scale + 0.5f);
+        int yOffset = (int) (50 * scale + 0.5f);
+
+        Rect rect = locateView(anchorView);
+
+        popup.showAtLocation(anchorView, Gravity.NO_GRAVITY, rect.left, rect.bottom); //xOffset, yOffset);
     }
 
     private class ActionBarCallBack implements ActionMode.Callback {
