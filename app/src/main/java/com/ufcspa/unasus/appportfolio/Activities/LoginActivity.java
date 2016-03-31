@@ -199,7 +199,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
     private boolean verificarLogin(){
 
-        try {
+        //try {
 //            DataBaseAdapter bd = DataBaseAdapter.getInstance(this);
 //            user=bd.verifyPass(mEmailView.getText().toString(),mPasswordView.getText().toString());
 //            result=user.getIdUser();
@@ -209,13 +209,13 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             first.setIdDevice("XYZER");
             first.setTpDevice("T");
             first.setPasswd(mPasswordView.getText().toString());
-            FistLoginClient client = new FistLoginClient(this);
+            FistLoginClient client = new FistLoginClient(getBaseContext());
             client.postJson(first.toJSON());
-        }catch (Exception e){
-            Log.d("BANCO","verificando pass:"+e.getMessage());
-        }finally {
+       // }catch (Exception e){
+            //Log.d("BANCO","verificando pass:"+e.getMessage());
+        //}finally {
             return isLoginSucessful;
-        }
+        //}
 
 
     }

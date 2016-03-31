@@ -26,44 +26,61 @@ public class FistLoginClient extends HttpClient {
 
     public FistLoginClient(Context context) {
         super(context);
+        this.context=context;
     }
 
+
+
     public void postJson(JSONObject jsonFirstRequest){
-        Log.d(tag, "URL: " + URL);
+        Log.d(tag, "URL: " + URL + method);
 
         JsonObjectRequest jsObjReq = new JsonObjectRequest(Request.Method.POST, URL+method, jsonFirstRequest, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
                 Log.d(tag,"Retornou do request");
+
                 try {
-                    Log.d(tag,"JSON RESPONSE: "+ response.toString());
-                    if( response.getString("erro").length()>2) {
+                    Log.d(tag, "JSON RESPONSE: " + response.toString());
+                    if( response.has("erro")) {
+
                         Log.e(tag, "JSON usuario ou senha invalidos");
                         LoginActivity.isLoginSucessful=false;
-                    }else if(response.getJSONObject("tb_user").getInt("id_user")!=0){
+                        Log.wtf(tag,"JSon response::"+response.toString());
+                    }else if(response.getJSONObject("firstLogin_response").getJSONObject("tb_user").getInt("id_user")!=0){
                         Log.d(tag,"JSON POST foi");
-                        Log.d(tag,"user encontrado!\n cadastrando no banco...");
-
+                        Log.d(tag, "user encontrado!\n cadastrando no banco...");
+                        JSONObject resp= new JSONObject();
+                        try {
+                          resp=response.getJSONObject("firstLogin_response");
+                            Log.wtf(tag,"JSon response::"+resp.toString());
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        } catch (Exception v){
+                            v.printStackTrace();
+                        }
                         //RECUPERANDO DADOS DO JSON RESPONSE
-                        Integer idUser=response.getJSONObject("tb_user").getInt("id_user");
-                        String name=response.getJSONObject("tb_user").getString("nm_user");
-                        String idCode=response.getJSONObject("tb_user").getString("nu_identification");
-                        String email=response.getJSONObject("tb_user").getString("ds_email");
-                        String cellphone=response.getJSONObject("tb_user").getString("nu_cellphone");;
-
-
+                        Integer idUser=resp.getJSONObject("tb_user").getInt("id_user");
+                        String name=resp.getJSONObject("tb_user").getString("nm_user");
+                        String idCode=resp.getJSONObject("tb_user").getString("nu_identification");
+                        String email=resp.getJSONObject("tb_user").getString("ds_email");
+                        String cellphone=resp.getJSONObject("tb_user").getString("nu_cellphone");
                         user = new User(idUser,name,idCode,email,cellphone);
                         DataBaseAdapter.getInstance(context).insertUser(user);
                         LoginActivity.isLoginSucessful=true;
+                        Log.wtf(tag, "JSon response::" + response.toString());
                     }
                 } catch (JSONException e) {
                     Log.e(tag,"JSON exception on response:"+e.getMessage());
+                }finally {
+                    Log.wtf(tag,"JSon response::"+response.toString());
                 }
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError volleyError) {
-                Log.e(tag,"Erro  na request");
+                Log.e(tag, "Erro  na request");
+                volleyError.printStackTrace();
+                //Log.wtf(tag,"Network response:"+volleyError.networkResponse.statusCode);
                 Log.e(tag,"erro="+volleyError.getMessage());
             }
         });
