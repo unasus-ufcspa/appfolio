@@ -7,6 +7,8 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.res.Configuration;
 import android.graphics.Color;
+import android.graphics.Rect;
+import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
@@ -20,15 +22,19 @@ import android.text.TextWatcher;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.ActionMode;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -71,7 +77,6 @@ public class FragmentRTEditor extends Fragment {
     private HashMap<Integer,Note> specificCommentsNotes;
     private String selectedActualText = "null";
     private RelativeLayout slider;
-    private RelativeLayout rteditor;
     private int greenLight;
     private int greenDark;
     private Singleton singleton;
@@ -88,6 +93,23 @@ public class FragmentRTEditor extends Fragment {
 
 
     public FragmentRTEditor() {}
+
+    public static Rect locateView(View v) {
+        int[] loc_int = new int[2];
+        if (v == null) return null;
+        try {
+            v.getLocationOnScreen(loc_int);
+        } catch (NullPointerException npe) {
+            //Happens when the view doesn't exist on screen anymore.
+            return null;
+        }
+        Rect location = new Rect();
+        location.left = loc_int[0];
+        location.top = loc_int[1];
+        location.right = location.left + v.getWidth();
+        location.bottom = location.top + v.getHeight();
+        return location;
+    }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -132,7 +154,6 @@ public class FragmentRTEditor extends Fragment {
      *
      *
      * */
-
     public void loadLastText() {
         acStudent = source.listActivityStudent(singleton.idActivityStudent);
         if (singleton.firsttime) {
@@ -140,6 +161,7 @@ public class FragmentRTEditor extends Fragment {
             singleton.firsttime = false;
         }
     }
+
     /**
      *  MÉTODO PARA SALVAR TEXTO NO FORMATO HTML
      *
@@ -377,8 +399,7 @@ public class FragmentRTEditor extends Fragment {
         super.onStart();
     }
 
-    private void initCommentsTab(final View view)
-    {
+    private void initCommentsTab(final View view) {
         view.findViewById(R.id.usr_photo_left).bringToFront();
 
         slider = (RelativeLayout) view.findViewById(R.id.slider);
@@ -466,6 +487,16 @@ public class FragmentRTEditor extends Fragment {
     private void initTopBar(View view) {
         TextView studentName = (TextView) view.findViewById(R.id.student_name);
         TextView activityName = (TextView) view.findViewById(R.id.activity_name);
+        ImageView usrPhoto = (ImageView) view.findViewById(R.id.usr_photo_left);
+        ImageButton personalCommentButton = (ImageButton) view.findViewById(R.id.personal_comment);
+
+        usrPhoto.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+//                ((InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(getView().getWindowToken(), 0);
+                displayPersonalComment(getView().findViewById(R.id.btn_versions));
+            }
+        });
 
         studentName.setText(singleton.portfolioClass.getStudentName());
         activityName.setText("Ativ. " + singleton.activity.getNuOrder() + ": " + singleton.activity.getTitle());
@@ -653,13 +684,11 @@ public class FragmentRTEditor extends Fragment {
         }
     }
 
-
     /**
      *  MÉTODO PARA RECUPERAR O TEXTO SELECIONADO NO FORMATO HTML
      *
      *
      * */
-
     private String getSelectedText(){
         int selStart = mRTMessageField.getSelectionStart();
         int selEnd = mRTMessageField.getSelectionEnd();
@@ -674,9 +703,7 @@ public class FragmentRTEditor extends Fragment {
      *
      *
      * */
-
-    private void changeColor(int id)
-    {
+    private void changeColor(int id) {
         Spannable textSpanned = (Spannable) mRTMessageField.getText();
         BackgroundColorSpan[] spans = textSpanned.getSpans(0, textSpanned.length(), BackgroundColorSpan.class);
 
@@ -771,8 +798,7 @@ public class FragmentRTEditor extends Fragment {
         }
     }
 
-    private void putAttachment(String url)
-    {
+    private void putAttachment(String url) {
         int selStart = mRTMessageField.getSelectionStart();
         Spannable textBefore = (Spannable) mRTMessageField.getText().subSequence(0, selStart);
         Spannable textAfter = (Spannable) mRTMessageField.getText().subSequence(selStart, mRTMessageField.length());
@@ -795,6 +821,30 @@ public class FragmentRTEditor extends Fragment {
         }
 
         return canCreate;
+    }
+
+    private void displayPersonalComment(View anchorView) {
+        PopupWindow popup = new PopupWindow(getActivity());
+        View layout = getActivity().getLayoutInflater().inflate(R.layout.versions_dialog, null);
+        popup.setContentView(layout);
+        // Set content width and height
+        popup.setHeight(WindowManager.LayoutParams.WRAP_CONTENT);
+        popup.setWidth(WindowManager.LayoutParams.WRAP_CONTENT);
+        // Closes the popup window when touch outside of it - when looses focus
+        popup.setOutsideTouchable(true);
+        popup.setFocusable(true);
+        // Show anchored to button
+        popup.setBackgroundDrawable(new BitmapDrawable());
+
+        final float scale = getResources().getDisplayMetrics().density;
+        int xOffset = (int) (96 * scale + 0.5f);
+        int yOffset = (int) (50 * scale + 0.5f);
+
+        Rect rect = locateView(anchorView);
+
+        popup.showAtLocation(anchorView, Gravity.NO_GRAVITY, rect.left, rect.bottom); //xOffset, yOffset);
+
+        getView().findViewById(R.id.usr_photo_left).bringToFront();
     }
 
     private class ActionBarCallBack implements ActionMode.Callback {

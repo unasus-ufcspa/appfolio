@@ -1,7 +1,112 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:layout_height="wrap_content">
 
-</LinearLayout>
+    <!--<ScrollView-->
+    <!--android:layout_width="wrap_content"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:id="@+id/scrollView3">-->
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="400dp"
+        android:background="@drawable/border_popup_rteditor"
+        android:padding="20dp">
+
+        <TextView
+            android:id="@+id/tvCaption"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginBottom="5dp"
+            android:layout_marginRight="25dp"
+            android:gravity="right"
+            android:singleLine="true"
+            android:text="Daiane dos Santos"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:textColor="@color/gray_2"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/textView11"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentStart="true"
+            android:layout_below="@+id/tvCaption"
+            android:layout_marginBottom="20dp"
+            android:layout_marginRight="25dp"
+            android:gravity="right"
+            android:singleLine="true"
+            android:text="(51) 84658496"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:textColor="@color/gray_2" />
+
+        <TextView
+            android:id="@+id/textView12"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/textView11"
+            android:layout_toEndOf="@+id/relativeLayout"
+            android:layout_toRightOf="@+id/relativeLayout"
+            android:singleLine="true"
+            android:text="COMENTÁRIOS PESSOAIS SOBRE O ALUNO"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:textColor="@color/gray_2"
+            android:textStyle="italic" />
+
+        <TextView
+            android:id="@+id/textView13"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@+id/textView12"
+            android:layout_alignStart="@+id/textView12"
+            android:layout_below="@+id/textView12"
+            android:layout_marginBottom="15dp"
+            android:text="(o aluno NÃO terá acesso a esse texto)"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:textColor="@color/gray_2" />
+
+        <EditText
+            android:id="@+id/editText"
+            android:layout_width="wrap_content"
+            android:layout_height="250dp"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentStart="true"
+            android:layout_below="@+id/textView13"
+            android:background="@drawable/border_popup_personal_comment"
+            android:gravity="left|top"
+            android:padding="15dp"
+            android:scrollHorizontally="true"
+            android:scrollbars="vertical" />
+
+        <RelativeLayout
+            android:id="@+id/relativeLayout"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_above="@+id/textView13"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_alignTop="@+id/textView12"
+            android:layout_marginRight="10dp"
+            android:gravity="center">
+
+            <RelativeLayout
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:background="@drawable/circle"></RelativeLayout>
+        </RelativeLayout>
+    </RelativeLayout>
+    <!--</ScrollView>-->
+
+</RelativeLayout>

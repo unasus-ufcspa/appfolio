@@ -11,7 +11,8 @@
     <RelativeLayout
         android:id="@+id/rteditor"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:visibility="visible">
 
         <ImageButton
             android:id="@+id/fullscreen"
@@ -23,6 +24,7 @@
             android:background="@drawable/fullscreen1" />
 
         <RelativeLayout
+            android:id="@+id/edittext_container"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_alignParentBottom="true"
@@ -80,7 +82,7 @@
             </ScrollView>
         </RelativeLayout>
 
-        <me.grantland.widget.AutofitTextView
+        <TextView
             android:id="@+id/student_name"
             android:layout_width="match_parent"
             android:layout_height="35dp"
@@ -110,7 +112,7 @@
             android:background="@color/gray_1"
             android:orientation="horizontal">
 
-            <me.grantland.widget.AutofitTextView
+            <TextView
                 android:id="@+id/activity_name"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
@@ -127,7 +129,7 @@
                 android:visibility="visible" />
 
             <ImageButton
-                android:id="@+id/imageButton"
+                android:id="@+id/btn_versions"
                 android:layout_width="110dp"
                 android:layout_height="50dp"
                 android:layout_alignParentBottom="true"
@@ -138,7 +140,7 @@
                 android:src="@drawable/versions" />
 
             <ImageButton
-                android:id="@+id/imageButton2"
+                android:id="@+id/personal_comment"
                 android:layout_width="48dp"
                 android:layout_height="48dp"
                 android:layout_alignParentBottom="true"
@@ -183,7 +185,7 @@
             android:gravity="bottom"
             android:orientation="horizontal">
 
-            <me.grantland.widget.AutofitTextView
+            <Button
                 android:id="@+id/btn_geral"
                 android:layout_width="wrap_content"
                 android:layout_height="45dp"
@@ -192,12 +194,13 @@
                 android:background="@drawable/geral_comment_tab"
                 android:gravity="center"
                 android:scaleType="fitEnd"
+                android:singleLine="true"
                 android:text="geral"
                 android:textColor="#ffffff"
                 android:textStyle="bold"
                 android:visibility="visible" />
 
-            <me.grantland.widget.AutofitTextView
+            <Button
                 android:id="@+id/btn_specific"
                 android:layout_width="wrap_content"
                 android:layout_height="45dp"
@@ -206,6 +209,7 @@
                 android:background="@drawable/specific_comment_tab"
                 android:gravity="center"
                 android:scaleType="fitEnd"
+                android:singleLine="true"
                 android:text="observações"
                 android:textColor="@color/gray_2"
                 android:textStyle="bold" />
