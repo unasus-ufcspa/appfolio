@@ -5,12 +5,14 @@ import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
 import android.app.AlertDialog;
 import android.app.LoaderManager.LoaderCallbacks;
+import android.content.Context;
 import android.content.CursorLoader;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.Loader;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
+import android.net.ConnectivityManager;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
@@ -34,8 +36,8 @@ import android.widget.Toast;
 
 import com.ufcspa.unasus.appportfolio.Model.Singleton;
 import com.ufcspa.unasus.appportfolio.Model.User;
-import com.ufcspa.unasus.appportfolio.Model.WebClient.FirstLogin;
-import com.ufcspa.unasus.appportfolio.Model.WebClient.FistLoginClient;
+import com.ufcspa.unasus.appportfolio.WebClient.FirstLogin;
+import com.ufcspa.unasus.appportfolio.WebClient.FistLoginClient;
 import com.ufcspa.unasus.appportfolio.R;
 import com.ufcspa.unasus.appportfolio.database.DataBaseAdapter;
 
@@ -121,19 +123,20 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             public void onClick(View view) {
                 //attemptLogin();
                 if (verificarLogin()) {
-                    session = Singleton.getInstance();
-                    session.user = user;
+//                    session = Singleton.getInstance();
+//                    session.user = user;
+                    loginSuccess();
 
-                    char userType = checkUserType(user.getIdUser());
-                    if(userType == 'W')
-                    {
-                        //showChooseTutorOrStudentPopup();
-                    }
-                    else
-                    {
-                        session.user.setUserType(userType);
-                        loginSuccess();
-                    }
+//                    char userType = checkUserType(user.getIdUser());
+//                    if(userType == 'W')
+//                    {
+//                        //showChooseTutorOrStudentPopup();
+//                    }
+//                    else
+//                    {
+//                        session.user.setUserType(userType);
+//                        loginSuccess();
+//                    }
                 } else {
                     Toast.makeText(getApplicationContext(), "Erro ao logar, favor verifique email e senha", Toast.LENGTH_LONG).show();
                 }
@@ -196,6 +199,13 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     private void criarBD(){
         bd = DataBaseAdapter.getInstance(this);
     }
+    public boolean isOnline() {
+        ConnectivityManager cm =
+                (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+
+        return cm.getActiveNetworkInfo() != null &&
+                cm.getActiveNetworkInfo().isConnectedOrConnecting();
+    }
 
     private boolean verificarLogin(){
 
@@ -204,20 +214,23 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 //            user=bd.verifyPass(mEmailView.getText().toString(),mPasswordView.getText().toString());
 //            result=user.getIdUser();
             //Log.d("BANCO", " pass:" + result);
-            FirstLogin first= new FirstLogin();
+        if(isOnline()) {
+            FirstLogin first = new FirstLogin();
             first.setEmail(mEmailView.getText().toString());
             first.setIdDevice("XYZER");
             first.setTpDevice("T");
             first.setPasswd(mPasswordView.getText().toString());
             FistLoginClient client = new FistLoginClient(getBaseContext());
             client.postJson(first.toJSON());
-       // }catch (Exception e){
+            // }catch (Exception e){
             //Log.d("BANCO","verificando pass:"+e.getMessage());
-        //}finally {
-            return isLoginSucessful;
-        //}
+            //}finally {
 
-
+            //}
+        }else{
+            Toast.makeText(getApplicationContext(), "Erro ao logar, favor verifique sua conexão com a internet", Toast.LENGTH_LONG).show();
+        }
+        return isLoginSucessful;
     }
 
 
@@ -468,6 +481,8 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             mAuthTask = null;
             showProgress(false);
         }
+
+
     }
 }
 

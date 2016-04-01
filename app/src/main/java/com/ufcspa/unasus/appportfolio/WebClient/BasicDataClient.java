@@ -1,4 +1,4 @@
-package com.ufcspa.unasus.appportfolio.Model.WebClient;
+package com.ufcspa.unasus.appportfolio.WebClient;
 
 /**
  * Created by icaromsc on 31/03/2016.
