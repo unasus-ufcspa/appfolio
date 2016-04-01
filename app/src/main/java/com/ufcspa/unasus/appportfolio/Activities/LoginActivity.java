@@ -18,9 +18,11 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.ContactsContract;
+import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
+import android.telephony.TelephonyManager;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -144,6 +146,16 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         });
     }
 
+    public boolean isTablet() {
+        TelephonyManager manager = (TelephonyManager) this.getSystemService(Context.TELEPHONY_SERVICE);
+        if (manager.getPhoneType() == TelephonyManager.PHONE_TYPE_NONE) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+
     private void showChooseTutorOrStudentPopup()
     {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -216,9 +228,13 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             //Log.d("BANCO", " pass:" + result);
         if(isOnline()) {
             FirstLogin first = new FirstLogin();
+
+            String android_id = Settings.Secure.getString(this.getContentResolver(), Settings.Secure.ANDROID_ID);
+            Log.d("ANDROID ID", "Android ID:" + android_id);
+            String tpDevice=(isTablet()) ? "T" : "M";
+            first.setIdDevice(android_id);
+            first.setTpDevice(tpDevice);
             first.setEmail(mEmailView.getText().toString());
-            first.setIdDevice("XYZER");
-            first.setTpDevice("T");
             first.setPasswd(mPasswordView.getText().toString());
             FistLoginClient client = new FistLoginClient(getBaseContext());
             client.postJson(first.toJSON());
