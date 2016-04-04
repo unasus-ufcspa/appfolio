@@ -18,7 +18,6 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.ContactsContract;
-import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
@@ -38,8 +37,6 @@ import android.widget.Toast;
 
 import com.ufcspa.unasus.appportfolio.Model.Singleton;
 import com.ufcspa.unasus.appportfolio.Model.User;
-import com.ufcspa.unasus.appportfolio.WebClient.FirstLogin;
-import com.ufcspa.unasus.appportfolio.WebClient.FistLoginClient;
 import com.ufcspa.unasus.appportfolio.R;
 import com.ufcspa.unasus.appportfolio.database.DataBaseAdapter;
 
@@ -52,13 +49,10 @@ import static android.Manifest.permission.READ_CONTACTS;
  * A login screen that offers login via email/password.
  */
 public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<Cursor> {
-    public static boolean isLoginSucessful;
-
     /**
      * Id to identity READ_CONTACTS permission request.
      */
     private static final int REQUEST_READ_CONTACTS = 0;
-
     /**
      * A dummy authentication store containing known user names and passwords.
      * TODO: remove after connecting to a real authentication system.
@@ -66,6 +60,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     private static final String[] DUMMY_CREDENTIALS = new String[]{
             "foo@example.com:hello", "bar@example.com:world"
     };
+    public static boolean isLoginSucessful;
     /**
      * Keep track of the login task to ensure we can cancel it if requested.
      */
@@ -125,20 +120,17 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             public void onClick(View view) {
                 //attemptLogin();
                 if (verificarLogin()) {
-//                    session = Singleton.getInstance();
-//                    session.user = user;
-                    loginSuccess();
+                    session = Singleton.getInstance();
+                    session.user = user;
+//                    loginSuccess();
 
-//                    char userType = checkUserType(user.getIdUser());
-//                    if(userType == 'W')
-//                    {
-//                        //showChooseTutorOrStudentPopup();
-//                    }
-//                    else
-//                    {
-//                        session.user.setUserType(userType);
-//                        loginSuccess();
-//                    }
+                    char userType = checkUserType(user.getIdUser());
+                    if (userType == 'W') {
+                        //showChooseTutorOrStudentPopup();
+                    } else {
+                        session.user.setUserType(userType);
+                        loginSuccess();
+                    }
                 } else {
                     Toast.makeText(getApplicationContext(), "Erro ao logar, favor verifique email e senha", Toast.LENGTH_LONG).show();
                 }
@@ -221,32 +213,32 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
     private boolean verificarLogin(){
 
-        //try {
-//            DataBaseAdapter bd = DataBaseAdapter.getInstance(this);
-//            user=bd.verifyPass(mEmailView.getText().toString(),mPasswordView.getText().toString());
-//            result=user.getIdUser();
+        try {
+            DataBaseAdapter bd = DataBaseAdapter.getInstance(this);
+            user = bd.verifyPass(mEmailView.getText().toString(), mPasswordView.getText().toString());
+            //result=user.getIdUser();
             //Log.d("BANCO", " pass:" + result);
-        if(isOnline()) {
-            FirstLogin first = new FirstLogin();
+//        if(isOnline()) {
+//            FirstLogin first = new FirstLogin();
+//
+//            String android_id = Settings.Secure.getString(this.getContentResolver(), Settings.Secure.ANDROID_ID);
+//            Log.d("ANDROID ID", "Android ID:" + android_id);
+//            String tpDevice=(isTablet()) ? "T" : "M";
+//            first.setIdDevice(android_id);
+//            first.setTpDevice(tpDevice);
+//            first.setEmail(mEmailView.getText().toString());
+//            first.setPasswd(mPasswordView.getText().toString());
+//            FistLoginClient client = new FistLoginClient(getBaseContext());
+//            client.postJson(first.toJSON());
+        } catch (Exception e) {
+            Log.d("BANCO", "verificando pass:" + e.getMessage());
+        } finally {
 
-            String android_id = Settings.Secure.getString(this.getContentResolver(), Settings.Secure.ANDROID_ID);
-            Log.d("ANDROID ID", "Android ID:" + android_id);
-            String tpDevice=(isTablet()) ? "T" : "M";
-            first.setIdDevice(android_id);
-            first.setTpDevice(tpDevice);
-            first.setEmail(mEmailView.getText().toString());
-            first.setPasswd(mPasswordView.getText().toString());
-            FistLoginClient client = new FistLoginClient(getBaseContext());
-            client.postJson(first.toJSON());
-            // }catch (Exception e){
-            //Log.d("BANCO","verificando pass:"+e.getMessage());
-            //}finally {
-
-            //}
-        }else{
-            Toast.makeText(getApplicationContext(), "Erro ao logar, favor verifique sua conexão com a internet", Toast.LENGTH_LONG).show();
         }
-        return isLoginSucessful;
+//        }else{
+//            Toast.makeText(getApplicationContext(), "Erro ao logar, favor verifique sua conexão com a internet", Toast.LENGTH_LONG).show();
+//        }
+        return true;//isLoginSucessful;
     }
 
 

@@ -12,11 +12,8 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.ufcspa.unasus.appportfolio.Activities.SelectActivitiesActivity;
-import com.ufcspa.unasus.appportfolio.Activities.SelectClassActivity;
 import com.ufcspa.unasus.appportfolio.Model.PortfolioClass;
 import com.ufcspa.unasus.appportfolio.Model.Singleton;
-import com.ufcspa.unasus.appportfolio.Model.Team;
 import com.ufcspa.unasus.appportfolio.R;
 
 import java.util.List;
@@ -58,6 +55,7 @@ public class SelectPortfolioClassAdapter extends BaseAdapter {
         View rowView;
 
         rowView = inflater.inflate(R.layout.adapter_item_class, null);
+        holder.txt_port = (TextView) rowView.findViewById(R.id.adapter_item_class_txv_ds_port);
         holder.txt_class_code=(TextView) rowView.findViewById(R.id.adapter_item_class_txv_code);
         holder.txt_port_title=(TextView) rowView.findViewById(R.id.adapter_item_class_txv_ds_title);
         holder.background=(TextView) rowView.findViewById(R.id.item_color_background);
@@ -71,7 +69,8 @@ public class SelectPortfolioClassAdapter extends BaseAdapter {
         if(portClass.getPerfil().equals("S")){
             holder.background.setBackgroundResource(R.color.base_green);
             holder.txt_class_code.setTextColor(Color.GRAY);
-            holder.txt_port_title.setTextColor(Color.WHITE);
+            holder.txt_port_title.setTextColor(Color.GRAY);
+            holder.txt_port.setTextColor(Color.GRAY);
             holder.btnInfo.setBackgroundResource(R.color.base_green);
             holder.nofificationIcon.setBackgroundResource(R.drawable.rounded_student);
             holder.nofificationIcon.setVisibility(View.VISIBLE);
@@ -102,6 +101,7 @@ public class SelectPortfolioClassAdapter extends BaseAdapter {
     {
         TextView txt_class_code;
         TextView txt_port_title;
+        TextView txt_port;
         TextView background;
         ImageButton btnInfo;
         TextView nofificationIcon;
