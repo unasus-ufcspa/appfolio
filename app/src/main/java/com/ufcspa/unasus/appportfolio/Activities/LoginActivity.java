@@ -203,6 +203,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     private void criarBD(){
         bd = DataBaseAdapter.getInstance(this);
     }
+
     public boolean isOnline() {
         ConnectivityManager cm =
                 (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
@@ -211,7 +212,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                 cm.getActiveNetworkInfo().isConnectedOrConnecting();
     }
 
-    private boolean verificarLogin(){
+    private boolean verificarLogin() {
 
         try {
             DataBaseAdapter bd = DataBaseAdapter.getInstance(this);

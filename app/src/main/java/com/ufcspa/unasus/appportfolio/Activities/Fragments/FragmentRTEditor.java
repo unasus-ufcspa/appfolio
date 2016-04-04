@@ -504,13 +504,12 @@ public class FragmentRTEditor extends Fragment {
         versionsButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ArrayList<String> list = new ArrayList<>();
+                final ArrayList<String> list = new ArrayList<>();
                 for (int i = 0; i < 4; i++)
                     list.add("");
 
-                ListView versionList = (ListView) getView().findViewById(R.id.version_list);
+                final ListView versionList = (ListView) getView().findViewById(R.id.version_list);
                 versionList.setAdapter(new VersionsAdapter(getContext(), list));
-
                 displayVersionsDialog(getView().findViewById(R.id.versions_container));
             }
         });

@@ -9,8 +9,8 @@
     <!--android:id="@+id/scrollView3">-->
 
     <RelativeLayout
-        android:layout_width="400dp"
-        android:layout_height="300dp"
+        android:layout_width="450dp"
+        android:layout_height="325dp"
         android:background="@drawable/border_popup_rteditor"
         android:padding="20dp">
 
@@ -60,6 +60,7 @@
             android:text="COMENTÁRIOS PESSOAIS SOBRE O ALUNO"
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:textColor="@color/gray_2"
+            android:textSize="18dp"
             android:textStyle="italic" />
 
         <TextView
@@ -102,8 +103,8 @@
             android:gravity="center">
 
             <RelativeLayout
-                android:layout_width="20dp"
-                android:layout_height="20dp"
+                android:layout_width="15dp"
+                android:layout_height="15dp"
                 android:background="@drawable/circle"></RelativeLayout>
         </RelativeLayout>
     </RelativeLayout>

@@ -24,12 +24,11 @@ import com.onegravity.rteditor.utils.Constants;
 import com.ufcspa.unasus.appportfolio.Adapter.CommentAdapter;
 import com.ufcspa.unasus.appportfolio.Model.Attachment;
 import com.ufcspa.unasus.appportfolio.Model.Comentario;
-import com.ufcspa.unasus.appportfolio.WebClient.CommentClient;
 import com.ufcspa.unasus.appportfolio.Model.OneComment;
 import com.ufcspa.unasus.appportfolio.Model.Singleton;
 import com.ufcspa.unasus.appportfolio.Model.Sync;
-import com.ufcspa.unasus.appportfolio.Model.WebClient.CommentClient;
 import com.ufcspa.unasus.appportfolio.R;
+import com.ufcspa.unasus.appportfolio.WebClient.CommentClient;
 import com.ufcspa.unasus.appportfolio.database.DataBaseAdapter;
 
 import java.text.ParseException;
@@ -37,6 +36,8 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+
+//import com.ufcspa.unasus.appportfolio.Model.WebClient.CommentClient;
 
 /**
  * Created by Desenvolvimento on 07/12/2015.

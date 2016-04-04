@@ -124,6 +124,8 @@
             android:layout_height="wrap_content"
             android:layout_marginRight="60dp"
             android:layout_marginTop="50dp"
+            android:layout_toEndOf="@+id/personal_comment_container"
+            android:layout_toRightOf="@+id/personal_comment_container"
             android:gravity="right"
             android:visibility="gone">
 

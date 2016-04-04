@@ -5,10 +5,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.nostra13.universalimageloader.core.ImageLoader;
 import com.ufcspa.unasus.appportfolio.R;
 
 import java.util.List;
@@ -20,7 +18,6 @@ public class VersionsAdapter extends BaseAdapter {
     private static LayoutInflater inflater = null;
     private Context context;
     private List<String> list;
-    private ImageLoader imageLoader;
 
     public VersionsAdapter(Context context, List<String> list) {
         this.context = context;
@@ -54,7 +51,6 @@ public class VersionsAdapter extends BaseAdapter {
 
         holder.date = (TextView) rowView.findViewById(R.id.version_date);
         holder.time = (TextView) rowView.findViewById(R.id.version_time);
-        holder.img_version = (ImageView) rowView.findViewById(R.id.version_image);
 
         return rowView;
     }
@@ -62,6 +58,5 @@ public class VersionsAdapter extends BaseAdapter {
     public class Holder {
         TextView date;
         TextView time;
-        ImageView img_version;
     }
 }

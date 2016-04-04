@@ -78,34 +78,32 @@ public class DataBaseAdapter {
     public User insertUser(User u) {
         ContentValues cv = new ContentValues();
         cv.put("nm_user", u.getName());
-        cv.put("id_user",u.getIdUser());
+        cv.put("id_user", u.getIdUser());
         cv.put("nu_identification", u.getIdCode());
         cv.put("ds_email", u.getEmail());
         cv.put("nu_cellphone", u.getCellphone());
         int lastID = 0;
-        User user= new User(0,'U',"NULO");
+        User user = new User(0, 'U', "NULO");
         try {
             db.insert("tb_user", null, cv);
-            Log.d(tag, "inseriu no banco user "+u.getName()+"  no banco");
+            Log.d(tag, "inseriu no banco user " + u.getName() + "  no banco");
             Cursor cursor = db.rawQuery("select seq from sqlite_sequence where name='tb_attachment'", null);
 
             if (cursor.moveToFirst()) {
                 lastID = cursor.getInt(0);
                 Log.d(tag, "last id_attachment in table:" + lastID);
-                Cursor c = db.rawQuery("SELECT nm_user FROM tb_user where id_user="+lastID,null);
-                if (c.moveToFirst()){
-                    user= new User(lastID,'U',c.getString(0));
+                Cursor c = db.rawQuery("SELECT nm_user FROM tb_user where id_user=" + lastID, null);
+                if (c.moveToFirst()) {
+                    user = new User(lastID, 'U', c.getString(0));
                 }
             }
-        }catch (Exception e){
-            Log.e(tag, "erro ao inserir user:"+e.getMessage()+"\n");
+        } catch (Exception e) {
+            Log.e(tag, "erro ao inserir user:" + e.getMessage() + "\n");
             e.printStackTrace();
         }
 
         return user;
     }
-
-
 
 
     public String listarUsers() {
@@ -807,9 +805,6 @@ public class DataBaseAdapter {
         cursor.close();
         return -1;
     }
-
-
-
 
 
     public boolean deleteAttachment(Attachment attachment) {

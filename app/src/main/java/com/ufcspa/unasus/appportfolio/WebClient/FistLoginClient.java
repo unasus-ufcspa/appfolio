@@ -70,11 +70,11 @@ public class FistLoginClient extends HttpClient {
 
                         //INSERINDO USER NO DB SQLITE
                         user = new User(idUser,name,idCode,email,cellphone);
-                        Log.d(tag,"user get by json:"+user.toString());
-                        user=DataBaseAdapter.getInstance(context).insertUser(user);
+                        Log.d(tag, "user get by json:" + user.toString());
+                        user = DataBaseAdapter.getInstance(context).insertUser(user);
 
                         //Adicionando o usuario no singleton
-                        Singleton.getInstance().user=user;
+                        Singleton.getInstance().user = user;
                         LoginActivity.isLoginSucessful=true;
                         //Log.wtf(tag, "JSon response::" + response.toString());
                     }

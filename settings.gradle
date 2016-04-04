@@ -1,1 +1,1 @@
-include ':app', ':RTEditor', ':RTEditor-Toolbar', ':ColorPicker', ':'
+include ':', ':ColorPicker', ':RTEditor', ':RTEditor-Toolbar', ':app'
