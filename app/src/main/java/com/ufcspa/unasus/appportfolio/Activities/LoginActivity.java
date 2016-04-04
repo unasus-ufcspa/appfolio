@@ -5,12 +5,14 @@ import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
 import android.app.AlertDialog;
 import android.app.LoaderManager.LoaderCallbacks;
+import android.content.Context;
 import android.content.CursorLoader;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.Loader;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
+import android.net.ConnectivityManager;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
@@ -19,6 +21,7 @@ import android.provider.ContactsContract;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
+import android.telephony.TelephonyManager;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -116,17 +119,15 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             @Override
             public void onClick(View view) {
                 //attemptLogin();
-                if (verificarLogin() != 0) {
+                if (verificarLogin()) {
                     session = Singleton.getInstance();
                     session.user = user;
+//                    loginSuccess();
 
                     char userType = checkUserType(user.getIdUser());
-                    if(userType == 'W')
-                    {
+                    if (userType == 'W') {
                         //showChooseTutorOrStudentPopup();
-                    }
-                    else
-                    {
+                    } else {
                         session.user.setUserType(userType);
                         loginSuccess();
                     }
@@ -136,6 +137,16 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             }
         });
     }
+
+    public boolean isTablet() {
+        TelephonyManager manager = (TelephonyManager) this.getSystemService(Context.TELEPHONY_SERVICE);
+        if (manager.getPhoneType() == TelephonyManager.PHONE_TYPE_NONE) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
 
     private void showChooseTutorOrStudentPopup()
     {
@@ -192,39 +203,42 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     private void criarBD(){
         bd = DataBaseAdapter.getInstance(this);
     }
+    public boolean isOnline() {
+        ConnectivityManager cm =
+                (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
 
-    private int verificarLogin() {
+        return cm.getActiveNetworkInfo() != null &&
+                cm.getActiveNetworkInfo().isConnectedOrConnecting();
+    }
 
-//        //try {
-////            DataBaseAdapter bd = DataBaseAdapter.getInstance(this);
-////            user=bd.verifyPass(mEmailView.getText().toString(),mPasswordView.getText().toString());
-////            result=user.getIdUser();
-//            //Log.d("BANCO", " pass:" + result);
-//            FirstLogin first= new FirstLogin();
-//            first.setEmail(mEmailView.getText().toString());
-//            first.setIdDevice("XYZER");
-//            first.setTpDevice("T");
-//            first.setPasswd(mPasswordView.getText().toString());
-//            FistLoginClient client = new FistLoginClient(getBaseContext());
-//            client.postJson(first.toJSON());
-//       // }catch (Exception e){
-//            //Log.d("BANCO","verificando pass:"+e.getMessage());
-//        //}finally {
-//
-//            return isLoginSucessful;
-//        //}
+    private boolean verificarLogin(){
 
-        int result = 0;
         try {
             DataBaseAdapter bd = DataBaseAdapter.getInstance(this);
             user = bd.verifyPass(mEmailView.getText().toString(), mPasswordView.getText().toString());
-            result = user.getIdUser();
+            //result=user.getIdUser();
             //Log.d("BANCO", " pass:" + result);
+//        if(isOnline()) {
+//            FirstLogin first = new FirstLogin();
+//
+//            String android_id = Settings.Secure.getString(this.getContentResolver(), Settings.Secure.ANDROID_ID);
+//            Log.d("ANDROID ID", "Android ID:" + android_id);
+//            String tpDevice=(isTablet()) ? "T" : "M";
+//            first.setIdDevice(android_id);
+//            first.setTpDevice(tpDevice);
+//            first.setEmail(mEmailView.getText().toString());
+//            first.setPasswd(mPasswordView.getText().toString());
+//            FistLoginClient client = new FistLoginClient(getBaseContext());
+//            client.postJson(first.toJSON());
         } catch (Exception e) {
             Log.d("BANCO", "verificando pass:" + e.getMessage());
         } finally {
-            return result;
+
         }
+//        }else{
+//            Toast.makeText(getApplicationContext(), "Erro ao logar, favor verifique sua conexão com a internet", Toast.LENGTH_LONG).show();
+//        }
+        return true;//isLoginSucessful;
     }
 
 
@@ -475,6 +489,8 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             mAuthTask = null;
             showProgress(false);
         }
+
+
     }
 }
 

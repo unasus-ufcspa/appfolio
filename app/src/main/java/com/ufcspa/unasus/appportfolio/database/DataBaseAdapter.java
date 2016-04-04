@@ -74,6 +74,81 @@ public class DataBaseAdapter {
         }
     }
 
+
+    public User insertUser(User u) {
+        ContentValues cv = new ContentValues();
+        cv.put("nm_user", u.getName());
+        cv.put("id_user",u.getIdUser());
+        cv.put("nu_identification", u.getIdCode());
+        cv.put("ds_email", u.getEmail());
+        cv.put("nu_cellphone", u.getCellphone());
+        int lastID = 0;
+        User user= new User(0,'U',"NULO");
+        try {
+            db.insert("tb_user", null, cv);
+            Log.d(tag, "inseriu no banco user "+u.getName()+"  no banco");
+            Cursor cursor = db.rawQuery("select seq from sqlite_sequence where name='tb_attachment'", null);
+
+            if (cursor.moveToFirst()) {
+                lastID = cursor.getInt(0);
+                Log.d(tag, "last id_attachment in table:" + lastID);
+                Cursor c = db.rawQuery("SELECT nm_user FROM tb_user where id_user="+lastID,null);
+                if (c.moveToFirst()){
+                    user= new User(lastID,'U',c.getString(0));
+                }
+            }
+        }catch (Exception e){
+            Log.e(tag, "erro ao inserir user:"+e.getMessage()+"\n");
+            e.printStackTrace();
+        }
+
+        return user;
+    }
+
+
+
+
+    public String listarUsers() {
+        String query = "SELECT * FROM tb_user";
+        String r = "";
+        Cursor c = db.rawQuery(query, null);
+        if (c.moveToFirst()) {
+            r += "id:" + c.getString(0) + "\n";
+            r += "nome:" + c.getString(1) + "\n";
+            r += "email:" + c.getString(4) + "\n";
+
+        } else {
+            r = "Não há users!";
+        }
+        c.close();
+//        db.close();
+        Log.d(tag, "resultado string:" + r);
+        return r;
+
+    }
+
+    public String listarTabelas() {
+        String query = "SELECT name from sqlite_master where type='table'";
+        String r = "";
+        Cursor c = db.rawQuery(query, null);
+        if (c.moveToFirst()) {
+            do {
+                r += c.getString(0) + "\n";
+                //r += c.getString(1) + "\n";
+            } while (c.moveToNext());
+        } else {
+            r = "não há tabelas";
+        }
+
+//        db.close();
+
+        return r;
+    }
+
+
+
+
+
 /*
 
     *************************CRUD REFERENCIAS***********************************
@@ -414,55 +489,7 @@ public class DataBaseAdapter {
     }
 
 
-    public void insertUser(User u) {
-        ContentValues cv = new ContentValues();
-        cv.put("nm_user", u.getName());
-        cv.put("id_user",u.getIdUser());
-        cv.put("nu_identification", u.getIdCode());
-        cv.put("ds_email", u.getEmail());
-        cv.put("nu_cellphone",u.getCellphone());
-        db.insert("tb_user", null, cv);
-//        db.close();
-        Log.d(tag, "inseriu no banco user "+u.getName()+"  no banco");
-    }
 
-
-    public String listarUsers() {
-        String query = "SELECT * FROM tb_user";
-        String r = "";
-        Cursor c = db.rawQuery(query, null);
-        if (c.moveToFirst()) {
-            r += "id:" + c.getString(0) + "\n";
-            r += "nome:" + c.getString(1) + "\n";
-            r += "email:" + c.getString(4) + "\n";
-
-        } else {
-            r = "Não há users!";
-        }
-        c.close();
-//        db.close();
-        Log.d(tag, "resultado string:" + r);
-        return r;
-
-    }
-
-    public String listarTabelas() {
-        String query = "SELECT name from sqlite_master where type='table'";
-        String r = "";
-        Cursor c = db.rawQuery(query, null);
-        if (c.moveToFirst()) {
-            do {
-                r += c.getString(0) + "\n";
-                //r += c.getString(1) + "\n";
-            } while (c.moveToNext());
-        } else {
-            r = "não há tabelas";
-        }
-
-//        db.close();
-
-        return r;
-    }
 
     public List<PortfolioClass> listarPortfolio(int idClass, char userType,int idUser){
         String query = "SELECT * FROM tb_portfolio";
@@ -780,6 +807,10 @@ public class DataBaseAdapter {
         cursor.close();
         return -1;
     }
+
+
+
+
 
     public boolean deleteAttachment(Attachment attachment) {
         String query = "id_attachment = " + attachment.getIdAttachment() + " AND\n" +

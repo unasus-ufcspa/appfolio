@@ -1,4 +1,4 @@
-package com.ufcspa.unasus.appportfolio.Model.WebClient;
+package com.ufcspa.unasus.appportfolio.WebClient;
 
 import android.util.Log;
 
