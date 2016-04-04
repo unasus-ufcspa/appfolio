@@ -9,18 +9,18 @@
         android:background="@drawable/border_popup_rteditor">
 
         <ImageView
-            android:id="@+id/imageView4"
+            android:id="@+id/img_arrow"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
             android:layout_centerHorizontal="true"
-            android:src="@drawable/triangle"
+            android:src="@drawable/arrow_bottom"
             android:visibility="visible" />
 
         <RelativeLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/imageView4"
+            android:layout_below="@+id/img_arrow"
             android:paddingBottom="10dp"
             android:paddingLeft="10dp"
             android:paddingRight="10dp"

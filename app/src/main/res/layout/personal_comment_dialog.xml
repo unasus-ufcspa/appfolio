@@ -9,13 +9,13 @@
     <!--android:id="@+id/scrollView3">-->
 
     <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="400dp"
+        android:layout_width="400dp"
+        android:layout_height="300dp"
         android:background="@drawable/border_popup_rteditor"
         android:padding="20dp">
 
         <TextView
-            android:id="@+id/tvCaption"
+            android:id="@+id/student_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
@@ -33,14 +33,14 @@
             android:textStyle="bold" />
 
         <TextView
-            android:id="@+id/textView11"
+            android:id="@+id/student_phone"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
             android:layout_alignParentLeft="true"
             android:layout_alignParentRight="true"
             android:layout_alignParentStart="true"
-            android:layout_below="@+id/tvCaption"
+            android:layout_below="@+id/student_name"
             android:layout_marginBottom="20dp"
             android:layout_marginRight="25dp"
             android:gravity="right"
@@ -50,12 +50,12 @@
             android:textColor="@color/gray_2" />
 
         <TextView
-            android:id="@+id/textView12"
+            android:id="@+id/lbl_personal_comment"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/textView11"
-            android:layout_toEndOf="@+id/relativeLayout"
-            android:layout_toRightOf="@+id/relativeLayout"
+            android:layout_below="@+id/student_phone"
+            android:layout_toEndOf="@+id/circle"
+            android:layout_toRightOf="@+id/circle"
             android:singleLine="true"
             android:text="COMENTÁRIOS PESSOAIS SOBRE O ALUNO"
             android:textAppearance="?android:attr/textAppearanceLarge"
@@ -63,19 +63,19 @@
             android:textStyle="italic" />
 
         <TextView
-            android:id="@+id/textView13"
+            android:id="@+id/lbl_privacy"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignLeft="@+id/textView12"
-            android:layout_alignStart="@+id/textView12"
-            android:layout_below="@+id/textView12"
+            android:layout_alignLeft="@+id/lbl_personal_comment"
+            android:layout_alignStart="@+id/lbl_personal_comment"
+            android:layout_below="@+id/lbl_personal_comment"
             android:layout_marginBottom="15dp"
             android:text="(o aluno NÃO terá acesso a esse texto)"
             android:textAppearance="?android:attr/textAppearanceSmall"
             android:textColor="@color/gray_2" />
 
         <EditText
-            android:id="@+id/editText"
+            android:id="@+id/edittext_personal_comment"
             android:layout_width="wrap_content"
             android:layout_height="250dp"
             android:layout_alignParentBottom="true"
@@ -83,7 +83,7 @@
             android:layout_alignParentLeft="true"
             android:layout_alignParentRight="true"
             android:layout_alignParentStart="true"
-            android:layout_below="@+id/textView13"
+            android:layout_below="@+id/lbl_privacy"
             android:background="@drawable/border_popup_personal_comment"
             android:gravity="left|top"
             android:padding="15dp"
@@ -91,13 +91,13 @@
             android:scrollbars="vertical" />
 
         <RelativeLayout
-            android:id="@+id/relativeLayout"
+            android:id="@+id/circle"
             android:layout_width="20dp"
             android:layout_height="20dp"
-            android:layout_above="@+id/textView13"
+            android:layout_above="@+id/lbl_privacy"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
-            android:layout_alignTop="@+id/textView12"
+            android:layout_alignTop="@+id/lbl_personal_comment"
             android:layout_marginRight="10dp"
             android:gravity="center">
 

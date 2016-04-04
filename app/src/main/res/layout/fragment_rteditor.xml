@@ -102,6 +102,38 @@
             android:textSize="20dp"
             android:textStyle="bold" />
 
+        <RelativeLayout
+            android:id="@+id/personal_comment_container"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="60dp"
+            android:layout_marginTop="50dp"
+            android:gravity="right"
+            android:visibility="gone">
+
+            <include
+                layout="@layout/personal_comment_dialog"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/versions_container"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="60dp"
+            android:layout_marginTop="50dp"
+            android:gravity="right"
+            android:visibility="gone">
+
+            <include
+                layout="@layout/versions_dialog"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true" />
+        </RelativeLayout>
+
         <LinearLayout
             android:id="@+id/info_rteditor_container"
             android:layout_width="match_parent"

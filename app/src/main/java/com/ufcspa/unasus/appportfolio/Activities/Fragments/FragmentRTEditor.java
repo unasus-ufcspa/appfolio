@@ -8,7 +8,6 @@ import android.content.IntentFilter;
 import android.content.res.Configuration;
 import android.graphics.Color;
 import android.graphics.Rect;
-import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
@@ -22,20 +21,17 @@ import android.text.TextWatcher;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.ActionMode;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -496,19 +492,26 @@ public class FragmentRTEditor extends Fragment {
         usrPhoto.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                displayPersonalComment(getView().findViewById(R.id.usr_photo_left));
+                displayPersonalComment(getView().findViewById(R.id.personal_comment_container));
             }
         });
         personalCommentButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                displayPersonalComment(getView().findViewById(R.id.usr_photo_left));
+                displayPersonalComment(getView().findViewById(R.id.personal_comment_container));
             }
         });
         versionsButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                displayVersionsDialog(getView().findViewById(R.id.usr_photo_left));
+                ArrayList<String> list = new ArrayList<>();
+                for (int i = 0; i < 4; i++)
+                    list.add("");
+
+                ListView versionList = (ListView) getView().findViewById(R.id.version_list);
+                versionList.setAdapter(new VersionsAdapter(getContext(), list));
+
+                displayVersionsDialog(getView().findViewById(R.id.versions_container));
             }
         });
 
@@ -838,56 +841,67 @@ public class FragmentRTEditor extends Fragment {
     }
 
     private void displayPersonalComment(View anchorView) {
-        PopupWindow popup = new PopupWindow(getActivity());
-        View layout = getActivity().getLayoutInflater().inflate(R.layout.personal_comment_dialog, null);
-        popup.setContentView(layout);
-        // Set content width and height
-        popup.setHeight(WindowManager.LayoutParams.WRAP_CONTENT);
-        popup.setWidth(WindowManager.LayoutParams.WRAP_CONTENT);
-        // Closes the popup window when touch outside of it - when looses focus
-        popup.setOutsideTouchable(true);
-        popup.setFocusable(true);
-        // Show anchored to button
-        popup.setBackgroundDrawable(new BitmapDrawable());
+        if (anchorView.getVisibility() == View.VISIBLE)
+            anchorView.setVisibility(View.GONE);
+        else
+            anchorView.setVisibility(View.VISIBLE);
 
-        final float scale = getResources().getDisplayMetrics().density;
-        int xOffset = (int) (96 * scale + 0.5f);
-        int yOffset = (int) (50 * scale + 0.5f);
 
-        Rect rect = locateView(anchorView);
-
-        popup.showAtLocation(anchorView, Gravity.NO_GRAVITY, rect.left, rect.bottom); //xOffset, yOffset);
+//        PopupWindow popup = new PopupWindow(getActivity());
+//        View layout = getActivity().getLayoutInflater().inflate(R.layout.personal_comment_dialog, null);
+//        popup.setContentView(layout);
+//        // Set content width and height
+//        popup.setHeight(WindowManager.LayoutParams.WRAP_CONTENT);
+//        popup.setWidth(WindowManager.LayoutParams.WRAP_CONTENT);
+//        // Closes the popup window when touch outside of it - when looses focus
+//        popup.setOutsideTouchable(true);
+//        popup.setFocusable(true);
+//        // Show anchored to button
+//        popup.setBackgroundDrawable(new BitmapDrawable());
+//
+//        final float scale = getResources().getDisplayMetrics().density;
+//        int xOffset = (int) (96 * scale + 0.5f);
+//        int yOffset = (int) (50 * scale + 0.5f);
+//
+//        Rect rect = locateView(anchorView);
+//
+//        popup.showAtLocation(anchorView, Gravity.NO_GRAVITY, rect.left, rect.bottom); //xOffset, yOffset);
     }
 
     private void displayVersionsDialog(View anchorView) {
-        PopupWindow popup = new PopupWindow(getActivity());
-        View layout = getActivity().getLayoutInflater().inflate(R.layout.versions_dialog, null);
-        popup.setContentView(layout);
+        if (anchorView.getVisibility() == View.VISIBLE)
+            anchorView.setVisibility(View.GONE);
+        else
+            anchorView.setVisibility(View.VISIBLE);
 
-        ArrayList<String> list = new ArrayList<>();
-        for (int i = 0; i < 10; i++)
-            list.add("");
-
-        ListView versionList = (ListView) layout.findViewById(R.id.version_list);
-        versionList.setAdapter(new VersionsAdapter(getContext(), list));
-
-
-        // Set content width and height
-        popup.setHeight(WindowManager.LayoutParams.WRAP_CONTENT);
-        popup.setWidth(WindowManager.LayoutParams.WRAP_CONTENT);
-        // Closes the popup window when touch outside of it - when looses focus
-        popup.setOutsideTouchable(true);
-        popup.setFocusable(true);
-        // Show anchored to button
-        popup.setBackgroundDrawable(new BitmapDrawable());
-
-        final float scale = getResources().getDisplayMetrics().density;
-        int xOffset = (int) (96 * scale + 0.5f);
-        int yOffset = (int) (50 * scale + 0.5f);
-
-        Rect rect = locateView(anchorView);
-
-        popup.showAtLocation(anchorView, Gravity.NO_GRAVITY, rect.left, rect.bottom); //xOffset, yOffset);
+//        PopupWindow popup = new PopupWindow(getActivity());
+//        View layout = getActivity().getLayoutInflater().inflate(R.layout.versions_dialog, null);
+//        popup.setContentView(layout);
+//
+//        ArrayList<String> list = new ArrayList<>();
+//        for (int i = 0; i < 10; i++)
+//            list.add("");
+//
+//        ListView versionList = (ListView) layout.findViewById(R.id.version_list);
+//        versionList.setAdapter(new VersionsAdapter(getContext(), list));
+//
+//
+//        // Set content width and height
+//        popup.setHeight(WindowManager.LayoutParams.WRAP_CONTENT);
+//        popup.setWidth(WindowManager.LayoutParams.WRAP_CONTENT);
+//        // Closes the popup window when touch outside of it - when looses focus
+//        popup.setOutsideTouchable(true);
+//        popup.setFocusable(true);
+//        // Show anchored to button
+//        popup.setBackgroundDrawable(new BitmapDrawable());
+//
+//        final float scale = getResources().getDisplayMetrics().density;
+//        int xOffset = (int) (96 * scale + 0.5f);
+//        int yOffset = (int) (50 * scale + 0.5f);
+//
+//        Rect rect = locateView(anchorView);
+//
+//        popup.showAtLocation(anchorView, Gravity.NO_GRAVITY, rect.left, rect.bottom); //xOffset, yOffset);
     }
 
     private class ActionBarCallBack implements ActionMode.Callback {
