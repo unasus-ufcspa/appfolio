@@ -12,8 +12,11 @@ import com.android.volley.toolbox.Volley;
 import com.ufcspa.unasus.appportfolio.Activities.LoginActivity;
 import com.ufcspa.unasus.appportfolio.Model.Singleton;
 import com.ufcspa.unasus.appportfolio.Model.User;
+import com.ufcspa.unasus.appportfolio.Model.basicData.PortfolioClass;
+import com.ufcspa.unasus.appportfolio.Model.basicData.PortfolioStudent;
 import com.ufcspa.unasus.appportfolio.database.DataBaseAdapter;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -44,16 +47,83 @@ public class BasicDataClient extends HttpClient {
                     Log.d(tag, "JSON RESPONSE: " + response.toString());
                     if( response.has("erro")) {
 
-                        Log.e(tag, "JSON usuario ou senha invalidos");
-                        LoginActivity.isLoginSucessful=false;
+                        Log.e(tag, "sincronizacao de dados iniciais falhu");
+                        //LoginActivity.isLoginSucessful=false;
                         Log.d(tag, "JSon response receiving:" + response.toString());
-                    }else if(response.getJSONObject("firstLogin_response").getJSONObject("tb_user").getInt("id_user")!=0){
-                        Log.d(tag,"JSON POST foi");
-                        Log.d(tag, "user encontrado!\n cadastrando no banco...");
+                    }else if(response.has("getBasicData_response")){
+                        Log.d(tag,"JSON POST existe basic Data response");
+
+
+                        // INSTANCE BASIC DATA COMPLEX OBJECT
+                        basicData= new BasicData(context);
+
+                        //Log.d(tag, "user encontrado!\n cadastrando no banco...");
                         JSONObject resp= new JSONObject();
                         try {
-                            resp=response.getJSONObject("firstLogin_response");
-                            Log.wtf(tag,"JSon response::"+resp.toString());
+                            resp=response.getJSONObject("getBasicData_response");
+                            Log.d(tag, "JSon response::" + resp.toString());
+                            if(resp.has("portfolio_student")) {
+                                // GET PORTFOLIO STUDENT
+                                JSONObject objPs = resp.getJSONObject("portfolio_student");
+                                JSONArray tb_port_stu = objPs.getJSONArray("tb_portfolio_student");
+                                // POPULATE PORTFOLIO STUDENT
+                                for (int i = 0; i < tb_port_stu.length(); i++) {
+                                    JSONObject temp = tb_port_stu.getJSONObject(i);
+                                    PortfolioStudent ps = new PortfolioStudent();
+
+                                    // GET DATA FROM JSON
+                                    int idPortfolioStudent=temp.getInt("id_portfolio_student");
+                                    int idStudent=temp.getInt("id_student");
+                                    int idTutor=temp.getInt("id_tutor");
+                                    String dtFirstSync=temp.getString("dt_fist_sync");
+                                    String nuPortVersion=temp.getString("nu_portfolio_version");
+
+                                    //POPULATE OBJECT WITH DATA
+                                    ps.setId_portfolio_student(idPortfolioStudent);
+                                    ps.setId_student(idStudent);
+                                    ps.setId_tutor(idTutor);
+                                    ps.setDt_first_sync(dtFirstSync);
+                                    ps.setNu_portfolio_version(nuPortVersion);
+
+
+                                    //ADD TO LINKEDLIST
+
+                                    basicData.addPortfolioStudent(ps);
+
+                                }
+                            }
+                            if(resp.has("portfolio_class")) {
+                                // GET PORTFOLIO STUDENT
+                                JSONObject objPs = resp.getJSONObject("portfolio_class");
+                                JSONArray tb_port_class = objPs.getJSONArray("tb_portfolio_class");
+                                // POPULATE PORTFOLIO STUDENT
+                                for (int i = 0; i < tb_port_class.length(); i++) {
+                                    JSONObject temp = tb_port_class.getJSONObject(i);
+                                    PortfolioClass pc = new PortfolioClass();
+
+                                    // GET DATA FROM JSON
+                                    int idPortfolioClass=temp.getInt("id_portfolio_class");
+                                    int idClass=temp.getInt("id_class");
+                                    int idPortfolio=temp.getInt("id_portfolio");
+
+
+                                    //POPULATE OBJECT WITH DATA
+                                    pc.setId_portfolio_class(idPortfolioClass);
+                                    pc.setId_class(idClass);
+                                    pc.setId_portfolio(idPortfolio);
+
+
+                                    //ADD TO LINKEDLIST
+
+                                    basicData.addPortfolioClass(pc);
+
+                                }
+                            }
+
+
+
+
+
                         } catch (JSONException e) {
                             e.printStackTrace();
                         } catch (Exception v){

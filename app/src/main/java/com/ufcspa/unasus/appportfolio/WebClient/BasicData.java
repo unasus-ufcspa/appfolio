@@ -49,6 +49,9 @@ public class BasicData {
     public void addActivityStudent(ActivityStudent a){
         activitiesStudent.add(a);
     }
+
+
+
     public void addClass(Class c){
         classes.add(c);
     }
@@ -64,7 +67,7 @@ public class BasicData {
     public void addPortfolioClass(PortfolioClass pc){
         portfolioClasses.add(pc);
     }
-    public void addPortfolioTutor(PortfolioStudent ps){
+    public void addPortfolioStudent(PortfolioStudent ps){
         portfolioStudents.add(ps);
     }
     public void addUsers(User u){
@@ -108,7 +111,7 @@ public class BasicData {
         return users;
     }
 
-    public synchronized void insertDataInSQLITE() {
+    public synchronized void insertDataIntoSQLITE() {
         Thread t = new Thread(new Runnable() {
             @Override
             public void run() {
