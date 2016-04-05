@@ -45,10 +45,10 @@
             style="@style/RTE_ToolbarButton"
             android:background="?attr/rte_icToolbarUnderline" />
 
-        <com.onegravity.rteditor.toolbar.RTToolbarImageButton
-            android:id="@+id/toolbar_strikethrough"
-            style="@style/RTE_ToolbarButton"
-            android:background="?attr/rte_icToolbarStrikethrough" />
+        <!--<com.onegravity.rteditor.toolbar.RTToolbarImageButton-->
+        <!--android:id="@+id/toolbar_strikethrough"-->
+        <!--style="@style/RTE_ToolbarButton"-->
+        <!--android:background="?attr/rte_icToolbarStrikethrough" />-->
 
         <com.onegravity.rteditor.toolbar.RTToolbarImageButton
             android:id="@+id/toolbar_superscript"
@@ -60,7 +60,7 @@
             style="@style/RTE_ToolbarButton"
             android:background="?attr/rte_icToolbarSubscript" />
 
-		<include layout="@layout/rte_toolbar_divider"/>
+        <!--<include layout="@layout/rte_toolbar_divider"/>-->
 
         <Spinner
             android:id="@+id/toolbar_font"
@@ -71,40 +71,40 @@
             android:id="@+id/toolbar_fontsize"
             style="?attr/rte_ToolbarSpinner"
             android:background="?attr/rte_icToolbarFontSize" />
-		
-        <Spinner
-            android:id="@+id/toolbar_fontcolor"
-            style="?attr/rte_ToolbarSpinner"
-            android:background="?attr/rte_icToolbarFontColor" />
+
+        <!--<Spinner-->
+        <!--android:id="@+id/toolbar_fontcolor"-->
+        <!--style="?attr/rte_ToolbarSpinner"-->
+        <!--android:background="?attr/rte_icToolbarFontColor" />-->
 
         <!--<Spinner-->
         <!--android:id="@+id/toolbar_bgcolor"-->
         <!--style="?attr/rte_ToolbarSpinner"-->
         <!--android:background="?attr/rte_icToolbarBGColor" />-->
-		
-		<include layout="@layout/rte_toolbar_divider"/>
-		
-        <com.onegravity.rteditor.toolbar.RTToolbarImageButton
-            android:id="@+id/toolbar_number"
-            style="@style/RTE_ToolbarButton"
-            android:background="?attr/rte_icToolbarNumber" />
+
+        <!--<include layout="@layout/rte_toolbar_divider"/>-->
+
+        <!--<com.onegravity.rteditor.toolbar.RTToolbarImageButton-->
+        <!--android:id="@+id/toolbar_number"-->
+        <!--style="@style/RTE_ToolbarButton"-->
+        <!--android:background="?attr/rte_icToolbarNumber" />-->
 		
         <com.onegravity.rteditor.toolbar.RTToolbarImageButton
             android:id="@+id/toolbar_bullet"
             style="@style/RTE_ToolbarButton"
             android:background="?attr/rte_icToolbarBullet" />
-		
-        <com.onegravity.rteditor.toolbar.RTToolbarImageButton
-            android:id="@+id/toolbar_inc_indent"
-            style="@style/RTE_ToolbarButton"
-            android:background="?attr/rte_icToolbarIncIndent" />
-		
-        <com.onegravity.rteditor.toolbar.RTToolbarImageButton
-            android:id="@+id/toolbar_dec_indent"
-            style="@style/RTE_ToolbarButton"
-            android:background="?attr/rte_icToolbarDecIntent" />
-		
-        <include layout="@layout/rte_toolbar_divider"/>
+
+        <!--<com.onegravity.rteditor.toolbar.RTToolbarImageButton-->
+        <!--android:id="@+id/toolbar_inc_indent"-->
+        <!--style="@style/RTE_ToolbarButton"-->
+        <!--android:background="?attr/rte_icToolbarIncIndent" />-->
+
+        <!--<com.onegravity.rteditor.toolbar.RTToolbarImageButton-->
+        <!--android:id="@+id/toolbar_dec_indent"-->
+        <!--style="@style/RTE_ToolbarButton"-->
+        <!--android:background="?attr/rte_icToolbarDecIntent" />-->
+
+        <!--<include layout="@layout/rte_toolbar_divider"/>-->
         
         <com.onegravity.rteditor.toolbar.RTToolbarImageButton
             android:id="@+id/toolbar_align_left"
@@ -120,8 +120,8 @@
             android:id="@+id/toolbar_align_right"
             style="@style/RTE_ToolbarButton"
             android:background="?attr/rte_icToolbarAlignRight" />
-        
-        <include layout="@layout/rte_toolbar_divider"/>
+
+        <!--<include layout="@layout/rte_toolbar_divider"/>-->
         
         <com.onegravity.rteditor.toolbar.RTToolbarImageButton
             android:id="@+id/toolbar_link"
@@ -158,8 +158,8 @@
             style="@style/ToolbarButton"
 	        android:layout_marginRight="4dip"
             android:background="?attr/rte_icToolbarVideo" /-->
-        
-        <include layout="@layout/rte_toolbar_divider"/>
+
+        <!--<include layout="@layout/rte_toolbar_divider"/>-->
 
         <com.onegravity.rteditor.toolbar.RTToolbarImageButton
             android:id="@+id/toolbar_undo"
@@ -171,11 +171,11 @@
             style="@style/RTE_ToolbarButton"
             android:background="?attr/rte_icToolbarRedo"/>
 
-        <com.onegravity.rteditor.toolbar.RTToolbarImageButton
-            android:id="@+id/toolbar_clear"
-            style="@style/RTE_ToolbarButton"
-	        android:layout_marginRight="4dip"
-            android:background="?attr/rte_icToolbarClear"/>
+        <!--<com.onegravity.rteditor.toolbar.RTToolbarImageButton-->
+        <!--android:id="@+id/toolbar_clear"-->
+        <!--style="@style/RTE_ToolbarButton"-->
+        <!--android:layout_marginRight="4dip"-->
+        <!--android:background="?attr/rte_icToolbarClear"/>-->
         
     </com.onegravity.rteditor.toolbar.HorizontalRTToolbar>
 

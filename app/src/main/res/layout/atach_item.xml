@@ -8,14 +8,14 @@
         android:id="@+id/date"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="5dp"
         android:adjustViewBounds="true"
-        android:text="17/12/2016"
+        android:gravity="center_horizontal"
         android:scaleType="fitCenter"
+        android:text="17/12/2016"
+        android:textColor="#000000"
         android:textSize="10dp"
         android:visibility="visible"
-        android:textColor="#000000"
-        android:gravity="center_horizontal"
-        android:layout_marginBottom="5dp"
         />
 
     <RelativeLayout
@@ -27,32 +27,32 @@
         >
         <TextView
             android:id="@+id/comment"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_centerInParent="@+id/hour"
             android:layout_margin="5dip"
             android:layout_marginTop="5dp"
-            android:layout_centerInParent="@+id/hour"
+            android:background="@drawable/attachment_file"
+            android:gravity="center"
             android:paddingBottom="10dp"
             android:text=""
-            android:background="@drawable/att_text"
             android:textColor="#000000"
-            android:gravity="center"
             />
 
         <TextView
             android:id="@+id/hour"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/comment"
             android:layout_alignParentLeft="@+id/comment"
-            android:adjustViewBounds="true"
+            android:layout_below="@+id/comment"
             android:layout_marginRight="2dp"
-            android:text="12:35"
+            android:adjustViewBounds="true"
+            android:gravity="center_horizontal"
             android:paddingLeft="30dp"
             android:scaleType="fitCenter"
-            android:textSize="10dp"
-            android:gravity="center_horizontal"
-            android:textColor="#000000" />
+            android:text="12:35"
+            android:textColor="#000000"
+            android:textSize="10dp" />
 
     </RelativeLayout>
 

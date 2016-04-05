@@ -8,7 +8,8 @@
     <ScrollView
         android:id="@+id/scrollView2"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:background="@drawable/border_popup_rteditor">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -27,8 +28,8 @@
 
                     <ImageButton
                         android:id="@+id/img_gallery"
-                        android:layout_width="100dp"
-                        android:layout_height="100dp"
+                        android:layout_width="80dp"
+                        android:layout_height="80dp"
                         android:layout_alignParentTop="true"
                         android:layout_weight="0.17"
                         android:background="@android:color/transparent"
@@ -60,12 +61,13 @@
 
                     <ImageButton
                         android:id="@+id/img_photos"
-                        android:layout_width="100dp"
-                        android:layout_height="100dp"
+                        android:layout_width="80dp"
+                        android:layout_height="80dp"
                         android:layout_alignParentTop="true"
                         android:layout_weight="0.17"
                         android:background="@android:color/transparent"
-                        android:src="@drawable/att_photo" />
+                        android:scaleType="fitCenter"
+                        android:src="@drawable/attachment_photo" />
 
                     <TextView
                         android:id="@+id/textView4"
@@ -94,8 +96,8 @@
 
                     <ImageButton
                         android:id="@+id/img_text"
-                        android:layout_width="100dp"
-                        android:layout_height="100dp"
+                        android:layout_width="80dp"
+                        android:layout_height="80dp"
                         android:layout_alignParentTop="true"
                         android:layout_weight="0.17"
                         android:adjustViewBounds="false"
@@ -128,8 +130,8 @@
 
                     <ImageButton
                         android:id="@+id/img_videos"
-                        android:layout_width="100dp"
-                        android:layout_height="100dp"
+                        android:layout_width="80dp"
+                        android:layout_height="80dp"
                         android:layout_alignParentTop="true"
                         android:layout_weight="0.17"
                         android:background="@android:color/transparent"

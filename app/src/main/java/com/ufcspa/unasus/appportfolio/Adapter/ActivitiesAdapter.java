@@ -4,24 +4,21 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
+import android.view.animation.AnimationUtils;
 import android.widget.ImageButton;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.ufcspa.unasus.appportfolio.Activities.EditActivity;
-import com.ufcspa.unasus.appportfolio.Activities.SelectActivitiesActivity;
 import com.ufcspa.unasus.appportfolio.Model.Activity;
 import com.ufcspa.unasus.appportfolio.Model.Singleton;
 import com.ufcspa.unasus.appportfolio.R;
 
 import java.util.Collections;
 import java.util.List;
-import java.util.Random;
 
 /**
  * Created by arthurzettler on 1/5/16.
@@ -49,6 +46,12 @@ public class ActivitiesAdapter extends RecyclerView.Adapter<ActivitiesAdapter.Vi
         vh.moreInfo = (ImageButton)v.findViewById(R.id.btn_info);
         vh.description = "";
         vh.notificationIcon = (TextView)v.findViewById(R.id.item_notification_icon);
+
+        vh.txt_class_code_info = (TextView) v.findViewById(R.id.txt_class_code_info);
+        vh.btnInfoClose = (ImageButton) v.findViewById(R.id.btn_info_close);
+        vh.txt_finalize_activity = (TextView) v.findViewById(R.id.txt_finalize_activity);
+        vh.txt_send_message = (TextView) v.findViewById(R.id.txt_send_message);
+        vh.infoView = (RelativeLayout) v.findViewById(R.id.info);
         return vh;
     }
 
@@ -57,22 +60,45 @@ public class ActivitiesAdapter extends RecyclerView.Adapter<ActivitiesAdapter.Vi
         Activity aux = list.get(position);
 
         holder.title.setText(aux.getTitle());
+        holder.txt_class_code_info.setText(aux.getTitle());
         holder.description = aux.getDescription();
         holder.moreInfo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(v.getContext(), holder.title.getText()+"\n"+ holder.description, Toast.LENGTH_SHORT).show();
+                holder.infoView.setVisibility(View.VISIBLE);
+                holder.infoView.startAnimation(AnimationUtils.loadAnimation(context, R.anim.anim_right));
             }
         });
 
-        holder.view.setOnClickListener(new View.OnClickListener() {
+        holder.btnInfoClose.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                holder.infoView.startAnimation(AnimationUtils.loadAnimation(context, R.anim.anim_left));
+                holder.infoView.setVisibility(View.GONE);
+            }
+        });
+
+        holder.title.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 singleton.activity = list.get(position);
                 singleton.idActivityStudent=singleton.activity.getIdAtivity();
                 singleton.portfolioClass.setIdPortfolioStudent(list.get(position).getIdPortfolio());
                 singleton.portfolioClass.setStudentName(studentName);
-                LocalBroadcastManager.getInstance(context).sendBroadcast(new Intent("call.fragments.action").putExtra("ID",5));
+                LocalBroadcastManager.getInstance(context).sendBroadcast(new Intent("call.fragments.action").putExtra("ID", 5));
+            }
+        });
+
+        holder.txt_finalize_activity.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(context, "Finalizar todas as atividades", Toast.LENGTH_SHORT).show();
+            }
+        });
+        holder.txt_send_message.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(context, "Enviar mensagens a todas as atividades", Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -92,6 +118,13 @@ public class ActivitiesAdapter extends RecyclerView.Adapter<ActivitiesAdapter.Vi
         public String description;
         public View view;
         public TextView notificationIcon;
+
+        RelativeLayout infoView;
+        TextView txt_class_code_info;
+        ImageButton btnInfoClose;
+        TextView txt_finalize_activity;
+        TextView txt_send_message;
+
         public ViewHolder(View v) {
             super(v);
             view = v;

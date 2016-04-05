@@ -11,10 +11,9 @@
     <RelativeLayout
         android:id="@+id/rteditor"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:visibility="visible">
 
-        <!--<include android:id="@+id/rte_toolbar_container" layout="@layout/rte_toolbar" />-->
-        <!--android:layout_above="@id/rte_toolbar_container"-->
         <ImageButton
             android:id="@+id/fullscreen"
             android:layout_width="48dp"
@@ -25,14 +24,14 @@
             android:background="@drawable/fullscreen1" />
 
         <RelativeLayout
+            android:id="@+id/edittext_container"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_alignParentBottom="true"
             android:layout_below="@+id/info_rteditor_container"
             android:layout_toLeftOf="@+id/fullscreen"
             android:layout_toStartOf="@+id/fullscreen"
-            android:background="@drawable/rteditor_shadow"
-            android:focusable="false">
+            android:background="@drawable/rteditor_shadow">
 
             <RelativeLayout
                 android:id="@+id/toolbar"
@@ -56,7 +55,6 @@
                 android:id="@+id/rte_content"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-
                 android:layout_alignParentBottom="true"
                 android:layout_below="@+id/toolbar"
                 android:fillViewport="true"
@@ -84,7 +82,7 @@
             </ScrollView>
         </RelativeLayout>
 
-        <me.grantland.widget.AutofitTextView
+        <TextView
             android:id="@+id/student_name"
             android:layout_width="match_parent"
             android:layout_height="35dp"
@@ -104,6 +102,40 @@
             android:textSize="20dp"
             android:textStyle="bold" />
 
+        <RelativeLayout
+            android:id="@+id/personal_comment_container"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="60dp"
+            android:layout_marginTop="50dp"
+            android:gravity="right"
+            android:visibility="gone">
+
+            <include
+                layout="@layout/personal_comment_dialog"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/versions_container"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="60dp"
+            android:layout_marginTop="50dp"
+            android:layout_toEndOf="@+id/personal_comment_container"
+            android:layout_toRightOf="@+id/personal_comment_container"
+            android:gravity="right"
+            android:visibility="gone">
+
+            <include
+                layout="@layout/versions_dialog"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true" />
+        </RelativeLayout>
+
         <LinearLayout
             android:id="@+id/info_rteditor_container"
             android:layout_width="match_parent"
@@ -114,7 +146,7 @@
             android:background="@color/gray_1"
             android:orientation="horizontal">
 
-            <me.grantland.widget.AutofitTextView
+            <TextView
                 android:id="@+id/activity_name"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
@@ -131,7 +163,7 @@
                 android:visibility="visible" />
 
             <ImageButton
-                android:id="@+id/imageButton"
+                android:id="@+id/btn_versions"
                 android:layout_width="110dp"
                 android:layout_height="50dp"
                 android:layout_alignParentBottom="true"
@@ -142,7 +174,7 @@
                 android:src="@drawable/versions" />
 
             <ImageButton
-                android:id="@+id/imageButton2"
+                android:id="@+id/personal_comment"
                 android:layout_width="48dp"
                 android:layout_height="48dp"
                 android:layout_alignParentBottom="true"
@@ -187,7 +219,7 @@
             android:gravity="bottom"
             android:orientation="horizontal">
 
-            <me.grantland.widget.AutofitTextView
+            <Button
                 android:id="@+id/btn_geral"
                 android:layout_width="wrap_content"
                 android:layout_height="45dp"
@@ -196,12 +228,13 @@
                 android:background="@drawable/geral_comment_tab"
                 android:gravity="center"
                 android:scaleType="fitEnd"
+                android:singleLine="true"
                 android:text="geral"
                 android:textColor="#ffffff"
                 android:textStyle="bold"
                 android:visibility="visible" />
 
-            <me.grantland.widget.AutofitTextView
+            <Button
                 android:id="@+id/btn_specific"
                 android:layout_width="wrap_content"
                 android:layout_height="45dp"
@@ -210,6 +243,7 @@
                 android:background="@drawable/specific_comment_tab"
                 android:gravity="center"
                 android:scaleType="fitEnd"
+                android:singleLine="true"
                 android:text="observações"
                 android:textColor="@color/gray_2"
                 android:textStyle="bold" />
@@ -220,16 +254,17 @@
             android:id="@+id/comments_container"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
             android:layout_below="@+id/button_container"
-            android:layout_toEndOf="@+id/topbar_gray"
-            android:layout_toRightOf="@+id/topbar_gray"
+            android:layout_marginLeft="40dp"
             android:visibility="visible">
 
         </FrameLayout>
 
         <RelativeLayout
             android:id="@+id/topbar_gray"
-            android:layout_width="40dp"
+            android:layout_width="50dp"
             android:layout_height="35dp"
             android:layout_above="@+id/comments_container"
             android:layout_alignParentTop="true"
@@ -242,11 +277,11 @@
             android:id="@+id/leftbar_white"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_alignTop="@+id/comments_container"
-            android:layout_marginLeft="5dp"
+            android:layout_below="@+id/button_container"
             android:layout_toLeftOf="@+id/button_container"
             android:layout_toStartOf="@+id/button_container"
             android:background="@android:color/transparent"
+            android:gravity="right"
             android:visibility="visible">
 
             <RelativeLayout
@@ -256,7 +291,23 @@
                 android:layout_alignParentEnd="true"
                 android:layout_alignParentRight="true"
                 android:layout_alignParentTop="true"
+                android:layout_marginRight="10dp"
                 android:background="@color/base_green"></RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/drawer_indicator"
+                android:layout_width="15dp"
+                android:layout_height="match_parent"
+                android:layout_alignParentTop="true"
+                android:layout_toLeftOf="@+id/rightbar_green"
+                android:layout_toStartOf="@+id/rightbar_green"
+                android:background="@color/base_green"
+                android:visibility="visible" />
+
+            <RelativeLayout
+                android:id="@+id/obs_view"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"></RelativeLayout>
 
         </RelativeLayout>
 

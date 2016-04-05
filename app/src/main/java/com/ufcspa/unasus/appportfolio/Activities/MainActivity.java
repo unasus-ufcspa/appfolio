@@ -298,6 +298,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private void changeFragment(int id)
     {
         singleton.firsttime = true;
+        singleton.note = new Note(0, "null", 0);
         ((InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(findViewById(R.id.fragment_container).getWindowToken(), 0);
         switch (id)
         {

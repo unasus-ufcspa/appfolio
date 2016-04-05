@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.res.Configuration;
 import android.graphics.Color;
+import android.graphics.Rect;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
@@ -28,7 +29,9 @@ import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -47,6 +50,7 @@ import com.onegravity.rteditor.converter.ConverterSpannedToHtml;
 import com.onegravity.rteditor.effects.Effects;
 import com.onegravity.rteditor.spans.BackgroundColorSpan;
 import com.ufcspa.unasus.appportfolio.Activities.MainActivity;
+import com.ufcspa.unasus.appportfolio.Adapter.VersionsAdapter;
 import com.ufcspa.unasus.appportfolio.Model.ActivityStudent;
 import com.ufcspa.unasus.appportfolio.Model.Comentario;
 import com.ufcspa.unasus.appportfolio.Model.Note;
@@ -87,6 +91,23 @@ public class FragmentRTEditor extends Fragment {
 
 
     public FragmentRTEditor() {}
+
+    public static Rect locateView(View v) {
+        int[] loc_int = new int[2];
+        if (v == null) return null;
+        try {
+            v.getLocationOnScreen(loc_int);
+        } catch (NullPointerException npe) {
+            //Happens when the view doesn't exist on screen anymore.
+            return null;
+        }
+        Rect location = new Rect();
+        location.left = loc_int[0];
+        location.top = loc_int[1];
+        location.right = location.left + v.getWidth();
+        location.bottom = location.top + v.getHeight();
+        return location;
+    }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -131,7 +152,6 @@ public class FragmentRTEditor extends Fragment {
      *
      *
      * */
-
     public void loadLastText() {
         acStudent = source.listActivityStudent(singleton.idActivityStudent);
         if (singleton.firsttime) {
@@ -139,6 +159,7 @@ public class FragmentRTEditor extends Fragment {
             singleton.firsttime = false;
         }
     }
+
     /**
      *  MÉTODO PARA SALVAR TEXTO NO FORMATO HTML
      *
@@ -168,7 +189,7 @@ public class FragmentRTEditor extends Fragment {
         getIdNotesFromDB();
 
         scrollview = (ViewGroup) view.findViewById(R.id.comments);
-        rightBarSpecificComments = (ViewGroup) view.findViewById(R.id.leftbar_white);
+        rightBarSpecificComments = (ViewGroup) view.findViewById(R.id.obs_view);
 
         // create RTManager
         RTApi rtApi = new RTApi(getActivity(), new RTProxyImpl(getActivity()), new RTMediaFactoryImpl(getActivity(), true));
@@ -256,7 +277,7 @@ public class FragmentRTEditor extends Fragment {
                                     singleton.note = new Note(0, "null", 0);
 
                                     int childs = rightBarSpecificComments.getChildCount();
-                                    for (int i = childs - 1; i > 0; i--)
+                                    for (int i = childs - 1; i >= 0; i--)
                                         rightBarSpecificComments.removeViewAt(i);
 
                                     final float scale = getResources().getDisplayMetrics().density;
@@ -283,6 +304,10 @@ public class FragmentRTEditor extends Fragment {
             mRTMessageField.setTextIsSelectable(true);
             mRTManager.setToolbarVisibility(RTManager.ToolbarVisibility.HIDE);
             mRTMessageField.setCanPaste(false);
+
+
+            mRTMessageField.setText("Sou tutor");
+
         }
         LinearLayout layout = (LinearLayout) view.findViewById(R.id.info_rteditor_container);
         layout.clearFocus();
@@ -372,8 +397,7 @@ public class FragmentRTEditor extends Fragment {
         super.onStart();
     }
 
-    private void initCommentsTab(final View view)
-    {
+    private void initCommentsTab(final View view) {
         view.findViewById(R.id.usr_photo_left).bringToFront();
 
         slider = (RelativeLayout) view.findViewById(R.id.slider);
@@ -405,7 +429,6 @@ public class FragmentRTEditor extends Fragment {
         specific.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.comments_container, new FragmentSpecificComments()).commit();
                 showCommentsTab(true);
             }
         });
@@ -415,8 +438,9 @@ public class FragmentRTEditor extends Fragment {
             @Override
             public void run() {
                 if (!layout.isOpen()) {
-                    layout.findViewById(R.id.usr_photo_right).setVisibility(View.GONE);
+                    layout.findViewById(R.id.usr_photo_right).setVisibility(View.VISIBLE);
                     view.findViewById(R.id.usr_photo_left).setVisibility(View.GONE);
+                    layout.findViewById(R.id.drawer_indicator).setVisibility(View.GONE);
                 }
             }
         });
@@ -433,6 +457,7 @@ public class FragmentRTEditor extends Fragment {
                     view.findViewById(R.id.usr_photo_left).setVisibility(View.GONE);
                 }
 
+                panel.findViewById(R.id.drawer_indicator).setVisibility(View.GONE);
                 ((InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(getView().getWindowToken(), 0);
             }
 
@@ -440,12 +465,15 @@ public class FragmentRTEditor extends Fragment {
             public void onPanelOpened(View panel) {
                 panel.findViewById(R.id.usr_photo_right).setVisibility(View.GONE);
                 view.findViewById(R.id.usr_photo_left).setVisibility(View.VISIBLE);
+                panel.findViewById(R.id.drawer_indicator).setVisibility(View.VISIBLE);
+                showCommentsTab(false);
             }
 
             @Override
             public void onPanelClosed(View panel) {
                 panel.findViewById(R.id.usr_photo_right).setVisibility(View.VISIBLE);
                 view.findViewById(R.id.usr_photo_left).setVisibility(View.GONE);
+                panel.findViewById(R.id.drawer_indicator).setVisibility(View.GONE);
             }
         });
         layout.setSliderFadeColor(getResources().getColor(android.R.color.transparent));
@@ -457,6 +485,34 @@ public class FragmentRTEditor extends Fragment {
     private void initTopBar(View view) {
         TextView studentName = (TextView) view.findViewById(R.id.student_name);
         TextView activityName = (TextView) view.findViewById(R.id.activity_name);
+        ImageView usrPhoto = (ImageView) view.findViewById(R.id.usr_photo_left);
+        ImageButton personalCommentButton = (ImageButton) view.findViewById(R.id.personal_comment);
+        ImageButton versionsButton = (ImageButton) view.findViewById(R.id.btn_versions);
+
+        usrPhoto.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                displayPersonalComment(getView().findViewById(R.id.personal_comment_container));
+            }
+        });
+        personalCommentButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                displayPersonalComment(getView().findViewById(R.id.personal_comment_container));
+            }
+        });
+        versionsButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final ArrayList<String> list = new ArrayList<>();
+                for (int i = 0; i < 4; i++)
+                    list.add("");
+
+                final ListView versionList = (ListView) getView().findViewById(R.id.version_list);
+                versionList.setAdapter(new VersionsAdapter(getContext(), list));
+                displayVersionsDialog(getView().findViewById(R.id.versions_container));
+            }
+        });
 
         studentName.setText(singleton.portfolioClass.getStudentName());
         activityName.setText("Ativ. " + singleton.activity.getNuOrder() + ": " + singleton.activity.getTitle());
@@ -522,7 +578,7 @@ public class FragmentRTEditor extends Fragment {
                     int btnBegin = (int) (40 * scale + 0.5f);
 
                     int childs = rightBarSpecificComments.getChildCount();
-                    for (int i = childs - 1; i > 0; i--)
+                    for (int i = childs - 1; i >= 0; i--)
                         rightBarSpecificComments.removeViewAt(i);
 
                     if (btn.getText().equals("..."))
@@ -534,6 +590,9 @@ public class FragmentRTEditor extends Fragment {
                         btn_view.setBackgroundResource(R.drawable.rounded_corner);
                         btn_view.setTextColor(Color.WHITE);
                         btn_view.setId(id);
+                        RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) btn_view.getLayoutParams();
+                        params.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
+                        btn_view.setLayoutParams(params);
                         rightBarSpecificComments.addView(btn_view);
                     }
                 }
@@ -566,6 +625,10 @@ public class FragmentRTEditor extends Fragment {
                 btn_view.setY(i);
                 btn_view.setTag(n.getBtId());
                 btn_view.setId(n.getBtId());
+
+                RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) btn_view.getLayoutParams();
+                params.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
+                btn_view.setLayoutParams(params);
 
                 btn_view.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -637,13 +700,11 @@ public class FragmentRTEditor extends Fragment {
         }
     }
 
-
     /**
      *  MÉTODO PARA RECUPERAR O TEXTO SELECIONADO NO FORMATO HTML
      *
      *
      * */
-
     private String getSelectedText(){
         int selStart = mRTMessageField.getSelectionStart();
         int selEnd = mRTMessageField.getSelectionEnd();
@@ -658,9 +719,7 @@ public class FragmentRTEditor extends Fragment {
      *
      *
      * */
-
-    private void changeColor(int id)
-    {
+    private void changeColor(int id) {
         Spannable textSpanned = (Spannable) mRTMessageField.getText();
         BackgroundColorSpan[] spans = textSpanned.getSpans(0, textSpanned.length(), BackgroundColorSpan.class);
 
@@ -694,14 +753,14 @@ public class FragmentRTEditor extends Fragment {
         specificCommentsOpen = isSpecificComment;
         if (isSpecificComment) {
             int childs = rightBarSpecificComments.getChildCount();
-            for (int i = childs - 1; i > 0; i--)
+            for (int i = childs - 1; i >= 0; i--)
                 rightBarSpecificComments.getChildAt(i).setVisibility(View.VISIBLE);
             getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.comments_container, new FragmentSpecificComments()).commit();
             SlidingPaneLayout layout = (SlidingPaneLayout) getView().findViewById(R.id.rteditor_fragment);
             layout.closePane();
         } else {
             int childs = rightBarSpecificComments.getChildCount();
-            for (int i = childs - 1; i > 0; i--)
+            for (int i = childs - 1; i >= 0; i--)
                 rightBarSpecificComments.getChildAt(i).setVisibility(View.GONE);
             getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.comments_container, new FragmentComments()).commit();
         }
@@ -755,8 +814,7 @@ public class FragmentRTEditor extends Fragment {
         }
     }
 
-    private void putAttachment(String url)
-    {
+    private void putAttachment(String url) {
         int selStart = mRTMessageField.getSelectionStart();
         Spannable textBefore = (Spannable) mRTMessageField.getText().subSequence(0, selStart);
         Spannable textAfter = (Spannable) mRTMessageField.getText().subSequence(selStart, mRTMessageField.length());
@@ -779,6 +837,70 @@ public class FragmentRTEditor extends Fragment {
         }
 
         return canCreate;
+    }
+
+    private void displayPersonalComment(View anchorView) {
+        if (anchorView.getVisibility() == View.VISIBLE)
+            anchorView.setVisibility(View.GONE);
+        else
+            anchorView.setVisibility(View.VISIBLE);
+
+
+//        PopupWindow popup = new PopupWindow(getActivity());
+//        View layout = getActivity().getLayoutInflater().inflate(R.layout.personal_comment_dialog, null);
+//        popup.setContentView(layout);
+//        // Set content width and height
+//        popup.setHeight(WindowManager.LayoutParams.WRAP_CONTENT);
+//        popup.setWidth(WindowManager.LayoutParams.WRAP_CONTENT);
+//        // Closes the popup window when touch outside of it - when looses focus
+//        popup.setOutsideTouchable(true);
+//        popup.setFocusable(true);
+//        // Show anchored to button
+//        popup.setBackgroundDrawable(new BitmapDrawable());
+//
+//        final float scale = getResources().getDisplayMetrics().density;
+//        int xOffset = (int) (96 * scale + 0.5f);
+//        int yOffset = (int) (50 * scale + 0.5f);
+//
+//        Rect rect = locateView(anchorView);
+//
+//        popup.showAtLocation(anchorView, Gravity.NO_GRAVITY, rect.left, rect.bottom); //xOffset, yOffset);
+    }
+
+    private void displayVersionsDialog(View anchorView) {
+        if (anchorView.getVisibility() == View.VISIBLE)
+            anchorView.setVisibility(View.GONE);
+        else
+            anchorView.setVisibility(View.VISIBLE);
+
+//        PopupWindow popup = new PopupWindow(getActivity());
+//        View layout = getActivity().getLayoutInflater().inflate(R.layout.versions_dialog, null);
+//        popup.setContentView(layout);
+//
+//        ArrayList<String> list = new ArrayList<>();
+//        for (int i = 0; i < 10; i++)
+//            list.add("");
+//
+//        ListView versionList = (ListView) layout.findViewById(R.id.version_list);
+//        versionList.setAdapter(new VersionsAdapter(getContext(), list));
+//
+//
+//        // Set content width and height
+//        popup.setHeight(WindowManager.LayoutParams.WRAP_CONTENT);
+//        popup.setWidth(WindowManager.LayoutParams.WRAP_CONTENT);
+//        // Closes the popup window when touch outside of it - when looses focus
+//        popup.setOutsideTouchable(true);
+//        popup.setFocusable(true);
+//        // Show anchored to button
+//        popup.setBackgroundDrawable(new BitmapDrawable());
+//
+//        final float scale = getResources().getDisplayMetrics().density;
+//        int xOffset = (int) (96 * scale + 0.5f);
+//        int yOffset = (int) (50 * scale + 0.5f);
+//
+//        Rect rect = locateView(anchorView);
+//
+//        popup.showAtLocation(anchorView, Gravity.NO_GRAVITY, rect.left, rect.bottom); //xOffset, yOffset);
     }
 
     private class ActionBarCallBack implements ActionMode.Callback {
