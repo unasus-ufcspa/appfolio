@@ -8,18 +8,6 @@
         android:layout_width="match_parent"
         android:layout_height="230dp">
 
-        <ImageView
-            android:id="@+id/student_image"
-            android:layout_width="70dp"
-            android:layout_height="70dp"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
-            android:layout_marginBottom="20dp"
-            android:layout_marginLeft="30dp"
-            android:background="@drawable/rounded_corner"
-            android:elevation="10dp" />
-
         <TextView
             android:id="@+id/line"
             android:layout_width="match_parent"
@@ -27,9 +15,22 @@
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
             android:layout_alignTop="@+id/student_image"
-            android:layout_marginTop="31dp"
+            android:layout_marginTop="40dp"
             android:background="#70e7d0"
             android:textAppearance="?android:attr/textAppearanceSmall" />
+
+        <ImageView
+            android:id="@+id/student_image"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_marginBottom="15dp"
+            android:layout_marginLeft="30dp"
+            android:background="@drawable/rounded_corner"
+            android:elevation="10dp"
+            android:src="@drawable/ex_user_img" />
 
         <TextView
             android:id="@+id/student_name"
