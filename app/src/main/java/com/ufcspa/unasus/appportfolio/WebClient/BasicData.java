@@ -2,15 +2,12 @@ package com.ufcspa.unasus.appportfolio.WebClient;
 
 import android.content.Context;
 
-import com.ufcspa.unasus.appportfolio.Model.basicData.Activity;
-import com.ufcspa.unasus.appportfolio.Model.basicData.ActivityStudent;
-import com.ufcspa.unasus.appportfolio.Model.basicData.ClassStudent;
-import com.ufcspa.unasus.appportfolio.Model.basicData.ClassTutor;
-import com.ufcspa.unasus.appportfolio.Model.basicData.Portfolio;
-import com.ufcspa.unasus.appportfolio.Model.basicData.PortfolioClass;
-import com.ufcspa.unasus.appportfolio.Model.basicData.PortfolioStudent;
-import com.ufcspa.unasus.appportfolio.Model.basicData.User;
+import com.ufcspa.unasus.appportfolio.Model.basicData.*;
+import com.ufcspa.unasus.appportfolio.Model.basicData.Class;
 import com.ufcspa.unasus.appportfolio.database.DataBaseAdapter;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -112,15 +109,41 @@ public class BasicData {
     }
 
     public synchronized void insertDataIntoSQLITE() {
+        if(users.size()!=0 && activities.size() !=0){
+
+        }
         Thread t = new Thread(new Runnable() {
             @Override
             public void run() {
                 //INSERT DATA IN DATABASE
                 DataBaseAdapter data = DataBaseAdapter.getInstance(context);
 
+                data.insertTBUser(users);
+                data.insertTBClass(classes);
+                data.insertTBClassStudent(studentClasses);
+                data.insertTBClassTutor(tutorClasses);
+                data.insertTBPortfolio(portfolios);
+                data.insertTBPortfolioClass(portfolioClasses);
+                data.insertTBPortfolioStudent(portfolioStudents);
+                data.insertTBActivity(activities);
+                data.insertTBActivityStudent(activitiesStudent);
+
 
             }
         });
     }
+
+    public static JSONObject toJSON(int idUser){
+        JSONObject json = new JSONObject();
+        JSONObject basic = new JSONObject();
+        try {
+            basic.put("id_user",idUser);
+            json.put("getBasicData_request",basic);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return json;
+    }
+
 
 }

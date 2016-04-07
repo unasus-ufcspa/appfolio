@@ -18,6 +18,7 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.ContactsContract;
+import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
@@ -38,7 +39,13 @@ import android.widget.Toast;
 import com.ufcspa.unasus.appportfolio.Model.Singleton;
 import com.ufcspa.unasus.appportfolio.Model.User;
 import com.ufcspa.unasus.appportfolio.R;
+import com.ufcspa.unasus.appportfolio.WebClient.BasicData;
+import com.ufcspa.unasus.appportfolio.WebClient.BasicDataClient;
+import com.ufcspa.unasus.appportfolio.WebClient.FirstLogin;
+import com.ufcspa.unasus.appportfolio.WebClient.FistLoginClient;
 import com.ufcspa.unasus.appportfolio.database.DataBaseAdapter;
+
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -73,6 +80,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 //    private View mLoginFormView;
     private DataBaseAdapter bd;
     private User user;
+    LoginActivity l = this;
 
     // Singleton
     private Singleton session;
@@ -100,6 +108,10 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             }
         });
 
+
+
+
+
         DataBaseAdapter data = DataBaseAdapter.getInstance(this);
 //        ArrayList<PortfolioClass> lista= (ArrayList<PortfolioClass>) data.selectListClassAndUserType(5);
 //        Log.d("lista","tamanho:"+lista.size());
@@ -123,6 +135,9 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                     session = Singleton.getInstance();
                     session.user = user;
 //                    loginSuccess();
+                    if(isLoginSucessful){
+                       getBasicData();
+                    }
 
                     char userType = checkUserType(user.getIdUser());
                     if (userType == 'W') {
@@ -137,6 +152,14 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             }
         });
     }
+    public void getBasicData(){
+        BasicDataClient client = new BasicDataClient(getBaseContext(),l);
+        JSONObject jsonObject = new JSONObject();
+        client.postJson(BasicData.toJSON(DataBaseAdapter.getInstance(getBaseContext()).getUserID()));
+    }
+
+
+
 
     public boolean isTablet() {
         TelephonyManager manager = (TelephonyManager) this.getSystemService(Context.TELEPHONY_SERVICE);
@@ -214,31 +237,32 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
     private boolean verificarLogin() {
 
-        try {
-            DataBaseAdapter bd = DataBaseAdapter.getInstance(this);
-            user = bd.verifyPass(mEmailView.getText().toString(), mPasswordView.getText().toString());
+      //  try {
+//            DataBaseAdapter bd = DataBaseAdapter.getInstance(this);
+//            user = bd.verifyPass(mEmailView.getText().toString(), mPasswordView.getText().toString());
             //result=user.getIdUser();
             //Log.d("BANCO", " pass:" + result);
-//        if(isOnline()) {
-//            FirstLogin first = new FirstLogin();
-//
-//            String android_id = Settings.Secure.getString(this.getContentResolver(), Settings.Secure.ANDROID_ID);
-//            Log.d("ANDROID ID", "Android ID:" + android_id);
-//            String tpDevice=(isTablet()) ? "T" : "M";
-//            first.setIdDevice(android_id);
-//            first.setTpDevice(tpDevice);
-//            first.setEmail(mEmailView.getText().toString());
-//            first.setPasswd(mPasswordView.getText().toString());
-//            FistLoginClient client = new FistLoginClient(getBaseContext());
-//            client.postJson(first.toJSON());
-        } catch (Exception e) {
-            Log.d("BANCO", "verificando pass:" + e.getMessage());
-        } finally {
+        if(isOnline()) {
+            FirstLogin first = new FirstLogin();
 
-        }
+            String android_id = Settings.Secure.getString(this.getContentResolver(), Settings.Secure.ANDROID_ID);
+            Log.d("ANDROID ID", "Android ID:" + android_id);
+            String tpDevice=(isTablet()) ? "T" : "M";
+            first.setIdDevice(android_id);
+            first.setTpDevice(tpDevice);
+            first.setEmail(mEmailView.getText().toString());
+            first.setPasswd(mPasswordView.getText().toString());
+            FistLoginClient client = new FistLoginClient(getBaseContext());
+            client.postJson(first.toJSON());
+
+     //   } catch (Exception e) {
+       //     Log.d("BANCO", "verificando pass:" + e.getMessage());
+     //   } finally {
+
+      //  }
 //        }else{
 //            Toast.makeText(getApplicationContext(), "Erro ao logar, favor verifique sua conexão com a internet", Toast.LENGTH_LONG).show();
-//        }
+        }
         return true;//isLoginSucessful;
     }
 
@@ -342,11 +366,13 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         return password.length() > 4;
     }
 
+
+
     /**
      * Shows the progress UI and hides the login form.
      */
     @TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)
-    private void showProgress(final boolean show) {
+    public  void showProgress(final boolean show) {
         // On Honeycomb MR2 we have the ViewPropertyAnimator APIs, which allow
         // for very easy animations. If available, use these APIs to fade-in
         // the progress spinner.
