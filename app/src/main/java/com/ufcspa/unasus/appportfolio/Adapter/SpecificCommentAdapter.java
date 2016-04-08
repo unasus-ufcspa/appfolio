@@ -1,7 +1,6 @@
 package com.ufcspa.unasus.appportfolio.Adapter;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,8 +18,8 @@ import java.util.List;
  * Created by icaromsc on 26/02/2016.
  */
 public class SpecificCommentAdapter extends BaseAdapter {
-    private Context context;
     private static LayoutInflater inflater = null;
+    private Context context;
     private List<OneComment> comments;
     private String lastDate;
 
@@ -97,7 +96,7 @@ public class SpecificCommentAdapter extends BaseAdapter {
             }
         }
         if(c.atach==false) {
-            holder.message.setBackgroundResource(c.orientation ? R.drawable.final_b_spc_right : R.drawable.final_b_spc_left);
+            holder.message.setBackgroundResource(c.orientation ? R.drawable.final_b_ger_left : R.drawable.final_b_ger_right);
             holder.wraper.setGravity(c.orientation ? Gravity.LEFT : Gravity.RIGHT);
         }
         //////////---------------////////////////////
@@ -109,17 +108,17 @@ public class SpecificCommentAdapter extends BaseAdapter {
         notifyDataSetChanged();
     }
 
+    public void refresh(List<OneComment> comnts) {
+        this.comments = comnts;
+        notifyDataSetChanged();
+    }
+
     public class Holder
     {
         TextView message;
         TextView hour;
         TextView date;
         RelativeLayout wraper;
-    }
-
-    public void refresh(List<OneComment> comnts){
-        this.comments=comnts;
-        notifyDataSetChanged();
     }
 
 }

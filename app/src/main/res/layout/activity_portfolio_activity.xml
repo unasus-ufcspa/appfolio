@@ -34,8 +34,9 @@
             android:layout_marginLeft="30dp"
             android:text="Turma 1"
             android:textAppearance="?android:attr/textAppearanceMedium"
-            android:textColor="#808080"
-            android:textSize="15dp" />
+            android:textColor="@color/gray_1"
+            android:textSize="15dp"
+            android:textStyle="bold" />
 
         <ListView
             android:id="@+id/list_activities"

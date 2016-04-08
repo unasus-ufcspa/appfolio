@@ -1,8 +1,6 @@
 package com.ufcspa.unasus.appportfolio.Adapter;
 
 import android.content.Context;
-import android.graphics.Color;
-import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -15,15 +13,14 @@ import android.widget.TextView;
 import com.ufcspa.unasus.appportfolio.Model.OneComment;
 import com.ufcspa.unasus.appportfolio.R;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Created by icaromsc on 25/02/2016.
  */
 public class CommentAdapter extends BaseAdapter {
-    private Context context;
     private static LayoutInflater inflater = null;
+    private Context context;
     private List<OneComment> comments;
     private String lastDate;
 
@@ -99,7 +96,7 @@ public class CommentAdapter extends BaseAdapter {
             }
         }
         if(c.atach==false) {
-            holder.message.setBackgroundResource(c.orientation ? R.drawable.final_b_ger_right : R.drawable.final_b_ger_left);
+            holder.message.setBackgroundResource(c.orientation ? R.drawable.final_b_ger_left : R.drawable.final_b_ger_right);
             holder.wraper.setGravity(c.orientation ? Gravity.LEFT : Gravity.RIGHT);
         }
         //////////---------------////////////////////
@@ -111,18 +108,16 @@ public class CommentAdapter extends BaseAdapter {
         notifyDataSetChanged();
     }
 
+    public void refresh(List<OneComment> comnts) {
+        this.comments = comnts;
+        notifyDataSetChanged();
+    }
+
     public class Holder
     {
         TextView message;
         TextView hour;
         TextView date;
         RelativeLayout wraper;
-    }
-
-
-
-    public void refresh(List<OneComment> comnts){
-        this.comments=comnts;
-        notifyDataSetChanged();
     }
 }

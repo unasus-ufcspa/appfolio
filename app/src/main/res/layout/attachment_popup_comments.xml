@@ -1,14 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
     android:orientation="vertical"
     android:weightSum="1">
 
     <ScrollView
         android:id="@+id/scrollView2"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:background="@drawable/border_popup_rteditor">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -16,8 +17,12 @@
             android:orientation="vertical">
 
             <LinearLayout
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginBottom="15dp"
+                android:layout_marginLeft="50dp"
+                android:layout_marginRight="50dp"
+                android:layout_marginTop="15dp"
                 android:gravity="center"
                 android:orientation="horizontal">
 
@@ -27,8 +32,8 @@
 
                     <ImageButton
                         android:id="@+id/img_gallery"
-                        android:layout_width="100dp"
-                        android:layout_height="100dp"
+                        android:layout_width="80dp"
+                        android:layout_height="80dp"
                         android:layout_alignParentTop="true"
                         android:layout_weight="0.17"
                         android:background="@android:color/transparent"
@@ -46,7 +51,9 @@
                         android:layout_below="@+id/img_gallery"
                         android:gravity="center"
                         android:text="@string/files_popup_gallery"
-                        android:textAppearance="?android:attr/textAppearanceMedium" />
+                        android:textAppearance="?android:attr/textAppearanceMedium"
+                        android:textColor="@color/gray_2"
+                        android:textStyle="bold" />
                 </RelativeLayout>
 
                 <ImageView
@@ -60,8 +67,8 @@
 
                     <ImageButton
                         android:id="@+id/img_photos"
-                        android:layout_width="100dp"
-                        android:layout_height="100dp"
+                        android:layout_width="80dp"
+                        android:layout_height="80dp"
                         android:layout_alignParentTop="true"
                         android:layout_weight="0.17"
                         android:background="@android:color/transparent"
@@ -79,19 +86,21 @@
                         android:layout_below="@+id/img_photos"
                         android:gravity="center"
                         android:text="@string/files_popup_photos"
-                        android:textAppearance="?android:attr/textAppearanceMedium" />
+                        android:textAppearance="?android:attr/textAppearanceMedium"
+                        android:textColor="@color/gray_2"
+                        android:textStyle="bold" />
                 </RelativeLayout>
             </LinearLayout>
-
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginBottom="15dp"
                 android:gravity="center">
 
                 <ImageButton
                     android:id="@+id/img_my_gallery"
-                    android:layout_width="80dp"
-                    android:layout_height="80dp"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
                     android:layout_centerHorizontal="true"
                     android:layout_centerVertical="true"
                     android:layout_gravity="center_horizontal"
@@ -107,12 +116,16 @@
                     android:layout_centerHorizontal="true"
                     android:gravity="center"
                     android:text="Minha Galeria"
-                    android:textAppearance="?android:attr/textAppearanceMedium" />
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:textColor="@color/gray_2"
+                    android:textStyle="bold" />
             </RelativeLayout>
-
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginBottom="15dp"
+                android:layout_marginLeft="50dp"
+                android:layout_marginRight="50dp"
                 android:gravity="center"
                 android:orientation="horizontal">
 
@@ -122,8 +135,8 @@
 
                     <ImageButton
                         android:id="@+id/img_text"
-                        android:layout_width="100dp"
-                        android:layout_height="100dp"
+                        android:layout_width="80dp"
+                        android:layout_height="80dp"
                         android:layout_alignParentTop="true"
                         android:layout_weight="0.17"
                         android:adjustViewBounds="false"
@@ -142,7 +155,9 @@
                         android:layout_below="@+id/img_text"
                         android:gravity="center"
                         android:text="@string/files_popup_text"
-                        android:textAppearance="?android:attr/textAppearanceMedium" />
+                        android:textAppearance="?android:attr/textAppearanceMedium"
+                        android:textColor="@color/gray_2"
+                        android:textStyle="bold" />
                 </RelativeLayout>
 
                 <ImageView
@@ -156,8 +171,8 @@
 
                     <ImageButton
                         android:id="@+id/img_videos"
-                        android:layout_width="100dp"
-                        android:layout_height="100dp"
+                        android:layout_width="80dp"
+                        android:layout_height="80dp"
                         android:layout_alignParentTop="true"
                         android:layout_weight="0.17"
                         android:background="@android:color/transparent"
@@ -175,19 +190,90 @@
                         android:layout_below="@+id/img_videos"
                         android:gravity="center"
                         android:text="@string/files_popup_videos"
-                        android:textAppearance="?android:attr/textAppearanceMedium" />
+                        android:textAppearance="?android:attr/textAppearanceMedium"
+                        android:textColor="@color/gray_2"
+                        android:textStyle="bold" />
                 </RelativeLayout>
             </LinearLayout>
 
-            <Button
-                android:id="@+id/btn_cancel"
+            <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:background="#70E7D0"
-                android:text="@string/cancel"
-                android:textColor="#ffffff" />
+                android:layout_height="match_parent"
+                android:layout_marginBottom="2dp"
+                android:layout_marginLeft="2dp"
+                android:layout_marginRight="2dp">
+
+                <Button
+                    android:id="@+id/btn_cancel"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:background="@drawable/cancel_border_attachment_popup"
+                    android:text="@string/cancel"
+                    android:textColor="#ffffff"
+                    android:textSize="15dp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/textView14"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentRight="true"
+                    android:layout_alignParentStart="true"
+                    android:layout_alignParentTop="true"
+                    android:background="@color/base_green" />
+
+            </RelativeLayout>
+
         </LinearLayout>
     </ScrollView>
 
-</LinearLayout>
+</LinearLayout><!--<?xml version="1.0" encoding="utf-8"?>--><!--<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"--><!--android:layout_width="match_parent"--><!--android:layout_height="match_parent"--><!--android:orientation="vertical"--><!--android:weightSum="1">-->
+
+    <!--<ScrollView--><!--android:id="@+id/scrollView2"--><!--android:layout_width="match_parent"--><!--android:layout_height="wrap_content">-->
+
+    <!--<LinearLayout--><!--android:layout_width="match_parent"--><!--android:layout_height="match_parent"--><!--android:orientation="vertical">-->
+
+    <!--<LinearLayout--><!--android:layout_width="match_parent"--><!--android:layout_height="wrap_content"--><!--android:gravity="center"--><!--android:orientation="horizontal">-->
+
+    <!--<RelativeLayout--><!--android:layout_width="wrap_content"--><!--android:layout_height="wrap_content">-->
+
+    <!--<ImageButton--><!--android:id="@+id/img_gallery"--><!--android:layout_width="100dp"--><!--android:layout_height="100dp"--><!--android:layout_alignParentTop="true"--><!--android:layout_weight="0.17"--><!--android:background="@android:color/transparent"--><!--android:scaleType="fitCenter"--><!--android:src="@drawable/attachment_image" />-->
+
+    <!--<TextView--><!--android:id="@+id/textView3"--><!--android:layout_width="wrap_content"--><!--android:layout_height="wrap_content"--><!--android:layout_alignEnd="@+id/img_gallery"--><!--android:layout_alignParentLeft="true"--><!--android:layout_alignParentStart="true"--><!--android:layout_alignRight="@+id/img_gallery"--><!--android:layout_below="@+id/img_gallery"--><!--android:gravity="center"--><!--android:text="@string/files_popup_gallery"--><!--android:textAppearance="?android:attr/textAppearanceMedium" />--><!--</RelativeLayout>-->
+
+    <!--<ImageView--><!--android:id="@+id/imageView"--><!--android:layout_width="50dp"--><!--android:layout_height="wrap_content" />-->
+
+    <!--<RelativeLayout--><!--android:layout_width="wrap_content"--><!--android:layout_height="wrap_content">-->
+
+    <!--<ImageButton--><!--android:id="@+id/img_photos"--><!--android:layout_width="100dp"--><!--android:layout_height="100dp"--><!--android:layout_alignParentTop="true"--><!--android:layout_weight="0.17"--><!--android:background="@android:color/transparent"--><!--android:scaleType="fitCenter"--><!--android:src="@drawable/attachment_photo" />-->
+
+    <!--<TextView--><!--android:id="@+id/textView4"--><!--android:layout_width="wrap_content"--><!--android:layout_height="wrap_content"--><!--android:layout_alignEnd="@+id/img_photos"--><!--android:layout_alignParentLeft="true"--><!--android:layout_alignParentStart="true"--><!--android:layout_alignRight="@+id/img_photos"--><!--android:layout_below="@+id/img_photos"--><!--android:gravity="center"--><!--android:text="@string/files_popup_photos"--><!--android:textAppearance="?android:attr/textAppearanceMedium" />--><!--</RelativeLayout>--><!--</LinearLayout>-->
+
+    <!--<RelativeLayout--><!--android:layout_width="match_parent"--><!--android:layout_height="wrap_content"--><!--android:gravity="center">-->
+
+    <!--<ImageButton--><!--android:id="@+id/img_my_gallery"--><!--android:layout_width="80dp"--><!--android:layout_height="80dp"--><!--android:layout_centerHorizontal="true"--><!--android:layout_centerVertical="true"--><!--android:layout_gravity="center_horizontal"--><!--android:background="@android:color/transparent"--><!--android:scaleType="fitCenter"--><!--android:src="@drawable/icon" />-->
+
+    <!--<TextView--><!--android:id="@+id/textView10"--><!--android:layout_width="wrap_content"--><!--android:layout_height="wrap_content"--><!--android:layout_below="@+id/img_my_gallery"--><!--android:layout_centerHorizontal="true"--><!--android:gravity="center"--><!--android:text="Minha Galeria"--><!--android:textAppearance="?android:attr/textAppearanceMedium" />--><!--</RelativeLayout>-->
+
+    <!--<LinearLayout--><!--android:layout_width="match_parent"--><!--android:layout_height="wrap_content"--><!--android:gravity="center"--><!--android:orientation="horizontal">-->
+
+    <!--<RelativeLayout--><!--android:layout_width="wrap_content"--><!--android:layout_height="wrap_content">-->
+
+    <!--<ImageButton--><!--android:id="@+id/img_text"--><!--android:layout_width="100dp"--><!--android:layout_height="100dp"--><!--android:layout_alignParentTop="true"--><!--android:layout_weight="0.17"--><!--android:adjustViewBounds="false"--><!--android:background="@android:color/transparent"--><!--android:scaleType="fitCenter"--><!--android:src="@drawable/attachment_file" />-->
+
+    <!--<TextView--><!--android:id="@+id/textView"--><!--android:layout_width="wrap_content"--><!--android:layout_height="wrap_content"--><!--android:layout_alignEnd="@+id/img_text"--><!--android:layout_alignParentLeft="true"--><!--android:layout_alignParentStart="true"--><!--android:layout_alignRight="@+id/img_text"--><!--android:layout_below="@+id/img_text"--><!--android:gravity="center"--><!--android:text="@string/files_popup_text"--><!--android:textAppearance="?android:attr/textAppearanceMedium" />--><!--</RelativeLayout>-->
+
+    <!--<ImageView--><!--android:id="@+id/imageView2"--><!--android:layout_width="50dp"--><!--android:layout_height="wrap_content" />-->
+
+    <!--<RelativeLayout--><!--android:layout_width="wrap_content"--><!--android:layout_height="wrap_content">-->
+
+    <!--<ImageButton--><!--android:id="@+id/img_videos"--><!--android:layout_width="100dp"--><!--android:layout_height="100dp"--><!--android:layout_alignParentTop="true"--><!--android:layout_weight="0.17"--><!--android:background="@android:color/transparent"--><!--android:scaleType="fitCenter"--><!--android:src="@drawable/attachment_video" />-->
+
+    <!--<TextView--><!--android:id="@+id/textView2"--><!--android:layout_width="wrap_content"--><!--android:layout_height="wrap_content"--><!--android:layout_alignEnd="@+id/img_videos"--><!--android:layout_alignParentLeft="true"--><!--android:layout_alignParentStart="true"--><!--android:layout_alignRight="@+id/img_videos"--><!--android:layout_below="@+id/img_videos"--><!--android:gravity="center"--><!--android:text="@string/files_popup_videos"--><!--android:textAppearance="?android:attr/textAppearanceMedium" />--><!--</RelativeLayout>--><!--</LinearLayout>-->
+
+    <!--<Button--><!--android:id="@+id/btn_cancel"--><!--android:layout_width="match_parent"--><!--android:layout_height="wrap_content"--><!--android:layout_gravity="center_horizontal"--><!--android:background="#70E7D0"--><!--android:text="@string/cancel"--><!--android:textColor="#ffffff" />--><!--</LinearLayout>--><!--</ScrollView>-->
+
+    <!--</LinearLayout>-->

@@ -3,38 +3,51 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent">
 
-    <TextView
-        android:id="@+id/date"
+    <RelativeLayout
+        android:id="@+id/relativeLayout2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:adjustViewBounds="true"
-        android:text="17/12/2016"
-        android:scaleType="fitCenter"
-        android:textSize="10dp"
-        android:visibility="visible"
-        android:textColor="#000000"
-        android:gravity="center_horizontal"
-        android:layout_marginBottom="5dp"
-        />
+        android:gravity="center">
+
+        <TextView
+            android:id="@+id/date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:adjustViewBounds="true"
+            android:background="@drawable/background_date_comment"
+            android:gravity="center_horizontal"
+            android:paddingBottom="3dp"
+            android:paddingLeft="8dp"
+            android:paddingRight="8dp"
+            android:paddingTop="3dp"
+            android:scaleType="fitCenter"
+            android:text="17/12/2016"
+            android:textColor="#ffffff"
+            android:textIsSelectable="true"
+            android:textSize="11dp"
+            android:textStyle="italic"
+            android:visibility="visible" />
+    </RelativeLayout>
 
     <RelativeLayout
         android:id="@+id/wrapper"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/date"
-        android:gravity="left"
-        >
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/relativeLayout2"
+        android:gravity="left">
         <TextView
             android:id="@+id/comment"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="5dip"
             android:layout_marginTop="5dp"
+            android:background="@drawable/rsz_my_balloon"
+            android:gravity="center_horizontal"
             android:paddingBottom="7dp"
             android:text="auheuaheuhauehuaeh"
-            android:background="@drawable/rsz_my_balloon"
             android:textColor="#000000"
-            android:gravity="center_horizontal"
             />
 
         <TextView
@@ -42,17 +55,19 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignBottom="@+id/comment"
-            android:layout_alignParentLeft="@+id/comment"
+            android:layout_alignEnd="@+id/comment"
+            android:layout_alignLeft="@+id/comment"
+            android:layout_alignRight="@+id/comment"
+            android:layout_alignStart="@+id/comment"
+            android:layout_marginTop="15dp"
             android:adjustViewBounds="true"
-            android:layout_marginTop="7dp"
-            android:layout_marginRight="2dp"
-            android:text="12:35"
-            android:paddingRight="50dp"
+            android:gravity="bottom|right"
             android:paddingLeft="50dp"
+            android:paddingRight="15dp"
             android:scaleType="fitCenter"
-            android:textSize="10dp"
-            android:gravity="bottom"
-            android:textColor="#000000" />
+            android:text="12:35"
+            android:textColor="#000000"
+            android:textSize="10dp" />
 
     </RelativeLayout>
 
