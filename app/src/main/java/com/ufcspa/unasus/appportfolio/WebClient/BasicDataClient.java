@@ -23,20 +23,19 @@ import org.json.JSONObject;
  * Created by icaromsc on 31/03/2016.
  */
 public class BasicDataClient extends HttpClient {
-    private String method="BasicData";
+    private String method="basicData";
     private Context context;
     private BasicData basicData;
     private LoginActivity loginActivity;
-    public BasicDataClient(Context context,LoginActivity loginActivity) {
+    public BasicDataClient(Context context) {
         super(context);
         this.context= context;
-        this.loginActivity=loginActivity;
+
     }
 
 
 
     public void postJson(JSONObject jsonFirstRequest){
-        loginActivity.showProgress(true);
         Log.d(tag, "URL: " + URL + method);
 
         JsonObjectRequest jsObjReq = new JsonObjectRequest(Request.Method.POST, URL+method, jsonFirstRequest, new Response.Listener<JSONObject>() {
@@ -44,15 +43,16 @@ public class BasicDataClient extends HttpClient {
             public void onResponse(JSONObject response) {
                 Log.d(tag,"Retornou do request");
                 JSONObject rsp = response;
+                String jsonStringName="basicData_response";
 
                 try {
-                    Log.d(tag, "JSON RESPONSE: " + response.toString());
+                    Log.d(tag, "JSON RESPONSE: " + response.toString().replaceAll("\\{","\n{"));
                     if( response.has("erro")) {
 
                         Log.e(tag, "sincronizacao de dados iniciais falhou");
                         //LoginActivity.isLoginSucessful=false;
                         Log.d(tag, "JSon response receiving:" + response.toString());
-                    }else if(response.has("getBasicData_response")){
+                    }else if(response.has("basicData_response")){
                         Log.d(tag,"JSON POST existe basic Data response");
 
 
@@ -62,7 +62,7 @@ public class BasicDataClient extends HttpClient {
                         //Log.d(tag, "user encontrado!\n cadastrando no banco...");
                         JSONObject resp= new JSONObject();
                         try {
-                            resp=response.getJSONObject("getBasicData_response");
+                            resp=response.getJSONObject("basicData_response");
                             Log.d(tag, "JSon response::" + resp.toString());
 
 
@@ -162,10 +162,10 @@ public class BasicDataClient extends HttpClient {
                                     Class c = new Class();
 
                                     // GET DATA FROM JSON
-                                    int idClass=temp.getInt("id_class");
-                                    int idProposer=temp.getInt("id_proposer");
-                                    String ds_code=temp.getString("ds_code");
-                                    String ds_description=temp.getString("ds_description");
+                                    int idClass = temp.getInt("id_class");
+                                    int idProposer = temp.getInt("id_proposer");
+                                    String ds_code = temp.getString("ds_code");
+                                    String ds_description = temp.getString("ds_description");
 
                                     //POPULATE OBJECT WITH DATA
                                     c.setId_class(idClass);
@@ -176,45 +176,49 @@ public class BasicDataClient extends HttpClient {
                                     //ADD TO LINKEDLIST
                                     basicData.addClass(c);
                                 }
-                                objPs = objPs.getJSONObject("classStudent");
-                                tb=objPs.getJSONArray("tb_class_student");
-                                for (int i = 0; i < tb.length(); i++) {
-                                    JSONObject temp = tb.getJSONObject(i);
-                                    ClassStudent cs = new ClassStudent();
+                                if (objPs.has("classStudent")) {
+                                    objPs = objPs.getJSONObject("classStudent");
+                                    tb = objPs.getJSONArray("tb_class_student");
+                                    for (int i = 0; i < tb.length(); i++) {
+                                        JSONObject temp = tb.getJSONObject(i);
+                                        ClassStudent cs = new ClassStudent();
 
-                                    // GET DATA FROM JSON
-                                    int idClassStudent=temp.getInt("id_class_student");
-                                    int idClass=temp.getInt("id_class");
-                                    int idStudent=temp.getInt("id_student");
+                                        // GET DATA FROM JSON
+                                        int idClassStudent = temp.getInt("id_class_student");
+                                        int idClass = temp.getInt("id_class");
+                                        int idStudent = temp.getInt("id_student");
 
-                                    //POPULATE OBJECT WITH DATA
-                                    cs.setId_Class(idClass);
-                                    cs.setId_Student(idStudent);
-                                    cs.setId_Class_Student(idClassStudent);
+                                        //POPULATE OBJECT WITH DATA
+                                        cs.setId_Class(idClass);
+                                        cs.setId_Student(idStudent);
+                                        cs.setId_Class_Student(idClassStudent);
 
 
-                                    //ADD TO LINKEDLIST
-                                    basicData.addClassStudent(cs);
+                                        //ADD TO LINKEDLIST
+                                        basicData.addClassStudent(cs);
+                                    }
                                 }
-                                objPs = objPs.getJSONObject("classTutor");
-                                tb=objPs.getJSONArray("tb_class_tutor");
-                                for (int i = 0; i < tb.length(); i++) {
-                                    JSONObject temp = tb.getJSONObject(i);
-                                    ClassTutor ct = new ClassTutor();
+                                if (objPs.has("classTutor")) {
+                                    objPs = objPs.getJSONObject("classTutor");
+                                    tb = objPs.getJSONArray("tb_class_tutor");
+                                    for (int i = 0; i < tb.length(); i++) {
+                                        JSONObject temp = tb.getJSONObject(i);
+                                        ClassTutor ct = new ClassTutor();
 
-                                    // GET DATA FROM JSON
-                                    int idClassTutor=temp.getInt("id_class_tutor");
-                                    int idClass=temp.getInt("id_class");
-                                    int idTutor=temp.getInt("id_tutor");
+                                        // GET DATA FROM JSON
+                                        int idClassTutor = temp.getInt("id_class_tutor");
+                                        int idClass = temp.getInt("id_class");
+                                        int idTutor = temp.getInt("id_tutor");
 
-                                    //POPULATE OBJECT WITH DATA
-                                    ct.setId_Class(idClass);
-                                    ct.setId_Tutor(idTutor);
-                                    ct.setId_Class_Tutor(idClassTutor);
+                                        //POPULATE OBJECT WITH DATA
+                                        ct.setId_Class(idClass);
+                                        ct.setId_Tutor(idTutor);
+                                        ct.setId_Class_Tutor(idClassTutor);
 
 
-                                    //ADD TO LINKEDLIST
-                                    basicData.addClassTutor(ct);
+                                        //ADD TO LINKEDLIST
+                                        basicData.addClassTutor(ct);
+                                    }
                                 }
                             }
 
@@ -229,18 +233,37 @@ public class BasicDataClient extends HttpClient {
                                     ActivityStudent activityStudent = new ActivityStudent();
 
                                     // GET DATA FROM JSON
-                                    int id_activity_student = temp.getInt("id_activity_student");
-                                    int id_portfolio_student = temp.getInt("id_portfolio_student");
-                                    int id_activity = temp.getInt("id_activity");
-                                    String dt_conclusion = temp.getString("dt_conclusion");
-                                    String dt_fisrt_sync = temp.getString("dt_fisrt_sync");
+                                    if(temp.has("id_activity_student")){
+                                        int id_activity_student = temp.getInt("id_activity_student");
+                                        activityStudent.setIdActivityStudent(id_activity_student);
+                                    }
+                                    if(temp.has("dt_fisrt_sync")){
+                                        String dt_fisrt_sync = temp.getString("dt_fisrt_sync");
+                                        activityStudent.setDt_first_sync(dt_fisrt_sync);
+                                    }
+
+                                    if(temp.has("id_portfolio_student")){
+                                        int id_portfolio_student = temp.getInt("id_portfolio_student");
+                                        activityStudent.setIdPortfolioStudent(id_portfolio_student);
+                                    }
+                                    if(temp.has("id_activity")){
+                                        int id_activity = temp.getInt("id_activity");
+                                        activityStudent.setIdActivity(id_activity);
+                                    }
+
+                                   if(temp.has("dt_conclusion")){
+                                       String dt_conclusion = temp.getString("dt_conclusion");
+                                       activityStudent.setDt_conclusion(dt_conclusion);
+                                   }
+
+
 
                                     //POPULATE OBJECT WITH DATA
-                                    activityStudent.setIdActivityStudent(id_activity_student);
-                                    activityStudent.setIdPortfolioStudent(id_portfolio_student);
-                                    activityStudent.setIdActivity(id_activity);
-                                    activityStudent.setDt_conclusion(dt_conclusion);
-                                    activityStudent.setDt_first_sync(dt_fisrt_sync);
+
+
+
+
+
 
 
                                     //ADD TO LINKEDLIST
@@ -262,14 +285,19 @@ public class BasicDataClient extends HttpClient {
                                     int id_portfolio = temp.getInt("id_portfolio");
                                     int nu_order = temp.getInt("nu_order");
                                     String dsTitle = temp.getString("ds_title");
-                                    String ds_description = temp.getString("ds_description");
+
+                                    if(temp.has("ds_description")){
+                                        String ds_description = temp.getString("ds_description");
+                                        act.setDs_description(ds_description);
+                                    }
+
 
                                     //POPULATE OBJECT WITH DATA
                                     act.setId_activity(idActivity);
                                     act.setId_portfolio(id_portfolio);
                                     act.setNu_order(nu_order);
                                     act.setDs_title(dsTitle);
-                                    act.setDs_description(ds_description);
+
 
                                     //ADD TO LINKEDLIST
                                     basicData.addActivity(act);
@@ -314,10 +342,10 @@ public class BasicDataClient extends HttpClient {
                         } catch (Exception v){
                             v.printStackTrace();
                         }
-
+                        LoginActivity.isDataSyncSucessful=true;
                     }
                 } finally {
-                    loginActivity.showProgress(false);
+
                     Log.d(tag, "Fim  da request");
                 }
             }
@@ -327,11 +355,11 @@ public class BasicDataClient extends HttpClient {
                 Log.e(tag, "Erro  na request");
                 volleyError.printStackTrace();
                 //Log.wtf(tag,"Network response:"+volleyError.networkResponse.statusCode);
-                Log.e(tag,"erro="+volleyError.getMessage());
-                loginActivity.showProgress(false);
+                Log.e(tag, "erro=" + volleyError.getMessage());
+              //  loginActivity.showProgress(false);
             }
         });
-        RequestQueue queue= Volley.newRequestQueue(context);
+        RequestQueue queue = Volley.newRequestQueue(context);
         queue.add(jsObjReq);
     }
 

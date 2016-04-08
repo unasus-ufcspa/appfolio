@@ -1,6 +1,8 @@
 package com.ufcspa.unasus.appportfolio.WebClient;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
+import android.util.Log;
 
 import com.ufcspa.unasus.appportfolio.Model.basicData.*;
 import com.ufcspa.unasus.appportfolio.Model.basicData.Class;
@@ -112,18 +114,29 @@ public class BasicData {
         if(users.size()!=0 && activities.size() !=0){
 
         }
+
         Thread t = new Thread(new Runnable() {
+            @SuppressLint("LongLogTag")
             @Override
             public void run() {
                 //INSERT DATA IN DATABASE
                 DataBaseAdapter data = DataBaseAdapter.getInstance(context);
-
-                data.insertTBUser(users);
+                String log="BasicData insert into sqlite";
+                if(users.size()!=0){
+                    Log.d(log,"inserindo users");
+                    data.insertTBUser(users);
+                }
+                Log.d(log, "inserindo classes");
                 data.insertTBClass(classes);
+                Log.d(log, "inserindo student claases");
                 data.insertTBClassStudent(studentClasses);
+                Log.d(log, "inserindo tutor classes");
                 data.insertTBClassTutor(tutorClasses);
+                Log.d(log, "inserindo portfolios");
                 data.insertTBPortfolio(portfolios);
+                Log.d(log, "inserindo portfolio claases");
                 data.insertTBPortfolioClass(portfolioClasses);
+                Log.d(log, "inserindo portfolio Students");
                 data.insertTBPortfolioStudent(portfolioStudents);
                 data.insertTBActivity(activities);
                 data.insertTBActivityStudent(activitiesStudent);
@@ -131,6 +144,7 @@ public class BasicData {
 
             }
         });
+        t.start();
     }
 
     public static JSONObject toJSON(int idUser){
@@ -138,7 +152,7 @@ public class BasicData {
         JSONObject basic = new JSONObject();
         try {
             basic.put("id_user",idUser);
-            json.put("getBasicData_request",basic);
+            json.put("basicData_request",basic);
         } catch (JSONException e) {
             e.printStackTrace();
         }

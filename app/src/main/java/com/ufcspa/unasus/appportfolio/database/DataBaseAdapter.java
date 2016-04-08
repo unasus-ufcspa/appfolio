@@ -173,7 +173,10 @@ public void insertTBUser(List<com.ufcspa.unasus.appportfolio.Model.basicData.Use
             cv.put("id_portfolio",ac.getId_Portfolio());
             cv.put("ds_title", ac.getDs_Title());
             cv.put("ds_description", ac.getDs_Description());
-            cv.put("nu_portfolio_version", ac.getNu_portfolio_version());
+            if(ac.getNu_portfolio_version()!=null){
+                cv.put("nu_portfolio_version", ac.getNu_portfolio_version());
+            }
+
             try{
                 db.insert("tb_portfolio", null, cv);
 
@@ -248,7 +251,7 @@ public void insertTBUser(List<com.ufcspa.unasus.appportfolio.Model.basicData.Use
             cv.put("id_portfolio_student", ac.getIdPortfolioStudent());
             cv.put("id_activity", ac.getIdActivity());
             cv.put("dt_conclusion", ac.getDt_conclusion());
-            cv.put("dt_fisrt_sync", ac.getDt_first_sync());
+            //cv.put("dt_fisrt_sync", ac.getDt_first_sync());
             try{
                 db.insert("tb_activity_student", null, cv);
 

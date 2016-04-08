@@ -43,40 +43,48 @@ public class FistLoginClient extends HttpClient {
 
                 try {
                     Log.d(tag, "JSON RESPONSE: " + response.toString());
-                    if( response.has("erro")) {
+                    if( response.has("firstLogin_response")) {
+                        if(response.getJSONObject("firstLogin_response").has("erro")){
+                            Log.e(tag, "JSON usuario ou senha invalidos");
+                            LoginActivity.isLoginSucessful=false;
+                            Log.d(tag, "JSon response receiving:" + response.getJSONObject("firstLogin_response").get("erro"));
+                        }else {
+                            if(response.getJSONObject("firstLogin_response").has("tb_user")){
+                                Log.d(tag,"JSON POST foi");
+                                Log.d(tag, "user encontrado!\n cadastrando no banco...");
+                                JSONObject resp= new JSONObject();
+                                try {
+                                    resp=response.getJSONObject("firstLogin_response");
+                                    Log.wtf(tag,"JSon response::"+resp.toString());
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                } catch (Exception v){
+                                    v.printStackTrace();
+                                }
+                                //RECUPERANDO DADOS DO JSON RESPONSE
+                                Integer idUser=resp.getJSONObject("tb_user").getInt("id_user");
+                                String name=resp.getJSONObject("tb_user").getString("nm_user");
+                                String idCode=resp.getJSONObject("tb_user").getString("nu_identification");
+                                String email=resp.getJSONObject("tb_user").getString("ds_email");
+                                String cellphone=resp.getJSONObject("tb_user").getString("nu_cellphone");
 
-                        Log.e(tag, "JSON usuario ou senha invalidos");
-                        LoginActivity.isLoginSucessful=false;
-                        Log.d(tag, "JSon response receiving:" + response.toString());
-                    }else if(response.getJSONObject("firstLogin_response").getJSONObject("tb_user").getInt("id_user")!=0){
-                        Log.d(tag,"JSON POST foi");
-                        Log.d(tag, "user encontrado!\n cadastrando no banco...");
-                        JSONObject resp= new JSONObject();
-                        try {
-                          resp=response.getJSONObject("firstLogin_response");
-                            Log.wtf(tag,"JSon response::"+resp.toString());
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        } catch (Exception v){
-                            v.printStackTrace();
+
+
+
+                                //INSERINDO USER NO DB SQLITE
+                                user = new User(idUser,name,idCode,email,cellphone);
+                                Log.d(tag, "user get by json:" + user.toString());
+                                user = DataBaseAdapter.getInstance(context).insertUser(user);
+
+                                //Adicionando o usuario no singleton
+                                Singleton.getInstance().user = user;
+                                LoginActivity.isLoginSucessful=true;
+                            }
                         }
-                        //RECUPERANDO DADOS DO JSON RESPONSE
-                        Integer idUser=resp.getJSONObject("tb_user").getInt("id_user");
-                        String name=resp.getJSONObject("tb_user").getString("nm_user");
-                        String idCode=resp.getJSONObject("tb_user").getString("nu_identification");
-                        String email=resp.getJSONObject("tb_user").getString("ds_email");
-                        String cellphone=resp.getJSONObject("tb_user").getString("nu_cellphone");
 
 
-                        //INSERINDO USER NO DB SQLITE
-                        user = new User(idUser,name,idCode,email,cellphone);
-                        Log.d(tag, "user get by json:" + user.toString());
-                        user = DataBaseAdapter.getInstance(context).insertUser(user);
-
-                        //Adicionando o usuario no singleton
-                        Singleton.getInstance().user = user;
-                        LoginActivity.isLoginSucessful=true;
-                        //Log.wtf(tag, "JSon response::" + response.toString());
+                    }else {
+                        Log.e(tag,"não encontrou firstLogin_response no json");
                     }
                 } catch (JSONException e) {
                     Log.e(tag,"JSON exception on response:"+e.getMessage());
