@@ -19,8 +19,8 @@ public class DataBase extends SQLiteOpenHelper {
     private static String DBPATH = "/data/data/com.ufcspa.unasus.appportfolio/databases/";
 
     // Este é o nome do banco de dados que iremos utilizar
-    //private static String DBNAME ="db_portfolio_alpha_v2.sqlite";
-    private static String DBNAME ="db_portfolio_json_teste.sqlite";
+    //private static String DBNAME ="db_portfolio_json_teste.sqlite"; Classe SplashActivity => LoginActivity2
+    private static String DBNAME = "db_portfolio_alpha_v2.sqlite";
 
     private Context context;
 

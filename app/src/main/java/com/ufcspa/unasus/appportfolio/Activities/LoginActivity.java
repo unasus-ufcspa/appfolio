@@ -17,11 +17,7 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Looper;
-import android.os.SystemClock;
 import android.provider.ContactsContract;
-import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
@@ -42,17 +38,10 @@ import android.widget.Toast;
 import com.ufcspa.unasus.appportfolio.Model.Singleton;
 import com.ufcspa.unasus.appportfolio.Model.User;
 import com.ufcspa.unasus.appportfolio.R;
-import com.ufcspa.unasus.appportfolio.WebClient.BasicData;
-import com.ufcspa.unasus.appportfolio.WebClient.BasicDataClient;
-import com.ufcspa.unasus.appportfolio.WebClient.FirstLogin;
-import com.ufcspa.unasus.appportfolio.WebClient.FistLoginClient;
 import com.ufcspa.unasus.appportfolio.database.DataBaseAdapter;
-
-import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
-
 
 import static android.Manifest.permission.READ_CONTACTS;
 
@@ -72,7 +61,6 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             "foo@example.com:hello", "bar@example.com:world"
     };
     public static boolean isLoginSucessful;
-    public static boolean isDataSyncSucessful;
     /**
      * Keep track of the login task to ensure we can cancel it if requested.
      */
@@ -82,10 +70,9 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     private AutoCompleteTextView mEmailView;
     private EditText mPasswordView;
     private View mProgressView;
-//    private View mLoginFormView;
+    //    private View mLoginFormView;
     private DataBaseAdapter bd;
     private User user;
-    LoginActivity l = this;
 
     // Singleton
     private Singleton session;
@@ -105,17 +92,9 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         mPasswordView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView textView, int id, KeyEvent keyEvent) {
-                if (id == R.id.login || id == EditorInfo.IME_NULL) {
-                    //attemptLogin();
-                    return true;
-                }
-                return false;
+                return id == R.id.login || id == EditorInfo.IME_NULL;
             }
         });
-
-
-
-
 
         DataBaseAdapter data = DataBaseAdapter.getInstance(this);
 //        ArrayList<PortfolioClass> lista= (ArrayList<PortfolioClass>) data.selectListClassAndUserType(5);
@@ -135,62 +114,29 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         mEmailSignInButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
-                showProgress(true);
-                new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-                        getBasicData();
-                        SystemClock.sleep(20000);
-                        new Handler(Looper.getMainLooper()).post(new Runnable() {
-                            @Override
-                            public void run() {
-                                showProgress(false);
-                                Log.d("tela login","conseguiu fazer funfar a conexao");
-                            }
-                        });
-                    }
-                }).start();
-
                 //attemptLogin();
-//                if (verificarLogin()) {
-//                    session = Singleton.getInstance();
-//                    session.user = user;
-//                    getBasicData();
+                if (verificarLogin()) {
+                    session = Singleton.getInstance();
+                    session.user = user;
 //                    loginSuccess();
-////                    loginSuccess();
-//                    /*if(isLoginSucessful){
-//                       getBasicData();
-//                    }
-//
-//                    char userType = checkUserType(user.getIdUser());
-//                    if (userType == 'W') {
-//                        //showChooseTutorOrStudentPopup();
-//                    } else {
-//                        session.user.setUserType(userType);
-//                        loginSuccess();
-//                    }*/
-//                } else {
-//                    Toast.makeText(getApplicationContext(), "Erro ao logar, favor verifique email e senha", Toast.LENGTH_LONG).show();
-//                }
+
+                    char userType = checkUserType(user.getIdUser());
+                    if (userType == 'W') {
+                        //showChooseTutorOrStudentPopup();
+                    } else {
+                        session.user.setUserType(userType);
+                        loginSuccess();
+                    }
+                } else {
+                    Toast.makeText(getApplicationContext(), "Erro ao logar, favor verifique email e senha", Toast.LENGTH_LONG).show();
+                }
             }
         });
     }
-    public void getBasicData(){
-        BasicDataClient client = new BasicDataClient(getBaseContext());
-        JSONObject jsonObject = new JSONObject();
-        client.postJson(BasicData.toJSON(10));// mandando id
-    }
-
-
-
 
     public boolean isTablet() {
         TelephonyManager manager = (TelephonyManager) this.getSystemService(Context.TELEPHONY_SERVICE);
-        if (manager.getPhoneType() == TelephonyManager.PHONE_TYPE_NONE) {
-            return true;
-        } else {
-            return false;
-        }
+        return manager.getPhoneType() == TelephonyManager.PHONE_TYPE_NONE;
     }
 
 
@@ -219,13 +165,8 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
     private void loginSuccess()
     {
-
-      //  Log.d("singletonn", "id:" + session.user.getIdUser() + " uT:" + session.user.getUserType());
-        while(!isDataSyncSucessful){
-
-        }
-        showProgress(false);
-        Log.d("Act Login","Finishing activity");
+        showProgress(true);
+        //  Log.d("singletonn", "id:" + session.user.getIdUser() + " uT:" + session.user.getUserType());
         startActivity(new Intent(getApplicationContext(), MainActivity.class));
         finish();
     }
@@ -265,12 +206,12 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
     private boolean verificarLogin() {
 
-      //  try {
-//            DataBaseAdapter bd = DataBaseAdapter.getInstance(this);
-//            user = bd.verifyPass(mEmailView.getText().toString(), mPasswordView.getText().toString());
+        try {
+            DataBaseAdapter bd = DataBaseAdapter.getInstance(this);
+            user = bd.verifyPass(mEmailView.getText().toString(), mPasswordView.getText().toString());
             //result=user.getIdUser();
             //Log.d("BANCO", " pass:" + result);
-        if(isOnline()) {
+//        if(isOnline()) {
 //            FirstLogin first = new FirstLogin();
 //
 //            String android_id = Settings.Secure.getString(this.getContentResolver(), Settings.Secure.ANDROID_ID);
@@ -282,16 +223,14 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 //            first.setPasswd(mPasswordView.getText().toString());
 //            FistLoginClient client = new FistLoginClient(getBaseContext());
 //            client.postJson(first.toJSON());
+        } catch (Exception e) {
+            Log.d("BANCO", "verificando pass:" + e.getMessage());
+        } finally {
 
-     //   } catch (Exception e) {
-       //     Log.d("BANCO", "verificando pass:" + e.getMessage());
-     //   } finally {
-
-      //  }
+        }
 //        }else{
 //            Toast.makeText(getApplicationContext(), "Erro ao logar, favor verifique sua conexão com a internet", Toast.LENGTH_LONG).show();
-        }
-        showProgress(true);
+//        }
         return true;//isLoginSucessful;
     }
 
@@ -395,13 +334,11 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         return password.length() > 4;
     }
 
-
-
     /**
      * Shows the progress UI and hides the login form.
      */
     @TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)
-    private  void showProgress(final boolean show) {
+    private void showProgress(final boolean show) {
         // On Honeycomb MR2 we have the ViewPropertyAnimator APIs, which allow
         // for very easy animations. If available, use these APIs to fade-in
         // the progress spinner.

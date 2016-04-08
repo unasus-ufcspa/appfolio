@@ -9,11 +9,16 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
-import com.ufcspa.unasus.appportfolio.Activities.LoginActivity;
-import com.ufcspa.unasus.appportfolio.Model.Singleton;
-import com.ufcspa.unasus.appportfolio.Model.basicData.*;
+import com.ufcspa.unasus.appportfolio.Activities.LoginActivity2;
+import com.ufcspa.unasus.appportfolio.Model.basicData.Activity;
+import com.ufcspa.unasus.appportfolio.Model.basicData.ActivityStudent;
 import com.ufcspa.unasus.appportfolio.Model.basicData.Class;
-import com.ufcspa.unasus.appportfolio.database.DataBaseAdapter;
+import com.ufcspa.unasus.appportfolio.Model.basicData.ClassStudent;
+import com.ufcspa.unasus.appportfolio.Model.basicData.ClassTutor;
+import com.ufcspa.unasus.appportfolio.Model.basicData.Portfolio;
+import com.ufcspa.unasus.appportfolio.Model.basicData.PortfolioClass;
+import com.ufcspa.unasus.appportfolio.Model.basicData.PortfolioStudent;
+import com.ufcspa.unasus.appportfolio.Model.basicData.User;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -26,7 +31,7 @@ public class BasicDataClient extends HttpClient {
     private String method="basicData";
     private Context context;
     private BasicData basicData;
-    private LoginActivity loginActivity;
+    private LoginActivity2 loginActivity;
     public BasicDataClient(Context context) {
         super(context);
         this.context= context;
@@ -342,7 +347,7 @@ public class BasicDataClient extends HttpClient {
                         } catch (Exception v){
                             v.printStackTrace();
                         }
-                        LoginActivity.isDataSyncSucessful=true;
+                        LoginActivity2.isDataSyncSucessful = true;
                     }
                 } finally {
 
