@@ -122,8 +122,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             initMiniDrawer();
 
             final float scale = getResources().getDisplayMetrics().density;
-            int pixelsMini = (int) (65 * scale + 0.5f);
-            int pixelsBig = (int) (200 * scale + 0.5f);
+            int pixelsMini = (int) (80 * scale + 0.5f);
+            int pixelsBig = (int) (250 * scale + 0.5f);
 
 
             crossFader = new Crossfader()
@@ -180,70 +180,49 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             @Override
             public boolean onTouch(final View view, final MotionEvent event) {
                 clicked = view;
-                if (gestureDetector.onTouchEvent(event)) {
-                    return false;
-                }
-                return true;
+                return !gestureDetector.onTouchEvent(event);
             }
         });
         bigDrawer.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(final View view, final MotionEvent event) {
                 clicked = view;
-                if (gestureDetector.onTouchEvent(event)) {
-                    return false;
-                }
-                return true;
+                return !gestureDetector.onTouchEvent(event);
             }
         });
         portfolios.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(final View view, final MotionEvent event) {
                 clicked = view;
-                if (gestureDetector.onTouchEvent(event)) {
-                    return false;
-                }
-                return true;
+                return !gestureDetector.onTouchEvent(event);
             }
         });
         activities.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(final View view, final MotionEvent event) {
                 clicked = view;
-                if (gestureDetector.onTouchEvent(event)) {
-                    return false;
-                }
-                return true;
+                return !gestureDetector.onTouchEvent(event);
             }
         });
         reports.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(final View view, final MotionEvent event) {
                 clicked = view;
-                if (gestureDetector.onTouchEvent(event)) {
-                    return false;
-                }
-                return true;
+                return !gestureDetector.onTouchEvent(event);
             }
         });
         config.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(final View view, final MotionEvent event) {
                 clicked = view;
-                if (gestureDetector.onTouchEvent(event)) {
-                    return false;
-                }
-                return true;
+                return !gestureDetector.onTouchEvent(event);
             }
         });
         attachments.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(final View view, final MotionEvent event) {
                 clicked = view;
-                if (gestureDetector.onTouchEvent(event)) {
-                    return false;
-                }
-                return true;
+                return !gestureDetector.onTouchEvent(event);
             }
         });
     }

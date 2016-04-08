@@ -50,20 +50,27 @@ public class EmailValidator implements Serializable {
     private static final Pattern EMAIL_PATTERN = Pattern.compile(EMAIL_REGEX);
     private static final Pattern IP_DOMAIN_PATTERN = Pattern.compile(IP_DOMAIN_REGEX);
     private static final Pattern USER_PATTERN = Pattern.compile(USER_REGEX);
-
-    private final boolean allowLocal;
-
     /**
      * Singleton instance of this class, which
      * doesn't consider local addresses as valid.
      */
     private static final EmailValidator EMAIL_VALIDATOR = new EmailValidator(false);
-
     /**
      * Singleton instance of this class, which does
      * consider local addresses valid.
      */
     private static final EmailValidator EMAIL_VALIDATOR_WITH_LOCAL = new EmailValidator(true);
+    private final boolean allowLocal;
+
+    /**
+     * Protected constructor for subclasses to use.
+     *
+     * @param allowLocal Should local addresses be considered valid?
+     */
+    protected EmailValidator(boolean allowLocal) {
+        super();
+        this.allowLocal = allowLocal;
+    }
 
     /**
      * Returns the Singleton instance of this validator.
@@ -86,16 +93,6 @@ public class EmailValidator implements Serializable {
             return EMAIL_VALIDATOR_WITH_LOCAL;
         }
         return EMAIL_VALIDATOR;
-    }
-
-    /**
-     * Protected constructor for subclasses to use.
-     *
-     * @param allowLocal Should local addresses be considered valid?
-     */
-    protected EmailValidator(boolean allowLocal) {
-        super();
-        this.allowLocal = allowLocal;
     }
 
     /**
@@ -124,11 +121,8 @@ public class EmailValidator implements Serializable {
             return false;
         }
 
-        if (!isValidDomain(emailMatcher.group(2))) {
-            return false;
-        }
+        return isValidDomain(emailMatcher.group(2));
 
-        return true;
     }
 
     /**

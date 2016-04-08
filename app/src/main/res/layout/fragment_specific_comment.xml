@@ -17,7 +17,6 @@
         android:layout_marginRight="10dp"
         android:layout_marginTop="10dp"
         android:background="@color/gray_5"
-        android:elegantTextHeight="@bool/md_is_tablet"
         android:gravity="left"
         android:minHeight="70px"
         android:padding="10dp"

@@ -26,7 +26,7 @@
             android:paddingRight="10dp"
             android:paddingTop="5dp">
 
-            <ListView
+            <GridView
                 android:id="@+id/version_list"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

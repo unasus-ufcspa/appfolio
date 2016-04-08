@@ -7,7 +7,6 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.res.Configuration;
 import android.graphics.Color;
-import android.graphics.Rect;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
@@ -28,10 +27,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
+import android.widget.GridView;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -80,6 +79,7 @@ public class FragmentRTEditor extends Fragment {
     private Singleton singleton;
     private ViewGroup rightBarSpecificComments;
     private boolean specificCommentsOpen;
+    private View importPanel;
     private BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -89,25 +89,7 @@ public class FragmentRTEditor extends Fragment {
         }
     };
 
-
     public FragmentRTEditor() {}
-
-    public static Rect locateView(View v) {
-        int[] loc_int = new int[2];
-        if (v == null) return null;
-        try {
-            v.getLocationOnScreen(loc_int);
-        } catch (NullPointerException npe) {
-            //Happens when the view doesn't exist on screen anymore.
-            return null;
-        }
-        Rect location = new Rect();
-        location.left = loc_int[0];
-        location.top = loc_int[1];
-        location.right = location.left + v.getWidth();
-        location.bottom = location.top + v.getHeight();
-        return location;
-    }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -253,8 +235,7 @@ public class FragmentRTEditor extends Fragment {
                         layout.openPane();
 
                         int id = singleton.note.getBtId();
-                        if (specificCommentsOpen) {
-                            if (id > 0) {
+                        if (specificCommentsOpen && id > 0) {
                                 ArrayList<Comentario> lista = (ArrayList<Comentario>) source.listComments(singleton.activity.getIdAtivity(), "O", id);
                                 if (lista == null || lista.size() == 0) {
                                     //Remove note from hash map
@@ -262,7 +243,7 @@ public class FragmentRTEditor extends Fragment {
                                     currentSpecificComment--;
 
                                     //Remove background color from text
-                                    Spannable textSpanned = (Spannable) mRTMessageField.getText();
+                                    Spannable textSpanned = mRTMessageField.getText();
                                     BackgroundColorSpan[] spans = textSpanned.getSpans(0, textSpanned.length(), BackgroundColorSpan.class);
 
                                     for (BackgroundColorSpan s : spans) {
@@ -291,7 +272,6 @@ public class FragmentRTEditor extends Fragment {
                                     scrollview.removeView(btn);
                                     setSpecificCommentNoteValue();
                                 }
-                            }
                         }
                     }
                 }
@@ -306,7 +286,15 @@ public class FragmentRTEditor extends Fragment {
             mRTMessageField.setCanPaste(false);
 
 
-            mRTMessageField.setText("Sou tutor");
+            mRTMessageField.setText("Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris enim lacus, gravida egestas ex fringilla, molestie sollicitudin turpis. Curabitur et congue justo. Etiam tincidunt, est vel euismod facilisis, dui urna pellentesque nunc, vitae pharetra est nisi ultrices ex. Pellentesque sollicitudin porttitor condimentum. Ut auctor enim pulvinar, hendrerit sem eu, facilisis erat. Sed tempus convallis iaculis. Duis imperdiet rhoncus ipsum et congue. Aenean pellentesque volutpat neque ac semper. Donec consectetur lacinia nisi, et molestie dolor rhoncus in. Praesent ultricies massa nec nisi dictum hendrerit. Proin nec pellentesque lacus, ut fringilla sapien. Donec quis enim interdum, molestie lacus et, ullamcorper ligula.\n" +
+                    "\n" +
+                    "Ut sit amet odio ornare, vehicula urna a, volutpat est. Nunc ut ante massa. Maecenas eget est quis sapien venenatis bibendum. Fusce id porta nulla. Nunc luctus sapien libero, eget imperdiet massa laoreet at. Etiam dolor tortor, lacinia quis congue eu, varius nec turpis. Suspendisse urna leo, rutrum eget porta ut, tempus vel urna.\n" +
+                    "\n" +
+                    "Suspendisse eget velit accumsan, cursus lectus vitae, dapibus justo. Proin vel dolor orci. Nullam euismod fringilla nunc. Proin eu libero nec est mattis semper in eget purus. Integer eleifend sodales justo, id luctus tortor feugiat sit amet. Phasellus convallis neque ut est mollis aliquet. Ut semper volutpat velit. Aliquam eget lectus sit amet turpis condimentum elementum. Phasellus sollicitudin turpis quis euismod mattis. Sed id nisl lectus. Mauris pharetra non ipsum dapibus imperdiet. Sed sagittis tellus ac lacus consectetur pretium. Nam tristique iaculis pellentesque. Ut suscipit neque ligula.\n" +
+                    "\n" +
+                    "Pellentesque non malesuada purus, in posuere tellus. Quisque in scelerisque odio, quis eleifend lectus. Aliquam mattis urna vel feugiat ornare. Proin lectus ex, iaculis nec iaculis id, ultricies in nisi. In a lectus eros. Nulla interdum cursus nunc, ac congue massa ullamcorper eget. Integer turpis orci, accumsan non egestas vel, porta vel nunc. Nullam consequat turpis in vehicula condimentum. Phasellus libero arcu, pretium sit amet lorem at, vehicula mollis velit. Nulla rhoncus ornare gravida. Nulla facilisi. Fusce porttitor tellus eget nunc suscipit, a tempus libero accumsan. Maecenas at lacus tempor, ullamcorper urna in, viverra ex. Proin tincidunt ex elit, ac malesuada diam porta eget. Morbi sed ornare lectus, aliquam scelerisque mauris.\n" +
+                    "\n" +
+                    "Morbi in quam et ante egestas molestie. Proin ut tellus molestie libero mattis blandit. Integer ac lorem neque. Aenean elementum, nunc in congue tempus, enim nibh feugiat velit, id sollicitudin tellus enim ac purus. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Cras in felis eu neque dictum interdum in nec tellus. Etiam quis dolor ultrices tortor pharetra gravida. Suspendisse auctor malesuada eros, posuere tincidunt risus posuere eget. Aenean quis magna et lacus fringilla tristique vel et tortor. Duis ultrices ut purus viverra dignissim.");
 
         }
         LinearLayout layout = (LinearLayout) view.findViewById(R.id.info_rteditor_container);
@@ -417,8 +405,6 @@ public class FragmentRTEditor extends Fragment {
         TextView geral = (TextView)view.findViewById(R.id.btn_geral);
         TextView specific = (TextView)view.findViewById(R.id.btn_specific);
 
-        getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.comments_container, new FragmentComments()).commit();
-
         geral.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -434,48 +420,46 @@ public class FragmentRTEditor extends Fragment {
         });
 
         final SlidingPaneLayout layout = (SlidingPaneLayout) view.findViewById(R.id.rteditor_fragment);
-        layout.post(new Runnable() {
-            @Override
-            public void run() {
-                if (!layout.isOpen()) {
-                    layout.findViewById(R.id.usr_photo_right).setVisibility(View.VISIBLE);
-                    view.findViewById(R.id.usr_photo_left).setVisibility(View.GONE);
-                    layout.findViewById(R.id.drawer_indicator).setVisibility(View.GONE);
-                }
-            }
-        });
+
         layout.setPanelSlideListener(new SlidingPaneLayout.PanelSlideListener() {
             @Override
             public void onPanelSlide(View panel, float slideOffset) {
-                int usr_photo_x = (int) view.findViewById(R.id.usr_photo_right).getX();
-
-                if (panel.getX() <= usr_photo_x) {
-                    panel.findViewById(R.id.usr_photo_right).setVisibility(View.GONE);
-                    view.findViewById(R.id.usr_photo_left).setVisibility(View.VISIBLE);
-                } else {
-                    panel.findViewById(R.id.usr_photo_right).setVisibility(View.VISIBLE);
-                    view.findViewById(R.id.usr_photo_left).setVisibility(View.GONE);
-                }
-
-                panel.findViewById(R.id.drawer_indicator).setVisibility(View.GONE);
+                importPanel.setVisibility(View.GONE);
+                getView().findViewById(R.id.personal_comment_container).setVisibility(View.GONE);
                 ((InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(getView().getWindowToken(), 0);
             }
 
             @Override
             public void onPanelOpened(View panel) {
-                panel.findViewById(R.id.usr_photo_right).setVisibility(View.GONE);
-                view.findViewById(R.id.usr_photo_left).setVisibility(View.VISIBLE);
-                panel.findViewById(R.id.drawer_indicator).setVisibility(View.VISIBLE);
-                showCommentsTab(false);
+                if (panel != null) {
+                    Fragment frag = getActivity().getSupportFragmentManager().findFragmentById(R.id.comments_container);
+                    if (frag != null) {
+                        getActivity().getSupportFragmentManager().beginTransaction().remove(frag).commit();
+                    }
+
+                    int childs = rightBarSpecificComments.getChildCount();
+                    for (int i = childs - 1; i >= 0; i--)
+                        rightBarSpecificComments.getChildAt(i).setVisibility(View.GONE);
+                    slider.findViewById(R.id.rightbar_green).setVisibility(View.INVISIBLE);
+                }
             }
 
             @Override
             public void onPanelClosed(View panel) {
-                panel.findViewById(R.id.usr_photo_right).setVisibility(View.VISIBLE);
-                view.findViewById(R.id.usr_photo_left).setVisibility(View.GONE);
-                panel.findViewById(R.id.drawer_indicator).setVisibility(View.GONE);
+                if (panel != null) {
+                    Fragment frag = getActivity().getSupportFragmentManager().findFragmentById(R.id.comments_container);
+                    if (frag != null) {
+                        String tag = frag.getTag();
+                        if (tag.equals("G"))
+                            showCommentsTab(false);
+                        else
+                            showCommentsTab(true);
+                    } else
+                        showCommentsTab(false);
+                }
             }
         });
+
         layout.setSliderFadeColor(getResources().getColor(android.R.color.transparent));
         layout.setBackgroundColor(getResources().getColor(android.R.color.transparent));
 
@@ -492,27 +476,32 @@ public class FragmentRTEditor extends Fragment {
         usrPhoto.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                importPanel.setVisibility(View.GONE);
                 displayPersonalComment(getView().findViewById(R.id.personal_comment_container));
             }
         });
         personalCommentButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                importPanel.setVisibility(View.GONE);
                 displayPersonalComment(getView().findViewById(R.id.personal_comment_container));
             }
         });
         versionsButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                final ArrayList<String> list = new ArrayList<>();
-                for (int i = 0; i < 4; i++)
-                    list.add("");
-
-                final ListView versionList = (ListView) getView().findViewById(R.id.version_list);
-                versionList.setAdapter(new VersionsAdapter(getContext(), list));
-                displayVersionsDialog(getView().findViewById(R.id.versions_container));
+                getView().findViewById(R.id.personal_comment_container).setVisibility(View.GONE);
+                displayVersionsDialog(importPanel);
             }
         });
+
+        importPanel = view.findViewById(R.id.versions_container);
+        ArrayList<String> list = new ArrayList<>();
+        for (int i = 0; i < 100; i++)
+            list.add("");
+
+        GridView versionList = (GridView) importPanel.findViewById(R.id.version_list);
+        versionList.setAdapter(new VersionsAdapter(getActivity(), list));
 
         studentName.setText(singleton.portfolioClass.getStudentName());
         activityName.setText("Ativ. " + singleton.activity.getNuOrder() + ": " + singleton.activity.getTitle());
@@ -720,7 +709,7 @@ public class FragmentRTEditor extends Fragment {
      *
      * */
     private void changeColor(int id) {
-        Spannable textSpanned = (Spannable) mRTMessageField.getText();
+        Spannable textSpanned = mRTMessageField.getText();
         BackgroundColorSpan[] spans = textSpanned.getSpans(0, textSpanned.length(), BackgroundColorSpan.class);
 
         BackgroundColorSpan aux = null;
@@ -752,23 +741,26 @@ public class FragmentRTEditor extends Fragment {
     public void showCommentsTab(Boolean isSpecificComment) {
         specificCommentsOpen = isSpecificComment;
         if (isSpecificComment) {
+            if (singleton.note.getBtId() != 0)
+                slider.findViewById(R.id.rightbar_green).setVisibility(View.VISIBLE);
             int childs = rightBarSpecificComments.getChildCount();
             for (int i = childs - 1; i >= 0; i--)
                 rightBarSpecificComments.getChildAt(i).setVisibility(View.VISIBLE);
-            getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.comments_container, new FragmentSpecificComments()).commit();
+            getActivity().getSupportFragmentManager().beginTransaction().setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out).replace(R.id.comments_container, new FragmentSpecificComments(), "S").commit();
             SlidingPaneLayout layout = (SlidingPaneLayout) getView().findViewById(R.id.rteditor_fragment);
             layout.closePane();
         } else {
             int childs = rightBarSpecificComments.getChildCount();
             for (int i = childs - 1; i >= 0; i--)
                 rightBarSpecificComments.getChildAt(i).setVisibility(View.GONE);
-            getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.comments_container, new FragmentComments()).commit();
+            slider.findViewById(R.id.rightbar_green).setVisibility(View.INVISIBLE);
+            getActivity().getSupportFragmentManager().beginTransaction().setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out).replace(R.id.comments_container, new FragmentComments(), "G").commit();
         }
     }
 
     private void changeNotePosition() {
         if (specificCommentsNotes != null && specificCommentsNotes.size() != 0) {
-            Spannable textSpanned = (Spannable) mRTMessageField.getText();
+            Spannable textSpanned = mRTMessageField.getText();
             BackgroundColorSpan[] spans = textSpanned.getSpans(0, textSpanned.length(), BackgroundColorSpan.class);
 
             for (BackgroundColorSpan spm : spans) {
@@ -786,7 +778,7 @@ public class FragmentRTEditor extends Fragment {
     }
 
     private void noteFollowText() {
-        Spannable textSpanned = (Spannable) mRTMessageField.getText();
+        Spannable textSpanned = mRTMessageField.getText();
         BackgroundColorSpan[] spans = textSpanned.getSpans(0, textSpanned.length(), BackgroundColorSpan.class);
 
         for (BackgroundColorSpan spm : spans) {
@@ -809,8 +801,9 @@ public class FragmentRTEditor extends Fragment {
         for (int i = 0; i < arrayAux.size(); i++) {
             Note aux = arrayAux.get(i);
             Button btn = createButton(aux.getBtId(), String.valueOf(aux.getBtId()), aux.getBtY());
-            if (btn != null)
+            if (btn != null) {
                 scrollview.addView(btn);
+            }
         }
     }
 
@@ -826,7 +819,7 @@ public class FragmentRTEditor extends Fragment {
 
     private boolean canCreateButton(int start, int end) {
         boolean canCreate = true;
-        Spannable textSpanned = (Spannable) mRTMessageField.getText();
+        Spannable textSpanned = mRTMessageField.getText();
         BackgroundColorSpan[] spans = textSpanned.getSpans(start, end, BackgroundColorSpan.class);
 
         for (BackgroundColorSpan bcs : spans) {
@@ -844,63 +837,14 @@ public class FragmentRTEditor extends Fragment {
             anchorView.setVisibility(View.GONE);
         else
             anchorView.setVisibility(View.VISIBLE);
-
-
-//        PopupWindow popup = new PopupWindow(getActivity());
-//        View layout = getActivity().getLayoutInflater().inflate(R.layout.personal_comment_dialog, null);
-//        popup.setContentView(layout);
-//        // Set content width and height
-//        popup.setHeight(WindowManager.LayoutParams.WRAP_CONTENT);
-//        popup.setWidth(WindowManager.LayoutParams.WRAP_CONTENT);
-//        // Closes the popup window when touch outside of it - when looses focus
-//        popup.setOutsideTouchable(true);
-//        popup.setFocusable(true);
-//        // Show anchored to button
-//        popup.setBackgroundDrawable(new BitmapDrawable());
-//
-//        final float scale = getResources().getDisplayMetrics().density;
-//        int xOffset = (int) (96 * scale + 0.5f);
-//        int yOffset = (int) (50 * scale + 0.5f);
-//
-//        Rect rect = locateView(anchorView);
-//
-//        popup.showAtLocation(anchorView, Gravity.NO_GRAVITY, rect.left, rect.bottom); //xOffset, yOffset);
     }
 
     private void displayVersionsDialog(View anchorView) {
         if (anchorView.getVisibility() == View.VISIBLE)
             anchorView.setVisibility(View.GONE);
-        else
+        else {
             anchorView.setVisibility(View.VISIBLE);
-
-//        PopupWindow popup = new PopupWindow(getActivity());
-//        View layout = getActivity().getLayoutInflater().inflate(R.layout.versions_dialog, null);
-//        popup.setContentView(layout);
-//
-//        ArrayList<String> list = new ArrayList<>();
-//        for (int i = 0; i < 10; i++)
-//            list.add("");
-//
-//        ListView versionList = (ListView) layout.findViewById(R.id.version_list);
-//        versionList.setAdapter(new VersionsAdapter(getContext(), list));
-//
-//
-//        // Set content width and height
-//        popup.setHeight(WindowManager.LayoutParams.WRAP_CONTENT);
-//        popup.setWidth(WindowManager.LayoutParams.WRAP_CONTENT);
-//        // Closes the popup window when touch outside of it - when looses focus
-//        popup.setOutsideTouchable(true);
-//        popup.setFocusable(true);
-//        // Show anchored to button
-//        popup.setBackgroundDrawable(new BitmapDrawable());
-//
-//        final float scale = getResources().getDisplayMetrics().density;
-//        int xOffset = (int) (96 * scale + 0.5f);
-//        int yOffset = (int) (50 * scale + 0.5f);
-//
-//        Rect rect = locateView(anchorView);
-//
-//        popup.showAtLocation(anchorView, Gravity.NO_GRAVITY, rect.left, rect.bottom); //xOffset, yOffset);
+        }
     }
 
     private class ActionBarCallBack implements ActionMode.Callback {
@@ -965,8 +909,9 @@ public class FragmentRTEditor extends Fragment {
 
             specificCommentsNotes.put(idButton, new Note(idButton, selectedText, yButton));
             Button btn = createButton(idButton, String.valueOf(currentSpecificComment), yButton);
-            if (btn != null)
+            if (btn != null) {
                 scrollview.addView(btn);
+            }
 
             mRTManager.onEffectSelected(Effects.BGCOLOR, greenLight, idButton);
             mRTMessageField.setSelected(false);
@@ -977,62 +922,5 @@ public class FragmentRTEditor extends Fragment {
             btn.callOnClick();
         }
     }
-
-
-/*
-    // METODOS ANTIGOS PARA ALTERAR COR DO TEXTO ATRAVES DE PROCESSAMENTO DE TEXTO
-
-
-
-
-    private int findText(String selTxt,String texto){
-        String tag="Processing text:";
-        Log.d(tag,"finding selected text:"+selTxt +"\n in text:"+texto);
-        int start=texto.indexOf(selTxt);
-        int end =start+selTxt.length();
-        Log.d(tag,"selected text starts at position '"+start+"' ends at position '"+end+"'");
-        Log.d(tag,"substring generated:"+texto.substring(start,end));
-        return start;
-    }
-
-
-    public String changeColor(String text,String tag,String color){
-        int start=text.indexOf("#",text.indexOf(tag));
-        int end=start+7;
-        Log.d("changeColor","text:"+text);
-        Log.d("changeColor","cor:"+color);
-        Log.d("changeColor","encontrou # na posição:"+start);
-        String textWChColor=text;
-        Log.d("changeColor","bg color in text:"+text.subSequence(start,start+7));
-//        int j=1;
-//        for (int i=start+1;i<start+6;i++){
-//            char old=text.charAt(i);
-//            char newChar=color.charAt(j);
-//            textWChColor.replace(old, newChar);
-//            j++;
-//        }
-        StringBuffer buf = new StringBuffer(textWChColor);
-        buf.replace(start, end, color);
-
-
-        Log.d("changeColor", "text is now:" + buf.toString());
-        textWChColor=buf.toString();
-        return textWChColor;
-
-//        int start=text.indexOf(tag);
-//        int end=text.lastIndexOf(tag,start);
-//        Log.d("changeColor","text:"+text);
-//        Log.d("changeColor","tag:"+tag);
-//        mRTMessageField.setSelection(start, end);
-        //rtToolbar.setBGColor(color);
-        //mRTManager.onEffectSelected(Effects.BGCOLOR,color);
-    }
-
-    public void copyNoteObject(){//ultima nota recebe a atual
-        btLastNote.setBtId(btNoteNow.getBtId());
-        btLastNote.setSelectedText(btNoteNow.getSelectedText());
-        btLastNote.setBtY(btNoteNow.getBtY());
-    }
-*/
 
 }

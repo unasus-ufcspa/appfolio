@@ -3,7 +3,6 @@ package com.ufcspa.unasus.appportfolio.Activities.Fragments;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
@@ -86,7 +85,7 @@ public class FragRef extends Frag {
         list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                refSelected = (Reference) adapter.getItem(position);
+                refSelected = adapter.getItem(position);
                 registerForContextMenu(list);
             }
         });

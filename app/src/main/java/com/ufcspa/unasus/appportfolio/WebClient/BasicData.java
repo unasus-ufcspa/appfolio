@@ -12,13 +12,13 @@ import com.ufcspa.unasus.appportfolio.Model.basicData.PortfolioStudent;
 import com.ufcspa.unasus.appportfolio.Model.basicData.User;
 import com.ufcspa.unasus.appportfolio.database.DataBaseAdapter;
 
-import java.util.Iterator;
 import java.util.LinkedList;
 
 /**
  * Created by icaromsc on 04/04/2016.
  */
-public class BasicData {
+public class
+        BasicData {
 
     private LinkedList<Activity> activities;
     private LinkedList<ActivityStudent> activitiesStudent;

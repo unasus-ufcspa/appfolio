@@ -21,21 +21,19 @@ import com.onegravity.rteditor.api.media.RTAudio;
 import com.onegravity.rteditor.api.media.RTImage;
 import com.onegravity.rteditor.api.media.RTVideo;
 
-import java.io.IOException;
-
 public class AudioProcessor extends MediaProcessor {
-
-    public interface AudioProcessorListener extends MediaProcessorListener {
-        public void onAudioProcessed(RTAudio audio);
-    }
 
     public AudioProcessor(String originalFile, RTMediaFactory<RTImage, RTAudio, RTVideo> mediaFactory, AudioProcessorListener listener) {
         super(originalFile, mediaFactory, listener);
     }
 
     @Override
-    protected void processMedia() throws IOException, Exception {
+    protected void processMedia() throws Exception {
         // TODO
+    }
+
+    public interface AudioProcessorListener extends MediaProcessorListener {
+        void onAudioProcessed(RTAudio audio);
     }
 
 }

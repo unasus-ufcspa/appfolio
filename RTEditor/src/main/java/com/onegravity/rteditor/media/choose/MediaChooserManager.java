@@ -34,21 +34,11 @@ import com.onegravity.rteditor.utils.Constants.MediaAction;
 
 abstract class MediaChooserManager implements MediaProcessorListener {
 
-    public interface MediaChooserListener {
-        /**
-         * Handle any error condition if at all, when you receive this callback
-         */
-        public void onError(String reason);
-    }
-
     transient protected MonitoredActivity mActivity;
     transient protected RTMediaFactory<RTImage, RTAudio, RTVideo> mMediaFactory;
-
     // the type of chooser (see MediaChooserActivity.REQUEST_PICK_PICTURE etc.)
     transient protected MediaAction mMediaAction;
-
     transient private MediaChooserListener mListener;
-
     // the file path and name of the original file
     // the MediaChooserManager sets this once the user picked a file
     private String mOriginalFile;
@@ -125,5 +115,12 @@ abstract class MediaChooserManager implements MediaProcessorListener {
             }
         }
         return mOriginalFile;
+    }
+
+    public interface MediaChooserListener {
+        /**
+         * Handle any error condition if at all, when you receive this callback
+         */
+        void onError(String reason);
     }
 }

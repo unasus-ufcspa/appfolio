@@ -37,20 +37,14 @@
         <item name="rte_icToolbarBold">@drawable/selector_ic_black</item>
         <item name="rte_icToolbarItalic">@drawable/selector_ic_italic</item>
         <item name="rte_icToolbarUnderline">@drawable/selector_ic_underline</item>
-        <item name="rte_icToolbarStrikethrough">@drawable/selector_ic_toolbar_strikethrough_light</item>
         <item name="rte_icToolbarSuperscript">@drawable/selector_ic_upper</item>
         <item name="rte_icToolbarSubscript">@drawable/selector_ic_under</item>
         <item name="rte_icToolbarAlignLeft">@drawable/selector_ic_left</item>
         <item name="rte_icToolbarAlignCenter">@drawable/selector_ic_middle</item>
         <item name="rte_icToolbarAlignRight">@drawable/selector_ic_right</item>
-        <item name="rte_icToolbarIncIndent">@drawable/selector_ic_toolbar_inc_indent_light</item>
-        <item name="rte_icToolbarDecIntent">@drawable/selector_ic_toolbar_dec_indent_light</item>
         <item name="rte_icToolbarBullet">@drawable/selector_ic_bullet</item>
-        <item name="rte_icToolbarNumber">@drawable/selector_ic_toolbar_number_light</item>
         <item name="rte_icToolbarFont">@drawable/ic_font</item>
         <item name="rte_icToolbarFontSize">@drawable/ic_size</item>
-        <item name="rte_icToolbarFontColor">@drawable/selector_ic_toolbar_fontcolor_light</item>
-        <item name="rte_icToolbarBGColor">@drawable/selector_ic_toolbar_bgcolor_light</item>
         <item name="rte_icToolbarLink">@drawable/ic_link</item>
         <item name="rte_icToolbarImage">@drawable/selector_ic_toolbar_image_light</item>
         <item name="rte_icToolbarVideo">@drawable/ic_toolbar_video_light</item>
@@ -59,7 +53,6 @@
         <item name="rte_icToolbarCapture">@drawable/selector_ic_toolbar_capture_light</item>
         <item name="rte_icToolbarUndo">@drawable/ic_undo</item>
         <item name="rte_icToolbarRedo">@drawable/ic_redo</item>
-        <item name="rte_icToolbarClear">@drawable/selector_ic_toolbar_clear_light</item>
 		
 		<item name="rte_icMenuCloseClearCancel">@drawable/ic_menu_close_clear_cancel_light</item>
 		<item name="rte_icMenuSave">@drawable/ic_menu_save_light</item>
@@ -87,21 +80,14 @@
         <item name="rte_icToolbarBold">@drawable/selector_ic_black</item>
         <item name="rte_icToolbarItalic">@drawable/selector_ic_italic</item>
         <item name="rte_icToolbarUnderline">@drawable/selector_ic_underline</item>
-        <item name="rte_icToolbarStrikethrough">@drawable/selector_ic_toolbar_strikethrough_light
-        </item>
         <item name="rte_icToolbarSuperscript">@drawable/selector_ic_upper</item>
         <item name="rte_icToolbarSubscript">@drawable/selector_ic_under</item>
         <item name="rte_icToolbarAlignLeft">@drawable/selector_ic_left</item>
         <item name="rte_icToolbarAlignCenter">@drawable/selector_ic_middle</item>
         <item name="rte_icToolbarAlignRight">@drawable/selector_ic_right</item>
-        <item name="rte_icToolbarIncIndent">@drawable/selector_ic_toolbar_inc_indent_light</item>
-        <item name="rte_icToolbarDecIntent">@drawable/selector_ic_toolbar_dec_indent_light</item>
         <item name="rte_icToolbarBullet">@drawable/selector_ic_bullet</item>
-        <item name="rte_icToolbarNumber">@drawable/selector_ic_toolbar_number_light</item>
         <item name="rte_icToolbarFont">@drawable/ic_font</item>
         <item name="rte_icToolbarFontSize">@drawable/ic_size</item>
-        <item name="rte_icToolbarFontColor">@drawable/selector_ic_toolbar_fontcolor_light</item>
-        <item name="rte_icToolbarBGColor">@drawable/selector_ic_toolbar_bgcolor_light</item>
         <item name="rte_icToolbarLink">@drawable/ic_link</item>
         <item name="rte_icToolbarImage">@drawable/selector_ic_toolbar_image_light</item>
         <item name="rte_icToolbarVideo">@drawable/ic_toolbar_video_light</item>
@@ -110,8 +96,6 @@
         <item name="rte_icToolbarCapture">@drawable/selector_ic_toolbar_capture_light</item>
         <item name="rte_icToolbarUndo">@drawable/ic_undo</item>
         <item name="rte_icToolbarRedo">@drawable/ic_redo</item>
-        <item name="rte_icToolbarClear">@drawable/selector_ic_toolbar_clear_light</item>
-        
 		<item name="rte_icMenuCloseClearCancel">@drawable/ic_menu_close_clear_cancel_dark</item>
 		<item name="rte_icMenuSave">@drawable/ic_menu_save_dark</item>
         <item name="rte_icMenuRotateLeft">@drawable/ic_menu_rotate_left_dark</item>

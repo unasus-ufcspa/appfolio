@@ -12,8 +12,6 @@ import android.view.MotionEvent;
 import android.view.ViewParent;
 import android.webkit.WebSettings;
 
-import com.ufcspa.unasus.appportfolio.R;
-
 import jp.wasabeef.richeditor.RichEditor;
 
 /**
@@ -63,51 +61,6 @@ public class MyEditor extends RichEditor {
         return parent.startActionModeForChild(this, mActionModeCallback);
     }
 
-    private class CustomActionModeCallback implements ActionMode.Callback {
-
-        @Override
-        public boolean onCreateActionMode(ActionMode mode, Menu menu) {
-            mActionMode = mode;
-            MenuInflater inflater = mode.getMenuInflater();
-            inflater.inflate(R.layout.menu_clip, menu);
-            return true;
-        }
-
-        @Override
-        public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
-            return false;
-        }
-
-        @Override
-        public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
-
-            switch (item.getItemId()) {
-                case R.id.copy:
-                    getSelectedData();
-                    mode.finish();
-                    return true;
-                case R.id.share:
-                    mode.finish();
-                    return true;
-                default:
-                    mode.finish();
-                    return false;
-            }
-        }
-
-        @Override
-        public void onDestroyActionMode(ActionMode mode) {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-                clearFocus();
-            } else {
-                if (mSelectActionModeCallback != null) {
-                    mSelectActionModeCallback.onDestroyActionMode(mode);
-                }
-                mActionMode = null;
-            }
-        }
-    }
-
     private void getSelectedData() {
 
         String js = "(function getSelectedText() {" +
@@ -129,6 +82,62 @@ public class MyEditor extends RichEditor {
         }
     }
 
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        // Send the event to our gesture detector
+        // If it is implemented, there will be a return value
+        if (mDetector != null)
+            mDetector.onTouchEvent(event);
+        // If the detected gesture is unimplemented, send it to the superclass
+        return super.onTouchEvent(event);
+    }
+
+    private class CustomActionModeCallback implements ActionMode.Callback {
+
+        @Override
+        public boolean onCreateActionMode(ActionMode mode, Menu menu) {
+            mActionMode = mode;
+            MenuInflater inflater = mode.getMenuInflater();
+            //inflater.inflate(R.layout.menu_clip, menu);
+            return true;
+        }
+
+        @Override
+        public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
+            return false;
+        }
+
+        @Override
+        public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
+
+//            switch (item.getItemId()) {
+//                case R.id.copy:
+//                    getSelectedData();
+//                    mode.finish();
+//                    return true;
+//                case R.id.share:
+//                    mode.finish();
+//                    return true;
+//                default:
+//                    mode.finish();
+//                    return false;
+//            }
+            return false;
+        }
+
+        @Override
+        public void onDestroyActionMode(ActionMode mode) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+                clearFocus();
+            } else {
+                if (mSelectActionModeCallback != null) {
+                    mSelectActionModeCallback.onDestroyActionMode(mode);
+                }
+                mActionMode = null;
+            }
+        }
+    }
+
     private class CustomGestureListener extends GestureDetector.SimpleOnGestureListener {
         @Override
         public boolean onSingleTapUp(MotionEvent e) {
@@ -138,16 +147,6 @@ public class MyEditor extends RichEditor {
             }
             return false;
         }
-    }
-
-    @Override
-    public boolean onTouchEvent(MotionEvent event) {
-        // Send the event to our gesture detector
-        // If it is implemented, there will be a return value
-        if (mDetector != null)
-            mDetector.onTouchEvent(event);
-        // If the detected gesture is unimplemented, send it to the superclass
-        return super.onTouchEvent(event);
     }
 
 

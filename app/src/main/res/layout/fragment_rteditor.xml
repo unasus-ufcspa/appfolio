@@ -14,6 +14,13 @@
         android:layout_height="match_parent"
         android:visibility="visible">
 
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/gray_4">
+
+        </RelativeLayout>
+
         <ImageButton
             android:id="@+id/fullscreen"
             android:layout_width="48dp"
@@ -74,7 +81,7 @@
                         android:layout_marginLeft="35dp"
                         android:layout_marginRight="35dp"
                         android:layout_weight="1"
-                        android:background="@android:color/white"
+                        android:background="@color/gray_4"
                         android:gravity="top"
                         android:imeOptions="actionDone|flagNoEnterAction"
                         android:inputType="textMultiLine|textAutoCorrect|textCapSentences" />
@@ -123,18 +130,21 @@
             android:id="@+id/versions_container"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentStart="true"
             android:layout_marginRight="60dp"
             android:layout_marginTop="50dp"
-            android:layout_toEndOf="@+id/personal_comment_container"
-            android:layout_toRightOf="@+id/personal_comment_container"
             android:gravity="right"
-            android:visibility="gone">
+            android:inflatedId="@+id/panel_import"
+            android:layout="@layout/versions_dialog"
+            android:visibility="invisible">
 
             <include
-                layout="@layout/versions_dialog"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentRight="true" />
+                android:id="@+id/versions"
+                layout="@layout/versions_dialog" />
+
         </RelativeLayout>
 
         <LinearLayout
@@ -201,6 +211,21 @@
             android:src="@drawable/ex_user_img"
             android:visibility="visible" />
 
+        <!--<RelativeLayout-->
+        <!--android:id="@+id/versions_container"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_marginTop="50dp"-->
+        <!--android:gravity="right"-->
+        <!--android:visibility="gone"-->
+        <!--android:layout_alignParentRight="true"-->
+        <!--android:layout_alignParentEnd="true"-->
+        <!--android:layout_alignParentLeft="true"-->
+        <!--android:layout_alignParentStart="true"-->
+        <!--android:layout_marginRight="65dp">-->
+
+        <!--</RelativeLayout>-->
+
     </RelativeLayout>
 
     <RelativeLayout
@@ -214,8 +239,8 @@
             android:id="@+id/button_container"
             android:layout_width="match_parent"
             android:layout_height="50dp"
-            android:layout_toEndOf="@+id/topbar_gray"
-            android:layout_toRightOf="@+id/topbar_gray"
+            android:layout_toEndOf="@+id/leftbar_white"
+            android:layout_toRightOf="@+id/leftbar_white"
             android:background="@color/gray_1"
             android:gravity="bottom"
             android:orientation="horizontal">
@@ -255,74 +280,46 @@
             android:id="@+id/comments_container"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
             android:layout_below="@+id/button_container"
-            android:layout_marginLeft="40dp"
+            android:layout_toEndOf="@+id/leftbar_white"
+            android:layout_toRightOf="@+id/leftbar_white"
+            android:background="@color/base_green"
             android:visibility="visible">
 
         </FrameLayout>
 
         <RelativeLayout
-            android:id="@+id/topbar_gray"
-            android:layout_width="50dp"
-            android:layout_height="35dp"
-            android:layout_above="@+id/comments_container"
-            android:layout_alignParentTop="true"
-            android:background="@color/gray_1"
-            android:visibility="visible">
-
-        </RelativeLayout>
-
-        <RelativeLayout
             android:id="@+id/leftbar_white"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_below="@+id/button_container"
-            android:layout_toLeftOf="@+id/button_container"
-            android:layout_toStartOf="@+id/button_container"
-            android:background="@android:color/transparent"
-            android:gravity="right"
+            android:layout_width="25dp"
+            android:layout_height="35dp"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentTop="true"
+            android:background="@color/gray_4"
             android:visibility="visible">
+
+            <RelativeLayout
+                android:id="@+id/relativeLayout4"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:background="@color/gray_1"></RelativeLayout>
 
             <RelativeLayout
                 android:id="@+id/rightbar_green"
                 android:layout_width="5dp"
                 android:layout_height="match_parent"
-                android:layout_alignParentEnd="true"
-                android:layout_alignParentRight="true"
-                android:layout_alignParentTop="true"
-                android:layout_marginRight="10dp"
-                android:background="@color/base_green"></RelativeLayout>
-
-            <RelativeLayout
-                android:id="@+id/drawer_indicator"
-                android:layout_width="15dp"
-                android:layout_height="match_parent"
-                android:layout_alignParentTop="true"
-                android:layout_toLeftOf="@+id/rightbar_green"
-                android:layout_toStartOf="@+id/rightbar_green"
+                android:layout_below="@+id/relativeLayout4"
+                android:layout_marginLeft="10dp"
                 android:background="@color/base_green"
-                android:visibility="visible" />
+                android:visibility="invisible"></RelativeLayout>
 
             <RelativeLayout
                 android:id="@+id/obs_view"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"></RelativeLayout>
+                android:layout_height="match_parent"
+                android:layout_below="@+id/relativeLayout4"
+                android:visibility="visible"></RelativeLayout>
 
         </RelativeLayout>
-
-        <ImageView
-            android:id="@+id/usr_photo_right"
-            android:layout_width="75dp"
-            android:layout_height="75dp"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
-            android:layout_alignParentTop="true"
-            android:layout_marginTop="10dp"
-            android:background="@drawable/rounded_corner"
-            android:src="@drawable/ex_user_img"
-            android:visibility="gone" />
 
     </RelativeLayout>
 

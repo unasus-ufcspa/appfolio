@@ -309,8 +309,6 @@ public class SVBar extends View {
         canvas.drawCircle(cX, cY, mBarPointerRadius, mBarPointerPaint);
     }
 
-    ;
-
     @SuppressLint("ClickableViewAccessibility")
     @Override
     public boolean onTouchEvent(MotionEvent event) {
@@ -420,6 +418,47 @@ public class SVBar extends View {
     }
 
     /**
+     * Calculate the color selected by the pointer on the bar.
+     *
+     * @param coord Coordinate of the pointer.
+     */
+    private void calculateColor(int coord) {
+        coord = coord - mBarPointerHaloRadius;
+        if (coord < 0) {
+            coord = 0;
+        } else if (coord > mBarLength) {
+            coord = mBarLength;
+        }
+
+        if (coord > (mBarPointerHaloRadius + (mBarLength / 2))
+                && coord < (mBarPointerHaloRadius + mBarLength)) {
+            mColor = Color
+                    .HSVToColor(new float[]{
+                            mHSVColor[0],
+                            1f,
+                            1 - (mPosToSVFactor * (coord - (mBarPointerHaloRadius + (mBarLength / 2))))});
+        } else if (coord > mBarPointerHaloRadius
+                && coord < (mBarPointerHaloRadius + mBarLength)) {
+            mColor = Color.HSVToColor(new float[]{mHSVColor[0],
+                    (mPosToSVFactor * (coord - mBarPointerHaloRadius)),
+                    1f});
+        } else if (coord == mBarPointerHaloRadius) {
+            mColor = Color.WHITE;
+        } else if (coord == mBarPointerHaloRadius + mBarLength) {
+            mColor = Color.BLACK;
+        }
+    }
+
+    /**
+     * Get the currently selected color.
+     *
+     * @return The ARGB value of the currently selected color.
+     */
+    public int getColor() {
+        return mColor;
+    }
+
+    /**
      * Set the bar color. <br>
      * <br>
      * Its discouraged to use this method.
@@ -450,47 +489,6 @@ public class SVBar extends View {
                 mPicker.changeOpacityBarColor(mColor);
         }
         invalidate();
-    }
-
-    /**
-     * Calculate the color selected by the pointer on the bar.
-     *
-     * @param coord Coordinate of the pointer.
-     */
-    private void calculateColor(int coord) {
-        coord = coord - mBarPointerHaloRadius;
-        if (coord < 0) {
-            coord = 0;
-        } else if (coord > mBarLength) {
-            coord = mBarLength;
-        }
-
-        if (coord > (mBarPointerHaloRadius + (mBarLength / 2))
-                && coord < (mBarPointerHaloRadius + mBarLength)) {
-            mColor = Color
-                    .HSVToColor(new float[]{
-                            mHSVColor[0],
-                            1f,
-                            (float) (1 - (mPosToSVFactor * (coord - (mBarPointerHaloRadius + (mBarLength / 2)))))});
-        } else if (coord > mBarPointerHaloRadius
-                && coord < (mBarPointerHaloRadius + mBarLength)) {
-            mColor = Color.HSVToColor(new float[]{mHSVColor[0],
-                    (float) ((mPosToSVFactor * (coord - mBarPointerHaloRadius))),
-                    1f});
-        } else if (coord == mBarPointerHaloRadius) {
-            mColor = Color.WHITE;
-        } else if (coord == mBarPointerHaloRadius + mBarLength) {
-            mColor = Color.BLACK;
-        }
-    }
-
-    /**
-     * Get the currently selected color.
-     *
-     * @return The ARGB value of the currently selected color.
-     */
-    public int getColor() {
-        return mColor;
     }
 
     /**

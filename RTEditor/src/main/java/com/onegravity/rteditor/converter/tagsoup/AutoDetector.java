@@ -16,8 +16,8 @@
 
 package com.onegravity.rteditor.converter.tagsoup;
 
-import java.io.Reader;
 import java.io.InputStream;
+import java.io.Reader;
 
 /**
  * Classes which accept an InputStream and provide a Reader which figures out
@@ -40,6 +40,6 @@ public interface AutoDetector {
      * @return A Reader that reads from the InputStream
      */
 
-    public Reader autoDetectingReader(InputStream i);
+    Reader autoDetectingReader(InputStream i);
 
 }

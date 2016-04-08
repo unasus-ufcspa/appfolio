@@ -61,6 +61,36 @@ public class ElementType {
     }
 
     /**
+     * Normalize an attribute value (ID-style). CDATA-style attribute
+     * normalization is already done.
+     *
+     * @param value The value to normalize
+     * @return The normalized value
+     */
+    public static String normalize(String value) {
+        if (value == null)
+            return value;
+        value = value.trim();
+        if (value.indexOf("  ") == -1)
+            return value;
+        boolean space = false;
+        int len = value.length();
+        StringBuffer b = new StringBuffer(len);
+        for (int i = 0; i < len; i++) {
+            char v = value.charAt(i);
+            if (v == ' ') {
+                if (!space)
+                    b.append(v);
+                space = true;
+            } else {
+                b.append(v);
+                space = false;
+            }
+        }
+        return b.toString();
+    }
+
+    /**
      * Return a namespace name from a Qname. The attribute flag tells us whether
      * to return an empty namespace name if there is no prefix, or use the
      * schema default instead.
@@ -217,7 +247,6 @@ public class ElementType {
         if (name.equals("xmlns") || name.startsWith("xmlns:")) {
             return;
         }
-        ;
         String namespace = namespace(name, true);
         String localName = localName(name);
         int i = atts.getIndex(name);
@@ -235,36 +264,6 @@ public class ElementType {
                 value = normalize(value);
             atts.setAttribute(i, namespace, localName, name, type, value);
         }
-    }
-
-    /**
-     * Normalize an attribute value (ID-style). CDATA-style attribute
-     * normalization is already done.
-     *
-     * @param value The value to normalize
-     * @return The normalized value
-     */
-    public static String normalize(String value) {
-        if (value == null)
-            return value;
-        value = value.trim();
-        if (value.indexOf("  ") == -1)
-            return value;
-        boolean space = false;
-        int len = value.length();
-        StringBuffer b = new StringBuffer(len);
-        for (int i = 0; i < len; i++) {
-            char v = value.charAt(i);
-            if (v == ' ') {
-                if (!space)
-                    b.append(v);
-                space = true;
-            } else {
-                b.append(v);
-                space = false;
-            }
-        }
-        return b.toString();
     }
 
     /**

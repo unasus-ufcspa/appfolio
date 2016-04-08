@@ -26,45 +26,10 @@ import java.util.ArrayList;
 
 public class MonitoredActivity extends AppCompatActivity {
 
+    private final ArrayList<LifeCycleListener> mListeners = new ArrayList<LifeCycleListener>();
     protected Handler mHandler;
 
-    private final ArrayList<LifeCycleListener> mListeners = new ArrayList<LifeCycleListener>();
-
     // ****************************************** MonitoredActivity Methods *******************************************
-
-    public static interface LifeCycleListener {
-        public void onActivityCreated(Activity activity);
-
-        public void onActivityDestroyed(Activity activity);
-
-        public void onActivityPaused(Activity activity);
-
-        public void onActivityResumed(Activity activity);
-
-        public void onActivityStarted(Activity activity);
-
-        public void onActivityStopped(Activity activity);
-    }
-
-    public static class LifeCycleAdapter implements LifeCycleListener {
-        public void onActivityCreated(Activity activity) {
-        }
-
-        public void onActivityDestroyed(Activity activity) {
-        }
-
-        public void onActivityPaused(Activity activity) {
-        }
-
-        public void onActivityResumed(Activity activity) {
-        }
-
-        public void onActivityStarted(Activity activity) {
-        }
-
-        public void onActivityStopped(Activity activity) {
-        }
-    }
 
     public void addLifeCycleListener(LifeCycleListener listener) {
         if (!mListeners.contains(listener)) {
@@ -75,8 +40,6 @@ public class MonitoredActivity extends AppCompatActivity {
     public void removeLifeCycleListener(LifeCycleListener listener) {
         mListeners.remove(listener);
     }
-
-    // ****************************************** Lifecycle Methods *******************************************
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -99,6 +62,8 @@ public class MonitoredActivity extends AppCompatActivity {
             listener.onActivityStarted(this);
         }
     }
+
+    // ****************************************** Lifecycle Methods *******************************************
 
     @Override
     protected void onPause() {
@@ -136,8 +101,6 @@ public class MonitoredActivity extends AppCompatActivity {
         }
     }
 
-    // ****************************************** Foreground Jobs (Modal) *******************************************
-
     /**
      * Start a foreground job showing a progress bar as long as the job runs.
      * A foreground job shows a modal dialog that can't be cancelled while the app
@@ -170,8 +133,44 @@ public class MonitoredActivity extends AppCompatActivity {
         managedJob.runBackgroundJob();
     }
 
+    // ****************************************** Foreground Jobs (Modal) *******************************************
+
+    public interface LifeCycleListener {
+        void onActivityCreated(Activity activity);
+
+        void onActivityDestroyed(Activity activity);
+
+        void onActivityPaused(Activity activity);
+
+        void onActivityResumed(Activity activity);
+
+        void onActivityStarted(Activity activity);
+
+        void onActivityStopped(Activity activity);
+    }
+
     public interface ForegroundJob<T> {
-        public T runForegroundJob();
+        T runForegroundJob();
+    }
+
+    public static class LifeCycleAdapter implements LifeCycleListener {
+        public void onActivityCreated(Activity activity) {
+        }
+
+        public void onActivityDestroyed(Activity activity) {
+        }
+
+        public void onActivityPaused(Activity activity) {
+        }
+
+        public void onActivityResumed(Activity activity) {
+        }
+
+        public void onActivityStarted(Activity activity) {
+        }
+
+        public void onActivityStopped(Activity activity) {
+        }
     }
 
     private class Job<T> extends LifeCycleAdapter implements ForegroundJob<T> {

@@ -46,9 +46,109 @@ class RTOperationManager {
      */
     private Map<Integer, Stack<Operation>> mUndoStacks = new HashMap<Integer, Stack<Operation>>();
     private Map<Integer, Stack<Operation>> mRedoStacks = new HashMap<Integer, Stack<Operation>>();
-    ;
 
     // ****************************************** Operation Classes *******************************************
+
+    /**
+     * Call this when an operation is performed to add it to the undo stack.
+     *
+     * @param editor The rich text editor the operation was performed on
+     * @param op     The Operation that was performed
+     */
+    synchronized void executed(RTEditText editor, Operation op) {
+        Stack<Operation> undoStack = getUndoStack(editor);
+        Stack<Operation> redoStack = getRedoStack(editor);
+
+        // if operations are executed in a quick succession we "merge" them to have but one
+        // -> saves memory and makes more sense from a user perspective (each key stroke an undo? -> no way)
+        while (!undoStack.empty() && op.canMerge(undoStack.peek())) {
+            Operation previousOp = undoStack.pop();
+            op.merge(previousOp);
+        }
+
+        push(op, undoStack);
+        redoStack.clear();
+    }
+
+    /**
+     * Undo the last operation for a specific rich text editor
+     *
+     * @param editor Undo the last operation for this rich text editor
+     */
+    synchronized void undo(RTEditText editor) {
+        Stack<Operation> undoStack = getUndoStack(editor);
+        if (!undoStack.empty()) {
+            Stack<Operation> redoStack = getRedoStack(editor);
+            Operation op = undoStack.pop();
+            push(op, redoStack);
+            op.undo(editor);
+            while (!undoStack.empty() && op.canMerge(undoStack.peek())) {
+                op = undoStack.pop();
+                push(op, redoStack);
+                op.undo(editor);
+            }
+        }
+    }
+
+    // ****************************************** execute/undo/redo/flush *******************************************
+
+    /**
+     * Re-do the last undone operation for a specific rich text editor
+     *
+     * @param editor Re-do an operation for this rich text editor
+     */
+    synchronized void redo(RTEditText editor) {
+        Stack<Operation> redoStack = getRedoStack(editor);
+        if (!redoStack.empty()) {
+            Stack<Operation> undoStack = getUndoStack(editor);
+            Operation op = redoStack.pop();
+            push(op, undoStack);
+            op.redo(editor);
+            while (!redoStack.empty() && op.canMerge(redoStack.peek())) {
+                op = redoStack.pop();
+                push(op, undoStack);
+                op.redo(editor);
+            }
+        }
+    }
+
+    /**
+     * Flush all operations for a specific rich text editor (method unused at the moment)
+     *
+     * @param editor This rich text editor's operations will be flushed
+     */
+    synchronized void flushOperations(RTEditText editor) {
+        Stack<Operation> undoStack = getUndoStack(editor);
+        Stack<Operation> redoStack = getRedoStack(editor);
+        undoStack.clear();
+        redoStack.clear();
+    }
+
+    private void push(Operation op, Stack<Operation> stack) {
+        if (stack.size() >= MAX_NR_OF_OPERATIONS) {
+            stack.remove(0);
+        }
+        stack.push(op);
+    }
+
+    private Stack<Operation> getUndoStack(RTEditText editor) {
+        return getStack(mUndoStacks, editor);
+    }
+
+    // ****************************************** Private Methods *******************************************
+
+    private Stack<Operation> getRedoStack(RTEditText editor) {
+        return getStack(mRedoStacks, editor);
+    }
+
+    private Stack<Operation> getStack(Map<Integer, Stack<Operation>> stacks, RTEditText editor) {
+        Stack<Operation> stack = stacks.get(editor.getId());
+        if (stack == null) {
+            stack = new Stack<Operation>();
+            stacks.put(editor.getId(), stack);
+        }
+        return stack;
+    }
 
     /**
      * An atomic operation in the rich text editor.
@@ -106,107 +206,6 @@ class RTOperationManager {
         TextChangeOperation(Spannable before, Spannable after, int selStartBefore, int selEndBefore, int selStartAfter, int selEndAfter) {
             super(before, after, selStartBefore, selEndBefore, selStartAfter, selEndAfter);
         }
-    }
-
-    // ****************************************** execute/undo/redo/flush *******************************************
-
-    /**
-     * Call this when an operation is performed to add it to the undo stack.
-     *
-     * @param editor The rich text editor the operation was performed on
-     * @param op     The Operation that was performed
-     */
-    synchronized void executed(RTEditText editor, Operation op) {
-        Stack<Operation> undoStack = getUndoStack(editor);
-        Stack<Operation> redoStack = getRedoStack(editor);
-
-        // if operations are executed in a quick succession we "merge" them to have but one
-        // -> saves memory and makes more sense from a user perspective (each key stroke an undo? -> no way)
-        while (!undoStack.empty() && op.canMerge(undoStack.peek())) {
-            Operation previousOp = undoStack.pop();
-            op.merge(previousOp);
-        }
-
-        push(op, undoStack);
-        redoStack.clear();
-    }
-
-    /**
-     * Undo the last operation for a specific rich text editor
-     *
-     * @param editor Undo the last operation for this rich text editor
-     */
-    synchronized void undo(RTEditText editor) {
-        Stack<Operation> undoStack = getUndoStack(editor);
-        if (!undoStack.empty()) {
-            Stack<Operation> redoStack = getRedoStack(editor);
-            Operation op = undoStack.pop();
-            push(op, redoStack);
-            op.undo(editor);
-            while (!undoStack.empty() && op.canMerge(undoStack.peek())) {
-                op = undoStack.pop();
-                push(op, redoStack);
-                op.undo(editor);
-            }
-        }
-    }
-
-    /**
-     * Re-do the last undone operation for a specific rich text editor
-     *
-     * @param editor Re-do an operation for this rich text editor
-     */
-    synchronized void redo(RTEditText editor) {
-        Stack<Operation> redoStack = getRedoStack(editor);
-        if (!redoStack.empty()) {
-            Stack<Operation> undoStack = getUndoStack(editor);
-            Operation op = redoStack.pop();
-            push(op, undoStack);
-            op.redo(editor);
-            while (!redoStack.empty() && op.canMerge(redoStack.peek())) {
-                op = redoStack.pop();
-                push(op, undoStack);
-                op.redo(editor);
-            }
-        }
-    }
-
-    /**
-     * Flush all operations for a specific rich text editor (method unused at the moment)
-     *
-     * @param editor This rich text editor's operations will be flushed
-     */
-    synchronized void flushOperations(RTEditText editor) {
-        Stack<Operation> undoStack = getUndoStack(editor);
-        Stack<Operation> redoStack = getRedoStack(editor);
-        undoStack.clear();
-        redoStack.clear();
-    }
-
-    // ****************************************** Private Methods *******************************************
-
-    private void push(Operation op, Stack<Operation> stack) {
-        if (stack.size() >= MAX_NR_OF_OPERATIONS) {
-            stack.remove(0);
-        }
-        stack.push(op);
-    }
-
-    private Stack<Operation> getUndoStack(RTEditText editor) {
-        return getStack(mUndoStacks, editor);
-    }
-
-    private Stack<Operation> getRedoStack(RTEditText editor) {
-        return getStack(mRedoStacks, editor);
-    }
-
-    private Stack<Operation> getStack(Map<Integer, Stack<Operation>> stacks, RTEditText editor) {
-        Stack<Operation> stack = stacks.get(editor.getId());
-        if (stack == null) {
-            stack = new Stack<Operation>();
-            stacks.put(editor.getId(), stack);
-        }
-        return stack;
     }
 
 }
