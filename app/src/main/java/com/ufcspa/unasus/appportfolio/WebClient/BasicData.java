@@ -115,13 +115,13 @@ public class BasicData {
 
         }
 
-        Thread t = new Thread(new Runnable() {
-            @SuppressLint("LongLogTag")
-            @Override
-            public void run() {
+//        Thread t = new Thread(new Runnable() {
+//            @SuppressLint("LongLogTag")
+//            @Override
+//            public void run() {
                 //INSERT DATA IN DATABASE
                 DataBaseAdapter data = DataBaseAdapter.getInstance(context);
-                String log="BasicData insert into sqlite";
+                String log="BD Insert SQLite";
                 if(users.size()!=0){
                     Log.d(log,"inserindo users");
                     data.insertTBUser(users);
@@ -144,9 +144,9 @@ public class BasicData {
                 data.insertTBActivityStudent(activitiesStudent);
 
 
-            }
-        });
-        t.start();
+//            }
+//        });
+//        t.start();
     }
 
     public static JSONObject toJSON(int idUser){

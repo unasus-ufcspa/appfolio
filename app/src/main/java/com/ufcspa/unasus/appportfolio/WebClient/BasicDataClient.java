@@ -71,9 +71,9 @@ public class BasicDataClient extends HttpClient {
                             Log.d(tag, "JSon response::" + resp.toString());
 
 
-                            if(resp.has("portfolio_student")) {
+                            if(resp.has("portfolioStudent")) {
                                 // GET PORTFOLIO STUDENT
-                                JSONObject objPs = resp.getJSONObject("portfolio_student");
+                                JSONObject objPs = resp.getJSONObject("portfolioStudent");
                                 JSONArray tb_port_stu = objPs.getJSONArray("tb_portfolio_student");
                                 // POPULATE PORTFOLIO STUDENT
                                 for (int i = 0; i < tb_port_stu.length(); i++) {

@@ -46,8 +46,12 @@ public class FragmentSelectPortfolio extends Frag {
 
         try
         {
-            portclasses=source.selectListClassAndUserType(singleton.user.getIdUser());
+            portclasses = source.selectListClassAndUserType(singleton.user.getIdUser());
             Log.d("lista", "tam portlis:" + portclasses.size());
+//            Log.d("lista", "tam tb_class:" + source.getCountTbClass());
+//            Log.d("lista", "tam tb_portfolio_student:" + source.getCountTbPortfolioStudent());
+//            Log.d("lista", "tam tb_activity_student:" + source.getCountTbActivityStudent());
+
         }
         catch (Exception e)
         {

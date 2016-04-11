@@ -54,6 +54,8 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
+import io.github.skyhacker2.sqliteonweb.SQLiteOnWeb;
+
 import static android.Manifest.permission.READ_CONTACTS;
 
 /**
@@ -93,6 +95,8 @@ public class LoginActivity2 extends AppCompatActivity implements LoaderCallbacks
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         getSupportActionBar().hide();
+
+        SQLiteOnWeb.init(this).start();
 
         // Set up the login form.
         mEmailView = (AutoCompleteTextView) findViewById(R.id.email);
@@ -148,7 +152,7 @@ public class LoginActivity2 extends AppCompatActivity implements LoaderCallbacks
                             if(!isDataSyncNotSucessful){
                                 Log.d("acitivity login", "user get by json:" + Singleton.getInstance().user.toString());
                                 getBasicData();
-                                SystemClock.sleep(5000);
+                                SystemClock.sleep(20000);
                                 new Handler(Looper.getMainLooper()).post(new Runnable() {
                                     @Override
                                     public void run() {
@@ -160,7 +164,7 @@ public class LoginActivity2 extends AppCompatActivity implements LoaderCallbacks
                                     }
                                 });
                             }else{
-                                Toast.makeText(getApplicationContext(),"Erro ao fazer login, verifique seu usuário e senha",Toast.LENGTH_LONG).show();
+//                                Toast.makeText(getApplicationContext(),"Erro ao fazer login, verifique seu usuário e senha",Toast.LENGTH_LONG).show();
                             }
                         }
                     });

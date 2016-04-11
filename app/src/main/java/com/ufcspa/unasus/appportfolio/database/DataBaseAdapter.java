@@ -1164,8 +1164,66 @@ public void insertTBUser(List<com.ufcspa.unasus.appportfolio.Model.basicData.Use
         return device;
     }
 
+     /*
+        ************************* DEBUG ***************************
+        *  Log.d("lista", "tam tb_class:" + source.getCountTbPortfolioStudent());
+            Log.d("lista", "tam tb_class_student:" + source.getCountTbPortfolioStudent());
+            Log.d("lista", "tam tb_class_tutor:" + source.getCountTbPortfolioStudent());
+            Log.d("lista", "tam tb_portfolio:" + source.getCountTbPortfolioStudent());
+            Log.d("lista", "tam tb_portfolio_class:" + source.getCountTbPortfolioStudent());
+            Log.d("lista", "tam tb_portfolio_student:" + source.getCountTbPortfolioStudent());
+            Log.d("lista", "tam tb_activity:" + source.getCountTbPortfolioStudent());
+            Log.d("lista", "tam tb_activity_student:" + source.getCountTbPortfolioStudent());
+    */
+    public String getCountTbClass()
+    {
+        String query = "SELECT * FROM tb_class";
+        String result = null;
+        Cursor c = db.rawQuery(query, null);
 
+        if (c.moveToFirst()) {
+            do {
+                result = c.getInt(0) + ", " + c.getInt(1) + ", " + c.getString(2) + ", " + c.getString(3) + ", " + c.getString(4) + ", ... \n";
+            } while (c.moveToNext());
+        } else {
+            Log.e(tag, "não há registros na tabela tb_class");
+        }
 
+        return result;
+    }
 
+    public String getCountTbActivityStudent()
+    {
+        String query = "SELECT * FROM tb_activity_student";
+        String result = null;
+        Cursor c = db.rawQuery(query, null);
+
+        if (c.moveToFirst()) {
+            do {
+                result = c.getInt(0) + ", " + c.getInt(1) + ", " + c.getInt(2) + ", " + c.getString(3) + ", " + c.getString(4) + ", ... \n";
+            } while (c.moveToNext());
+        } else {
+            Log.e(tag, "não há registros na tabela tb_activity_student");
+        }
+
+        return result;
+    }
+
+    public String getCountTbPortfolioStudent()
+    {
+        String query = "SELECT * FROM tb_portfolio_student";
+        String result = null;
+        Cursor c = db.rawQuery(query, null);
+
+        if (c.moveToFirst()) {
+            do {
+                result = c.getInt(0) + ", " + c.getInt(1) + ", " + c.getInt(2) + ", " + c.getString(3) + ", " + c.getString(4) + ", ... \n";
+            } while (c.moveToNext());
+        } else {
+            Log.e(tag, "não há registros na tabela tb_portfolio_student");
+        }
+
+        return result;
+    }
 
 }
