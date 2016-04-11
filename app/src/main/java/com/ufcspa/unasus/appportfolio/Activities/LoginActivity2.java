@@ -22,6 +22,7 @@ import android.os.Handler;
 import android.os.Looper;
 import android.os.SystemClock;
 import android.provider.ContactsContract;
+import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
@@ -37,12 +38,15 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.ufcspa.unasus.appportfolio.Model.Singleton;
 import com.ufcspa.unasus.appportfolio.Model.User;
 import com.ufcspa.unasus.appportfolio.R;
 import com.ufcspa.unasus.appportfolio.WebClient.BasicData;
 import com.ufcspa.unasus.appportfolio.WebClient.BasicDataClient;
+import com.ufcspa.unasus.appportfolio.WebClient.FirstLogin;
+import com.ufcspa.unasus.appportfolio.WebClient.FistLoginClient;
 import com.ufcspa.unasus.appportfolio.database.DataBaseAdapter;
 
 import org.json.JSONObject;
@@ -68,7 +72,7 @@ public class LoginActivity2 extends AppCompatActivity implements LoaderCallbacks
             "foo@example.com:hello", "bar@example.com:world"
     };
     public static boolean isLoginSucessful;
-    public static boolean isDataSyncSucessful;
+    public static boolean isDataSyncNotSucessful;
     LoginActivity2 l = this;
     /**
      * Keep track of the login task to ensure we can cancel it if requested.
@@ -108,7 +112,7 @@ public class LoginActivity2 extends AppCompatActivity implements LoaderCallbacks
         });
 
 
-        DataBaseAdapter data = DataBaseAdapter.getInstance(this);
+        final DataBaseAdapter data = DataBaseAdapter.getInstance(this);
 //        ArrayList<PortfolioClass> lista= (ArrayList<PortfolioClass>) data.selectListClassAndUserType(5);
 //        Log.d("lista","tamanho:"+lista.size());
 //
@@ -125,25 +129,49 @@ public class LoginActivity2 extends AppCompatActivity implements LoaderCallbacks
         Button mEmailSignInButton = (Button) findViewById(R.id.email_sign_in_button);
         mEmailSignInButton.setOnClickListener(new OnClickListener() {
             @Override
-            public void onClick(View view) {
+            public synchronized void onClick(View view) {
                 showProgress(true);
-                new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-                        getBasicData();
-                        SystemClock.sleep(20000);
-                        new Handler(Looper.getMainLooper()).post(new Runnable() {
-                            @Override
-                            public void run() {
-                                showProgress(false);
-                                Log.d("tela login", "conseguiu fazer funfar a conexao");
-                            }
-                        });
-                    }
-                }).start();
+                if (isOnline()) {
 
-                //attemptLogin();
-//                if (verificarLogin()) {
+                    final Thread myThread =new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            //final String id=DataBaseAdapter.getInstance(getApplicationContext()).listarUsers();
+                            verificarLogin();
+                            while(!isLoginSucessful){
+                                if(isDataSyncNotSucessful){
+                                    Log.d("acitivity login", "data sync not sucesseful");
+                                    break;
+                                }
+
+                            }
+                            if(!isDataSyncNotSucessful){
+                                Log.d("acitivity login", "user get by json:" + Singleton.getInstance().user.toString());
+                                getBasicData();
+                                SystemClock.sleep(5000);
+                                new Handler(Looper.getMainLooper()).post(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        showProgress(false);
+                                    //Toast.makeText(getApplicationContext(),"id user:"+id,Toast.LENGTH_SHORT).show();
+                                        Log.d("tela login", "terminou conexão");
+                                        startActivity(new Intent(getApplicationContext(), MainActivity.class));
+                                        finish();
+                                    }
+                                });
+                            }else{
+                                Toast.makeText(getApplicationContext(),"Erro ao fazer login, verifique seu usuário e senha",Toast.LENGTH_LONG).show();
+                            }
+                        }
+                    });
+                    myThread.start();
+
+
+
+
+
+
+
 //                    session = Singleton.getInstance();
 //                    session.user = user;
 //                    getBasicData();
@@ -151,7 +179,7 @@ public class LoginActivity2 extends AppCompatActivity implements LoaderCallbacks
 ////                    loginSuccess();
 //                    /*if(isLoginSucessful){
 //                       getBasicData();
-//                    }
+                    }
 //
 //                    char userType = checkUserType(user.getIdUser());
 //                    if (userType == 'W') {
@@ -209,7 +237,7 @@ public class LoginActivity2 extends AppCompatActivity implements LoaderCallbacks
     private void loginSuccess() {
 
         //  Log.d("singletonn", "id:" + session.user.getIdUser() + " uT:" + session.user.getUserType());
-        while (!isDataSyncSucessful) {
+        while (!isDataSyncNotSucessful) {
 
         }
         showProgress(false);
@@ -258,28 +286,33 @@ public class LoginActivity2 extends AppCompatActivity implements LoaderCallbacks
         //result=user.getIdUser();
         //Log.d("BANCO", " pass:" + result);
         if (isOnline()) {
-//            FirstLogin first = new FirstLogin();
+            FirstLogin first = new FirstLogin();
+
+            String android_id = Settings.Secure.getString(this.getContentResolver(), Settings.Secure.ANDROID_ID);
+            Log.d("ANDROID ID", "Android ID:" + android_id);
+            String tpDevice=(isTablet()) ? "T" : "M";
+            first.setIdDevice(android_id);
+            first.setTpDevice(tpDevice);
+            first.setEmail(mEmailView.getText().toString());
+            first.setPasswd(mPasswordView.getText().toString());
+
+            //ADD TO SINGLETON
+            Singleton.getInstance().device.set_id_device(android_id);
+            Singleton.getInstance().device.set_tp_device(tpDevice.charAt(0));
+
+            FistLoginClient client = new FistLoginClient(getBaseContext());
+            client.postJson(first.toJSON());
+
+//               } catch (Exception e) {
+//                 Log.d("BANCO", "verificando pass:" + e.getMessage());
+//               } finally {
 //
-//            String android_id = Settings.Secure.getString(this.getContentResolver(), Settings.Secure.ANDROID_ID);
-//            Log.d("ANDROID ID", "Android ID:" + android_id);
-//            String tpDevice=(isTablet()) ? "T" : "M";
-//            first.setIdDevice(android_id);
-//            first.setTpDevice(tpDevice);
-//            first.setEmail(mEmailView.getText().toString());
-//            first.setPasswd(mPasswordView.getText().toString());
-//            FistLoginClient client = new FistLoginClient(getBaseContext());
-//            client.postJson(first.toJSON());
-
-            //   } catch (Exception e) {
-            //     Log.d("BANCO", "verificando pass:" + e.getMessage());
-            //   } finally {
-
-            //  }
-//        }else{
-//            Toast.makeText(getApplicationContext(), "Erro ao logar, favor verifique sua conexão com a internet", Toast.LENGTH_LONG).show();
+//              }
+        }else{
+            Toast.makeText(getApplicationContext(), "Erro ao logar, favor verifique sua conexão com a internet", Toast.LENGTH_LONG).show();
         }
-        showProgress(true);
-        return true;//isLoginSucessful;
+        //showProgress(true);
+        return isLoginSucessful;
     }
 
 

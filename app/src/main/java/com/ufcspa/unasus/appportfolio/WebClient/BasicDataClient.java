@@ -347,7 +347,7 @@ public class BasicDataClient extends HttpClient {
                         } catch (Exception v){
                             v.printStackTrace();
                         }
-                        LoginActivity2.isDataSyncSucessful = true;
+                        LoginActivity2.isDataSyncNotSucessful = true;
                     }
                 } finally {
 

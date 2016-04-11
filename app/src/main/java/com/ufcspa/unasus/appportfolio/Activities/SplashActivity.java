@@ -25,7 +25,7 @@ public class SplashActivity extends AppCompatActivity {
         Log.d("ANDROID ID", "getting android ID BY IMEI...");
         Log.d("ANDROID ID","Android ID IMEI:"+id);*/
 
-        Intent intent = new Intent(this, LoginActivity.class);
+        Intent intent = new Intent(this, LoginActivity2.class);
         startActivity(intent);
         finish();
     }

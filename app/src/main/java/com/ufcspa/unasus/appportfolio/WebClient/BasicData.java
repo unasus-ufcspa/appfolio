@@ -138,7 +138,9 @@ public class BasicData {
                 data.insertTBPortfolioClass(portfolioClasses);
                 Log.d(log, "inserindo portfolio Students");
                 data.insertTBPortfolioStudent(portfolioStudents);
+                Log.d(log, "inserindo tb_atividades");
                 data.insertTBActivity(activities);
+                Log.d(log, "inserindo tb_activities student");
                 data.insertTBActivityStudent(activitiesStudent);
 
 

@@ -10,6 +10,8 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.ufcspa.unasus.appportfolio.Activities.LoginActivity;
+import com.ufcspa.unasus.appportfolio.Activities.LoginActivity2;
+import com.ufcspa.unasus.appportfolio.Model.Device;
 import com.ufcspa.unasus.appportfolio.Model.Singleton;
 import com.ufcspa.unasus.appportfolio.Model.User;
 import com.ufcspa.unasus.appportfolio.database.DataBaseAdapter;
@@ -74,11 +76,17 @@ public class FistLoginClient extends HttpClient {
                                 //INSERINDO USER NO DB SQLITE
                                 user = new User(idUser,name,idCode,email,cellphone);
                                 Log.d(tag, "user get by json:" + user.toString());
-                                user = DataBaseAdapter.getInstance(context).insertUser(user);
+                                Log.d(tag, "user this user in sqlite...");
+
+
+                                DataBaseAdapter.getInstance(context).insertUser(user);
+                                DataBaseAdapter.getInstance(context).insertIntoTbDevice(new Device(Singleton.getInstance().device.get_id_device(),user.getIdUser(),Singleton.getInstance().device.get_tp_device()));
 
                                 //Adicionando o usuario no singleton
                                 Singleton.getInstance().user = user;
-                                LoginActivity.isLoginSucessful=true;
+                                Log.d(tag, "user get by singleton:" + Singleton.getInstance().user.toString());
+
+                                LoginActivity2.isLoginSucessful=true;
                             }
                         }
 
@@ -99,6 +107,7 @@ public class FistLoginClient extends HttpClient {
                 volleyError.printStackTrace();
                 //Log.wtf(tag,"Network response:"+volleyError.networkResponse.statusCode);
                 Log.e(tag,"erro="+volleyError.getMessage());
+                LoginActivity2.isDataSyncNotSucessful=true;
             }
         });
         RequestQueue queue= Volley.newRequestQueue(context);

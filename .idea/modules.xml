@@ -6,7 +6,7 @@
       <module fileurl="file://$PROJECT_DIR$/RTEditor/RTEditor.iml" filepath="$PROJECT_DIR$/RTEditor/RTEditor.iml" />
       <module fileurl="file://$PROJECT_DIR$/RTEditor-Toolbar/RTEditor-Toolbar.iml" filepath="$PROJECT_DIR$/RTEditor-Toolbar/RTEditor-Toolbar.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
-      <module fileurl="file://$PROJECT_DIR$/app-portfolio-connect.iml" filepath="$PROJECT_DIR$/app-portfolio-connect.iml" />
+      <module fileurl="file://$PROJECT_DIR$/app-portfolio.iml" filepath="$PROJECT_DIR$/app-portfolio.iml" />
     </modules>
   </component>
 </project>

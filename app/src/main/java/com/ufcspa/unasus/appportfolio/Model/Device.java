@@ -16,6 +16,7 @@ public class Device {
         this._tp_device = _tp_device;
     }
 
+
     public String get_id_device() {
         return _id_device;
     }
