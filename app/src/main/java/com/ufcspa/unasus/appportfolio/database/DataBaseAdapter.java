@@ -13,6 +13,7 @@ import com.ufcspa.unasus.appportfolio.Model.Comentario;
 import com.ufcspa.unasus.appportfolio.Model.Device;
 import com.ufcspa.unasus.appportfolio.Model.PortfolioClass;
 import com.ufcspa.unasus.appportfolio.Model.Reference;
+import com.ufcspa.unasus.appportfolio.Model.StatusApp;
 import com.ufcspa.unasus.appportfolio.Model.StudFrPortClass;
 import com.ufcspa.unasus.appportfolio.Model.Sync;
 import com.ufcspa.unasus.appportfolio.Model.Team;
@@ -1225,5 +1226,52 @@ public void insertTBUser(List<com.ufcspa.unasus.appportfolio.Model.basicData.Use
 
         return result;
     }
+
+    public void updateTbStatusFirstSync(boolean firstSync){
+        ContentValues cv = new ContentValues();
+        int value=(firstSync == true ? 1 : 0);
+        cv.put("first_sync", value);
+        try {
+            db.update("tb_status", cv, "id=1", null);
+            Log.e(tag, "Conseguiu alterar tb_status FirstSync");
+        }catch (Exception e){
+            Log.e(tag, "Erro ao alterar tb_status FirstSync");
+        }
+    }
+
+    public void updateTbStatusBasicDataSync(boolean basicData){
+        ContentValues cv = new ContentValues();
+        int value=(basicData == true ? 1 : 0);
+        cv.put("basic_data_sync", value);
+        try {
+            db.update("tb_status", cv, "id=1", null);
+            Log.e(tag, "Conseguiu alterar tb_status basic_data_sync");
+        }catch (Exception e){
+            Log.e(tag, "Erro ao alterar tb_status basic_data_sync");
+        }
+    }
+
+    public StatusApp getStatus(){
+        StatusApp s = new StatusApp();
+        String query = "SELECT * FROM tb_status";
+        Cursor c = db.rawQuery(query, null);
+
+        if (c.moveToFirst()) {
+            s.setId(c.getInt(0));
+            s.setFirst_sync(c.getInt(1) == 1);
+            s.setBasic_data_sync(c.getInt(1) == 2);
+            Log.d(tag, "encontrou row tb_status");
+        }else {
+            Log.e(tag, "Não encontrou nenhum row em tb_status");
+        }
+        return s;
+    }
+
+
+
+
+
+
+
 
 }
