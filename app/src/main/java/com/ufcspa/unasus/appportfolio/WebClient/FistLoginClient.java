@@ -93,6 +93,7 @@ public class FistLoginClient extends HttpClient {
 
                     }else {
                         Log.e(tag,"não encontrou firstLogin_response no json");
+                        LoginActivity2.isDataSyncNotSucessful = true;
                     }
                 } catch (JSONException e) {
                     Log.e(tag,"JSON exception on response:"+e.getMessage());

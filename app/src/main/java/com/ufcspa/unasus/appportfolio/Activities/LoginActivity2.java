@@ -153,6 +153,7 @@ public class LoginActivity2 extends AppCompatActivity implements LoaderCallbacks
                             if(!isDataSyncNotSucessful){
                                 Log.d("acitivity login", "user get by json:" + Singleton.getInstance().user.toString());
                                 getBasicData();
+                                isDataSyncNotSucessful = true;
                                 SystemClock.sleep(20000);
                                 new Handler(Looper.getMainLooper()).post(new Runnable() {
                                     @Override
@@ -165,7 +166,16 @@ public class LoginActivity2 extends AppCompatActivity implements LoaderCallbacks
                                     }
                                 });
                             }else{
-//                                Toast.makeText(getApplicationContext(),"Erro ao fazer login, verifique seu usuário e senha",Toast.LENGTH_LONG).show();
+                                new Handler(Looper.getMainLooper()).post(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        showProgress(false);
+                                        Toast.makeText(getApplicationContext(), "Erro ao fazer login, verifique seu usuário e senha", Toast.LENGTH_LONG).show();
+                                        findViewById(R.id.scrollView).setVisibility(View.VISIBLE);
+                                        isLoginSucessful = false;
+                                        isDataSyncNotSucessful = false;
+                                    }
+                                });
                             }
                         }
                     });
