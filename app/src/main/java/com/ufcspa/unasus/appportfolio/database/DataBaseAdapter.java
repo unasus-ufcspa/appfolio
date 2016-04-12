@@ -213,7 +213,7 @@ public void insertTBUser(List<com.ufcspa.unasus.appportfolio.Model.basicData.Use
             cv.put("id_portfolio_class",ac.getId_portfolio_class());
             cv.put("id_student", ac.getId_student());
             cv.put("id_tutor", ac.getId_tutor());
-            cv.put("dt_fist_sync", ac.getDt_first_sync());
+            cv.put("dt_first_sync", ac.getDt_first_sync());
             cv.put("nu_portfolio_version", ac.getNu_portfolio_version());
             try{
                 db.insert("tb_portfolio_student", null, cv);

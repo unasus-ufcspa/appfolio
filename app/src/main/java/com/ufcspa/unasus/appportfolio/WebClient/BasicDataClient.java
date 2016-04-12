@@ -81,10 +81,11 @@ public class BasicDataClient extends HttpClient {
                                     PortfolioStudent ps = new PortfolioStudent();
 
                                     // GET DATA FROM JSON
-                                    int idPortfolioStudent=temp.getInt("id_portfolio_student");
+                                    int idPortfolioStudent=temp.getInt("id_portifolio_student");
                                     int idStudent=temp.getInt("id_student");
                                     int idTutor=temp.getInt("id_tutor");
-                                    String dtFirstSync=temp.getString("dt_fist_sync");
+                                    int idPortfolioClass = temp.getInt("id_portfolio_class");
+                                    String dtFirstSync=temp.getString("dt_first_sync");
                                     String nuPortVersion=temp.getString("nu_portfolio_version");
 
                                     //POPULATE OBJECT WITH DATA
@@ -93,6 +94,7 @@ public class BasicDataClient extends HttpClient {
                                     ps.setId_tutor(idTutor);
                                     ps.setDt_first_sync(dtFirstSync);
                                     ps.setNu_portfolio_version(nuPortVersion);
+                                    ps.setId_portfolio_class(idPortfolioClass);
 
 
                                     //ADD TO LINKEDLIST

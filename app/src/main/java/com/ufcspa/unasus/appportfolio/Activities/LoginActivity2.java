@@ -96,6 +96,7 @@ public class LoginActivity2 extends AppCompatActivity implements LoaderCallbacks
         setContentView(R.layout.activity_login);
         getSupportActionBar().hide();
 
+        bd = DataBaseAdapter.getInstance(this);
         SQLiteOnWeb.init(this).start();
 
         // Set up the login form.
