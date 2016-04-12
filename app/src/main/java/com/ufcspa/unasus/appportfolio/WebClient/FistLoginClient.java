@@ -80,7 +80,7 @@ public class FistLoginClient extends HttpClient {
 
 
                                 DataBaseAdapter.getInstance(context).insertUser(user);
-                                DataBaseAdapter.getInstance(context).insertIntoTbDevice(new Device(Singleton.getInstance().device.get_id_device(),user.getIdUser(),Singleton.getInstance().device.get_tp_device()));
+                                DataBaseAdapter.getInstance(context).insertIntoTbDevice(new Device(Singleton.getInstance().device.get_id_device(), user.getIdUser(), Singleton.getInstance().device.get_tp_device(), null, null));
 
                                 //Adicionando o usuario no singleton
                                 Singleton.getInstance().user = user;

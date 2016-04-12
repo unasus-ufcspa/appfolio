@@ -13,7 +13,6 @@ import com.ufcspa.unasus.appportfolio.Model.Comentario;
 import com.ufcspa.unasus.appportfolio.Model.Device;
 import com.ufcspa.unasus.appportfolio.Model.PortfolioClass;
 import com.ufcspa.unasus.appportfolio.Model.Reference;
-import com.ufcspa.unasus.appportfolio.Model.StatusApp;
 import com.ufcspa.unasus.appportfolio.Model.StudFrPortClass;
 import com.ufcspa.unasus.appportfolio.Model.Sync;
 import com.ufcspa.unasus.appportfolio.Model.Team;
@@ -1144,6 +1143,7 @@ public class DataBaseAdapter {
         cv.put("id_device",d.get_id_device());
         cv.put("id_user",d.get_id_user());
         cv.put("tp_device",d.get_tp_device());
+        cv.put("fl_first_login", "T");
         try {
             db.insert("tb_device", null, cv);
         } catch (Exception e) {
@@ -1157,7 +1157,7 @@ public class DataBaseAdapter {
         Device device = new Device();
         Cursor c = db.rawQuery(query, null);
         if (c.moveToFirst()) {
-            device= new Device(c.getString(0),c.getInt(1),c.getInt(2));
+            device = new Device(c.getString(0), c.getInt(1), c.getInt(2), c.getString(3), c.getString(4));
         } else {
             Log.e(tag, "não há registros na tabela tb_device");
         }
@@ -1226,44 +1226,26 @@ public class DataBaseAdapter {
         return result;
     }
 
-    public void updateTbStatusFirstSync(boolean firstSync){
+
+    public void updateDeviceBasicDataSync() {
         ContentValues cv = new ContentValues();
-        int value=(firstSync == true ? 1 : 0);
-        cv.put("first_sync", value);
+        cv.put("fl_basic_data", "T");
+        Device device = getDevice();
         try {
-            db.update("tb_status", cv, "id=1", null);
-            Log.e(tag, "Conseguiu alterar tb_status FirstSync");
+            db.update("tb_device", cv, null, null);
+            Log.e(tag, "Conseguiu alterar tb_device fl_basic_data");
         }catch (Exception e){
-            Log.e(tag, "Erro ao alterar tb_status FirstSync");
+            Log.e(tag, "Erro ao alterar tb_device fl_basic_data");
         }
     }
 
-    public void updateTbStatusBasicDataSync(boolean basicData){
-        ContentValues cv = new ContentValues();
-        int value=(basicData == true ? 1 : 0);
-        cv.put("basic_data_sync", value);
-        try {
-            db.update("tb_status", cv, "id=1", null);
-            Log.e(tag, "Conseguiu alterar tb_status basic_data_sync");
-        }catch (Exception e){
-            Log.e(tag, "Erro ao alterar tb_status basic_data_sync");
-        }
-    }
-
-    public StatusApp getStatus(){
-        StatusApp s = new StatusApp();
-        String query = "SELECT * FROM tb_status";
-        Cursor c = db.rawQuery(query, null);
-
-        if (c.moveToFirst()) {
-            s.setId(c.getInt(0));
-            s.setFirst_sync(c.getInt(1) == 1);
-            s.setBasic_data_sync(c.getInt(2) == 1);
-            Log.d(tag, "encontrou row tb_status");
-        }else {
-            Log.e(tag, "Não encontrou nenhum row em tb_status");
-        }
-        return s;
+    public int getStatus() {
+        Device device = getDevice();
+        if (device.get_id_device() == null)
+            return -1;
+        if (device.getFl_basic_data() != null)
+            return 1;
+        return 0;
     }
 
     public User getUser() {

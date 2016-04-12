@@ -153,7 +153,6 @@ public class LoginActivity2 extends AppCompatActivity implements LoaderCallbacks
 
                             }
                             if(!isDataSyncNotSucessful){
-                                bd.updateTbStatusFirstSync(true);
                                 Log.d("acitivity login", "user get by json:" + Singleton.getInstance().user.toString());
                                 getBasicData();
                                 while (!isBasicDataSucessful) {
@@ -163,7 +162,7 @@ public class LoginActivity2 extends AppCompatActivity implements LoaderCallbacks
                                         getBasicData();
                                     }
                                 }
-                                bd.updateTbStatusBasicDataSync(true);
+                                bd.updateDeviceBasicDataSync();
                                 new Handler(Looper.getMainLooper()).post(new Runnable() {
                                     @Override
                                     public void run() {
@@ -208,7 +207,7 @@ public class LoginActivity2 extends AppCompatActivity implements LoaderCallbacks
                                 getBasicData();
                             }
                         }
-                        bd.updateTbStatusBasicDataSync(true);
+                        bd.updateDeviceBasicDataSync();
                         new Handler(Looper.getMainLooper()).post(new Runnable() {
                             @Override
                             public void run() {
