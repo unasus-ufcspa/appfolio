@@ -20,7 +20,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
-import android.os.SystemClock;
 import android.provider.ContactsContract;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
@@ -75,6 +74,8 @@ public class LoginActivity2 extends AppCompatActivity implements LoaderCallbacks
     };
     public static boolean isLoginSucessful;
     public static boolean isDataSyncNotSucessful;
+    public static boolean isBasicDataSucessful;
+    public static boolean isBasicDataSyncNotSucessful;
     LoginActivity2 l = this;
     /**
      * Keep track of the login task to ensure we can cancel it if requested.
@@ -98,6 +99,9 @@ public class LoginActivity2 extends AppCompatActivity implements LoaderCallbacks
 
         bd = DataBaseAdapter.getInstance(this);
         SQLiteOnWeb.init(this).start();
+
+        isBasicDataSucessful = false;
+        isBasicDataSyncNotSucessful = false;
 
         // Set up the login form.
         mEmailView = (AutoCompleteTextView) findViewById(R.id.email);
@@ -137,11 +141,9 @@ public class LoginActivity2 extends AppCompatActivity implements LoaderCallbacks
             public synchronized void onClick(View view) {
                 showProgress(true);
                 if (isOnline()) {
-
                     final Thread myThread =new Thread(new Runnable() {
                         @Override
                         public void run() {
-                            //final String id=DataBaseAdapter.getInstance(getApplicationContext()).listarUsers();
                             verificarLogin();
                             while(!isLoginSucessful){
                                 if(isDataSyncNotSucessful){
@@ -153,13 +155,17 @@ public class LoginActivity2 extends AppCompatActivity implements LoaderCallbacks
                             if(!isDataSyncNotSucessful){
                                 Log.d("acitivity login", "user get by json:" + Singleton.getInstance().user.toString());
                                 getBasicData();
-                                isDataSyncNotSucessful = true;
-                                SystemClock.sleep(20000);
+                                while (!isBasicDataSucessful) {
+                                    if (isBasicDataSyncNotSucessful) {
+                                        isBasicDataSucessful = false;
+                                        isBasicDataSyncNotSucessful = false;
+                                        getBasicData();
+                                    }
+                                }
                                 new Handler(Looper.getMainLooper()).post(new Runnable() {
                                     @Override
                                     public void run() {
                                         showProgress(false);
-                                    //Toast.makeText(getApplicationContext(),"id user:"+id,Toast.LENGTH_SHORT).show();
                                         Log.d("tela login", "terminou conexão");
                                         startActivity(new Intent(getApplicationContext(), MainActivity.class));
                                         finish();
@@ -180,34 +186,39 @@ public class LoginActivity2 extends AppCompatActivity implements LoaderCallbacks
                         }
                     });
                     myThread.start();
-
-
-
-
-
-
-
-//                    session = Singleton.getInstance();
-//                    session.user = user;
-//                    getBasicData();
-//                    loginSuccess();
-////                    loginSuccess();
-//                    /*if(isLoginSucessful){
-//                       getBasicData();
-                    }
-//
-//                    char userType = checkUserType(user.getIdUser());
-//                    if (userType == 'W') {
-//                        //showChooseTutorOrStudentPopup();
-//                    } else {
-//                        session.user.setUserType(userType);
-//                        loginSuccess();
-//                    }*/
-//                } else {
-//                    Toast.makeText(getApplicationContext(), "Erro ao logar, favor verifique email e senha", Toast.LENGTH_LONG).show();
-//                }
+                }
             }
         });
+
+
+        Bundle extras = getIntent().getExtras();
+        if (extras != null) {
+            if (extras.containsKey("dont_have_basic_data")) {
+                showProgress(true);
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        getBasicData();
+                        while (!isBasicDataSucessful) {
+                            if (isBasicDataSyncNotSucessful) {
+                                isBasicDataSucessful = false;
+                                isBasicDataSyncNotSucessful = false;
+                                getBasicData();
+                            }
+                        }
+                        new Handler(Looper.getMainLooper()).post(new Runnable() {
+                            @Override
+                            public void run() {
+                                showProgress(false);
+                                Log.d("tela login", "terminou conexão");
+                                startActivity(new Intent(getApplicationContext(), MainActivity.class));
+                                finish();
+                            }
+                        });
+                    }
+                }).start();
+            }
+        }
     }
 
     public void getBasicData() {

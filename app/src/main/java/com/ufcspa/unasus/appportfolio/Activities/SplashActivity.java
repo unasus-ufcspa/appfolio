@@ -1,12 +1,10 @@
 package com.ufcspa.unasus.appportfolio.Activities;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.provider.Settings.Secure;
-import android.telephony.TelephonyManager;
-import android.util.Log;
+
+import com.ufcspa.unasus.appportfolio.database.DataBaseAdapter;
 
 /**
  * Created by Zago on 17/12/2015.
@@ -25,7 +23,14 @@ public class SplashActivity extends AppCompatActivity {
         Log.d("ANDROID ID", "getting android ID BY IMEI...");
         Log.d("ANDROID ID","Android ID IMEI:"+id);*/
 
+        DataBaseAdapter adapter = DataBaseAdapter.getInstance(this);
         Intent intent = new Intent(this, LoginActivity2.class);
+        // Se já baixou o Basic Data
+        // Se já baixou o First Login e não baixou o Basic Data
+//            intent.putExtra("dont_have_basic_data",true);
+        // Se não baixou nada
+
+
         startActivity(intent);
         finish();
     }

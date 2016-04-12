@@ -341,24 +341,22 @@ public class BasicDataClient extends HttpClient {
                             //EXECUTE INSERTS IN SQLITE
                             basicData.insertDataIntoSQLITE();
 
-
-
-
                         } catch (JSONException e) {
                             e.printStackTrace();
                         } catch (Exception v){
                             v.printStackTrace();
                         }
-                        LoginActivity2.isDataSyncNotSucessful = true;
+
+                        LoginActivity2.isBasicDataSucessful = true;
                     }
                 } finally {
-
                     Log.d(tag, "Fim  da request");
                 }
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError volleyError) {
+                LoginActivity2.isBasicDataSyncNotSucessful = true;
                 Log.e(tag, "Erro  na request");
                 volleyError.printStackTrace();
                 //Log.wtf(tag,"Network response:"+volleyError.networkResponse.statusCode);
