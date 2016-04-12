@@ -18,7 +18,6 @@ import com.ufcspa.unasus.appportfolio.Model.StudFrPortClass;
 import com.ufcspa.unasus.appportfolio.Model.Sync;
 import com.ufcspa.unasus.appportfolio.Model.Team;
 import com.ufcspa.unasus.appportfolio.Model.User;
-import com.ufcspa.unasus.appportfolio.Model.basicData.*;
 
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -96,8 +95,8 @@ public class DataBaseAdapter {
     }
 
 
-//INSERTS IN DATABASE
-public void insertTBUser(List<com.ufcspa.unasus.appportfolio.Model.basicData.User> users){
+    //INSERTS IN DATABASE
+    public void insertTBUser(List<com.ufcspa.unasus.appportfolio.Model.basicData.User> users) {
     for (com.ufcspa.unasus.appportfolio.Model.basicData.User u : users){
         ContentValues cv = new ContentValues();
         cv.put("nm_user", u.getNm_user());
@@ -1259,7 +1258,7 @@ public void insertTBUser(List<com.ufcspa.unasus.appportfolio.Model.basicData.Use
         if (c.moveToFirst()) {
             s.setId(c.getInt(0));
             s.setFirst_sync(c.getInt(1) == 1);
-            s.setBasic_data_sync(c.getInt(1) == 2);
+            s.setBasic_data_sync(c.getInt(2) == 1);
             Log.d(tag, "encontrou row tb_status");
         }else {
             Log.e(tag, "Não encontrou nenhum row em tb_status");
@@ -1267,11 +1266,23 @@ public void insertTBUser(List<com.ufcspa.unasus.appportfolio.Model.basicData.Use
         return s;
     }
 
+    public User getUser() {
+        User user = null;
 
+        String query = "SELECT id_user FROM tb_device";
+        Cursor c = db.rawQuery(query, null);
 
+        if (c.moveToFirst()) {
+            int id_user = c.getInt(0);
 
+            query = "SELECT nm_user, nu_identification, ds_email, nu_cellphone FROM tb_user WHERE id_user = " + id_user;
+            c = db.rawQuery(query, null);
 
+            if (c.moveToFirst()) {
+                user = new User(id_user, c.getString(0), c.getString(1), c.getString(2), c.getString(3));
+            }
+        }
 
-
-
+        return user;
+    }
 }
