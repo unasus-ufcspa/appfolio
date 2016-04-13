@@ -32,13 +32,11 @@ public class BasicDataClient extends HttpClient {
     private Context context;
     private BasicData basicData;
     private LoginActivity2 loginActivity;
+
     public BasicDataClient(Context context) {
         super(context);
         this.context= context;
-
     }
-
-
 
     public void postJson(JSONObject jsonFirstRequest){
         Log.d(tag, "URL: " + URL + method);
@@ -53,14 +51,11 @@ public class BasicDataClient extends HttpClient {
                 try {
                     Log.d(tag, "JSON RESPONSE: " + response.toString().replaceAll("\\{","\n{"));
                     if( response.has("erro")) {
-
                         Log.e(tag, "sincronizacao de dados iniciais falhou");
-                        //LoginActivity.isLoginSucessful=false;
+                        LoginActivity2.isBasicDataSyncNotSucessful = true;
                         Log.d(tag, "JSon response receiving:" + response.toString());
                     }else if(response.has("basicData_response")){
                         Log.d(tag,"JSON POST existe basic Data response");
-
-
                         // INSTANCE BASIC DATA COMPLEX OBJECT
                         basicData= new BasicData(context);
 
@@ -262,17 +257,7 @@ public class BasicDataClient extends HttpClient {
                                        String dt_conclusion = temp.getString("dt_conclusion");
                                        activityStudent.setDt_conclusion(dt_conclusion);
                                    }
-
-
-
                                     //POPULATE OBJECT WITH DATA
-
-
-
-
-
-
-
                                     //ADD TO LINKEDLIST
                                     basicData.addActivityStudent(activityStudent);
                                 }
@@ -337,20 +322,27 @@ public class BasicDataClient extends HttpClient {
                                 }
                             }
 
-
-                            //EXECUTE INSERTS IN SQLITE
-                            basicData.insertDataIntoSQLITE();
+                            if (resp.has("version_activityStudent")) {
+                                Log.d(tag, "recebendo version_activityStudent via json");
+                                JSONObject objPs = resp.getJSONObject("version_activityStudent");
+                                JSONArray tb = objPs.getJSONArray("tb_version_activity");
+                                //...
+                            }
 
                         } catch (JSONException e) {
                             e.printStackTrace();
+                            LoginActivity2.isBasicDataSyncNotSucessful = true;
                         } catch (Exception v){
                             v.printStackTrace();
+                            LoginActivity2.isBasicDataSyncNotSucessful = true;
                         }
 
                         LoginActivity2.isBasicDataSucessful = true;
                     }
                 } finally {
                     Log.d(tag, "Fim  da request");
+                    //EXECUTE INSERTS IN SQLITE
+                    basicData.insertDataIntoSQLITE();
                 }
             }
         }, new Response.ErrorListener() {

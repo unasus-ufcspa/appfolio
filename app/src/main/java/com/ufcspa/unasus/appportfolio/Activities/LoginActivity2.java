@@ -32,8 +32,6 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.inputmethod.EditorInfo;
-import android.widget.ArrayAdapter;
-import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -82,7 +80,7 @@ public class LoginActivity2 extends AppCompatActivity implements LoaderCallbacks
      */
     private UserLoginTask mAuthTask = null;
     // UI references.
-    private AutoCompleteTextView mEmailView;
+    private EditText mEmailView;
     private EditText mPasswordView;
     private View mProgressView;
     //    private View mLoginFormView;
@@ -104,7 +102,7 @@ public class LoginActivity2 extends AppCompatActivity implements LoaderCallbacks
         isBasicDataSyncNotSucessful = false;
 
         // Set up the login form.
-        mEmailView = (AutoCompleteTextView) findViewById(R.id.email);
+        mEmailView = (EditText) findViewById(R.id.email);
         populateAutoComplete();
         mPasswordView = (EditText) findViewById(R.id.password);
 //        mLoginFormView = findViewById(R.id.login_form);
@@ -139,12 +137,13 @@ public class LoginActivity2 extends AppCompatActivity implements LoaderCallbacks
         mEmailSignInButton.setOnClickListener(new OnClickListener() {
             @Override
             public synchronized void onClick(View view) {
-                showProgress(true);
                 if (isOnline()) {
+                    showProgress(true);
                     final Thread myThread =new Thread(new Runnable() {
                         @Override
                         public void run() {
-                            verificarLogin();
+                            if (!isLoginSucessful)
+                                verificarLogin();
                             while(!isLoginSucessful){
                                 if(isDataSyncNotSucessful){
                                     Log.d("acitivity login", "data sync not sucesseful");
@@ -155,29 +154,38 @@ public class LoginActivity2 extends AppCompatActivity implements LoaderCallbacks
                             if(!isDataSyncNotSucessful){
                                 Log.d("acitivity login", "user get by json:" + Singleton.getInstance().user.toString());
                                 getBasicData();
-                                while (!isBasicDataSucessful) {
-                                    if (isBasicDataSyncNotSucessful) {
-                                        isBasicDataSucessful = false;
-                                        isBasicDataSyncNotSucessful = false;
-                                        getBasicData();
-                                    }
+
+                                while (!isBasicDataSucessful)
+                                    if (isBasicDataSyncNotSucessful)
+                                        break;
+
+                                if (!isBasicDataSyncNotSucessful) {
+                                    bd.updateDeviceBasicDataSync();
+                                    new Handler(Looper.getMainLooper()).post(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            Log.d("tela login", "terminou conexão");
+                                            startActivity(new Intent(getApplicationContext(), MainActivity.class));
+                                            finish();
+                                        }
+                                    });
+                                } else {
+                                    new Handler(Looper.getMainLooper()).post(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            Toast.makeText(getApplicationContext(), "Erro interno. Por favor tente novamente", Toast.LENGTH_LONG).show();
+                                            showProgress(false);
+                                            mEmailView.setEnabled(false);
+                                            mPasswordView.setEnabled(false);
+                                        }
+                                    });
                                 }
-                                bd.updateDeviceBasicDataSync();
-                                new Handler(Looper.getMainLooper()).post(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        showProgress(false);
-                                        Log.d("tela login", "terminou conexão");
-                                        startActivity(new Intent(getApplicationContext(), MainActivity.class));
-                                        finish();
-                                    }
-                                });
                             }else{
                                 new Handler(Looper.getMainLooper()).post(new Runnable() {
                                     @Override
                                     public void run() {
                                         showProgress(false);
-                                        Toast.makeText(getApplicationContext(), "Erro ao fazer login, verifique seu usuário e senha", Toast.LENGTH_LONG).show();
+                                        Toast.makeText(getApplicationContext(), Singleton.getInstance().erro, Toast.LENGTH_LONG).show();
                                         findViewById(R.id.scrollView).setVisibility(View.VISIBLE);
                                         isLoginSucessful = false;
                                         isDataSyncNotSucessful = false;
@@ -187,46 +195,73 @@ public class LoginActivity2 extends AppCompatActivity implements LoaderCallbacks
                         }
                     });
                     myThread.start();
+                } else {
+                    Toast.makeText(getApplicationContext(), "Sem conexão com a internet", Toast.LENGTH_LONG).show();
                 }
             }
         });
 
-
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
             if (extras.containsKey("dont_have_basic_data")) {
-                showProgress(true);
-                new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-                        getBasicData();
-                        while (!isBasicDataSucessful) {
-                            if (isBasicDataSyncNotSucessful) {
-                                isBasicDataSucessful = false;
-                                isBasicDataSyncNotSucessful = false;
-                                getBasicData();
+                if (isOnline()) {
+                    showProgress(true);
+                    new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            getBasicData();
+
+                            while (!isBasicDataSucessful)
+                                if (isBasicDataSyncNotSucessful)
+                                    break;
+
+                            if (!isBasicDataSyncNotSucessful) {
+                                bd.updateDeviceBasicDataSync();
+                                new Handler(Looper.getMainLooper()).post(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        Log.d("tela login", "terminou conexão");
+                                        startActivity(new Intent(getApplicationContext(), MainActivity.class));
+                                        finish();
+                                    }
+                                });
+                            } else {
+                                new Handler(Looper.getMainLooper()).post(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        Toast.makeText(getApplicationContext(), "Erro interno. Por favor tente novamente", Toast.LENGTH_LONG).show();
+                                        showProgress(false);
+                                        mEmailView.setEnabled(false);
+                                        mPasswordView.setEnabled(false);
+                                        isLoginSucessful = true;
+                                        isDataSyncNotSucessful = false;
+                                    }
+                                });
                             }
                         }
-                        bd.updateDeviceBasicDataSync();
-                        new Handler(Looper.getMainLooper()).post(new Runnable() {
-                            @Override
-                            public void run() {
-                                showProgress(false);
-                                Log.d("tela login", "terminou conexão");
-                                startActivity(new Intent(getApplicationContext(), MainActivity.class));
-                                finish();
-                            }
-                        });
-                    }
-                }).start();
+                    }).start();
+                }
+            } else {
+                Toast.makeText(getApplicationContext(), "Sem conexão com a internet", Toast.LENGTH_LONG).show();
+                mEmailView.setEnabled(false);
+                mPasswordView.setEnabled(false);
             }
         }
     }
 
     public void getBasicData() {
-        BasicDataClient client = new BasicDataClient(getBaseContext());
-        JSONObject jsonObject = new JSONObject();
-        client.postJson(BasicData.toJSON(10));// mandando id
+        if (isOnline()) {
+            BasicDataClient client = new BasicDataClient(getBaseContext());
+            JSONObject jsonObject = new JSONObject();
+            client.postJson(BasicData.toJSON(Singleton.getInstance().user.getIdUser()));// mandando id
+        } else {
+            new Handler(Looper.getMainLooper()).post(new Runnable() {
+                @Override
+                public void run() {
+                    Toast.makeText(getApplicationContext(), "Sem conexão com a internet", Toast.LENGTH_LONG).show();
+                }
+            });
+        }
     }
 
 
@@ -299,8 +334,7 @@ public class LoginActivity2 extends AppCompatActivity implements LoaderCallbacks
     }
 
     public boolean isOnline() {
-        ConnectivityManager cm =
-                (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
 
         return cm.getActiveNetworkInfo() != null &&
                 cm.getActiveNetworkInfo().isConnectedOrConnecting();
@@ -313,7 +347,7 @@ public class LoginActivity2 extends AppCompatActivity implements LoaderCallbacks
 //            user = bd.verifyPass(mEmailView.getText().toString(), mPasswordView.getText().toString());
         //result=user.getIdUser();
         //Log.d("BANCO", " pass:" + result);
-        if (isOnline()) {
+//        if (isOnline()) {
             FirstLogin first = new FirstLogin();
 
             String android_id = Settings.Secure.getString(this.getContentResolver(), Settings.Secure.ANDROID_ID);
@@ -336,9 +370,9 @@ public class LoginActivity2 extends AppCompatActivity implements LoaderCallbacks
 //               } finally {
 //
 //              }
-        }else{
-            Toast.makeText(getApplicationContext(), "Erro ao logar, favor verifique sua conexão com a internet", Toast.LENGTH_LONG).show();
-        }
+//        }else{
+//            Toast.makeText(getApplicationContext(), "Erro ao logar, favor verifique sua conexão com a internet", Toast.LENGTH_LONG).show();
+//        }
         //showProgress(true);
         return isLoginSucessful;
     }
@@ -466,7 +500,7 @@ public class LoginActivity2 extends AppCompatActivity implements LoaderCallbacks
 //            });
 
             mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
-            findViewById(R.id.scrollView).setVisibility(View.GONE);
+            findViewById(R.id.scrollView).setVisibility(show ? View.GONE : View.VISIBLE);
             mProgressView.animate().setDuration(shortAnimTime).alpha(
                     show ? 1 : 0).setListener(new AnimatorListenerAdapter() {
                 @Override
@@ -478,7 +512,7 @@ public class LoginActivity2 extends AppCompatActivity implements LoaderCallbacks
             // The ViewPropertyAnimator APIs are not available, so simply show
             // and hide the relevant UI components.
             mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
-            findViewById(R.id.scrollView).setVisibility(View.GONE);
+            findViewById(R.id.scrollView).setVisibility(show ? View.GONE : View.VISIBLE);
 //            mLoginFormView.setVisibility(show ? View.GONE : View.VISIBLE);
         }
     }
@@ -509,22 +543,22 @@ public class LoginActivity2 extends AppCompatActivity implements LoaderCallbacks
             cursor.moveToNext();
         }
 
-        addEmailsToAutoComplete(emails);
+//        addEmailsToAutoComplete(emails);
     }
 
     @Override
     public void onLoaderReset(Loader<Cursor> cursorLoader) {
 
     }
-
-    private void addEmailsToAutoComplete(List<String> emailAddressCollection) {
-        //Create adapter to tell the AutoCompleteTextView what to show in its dropdown list.
-        ArrayAdapter<String> adapter =
-                new ArrayAdapter<>(LoginActivity2.this,
-                        android.R.layout.simple_dropdown_item_1line, emailAddressCollection);
-
-        mEmailView.setAdapter(adapter);
-    }
+//
+//    private void addEmailsToAutoComplete(List<String> emailAddressCollection) {
+//        //Create adapter to tell the AutoCompleteTextView what to show in its dropdown list.
+//        ArrayAdapter<String> adapter =
+//                new ArrayAdapter<>(LoginActivity2.this,
+//                        android.R.layout.simple_dropdown_item_1line, emailAddressCollection);
+//
+//        mEmailView.setAdapter(adapter);
+//    }
 
 
     private interface ProfileQuery {

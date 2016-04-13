@@ -9,9 +9,12 @@ import org.json.JSONObject;
 public class Sync {
     private int id_sync;
     private String id_device;
+    private int id_activity_student;
+    private String tp_sync;
     private String nm_table;
     private int co_id_table;
     private String dt_sync;
+    private String dt_read;
 
     public Sync(String id_device, String nm_table, int co_id_table) {
         this.id_device = id_device;
@@ -65,6 +68,30 @@ public class Sync {
 
     public void setDt_sync(String dt_sync) {
         this.dt_sync = dt_sync;
+    }
+
+    public int getId_activity_student() {
+        return id_activity_student;
+    }
+
+    public void setId_activity_student(int id_activity_student) {
+        this.id_activity_student = id_activity_student;
+    }
+
+    public String getTp_sync() {
+        return tp_sync;
+    }
+
+    public void setTp_sync(String tp_sync) {
+        this.tp_sync = tp_sync;
+    }
+
+    public String getDt_read() {
+        return dt_read;
+    }
+
+    public void setDt_read(String dt_read) {
+        this.dt_read = dt_read;
     }
 
     @Override

@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 
+import com.ufcspa.unasus.appportfolio.Model.Device;
 import com.ufcspa.unasus.appportfolio.Model.Singleton;
 import com.ufcspa.unasus.appportfolio.database.DataBaseAdapter;
 
@@ -24,12 +25,18 @@ public class SplashActivity extends AppCompatActivity {
         Log.d("ANDROID ID","Android ID IMEI:"+id);*/
 
         DataBaseAdapter adapter = DataBaseAdapter.getInstance(this);
-        int statusApp = adapter.getStatus();
+        Singleton singleton = Singleton.getInstance();
+
+        Device device = adapter.getDevice();
+
+        singleton.device = device;
+        singleton.user = adapter.getUser();
+
+        int statusApp = adapter.getStatus(device);
 
         Intent intent = new Intent(this, LoginActivity2.class);
+
         if (statusApp == 1) {
-            Singleton singleton = Singleton.getInstance();
-            singleton.user = adapter.getUser();
             intent = new Intent(this, MainActivity.class);
         } else if (statusApp == 0) {
             intent.putExtra("dont_have_basic_data", true);

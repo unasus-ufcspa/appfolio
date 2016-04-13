@@ -39,6 +39,7 @@
                 android:textAppearance="?android:attr/textAppearanceSmall" />
 
             <LinearLayout
+                android:id="@+id/user_layout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center"
@@ -55,7 +56,9 @@
                     android:layout_toLeftOf="@+id/email"
                     android:src="@drawable/login_user" />
 
-                <AutoCompleteTextView android:id="@+id/email" android:layout_width="200dp"
+                <EditText
+                    android:id="@+id/email"
+                    android:layout_width="200dp"
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/img_logo"
                     android:layout_centerHorizontal="true"
@@ -66,6 +69,7 @@
             </LinearLayout>
 
             <LinearLayout
+                android:id="@+id/pass_layout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center"

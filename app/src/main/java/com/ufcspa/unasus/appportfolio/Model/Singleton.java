@@ -18,6 +18,8 @@ public class Singleton {
     public boolean isFullscreen = false;
     public boolean wasFullscreen = false;
 
+    public String erro = "Erro interno. Por favor tente novamente";
+
 
     private Singleton() {
     }

@@ -262,7 +262,26 @@ public class DataBaseAdapter {
         }
     }
 
+    public void insertTBSync(List<Sync> syncs) {
+        for (Sync s : syncs) {
+            ContentValues cv = new ContentValues();
+            cv.put("id_device", s.getId_device());
+            cv.put("id_activity_student", s.getId_activity_student());
+            cv.put("tp_sync", s.getTp_sync());
+            cv.put("nm_table", s.getNm_table());
+            cv.put("co_id_table", s.getCo_id_table());
+            cv.put("dt_sync", s.getDt_sync());
+            cv.put("dt_read", s.getDt_read());
+            try {
+                db.insert("tb_sync", null, cv);
 
+            } catch (Exception e) {
+                Log.d(tag, "erro ao inserir tb_sync:" + e.getMessage());
+                e.printStackTrace();
+            }
+
+        }
+    }
 
     public User insertUser(User u) {
         ContentValues cv = new ContentValues();
@@ -1239,8 +1258,8 @@ public class DataBaseAdapter {
         }
     }
 
-    public int getStatus() {
-        Device device = getDevice();
+    public int getStatus(Device d) {
+        Device device = d;
         if (device.get_id_device() == null)
             return -1;
         if (device.getFl_basic_data() != null)
@@ -1249,7 +1268,7 @@ public class DataBaseAdapter {
     }
 
     public User getUser() {
-        User user = null;
+        User user = new User(0, null, null);
 
         String query = "SELECT id_user FROM tb_device";
         Cursor c = db.rawQuery(query, null);
