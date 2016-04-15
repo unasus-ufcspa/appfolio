@@ -1,17 +1,22 @@
 package com.ufcspa.unasus.appportfolio.WebClient;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.util.Log;
 
-import com.ufcspa.unasus.appportfolio.Model.basicData.*;
+import com.ufcspa.unasus.appportfolio.Model.basicData.Activity;
+import com.ufcspa.unasus.appportfolio.Model.basicData.ActivityStudent;
 import com.ufcspa.unasus.appportfolio.Model.basicData.Class;
+import com.ufcspa.unasus.appportfolio.Model.basicData.ClassStudent;
+import com.ufcspa.unasus.appportfolio.Model.basicData.ClassTutor;
+import com.ufcspa.unasus.appportfolio.Model.basicData.Portfolio;
+import com.ufcspa.unasus.appportfolio.Model.basicData.PortfolioClass;
+import com.ufcspa.unasus.appportfolio.Model.basicData.PortfolioStudent;
+import com.ufcspa.unasus.appportfolio.Model.basicData.User;
 import com.ufcspa.unasus.appportfolio.database.DataBaseAdapter;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.Iterator;
 import java.util.LinkedList;
 
 /**
@@ -42,37 +47,54 @@ public class BasicData {
         users= new LinkedList<User>();
         this.context=c;
     }
+
+    public static JSONObject toJSON(int idUser) {
+        JSONObject json = new JSONObject();
+        JSONObject basic = new JSONObject();
+        try {
+            basic.put("id_user", idUser);
+            json.put("basicData_request", basic);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return json;
+    }
+
     public void addActivity(Activity activity){
         activities.add(activity);
     }
+
     public void addActivityStudent(ActivityStudent a){
         activitiesStudent.add(a);
     }
 
-
-
     public void addClass(Class c){
         classes.add(c);
     }
+
     public void addClassStudent(ClassStudent c){
         studentClasses.add(c);
     }
+
     public void addClassTutor(ClassTutor c){
         tutorClasses.add(c);
     }
+
     public void addPortfolio(Portfolio p){
         portfolios.add(p);
     }
+
     public void addPortfolioClass(PortfolioClass pc){
         portfolioClasses.add(pc);
     }
+
     public void addPortfolioStudent(PortfolioStudent ps){
         portfolioStudents.add(ps);
     }
+
     public void addUsers(User u){
         users.add(u);
     }
-
 
     public LinkedList<Activity> getActivities() {
         return activities;
@@ -143,22 +165,9 @@ public class BasicData {
                 Log.d(log, "inserindo tb_activities student");
                 data.insertTBActivityStudent(activitiesStudent);
 
-
 //            }
 //        });
 //        t.start();
-    }
-
-    public static JSONObject toJSON(int idUser){
-        JSONObject json = new JSONObject();
-        JSONObject basic = new JSONObject();
-        try {
-            basic.put("id_user",idUser);
-            json.put("basicData_request",basic);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        return json;
     }
 
 

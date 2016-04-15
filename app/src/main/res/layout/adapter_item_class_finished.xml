@@ -38,7 +38,7 @@
         android:layout_alignLeft="@+id/item_background"
         android:layout_alignRight="@+id/item_background"
         android:layout_alignStart="@+id/item_background"
-        android:layout_below="@+id/item_notification_icon"
+        android:layout_below="@+id/item_class_notification_icon"
         android:orientation="vertical">
 
         <TextView
@@ -47,8 +47,8 @@
             android:layout_height="wrap_content"
             android:layout_alignBaseline="@+id/item_color_background"
             android:layout_alignBottom="@+id/item_color_background"
-            android:layout_toLeftOf="@+id/item_notification_icon"
-            android:layout_toStartOf="@+id/item_notification_icon"
+            android:layout_toLeftOf="@+id/item_class_notification_icon"
+            android:layout_toStartOf="@+id/item_class_notification_icon"
             android:layout_weight="1"
             android:gravity="bottom|right"
             android:paddingBottom="5dp"
@@ -63,9 +63,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignBottom="@+id/item_background"
-            android:layout_alignEnd="@+id/item_notification_icon"
+            android:layout_alignEnd="@+id/item_class_notification_icon"
             android:layout_alignLeft="@+id/item_background"
-            android:layout_alignRight="@+id/item_notification_icon"
+            android:layout_alignRight="@+id/item_class_notification_icon"
             android:layout_alignStart="@+id/item_background"
             android:layout_marginBottom="5dp"
             android:ellipsize="end"
@@ -81,7 +81,7 @@
     </LinearLayout>
 
     <TextView
-        android:id="@+id/item_notification_icon"
+        android:id="@+id/item_class_notification_icon"
         android:layout_width="55dp"
         android:layout_height="55dp"
         android:layout_alignEnd="@+id/item_background"

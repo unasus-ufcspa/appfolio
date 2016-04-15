@@ -31,7 +31,7 @@
         android:textAppearance="?android:attr/textAppearanceSmall" />
 
     <TextView
-        android:id="@+id/item_notification_icon"
+        android:id="@+id/item_class_notification_icon"
         android:layout_width="55dp"
         android:layout_height="55dp"
         android:layout_alignEnd="@+id/item_background"
@@ -50,7 +50,7 @@
         android:layout_alignLeft="@+id/item_background"
         android:layout_alignRight="@+id/item_background"
         android:layout_alignStart="@+id/item_background"
-        android:layout_below="@+id/item_notification_icon"
+        android:layout_below="@+id/item_class_notification_icon"
         android:gravity="bottom|right"
         android:paddingBottom="10dp"
         android:paddingRight="10dp"

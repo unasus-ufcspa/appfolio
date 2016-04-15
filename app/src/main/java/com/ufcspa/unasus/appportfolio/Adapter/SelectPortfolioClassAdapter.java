@@ -71,14 +71,14 @@ public class SelectPortfolioClassAdapter extends BaseAdapter {
         holder.txt_port_title=(TextView) rowView.findViewById(R.id.adapter_item_class_txv_ds_title);
         holder.background=(TextView) rowView.findViewById(R.id.item_color_background);
         holder.btnInfo=(ImageButton) rowView.findViewById(R.id.btn_info);
-        holder.nofificationIcon=(TextView) rowView.findViewById(R.id.item_notification_icon);
+        holder.nofificationIcon = (TextView) rowView.findViewById(R.id.item_class_notification_icon);
         final PortfolioClass portClass=portclasses.get(position);
 
         int notifications = dataBaseAdapter.getPortfolioClassNotification(portClass.getIdPortClass());
         if (notifications == 0)
             holder.nofificationIcon.setVisibility(View.INVISIBLE);
-        else
-            holder.nofificationIcon.setText(notifications);
+//        else
+//            holder.nofificationIcon.setText(notifications);
 
         if(portClass.getPerfil().equals("S")){
             holder.background.setBackgroundResource(R.color.base_green);
