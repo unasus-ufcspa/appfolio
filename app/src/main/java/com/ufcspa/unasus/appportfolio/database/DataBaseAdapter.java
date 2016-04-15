@@ -447,7 +447,7 @@ public class DataBaseAdapter {
         cv.put("tx_reference", c.getTxtReference());
         cv.put("tp_comment", c.getTypeComment());
         cv.put("dt_comment", c.getDateComment());
-        cv.put("id_note", idNote);
+        cv.put("nu_comment_activity", idNote);
         db.insert("tb_comment", null, cv);
         try {
 //            db.close();
@@ -520,8 +520,8 @@ public class DataBaseAdapter {
             //sql+=" AND tp_comment='"+typeComment+"' ";
             stBuild.append(" AND tp_comment='" + typeComment + "' ");
             if (typeComment.equalsIgnoreCase("O")) {
-                //sql+=" AND id_note="+idNote;
-                stBuild.append(" AND id_note=" + idNote);
+                //sql+=" AND nu_comment_activity="+idNote;
+                stBuild.append(" AND nu_comment_activity=" + idNote);
             }
         }
         //sql+=" ORDER BY dt_comment ASC;";
@@ -559,7 +559,7 @@ public class DataBaseAdapter {
 
     public List<Integer> listSpecificComments(int idActStu) {
         ArrayList<Integer> comentarios = new ArrayList<Integer>();
-        String sql = "SELECT DISTINCT id_note from tb_comment WHERE id_activity_student =" + idActStu + " AND tp_comment='O'";
+        String sql = "SELECT DISTINCT nu_comment_activity from tb_comment WHERE id_activity_student =" + idActStu + " AND tp_comment='O'";
         Log.e(tag, "sql listComments:" + sql);
         Cursor c = db.rawQuery(sql, null);
         Integer id;
