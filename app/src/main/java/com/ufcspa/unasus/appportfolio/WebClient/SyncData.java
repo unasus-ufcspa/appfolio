@@ -25,7 +25,7 @@ public class SyncData {
     public static JSONObject toJSON(String idDevice) {
         JSONObject json = new JSONObject();
         try {
-            json.put("sendSync_request", new JSONObject().put("tb_sync", new JSONObject().put("id_device", idDevice)));
+            json.put("sync_request", new JSONObject().put("tb_sync", new JSONObject().put("id_device", idDevice)));
         } catch (JSONException e) {
             e.printStackTrace();
         }

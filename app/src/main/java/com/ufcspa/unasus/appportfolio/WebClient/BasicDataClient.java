@@ -321,14 +321,6 @@ public class BasicDataClient extends HttpClient {
                                     basicData.addUsers(user);
                                 }
                             }
-
-                            if (resp.has("version_activityStudent")) {
-                                Log.d(tag, "recebendo version_activityStudent via json");
-                                JSONObject objPs = resp.getJSONObject("version_activityStudent");
-                                JSONArray tb = objPs.getJSONArray("tb_version_activity");
-                                //...
-                            }
-
                         } catch (JSONException e) {
                             e.printStackTrace();
                             LoginActivity2.isBasicDataSyncNotSucessful = true;

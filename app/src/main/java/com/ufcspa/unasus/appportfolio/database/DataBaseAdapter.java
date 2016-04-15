@@ -1152,6 +1152,39 @@ public class DataBaseAdapter {
 
     }
 
+    public int getPortfolioClassNotification(int id_portfolio_class) {
+        String query = "SELECT id_portfolio_student \n" +
+                "FROM tb_portfolio_student as tbps" +
+                " WHERE tbps.id_portfolio_class = " + id_portfolio_class;
+        int result = 0;
+
+        Cursor c = db.rawQuery(query, null);
+        if (c.moveToFirst())
+            do {
+                int id = c.getInt(0);
+                result += getNumNotifications(id);
+            } while (c.moveToNext());
+
+        return result;
+    }
+
+    private int getNumNotifications(int id_portfolio_student) {
+        String query = "SELECT COUNT(*) \n" +
+                "FROM tb_portfolio_student as tps\n" +
+                "\tJOIN tb_activity_student tbas on tbas.id_portfolio_student = tps.id_portfolio_student\n" +
+                "\tJOIN tb_sync tbs on tbs.id_activity_student = tbas.id_activity_student\n" +
+                " WHERE tps.id_portfolio_student = " + id_portfolio_student;
+        int result = 0;
+
+        Cursor c = db.rawQuery(query, null);
+        if (c.moveToFirst()) {
+            int val = c.getInt(0);
+            result = val;
+        }
+
+        return result;
+    }
+
 
      /*
         ************************* CRUD TB_DEVICE ***************************

@@ -17,6 +17,7 @@ import android.widget.Toast;
 import com.ufcspa.unasus.appportfolio.Model.PortfolioClass;
 import com.ufcspa.unasus.appportfolio.Model.Singleton;
 import com.ufcspa.unasus.appportfolio.R;
+import com.ufcspa.unasus.appportfolio.database.DataBaseAdapter;
 
 import java.util.List;
 
@@ -27,11 +28,13 @@ public class SelectPortfolioClassAdapter extends BaseAdapter {
     private static LayoutInflater inflater = null;
     private Context context;
     private List<PortfolioClass> portclasses;
+    private DataBaseAdapter dataBaseAdapter;
 
     public SelectPortfolioClassAdapter(Context context, List<PortfolioClass> classes)
     {
         this.context = context;
         this.portclasses = classes;
+        this.dataBaseAdapter = DataBaseAdapter.getInstance(context);
 
         inflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
@@ -71,8 +74,11 @@ public class SelectPortfolioClassAdapter extends BaseAdapter {
         holder.nofificationIcon=(TextView) rowView.findViewById(R.id.item_notification_icon);
         final PortfolioClass portClass=portclasses.get(position);
 
-        if(position%2 == 0)
+        int notifications = dataBaseAdapter.getPortfolioClassNotification(portClass.getIdPortClass());
+        if (notifications == 0)
             holder.nofificationIcon.setVisibility(View.INVISIBLE);
+        else
+            holder.nofificationIcon.setText(notifications);
 
         if(portClass.getPerfil().equals("S")){
             holder.background.setBackgroundResource(R.color.base_green);
