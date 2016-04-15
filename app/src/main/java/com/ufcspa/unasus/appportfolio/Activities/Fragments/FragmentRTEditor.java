@@ -13,7 +13,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.widget.SlidingPaneLayout;
 import android.text.Editable;
-import android.text.InputType;
 import android.text.Layout;
 import android.text.Spannable;
 import android.text.TextWatcher;
@@ -62,24 +61,31 @@ import java.util.HashMap;
 
 
 public class FragmentRTEditor extends Fragment {
+    // Constante
     static final int REQUEST_FOLIO_ATTACHMENT = 5;
+    // Editor
     private RTManager mRTManager;
     private RTEditText mRTMessageField;
     private RTToolbar rtToolbar;
+    // Observação
     private int currentSpecificComment;
+    private HashMap<Integer, Note> specificCommentsNotes;
+    private String selectedActualText = "null";
+    private boolean specificCommentsOpen;
+    // Layout
     private ViewGroup scrollview;
     private ImageButton fullScreen;
+    private RelativeLayout slider;
+    private ViewGroup rightBarSpecificComments;
+    private View importPanel;
+    // Model
     private ActivityStudent acStudent;
     private DataBaseAdapter source;
-    private HashMap<Integer,Note> specificCommentsNotes;
-    private String selectedActualText = "null";
-    private RelativeLayout slider;
+    private Singleton singleton;
+    // Cores
     private int greenLight;
     private int greenDark;
-    private Singleton singleton;
-    private ViewGroup rightBarSpecificComments;
-    private boolean specificCommentsOpen;
-    private View importPanel;
+    // Receptor de eventos
     private BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -280,11 +286,11 @@ public class FragmentRTEditor extends Fragment {
 
         mRTMessageField.setCanPaste(true);
         if (singleton.portfolioClass.getPerfil().equals("T")) {
-            mRTMessageField.setInputType(InputType.TYPE_NULL);
+//            mRTMessageField.setInputType(InputType.TYPE_NULL);
+//            mRTMessageField.setCanPaste(false);
+            mRTMessageField.setKeyListener(null);
             mRTMessageField.setTextIsSelectable(true);
             mRTManager.setToolbarVisibility(RTManager.ToolbarVisibility.HIDE);
-            mRTMessageField.setCanPaste(false);
-
 
             mRTMessageField.setText("Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris enim lacus, gravida egestas ex fringilla, molestie sollicitudin turpis. Curabitur et congue justo. Etiam tincidunt, est vel euismod facilisis, dui urna pellentesque nunc, vitae pharetra est nisi ultrices ex. Pellentesque sollicitudin porttitor condimentum. Ut auctor enim pulvinar, hendrerit sem eu, facilisis erat. Sed tempus convallis iaculis. Duis imperdiet rhoncus ipsum et congue. Aenean pellentesque volutpat neque ac semper. Donec consectetur lacinia nisi, et molestie dolor rhoncus in. Praesent ultricies massa nec nisi dictum hendrerit. Proin nec pellentesque lacus, ut fringilla sapien. Donec quis enim interdum, molestie lacus et, ullamcorper ligula.\n" +
                     "\n" +
@@ -419,6 +425,8 @@ public class FragmentRTEditor extends Fragment {
             }
         });
 
+        getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.comments_container, new FragmentComments()).addToBackStack("Frag").commit();
+
         final SlidingPaneLayout layout = (SlidingPaneLayout) view.findViewById(R.id.rteditor_fragment);
 
         layout.setPanelSlideListener(new SlidingPaneLayout.PanelSlideListener() {
@@ -431,32 +439,33 @@ public class FragmentRTEditor extends Fragment {
 
             @Override
             public void onPanelOpened(View panel) {
-                if (panel != null) {
-                    Fragment frag = getActivity().getSupportFragmentManager().findFragmentById(R.id.comments_container);
-                    if (frag != null) {
-                        getActivity().getSupportFragmentManager().beginTransaction().remove(frag).commit();
-                    }
-
-                    int childs = rightBarSpecificComments.getChildCount();
-                    for (int i = childs - 1; i >= 0; i--)
-                        rightBarSpecificComments.getChildAt(i).setVisibility(View.GONE);
-                    slider.findViewById(R.id.rightbar_green).setVisibility(View.INVISIBLE);
-                }
+                showCommentsTab(false);
+//                if (panel != null) {
+//                    Fragment frag = getActivity().getSupportFragmentManager().findFragmentById(R.id.comments_container);
+//                    if (frag != null) {
+//                        getActivity().getSupportFragmentManager().beginTransaction().remove(frag).commit();
+//                    }
+//
+//                    int childs = rightBarSpecificComments.getChildCount();
+//                    for (int i = childs - 1; i >= 0; i--)
+//                        rightBarSpecificComments.getChildAt(i).setVisibility(View.GONE);
+//                    slider.findViewById(R.id.rightbar_green).setVisibility(View.INVISIBLE);
+//                }
             }
 
             @Override
             public void onPanelClosed(View panel) {
-                if (panel != null) {
-                    Fragment frag = getActivity().getSupportFragmentManager().findFragmentById(R.id.comments_container);
-                    if (frag != null) {
-                        String tag = frag.getTag();
-                        if (tag.equals("G"))
-                            showCommentsTab(false);
-                        else
-                            showCommentsTab(true);
-                    } else
-                        showCommentsTab(false);
-                }
+//                if (panel != null) {
+//                    Fragment frag = getActivity().getSupportFragmentManager().findFragmentById(R.id.comments_container);
+//                    if (frag != null) {
+//                        String tag = frag.getTag();
+//                        if (tag.equals("G"))
+//                            showCommentsTab(false);
+//                        else
+//                            showCommentsTab(true);
+//                    } else
+//                        showCommentsTab(false);
+//                }
             }
         });
 
@@ -746,7 +755,7 @@ public class FragmentRTEditor extends Fragment {
             int childs = rightBarSpecificComments.getChildCount();
             for (int i = childs - 1; i >= 0; i--)
                 rightBarSpecificComments.getChildAt(i).setVisibility(View.VISIBLE);
-            getActivity().getSupportFragmentManager().beginTransaction().setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out).replace(R.id.comments_container, new FragmentSpecificComments(), "S").commit();
+            getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.comments_container, new FragmentSpecificComments(), "S").commit();
             SlidingPaneLayout layout = (SlidingPaneLayout) getView().findViewById(R.id.rteditor_fragment);
             layout.closePane();
         } else {
@@ -754,7 +763,7 @@ public class FragmentRTEditor extends Fragment {
             for (int i = childs - 1; i >= 0; i--)
                 rightBarSpecificComments.getChildAt(i).setVisibility(View.GONE);
             slider.findViewById(R.id.rightbar_green).setVisibility(View.INVISIBLE);
-            getActivity().getSupportFragmentManager().beginTransaction().setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out).replace(R.id.comments_container, new FragmentComments(), "G").commit();
+            getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.comments_container, new FragmentComments(), "G").commit();
         }
     }
 

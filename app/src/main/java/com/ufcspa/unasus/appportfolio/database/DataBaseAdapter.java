@@ -289,9 +289,6 @@ public class DataBaseAdapter {
         }
     }
 
-
-
-
     public List<Comentario> listComments(int idActStu,String typeComment,int idNote) {
         ArrayList<Comentario> comentarios = new ArrayList<Comentario>();
         //String sql = "select * from tb_comment WHERE id_activity_student =" + idActStu;
@@ -974,9 +971,4 @@ public class DataBaseAdapter {
         }
         return device;
     }
-
-
-
-
-
 }

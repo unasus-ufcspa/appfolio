@@ -23,9 +23,9 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
 import com.mikepenz.crossfader.Crossfader;
-import com.ufcspa.unasus.appportfolio.Activities.Fragments.FragRef;
 import com.ufcspa.unasus.appportfolio.Activities.Fragments.FragmentAttachment;
 import com.ufcspa.unasus.appportfolio.Activities.Fragments.FragmentRTEditor;
+import com.ufcspa.unasus.appportfolio.Activities.Fragments.FragmentReference;
 import com.ufcspa.unasus.appportfolio.Activities.Fragments.FragmentSelectPortfolio;
 import com.ufcspa.unasus.appportfolio.Activities.Fragments.FragmentStudentActivities;
 import com.ufcspa.unasus.appportfolio.Model.Attachment;
@@ -289,7 +289,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new FragmentStudentActivities()).addToBackStack("Frag").commit();
                 break;
             case 2:
-                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new FragRef()).addToBackStack("Frag").commit();
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new FragmentReference()).addToBackStack("Frag").commit();
                 break;
             case 3:
                 break;

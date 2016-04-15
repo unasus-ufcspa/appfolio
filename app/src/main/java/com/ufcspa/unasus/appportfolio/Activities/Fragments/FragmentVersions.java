@@ -14,7 +14,7 @@ import java.util.ArrayList;
 /**
  * Created by Arthur Zettler on 05/04/2016.
  */
-public class VersionsFragment extends Frag {
+public class FragmentVersions extends Frag {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {

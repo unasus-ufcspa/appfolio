@@ -26,7 +26,7 @@ import java.util.ArrayList;
 /**
  * Created by Desenvolvimento on 23/12/2015.
  */
-public class FragRef extends Frag {
+public class FragmentReference extends Frag {
     private Button btSave;
     private EditText edtRef;
     private ListView list;

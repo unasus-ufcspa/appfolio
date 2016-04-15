@@ -46,11 +46,11 @@
         <item name="rte_icToolbarFont">@drawable/ic_font</item>
         <item name="rte_icToolbarFontSize">@drawable/ic_size</item>
         <item name="rte_icToolbarLink">@drawable/ic_link</item>
-        <item name="rte_icToolbarImage">@drawable/selector_ic_toolbar_image_light</item>
-        <item name="rte_icToolbarVideo">@drawable/ic_toolbar_video_light</item>
-        <item name="rte_icToolbarCaptureVideo">@drawable/ic_toolbar_capture_video_light</item>
-        <item name="rte_icToolbarFolio">@drawable/ic_toolbar_folio_light</item>
-        <item name="rte_icToolbarCapture">@drawable/selector_ic_toolbar_capture_light</item>
+        <item name="rte_icToolbarImage">@drawable/ic_picgallery</item>
+        <item name="rte_icToolbarVideo">@drawable/ic_vidgallery</item>
+        <item name="rte_icToolbarCaptureVideo">@drawable/ic_video</item>
+        <item name="rte_icToolbarFolio">@drawable/ic_folioattach</item>
+        <item name="rte_icToolbarCapture">@drawable/ic_picture</item>
         <item name="rte_icToolbarUndo">@drawable/ic_undo</item>
         <item name="rte_icToolbarRedo">@drawable/ic_redo</item>
 		
@@ -89,11 +89,11 @@
         <item name="rte_icToolbarFont">@drawable/ic_font</item>
         <item name="rte_icToolbarFontSize">@drawable/ic_size</item>
         <item name="rte_icToolbarLink">@drawable/ic_link</item>
-        <item name="rte_icToolbarImage">@drawable/selector_ic_toolbar_image_light</item>
-        <item name="rte_icToolbarVideo">@drawable/ic_toolbar_video_light</item>
-        <item name="rte_icToolbarCaptureVideo">@drawable/ic_toolbar_capture_video_light</item>
-        <item name="rte_icToolbarFolio">@drawable/ic_toolbar_folio_light</item>
-        <item name="rte_icToolbarCapture">@drawable/selector_ic_toolbar_capture_light</item>
+        <item name="rte_icToolbarImage">@drawable/selector_ic_picgallery</item>
+        <item name="rte_icToolbarVideo">@drawable/selector_ic_vidgallery</item>
+        <item name="rte_icToolbarCaptureVideo">@drawable/selector_ic_video</item>
+        <item name="rte_icToolbarFolio">@drawable/selector_ic_folioattach</item>
+        <item name="rte_icToolbarCapture">@drawable/selector_ic_picture</item>
         <item name="rte_icToolbarUndo">@drawable/ic_undo</item>
         <item name="rte_icToolbarRedo">@drawable/ic_redo</item>
 		<item name="rte_icMenuCloseClearCancel">@drawable/ic_menu_close_clear_cancel_dark</item>
