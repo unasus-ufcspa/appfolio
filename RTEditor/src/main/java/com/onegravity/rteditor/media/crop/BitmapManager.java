@@ -16,12 +16,12 @@
 
 package com.onegravity.rteditor.media.crop;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+
 import java.io.FileDescriptor;
 import java.util.Iterator;
 import java.util.WeakHashMap;
-
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 
 /**
  * This class provides several utilities to cancel bitmap decoding.
@@ -39,56 +39,18 @@ import android.graphics.BitmapFactory;
  */
 public class BitmapManager {
 
-    private static enum State {
-        CANCEL, ALLOW
-    }
-
-    private static class ThreadStatus {
-
-        public State mState = State.ALLOW;
-        public BitmapFactory.Options mOptions;
-
-        @Override
-        public String toString() {
-
-            String s;
-            if (mState == State.CANCEL) {
-                s = "Cancel";
-            } else if (mState == State.ALLOW) {
-                s = "Allow";
-            } else {
-                s = "?";
-            }
-            s = "thread state = " + s + ", options = " + mOptions;
-            return s;
-        }
-    }
-
-    public static class ThreadSet implements Iterable<Thread> {
-        private final WeakHashMap<Thread, Object> mWeakCollection = new WeakHashMap<Thread, Object>();
-
-        public void add(Thread t) {
-
-            mWeakCollection.put(t, null);
-        }
-
-        public void remove(Thread t) {
-
-            mWeakCollection.remove(t);
-        }
-
-        public Iterator<Thread> iterator() {
-
-            return mWeakCollection.keySet().iterator();
-        }
-    }
-
-    private final WeakHashMap<Thread, ThreadStatus> mThreadStatus = new WeakHashMap<Thread, ThreadStatus>();
-
     private static BitmapManager sManager = null;
+    private final WeakHashMap<Thread, ThreadStatus> mThreadStatus = new WeakHashMap<Thread, ThreadStatus>();
 
     private BitmapManager() {
 
+    }
+
+    public static synchronized BitmapManager instance() {
+        if (sManager == null) {
+            sManager = new BitmapManager();
+        }
+        return sManager;
     }
 
     /**
@@ -166,13 +128,6 @@ public class BitmapManager {
         notifyAll();
     }
 
-    public static synchronized BitmapManager instance() {
-        if (sManager == null) {
-            sManager = new BitmapManager();
-        }
-        return sManager;
-    }
-
     /**
      * The real place to delegate bitmap decoding to BitmapFactory.
      */
@@ -191,5 +146,49 @@ public class BitmapManager {
 
         removeDecodingOptions(thread);
         return b;
+    }
+
+    private enum State {
+        CANCEL, ALLOW
+    }
+
+    private static class ThreadStatus {
+
+        public State mState = State.ALLOW;
+        public BitmapFactory.Options mOptions;
+
+        @Override
+        public String toString() {
+
+            String s;
+            if (mState == State.CANCEL) {
+                s = "Cancel";
+            } else if (mState == State.ALLOW) {
+                s = "Allow";
+            } else {
+                s = "?";
+            }
+            s = "thread state = " + s + ", options = " + mOptions;
+            return s;
+        }
+    }
+
+    public static class ThreadSet implements Iterable<Thread> {
+        private final WeakHashMap<Thread, Object> mWeakCollection = new WeakHashMap<Thread, Object>();
+
+        public void add(Thread t) {
+
+            mWeakCollection.put(t, null);
+        }
+
+        public void remove(Thread t) {
+
+            mWeakCollection.remove(t);
+        }
+
+        public Iterator<Thread> iterator() {
+
+            return mWeakCollection.keySet().iterator();
+        }
     }
 }

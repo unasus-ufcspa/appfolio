@@ -18,11 +18,12 @@ public class VersionsAdapter extends BaseAdapter {
     private static LayoutInflater inflater = null;
     private Context context;
     private List<String> list;
+    private Holder holder;
 
     public VersionsAdapter(Context context, List<String> list) {
         this.context = context;
         this.list = list;
-
+        this.holder = new Holder();
         inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
 
@@ -43,16 +44,15 @@ public class VersionsAdapter extends BaseAdapter {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        final Holder holder = new Holder();
-        View rowView;
-        rowView = inflater.inflate(R.layout.adapter_versions, null);
+        if (convertView == null)
+            convertView = inflater.inflate(R.layout.adapter_versions, null);
 
         String aux = list.get(position);
 
-        holder.date = (TextView) rowView.findViewById(R.id.version_date);
-        holder.time = (TextView) rowView.findViewById(R.id.version_time);
+        holder.date = (TextView) convertView.findViewById(R.id.version_date);
+        holder.time = (TextView) convertView.findViewById(R.id.version_time);
 
-        return rowView;
+        return convertView;
     }
 
     public class Holder {

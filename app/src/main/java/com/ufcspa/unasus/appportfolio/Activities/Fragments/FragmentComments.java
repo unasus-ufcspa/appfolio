@@ -7,6 +7,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.provider.Settings;
@@ -52,7 +53,7 @@ public class FragmentComments extends Frag {
     private Button btAttachment;
     //private LoremIpsum ipsum;
     private EditText edtMessage;
-
+    private LoadComments loadComments;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_messages, null);
@@ -83,7 +84,9 @@ public class FragmentComments extends Frag {
         super.onCreate(savedInstanceState);
         oneComments = new ArrayList<>(70);
         adapterComments = new CommentAdapter(getContext(), oneComments);
-        loadCom();
+//        loadCom();
+        loadComments = new LoadComments();
+        loadComments.execute();
         Log.d("Comments", "On create entrou");
     }
 
@@ -107,7 +110,8 @@ public class FragmentComments extends Frag {
                 Log.d("Comments attach", "inserindo comentario");
                 if (attach) {
                     Log.d("Comments attach", "tentando inserir view anexo");
-                    loadCom();
+//                    loadCom();
+                    loadComments.execute();
                     addOneComment(true);
                     attach = false;
                     edtMessage.setText("");
@@ -249,7 +253,8 @@ public class FragmentComments extends Frag {
      * */
     public void insertAtach() {
         Log.d("Comments attach", "tentando inserir view anexo");
-        loadCom();
+//        loadCom();
+        loadComments.execute();
         addOneComment(true);
         attach = false;
         edtMessage.setText("");
@@ -273,7 +278,6 @@ public class FragmentComments extends Frag {
         return c;
     }
 
-
     public void loadCom() {
         DataBaseAdapter db = DataBaseAdapter.getInstance(getActivity());
         Singleton singleton = Singleton.getInstance();
@@ -296,7 +300,7 @@ public class FragmentComments extends Frag {
         } else {
             Log.d("Banco", "Lista retornou vazia!");
         }
-        adapterComments.refresh(oneComments);
+
     }
 
     /**
@@ -333,9 +337,6 @@ public class FragmentComments extends Frag {
         });
     }
 
-
-
-
     /**
      *  MÉTODO PARA SALVAR COMENTARIO NO BANCO E ENVIAR VIA JSON
      *
@@ -366,9 +367,6 @@ public class FragmentComments extends Frag {
         }
 
     }
-
-
-
 
     /**
      *  REESCRITA DO MÉTODO DA CLASSE FRAG, USADO PARA SALVAR COMETARIO COM ANEXO NA TABELA ATTACH_COMMENT
@@ -410,7 +408,6 @@ public class FragmentComments extends Frag {
         builder.show();
     }
 
-
     /**
      * MÉTODO PARA PEGAR A DATA ATUAL
      */
@@ -421,7 +418,6 @@ public class FragmentComments extends Frag {
         String strDate = sdf.format(c.getTime());
         return strDate;
     }
-
 
     /**
      * MÉTODOS PARA CONVERTER O FORMATO DE DATA VINDO DO BANCO PARA EXIBIR NA VIEW
@@ -455,6 +451,21 @@ public class FragmentComments extends Frag {
             e.printStackTrace();
         }
         return shortDateStr;
+    }
+
+    private class LoadComments extends AsyncTask {
+
+        @Override
+        protected Object doInBackground(Object[] params) {
+            loadCom();
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Object o) {
+            super.onPostExecute(o);
+            adapterComments.refresh(oneComments);
+        }
     }
 
 

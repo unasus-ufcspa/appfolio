@@ -2,10 +2,6 @@ package com.ufcspa.unasus.appportfolio.Activities;
 
 import android.os.Bundle;
 import android.support.v4.app.FragmentTabHost;
-import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.util.DisplayMetrics;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -13,25 +9,10 @@ import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 
-import com.mikepenz.crossfader.Crossfader;
-import com.mikepenz.iconics.IconicsDrawable;
-import com.mikepenz.materialdrawer.AccountHeader;
-import com.mikepenz.materialdrawer.AccountHeaderBuilder;
-import com.mikepenz.materialdrawer.Drawer;
-import com.mikepenz.materialdrawer.DrawerBuilder;
-import com.mikepenz.materialdrawer.MiniDrawer;
-import com.mikepenz.materialdrawer.model.PrimaryDrawerItem;
-import com.mikepenz.materialdrawer.model.ProfileDrawerItem;
-import com.mikepenz.materialdrawer.model.SecondaryDrawerItem;
-import com.mikepenz.materialdrawer.model.SectionDrawerItem;
-import com.mikepenz.materialdrawer.model.interfaces.IProfile;
-import com.mikepenz.materialize.util.UIUtils;
-import com.ufcspa.unasus.appportfolio.Activities.Fragments.FragRef;
 import com.ufcspa.unasus.appportfolio.Activities.Fragments.FragmentAttachment;
 import com.ufcspa.unasus.appportfolio.Activities.Fragments.FragmentComments;
+import com.ufcspa.unasus.appportfolio.Activities.Fragments.FragmentReference;
 import com.ufcspa.unasus.appportfolio.R;
-import com.mikepenz.google_material_typeface_library.GoogleMaterial;
-import com.mikepenz.fontawesome_typeface_library.FontAwesome;
 
 
 /**
@@ -62,7 +43,7 @@ public class EditActivity extends AppActivity {
         slider.bringToFront();
 
         slider.addTab(slider.newTabSpec("Comments").setIndicator(null, getResources().getDrawable(R.drawable.ic_announcement_black_24dp)), FragmentComments.class, null);
-        slider.addTab(slider.newTabSpec("References").setIndicator(null, getResources().getDrawable(R.drawable.ic_copy)), FragRef.class, null);
+        slider.addTab(slider.newTabSpec("References").setIndicator(null, getResources().getDrawable(R.drawable.ic_copy)), FragmentReference.class, null);
         slider.addTab(slider.newTabSpec("Old Edit Text").setIndicator(null, getResources().getDrawable(R.drawable.ic_share)), FragmentAttachment.class, null);
 
         animLeft = AnimationUtils.loadAnimation(this, R.anim.anim_right);

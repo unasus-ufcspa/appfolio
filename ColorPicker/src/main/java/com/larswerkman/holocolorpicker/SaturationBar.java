@@ -154,18 +154,6 @@ public class SaturationBar extends View {
      */
     private int oldChangedListenerSaturation;
 
-    public interface OnSaturationChangedListener {
-        public void onSaturationChanged(int saturation);
-    }
-
-    public void setOnSaturationChangedListener(OnSaturationChangedListener listener) {
-        this.onSaturationChangedListener = listener;
-    }
-
-    public OnSaturationChangedListener getOnSaturationChangedListener() {
-        return this.onSaturationChangedListener;
-    }
-
     public SaturationBar(Context context) {
         super(context);
         init(null, 0);
@@ -179,6 +167,14 @@ public class SaturationBar extends View {
     public SaturationBar(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
         init(attrs, defStyle);
+    }
+
+    public OnSaturationChangedListener getOnSaturationChangedListener() {
+        return this.onSaturationChangedListener;
+    }
+
+    public void setOnSaturationChangedListener(OnSaturationChangedListener listener) {
+        this.onSaturationChangedListener = listener;
     }
 
     private void init(AttributeSet attrs, int defStyle) {
@@ -328,8 +324,6 @@ public class SaturationBar extends View {
         canvas.drawCircle(cX, cY, mBarPointerRadius, mBarPointerPaint);
     }
 
-    ;
-
     @SuppressLint("ClickableViewAccessibility")
     @Override
     public boolean onTouchEvent(MotionEvent event) {
@@ -409,6 +403,50 @@ public class SaturationBar extends View {
     }
 
     /**
+     * Set the pointer on the bar. With the opacity value.
+     *
+     * @param saturation float between 0 > 1
+     */
+    public void setSaturation(float saturation) {
+        mBarPointerPosition = Math.round((mSatToPosFactor * saturation))
+                + mBarPointerHaloRadius;
+        calculateColor(mBarPointerPosition);
+        mBarPointerPaint.setColor(mColor);
+        if (mPicker != null) {
+            mPicker.setNewCenterColor(mColor);
+            mPicker.changeValueBarColor(mColor);
+            mPicker.changeOpacityBarColor(mColor);
+        }
+        invalidate();
+    }
+
+    /**
+     * Calculate the color selected by the pointer on the bar.
+     *
+     * @param coord Coordinate of the pointer.
+     */
+    private void calculateColor(int coord) {
+        coord = coord - mBarPointerHaloRadius;
+        if (coord < 0) {
+            coord = 0;
+        } else if (coord > mBarLength) {
+            coord = mBarLength;
+        }
+        mColor = Color.HSVToColor(new float[]{mHSVColor[0],
+                (mPosToSatFactor * coord),
+                1f});
+    }
+
+    /**
+     * Get the currently selected color.
+     *
+     * @return The ARGB value of the currently selected color.
+     */
+    public int getColor() {
+        return mColor;
+    }
+
+    /**
      * Set the bar color. <br>
      * <br>
      * Its discouraged to use this method.
@@ -441,50 +479,6 @@ public class SaturationBar extends View {
                 mPicker.changeOpacityBarColor(mColor);
         }
         invalidate();
-    }
-
-    /**
-     * Set the pointer on the bar. With the opacity value.
-     *
-     * @param saturation float between 0 > 1
-     */
-    public void setSaturation(float saturation) {
-        mBarPointerPosition = Math.round((mSatToPosFactor * saturation))
-                + mBarPointerHaloRadius;
-        calculateColor(mBarPointerPosition);
-        mBarPointerPaint.setColor(mColor);
-        if (mPicker != null) {
-            mPicker.setNewCenterColor(mColor);
-            mPicker.changeValueBarColor(mColor);
-            mPicker.changeOpacityBarColor(mColor);
-        }
-        invalidate();
-    }
-
-    /**
-     * Calculate the color selected by the pointer on the bar.
-     *
-     * @param coord Coordinate of the pointer.
-     */
-    private void calculateColor(int coord) {
-        coord = coord - mBarPointerHaloRadius;
-        if (coord < 0) {
-            coord = 0;
-        } else if (coord > mBarLength) {
-            coord = mBarLength;
-        }
-        mColor = Color.HSVToColor(new float[]{mHSVColor[0],
-                (float) ((mPosToSatFactor * coord)),
-                1f});
-    }
-
-    /**
-     * Get the currently selected color.
-     *
-     * @return The ARGB value of the currently selected color.
-     */
-    public int getColor() {
-        return mColor;
     }
 
     /**
@@ -526,5 +520,9 @@ public class SaturationBar extends View {
         setColor(Color.HSVToColor(savedState.getFloatArray(STATE_COLOR)));
         setSaturation(savedState.getFloat(STATE_SATURATION));
         mOrientation = savedState.getBoolean(STATE_ORIENTATION, ORIENTATION_DEFAULT);
+    }
+
+    public interface OnSaturationChangedListener {
+        void onSaturationChanged(int saturation);
     }
 }

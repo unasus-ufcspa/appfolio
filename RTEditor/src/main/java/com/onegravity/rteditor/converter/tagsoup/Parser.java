@@ -16,15 +16,7 @@
 
 package com.onegravity.rteditor.converter.tagsoup;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.Reader;
-import java.io.UnsupportedEncodingException;
-import java.net.URL;
-import java.net.URLConnection;
-import java.util.ArrayList;
-import java.util.HashMap;
+import android.annotation.SuppressLint;
 
 import org.xml.sax.Attributes;
 import org.xml.sax.ContentHandler;
@@ -40,7 +32,15 @@ import org.xml.sax.XMLReader;
 import org.xml.sax.ext.LexicalHandler;
 import org.xml.sax.helpers.DefaultHandler;
 
-import android.annotation.SuppressLint;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.Reader;
+import java.io.UnsupportedEncodingException;
+import java.net.URL;
+import java.net.URLConnection;
+import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  * The SAX parser class.
@@ -49,64 +49,27 @@ public class Parser extends DefaultHandler implements ScanHandler, XMLReader, Le
 
     // XMLReader implementation
 
-    private ContentHandler theContentHandler = this;
-    private LexicalHandler theLexicalHandler = this;
-    private DTDHandler theDTDHandler = this;
-    private ErrorHandler theErrorHandler = this;
-    private EntityResolver theEntityResolver = this;
-    private Schema theSchema;
-    private Scanner theScanner;
-    private AutoDetector theAutoDetector;
-
-    // Default values for feature flags
-
-    private static boolean DEFAULT_NAMESPACES = true;
-    private static boolean DEFAULT_IGNORE_BOGONS = false;
-    private static boolean DEFAULT_BOGONS_EMPTY = false;
-    private static boolean DEFAULT_ROOT_BOGONS = true;
-    private static boolean DEFAULT_DEFAULT_ATTRIBUTES = true;
-    private static boolean DEFAULT_TRANSLATE_COLONS = false;
-    private static boolean DEFAULT_RESTART_ELEMENTS = true;
-    private static boolean DEFAULT_IGNORABLE_WHITESPACE = false;
-    private static boolean DEFAULT_CDATA_ELEMENTS = true;
-
-    // Feature flags.
-
-    private boolean namespaces = DEFAULT_NAMESPACES;
-    private boolean ignoreBogons = DEFAULT_IGNORE_BOGONS;
-    private boolean bogonsEmpty = DEFAULT_BOGONS_EMPTY;
-    private boolean rootBogons = DEFAULT_ROOT_BOGONS;
-    private boolean defaultAttributes = DEFAULT_DEFAULT_ATTRIBUTES;
-    private boolean translateColons = DEFAULT_TRANSLATE_COLONS;
-    private boolean restartElements = DEFAULT_RESTART_ELEMENTS;
-    private boolean ignorableWhitespace = DEFAULT_IGNORABLE_WHITESPACE;
-    private boolean CDATAElements = DEFAULT_CDATA_ELEMENTS;
-
     /**
      * A value of "true" indicates namespace URIs and unprefixed local names for
      * element and attribute names will be available.
      */
     public final static String namespacesFeature = "http://xml.org/sax/features/namespaces";
-
     /**
      * A value of "true" indicates that XML qualified names (with prefixes) and
      * attributes (including xmlns* attributes) will be available. We don't
      * support this value.
      */
     public final static String namespacePrefixesFeature = "http://xml.org/sax/features/namespace-prefixes";
-
     /**
      * Reports whether this parser processes external general entities (it
      * doesn't).
      */
     public final static String externalGeneralEntitiesFeature = "http://xml.org/sax/features/external-general-entities";
-
     /**
      * Reports whether this parser processes external parameter entities (it
      * doesn't).
      */
     public final static String externalParameterEntitiesFeature = "http://xml.org/sax/features/external-parameter-entities";
-
     /**
      * May be examined only during a parse, after the startDocument() callback
      * has been completed; read-only. The value is true if the document
@@ -114,20 +77,17 @@ public class Parser extends DefaultHandler implements ScanHandler, XMLReader, Le
      * false. (It's always false.)
      */
     public final static String isStandaloneFeature = "http://xml.org/sax/features/is-standalone";
-
     /**
      * A value of "true" indicates that the LexicalHandler will report the
      * beginning and end of parameter entities (it won't).
      */
     public final static String lexicalHandlerParameterEntitiesFeature = "http://xml.org/sax/features/lexical-handler/parameter-entities";
-
     /**
      * A value of "true" indicates that system IDs in declarations will be
      * absolutized (relative to their base URIs) before reporting. (This returns
      * true but doesn't actually do anything.)
      */
     public final static String resolveDTDURIsFeature = "http://xml.org/sax/features/resolve-dtd-uris";
-
     /**
      * Has a value of "true" if all XML names (for elements, prefixes,
      * attributes, entities, notations, and local names), as well as Namespace
@@ -137,6 +97,7 @@ public class Parser extends DefaultHandler implements ScanHandler, XMLReader, Le
      */
     public final static String stringInterningFeature = "http://xml.org/sax/features/string-interning";
 
+    // Default values for feature flags
     /**
      * Returns "true" if the Attributes objects passed by this parser in
      * ContentHandler.startElement() implement the org.xml.sax.ext.Attributes2
@@ -144,82 +105,71 @@ public class Parser extends DefaultHandler implements ScanHandler, XMLReader, Le
      */
 
     public final static String useAttributes2Feature = "http://xml.org/sax/features/use-attributes2";
-
     /**
      * Returns "true" if the Locator objects passed by this parser in
      * ContentHandler.setDocumentLocator() implement the
      * org.xml.sax.ext.Locator2 interface. (They don't.)
      */
     public final static String useLocator2Feature = "http://xml.org/sax/features/use-locator2";
-
     /**
      * Returns "true" if, when setEntityResolver is given an object implementing
      * the org.xml.sax.ext.EntityResolver2 interface, those new methods will be
      * used. (They won't be.)
      */
     public final static String useEntityResolver2Feature = "http://xml.org/sax/features/use-entity-resolver2";
-
     /**
      * Controls whether the parser is reporting all validity errors (We don't
      * report any validity errors.)
      */
     public final static String validationFeature = "http://xml.org/sax/features/validation";
-
     /**
      * Controls whether the parser reports Unicode normalization errors as
      * described in section 2.13 and Appendix B of the XML 1.1 Recommendation.
      * (We don't normalize.)
      */
     public final static String unicodeNormalizationCheckingFeature = "http://xml.org/sax/features/unicode-normalization-checking";
-
     /**
      * Controls whether, when the namespace-prefixes feature is set, the parser
      * treats namespace declaration attributes as being in the
      * http://www.w3.org/2000/xmlns/ namespace. (It doesn't.)
      */
     public final static String xmlnsURIsFeature = "http://xml.org/sax/features/xmlns-uris";
-
     /**
      * Returns "true" if the parser supports both XML 1.1 and XML 1.0. (Always
      * false.)
      */
     public final static String XML11Feature = "http://xml.org/sax/features/xml-1.1";
-
     /**
      * A value of "true" indicates that the parser will ignore unknown elements.
      */
     public final static String ignoreBogonsFeature = "http://www.ccil.org/~cowan/tagsoup/features/ignore-bogons";
-
     /**
      * A value of "true" indicates that the parser will give unknown elements a
      * content model of EMPTY; a value of "false", a content model of ANY.
      */
     public final static String bogonsEmptyFeature = "http://www.ccil.org/~cowan/tagsoup/features/bogons-empty";
 
+    // Feature flags.
     /**
      * A value of "true" indicates that the parser will allow unknown elements
      * to be the root element.
      */
     public final static String rootBogonsFeature = "http://www.ccil.org/~cowan/tagsoup/features/root-bogons";
-
     /**
      * A value of "true" indicates that the parser will return default attribute
      * values for missing attributes that have default values.
      */
     public final static String defaultAttributesFeature = "http://www.ccil.org/~cowan/tagsoup/features/default-attributes";
-
     /**
      * A value of "true" indicates that the parser will translate colons into
      * underscores in names.
      */
     public final static String translateColonsFeature = "http://www.ccil.org/~cowan/tagsoup/features/translate-colons";
-
     /**
      * A value of "true" indicates that the parser will attempt to restart the
      * restartable elements.
      */
     public final static String restartElementsFeature = "http://www.ccil.org/~cowan/tagsoup/features/restart-elements";
-
     /**
      * A value of "true" indicates that the parser will transmit whitespace in
      * element-only content via the SAX ignorableWhitespace callback. Normally
@@ -227,13 +177,11 @@ public class Parser extends DefaultHandler implements ScanHandler, XMLReader, Le
      * such whitespace.
      */
     public final static String ignorableWhitespaceFeature = "http://www.ccil.org/~cowan/tagsoup/features/ignorable-whitespace";
-
     /**
      * A value of "true" indicates that the parser will treat CDATA elements
      * specially. Normally true, since the input is by default HTML.
      */
     public final static String CDATAElementsFeature = "http://www.ccil.org/~cowan/tagsoup/features/cdata-elements";
-
     /**
      * Used to see some syntax events that are essential in some applications:
      * comments, CDATA delimiters, selected general entity inclusions, and the
@@ -241,28 +189,66 @@ public class Parser extends DefaultHandler implements ScanHandler, XMLReader, Le
      * Object must implement org.xml.sax.ext.LexicalHandler.
      */
     public final static String lexicalHandlerProperty = "http://xml.org/sax/properties/lexical-handler";
-
     /**
      * Specifies the Scanner object this Parser uses.
      */
     public final static String scannerProperty = "http://www.ccil.org/~cowan/tagsoup/properties/scanner";
-
     /**
      * Specifies the Schema object this Parser uses.
      */
     public final static String schemaProperty = "http://www.ccil.org/~cowan/tagsoup/properties/schema";
-
     /**
      * Specifies the AutoDetector (for encoding detection) this Parser uses.
      */
     public final static String autoDetectorProperty = "http://www.ccil.org/~cowan/tagsoup/properties/auto-detector";
+    private static boolean DEFAULT_NAMESPACES = true;
+    private static boolean DEFAULT_IGNORE_BOGONS = false;
+    private static boolean DEFAULT_BOGONS_EMPTY = false;
+    private static boolean DEFAULT_ROOT_BOGONS = true;
+    private static boolean DEFAULT_DEFAULT_ATTRIBUTES = true;
+    private static boolean DEFAULT_TRANSLATE_COLONS = false;
+    private static boolean DEFAULT_RESTART_ELEMENTS = true;
+    private static boolean DEFAULT_IGNORABLE_WHITESPACE = false;
+    private static boolean DEFAULT_CDATA_ELEMENTS = true;
+    private static char[] etagchars = {'<', '/', '>'};
+    // Replace junk in publicids with spaces
+    private static String legal = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-'()+,./:=?;!*#@$_%";
+    private ContentHandler theContentHandler = this;
+    private LexicalHandler theLexicalHandler = this;
+    private DTDHandler theDTDHandler = this;
+    private ErrorHandler theErrorHandler = this;
+    private EntityResolver theEntityResolver = this;
+    private Schema theSchema;
+    private Scanner theScanner;
+    private AutoDetector theAutoDetector;
+    private boolean namespaces = DEFAULT_NAMESPACES;
+    private boolean ignoreBogons = DEFAULT_IGNORE_BOGONS;
+    private boolean bogonsEmpty = DEFAULT_BOGONS_EMPTY;
+    private boolean rootBogons = DEFAULT_ROOT_BOGONS;
+    private boolean defaultAttributes = DEFAULT_DEFAULT_ATTRIBUTES;
+    private boolean translateColons = DEFAULT_TRANSLATE_COLONS;
+    private boolean restartElements = DEFAULT_RESTART_ELEMENTS;
 
     // Due to sucky Java order of initialization issues, these
     // entries are maintained separately from the initial values of
     // the corresponding instance variables, but care must be taken
     // to keep them in sync.
-
+    private boolean ignorableWhitespace = DEFAULT_IGNORABLE_WHITESPACE;
+    private boolean CDATAElements = DEFAULT_CDATA_ELEMENTS;
     private HashMap<String, Boolean> theFeatures = new HashMap<String, Boolean>();
+    private Element theNewElement = null;
+    private String theAttributeName = null;
+    private boolean theDoctypeIsPresent = false;
+    private String theDoctypePublicId = null;
+    private String theDoctypeSystemId = null;
+    private String theDoctypeName = null;
+    private String thePITarget = null;
+    private Element theStack = null;
+    private Element theSaved = null;
+    private Element thePCDATA = null;
+    private int theEntity = 0; // needs to support chars past U+FFFF
+    // Push element onto stack
+    private boolean virginStack = true;
 
     {
         theFeatures.put(namespacesFeature, truthValue(DEFAULT_NAMESPACES));
@@ -296,18 +282,77 @@ public class Parser extends DefaultHandler implements ScanHandler, XMLReader, Le
         return b ? Boolean.TRUE : Boolean.FALSE;
     }
 
+    // If the String is quoted, trim the quotes.
+    private static String trimquotes(String in) {
+        if (in == null)
+            return in;
+        int length = in.length();
+        if (length == 0)
+            return in;
+        char s = in.charAt(0);
+        char e = in.charAt(length - 1);
+        if (s == e && (s == '\'' || s == '"')) {
+            in = in.substring(1, in.length() - 1);
+        }
+        return in;
+    }
+
+    // Split the supplied String into words or phrases seperated by spaces.
+    // Recognises quotes around a phrase and doesn't split it.
+    private static String[] split(String val) throws IllegalArgumentException {
+        val = val.trim();
+        if (val.length() == 0) {
+            return new String[0];
+        } else {
+            ArrayList<String> l = new ArrayList<String>();
+            int s = 0;
+            int e = 0;
+            boolean sq = false; // single quote
+            boolean dq = false; // double quote
+            char lastc = 0;
+            int len = val.length();
+            for (e = 0; e < len; e++) {
+                char c = val.charAt(e);
+                if (!dq && c == '\'' && lastc != '\\') {
+                    sq = !sq;
+                    if (s < 0)
+                        s = e;
+                } else if (!sq && c == '\"' && lastc != '\\') {
+                    dq = !dq;
+                    if (s < 0)
+                        s = e;
+                } else if (!sq && !dq) {
+                    if (Character.isWhitespace(c)) {
+                        if (s >= 0)
+                            l.add(val.substring(s, e));
+                        s = -1;
+                    } else if (s < 0 && c != ' ') {
+                        s = e;
+                    }
+                }
+                lastc = c;
+            }
+            l.add(val.substring(s, e));
+            return l.toArray(new String[0]);
+        }
+    }
+
     @Override
     public boolean getFeature(String name) throws SAXNotRecognizedException, SAXNotSupportedException {
-        Boolean b = (Boolean) theFeatures.get(name);
+        Boolean b = theFeatures.get(name);
         if (b == null) {
             throw new SAXNotRecognizedException("Unknown feature " + name);
         }
         return b.booleanValue();
     }
 
+    // We don't process publicids (who uses them anyhow?)
+
+    // ScanHandler implementation
+
     @Override
     public void setFeature(String name, boolean value) throws SAXNotRecognizedException, SAXNotSupportedException {
-        Boolean b = (Boolean) theFeatures.get(name);
+        Boolean b = theFeatures.get(name);
         if (b == null) {
             throw new SAXNotRecognizedException("Unknown feature " + name);
         }
@@ -386,18 +431,13 @@ public class Parser extends DefaultHandler implements ScanHandler, XMLReader, Le
     }
 
     @Override
-    public void setEntityResolver(EntityResolver resolver) {
-        theEntityResolver = (resolver == null) ? this : resolver;
-    }
-
-    @Override
     public EntityResolver getEntityResolver() {
         return (theEntityResolver == this) ? null : theEntityResolver;
     }
 
     @Override
-    public void setDTDHandler(DTDHandler handler) {
-        theDTDHandler = (handler == null) ? this : handler;
+    public void setEntityResolver(EntityResolver resolver) {
+        theEntityResolver = (resolver == null) ? this : resolver;
     }
 
     @Override
@@ -406,8 +446,8 @@ public class Parser extends DefaultHandler implements ScanHandler, XMLReader, Le
     }
 
     @Override
-    public void setContentHandler(ContentHandler handler) {
-        theContentHandler = (handler == null) ? this : handler;
+    public void setDTDHandler(DTDHandler handler) {
+        theDTDHandler = (handler == null) ? this : handler;
     }
 
     @Override
@@ -416,13 +456,18 @@ public class Parser extends DefaultHandler implements ScanHandler, XMLReader, Le
     }
 
     @Override
-    public void setErrorHandler(ErrorHandler handler) {
-        theErrorHandler = (handler == null) ? this : handler;
+    public void setContentHandler(ContentHandler handler) {
+        theContentHandler = (handler == null) ? this : handler;
     }
 
     @Override
     public ErrorHandler getErrorHandler() {
         return (theErrorHandler == this) ? null : theErrorHandler;
+    }
+
+    @Override
+    public void setErrorHandler(ErrorHandler handler) {
+        theErrorHandler = (handler == null) ? this : handler;
     }
 
     @Override
@@ -502,22 +547,6 @@ public class Parser extends DefaultHandler implements ScanHandler, XMLReader, Le
         URLConnection c = url.openConnection();
         return c.getInputStream();
     }
-
-    // We don't process publicids (who uses them anyhow?)
-
-    // ScanHandler implementation
-
-    private Element theNewElement = null;
-    private String theAttributeName = null;
-    private boolean theDoctypeIsPresent = false;
-    private String theDoctypePublicId = null;
-    private String theDoctypeSystemId = null;
-    private String theDoctypeName = null;
-    private String thePITarget = null;
-    private Element theStack = null;
-    private Element theSaved = null;
-    private Element thePCDATA = null;
-    private int theEntity = 0; // needs to support chars past U+FFFF
 
     @Override
     public void adup(char[] buff, int offset, int length) throws SAXException {
@@ -637,8 +666,6 @@ public class Parser extends DefaultHandler implements ScanHandler, XMLReader, Le
         etag_basic(buff, offset, length);
     }
 
-    private static char[] etagchars = {'<', '/', '>'};
-
     private boolean etag_cdata(char[] buff, int offset, int length) throws SAXException {
         String currentName = theStack.name();
         // If this is a CDATA element and the tag doesn't match,
@@ -757,9 +784,6 @@ public class Parser extends DefaultHandler implements ScanHandler, XMLReader, Le
         }
     }
 
-    // Push element onto stack
-    private boolean virginStack = true;
-
     private void push(Element e) throws SAXException {
         String name = e.name();
         String localName = e.localName();
@@ -868,64 +892,6 @@ public class Parser extends DefaultHandler implements ScanHandler, XMLReader, Le
         }
     }
 
-    // If the String is quoted, trim the quotes.
-    private static String trimquotes(String in) {
-        if (in == null)
-            return in;
-        int length = in.length();
-        if (length == 0)
-            return in;
-        char s = in.charAt(0);
-        char e = in.charAt(length - 1);
-        if (s == e && (s == '\'' || s == '"')) {
-            in = in.substring(1, in.length() - 1);
-        }
-        return in;
-    }
-
-    // Split the supplied String into words or phrases seperated by spaces.
-    // Recognises quotes around a phrase and doesn't split it.
-    private static String[] split(String val) throws IllegalArgumentException {
-        val = val.trim();
-        if (val.length() == 0) {
-            return new String[0];
-        } else {
-            ArrayList<String> l = new ArrayList<String>();
-            int s = 0;
-            int e = 0;
-            boolean sq = false; // single quote
-            boolean dq = false; // double quote
-            char lastc = 0;
-            int len = val.length();
-            for (e = 0; e < len; e++) {
-                char c = val.charAt(e);
-                if (!dq && c == '\'' && lastc != '\\') {
-                    sq = !sq;
-                    if (s < 0)
-                        s = e;
-                } else if (!sq && c == '\"' && lastc != '\\') {
-                    dq = !dq;
-                    if (s < 0)
-                        s = e;
-                } else if (!sq && !dq) {
-                    if (Character.isWhitespace(c)) {
-                        if (s >= 0)
-                            l.add(val.substring(s, e));
-                        s = -1;
-                    } else if (s < 0 && c != ' ') {
-                        s = e;
-                    }
-                }
-                lastc = c;
-            }
-            l.add(val.substring(s, e));
-            return (String[]) l.toArray(new String[0]);
-        }
-    }
-
-    // Replace junk in publicids with spaces
-    private static String legal = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-'()+,./:=?;!*#@$_%";
-
     private String cleanPublicid(String src) {
         if (src == null)
             return null;
@@ -938,7 +904,6 @@ public class Parser extends DefaultHandler implements ScanHandler, XMLReader, Le
                 dst.append(ch);
                 suppressSpace = false;
             } else if (suppressSpace) { // normalizable whitespace or junk
-                ;
             } else {
                 dst.append(' ');
                 suppressSpace = true;

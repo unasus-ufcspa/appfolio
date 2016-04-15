@@ -39,15 +39,7 @@ import java.io.File;
 
 class ImageChooserManager extends MediaChooserManager implements ImageProcessorListener {
 
-    public interface ImageChooserListener extends MediaChooserListener {
-        /**
-         * Callback method to inform the caller that an image file has been processed
-         */
-        public void onImageChosen(RTImage image);
-    }
-
     private static final String CAPTURED_IMAGE_TEMPLATE = "CAPTURED_IMAGE.jpeg";
-
     private ImageChooserListener mListener;
 
     ImageChooserManager(MonitoredActivity activity, MediaAction mediaAction,
@@ -137,6 +129,13 @@ class ImageChooserManager extends MediaChooserManager implements ImageProcessorL
         if (mListener != null) {
             mListener.onImageChosen(image);
         }
+    }
+
+    public interface ImageChooserListener extends MediaChooserListener {
+        /**
+         * Callback method to inform the caller that an image file has been processed
+         */
+        void onImageChosen(RTImage image);
     }
 
 }

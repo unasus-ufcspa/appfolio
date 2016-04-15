@@ -26,7 +26,6 @@ import com.onegravity.rteditor.api.RTMediaFactory;
 import com.onegravity.rteditor.api.media.RTAudio;
 import com.onegravity.rteditor.api.media.RTImage;
 import com.onegravity.rteditor.api.media.RTVideo;
-
 import com.onegravity.rteditor.utils.io.FilenameUtils;
 import com.onegravity.rteditor.utils.io.IOUtils;
 
@@ -40,15 +39,10 @@ import java.net.URL;
 
 public abstract class MediaProcessor implements Runnable {
 
-    public interface MediaProcessorListener {
-        public void onError(String reason);
-    }
-
+    protected final RTMediaFactory<RTImage, RTAudio, RTVideo> mMediaFactory;
     final private MediaProcessorListener mListener;
 
     final private String mOriginalFile;
-
-    protected final RTMediaFactory<RTImage, RTAudio, RTVideo> mMediaFactory;
 
     public MediaProcessor(String originalFile, RTMediaFactory<RTImage, RTAudio, RTVideo> mediaFactory, MediaProcessorListener listener) {
         mOriginalFile = originalFile;
@@ -71,9 +65,9 @@ public abstract class MediaProcessor implements Runnable {
         return mOriginalFile;
     }
 
-    protected abstract void processMedia() throws IOException, Exception;
+    protected abstract void processMedia() throws Exception;
 
-    protected InputStream getInputStream() throws IOException, Exception {
+    protected InputStream getInputStream() throws Exception {
         InputStream in = null;
         if (mOriginalFile.startsWith("http")) {
             // http download
@@ -89,7 +83,7 @@ public abstract class MediaProcessor implements Runnable {
         return in;
     }
 
-    protected String getMimeType() throws IOException, Exception {
+    protected String getMimeType() throws Exception {
         if (mOriginalFile.startsWith("content://")) {
             // ContentProvider file
             ContentResolver resolver = RTApi.getApplicationContext().getContentResolver();
@@ -144,6 +138,10 @@ public abstract class MediaProcessor implements Runnable {
         }
 
         return in;
+    }
+
+    public interface MediaProcessorListener {
+        void onError(String reason);
     }
 
 }

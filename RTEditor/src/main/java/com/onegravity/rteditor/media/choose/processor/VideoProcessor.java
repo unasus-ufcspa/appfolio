@@ -23,14 +23,9 @@ import com.onegravity.rteditor.api.media.RTMediaSource;
 import com.onegravity.rteditor.api.media.RTMediaType;
 import com.onegravity.rteditor.api.media.RTVideo;
 
-import java.io.IOException;
 import java.io.InputStream;
 
 public class VideoProcessor extends MediaProcessor {
-
-    public interface VideoProcessorListener extends MediaProcessorListener {
-        public void onVideoProcessed(RTVideo video);
-    }
 
     private VideoProcessorListener mListener;
 
@@ -40,7 +35,7 @@ public class VideoProcessor extends MediaProcessor {
     }
 
     @Override
-    protected void processMedia() throws IOException, Exception {
+    protected void processMedia() throws Exception {
         InputStream in = super.getInputStream();
         if (in == null) {
             if (mListener != null) {
@@ -54,6 +49,10 @@ public class VideoProcessor extends MediaProcessor {
             }
         }
 
+    }
+
+    public interface VideoProcessorListener extends MediaProcessorListener {
+        void onVideoProcessed(RTVideo video);
     }
 
 }

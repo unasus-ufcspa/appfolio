@@ -15,6 +15,16 @@
 
 package com.onegravity.rteditor.converter.tagsoup;
 
+import android.text.util.Linkify.MatchFilter;
+
+import com.onegravity.rteditor.converter.tagsoup.util.StringEscapeUtils;
+
+import org.xml.sax.Attributes;
+import org.xml.sax.SAXException;
+import org.xml.sax.ext.LexicalHandler;
+import org.xml.sax.helpers.NamespaceSupport;
+import org.xml.sax.helpers.XMLFilterImpl;
+
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.StringWriter;
@@ -27,16 +37,6 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.Stack;
 import java.util.regex.Matcher;
-
-import org.xml.sax.Attributes;
-import org.xml.sax.SAXException;
-import org.xml.sax.ext.LexicalHandler;
-import org.xml.sax.helpers.NamespaceSupport;
-import org.xml.sax.helpers.XMLFilterImpl;
-
-import android.text.util.Linkify.MatchFilter;
-
-import com.onegravity.rteditor.converter.tagsoup.util.StringEscapeUtils;
 
 /**
  * Filter to write an XML document from a SAX event stream.
@@ -291,6 +291,30 @@ import com.onegravity.rteditor.converter.tagsoup.util.StringEscapeUtils;
  */
 public class HTMLWriter extends XMLFilterImpl implements LexicalHandler {
 
+    public static final String CDATA_SECTION_ELEMENTS = "cdata-section-elements";
+    public static final String DOCTYPE_PUBLIC = "doctype-public";
+
+    // //////////////////////////////////////////////////////////////////
+    // Constants.
+    // //////////////////////////////////////////////////////////////////
+    public static final String DOCTYPE_SYSTEM = "doctype-system";
+    public static final String ENCODING = "encoding";
+    public static final String INDENT = "indent"; // currently ignored
+    public static final String MEDIA_TYPE = "media-type"; // currently ignored
+    public static final String METHOD = "method"; // currently html or xml
+    public static final String OMIT_XML_DECLARATION = "omit-xml-declaration";
+    public static final String STANDALONE = "standalone"; // currently ignored
+    public static final String VERSION = "version";
+    private static final String[] LINK_SCHEMAS = new String[]{"http://", "https://", "rtsp://"};
+    private static final MatchFilter URL_MATCH_FILTER = new MatchFilter() {
+        public final boolean acceptMatch(CharSequence s, int start, int end) {
+            return start == 0 || s.charAt(start - 1) != '@';
+        }
+    };
+
+    // //////////////////////////////////////////////////////////////////
+    // Internal state.
+    // //////////////////////////////////////////////////////////////////
     // //////////////////////////////////////////////////////////////////
     // Tags to ignore
     // //////////////////////////////////////////////////////////////////
@@ -310,25 +334,6 @@ public class HTMLWriter extends XMLFilterImpl implements LexicalHandler {
         mTags2Ignore.put("video", attributes);
     }
 
-    // //////////////////////////////////////////////////////////////////
-    // Constants.
-    // //////////////////////////////////////////////////////////////////
-
-    public static final String CDATA_SECTION_ELEMENTS = "cdata-section-elements";
-    public static final String DOCTYPE_PUBLIC = "doctype-public";
-    public static final String DOCTYPE_SYSTEM = "doctype-system";
-    public static final String ENCODING = "encoding";
-    public static final String INDENT = "indent"; // currently ignored
-    public static final String MEDIA_TYPE = "media-type"; // currently ignored
-    public static final String METHOD = "method"; // currently html or xml
-    public static final String OMIT_XML_DECLARATION = "omit-xml-declaration";
-    public static final String STANDALONE = "standalone"; // currently ignored
-    public static final String VERSION = "version";
-
-    // //////////////////////////////////////////////////////////////////
-    // Internal state.
-    // //////////////////////////////////////////////////////////////////
-
     private Hashtable<String, String> prefixTable;
     private Hashtable<String, Boolean> forcedDeclTable;
     private Hashtable<String, String> doneDeclTable;
@@ -346,12 +351,21 @@ public class HTMLWriter extends XMLFilterImpl implements LexicalHandler {
     private String version = null;
     private String standalone = null;
     private boolean cdataElement = false;
-    private boolean mOmitXHTMLNamespace;
-    private Stack<String> mIgnoredTags;
 
     // //////////////////////////////////////////////////////////////////
     // Constructors.
     // //////////////////////////////////////////////////////////////////
+    private boolean mOmitXHTMLNamespace;
+
+    // //////////////////////////////////////////////////////////////////
+    // Public methods.
+    // //////////////////////////////////////////////////////////////////
+    private Stack<String> mIgnoredTags;
+    private String[] booleans = {"checked", "compact", "declare", "defer",
+            "disabled", "ismap", "multiple", "nohref", "noresize", "noshade",
+            "nowrap", "readonly", "selected"};
+    private boolean mIgnoreChars;
+    private StringBuffer mLastText4Links = new StringBuffer();
 
     /**
      * Create a new XML writer.
@@ -373,10 +387,6 @@ public class HTMLWriter extends XMLFilterImpl implements LexicalHandler {
         mOmitXHTMLNamespace = omitXHTMLNamespace;
         mIgnoredTags = new Stack<String>();
     }
-
-    // //////////////////////////////////////////////////////////////////
-    // Public methods.
-    // //////////////////////////////////////////////////////////////////
 
     /**
      * Reset the writer.
@@ -429,6 +439,10 @@ public class HTMLWriter extends XMLFilterImpl implements LexicalHandler {
         output.flush();
     }
 
+    // //////////////////////////////////////////////////////////////////
+    // Methods from org.xml.sax.ContentHandler.
+    // //////////////////////////////////////////////////////////////////
+
     /**
      * Set a new output destination for the document.
      *
@@ -471,7 +485,7 @@ public class HTMLWriter extends XMLFilterImpl implements LexicalHandler {
      * @see #setPrefix
      */
     public String getPrefix(String uri) {
-        return (String) prefixTable.get(uri);
+        return prefixTable.get(uri);
     }
 
     /**
@@ -515,10 +529,6 @@ public class HTMLWriter extends XMLFilterImpl implements LexicalHandler {
         setPrefix(uri, prefix);
         forceNSDecl(uri);
     }
-
-    // //////////////////////////////////////////////////////////////////
-    // Methods from org.xml.sax.ContentHandler.
-    // //////////////////////////////////////////////////////////////////
 
     /**
      * Write the XML declaration at the beginning of the document.
@@ -640,6 +650,10 @@ public class HTMLWriter extends XMLFilterImpl implements LexicalHandler {
 
         return false;
     }
+
+    // //////////////////////////////////////////////////////////////////
+    // Internal methods.
+    // //////////////////////////////////////////////////////////////////
 
     private boolean isNullOrEmpty(String string) {
         return string == null || string.length() == 0;
@@ -766,10 +780,6 @@ public class HTMLWriter extends XMLFilterImpl implements LexicalHandler {
         super.processingInstruction(target, data);
     }
 
-    // //////////////////////////////////////////////////////////////////
-    // Internal methods.
-    // //////////////////////////////////////////////////////////////////
-
     /**
      * Force all Namespaces to be declared.
      * <p>
@@ -779,7 +789,7 @@ public class HTMLWriter extends XMLFilterImpl implements LexicalHandler {
     private void forceNSDecls() {
         Enumeration<String> prefixes = forcedDeclTable.keys();
         while (prefixes.hasMoreElements()) {
-            String prefix = (String) prefixes.nextElement();
+            String prefix = prefixes.nextElement();
             doPrefix(prefix, null, true);
         }
     }
@@ -810,14 +820,14 @@ public class HTMLWriter extends XMLFilterImpl implements LexicalHandler {
         if (prefix != null) {
             return prefix;
         }
-        prefix = (String) doneDeclTable.get(uri);
+        prefix = doneDeclTable.get(uri);
         if (prefix != null
                 && ((!isElement || defaultNS != null) && "".equals(prefix) || nsSupport
                 .getURI(prefix) != null)) {
             prefix = null;
         }
         if (prefix == null) {
-            prefix = (String) prefixTable.get(uri);
+            prefix = prefixTable.get(uri);
             if (prefix != null
                     && ((!isElement || defaultNS != null) && "".equals(prefix) || nsSupport
                     .getURI(prefix) != null)) {
@@ -899,9 +909,9 @@ public class HTMLWriter extends XMLFilterImpl implements LexicalHandler {
         }
     }
 
-    private String[] booleans = {"checked", "compact", "declare", "defer",
-            "disabled", "ismap", "multiple", "nohref", "noresize", "noshade",
-            "nowrap", "readonly", "selected"};
+    // //////////////////////////////////////////////////////////////////
+    // Default LexicalHandler implementation
+    // //////////////////////////////////////////////////////////////////
 
     // Return true if the attribute is an HTML boolean from the above list.
     private boolean booleanAttribute(String localName, String qName,
@@ -947,7 +957,7 @@ public class HTMLWriter extends XMLFilterImpl implements LexicalHandler {
     private void writeNSDecls() throws SAXException {
         Enumeration<String> prefixes = (Enumeration<String>) nsSupport.getDeclaredPrefixes();
         while (prefixes.hasMoreElements()) {
-            String prefix = (String) prefixes.nextElement();
+            String prefix = prefixes.nextElement();
             String uri = nsSupport.getURI(prefix);
             if (uri == null) {
                 uri = "";
@@ -991,10 +1001,6 @@ public class HTMLWriter extends XMLFilterImpl implements LexicalHandler {
         }
     }
 
-    // //////////////////////////////////////////////////////////////////
-    // Default LexicalHandler implementation
-    // //////////////////////////////////////////////////////////////////
-
     @Override
     public void comment(char[] ch, int start, int length) throws SAXException {
         write("<!--");
@@ -1014,6 +1020,10 @@ public class HTMLWriter extends XMLFilterImpl implements LexicalHandler {
     public void endDTD() throws SAXException {
     }
 
+    // //////////////////////////////////////////////////////////////////
+    // Output properties
+    // //////////////////////////////////////////////////////////////////
+
     @Override
     public void endEntity(String name) throws SAXException {
     }
@@ -1021,6 +1031,10 @@ public class HTMLWriter extends XMLFilterImpl implements LexicalHandler {
     @Override
     public void startCDATA() throws SAXException {
     }
+
+    // //////////////////////////////////////////////////////////////////
+    // Linkifier code.
+    // //////////////////////////////////////////////////////////////////
 
     @Override
     public void startDTD(String name, String publicid, String systemid) throws SAXException {
@@ -1058,10 +1072,6 @@ public class HTMLWriter extends XMLFilterImpl implements LexicalHandler {
     public void startEntity(String name) throws SAXException {
     }
 
-    // //////////////////////////////////////////////////////////////////
-    // Output properties
-    // //////////////////////////////////////////////////////////////////
-
     public String getOutputProperty(String key) {
         return outputProperties.getProperty(key);
     }
@@ -1084,22 +1094,6 @@ public class HTMLWriter extends XMLFilterImpl implements LexicalHandler {
             standalone = value;
         }
     }
-
-    // //////////////////////////////////////////////////////////////////
-    // Linkifier code.
-    // //////////////////////////////////////////////////////////////////
-
-    private static final String[] LINK_SCHEMAS = new String[]{"http://", "https://", "rtsp://"};
-
-    private static final MatchFilter URL_MATCH_FILTER = new MatchFilter() {
-        public final boolean acceptMatch(CharSequence s, int start, int end) {
-            return start == 0 || s.charAt(start - 1) != '@';
-        }
-    };
-
-    private boolean mIgnoreChars;
-
-    private StringBuffer mLastText4Links = new StringBuffer();
 
     private void collectText4Links(char ch[], int start, int len) throws SAXException {
         mLastText4Links.append(String.valueOf(ch, start, len));

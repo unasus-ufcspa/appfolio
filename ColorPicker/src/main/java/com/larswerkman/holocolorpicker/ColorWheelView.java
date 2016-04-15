@@ -345,11 +345,12 @@ public class ColorWheelView extends View {
     }
 
     /**
-     * An interface that is called whenever a new color has been selected.
-     * Currently it is always called when the color wheel has been released.
+     * Gets the onColorChangedListener
+     *
+     * @return {@code OnColorChangedListener}
      */
-    public interface OnColorSelectedListener {
-        public void onColorSelected(int color);
+    public OnColorChangedListener getOnColorChangedListener() {
+        return mOnColorChangedListener;
     }
 
     /**
@@ -362,12 +363,12 @@ public class ColorWheelView extends View {
     }
 
     /**
-     * Gets the onColorChangedListener
+     * Gets the onColorSelectedListener
      *
-     * @return {@code OnColorChangedListener}
+     * @return {@code OnColorSelectedListener}
      */
-    public OnColorChangedListener getOnColorChangedListener() {
-        return mOnColorChangedListener;
+    public OnColorSelectedListener getOnColorSelectedListener() {
+        return mOnColorSelectedListener;
     }
 
     /**
@@ -377,15 +378,6 @@ public class ColorWheelView extends View {
      */
     public void setOnColorSelectedListener(OnColorSelectedListener listener) {
         mOnColorSelectedListener = listener;
-    }
-
-    /**
-     * Gets the onColorSelectedListener
-     *
-     * @return {@code OnColorSelectedListener}
-     */
-    public OnColorSelectedListener getOnColorSelectedListener() {
-        return mOnColorSelectedListener;
     }
 
     @Override
@@ -756,6 +748,10 @@ public class ColorWheelView extends View {
         invalidate();
     }
 
+    public int getOldCenterColor() {
+        return mCenterOldColor;
+    }
+
     /**
      * Change the color of the center which indicates the old color.
      *
@@ -767,8 +763,8 @@ public class ColorWheelView extends View {
         invalidate();
     }
 
-    public int getOldCenterColor() {
-        return mCenterOldColor;
+    public boolean getShowOldCenterColor() {
+        return mShowCenterOldColor;
     }
 
     /**
@@ -779,10 +775,6 @@ public class ColorWheelView extends View {
     public void setShowOldCenterColor(boolean show) {
         mShowCenterOldColor = show;
         invalidate();
-    }
-
-    public boolean getShowOldCenterColor() {
-        return mShowCenterOldColor;
     }
 
     /**
@@ -881,5 +873,13 @@ public class ColorWheelView extends View {
         int currentColor = calculateColor(mAngle);
         mPointerColor.setColor(currentColor);
         setNewCenterColor(currentColor);
+    }
+
+    /**
+     * An interface that is called whenever a new color has been selected.
+     * Currently it is always called when the color wheel has been released.
+     */
+    public interface OnColorSelectedListener {
+        void onColorSelected(int color);
     }
 }
