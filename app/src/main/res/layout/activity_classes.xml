@@ -17,7 +17,6 @@
             android:layout_gravity="center_horizontal"
             android:layout_margin="50dp"
             android:columnWidth="150dp"
-            android:contextClickable="false"
             android:gravity="center"
             android:horizontalSpacing="60dp"
             android:numColumns="auto_fit"
@@ -67,6 +66,21 @@
                 android:text="aluno"
                 android:textStyle="italic" />
         </LinearLayout>
+
+        <RelativeLayout
+            android:id="@+id/progressBarLayout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="#ffffff">
+
+            <ProgressBar
+                android:id="@+id/progressBar"
+                style="?android:attr/progressBarStyleLarge"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_centerVertical="true" />
+        </RelativeLayout>
 
     </RelativeLayout>
 

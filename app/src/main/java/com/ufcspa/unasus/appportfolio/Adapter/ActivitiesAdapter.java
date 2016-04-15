@@ -16,6 +16,7 @@ import android.widget.Toast;
 import com.ufcspa.unasus.appportfolio.Model.Activity;
 import com.ufcspa.unasus.appportfolio.Model.Singleton;
 import com.ufcspa.unasus.appportfolio.R;
+import com.ufcspa.unasus.appportfolio.database.DataBaseAdapter;
 
 import java.util.Collections;
 import java.util.List;
@@ -28,6 +29,7 @@ public class ActivitiesAdapter extends RecyclerView.Adapter<ActivitiesAdapter.Vi
     private Context context;
     private Singleton singleton;
     private String studentName;
+    private DataBaseAdapter source;
 
     public ActivitiesAdapter(Context context, List<Activity> list, String studName) {
         this.list = list;
@@ -35,6 +37,7 @@ public class ActivitiesAdapter extends RecyclerView.Adapter<ActivitiesAdapter.Vi
         this.singleton = Singleton.getInstance();
         Collections.sort(this.list);
         this.studentName = studName;
+        source = DataBaseAdapter.getInstance(context);
     }
 
     @Override
@@ -45,7 +48,7 @@ public class ActivitiesAdapter extends RecyclerView.Adapter<ActivitiesAdapter.Vi
         vh.title = (TextView)v.findViewById(R.id.adapter_item_class_txv_ds_title);
         vh.moreInfo = (ImageButton)v.findViewById(R.id.btn_info);
         vh.description = "";
-        vh.notificationIcon = (TextView)v.findViewById(R.id.item_notification_icon);
+        vh.notificationIcon = (TextView) v.findViewById(R.id.item_class_notification_icon);
 
         vh.txt_class_code_info = (TextView) v.findViewById(R.id.txt_class_code_info);
         vh.btnInfoClose = (ImageButton) v.findViewById(R.id.btn_info_close);
@@ -102,9 +105,13 @@ public class ActivitiesAdapter extends RecyclerView.Adapter<ActivitiesAdapter.Vi
             }
         });
 
-        int r = (int) (Math.random() * (100 - 0)) + 0;
-        if(r > 50)
+        int r = source.getActivityNotification(aux.getIdAtivity());
+        if (r == 0)
             holder.notificationIcon.setVisibility(View.INVISIBLE);
+        else {
+            holder.notificationIcon.setVisibility(View.VISIBLE);
+            holder.notificationIcon.setText(r);
+        }
     }
 
     @Override

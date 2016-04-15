@@ -10,10 +10,11 @@
 
         <ImageView
             android:id="@+id/img_arrow"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="50dp"
+            android:layout_height="20dp"
             android:layout_alignParentTop="true"
             android:layout_centerHorizontal="true"
+            android:scaleType="fitXY"
             android:src="@drawable/arrow_bottom"
             android:visibility="visible" />
 
@@ -26,7 +27,7 @@
             android:paddingRight="10dp"
             android:paddingTop="5dp">
 
-            <ListView
+            <GridView
                 android:id="@+id/version_list"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

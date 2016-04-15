@@ -19,6 +19,15 @@ public class User {
         this.cellphone = cellphone;
     }
 
+    public User(Integer idUser, Character userType, String name) {
+        this.idUser = idUser;
+        this.userType = userType;
+        this.name = name;
+    }
+
+    public User() {
+    }
+
     public Integer getIdUser() {
         return idUser;
     }
@@ -65,12 +74,6 @@ public class User {
 
     public void setCellphone(String cellphone) {
         this.cellphone = cellphone;
-    }
-
-    public User(Integer idUser, Character userType, String name) {
-        this.idUser = idUser;
-        this.userType = userType;
-        this.name = name;
     }
 
     @Override

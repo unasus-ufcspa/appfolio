@@ -51,6 +51,10 @@ public class PortfolioClass {
         return portfolioTitle;
     }
 
+    public void setPortfolioTitle(String portfolioTitle) {
+        this.portfolioTitle = portfolioTitle;
+    }
+
     public String getStudentName() {
         return studentName;
     }
@@ -58,6 +62,7 @@ public class PortfolioClass {
     public void setStudentName(String studentName) {
         this.studentName = studentName;
     }
+
     public String getPerfil() {
         return perfil;
     }
@@ -74,14 +79,11 @@ public class PortfolioClass {
         this.idPortClass = idPortClass;
     }
 
-    public void setPortfolioTitle(String portfolioTitle) {
-        this.portfolioTitle = portfolioTitle;
-    }
-
     @Override
     public String toString() {
         return "PortfolioClass{" +
-                "idPortClass=" + idPortClass +
+                "idPortStudent=" + idPortfolioStudent +
+                ", idPortClass=" + idPortClass +
                 ", classCode='" + classCode + '\'' +
                 ", portfolioTitle='" + portfolioTitle + '\'' +
                 ", perfil='" + perfil + '\'' +

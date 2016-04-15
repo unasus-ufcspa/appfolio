@@ -6,6 +6,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.text.InputType;
@@ -55,6 +56,7 @@ public class FragmentSpecificComments extends Frag {
     private Note noteNow;
     private ArrayList<Comentario> lista;
     private ArrayList<OneComment> oneComments;
+    private LoadCommentsFromDB loadCommentsFromDB;
 //    private ImageButton btExpand;
 
     @Override
@@ -68,7 +70,9 @@ public class FragmentSpecificComments extends Frag {
         super.onCreate(savedInstanceState);
         oneComments = new ArrayList<>(70);
         spcAdapter = new SpecificCommentAdapter(getContext(),oneComments);
-        loadCommentsFromDB();
+//        loadCommentsFromDB();
+        loadCommentsFromDB = new LoadCommentsFromDB();
+        loadCommentsFromDB.execute();
         Log.d("Comments", "On create entrou");
     }
 
@@ -103,7 +107,12 @@ public class FragmentSpecificComments extends Frag {
 //        btExpand = (ImageButton) getView().findViewById(R.id.btn_expand_ref);
         lv = (ListView) getView().findViewById(R.id.listView1);
         lv.setAdapter(spcAdapter);
-        loadCommentsFromDB();
+//        loadCommentsFromDB();
+        try {
+            loadCommentsFromDB.execute();
+        } catch (Exception e) {
+        }
+
         insertReference();
 //        ((InputMethodManager)getActivity().getSystemService(Context.INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(getView().getWindowToken(), 0);
 //        InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(getActivity().INPUT_METHOD_SERVICE);
@@ -158,7 +167,6 @@ public class FragmentSpecificComments extends Frag {
         return c;
     }
 
-
     public void loadCommentsFromDB(){
         try {
             DataBaseAdapter db = DataBaseAdapter.getInstance(getActivity());
@@ -181,18 +189,13 @@ public class FragmentSpecificComments extends Frag {
             } else {
                 Log.d("Banco", "Lista retornou vazia!");
             }
-            Log.d("specific comments","one Comments exist, size:"+oneComments.size());
-            spcAdapter.refresh(oneComments);
+            Log.d("specific comments", "one Comments exist, size:" + oneComments.size());
+//            spcAdapter.refresh(oneComments);
             Log.d("specific comments", "adapter itens:" + spcAdapter.getCount());
-
-
-
         } catch (Exception e) {
 
         }
     }
-
-
 
     public void insertFileIntoDataBase(final String path, final String type) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
@@ -228,7 +231,6 @@ public class FragmentSpecificComments extends Frag {
 
         builder.show();
     }
-
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -304,10 +306,12 @@ public class FragmentSpecificComments extends Frag {
         edtMessage.setText("anexo");
         insertAtach();
     }
+
     public void insertAtach(){
         Log.d("comment attachment ", "entrando no insertAtach");
         Comentario c = getCommentFromText();
-        loadCommentsFromDB();
+//        loadCommentsFromDB();
+        loadCommentsFromDB.execute();
         insertComment(c);
         OneComment oneComment = new OneComment(false, "Anexo", convertDateToTime(c.getDateComment()), convertDateToDate(c.getDateComment()),true);
         oneComment.idAttach = Singleton.getInstance().lastIdAttach;
@@ -318,8 +322,6 @@ public class FragmentSpecificComments extends Frag {
         attach = false;
         edtMessage.setText("");
     }
-
-
 
     public void setarListView(){
         lv.setAdapter(spcAdapter);
@@ -350,7 +352,6 @@ public class FragmentSpecificComments extends Frag {
         });
     }
 
-
     private void insertComment(Comentario c){
         try {
             DataBaseAdapter db = DataBaseAdapter.getInstance(getActivity());
@@ -367,7 +368,7 @@ public class FragmentSpecificComments extends Frag {
         if(spcAdapter!=null) {
             Singleton single = Singleton.getInstance();
             noteNow = single.note;
-            if(lista.size()!=0) { // se a lista nao estiver vazia quer dizer que a nota de referencia já existe no banco
+            if (lista != null && lista.size() != 0) { // se a lista nao estiver vazia quer dizer que a nota de referencia já existe no banco
                 for (Comentario c:lista) {
                     Log.d("comments noteNow","referencia é :"+c.toString());
                 }
@@ -418,6 +419,7 @@ public class FragmentSpecificComments extends Frag {
         }
         return shortTimeStr;
     }
+
     public String convertDateToDate(String atualDate){
         String shortTimeStr="12/12/2012";
         Log.d("comments","date receiving :"+atualDate);
@@ -433,6 +435,21 @@ public class FragmentSpecificComments extends Frag {
             e.printStackTrace();
         }
         return shortTimeStr;
+    }
+
+    private class LoadCommentsFromDB extends AsyncTask {
+
+        @Override
+        protected Object doInBackground(Object[] params) {
+            loadCommentsFromDB();
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Object o) {
+            super.onPostExecute(o);
+            spcAdapter.refresh(oneComments);
+        }
     }
 
 

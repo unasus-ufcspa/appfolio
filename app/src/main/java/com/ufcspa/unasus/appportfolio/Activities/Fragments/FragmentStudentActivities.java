@@ -28,6 +28,7 @@ public class FragmentStudentActivities extends Frag {
     private TextView className;
     private TextView portfolioName;
 
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.activity_portfolio_activity, null);
@@ -39,19 +40,19 @@ public class FragmentStudentActivities extends Frag {
         init();
     }
 
-    public void init(){
+    public void init() {
         singleton = Singleton.getInstance();
-
         source = DataBaseAdapter.getInstance(getActivity());
+
         try {
 
-            list = source.selectListActivitiesAndStudents(singleton.portfolioClass.getIdPortClass(),singleton.portfolioClass.getPerfil(),singleton.user.getIdUser());
+            list = source.selectListActivitiesAndStudents(singleton.portfolioClass.getIdPortClass(), singleton.portfolioClass.getPerfil(), singleton.user.getIdUser());
         } catch (Exception e) {
             Log.e("BANCO", "falha em pegar atividades (SelectActivitiesAactivity):" + e.getMessage());
         }
 
-        className = (TextView)getView().findViewById(R.id.class_name);
-        portfolioName = (TextView)getView().findViewById(R.id.portfolio_name);
+        className = (TextView) getView().findViewById(R.id.class_name);
+        portfolioName = (TextView) getView().findViewById(R.id.portfolio_name);
 
         className.setText(singleton.portfolioClass.getClassCode());
         portfolioName.setText(singleton.portfolioClass.getPortfolioTitle());
@@ -71,5 +72,4 @@ public class FragmentStudentActivities extends Frag {
             }
         });
     }
-
 }

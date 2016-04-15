@@ -125,7 +125,7 @@ public abstract class Schema {
 
     @SuppressLint("DefaultLocale")
     public ElementType getElementType(String name) {
-        return (ElementType) (theElementTypes.get(name.toLowerCase()));
+        return theElementTypes.get(name.toLowerCase());
     }
 
     /**
@@ -137,7 +137,7 @@ public abstract class Schema {
 
     public int getEntity(String name) {
         // System.err.println("%% Looking up entity " + name);
-        Integer ch = (Integer) theEntities.get(name);
+        Integer ch = theEntities.get(name);
         if (ch == null)
             return 0;
         return ch.intValue();
@@ -152,19 +152,19 @@ public abstract class Schema {
     }
 
     /**
-     * Return the prefix of this schema.
-     */
-
-    public String getPrefix() {
-        return thePrefix;
-    }
-
-    /**
      * Change the URI (namespace name) of this schema.
      */
 
     public void setURI(String uri) {
         theURI = uri;
+    }
+
+    /**
+     * Return the prefix of this schema.
+     */
+
+    public String getPrefix() {
+        return thePrefix;
     }
 
     /**

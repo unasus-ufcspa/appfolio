@@ -28,9 +28,17 @@ import android.widget.ImageView;
 
 abstract class ImageViewTouchBase extends ImageView {
 
+    static final float SCALE_RATE = 1.25F;
     @SuppressWarnings("unused")
     private static final String TAG = "ImageViewTouchBase";
+    // The current bitmap being displayed.
+    final protected RotateBitmap mBitmapDisplayed = new RotateBitmap(null);
+    // This is the final matrix which is computed as the concatentation
+    // of the base matrix and the supplementary matrix.
+    private final Matrix mDisplayMatrix = new Matrix();
 
+    // Temporary buffer used for getting the values out of a matrix.
+    private final float[] mMatrixValues = new float[9];
     // This is the base transformation which is used to show the image
     // initially. The current computation for this shows the image in
     // it's entirety, letterboxing as needed. One could choose to
@@ -39,47 +47,35 @@ abstract class ImageViewTouchBase extends ImageView {
     // This matrix is recomputed when we go from the thumbnail image to
     // the full size image.
     protected Matrix mBaseMatrix = new Matrix();
-
     // This is the supplementary transformation which reflects what
     // the user has done in terms of zooming and panning.
     //
     // This matrix remains the same when we go from the thumbnail image
     // to the full size image.
     protected Matrix mSuppMatrix = new Matrix();
-
-    // This is the final matrix which is computed as the concatentation
-    // of the base matrix and the supplementary matrix.
-    private final Matrix mDisplayMatrix = new Matrix();
-
-    // Temporary buffer used for getting the values out of a matrix.
-    private final float[] mMatrixValues = new float[9];
-
-    // The current bitmap being displayed.
-    final protected RotateBitmap mBitmapDisplayed = new RotateBitmap(null);
-
+    protected Handler mHandler = new Handler();
     int mThisWidth = -1, mThisHeight = -1;
-
     float mMaxZoom;
-
     int mLeft;
-
     int mRight;
-
     int mTop;
-
     int mBottom;
+    private Recycler mRecycler;
+    private Runnable mOnLayoutRunnable = null;
 
-    // ImageViewTouchBase will pass a Bitmap to the Recycler if it has finished
-    // its use of that Bitmap.
-    public interface Recycler {
-        public void recycle(Bitmap b);
+    public ImageViewTouchBase(Context context) {
+        super(context);
+        init();
+    }
+
+    public ImageViewTouchBase(Context context, AttributeSet attrs) {
+        super(context, attrs);
+        init();
     }
 
     public void setRecycler(Recycler r) {
         mRecycler = r;
     }
-
-    private Recycler mRecycler;
 
     @Override
     protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
@@ -112,8 +108,6 @@ abstract class ImageViewTouchBase extends ImageView {
         return super.onKeyDown(keyCode, event);
     }
 
-    protected Handler mHandler = new Handler();
-
     @Override
     public void setImageBitmap(Bitmap bitmap) {
         setImageBitmap(bitmap, 0);
@@ -138,8 +132,6 @@ abstract class ImageViewTouchBase extends ImageView {
     public void clear() {
         setImageBitmapResetBase(null, true);
     }
-
-    private Runnable mOnLayoutRunnable = null;
 
     // This function changes bitmap, reset base matrix according to the size
     // of the bitmap, and optionally reset the supplementary matrix.
@@ -224,16 +216,6 @@ abstract class ImageViewTouchBase extends ImageView {
         setImageMatrix(getImageViewMatrix());
     }
 
-    public ImageViewTouchBase(Context context) {
-        super(context);
-        init();
-    }
-
-    public ImageViewTouchBase(Context context, AttributeSet attrs) {
-        super(context, attrs);
-        init();
-    }
-
     private void init() {
         setScaleType(ScaleType.MATRIX);
     }
@@ -281,8 +263,6 @@ abstract class ImageViewTouchBase extends ImageView {
         mDisplayMatrix.postConcat(mSuppMatrix);
         return mDisplayMatrix;
     }
-
-    static final float SCALE_RATE = 1.25F;
 
     // Sets the maximum zoom, which is a scale relative to the base matrix. It
     // is calculated to show the image at 400% zoom regardless of screen or
@@ -391,5 +371,11 @@ abstract class ImageViewTouchBase extends ImageView {
     protected void panBy(float dx, float dy) {
         postTranslate(dx, dy);
         setImageMatrix(getImageViewMatrix());
+    }
+
+    // ImageViewTouchBase will pass a Bitmap to the Recycler if it has finished
+    // its use of that Bitmap.
+    public interface Recycler {
+        void recycle(Bitmap b);
     }
 }

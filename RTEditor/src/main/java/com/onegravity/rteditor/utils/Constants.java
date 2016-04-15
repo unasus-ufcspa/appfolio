@@ -18,6 +18,8 @@ package com.onegravity.rteditor.utils;
 
 public abstract class Constants {
 
+    public final static int CROP_IMAGE = 107;
+
     /*
      * Request codes for startActivityForResult calls.
      * Change to codes if they overlap with the ones already in use by the app.
@@ -32,7 +34,7 @@ public abstract class Constants {
 
         private int mRequestCode;
 
-        private MediaAction(int requestCode) {
+        MediaAction(int requestCode) {
             mRequestCode = requestCode;
         }
 
@@ -40,7 +42,5 @@ public abstract class Constants {
             return mRequestCode;
         }
     }
-
-    public final static int CROP_IMAGE = 107;
 
 }

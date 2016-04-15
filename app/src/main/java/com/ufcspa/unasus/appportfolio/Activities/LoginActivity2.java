@@ -352,7 +352,7 @@ public class LoginActivity2 extends AppCompatActivity implements LoaderCallbacks
 
             String android_id = Settings.Secure.getString(this.getContentResolver(), Settings.Secure.ANDROID_ID);
             Log.d("ANDROID ID", "Android ID:" + android_id);
-            String tpDevice=(isTablet()) ? "T" : "M";
+        String tpDevice = (isTablet()) ? "T" : "C";
             first.setIdDevice(android_id);
             first.setTpDevice(tpDevice);
             first.setEmail(mEmailView.getText().toString());

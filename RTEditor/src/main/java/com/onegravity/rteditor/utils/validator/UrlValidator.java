@@ -74,24 +74,19 @@ import java.util.regex.Pattern;
  */
 public class UrlValidator implements Serializable {
 
-    private static final long serialVersionUID = 7557161713937335013L;
-
     /**
      * Allows all validly formatted schemes to pass validation instead of
      * supplying a set of valid schemes.
      */
     public static final long ALLOW_ALL_SCHEMES = 1 << 0;
-
     /**
      * Allow two slashes in the path component of the URL.
      */
     public static final long ALLOW_2_SLASHES = 1 << 1;
-
     /**
      * Enabling this options disallows any URL fragments.
      */
     public static final long NO_FRAGMENTS = 1 << 2;
-
     /**
      * Allow local URLs, such as http://localhost/ or http://machine/ .
      * This enables a broad-brush check, for complex local machine name
@@ -99,7 +94,7 @@ public class UrlValidator implements Serializable {
      *  a {@link RegexValidator} instead ({@link #UrlValidator(RegexValidator, long)})
      */
     public static final long ALLOW_LOCAL_URLS = 1 << 3;
-
+    private static final long serialVersionUID = 7557161713937335013L;
     /**
      * This expression derived/taken from the BNF for URI (RFC2396).
      */
@@ -156,40 +151,27 @@ public class UrlValidator implements Serializable {
 
     private static final String PORT_REGEX = "^:(\\d{1,5})$";
     private static final Pattern PORT_PATTERN = Pattern.compile(PORT_REGEX);
-
+    /**
+     * If no schemes are provided, default to this set.
+     */
+    private static final String[] DEFAULT_SCHEMES = {"http", "https", "ftp"}; // Must be lower-case
+    /**
+     * Singleton instance of this class with default schemes and options.
+     */
+    private static final UrlValidator DEFAULT_URL_VALIDATOR = new UrlValidator();
     /**
      * Holds the set of current validation options.
      */
     private final long options;
-
     /**
      * The set of schemes that are allowed to be in a URL.
      */
     private final Set allowedSchemes; // Must be lower-case
-
     /**
      * Regular expressions used to manually validate authorities if IANA
      * domain name validation isn't desired.
      */
     private final RegexValidator authorityValidator;
-
-    /**
-     * If no schemes are provided, default to this set.
-     */
-    private static final String[] DEFAULT_SCHEMES = {"http", "https", "ftp"}; // Must be lower-case
-
-    /**
-     * Singleton instance of this class with default schemes and options.
-     */
-    private static final UrlValidator DEFAULT_URL_VALIDATOR = new UrlValidator();
-
-    /**
-     * Returns the singleton instance of this class with default schemes and options.
-     * @return singleton instance with default schemes and options
-     */
-    public static UrlValidator getInstance() {
-        return DEFAULT_URL_VALIDATOR;
-    }
 
     /**
      * Create a UrlValidator with default properties.
@@ -272,6 +254,14 @@ public class UrlValidator implements Serializable {
     }
 
     /**
+     * Returns the singleton instance of this class with default schemes and options.
+     * @return singleton instance with default schemes and options
+     */
+    public static UrlValidator getInstance() {
+        return DEFAULT_URL_VALIDATOR;
+    }
+
+    /**
      * <p>Checks if a field has a valid url address.</p>
      *
      * Note that the method calls #isValidAuthority()
@@ -315,11 +305,8 @@ public class UrlValidator implements Serializable {
             return false;
         }
 
-        if (!isValidFragment(urlMatcher.group(PARSE_URL_FRAGMENT))) {
-            return false;
-        }
+        return isValidFragment(urlMatcher.group(PARSE_URL_FRAGMENT));
 
-        return true;
     }
 
     /**
@@ -340,11 +327,8 @@ public class UrlValidator implements Serializable {
             return false;
         }
 
-        if (isOff(ALLOW_ALL_SCHEMES) && !allowedSchemes.contains(scheme.toLowerCase(Locale.ENGLISH))) {
-            return false;
-        }
+        return !(isOff(ALLOW_ALL_SCHEMES) && !allowedSchemes.contains(scheme.toLowerCase(Locale.ENGLISH)));
 
-        return true;
     }
 
     /**
@@ -394,11 +378,8 @@ public class UrlValidator implements Serializable {
         }
 
         String extra = authorityMatcher.group(PARSE_AUTHORITY_EXTRA);
-        if (extra != null && extra.trim().length() > 0){
-            return false;
-        }
+        return !(extra != null && extra.trim().length() > 0);
 
-        return true;
     }
 
     /**
@@ -422,11 +403,8 @@ public class UrlValidator implements Serializable {
 
         int slashCount = countToken("/", path);
         int dot2Count = countToken("..", path);
-        if (dot2Count > 0 && (slashCount - slash2Count - 1) <= dot2Count) {
-            return false;
-        }
+        return !(dot2Count > 0 && (slashCount - slash2Count - 1) <= dot2Count);
 
-        return true;
     }
 
     /**

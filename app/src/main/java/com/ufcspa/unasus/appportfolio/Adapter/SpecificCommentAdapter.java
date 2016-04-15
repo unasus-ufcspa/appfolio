@@ -82,7 +82,7 @@ public class SpecificCommentAdapter extends BaseAdapter {
             lastDate = c.date;
             holder.date.setText(c.date);
            // Log.d("comments", "datenow get:" + lastDate);
-            holder.date.setVisibility(rowView.VISIBLE);
+            holder.date.setVisibility(View.VISIBLE);
         }else {
 
             if (!lastDate.equals(c.date)) {
@@ -92,7 +92,7 @@ public class SpecificCommentAdapter extends BaseAdapter {
                // Log.d("comments", "dateNow in component:" + holder.date.getText().toString());
             } else {
                 //Log.d("comments", "dateNow:" + c.date + "is equal to lastDate:" + lastDate);
-                holder.date.setVisibility(rowView.GONE);
+                holder.date.setVisibility(View.GONE);
             }
         }
         if(c.atach==false) {

@@ -154,18 +154,6 @@ public class ValueBar extends View {
      */
     private int oldChangedListenerValue;
 
-    public interface OnValueChangedListener {
-        public void onValueChanged(int value);
-    }
-
-    public void setOnValueChangedListener(OnValueChangedListener listener) {
-        this.onValueChangedListener = listener;
-    }
-
-    public OnValueChangedListener getOnValueChangedListener() {
-        return this.onValueChangedListener;
-    }
-
     public ValueBar(Context context) {
         super(context);
         init(null, 0);
@@ -179,6 +167,14 @@ public class ValueBar extends View {
     public ValueBar(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
         init(attrs, defStyle);
+    }
+
+    public OnValueChangedListener getOnValueChangedListener() {
+        return this.onValueChangedListener;
+    }
+
+    public void setOnValueChangedListener(OnValueChangedListener listener) {
+        this.onValueChangedListener = listener;
     }
 
     private void init(AttributeSet attrs, int defStyle) {
@@ -329,8 +325,6 @@ public class ValueBar extends View {
         canvas.drawCircle(cX, cY, mBarPointerRadius, mBarPointerPaint);
     }
 
-    ;
-
     @SuppressLint("ClickableViewAccessibility")
     @Override
     public boolean onTouchEvent(MotionEvent event) {
@@ -406,38 +400,6 @@ public class ValueBar extends View {
     }
 
     /**
-     * Set the bar color. <br>
-     * <br>
-     * Its discouraged to use this method.
-     *
-     * @param color
-     */
-    public void setColor(int color) {
-        int x1, y1;
-        if (mOrientation == ORIENTATION_HORIZONTAL) {
-            x1 = (mBarLength + mBarPointerHaloRadius);
-            y1 = mBarThickness;
-        } else {
-            x1 = mBarThickness;
-            y1 = (mBarLength + mBarPointerHaloRadius);
-        }
-
-        Color.colorToHSV(color, mHSVColor);
-        shader = new LinearGradient(mBarPointerHaloRadius, 0,
-                x1, y1, new int[]{
-                color, Color.BLACK}, null, Shader.TileMode.CLAMP);
-        mBarPaint.setShader(shader);
-        calculateColor(mBarPointerPosition);
-        mBarPointerPaint.setColor(mColor);
-        if (mPicker != null) {
-            mPicker.setNewCenterColor(mColor);
-            if (mPicker.hasOpacityBar())
-                mPicker.changeOpacityBarColor(mColor);
-        }
-        invalidate();
-    }
-
-    /**
      * Set the pointer on the bar. With the opacity value.
      *
      * @param value float between 0 > 1
@@ -469,7 +431,7 @@ public class ValueBar extends View {
         }
         mColor = Color.HSVToColor(new float[]{mHSVColor[0],
                 mHSVColor[1],
-                (float) (1 - (mPosToSatFactor * coord))});
+                1 - (mPosToSatFactor * coord)});
     }
 
     /**
@@ -479,6 +441,38 @@ public class ValueBar extends View {
      */
     public int getColor() {
         return mColor;
+    }
+
+    /**
+     * Set the bar color. <br>
+     * <br>
+     * Its discouraged to use this method.
+     *
+     * @param color
+     */
+    public void setColor(int color) {
+        int x1, y1;
+        if (mOrientation == ORIENTATION_HORIZONTAL) {
+            x1 = (mBarLength + mBarPointerHaloRadius);
+            y1 = mBarThickness;
+        } else {
+            x1 = mBarThickness;
+            y1 = (mBarLength + mBarPointerHaloRadius);
+        }
+
+        Color.colorToHSV(color, mHSVColor);
+        shader = new LinearGradient(mBarPointerHaloRadius, 0,
+                x1, y1, new int[]{
+                color, Color.BLACK}, null, Shader.TileMode.CLAMP);
+        mBarPaint.setShader(shader);
+        calculateColor(mBarPointerPosition);
+        mBarPointerPaint.setColor(mColor);
+        if (mPicker != null) {
+            mPicker.setNewCenterColor(mColor);
+            if (mPicker.hasOpacityBar())
+                mPicker.changeOpacityBarColor(mColor);
+        }
+        invalidate();
     }
 
     /**
@@ -520,5 +514,9 @@ public class ValueBar extends View {
         setColor(Color.HSVToColor(savedState.getFloatArray(STATE_COLOR)));
         setValue(savedState.getFloat(STATE_VALUE));
         mOrientation = savedState.getBoolean(STATE_ORIENTATION, ORIENTATION_DEFAULT);
+    }
+
+    public interface OnValueChangedListener {
+        void onValueChanged(int value);
     }
 }

@@ -22,7 +22,6 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.util.Log;
-import android.widget.Toast;
 
 import com.onegravity.rteditor.R;
 import com.onegravity.rteditor.api.RTMediaFactory;
@@ -39,17 +38,8 @@ import java.io.File;
 
 class VideoChooserManager extends MediaChooserManager implements VideoProcessorListener {
 
-    public interface VideoChooserListener extends MediaChooserListener {
-        /**
-         * Callback method to inform the caller that a video file has been processed
-         */
-        public void onVideoChosen(RTVideo video);
-    }
-
     private static final String CAPTURED_VIDEO_TEMPLATE = "CAPTURED_VIDEO.mp4";
-
     private VideoChooserListener mListener;
-
 
     VideoChooserManager(MonitoredActivity activity, MediaAction mediaAction,
                         RTMediaFactory<RTImage, RTAudio, RTVideo> mediaFactory,
@@ -139,6 +129,13 @@ class VideoChooserManager extends MediaChooserManager implements VideoProcessorL
         if (mListener != null) {
             mListener.onVideoChosen(video);
         }
+    }
+
+    public interface VideoChooserListener extends MediaChooserListener {
+        /**
+         * Callback method to inform the caller that a video file has been processed
+         */
+        void onVideoChosen(RTVideo video);
     }
 
 }

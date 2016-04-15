@@ -33,8 +33,6 @@ import java.util.EnumSet;
  */
 public class NumericEntityUnescaper extends CharSequenceTranslator {
 
-    public static enum OPTION {semiColonRequired, semiColonOptional, errorIfNoSemiColon}
-
     private final EnumSet<OPTION> options;
 
     /**
@@ -134,4 +132,6 @@ public class NumericEntityUnescaper extends CharSequenceTranslator {
         }
         return 0;
     }
+
+    public enum OPTION {semiColonRequired, semiColonOptional, errorIfNoSemiColon}
 }

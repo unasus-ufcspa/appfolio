@@ -10,7 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.GridView;
-import android.widget.Toast;
+import android.widget.RelativeLayout;
 
 import com.ufcspa.unasus.appportfolio.Adapter.SelectPortfolioClassAdapter;
 import com.ufcspa.unasus.appportfolio.Model.PortfolioClass;
@@ -22,12 +22,15 @@ import com.ufcspa.unasus.appportfolio.database.DataBaseAdapter;
 
 import java.util.List;
 
+import io.github.skyhacker2.sqliteonweb.SQLiteOnWeb;
+
 /**
  * Created by Desenvolvimento on 12/01/2016.
  */
 public class FragmentSelectPortfolio extends Frag {
     public static boolean isSyncSucessful;
     public static boolean isSyncSincronizationNotSucessful;
+    private RelativeLayout progress_bar;
     private GridView grid_classes;
     private DataBaseAdapter source;
     private Singleton singleton;
@@ -39,6 +42,8 @@ public class FragmentSelectPortfolio extends Frag {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.activity_classes, null);
+
+        SQLiteOnWeb.init(getActivity().getApplicationContext()).start();
 
         isSyncSucessful = false;
         isSyncSincronizationNotSucessful = false;
@@ -56,17 +61,8 @@ public class FragmentSelectPortfolio extends Frag {
         singleton = Singleton.getInstance();
         source = DataBaseAdapter.getInstance(getActivity());
 
-        try {
-            portclasses = source.selectListClassAndUserType(singleton.user.getIdUser());
-            Log.d("lista", "tam portlis:" + portclasses.size());
-        } catch (Exception e) {
-            Log.wtf("ERRO", e.getMessage());
-        }
-
-        SelectPortfolioClassAdapter gridAdapter = new SelectPortfolioClassAdapter(getActivity(), portclasses);
-        grid_classes = (GridView) getView().findViewById(R.id.grid_classes);
-        grid_classes.setAdapter(gridAdapter);
-//        downloadTBSync();
+        progress_bar = (RelativeLayout) getView().findViewById(R.id.progressBarLayout);
+        downloadTBSync();
     }
 
     private void downloadTBSync() {
@@ -85,13 +81,14 @@ public class FragmentSelectPortfolio extends Frag {
                             @Override
                             public void run() {
                                 // Atualizar as notificações e o layout
+                                removeProgressBar();
                             }
                         });
                     } else {
                         new Handler(Looper.getMainLooper()).post(new Runnable() {
                             @Override
                             public void run() {
-                                Toast.makeText(getContext(), "Erro interno. Por favor tente novamente", Toast.LENGTH_LONG).show();
+                                removeProgressBar();
                             }
                         });
                     }
@@ -100,9 +97,26 @@ public class FragmentSelectPortfolio extends Frag {
             myThread.start();
         } else
         {
-            Toast.makeText(getContext(), "Sem conexão com a internet", Toast.LENGTH_LONG).show();
             // Atualizar a interface
+            removeProgressBar();
         }
+    }
+
+    private void removeProgressBar() {
+        try {
+            portclasses = source.selectListClassAndUserType(singleton.user.getIdUser());
+            Log.d("lista", "tam portlis:" + portclasses.size());
+        } catch (Exception e) {
+            Log.wtf("ERRO", e.getMessage());
+        }
+
+        SelectPortfolioClassAdapter gridAdapter = new SelectPortfolioClassAdapter(getActivity(), portclasses);
+        grid_classes = (GridView) getView().findViewById(R.id.grid_classes);
+        grid_classes.setAdapter(gridAdapter);
+
+        progress_bar.setVisibility(View.GONE);
+
+        Log.d("TB_SYNC", "Quantidade de Registros: " + source.getSyncs().size());
     }
 
     private void getSync() {
@@ -110,7 +124,7 @@ public class FragmentSelectPortfolio extends Frag {
         client.postJson(SyncData.toJSON(singleton.device.get_id_device()));
     }
 
-    public boolean isOnline() {
+    private boolean isOnline() {
         ConnectivityManager cm = (ConnectivityManager) getContext().getSystemService(Context.CONNECTIVITY_SERVICE);
         return cm.getActiveNetworkInfo() != null && cm.getActiveNetworkInfo().isConnectedOrConnecting();
     }

@@ -83,197 +83,20 @@ public class DomainValidator implements Serializable {
     // RFC1123 sec 2.1 allows hostnames to start with a digit
     private static final String DOMAIN_NAME_REGEX =
             "^(?:" + DOMAIN_LABEL_REGEX + "\\.)+" + "(" + TOP_LABEL_REGEX + ")\\.?$";
-
-    private final boolean allowLocal;
-
     /**
      * Singleton instance of this validator, which
      *  doesn't consider local addresses as valid.
      */
     private static final DomainValidator DOMAIN_VALIDATOR = new DomainValidator(false);
-
     /**
      * Singleton instance of this validator, which does
      *  consider local addresses valid.
      */
     private static final DomainValidator DOMAIN_VALIDATOR_WITH_LOCAL = new DomainValidator(true);
-
-    /**
-     * RegexValidator for matching domains.
-     */
-    private final RegexValidator domainRegex =
-            new RegexValidator(DOMAIN_NAME_REGEX);
-    /**
-     * RegexValidator for matching a local hostname
-     */
-    // RFC1123 sec 2.1 allows hostnames to start with a digit
-    private final RegexValidator hostnameRegex =
-            new RegexValidator(DOMAIN_LABEL_REGEX);
-
-    /**
-     * Returns the singleton instance of this validator. It
-     *  will not consider local addresses as valid.
-     * @return the singleton instance of this validator
-     */
-    public static DomainValidator getInstance() {
-        return DOMAIN_VALIDATOR;
-    }
-
-    /**
-     * Returns the singleton instance of this validator,
-     *  with local validation as required.
-     * @param allowLocal Should local addresses be considered valid?
-     * @return the singleton instance of this validator
-     */
-    public static DomainValidator getInstance(boolean allowLocal) {
-       if(allowLocal) {
-          return DOMAIN_VALIDATOR_WITH_LOCAL;
-       }
-       return DOMAIN_VALIDATOR;
-    }
-
-    /** Private constructor. */
-    private DomainValidator(boolean allowLocal) {
-       this.allowLocal = allowLocal;
-    }
-
-    /**
-     * Returns true if the specified <code>String</code> parses
-     * as a valid domain name with a recognized top-level domain.
-     * The parsing is case-insensitive.
-     * @param domain the parameter to check for domain name syntax
-     * @return true if the parameter is a valid domain name
-     */
-    public boolean isValid(String domain) {
-        if (domain == null) {
-            return false;
-        }
-        domain = unicodeToASCII(domain);
-        // hosts must be equally reachable via punycode and Unicode;
-        // Unicode is never shorter than punycode, so check punycode
-        // if domain did not convert, then it will be caught by ASCII
-        // checks in the regexes below
-        if (domain.length() > 253) {
-            return false;
-        }
-        String[] groups = domainRegex.match(domain);
-        if (groups != null && groups.length > 0) {
-            return isValidTld(groups[0]);
-        }
-        return allowLocal && hostnameRegex.isValid(domain);
-    }
-
-    // package protected for unit test access
-    // must agree with isValid() above
-    final boolean isValidDomainSyntax(String domain) {
-        if (domain == null) {
-            return false;
-        }
-        domain = unicodeToASCII(domain);
-        // hosts must be equally reachable via punycode and Unicode;
-        // Unicode is never shorter than punycode, so check punycode
-        // if domain did not convert, then it will be caught by ASCII
-        // checks in the regexes below
-        if (domain.length() > 253) {
-            return false;
-        }
-        String[] groups = domainRegex.match(domain);
-        return (groups != null && groups.length > 0)
-                || hostnameRegex.isValid(domain);
-    }
-
-    /**
-     * Returns true if the specified <code>String</code> matches any
-     * IANA-defined top-level domain. Leading dots are ignored if present.
-     * The search is case-insensitive.
-     * @param tld the parameter to check for TLD status, not null
-     * @return true if the parameter is a TLD
-     */
-    public boolean isValidTld(String tld) {
-        tld = unicodeToASCII(tld);
-        if(allowLocal && isValidLocalTld(tld)) {
-           return true;
-        }
-        return isValidInfrastructureTld(tld)
-                || isValidGenericTld(tld)
-                || isValidCountryCodeTld(tld);
-    }
-
-    /**
-     * Returns true if the specified <code>String</code> matches any
-     * IANA-defined infrastructure top-level domain. Leading dots are
-     * ignored if present. The search is case-insensitive.
-     * @param iTld the parameter to check for infrastructure TLD status, not null
-     * @return true if the parameter is an infrastructure TLD
-     */
-    public boolean isValidInfrastructureTld(String iTld) {
-        iTld = unicodeToASCII(iTld);
-        return Arrays.binarySearch(INFRASTRUCTURE_TLDS, (chompLeadingDot(iTld.toLowerCase(Locale.ENGLISH)))) >= 0;
-    }
-
-    /**
-     * Returns true if the specified <code>String</code> matches any
-     * IANA-defined generic top-level domain. Leading dots are ignored
-     * if present. The search is case-insensitive.
-     * @param gTld the parameter to check for generic TLD status, not null
-     * @return true if the parameter is a generic TLD
-     */
-    public boolean isValidGenericTld(String gTld) {
-        gTld = unicodeToASCII(gTld);
-        return Arrays.binarySearch(GENERIC_TLDS, chompLeadingDot(gTld.toLowerCase(Locale.ENGLISH))) >= 0;
-    }
-
-    /**
-     * Returns true if the specified <code>String</code> matches any
-     * IANA-defined country code top-level domain. Leading dots are
-     * ignored if present. The search is case-insensitive.
-     * @param ccTld the parameter to check for country code TLD status, not null
-     * @return true if the parameter is a country code TLD
-     */
-    public boolean isValidCountryCodeTld(String ccTld) {
-        ccTld = unicodeToASCII(ccTld);
-        return Arrays.binarySearch(COUNTRY_CODE_TLDS, chompLeadingDot(ccTld.toLowerCase(Locale.ENGLISH))) >= 0;
-    }
-
-    /**
-     * Returns true if the specified <code>String</code> matches any
-     * widely used "local" domains (localhost or localdomain). Leading dots are
-     * ignored if present. The search is case-insensitive.
-     * @param lTld the parameter to check for local TLD status, not null
-     * @return true if the parameter is an local TLD
-     */
-    public boolean isValidLocalTld(String lTld) {
-        lTld = unicodeToASCII(lTld);
-        return Arrays.binarySearch(LOCAL_TLDS, chompLeadingDot(lTld.toLowerCase(Locale.ENGLISH))) >= 0;
-    }
-
-    private String chompLeadingDot(String str) {
-        if (str.startsWith(".")) {
-            return str.substring(1);
-        }
-        return str;
-    }
-
-    // ---------------------------------------------
-    // ----- TLDs defined by IANA
-    // ----- Authoritative and comprehensive list at:
-    // ----- http://data.iana.org/TLD/tlds-alpha-by-domain.txt
-
-    // Note that the above list is in UPPER case.
-    // The code currently converts strings to lower case (as per the tables below)
-
-    // IANA also provide an HTML list at http://www.iana.org/domains/root/db
-    // Note that this contains several country code entries which are NOT in
-    // the text file. These all have the "Not assigned" in the "Sponsoring Organisation" column
-    // For example (as of 2015-01-02):
-    // .bl  country-code    Not assigned
-    // .um  country-code    Not assigned
-
     // WARNING: this array MUST be sorted, others it cannot be searched reliably using binary search
     private static final String[] INFRASTRUCTURE_TLDS = new String[] {
         "arpa",               // internet infrastructure
     };
-
     // WARNING: this array MUST be sorted, others it cannot be searched reliably using binary search
     private static final String[] GENERIC_TLDS = new String[] {
         "abogado",
@@ -779,7 +602,6 @@ public class DomainValidator implements Serializable {
         "zone",
         "zuerich",
    };
-
     // WARNING: this array MUST be sorted, others it cannot be searched reliably using binary search
     private static final String[] COUNTRY_CODE_TLDS = new String[] {
         "ac",                 // Ascension Island
@@ -1070,17 +892,59 @@ public class DomainValidator implements Serializable {
         "zm",                 // Zambia
         "zw",                 // Zimbabwe
     };
-
     // WARNING: this array MUST be sorted, others it cannot be searched reliably using binary search
     private static final String[] LOCAL_TLDS = new String[] {
        "localdomain",         // Also widely used as localhost.localdomain
        "localhost",           // RFC2606 defined
     };
+    private final boolean allowLocal;
+    /**
+     * RegexValidator for matching domains.
+     */
+    private final RegexValidator domainRegex =
+            new RegexValidator(DOMAIN_NAME_REGEX);
+    /**
+     * RegexValidator for matching a local hostname
+     */
+    // RFC1123 sec 2.1 allows hostnames to start with a digit
+    private final RegexValidator hostnameRegex =
+            new RegexValidator(DOMAIN_LABEL_REGEX);
+
+    /**
+     * Private constructor.
+     */
+    private DomainValidator(boolean allowLocal) {
+        this.allowLocal = allowLocal;
+    }
+
+    /**
+     * Returns the singleton instance of this validator. It
+     * will not consider local addresses as valid.
+     *
+     * @return the singleton instance of this validator
+     */
+    public static DomainValidator getInstance() {
+        return DOMAIN_VALIDATOR;
+    }
+
+    /**
+     * Returns the singleton instance of this validator,
+     * with local validation as required.
+     *
+     * @param allowLocal Should local addresses be considered valid?
+     * @return the singleton instance of this validator
+     */
+    public static DomainValidator getInstance(boolean allowLocal) {
+        if (allowLocal) {
+            return DOMAIN_VALIDATOR_WITH_LOCAL;
+        }
+        return DOMAIN_VALIDATOR;
+    }
 
     /**
      * Converts potentially Unicode input to punycode.
      * If conversion fails, returns the original input.
-     * 
+     *
      * @param input the string to convert, not null
      * @return converted input, or original input if conversion fails
      */
@@ -1093,23 +957,9 @@ public class DomainValidator implements Serializable {
         }
     }
 
-    // ================= Code needed for Java 1.4 and 1.5 compatibility ===============
-
-    private static class IDNHolder {
-        private static Method getMethod() {
-            try {
-                Class clazz = Class.forName("java.net.IDN", false, DomainValidator.class.getClassLoader());
-                return clazz.getDeclaredMethod("toASCII", new Class[]{String.class});
-            } catch (Exception e) {
-              return null;
-            }
-        }
-        private static final Method JAVA_NET_IDN_TO_ASCII = getMethod();
-    }
-
     /*
      * Helper method to invoke java.net.IDN.toAscii(String).
-     * Allows code to be compiled with Java 1.4 and 1.5 
+     * Allows code to be compiled with Java 1.4 and 1.5
      * @throws IllegalArgumentException if the input string doesn't conform to RFC 3490 specification
      */
     private static final String toASCII(String line) throws IllegalArgumentException {
@@ -1150,6 +1000,159 @@ public class DomainValidator implements Serializable {
             }
         }
         return true;
+    }
+
+    /**
+     * Returns true if the specified <code>String</code> parses
+     * as a valid domain name with a recognized top-level domain.
+     * The parsing is case-insensitive.
+     *
+     * @param domain the parameter to check for domain name syntax
+     * @return true if the parameter is a valid domain name
+     */
+    public boolean isValid(String domain) {
+        if (domain == null) {
+            return false;
+        }
+        domain = unicodeToASCII(domain);
+        // hosts must be equally reachable via punycode and Unicode;
+        // Unicode is never shorter than punycode, so check punycode
+        // if domain did not convert, then it will be caught by ASCII
+        // checks in the regexes below
+        if (domain.length() > 253) {
+            return false;
+        }
+        String[] groups = domainRegex.match(domain);
+        if (groups != null && groups.length > 0) {
+            return isValidTld(groups[0]);
+        }
+        return allowLocal && hostnameRegex.isValid(domain);
+    }
+
+    // ---------------------------------------------
+    // ----- TLDs defined by IANA
+    // ----- Authoritative and comprehensive list at:
+    // ----- http://data.iana.org/TLD/tlds-alpha-by-domain.txt
+
+    // Note that the above list is in UPPER case.
+    // The code currently converts strings to lower case (as per the tables below)
+
+    // IANA also provide an HTML list at http://www.iana.org/domains/root/db
+    // Note that this contains several country code entries which are NOT in
+    // the text file. These all have the "Not assigned" in the "Sponsoring Organisation" column
+    // For example (as of 2015-01-02):
+    // .bl  country-code    Not assigned
+    // .um  country-code    Not assigned
+
+    // package protected for unit test access
+    // must agree with isValid() above
+    final boolean isValidDomainSyntax(String domain) {
+        if (domain == null) {
+            return false;
+        }
+        domain = unicodeToASCII(domain);
+        // hosts must be equally reachable via punycode and Unicode;
+        // Unicode is never shorter than punycode, so check punycode
+        // if domain did not convert, then it will be caught by ASCII
+        // checks in the regexes below
+        if (domain.length() > 253) {
+            return false;
+        }
+        String[] groups = domainRegex.match(domain);
+        return (groups != null && groups.length > 0)
+                || hostnameRegex.isValid(domain);
+    }
+
+    /**
+     * Returns true if the specified <code>String</code> matches any
+     * IANA-defined top-level domain. Leading dots are ignored if present.
+     * The search is case-insensitive.
+     *
+     * @param tld the parameter to check for TLD status, not null
+     * @return true if the parameter is a TLD
+     */
+    public boolean isValidTld(String tld) {
+        tld = unicodeToASCII(tld);
+        if (allowLocal && isValidLocalTld(tld)) {
+            return true;
+        }
+        return isValidInfrastructureTld(tld)
+                || isValidGenericTld(tld)
+                || isValidCountryCodeTld(tld);
+    }
+
+    /**
+     * Returns true if the specified <code>String</code> matches any
+     * IANA-defined infrastructure top-level domain. Leading dots are
+     * ignored if present. The search is case-insensitive.
+     *
+     * @param iTld the parameter to check for infrastructure TLD status, not null
+     * @return true if the parameter is an infrastructure TLD
+     */
+    public boolean isValidInfrastructureTld(String iTld) {
+        iTld = unicodeToASCII(iTld);
+        return Arrays.binarySearch(INFRASTRUCTURE_TLDS, (chompLeadingDot(iTld.toLowerCase(Locale.ENGLISH)))) >= 0;
+    }
+
+    /**
+     * Returns true if the specified <code>String</code> matches any
+     * IANA-defined generic top-level domain. Leading dots are ignored
+     * if present. The search is case-insensitive.
+     *
+     * @param gTld the parameter to check for generic TLD status, not null
+     * @return true if the parameter is a generic TLD
+     */
+    public boolean isValidGenericTld(String gTld) {
+        gTld = unicodeToASCII(gTld);
+        return Arrays.binarySearch(GENERIC_TLDS, chompLeadingDot(gTld.toLowerCase(Locale.ENGLISH))) >= 0;
+    }
+
+    /**
+     * Returns true if the specified <code>String</code> matches any
+     * IANA-defined country code top-level domain. Leading dots are
+     * ignored if present. The search is case-insensitive.
+     *
+     * @param ccTld the parameter to check for country code TLD status, not null
+     * @return true if the parameter is a country code TLD
+     */
+    public boolean isValidCountryCodeTld(String ccTld) {
+        ccTld = unicodeToASCII(ccTld);
+        return Arrays.binarySearch(COUNTRY_CODE_TLDS, chompLeadingDot(ccTld.toLowerCase(Locale.ENGLISH))) >= 0;
+    }
+
+    // ================= Code needed for Java 1.4 and 1.5 compatibility ===============
+
+    /**
+     * Returns true if the specified <code>String</code> matches any
+     * widely used "local" domains (localhost or localdomain). Leading dots are
+     * ignored if present. The search is case-insensitive.
+     *
+     * @param lTld the parameter to check for local TLD status, not null
+     * @return true if the parameter is an local TLD
+     */
+    public boolean isValidLocalTld(String lTld) {
+        lTld = unicodeToASCII(lTld);
+        return Arrays.binarySearch(LOCAL_TLDS, chompLeadingDot(lTld.toLowerCase(Locale.ENGLISH))) >= 0;
+    }
+
+    private String chompLeadingDot(String str) {
+        if (str.startsWith(".")) {
+            return str.substring(1);
+        }
+        return str;
+    }
+
+    private static class IDNHolder {
+        private static final Method JAVA_NET_IDN_TO_ASCII = getMethod();
+
+        private static Method getMethod() {
+            try {
+                Class clazz = Class.forName("java.net.IDN", false, DomainValidator.class.getClassLoader());
+                return clazz.getDeclaredMethod("toASCII", String.class);
+            } catch (Exception e) {
+                return null;
+            }
+        }
     }
 
 }

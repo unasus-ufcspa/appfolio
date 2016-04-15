@@ -37,19 +37,6 @@ public enum ParagraphType {
     INDENTATION_UL("<ul style='list-style-type:none;'>", "</ul>", "<li style='list-style-type:none;'>", "</li>", false, true),
     INDENTATION_OL("<ol style='list-style-type:none;'>", "</ol>", "<li style='list-style-type:none;'>", "</li>", false, true);
 
-    public static ParagraphType getInstance(ParagraphStyle style) {
-        if (style instanceof AlignmentSpan) {
-            Layout.Alignment align = ((AlignmentSpan) style).getValue();
-            return align == Layout.Alignment.ALIGN_NORMAL ? ParagraphType.ALIGNMENT_LEFT :
-                   align == Layout.Alignment.ALIGN_CENTER ? ParagraphType.ALIGNMENT_CENTER :
-                   ParagraphType.ALIGNMENT_RIGHT;
-        } else {
-            return style instanceof BulletSpan ? ParagraphType.BULLET :
-                   style instanceof NumberSpan ? ParagraphType.NUMBERING :
-                   style instanceof IndentationSpan ? ParagraphType.INDENTATION_UL : null;
-        }
-    }
-
     final private String mStartTag;
     final private String mEndTag;
     final private boolean mIsAlignment;
@@ -57,14 +44,27 @@ public enum ParagraphType {
     final private String mListEndTag;
     final private boolean mEndTagAddsLineBreak;
 
-    private ParagraphType(String startTag, String endTag, String listStartTag,
-                          String listEndTag, boolean isAlignment, boolean endTagAddsLineBreak) {
+    ParagraphType(String startTag, String endTag, String listStartTag,
+                  String listEndTag, boolean isAlignment, boolean endTagAddsLineBreak) {
         mStartTag = startTag;
         mEndTag = endTag;
         mListStartTag = listStartTag;
         mListEndTag = listEndTag;
         mIsAlignment = isAlignment;
         mEndTagAddsLineBreak = endTagAddsLineBreak;
+    }
+
+    public static ParagraphType getInstance(ParagraphStyle style) {
+        if (style instanceof AlignmentSpan) {
+            Layout.Alignment align = ((AlignmentSpan) style).getValue();
+            return align == Layout.Alignment.ALIGN_NORMAL ? ParagraphType.ALIGNMENT_LEFT :
+                    align == Layout.Alignment.ALIGN_CENTER ? ParagraphType.ALIGNMENT_CENTER :
+                            ParagraphType.ALIGNMENT_RIGHT;
+        } else {
+            return style instanceof BulletSpan ? ParagraphType.BULLET :
+                    style instanceof NumberSpan ? ParagraphType.NUMBERING :
+                            style instanceof IndentationSpan ? ParagraphType.INDENTATION_UL : null;
+        }
     }
 
     public boolean isUndefined() {

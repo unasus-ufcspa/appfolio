@@ -16,6 +16,9 @@ public class Sync {
     private String dt_sync;
     private String dt_read;
 
+    public Sync() {
+    }
+
     public Sync(String id_device, String nm_table, int co_id_table) {
         this.id_device = id_device;
         this.nm_table = nm_table;
