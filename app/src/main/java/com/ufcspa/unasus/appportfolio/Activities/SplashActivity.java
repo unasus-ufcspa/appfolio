@@ -43,6 +43,7 @@ public class SplashActivity extends AppCompatActivity {
         }
 
         startActivity(intent);
+//        startActivity(new Intent(this,TesteDownloadImage.class));
         finish();
     }
 }

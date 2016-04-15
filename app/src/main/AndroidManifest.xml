@@ -13,6 +13,7 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission
         android:name="android.permission.READ_EXTERNAL_STORAGE"
         android:maxSdkVersion="21" />
@@ -35,32 +36,36 @@
         </activity>
         <activity
             android:name=".Activities.SelectActivitiesActivity"
-            android:label="@string/title_activity_select_activity"></activity>
+            android:label="@string/title_activity_select_activity" />
         <activity
             android:name=".Activities.EditActivity"
-            android:label="@string/title_edit_activity"></activity>
+            android:label="@string/title_edit_activity" />
         <activity
             android:name=".Activities.SelectClassActivity"
-            android:label="@string/title_activity_select_class"></activity>
+            android:label="@string/title_activity_select_class" />
         <activity
             android:name=".Activities.LoginActivity"
-            android:label="@string/title_activity_login"></activity>
+            android:label="@string/title_activity_login" />
         <activity
             android:name=".Activities.SelectPortfolioActivity"
             android:label="@string/title_activity_select_portfolio"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name="com.onegravity.rteditor.media.choose.MediaChooserActivity" />
         <activity android:name="com.onegravity.rteditor.media.crop.CropImageActivity" />
-        <activity android:name=".Activities.MainActivity"></activity>
+        <activity android:name=".Activities.MainActivity" />
         <activity
             android:name=".Dialog.FullVideoDialog"
-            android:theme="@android:style/Theme.Dialog"></activity>
+            android:theme="@android:style/Theme.Dialog" />
         <activity
             android:name=".Dialog.FullImageDialog"
-            android:theme="@android:style/Theme.Dialog"></activity>
+            android:theme="@android:style/Theme.Dialog" />
         <activity
             android:name=".Activities.LoginActivity2"
-            android:label="@string/title_activity_login2"> </activity>
+            android:label="@string/title_activity_login2"></activity>
+        <activity
+            android:name=".Activities.TesteDownloadImage"
+            android:label="@string/title_activity_teste_download_image"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
 </manifest>
