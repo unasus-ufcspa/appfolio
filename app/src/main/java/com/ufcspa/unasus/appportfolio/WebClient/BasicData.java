@@ -1,24 +1,23 @@
 package com.ufcspa.unasus.appportfolio.WebClient;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
+import android.util.Log;
 
-import com.ufcspa.unasus.appportfolio.Model.basicData.Activity;
-import com.ufcspa.unasus.appportfolio.Model.basicData.ActivityStudent;
-import com.ufcspa.unasus.appportfolio.Model.basicData.ClassStudent;
-import com.ufcspa.unasus.appportfolio.Model.basicData.ClassTutor;
-import com.ufcspa.unasus.appportfolio.Model.basicData.Portfolio;
-import com.ufcspa.unasus.appportfolio.Model.basicData.PortfolioClass;
-import com.ufcspa.unasus.appportfolio.Model.basicData.PortfolioStudent;
-import com.ufcspa.unasus.appportfolio.Model.basicData.User;
+import com.ufcspa.unasus.appportfolio.Model.basicData.*;
+import com.ufcspa.unasus.appportfolio.Model.basicData.Class;
 import com.ufcspa.unasus.appportfolio.database.DataBaseAdapter;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.Iterator;
 import java.util.LinkedList;
 
 /**
  * Created by icaromsc on 04/04/2016.
  */
-public class
-        BasicData {
+public class BasicData {
 
     private LinkedList<Activity> activities;
     private LinkedList<ActivityStudent> activitiesStudent;
@@ -112,15 +111,55 @@ public class
     }
 
     public synchronized void insertDataIntoSQLITE() {
-        Thread t = new Thread(new Runnable() {
-            @Override
-            public void run() {
+        if(users.size()!=0 && activities.size() !=0){
+
+        }
+
+//        Thread t = new Thread(new Runnable() {
+//            @SuppressLint("LongLogTag")
+//            @Override
+//            public void run() {
                 //INSERT DATA IN DATABASE
                 DataBaseAdapter data = DataBaseAdapter.getInstance(context);
+                String log="BD Insert SQLite";
+                if(users.size()!=0){
+                    Log.d(log,"inserindo users");
+                    data.insertTBUser(users);
+                }
+                Log.d(log, "inserindo classes");
+                data.insertTBClass(classes);
+                Log.d(log, "inserindo student claases");
+                data.insertTBClassStudent(studentClasses);
+                Log.d(log, "inserindo tutor classes");
+                data.insertTBClassTutor(tutorClasses);
+                Log.d(log, "inserindo portfolios");
+                data.insertTBPortfolio(portfolios);
+                Log.d(log, "inserindo portfolio claases");
+                data.insertTBPortfolioClass(portfolioClasses);
+                Log.d(log, "inserindo portfolio Students");
+                data.insertTBPortfolioStudent(portfolioStudents);
+                Log.d(log, "inserindo tb_atividades");
+                data.insertTBActivity(activities);
+                Log.d(log, "inserindo tb_activities student");
+                data.insertTBActivityStudent(activitiesStudent);
 
 
-            }
-        });
+//            }
+//        });
+//        t.start();
     }
+
+    public static JSONObject toJSON(int idUser){
+        JSONObject json = new JSONObject();
+        JSONObject basic = new JSONObject();
+        try {
+            basic.put("id_user",idUser);
+            json.put("basicData_request",basic);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return json;
+    }
+
 
 }

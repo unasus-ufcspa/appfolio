@@ -4,7 +4,9 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
+import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -19,7 +21,9 @@ public class DataBase extends SQLiteOpenHelper {
     private static String DBPATH = "/data/data/com.ufcspa.unasus.appportfolio/databases/";
 
     // Este é o nome do banco de dados que iremos utilizar
-    private static String DBNAME ="db_portfolio_alpha_v2.sqlite";
+    private static String DBNAME ="db_portfolio_json_teste.sqlite"; //Classe SplashActivity => LoginActivity2
+    //private static String DBNAME ="json.sqlite";
+    //private static String DBNAME = "db_portfolio_alpha_v2.sqlite";
 
     private Context context;
 
@@ -67,10 +71,18 @@ public class DataBase extends SQLiteOpenHelper {
 
         try {
             String path = DBPATH + DBNAME;
-            db = SQLiteDatabase.openDatabase(path, null, SQLiteDatabase.OPEN_READONLY);
-            db.close();
+            File file = new File(path);
+            if (file.exists() && !file.isDirectory()) {
+                Log.d("Banco sqlite","Arquivo .sqlite existe!");
+                db = SQLiteDatabase.openDatabase(path, null, SQLiteDatabase.OPEN_READONLY);
+                db.close();
+            }else{
+                Log.e("Banco sqlite","Arquivo nao existe ou diretório esta incorreto");
+            }
         } catch (SQLiteException e) {
             // O banco não existe
+            Log.e("Banco sqlite","gerou exception:" + e.getMessage());
+            e.printStackTrace();
         }
 
         // Retorna verdadeiro se o banco existir, pois o ponteiro ira existir,

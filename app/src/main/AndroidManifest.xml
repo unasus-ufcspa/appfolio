@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.ufcspa.unasus.appportfolio" >
+    package="com.ufcspa.unasus.appportfolio">
 
     <uses-feature
         android:name="android.hardware.camera"
@@ -16,15 +16,14 @@
     <uses-permission
         android:name="android.permission.READ_EXTERNAL_STORAGE"
         android:maxSdkVersion="21" />
-    <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
-
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
 
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_portfolio"
         android:label="@string/app_name"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme" >
+        android:theme="@style/AppTheme">
         <activity
             android:name=".Activities.SplashActivity"
             android:theme="@style/SplashTheme">
@@ -35,21 +34,33 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".Activities.LoginActivity"
-            android:label="@string/title_activity_login" >
-        </activity>
-        <activity android:name="com.onegravity.rteditor.media.choose.MediaChooserActivity" />
-        <activity android:name="com.onegravity.rteditor.media.crop.CropImageActivity"></activity>
+            android:name=".Activities.SelectActivitiesActivity"
+            android:label="@string/title_activity_select_activity"></activity>
         <activity
-            android:name=".Activities.MainActivity"
-            android:hardwareAccelerated="true">
-        </activity>
-        <activity android:name=".Dialog.FullVideoDialog"
-            android:theme="@android:style/Theme.Dialog">
-        </activity>
-        <activity android:name=".Dialog.FullImageDialog"
-            android:theme="@android:style/Theme.Dialog">
-        </activity>
+            android:name=".Activities.EditActivity"
+            android:label="@string/title_edit_activity"></activity>
+        <activity
+            android:name=".Activities.SelectClassActivity"
+            android:label="@string/title_activity_select_class"></activity>
+        <activity
+            android:name=".Activities.LoginActivity"
+            android:label="@string/title_activity_login"></activity>
+        <activity
+            android:name=".Activities.SelectPortfolioActivity"
+            android:label="@string/title_activity_select_portfolio"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name="com.onegravity.rteditor.media.choose.MediaChooserActivity" />
+        <activity android:name="com.onegravity.rteditor.media.crop.CropImageActivity" />
+        <activity android:name=".Activities.MainActivity"></activity>
+        <activity
+            android:name=".Dialog.FullVideoDialog"
+            android:theme="@android:style/Theme.Dialog"></activity>
+        <activity
+            android:name=".Dialog.FullImageDialog"
+            android:theme="@android:style/Theme.Dialog"></activity>
+        <activity
+            android:name=".Activities.LoginActivity2"
+            android:label="@string/title_activity_login2"> </activity>
     </application>
 
 </manifest>

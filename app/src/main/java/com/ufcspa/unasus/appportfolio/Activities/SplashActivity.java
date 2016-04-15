@@ -1,19 +1,18 @@
 package com.ufcspa.unasus.appportfolio.Activities;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.provider.Settings.Secure;
-import android.telephony.TelephonyManager;
-import android.util.Log;
+
+import com.ufcspa.unasus.appportfolio.Model.Device;
+import com.ufcspa.unasus.appportfolio.Model.Singleton;
+import com.ufcspa.unasus.appportfolio.database.DataBaseAdapter;
 
 /**
  * Created by Zago on 17/12/2015.
  */
 
 public class SplashActivity extends AppCompatActivity {
-    private String android_id;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -25,7 +24,24 @@ public class SplashActivity extends AppCompatActivity {
         Log.d("ANDROID ID", "getting android ID BY IMEI...");
         Log.d("ANDROID ID","Android ID IMEI:"+id);*/
 
-        Intent intent = new Intent(this, LoginActivity.class);
+        DataBaseAdapter adapter = DataBaseAdapter.getInstance(this);
+        Singleton singleton = Singleton.getInstance();
+
+        Device device = adapter.getDevice();
+
+        singleton.device = device;
+        singleton.user = adapter.getUser();
+
+        int statusApp = adapter.getStatus(device);
+
+        Intent intent = new Intent(this, LoginActivity2.class);
+
+        if (statusApp == 1) {
+            intent = new Intent(this, MainActivity.class);
+        } else if (statusApp == 0) {
+            intent.putExtra("dont_have_basic_data", true);
+        }
+
         startActivity(intent);
         finish();
     }

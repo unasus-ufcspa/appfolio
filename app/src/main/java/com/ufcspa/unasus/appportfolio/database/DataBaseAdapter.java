@@ -74,6 +74,214 @@ public class DataBaseAdapter {
         }
     }
 
+    public int getUserID(){
+        int id=-1;
+        String query = "select id_user from tb_user ;";
+
+     try {
+         Cursor c = db.rawQuery(query, null);
+         if (c.moveToFirst()) {
+             Log.d(tag, "recuperou user");
+             id = c.getInt(0);
+         }
+     }catch (Exception e){
+         Log.d(tag, "nao achou user");
+     }
+
+//            db.close();
+        return id;
+
+    }
+
+
+    //INSERTS IN DATABASE
+    public void insertTBUser(List<com.ufcspa.unasus.appportfolio.Model.basicData.User> users) {
+    for (com.ufcspa.unasus.appportfolio.Model.basicData.User u : users){
+        ContentValues cv = new ContentValues();
+        cv.put("nm_user", u.getNm_user());
+        cv.put("id_user", u.getIdUser());
+        cv.put("nu_identification", u.getNu_identification());
+//        cv.put("ds_email", u.getEmail());
+//        cv.put("nu_cellphone", u.getCellphone());
+        try{
+            db.insert("tb_user", null, cv);
+
+        }catch (Exception e){
+            Log.d(tag, "erro ao inserir tb_user:"+e.getMessage());
+            e.printStackTrace();
+        }
+
+    }
+}
+
+    public void insertTBClass(List<com.ufcspa.unasus.appportfolio.Model.basicData.Class> classList){
+        for (com.ufcspa.unasus.appportfolio.Model.basicData.Class ac : classList){
+            ContentValues cv = new ContentValues();
+            cv.put("id_class",ac.getId_class());
+            cv.put("id_proposer", ac.getId_proposer());
+            cv.put("ds_code", ac.getDs_code());
+            cv.put("ds_description", ac.getDs_description());
+            try{
+                db.insert("tb_class", null, cv);
+
+            }catch (Exception e){
+                Log.d(tag, "erro ao inserir na tb_class:"+e.getMessage());
+                e.printStackTrace();
+            }
+
+        }
+    }
+
+    public void insertTBClassStudent(List<com.ufcspa.unasus.appportfolio.Model.basicData.ClassStudent> classList){
+        for (com.ufcspa.unasus.appportfolio.Model.basicData.ClassStudent ac : classList){
+            ContentValues cv = new ContentValues();
+            cv.put("id_class_student",ac.getId_Class_Student());
+            cv.put("id_class", ac.getId_Class());
+            cv.put("id_student", ac.getId_Student());
+            try{
+                db.insert("tb_class_student", null, cv);
+
+            }catch (Exception e){
+                Log.d(tag, "erro ao inserir na tb_class_student:"+e.getMessage());
+                e.printStackTrace();
+            }
+
+        }
+    }
+
+    public void insertTBClassTutor(List<com.ufcspa.unasus.appportfolio.Model.basicData.ClassTutor> classList){
+        for (com.ufcspa.unasus.appportfolio.Model.basicData.ClassTutor ac : classList){
+            ContentValues cv = new ContentValues();
+            cv.put("id_class_tutor",ac.getId_Class_Tutor());
+            cv.put("id_class", ac.getId_Class());
+            cv.put("id_tutort", ac.getId_Tutor());
+            try{
+                db.insert("tb_class_tutor", null, cv);
+
+            }catch (Exception e){
+                Log.d(tag, "erro ao inserir na tb_class_tutor:"+e.getMessage());
+                e.printStackTrace();
+            }
+
+        }
+    }
+
+    public void insertTBPortfolio(List<com.ufcspa.unasus.appportfolio.Model.basicData.Portfolio> port){
+        for (com.ufcspa.unasus.appportfolio.Model.basicData.Portfolio ac : port){
+            ContentValues cv = new ContentValues();
+            cv.put("id_portfolio",ac.getId_Portfolio());
+            cv.put("ds_title", ac.getDs_Title());
+            cv.put("ds_description", ac.getDs_Description());
+            if(ac.getNu_portfolio_version()!=null){
+                cv.put("nu_portfolio_version", ac.getNu_portfolio_version());
+            }
+
+            try{
+                db.insert("tb_portfolio", null, cv);
+
+            }catch (Exception e){
+                Log.d(tag, "erro ao inserir na tb_portfolio:"+e.getMessage());
+                e.printStackTrace();
+            }
+
+        }
+    }
+
+
+    public void insertTBPortfolioClass(List<com.ufcspa.unasus.appportfolio.Model.basicData.PortfolioClass> classList){
+        for (com.ufcspa.unasus.appportfolio.Model.basicData.PortfolioClass ac : classList){
+            ContentValues cv = new ContentValues();
+            cv.put("id_portfolio_class",ac.getId_portfolio_class());
+            cv.put("id_class", ac.getId_class());
+            cv.put("id_portfolio", ac.getId_portfolio());
+            try{
+                db.insert("tb_portfolio_class", null, cv);
+
+            }catch (Exception e){
+                Log.d(tag, "erro ao inserir na tb_portfolio_class:"+e.getMessage());
+                e.printStackTrace();
+            }
+
+        }
+    }
+
+    public void insertTBPortfolioStudent(List<com.ufcspa.unasus.appportfolio.Model.basicData.PortfolioStudent> port){
+        for (com.ufcspa.unasus.appportfolio.Model.basicData.PortfolioStudent ac : port){
+            ContentValues cv = new ContentValues();
+            cv.put("id_portfolio_student",ac.getId_portfolio_student());
+            cv.put("id_portfolio_class",ac.getId_portfolio_class());
+            cv.put("id_student", ac.getId_student());
+            cv.put("id_tutor", ac.getId_tutor());
+            cv.put("dt_first_sync", ac.getDt_first_sync());
+            cv.put("nu_portfolio_version", ac.getNu_portfolio_version());
+            try{
+                db.insert("tb_portfolio_student", null, cv);
+
+            }catch (Exception e){
+                Log.d(tag, "erro ao inserir na tb_portfolio_student:"+e.getMessage());
+                e.printStackTrace();
+            }
+
+        }
+    }
+    public void insertTBActivity(List<com.ufcspa.unasus.appportfolio.Model.basicData.Activity> activities){
+        for (com.ufcspa.unasus.appportfolio.Model.basicData.Activity ac : activities){
+            ContentValues cv = new ContentValues();
+            cv.put("ds_description",ac.getDs_description());
+            cv.put("id_activity", ac.getId_activity());
+            cv.put("id_portfolio", ac.getId_portfolio());
+            cv.put("nu_order", ac.getNu_order());
+            cv.put("ds_title", ac.getDs_title());
+            try{
+                db.insert("tb_activity", null, cv);
+
+            }catch (Exception e){
+                Log.d(tag, "erro ao inserir activity:"+e.getMessage());
+                e.printStackTrace();
+            }
+
+        }
+    }
+
+    public void insertTBActivityStudent(List<com.ufcspa.unasus.appportfolio.Model.basicData.ActivityStudent> activities){
+        for (com.ufcspa.unasus.appportfolio.Model.basicData.ActivityStudent ac : activities){
+            ContentValues cv = new ContentValues();
+            cv.put("id_activity_student",ac.getIdActivityStudent());
+            cv.put("id_portfolio_student", ac.getIdPortfolioStudent());
+            cv.put("id_activity", ac.getIdActivity());
+            cv.put("dt_conclusion", ac.getDt_conclusion());
+            //cv.put("dt_fisrt_sync", ac.getDt_first_sync());
+            try{
+                db.insert("tb_activity_student", null, cv);
+
+            }catch (Exception e){
+                Log.d(tag, "erro ao inserir activity Student:"+e.getMessage());
+                e.printStackTrace();
+            }
+
+        }
+    }
+
+    public void insertTBSync(List<Sync> syncs) {
+        for (Sync s : syncs) {
+            ContentValues cv = new ContentValues();
+            cv.put("id_device", s.getId_device());
+            cv.put("id_activity_student", s.getId_activity_student());
+            cv.put("tp_sync", s.getTp_sync());
+            cv.put("nm_table", s.getNm_table());
+            cv.put("co_id_table", s.getCo_id_table());
+            cv.put("dt_sync", s.getDt_sync());
+            cv.put("dt_read", s.getDt_read());
+            try {
+                db.insert("tb_sync", null, cv);
+
+            } catch (Exception e) {
+                Log.d(tag, "erro ao inserir tb_sync:" + e.getMessage());
+                e.printStackTrace();
+            }
+
+        }
+    }
 
     public User insertUser(User u) {
         ContentValues cv = new ContentValues();
@@ -87,7 +295,7 @@ public class DataBaseAdapter {
         try {
             db.insert("tb_user", null, cv);
             Log.d(tag, "inseriu no banco user " + u.getName() + "  no banco");
-            Cursor cursor = db.rawQuery("select seq from sqlite_sequence where name='tb_attachment'", null);
+            Cursor cursor = db.rawQuery("select seq from sqlite_sequence where name='tb_user'", null);
 
             if (cursor.moveToFirst()) {
                 lastID = cursor.getInt(0);
@@ -101,7 +309,6 @@ public class DataBaseAdapter {
             Log.e(tag, "erro ao inserir user:" + e.getMessage() + "\n");
             e.printStackTrace();
         }
-
         return user;
     }
 
@@ -288,6 +495,9 @@ public class DataBaseAdapter {
             Log.d(tag, e.getMessage());
         }
     }
+
+
+
 
     public List<Comentario> listComments(int idActStu,String typeComment,int idNote) {
         ArrayList<Comentario> comentarios = new ArrayList<Comentario>();
@@ -952,6 +1162,7 @@ public class DataBaseAdapter {
         cv.put("id_device",d.get_id_device());
         cv.put("id_user",d.get_id_user());
         cv.put("tp_device",d.get_tp_device());
+        cv.put("fl_first_login", "T");
         try {
             db.insert("tb_device", null, cv);
         } catch (Exception e) {
@@ -965,10 +1176,114 @@ public class DataBaseAdapter {
         Device device = new Device();
         Cursor c = db.rawQuery(query, null);
         if (c.moveToFirst()) {
-            device= new Device(c.getString(0),c.getInt(1),c.getInt(2));
+            device = new Device(c.getString(0), c.getInt(1), c.getInt(2), c.getString(3), c.getString(4));
         } else {
             Log.e(tag, "não há registros na tabela tb_device");
         }
         return device;
+    }
+
+     /*
+        ************************* DEBUG ***************************
+        *  Log.d("lista", "tam tb_class:" + source.getCountTbPortfolioStudent());
+            Log.d("lista", "tam tb_class_student:" + source.getCountTbPortfolioStudent());
+            Log.d("lista", "tam tb_class_tutor:" + source.getCountTbPortfolioStudent());
+            Log.d("lista", "tam tb_portfolio:" + source.getCountTbPortfolioStudent());
+            Log.d("lista", "tam tb_portfolio_class:" + source.getCountTbPortfolioStudent());
+            Log.d("lista", "tam tb_portfolio_student:" + source.getCountTbPortfolioStudent());
+            Log.d("lista", "tam tb_activity:" + source.getCountTbPortfolioStudent());
+            Log.d("lista", "tam tb_activity_student:" + source.getCountTbPortfolioStudent());
+    */
+    public String getCountTbClass()
+    {
+        String query = "SELECT * FROM tb_class";
+        String result = null;
+        Cursor c = db.rawQuery(query, null);
+
+        if (c.moveToFirst()) {
+            do {
+                result = c.getInt(0) + ", " + c.getInt(1) + ", " + c.getString(2) + ", " + c.getString(3) + ", " + c.getString(4) + ", ... \n";
+            } while (c.moveToNext());
+        } else {
+            Log.e(tag, "não há registros na tabela tb_class");
+        }
+
+        return result;
+    }
+
+    public String getCountTbActivityStudent()
+    {
+        String query = "SELECT * FROM tb_activity_student";
+        String result = null;
+        Cursor c = db.rawQuery(query, null);
+
+        if (c.moveToFirst()) {
+            do {
+                result = c.getInt(0) + ", " + c.getInt(1) + ", " + c.getInt(2) + ", " + c.getString(3) + ", " + c.getString(4) + ", ... \n";
+            } while (c.moveToNext());
+        } else {
+            Log.e(tag, "não há registros na tabela tb_activity_student");
+        }
+
+        return result;
+    }
+
+    public String getCountTbPortfolioStudent()
+    {
+        String query = "SELECT * FROM tb_portfolio_student";
+        String result = null;
+        Cursor c = db.rawQuery(query, null);
+
+        if (c.moveToFirst()) {
+            do {
+                result = c.getInt(0) + ", " + c.getInt(1) + ", " + c.getInt(2) + ", " + c.getString(3) + ", " + c.getString(4) + ", ... \n";
+            } while (c.moveToNext());
+        } else {
+            Log.e(tag, "não há registros na tabela tb_portfolio_student");
+        }
+
+        return result;
+    }
+
+
+    public void updateDeviceBasicDataSync() {
+        ContentValues cv = new ContentValues();
+        cv.put("fl_basic_data", "T");
+        Device device = getDevice();
+        try {
+            db.update("tb_device", cv, null, null);
+            Log.e(tag, "Conseguiu alterar tb_device fl_basic_data");
+        }catch (Exception e){
+            Log.e(tag, "Erro ao alterar tb_device fl_basic_data");
+        }
+    }
+
+    public int getStatus(Device d) {
+        Device device = d;
+        if (device.get_id_device() == null)
+            return -1;
+        if (device.getFl_basic_data() != null)
+            return 1;
+        return 0;
+    }
+
+    public User getUser() {
+        User user = new User(0, null, null);
+
+        String query = "SELECT id_user FROM tb_device";
+        Cursor c = db.rawQuery(query, null);
+
+        if (c.moveToFirst()) {
+            int id_user = c.getInt(0);
+
+            query = "SELECT nm_user, nu_identification, ds_email, nu_cellphone FROM tb_user WHERE id_user = " + id_user;
+            c = db.rawQuery(query, null);
+
+            if (c.moveToFirst()) {
+                user = new User(id_user, c.getString(0), c.getString(1), c.getString(2), c.getString(3));
+            }
+        }
+
+        return user;
     }
 }
