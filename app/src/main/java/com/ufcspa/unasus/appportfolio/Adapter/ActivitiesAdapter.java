@@ -85,7 +85,7 @@ public class ActivitiesAdapter extends RecyclerView.Adapter<ActivitiesAdapter.Vi
             @Override
             public void onClick(View v) {
                 singleton.activity = list.get(position);
-                singleton.idActivityStudent=singleton.activity.getIdAtivity();
+                singleton.idActivityStudent = singleton.activity.getIdActivityStudent();
                 singleton.portfolioClass.setIdPortfolioStudent(list.get(position).getIdPortfolio());
                 singleton.portfolioClass.setStudentName(studentName);
                 LocalBroadcastManager.getInstance(context).sendBroadcast(new Intent("call.fragments.action").putExtra("ID", 5));
@@ -105,12 +105,12 @@ public class ActivitiesAdapter extends RecyclerView.Adapter<ActivitiesAdapter.Vi
             }
         });
 
-        int r = source.getActivityNotification(aux.getIdAtivity());
-        if (r == 0)
+        int r = source.getActivityNotification(aux.getIdActivity());
+        if (r == 0) {
             holder.notificationIcon.setVisibility(View.INVISIBLE);
-        else {
+        } else {
             holder.notificationIcon.setVisibility(View.VISIBLE);
-            holder.notificationIcon.setText(r);
+            holder.notificationIcon.setText(r + "");
         }
     }
 

@@ -274,14 +274,14 @@ public class FragmentComments extends Frag {
         c.setIdAuthor(singleton.user.getIdUser());
         c.setTypeComment("C");
         c.setTxtComment(edtMessage.getText().toString());
-        c.setIdActivityStudent(singleton.activity.getIdAtivity());
+        c.setIdActivityStudent(singleton.activity.getIdActivityStudent());
         return c;
     }
 
     public void loadCom() {
         DataBaseAdapter db = DataBaseAdapter.getInstance(getActivity());
         Singleton singleton = Singleton.getInstance();
-        ArrayList<Comentario> lista = (ArrayList<Comentario>) db.listComments(singleton.activity.getIdAtivity(), "C", 0);//lista comentario gerais filtrando por C
+        ArrayList<Comentario> lista = (ArrayList<Comentario>) db.listComments(singleton.activity.getIdActivityStudent(), "C", 0);//lista comentario gerais filtrando por C
         oneComments = new ArrayList<OneComment>(20);
         if (lista.size() != 0) {
 

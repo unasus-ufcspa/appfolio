@@ -21,14 +21,15 @@ public class Activity implements Comparable<Activity>
         this.ds_description = ds_description;
     }
 
-    public Activity(int id_activity, String ds_title, String ds_description) {
-        this.id_activity = id_activity;
+    public Activity(int id_activity_student, int id_activity, String ds_title, String ds_description) {
+        this.id_activity_student = id_activity_student;
         this.ds_title = ds_title;
         this.ds_description = ds_description;
+        this.id_activity = id_activity;
     }
 
-    public int getIdAtivity() {
-        return id_activity;
+    public int getIdActivityStudent() {
+        return id_activity_student;
     }
 
     public int getIdPortfolio() {
@@ -47,10 +48,6 @@ public class Activity implements Comparable<Activity>
         return ds_description;
     }
 
-    public void setId_activity(int id_activity) {
-        this.id_activity = id_activity;
-    }
-
     public void setId_portfolio(int id_portfolio) {
         this.id_portfolio = id_portfolio;
     }
@@ -67,6 +64,14 @@ public class Activity implements Comparable<Activity>
         this.ds_description = ds_description;
     }
 
+    public int getIdActivity() {
+        return id_activity;
+    }
+
+    public void setIdActivity(int id_activity) {
+        this.id_activity = id_activity;
+    }
+
     @Override
     public int compareTo(Activity another)
     {
@@ -80,7 +85,7 @@ public class Activity implements Comparable<Activity>
     @Override
     public String toString() {
         return "Activity{" +
-                "id_activity=" + id_activity +
+                "id_activity_student=" + id_activity_student +
                 ", ds_title='" + ds_title + '\'' +
                 ", ds_description='" + ds_description + '\'' +
                 '}';

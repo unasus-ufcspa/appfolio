@@ -892,7 +892,8 @@ public class DataBaseAdapter {
                 "a.ds_title,\n" +
                 "a.ds_description,\n" +
                 "u.nm_user as nm_student,\n" +
-                "tas.id_portfolio_student\n" +
+                "tas.id_portfolio_student,\n" +
+                "tas.id_activity\n" +
                 "FROM\n" +
                 "\ttb_activity_student as tas\n" +
                 "\tjoin tb_activity a on tas.id_activity = a.id_activity\n" +
@@ -914,7 +915,7 @@ public class DataBaseAdapter {
                 idUser = c.getInt(1);
 
                 String nameStudent = c.getString(4);
-                Activity a = new Activity(c.getInt(0), c.getString(2), c.getString(3));
+                Activity a = new Activity(c.getInt(0), c.getInt(6), c.getString(2), c.getString(3));
                 a.setId_portfolio(c.getInt(5));
 
                 if (lastid == idUser) {
@@ -1160,8 +1161,8 @@ public class DataBaseAdapter {
 
         Cursor c = db.rawQuery(query, null);
         if (c.moveToFirst()) {
-            int id = c.getInt(0);
-            result += getNumNotifications(id);
+            int num = c.getInt(0);
+            result += num;
         }
 
         return result;
