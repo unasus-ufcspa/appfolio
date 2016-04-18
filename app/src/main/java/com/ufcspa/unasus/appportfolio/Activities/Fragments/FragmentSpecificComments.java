@@ -163,7 +163,7 @@ public class FragmentSpecificComments extends Frag {
         //Log.d("comments", "reference setting in C spcific comment:" + txNote.getText().toString());
         c.setTxtReference(txNote.getText().toString());
         c.setTxtComment(edtMessage.getText().toString());
-        c.setIdActivityStudent(singleton.activity.getIdAtivity());
+        c.setIdActivityStudent(singleton.activity.getIdActivityStudent());
         return c;
     }
 
@@ -171,7 +171,7 @@ public class FragmentSpecificComments extends Frag {
         try {
             DataBaseAdapter db = DataBaseAdapter.getInstance(getActivity());
             Singleton singleton = Singleton.getInstance();
-            lista = (ArrayList<Comentario>) db.listComments(singleton.activity.getIdAtivity(),"O",singleton.note.getBtId());//lista comentario gerais filtrando por O
+            lista = (ArrayList<Comentario>) db.listComments(singleton.activity.getIdActivityStudent(), "O", singleton.note.getBtId());//lista comentario gerais filtrando por O
             oneComments= new ArrayList<>(10);
 
             if (lista.size() != 0) {

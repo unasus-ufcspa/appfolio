@@ -77,8 +77,8 @@ public class SelectPortfolioClassAdapter extends BaseAdapter {
         int notifications = dataBaseAdapter.getPortfolioClassNotification(portClass.getIdPortClass());
         if (notifications == 0)
             holder.nofificationIcon.setVisibility(View.INVISIBLE);
-//        else
-//            holder.nofificationIcon.setText(notifications);
+        else
+            holder.nofificationIcon.setText(notifications + "");
 
         if(portClass.getPerfil().equals("S")){
             holder.background.setBackgroundResource(R.color.base_green);

@@ -242,7 +242,7 @@ public class FragmentRTEditor extends Fragment {
 
                         int id = singleton.note.getBtId();
                         if (specificCommentsOpen && id > 0) {
-                                ArrayList<Comentario> lista = (ArrayList<Comentario>) source.listComments(singleton.activity.getIdAtivity(), "O", id);
+                            ArrayList<Comentario> lista = (ArrayList<Comentario>) source.listComments(singleton.activity.getIdActivityStudent(), "O", id);
                                 if (lista == null || lista.size() == 0) {
                                     //Remove note from hash map
                                     specificCommentsNotes.remove(id);
