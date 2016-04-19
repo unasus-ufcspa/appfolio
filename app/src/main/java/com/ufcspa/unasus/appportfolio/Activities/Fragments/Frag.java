@@ -13,10 +13,13 @@ import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.media.ThumbnailUtils;
+import android.net.ConnectivityManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.Handler;
+import android.os.Looper;
 import android.provider.DocumentsContract;
 import android.provider.MediaStore;
 import android.support.v4.app.DialogFragment;
@@ -37,6 +40,8 @@ import com.onegravity.rteditor.utils.Constants;
 import com.ufcspa.unasus.appportfolio.Model.Attachment;
 import com.ufcspa.unasus.appportfolio.Model.Singleton;
 import com.ufcspa.unasus.appportfolio.R;
+import com.ufcspa.unasus.appportfolio.WebClient.FullData;
+import com.ufcspa.unasus.appportfolio.WebClient.FullDataClient;
 import com.ufcspa.unasus.appportfolio.database.DataBaseAdapter;
 
 import java.io.File;
@@ -59,6 +64,8 @@ public class Frag extends Fragment {
     static final int REQUEST_FOLIO_ATTACHMENT = 5;
     public static String[] thumbColumns = {MediaStore.Video.Thumbnails.DATA};
     public static String[] mediaColumns = {MediaStore.Video.Media._ID};
+    public boolean isFullDataSucessful;
+    public boolean isFullSyncNotSucessful;
     protected String mCurrentPhotoPath;
     protected DataBaseAdapter source;
     protected Singleton singleton;
@@ -914,6 +921,57 @@ public class Frag extends Fragment {
             intent.setDataAndType(Uri.fromFile(new File(url)), "video/*");
             startActivity(intent);
         }
+    }
 
+    public void getFullData(int id_activity_student) {
+        FullDataClient client = new FullDataClient(getContext(), this);
+        client.postJson(FullData.toJSON(singleton.device.get_id_device(), id_activity_student));
+    }
+
+    public boolean isOnline() {
+        ConnectivityManager cm = (ConnectivityManager) getContext().getSystemService(Context.CONNECTIVITY_SERVICE);
+        return cm.getActiveNetworkInfo() != null && cm.getActiveNetworkInfo().isConnectedOrConnecting();
+    }
+
+    public void downloadFullData(final int id_activity_student) {
+        isFullDataSucessful = false;
+        isFullSyncNotSucessful = false;
+
+        if (isOnline()) {
+            final Thread myThread = new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    getFullData(id_activity_student);
+
+                    while (!isFullDataSucessful)
+                        if (isFullSyncNotSucessful)
+                            break;
+
+                    if (!isFullSyncNotSucessful) {
+                        new Handler(Looper.getMainLooper()).post(new Runnable() {
+                            @Override
+                            public void run() {
+                                // Atualizar as notificações e o layout
+                                removeProgressBar();
+                            }
+                        });
+                    } else {
+                        new Handler(Looper.getMainLooper()).post(new Runnable() {
+                            @Override
+                            public void run() {
+                                removeProgressBar();
+                            }
+                        });
+                    }
+                }
+            });
+            myThread.start();
+        } else {
+            // Atualizar a interface
+            removeProgressBar();
+        }
+    }
+
+    public void removeProgressBar() {
     }
 }

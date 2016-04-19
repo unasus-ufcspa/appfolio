@@ -1,10 +1,6 @@
 package com.ufcspa.unasus.appportfolio.Activities.Fragments;
 
-import android.content.Context;
-import android.net.ConnectivityManager;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Looper;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,8 +12,6 @@ import com.ufcspa.unasus.appportfolio.Adapter.SelectPortfolioClassAdapter;
 import com.ufcspa.unasus.appportfolio.Model.PortfolioClass;
 import com.ufcspa.unasus.appportfolio.Model.Singleton;
 import com.ufcspa.unasus.appportfolio.R;
-import com.ufcspa.unasus.appportfolio.WebClient.SyncData;
-import com.ufcspa.unasus.appportfolio.WebClient.SyncDataClient;
 import com.ufcspa.unasus.appportfolio.database.DataBaseAdapter;
 
 import java.util.List;
@@ -28,8 +22,6 @@ import io.github.skyhacker2.sqliteonweb.SQLiteOnWeb;
  * Created by Desenvolvimento on 12/01/2016.
  */
 public class FragmentSelectPortfolio extends Frag {
-    public static boolean isSyncSucessful;
-    public static boolean isSyncSincronizationNotSucessful;
     private RelativeLayout progress_bar;
     private GridView grid_classes;
     private DataBaseAdapter source;
@@ -45,9 +37,6 @@ public class FragmentSelectPortfolio extends Frag {
 
         SQLiteOnWeb.init(getActivity().getApplicationContext()).start();
 
-        isSyncSucessful = false;
-        isSyncSincronizationNotSucessful = false;
-
         return view;
     }
 
@@ -62,47 +51,10 @@ public class FragmentSelectPortfolio extends Frag {
         source = DataBaseAdapter.getInstance(getActivity());
 
         progress_bar = (RelativeLayout) getView().findViewById(R.id.progressBarLayout);
-        downloadTBSync();
+//        downloadFullData(-1);
     }
 
-    private void downloadTBSync() {
-        if (isOnline()) {
-            final Thread myThread = new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    getSync();
-
-                    while (!isSyncSucessful)
-                        if (isSyncSincronizationNotSucessful)
-                            break;
-
-                    if (!isSyncSincronizationNotSucessful) {
-                        new Handler(Looper.getMainLooper()).post(new Runnable() {
-                            @Override
-                            public void run() {
-                                // Atualizar as notificações e o layout
-                                removeProgressBar();
-                            }
-                        });
-                    } else {
-                        new Handler(Looper.getMainLooper()).post(new Runnable() {
-                            @Override
-                            public void run() {
-                                removeProgressBar();
-                            }
-                        });
-                    }
-                }
-            });
-            myThread.start();
-        } else
-        {
-            // Atualizar a interface
-            removeProgressBar();
-        }
-    }
-
-    private void removeProgressBar() {
+    public void removeProgressBar() {
         try {
             portclasses = source.selectListClassAndUserType(singleton.user.getIdUser());
             Log.d("lista", "tam portlis:" + portclasses.size());
@@ -117,15 +69,5 @@ public class FragmentSelectPortfolio extends Frag {
         progress_bar.setVisibility(View.GONE);
 
         Log.d("TB_SYNC", "Quantidade de Registros: " + source.getSyncs().size());
-    }
-
-    private void getSync() {
-        SyncDataClient client = new SyncDataClient(getContext());
-        client.postJson(SyncData.toJSON(singleton.device.get_id_device()));
-    }
-
-    private boolean isOnline() {
-        ConnectivityManager cm = (ConnectivityManager) getContext().getSystemService(Context.CONNECTIVITY_SERVICE);
-        return cm.getActiveNetworkInfo() != null && cm.getActiveNetworkInfo().isConnectedOrConnecting();
     }
 }

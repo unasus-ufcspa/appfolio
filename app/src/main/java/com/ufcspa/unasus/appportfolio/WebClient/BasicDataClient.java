@@ -296,10 +296,10 @@ public class BasicDataClient extends HttpClient {
                                 }
                             }
 
-                            if(resp.has("user")) {
+                            if (resp.has("students")) {
                                 // GET OBJECT
                                 Log.d(tag, "recebendo user via json");
-                                JSONObject objPs = resp.getJSONObject("user");
+                                JSONObject objPs = resp.getJSONObject("students");
                                 JSONArray tb = objPs.getJSONArray("tb_user");
                                 // POPULATE OBJECT
                                 for (int i = 0; i < tb.length(); i++) {
@@ -310,12 +310,16 @@ public class BasicDataClient extends HttpClient {
                                     int id_user = temp.getInt("id_user");
                                     String nm_user = temp.getString("nm_user");
                                     String nu_identification = temp.getString("nu_identification");
+                                    String nu_cellphone = temp.getString("nu_cellphone");
+                                    String ds_email = temp.getString("ds_email");
 
 
                                     //POPULATE OBJECT WITH DATA
                                     user.setIdUser(id_user);
                                     user.setNm_user(nm_user);
                                     user.setNu_identification(nu_identification);
+                                    user.setEmail(ds_email);
+                                    user.setCellphone(nu_cellphone);
 
                                     //ADD TO LINKEDLIST
                                     basicData.addUsers(user);
@@ -329,12 +333,13 @@ public class BasicDataClient extends HttpClient {
                             LoginActivity2.isBasicDataSyncNotSucessful = true;
                         }
 
+                        Log.d(tag, "Fim  da request");
+                        //EXECUTE INSERTS IN SQLITE
+                        basicData.insertDataIntoSQLITE();
                         LoginActivity2.isBasicDataSucessful = true;
                     }
                 } finally {
-                    Log.d(tag, "Fim  da request");
-                    //EXECUTE INSERTS IN SQLITE
-                    basicData.insertDataIntoSQLITE();
+
                 }
             }
         }, new Response.ErrorListener() {

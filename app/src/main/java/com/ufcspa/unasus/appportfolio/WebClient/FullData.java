@@ -6,6 +6,7 @@ import com.ufcspa.unasus.appportfolio.Model.Attachment;
 import com.ufcspa.unasus.appportfolio.Model.AttachmentActivity;
 import com.ufcspa.unasus.appportfolio.Model.AttachmentComment;
 import com.ufcspa.unasus.appportfolio.Model.Comentario;
+import com.ufcspa.unasus.appportfolio.Model.Notification;
 import com.ufcspa.unasus.appportfolio.Model.Reference;
 import com.ufcspa.unasus.appportfolio.Model.VersionActivity;
 import com.ufcspa.unasus.appportfolio.database.DataBaseAdapter;
@@ -25,24 +26,26 @@ public class FullData {
     private LinkedList<AttachmentActivity> anexosAtivade;
     private LinkedList<AttachmentComment> anexosComentario;
     private LinkedList<Reference> references;
+    private LinkedList<Notification> notifications;
 
     private Context context;
 
     public FullData(Context context) {
-        this.versionActs = new LinkedList<VersionActivity>();
-        this.comentarios = new LinkedList<Comentario>();
-        this.anexos = new LinkedList<Attachment>();
-        this.anexosAtivade = new LinkedList<AttachmentActivity>();
-        this.anexosComentario = new LinkedList<AttachmentComment>();
-        this.references = new LinkedList<Reference>();
+        this.versionActs = new LinkedList<>();
+        this.comentarios = new LinkedList<>();
+        this.anexos = new LinkedList<>();
+        this.anexosAtivade = new LinkedList<>();
+        this.anexosComentario = new LinkedList<>();
+        this.references = new LinkedList<>();
+        this.notifications = new LinkedList<>();
 
         this.context = context;
     }
 
-    public static JSONObject toJSON(String idDevice) {
+    public static JSONObject toJSON(String idDevice, int idActivityStudent) {
         JSONObject json = new JSONObject();
         try {
-            json.put("sync_request", new JSONObject().put("tb_sync", new JSONObject().put("id_device", idDevice)));
+            json.put("fullDataSrvDev_request", new JSONObject().put("id_device", idDevice).put("id_activity_student", idActivityStudent));
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -73,6 +76,10 @@ public class FullData {
         references.add(reference);
     }
 
+    public void addNotification(Notification notification) {
+        notifications.add(notification);
+    }
+
     public LinkedList<VersionActivity> getVersionActs() {
         return versionActs;
     }
@@ -95,6 +102,10 @@ public class FullData {
 
     public LinkedList<Reference> getReferences() {
         return references;
+    }
+
+    public LinkedList<Notification> getNotifications() {
+        return notifications;
     }
 
     public Context getContext() {

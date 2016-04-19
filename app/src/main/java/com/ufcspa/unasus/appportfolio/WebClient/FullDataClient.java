@@ -9,10 +9,12 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.ufcspa.unasus.appportfolio.Activities.Fragments.Frag;
 import com.ufcspa.unasus.appportfolio.Model.Attachment;
 import com.ufcspa.unasus.appportfolio.Model.AttachmentActivity;
 import com.ufcspa.unasus.appportfolio.Model.AttachmentComment;
 import com.ufcspa.unasus.appportfolio.Model.Comentario;
+import com.ufcspa.unasus.appportfolio.Model.Notification;
 import com.ufcspa.unasus.appportfolio.Model.Reference;
 import com.ufcspa.unasus.appportfolio.Model.VersionActivity;
 
@@ -24,40 +26,136 @@ import org.json.JSONObject;
  * Created by Arthur Zettler on 18/04/2016.
  */
 public class FullDataClient extends HttpClient {
-    private String method = "fullData";
+    private String method = "fullDataSrvDev";
     private Context context;
     private FullData fullData;
+    private Frag fragment;
 
-    public FullDataClient(Context context) {
+    public FullDataClient(Context context, Frag fragment) {
         super(context);
         this.context = context;
+        this.fragment = fragment;
     }
 
     public void postJson(JSONObject jsonFirstRequest) {
         Log.d(tag, "URL: " + URL + method);
-
         JsonObjectRequest jsObjReq = new JsonObjectRequest(Request.Method.POST, URL + method, jsonFirstRequest, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
                 Log.d(tag, "Retornou do request");
-                JSONObject rsp = response;
-                String jsonStringName = "fullData_response";
-
                 try {
                     Log.d(tag, "JSON RESPONSE: " + response.toString().replaceAll("\\{", "\n{"));
                     if (response.has("erro")) {
+                        fragment.isFullSyncNotSucessful = true;
                         Log.e(tag, "sincronizacao de dados full falhou");
-                        Log.d(tag, "JSon response receiving:" + response.toString());
-                    } else if (response.has("fullData_response")) {
+                    } else if (response.has("fullDataSrvDev_response")) {
                         Log.d(tag, "JSON POST existe Full Data response");
-                        // INSTANCE FULL DATA COMPLEX OBJECT
-                        fullData = new FullData(context);
 
-                        //Log.d(tag, "user encontrado!\n cadastrando no banco...");
+                        fullData = new FullData(context);
                         JSONObject resp = new JSONObject();
                         try {
-                            resp = response.getJSONObject("fullData_response");
-                            Log.d(tag, "JSon response::" + resp.toString());
+                            resp = response.getJSONObject("fullDataSrvDev_response");
+
+                            if (resp.has("notice")) {
+                                JSONObject notice = resp.getJSONObject("notice");
+                                if (notice.has("tb_notice")) {
+                                    JSONArray tb_notice = notice.getJSONArray("tb_notice");
+
+                                    for (int i = 0; i < tb_notice.length(); i++) {
+                                        JSONObject temp = tb_notice.getJSONObject(i);
+                                        Notification notification = new Notification();
+
+                                        int id_author = temp.getInt("id_author");
+                                        int id_destination = temp.getInt("id_destination");
+                                        int id_activity_student = temp.getInt("id_activity_student");
+                                        String nm_table = temp.getString("nm_table");
+                                        int co_id_table = temp.getInt("co_id_table");
+                                        int co_id_table_srv = temp.getInt("co_id_table_srv");
+                                        String dt_notice = temp.getString("dt_notice");
+                                        String dt_read = temp.getString("dt_read");
+
+                                        notification.setId_author(id_author);
+                                        notification.setId_destination(id_destination);
+                                        notification.setId_activity_student(id_activity_student);
+                                        notification.setNm_table(nm_table);
+                                        notification.setCo_id_table(co_id_table);
+                                        notification.setCo_id_table_srv(co_id_table_srv);
+                                        notification.setDt_notice(dt_notice);
+                                        notification.setDt_read(dt_read);
+
+                                        fullData.addNotification(notification);
+                                    }
+                                }
+                            }
+
+                            if (resp.has("data")) {
+                                JSONObject data = resp.getJSONObject("data");
+                                if (data.has("comment")) {
+                                    JSONObject comment = data.getJSONObject("comment");
+                                    if (comment.has("tb_comment")) {
+                                        JSONArray tb_comment = comment.getJSONArray("tb_comment");
+                                        for (int i = 0; i < tb_comment.length(); i++) {
+                                            JSONObject temp = tb_comment.getJSONObject(i);
+                                            Comentario comentario = new Comentario();
+
+                                            int id_activity_student = temp.getInt("id_activity_student");
+                                            int id_author = temp.getInt("id_author");
+                                            String tx_comment = temp.getString("tx_comment");
+                                            String tx_reference = temp.getString("tx_reference");
+                                            String tp_comment = temp.getString("tp_comment");
+                                            String dt_comment = temp.getString("dt_comment");
+                                            int nu_comment_activity = temp.getInt("nu_comment_activity");
+
+                                            comentario.setIdActivityStudent(id_activity_student);
+                                            comentario.setIdAuthor(id_author);
+                                            comentario.setTxtComment(tx_comment);
+                                            comentario.setTxtReference(tx_reference);
+                                            comentario.setTypeComment(tp_comment);
+                                            comentario.setDateComment(dt_comment);
+                                            comentario.setIdNote(nu_comment_activity);
+
+                                            fullData.addComments(comentario);
+
+                                            // ...
+                                            //"attachment": {}
+
+                                        }
+                                    }
+                                }
+
+                                if (data.has("reference")) {
+                                    JSONObject reference = data.getJSONObject("reference");
+                                    if (reference.has("tb_reference")) {
+                                        JSONArray tb_reference = reference.getJSONArray("tb_reference");
+                                        for (int i = 0; i < tb_reference.length(); i++) {
+                                            JSONObject temp = tb_reference.getJSONObject(i);
+                                            // ...
+                                        }
+                                    }
+                                }
+
+                                if (data.has("version")) {
+                                    JSONObject version = data.getJSONObject("version");
+                                    if (version.has("tb_version_activity")) {
+                                        JSONArray tb_version_activity = version.getJSONArray("tb_version_activity");
+                                        for (int i = 0; i < tb_version_activity.length(); i++) {
+                                            JSONObject temp = tb_version_activity.getJSONObject(i);
+                                            // ...
+                                        }
+                                    }
+                                }
+
+                                if (data.has("activityStudent")) {
+                                    JSONObject activityStudent = data.getJSONObject("activityStudent");
+                                    if (activityStudent.has("tb_activity_student")) {
+                                        JSONArray tb_activity_student = activityStudent.getJSONArray("tb_activity_student");
+                                        for (int i = 0; i < tb_activity_student.length(); i++) {
+                                            JSONObject temp = tb_activity_student.getJSONObject(i);
+                                            // ...
+                                        }
+                                    }
+                                }
+                            }
 
                             if (resp.has("versionActivity")) {
                                 // GET Version Activity
@@ -183,14 +281,12 @@ public class FullDataClient extends HttpClient {
                                     Attachment a = new Attachment();
 
                                     // GET DATA FROM JSON
-                                    String ds_local_path = temp.getString("ds_local_path");
                                     String ds_server_path = temp.getString("ds_server_path");
                                     String tp_attachment = temp.getString("tp_attachment");
                                     String nm_file = temp.getString("nm_file");
                                     int id_attachment_srv = temp.getInt("id_attachment_srv");
 
                                     //POPULATE OBJECT WITH DATA
-                                    a.setLocalPath(ds_local_path);
                                     a.setServerPath(ds_server_path);
                                     a.setType(tp_attachment);
                                     a.setNameFile(nm_file);
@@ -225,20 +321,25 @@ public class FullDataClient extends HttpClient {
                                 }
                             }
                         } catch (JSONException e) {
+                            fragment.isFullSyncNotSucessful = true;
                             e.printStackTrace();
                         } catch (Exception v) {
+                            fragment.isFullSyncNotSucessful = true;
                             v.printStackTrace();
                         }
+
+                        Log.d(tag, "Fim  da request");
+                        //EXECUTE INSERTS IN SQLITE
+                        fullData.insertDataIntoSQLITE();
+                        fragment.isFullDataSucessful = true;
                     }
                 } finally {
-                    Log.d(tag, "Fim  da request");
-                    //EXECUTE INSERTS IN SQLITE
-                    fullData.insertDataIntoSQLITE();
                 }
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError volleyError) {
+                fragment.isFullSyncNotSucessful = true;
                 Log.e(tag, "Erro  na request");
                 Log.e(tag, "erro=" + volleyError.getMessage());
                 volleyError.printStackTrace();

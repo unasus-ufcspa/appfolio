@@ -9,7 +9,6 @@ import android.content.res.Configuration;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
-import android.support.v4.app.Fragment;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.widget.SlidingPaneLayout;
 import android.text.Editable;
@@ -60,7 +59,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 
-public class FragmentRTEditor extends Fragment {
+public class FragmentRTEditor extends Frag {
     // Constante
     static final int REQUEST_FOLIO_ATTACHMENT = 5;
     // Editor
@@ -340,7 +339,11 @@ public class FragmentRTEditor extends Fragment {
     @Override
     public void onResume() {
         saveText();
+//        downloadFullData(singleton.idActivityStudent);
         super.onResume();
+    }
+
+    public void removeProgressBar() {
     }
 
     @Override

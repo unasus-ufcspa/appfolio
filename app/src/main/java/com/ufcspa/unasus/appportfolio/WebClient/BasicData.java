@@ -133,10 +133,6 @@ public class BasicData {
     }
 
     public synchronized void insertDataIntoSQLITE() {
-        if(users.size()!=0 && activities.size() !=0){
-
-        }
-
 //        Thread t = new Thread(new Runnable() {
 //            @SuppressLint("LongLogTag")
 //            @Override
@@ -144,10 +140,10 @@ public class BasicData {
                 //INSERT DATA IN DATABASE
                 DataBaseAdapter data = DataBaseAdapter.getInstance(context);
                 String log="BD Insert SQLite";
-                if(users.size()!=0){
-                    Log.d(log,"inserindo users");
-                    data.insertTBUser(users);
-                }
+//                if(users.size()!=0){
+        Log.d(log, "inserindo users");
+        data.insertTBUser(users);
+//                }
                 Log.d(log, "inserindo classes");
                 data.insertTBClass(classes);
                 Log.d(log, "inserindo student claases");
