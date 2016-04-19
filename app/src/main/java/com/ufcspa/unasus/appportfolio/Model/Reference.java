@@ -7,6 +7,7 @@ public class Reference {
     private int idRef;
     private String dsUrl;
     private int idActStudent;
+    private int idRefSrv;
 
     public Reference(){}
 
@@ -47,5 +48,13 @@ public class Reference {
 
     public void setIdActStudent(int idActStudent) {
         this.idActStudent = idActStudent;
+    }
+
+    public int getIdRefSrv() {
+        return idRefSrv;
+    }
+
+    public void setIdRefSrv(int idRefSrv) {
+        this.idRefSrv = idRefSrv;
     }
 }

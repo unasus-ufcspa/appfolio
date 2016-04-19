@@ -9,6 +9,8 @@ import android.util.Log;
 import com.ufcspa.unasus.appportfolio.Model.Activity;
 import com.ufcspa.unasus.appportfolio.Model.ActivityStudent;
 import com.ufcspa.unasus.appportfolio.Model.Attachment;
+import com.ufcspa.unasus.appportfolio.Model.AttachmentActivity;
+import com.ufcspa.unasus.appportfolio.Model.AttachmentComment;
 import com.ufcspa.unasus.appportfolio.Model.Comentario;
 import com.ufcspa.unasus.appportfolio.Model.Device;
 import com.ufcspa.unasus.appportfolio.Model.PortfolioClass;
@@ -17,6 +19,7 @@ import com.ufcspa.unasus.appportfolio.Model.StudFrPortClass;
 import com.ufcspa.unasus.appportfolio.Model.Sync;
 import com.ufcspa.unasus.appportfolio.Model.Team;
 import com.ufcspa.unasus.appportfolio.Model.User;
+import com.ufcspa.unasus.appportfolio.Model.VersionActivity;
 
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -24,6 +27,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
+import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -1333,4 +1337,125 @@ public class DataBaseAdapter {
 
         return user;
     }
+
+    /*
+        ************************* CRUD FULL DATA ***************************
+    */
+    public void insertVersionActivity(LinkedList<VersionActivity> versionActs) {
+        for (VersionActivity va : versionActs) {
+            ContentValues cv = new ContentValues();
+            cv.put("id_activity_student", va.getId_activity_student());
+            cv.put("tx_activity", va.getTx_activity());
+            cv.put("dt_last_access", va.getDt_last_access());
+            cv.put("dt_submission", va.getDt_submission());
+            cv.put("dt_verification", va.getDt_verification());
+            cv.put("id_version_activity_srv", va.getId_version_activit_srv());
+
+            try {
+                db.insert("tb_version_activity", null, cv);
+
+            } catch (Exception e) {
+                Log.d(tag, "erro ao inserir na tb_version_activity:" + e.getMessage());
+                e.printStackTrace();
+            }
+
+        }
+    }
+
+    public void insertComments(LinkedList<Comentario> comentarios) {
+        for (Comentario c : comentarios) {
+            ContentValues cv = new ContentValues();
+            cv.put("id_activity_student", c.getIdActivityStudent());
+            cv.put("id_author", c.getIdAuthor());
+            cv.put("tx_comment", c.getTxtComment());
+            cv.put("tx_reference", c.getTxtReference());
+            cv.put("tp_comment", c.getTypeComment());
+            cv.put("nu_comment_activity", c.getIdNote());
+            cv.put("id_comment_srv", c.getIdCommentSrv());
+            cv.put("dt_comment", c.getDateComment());
+            cv.put("dt_send", c.getDateSend());
+
+            try {
+                db.insert("tb_comment", null, cv);
+
+            } catch (Exception e) {
+                Log.d(tag, "erro ao inserir na tb_comment:" + e.getMessage());
+                e.printStackTrace();
+            }
+
+        }
+    }
+
+    public void insertAttachment(LinkedList<Attachment> anexos) {
+        for (Attachment a : anexos) {
+            ContentValues cv = new ContentValues();
+            cv.put("ds_local_path", a.getLocalPath());
+            cv.put("ds_server_path", a.getServerPath());
+            cv.put("tp_attachment", a.getType());
+            cv.put("nm_file", a.getNameFile());
+            cv.put("id_attachment_server", a.getidAttachmentSrv());
+
+            try {
+                db.insert("tb_attachment", null, cv);
+
+            } catch (Exception e) {
+                Log.d(tag, "erro ao inserir na tb_attachment:" + e.getMessage());
+                e.printStackTrace();
+            }
+
+        }
+    }
+
+    public void insertAttachmentActivity(LinkedList<AttachmentActivity> anexosAtivade) {
+        for (AttachmentActivity aa : anexosAtivade) {
+            ContentValues cv = new ContentValues();
+            cv.put("id_attachment", aa.getId_attachment());
+            cv.put("id_activity_student", aa.getId_activity_student());
+//            cv.put("id_attach_activity_srv", aa.getId_srv());
+
+            try {
+                db.insert("tb_attach_activity", null, cv);
+
+            } catch (Exception e) {
+                Log.d(tag, "erro ao inserir na tb_attach_activity:" + e.getMessage());
+                e.printStackTrace();
+            }
+        }
+    }
+
+    public void insertAttachmentComment(LinkedList<AttachmentComment> anexosComentario) {
+        for (AttachmentComment ac : anexosComentario) {
+            ContentValues cv = new ContentValues();
+            cv.put("id_attachment", ac.getId_attachment());
+            cv.put("id_comment", ac.getId_comment());
+//            cv.put("id_attach_comment_srv", ac.getId_srv());
+
+            try {
+                db.insert("tb_attach_comment", null, cv);
+
+            } catch (Exception e) {
+                Log.d(tag, "erro ao inserir na tb_attach_comment:" + e.getMessage());
+                e.printStackTrace();
+            }
+        }
+    }
+
+    public void insertReference(LinkedList<Reference> references) {
+        for (Reference r : references) {
+            ContentValues cv = new ContentValues();
+            cv.put("id_activity_student", r.getIdActStudent());
+            cv.put("ds_url", r.getDsUrl());
+            cv.put("id_reference_srv", r.getIdRefSrv());
+
+            try {
+                db.insert("tb_reference", null, cv);
+
+            } catch (Exception e) {
+                Log.d(tag, "erro ao inserir na tb_reference:" + e.getMessage());
+                e.printStackTrace();
+            }
+
+        }
+    }
+
 }

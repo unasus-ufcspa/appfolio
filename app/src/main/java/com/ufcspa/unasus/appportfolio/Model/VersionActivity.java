@@ -12,6 +12,8 @@ public class VersionActivity {
     private String dt_verification;
     private int id_version_activit_srv;
 
+    public VersionActivity() {
+    }
 
     public VersionActivity(int id_activity_student, String tx_activity, String dt_last_access, String dt_submission, String dt_verification, int id_version_activit_srv) {
         this.id_activity_student = id_activity_student;

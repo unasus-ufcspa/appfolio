@@ -11,11 +11,13 @@ public class Comentario {
     String txtReference;
     String typeComment;
     String dateComment;
+    private String dateSend;
     private int idComment;
     private int idActivityStudent;
     private int idAuthor;
     private int idNote;
     private int idAttach;
+    private int idCommentSrv;
 
     public int getIdAttach() {
         return idAttach;
@@ -87,6 +89,22 @@ public class Comentario {
 
     public void setDateComment(String dateComment) {
         this.dateComment = dateComment;
+    }
+
+    public String getDateSend() {
+        return dateSend;
+    }
+
+    public void setDateSend(String dateSend) {
+        this.dateSend = dateSend;
+    }
+
+    public int getIdCommentSrv() {
+        return idCommentSrv;
+    }
+
+    public void setIdCommentSrv(int idCommentSrv) {
+        this.idCommentSrv = idCommentSrv;
     }
 
     @Override
