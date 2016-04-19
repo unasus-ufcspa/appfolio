@@ -9,9 +9,11 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.ufcspa.unasus.appportfolio.Model.Attachment;
 import com.ufcspa.unasus.appportfolio.Model.AttachmentActivity;
 import com.ufcspa.unasus.appportfolio.Model.AttachmentComment;
 import com.ufcspa.unasus.appportfolio.Model.Comentario;
+import com.ufcspa.unasus.appportfolio.Model.Reference;
 import com.ufcspa.unasus.appportfolio.Model.VersionActivity;
 
 import org.json.JSONArray;
@@ -172,11 +174,55 @@ public class FullDataClient extends HttpClient {
                             }
 
                             if (resp.has("Attachment")) {
+                                // GET Attachment
+                                JSONObject objPs = resp.getJSONObject("Attachment");
+                                JSONArray tb_attachment = objPs.getJSONArray("tb_attachment");
+                                // POPULATE Attachment
+                                for (int i = 0; i < tb_attachment.length(); i++) {
+                                    JSONObject temp = tb_attachment.getJSONObject(i);
+                                    Attachment a = new Attachment();
 
+                                    // GET DATA FROM JSON
+                                    String ds_local_path = temp.getString("ds_local_path");
+                                    String ds_server_path = temp.getString("ds_server_path");
+                                    String tp_attachment = temp.getString("tp_attachment");
+                                    String nm_file = temp.getString("nm_file");
+                                    int id_attachment_srv = temp.getInt("id_attachment_srv");
+
+                                    //POPULATE OBJECT WITH DATA
+                                    a.setLocalPath(ds_local_path);
+                                    a.setServerPath(ds_server_path);
+                                    a.setType(tp_attachment);
+                                    a.setNameFile(nm_file);
+                                    a.setIdAttachmentSrv(id_attachment_srv);
+
+                                    //ADD TO LINKEDLIST
+                                    fullData.addAttachments(a);
+                                }
                             }
 
                             if (resp.has("Reference")) {
+                                // GET Reference
+                                JSONObject objPs = resp.getJSONObject("Reference");
+                                JSONArray tb_reference = objPs.getJSONArray("tb_reference");
+                                // POPULATE Reference
+                                for (int i = 0; i < tb_reference.length(); i++) {
+                                    JSONObject temp = tb_reference.getJSONObject(i);
+                                    Reference r = new Reference();
 
+                                    // GET DATA FROM JSON
+                                    int id_activity_student = temp.getInt("id_activity_student");
+                                    String ds_url = temp.getString("ds_url");
+                                    int id_reference_srv = temp.getInt("id_reference_srv");
+
+                                    //POPULATE OBJECT WITH DATA
+                                    r.setIdActStudent(id_activity_student);
+                                    r.setDsUrl(ds_url);
+                                    r.setIdRefSrv(id_reference_srv);
+
+                                    //ADD TO LINKEDLIST
+                                    fullData.addReference(r);
+                                }
                             }
                         } catch (JSONException e) {
                             e.printStackTrace();
