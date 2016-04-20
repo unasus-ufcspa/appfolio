@@ -85,11 +85,12 @@ public class FullData {
     public synchronized void insertDataIntoSQLITE() {
         DataBaseAdapter data = DataBaseAdapter.getInstance(context);
 
-        data.insertVersionActivity(versionActs);
-        data.insertComments(comentarios);
-        data.insertAttachment(anexos);
-        data.insertAttachmentActivity(anexosAtivade);
-        data.insertAttachmentComment(anexosComentario);
-        data.insertReference(references);
+        data.insertNotifications(notifications);
+//        data.insertVersionActivity(versionActs);
+//        data.insertComments(comentarios);
+//        data.insertAttachment(anexos);
+//        data.insertAttachmentActivity(anexosAtivade);
+//        data.insertAttachmentComment(anexosComentario);
+//        data.insertReference(references);
     }
 }

@@ -292,14 +292,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         switch (id)
         {
             case 0:
-//                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new FragmentSelectPortfolio()).addToBackStack("Frag").commit();//FragmentSelectPortfolio
                 downloadFullData(-1, id);
                 break;
             case 1:
-                if (singleton.portfolioClass != null) {
-//                    getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new FragmentStudentActivities()).addToBackStack("Frag").commit();
+                if (singleton.portfolioClass != null)
                     downloadFullData(-1, id);
-                }
                 break;
             case 2:
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new FragmentReference()).addToBackStack("Frag").commit();
@@ -310,7 +307,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new FragmentAttachment()).addToBackStack("Frag").commit();
                 break;
             case 5:
-//                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new FragmentRTEditor()).addToBackStack("Frag").commit();
                 downloadFullData(singleton.idActivityStudent, id);
                 break;
             default:
@@ -396,6 +392,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                             public void run() {
                                 // Atualizar as notificações e o layout
                                 removeProgressBar(change_fragment);
+                                Toast.makeText(getApplicationContext(), "Nada foi atualizado", Toast.LENGTH_SHORT).show();
                             }
                         });
                     } else {
@@ -403,7 +400,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                             @Override
                             public void run() {
                                 removeProgressBar(change_fragment);
-                                Toast.makeText(getApplicationContext(), "Erro interno. Por favor tente novamente", Toast.LENGTH_LONG).show();
+                                Toast.makeText(getApplicationContext(), "Erro interno. Por favor tente novamente", Toast.LENGTH_SHORT).show();
                             }
                         });
                     }
@@ -413,7 +410,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         } else {
             // Atualizar a interface
             removeProgressBar(change_fragment);
-            Toast.makeText(getApplicationContext(), "Sem conexão com a internet", Toast.LENGTH_LONG).show();
+            Toast.makeText(getApplicationContext(), "Sem conexão com a internet", Toast.LENGTH_SHORT).show();
         }
     }
 

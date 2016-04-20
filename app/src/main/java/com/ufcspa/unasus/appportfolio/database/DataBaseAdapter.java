@@ -13,6 +13,7 @@ import com.ufcspa.unasus.appportfolio.Model.AttachmentActivity;
 import com.ufcspa.unasus.appportfolio.Model.AttachmentComment;
 import com.ufcspa.unasus.appportfolio.Model.Comentario;
 import com.ufcspa.unasus.appportfolio.Model.Device;
+import com.ufcspa.unasus.appportfolio.Model.Notification;
 import com.ufcspa.unasus.appportfolio.Model.PortfolioClass;
 import com.ufcspa.unasus.appportfolio.Model.Reference;
 import com.ufcspa.unasus.appportfolio.Model.StudFrPortClass;
@@ -1158,7 +1159,7 @@ public class DataBaseAdapter {
     public int getActivityNotification(int id_activity) {
         String query = "SELECT COUNT(*) \n" +
                 "FROM tb_activity_student as tbas \n" +
-                "\tJOIN tb_sync tbs on tbs.id_activity_student = tbas.id_activity_student \n" +
+                "\tJOIN tb_notice tbs on tbs.id_activity_student = tbas.id_activity_student \n" +
                 "WHERE\n" +
                 "\ttbas.id_activity = " + id_activity;
         int result = 0;
@@ -1192,7 +1193,7 @@ public class DataBaseAdapter {
         String query = "SELECT COUNT(*) \n" +
                 "FROM tb_portfolio_student as tps\n" +
                 "\tJOIN tb_activity_student tbas on tbas.id_portfolio_student = tps.id_portfolio_student\n" +
-                "\tJOIN tb_sync tbs on tbs.id_activity_student = tbas.id_activity_student\n" +
+                "\tJOIN tb_notice tbs on tbs.id_activity_student = tbas.id_activity_student\n" +
                 " WHERE tps.id_portfolio_student = " + id_portfolio_student;
         // ADICIONAR CLAUSULAS WHERE PARA VEFIFICAR SE O TIPO DE COMENTÁRIO É R (RECEBIMENTO) E SE A DATA DE READ É NULL
         int result = 0;
@@ -1451,6 +1452,29 @@ public class DataBaseAdapter {
 
             } catch (Exception e) {
                 Log.d(tag, "erro ao inserir na tb_reference:" + e.getMessage());
+                e.printStackTrace();
+            }
+
+        }
+    }
+
+    public void insertNotifications(LinkedList<Notification> notifications) {
+        for (Notification n : notifications) {
+            ContentValues cv = new ContentValues();
+            cv.put("id_author", n.getId_author());
+            cv.put("id_destination", n.getId_destination());
+            cv.put("id_activity_student", n.getId_activity_student());
+            cv.put("nm_table", n.getNm_table());
+            cv.put("co_id_table", n.getCo_id_table());
+            cv.put("co_id_table_srv", n.getCo_id_table_srv());
+            cv.put("dt_notice", n.getDt_notice());
+            cv.put("dt_read", n.getDt_read());
+
+            try {
+                db.insert("tb_notice", null, cv);
+
+            } catch (Exception e) {
+                Log.d(tag, "erro ao inserir na tb_notice:" + e.getMessage());
                 e.printStackTrace();
             }
 
