@@ -93,22 +93,22 @@ public class FragmentAttachmentDialog extends DialogFragment {
 
     public void imageClicked(int position) {
         Attachment attachment = attachments.get(position);
-        if (attachment.getLocalPath() != null && attachment.getLocalPath() != "") {
-            loadPhoto(attachment.getLocalPath(), position);
+        if (attachment.getNmSystem() != null && attachment.getNmSystem() != "") {
+            loadPhoto(attachment.getNmSystem(), position);
         }
     }
 
     public void videoClicked(int position) {
         Attachment attachment = attachments.get(position);
-        if (attachment.getLocalPath() != null && attachment.getLocalPath() != "") {
-            loadVideo(attachment.getLocalPath(), position);
+        if (attachment.getNmSystem() != null && attachment.getNmSystem() != "") {
+            loadVideo(attachment.getNmSystem(), position);
         }
     }
 
     public void textClicked(int position) {
         Attachment attachment = attachments.get(position);
-        if (attachment.getLocalPath() != null && attachment.getLocalPath() != "") {
-            loadPDF(attachment.getLocalPath(), position);
+        if (attachment.getNmSystem() != null && attachment.getNmSystem() != "") {
+            loadPDF(attachment.getNmSystem(), position);
         }
     }
 

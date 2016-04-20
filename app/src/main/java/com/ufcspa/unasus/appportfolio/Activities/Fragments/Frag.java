@@ -737,7 +737,7 @@ public class Frag extends Fragment {
                 if (name.isEmpty()) {
                     name = "Anexo";
                 }
-                single.lastIdAttach = source.insertAttachment(new Attachment(0, path, "", type, name, 0));
+                single.lastIdAttach = source.insertAttachment(new Attachment(0, type, name, path, 0));
             }
         });
 

@@ -222,7 +222,7 @@ public class FragmentSpecificComments extends Frag {
                 if (name.isEmpty()) {
                     name = "Anexo";
                 }
-                single.lastIdAttach = DataBaseAdapter.getInstance(getActivity()).insertAttachment(new Attachment(0, path, "", type, name, 0));
+                single.lastIdAttach = DataBaseAdapter.getInstance(getActivity()).insertAttachment(new Attachment(0, type, name, path, 0));
                 if(lastID!=0 && single.lastIdAttach!=-1 && single.lastIdAttach!=0) {
                     DataBaseAdapter.getInstance(getActivity()).insertAttachComment(lastID, single.lastIdAttach);
                 }
@@ -332,18 +332,18 @@ public class FragmentSpecificComments extends Frag {
                 if (oneComments.get(position).idAttach != 0) {
                     Log.d("comments", "selecionou um anexo");
                     Attachment att = DataBaseAdapter.getInstance(getActivity()).getAttachmentByID(oneComments.get(position).idAttach);
-                    if (att.getType() != null) {
-                        Log.d("comments", "localpath attach:" + att.getLocalPath());
-                        if (att.getType().equals(Attachment.TYPE_TEXT)) {
+                    if (att.getTpAttachment() != null) {
+                        Log.d("comments", "localpath attach:" + att.getNmSystem());
+                        if (att.getTpAttachment().equals(Attachment.TYPE_TEXT)) {
                             Log.d("comments", "anexo do tipo texto");
                             //showPDFDialog(att.getLocalPath());
-                            openPDF(att.getLocalPath());
-                        } else if (att.getType().equals(Attachment.TYPE_IMAGE)) {
+                            openPDF(att.getNmSystem());
+                        } else if (att.getTpAttachment().equals(Attachment.TYPE_IMAGE)) {
                             Log.d("comments", "anexo do tipo imagem");
-                            loadPhoto(att.getLocalPath());
-                        } else if (att.getType().equals(Attachment.TYPE_VIDEO)) {
+                            loadPhoto(att.getNmSystem());
+                        } else if (att.getTpAttachment().equals(Attachment.TYPE_VIDEO)) {
                             Log.d("comments", "anexo do tipo video");
-                            loadVideo(att.getLocalPath());
+                            loadVideo(att.getNmSystem());
                         }
                     }
                 }

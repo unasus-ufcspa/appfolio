@@ -78,22 +78,22 @@ public class FragmentAttachment extends Frag {
 
     public void imageClicked(int position) {
         Attachment attachment = attachments.get(position);
-        if (attachment.getLocalPath() != null && attachment.getLocalPath() != "") {
-            loadPhoto(attachment.getLocalPath(), position);
+        if (attachment.getNmSystem() != null && attachment.getNmSystem() != "") {
+            loadPhoto(attachment.getNmSystem(), position);
         }
     }
 
     public void videoClicked(int position) {
         Attachment attachment = attachments.get(position);
-        if (attachment.getLocalPath() != null && attachment.getLocalPath() != "") {
-            loadVideo(attachment.getLocalPath(), position);
+        if (attachment.getNmSystem() != null && attachment.getNmSystem() != "") {
+            loadVideo(attachment.getNmSystem(), position);
         }
     }
 
     public void textClicked(int position) {
         Attachment attachment = attachments.get(position);
-        if (attachment.getLocalPath() != null && attachment.getLocalPath() != "") {
-            loadPDF(attachment.getLocalPath(), position);
+        if (attachment.getNmSystem() != null && attachment.getNmSystem() != "") {
+            loadPDF(attachment.getNmSystem(), position);
         }
     }
 
@@ -170,7 +170,7 @@ public class FragmentAttachment extends Frag {
                 if (name.isEmpty()) {
                     name = "Anexo";
                 }
-                singleton.lastIdAttach = source.insertAttachment(new Attachment(0, path, "", type, name, 0));
+                singleton.lastIdAttach = source.insertAttachment(new Attachment(0, type, name, path, 0));
                 attachments = source.getAttachments();
                 createPlusButton();
                 listAdapter.refresh(attachments);
@@ -181,7 +181,7 @@ public class FragmentAttachment extends Frag {
     }
 
     public void createPlusButton() {
-        attachments.add(new Attachment(-1, "", "", "", "", 0));
+        attachments.add(new Attachment(-1, "", "", "", 0));
     }
 
     private void loadPhoto(final String url, final int position) {
@@ -212,7 +212,7 @@ public class FragmentAttachment extends Frag {
                     allAttachmentDeleted = bool;
                 if (bool) {
                     attachments.remove(attachment);
-                    File file = new File(attachment.getLocalPath());
+                    File file = new File(attachment.getNmSystem());
                     if (file.exists())
                         file.delete();
                 }

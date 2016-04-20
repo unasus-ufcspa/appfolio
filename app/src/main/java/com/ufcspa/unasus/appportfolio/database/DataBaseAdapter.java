@@ -598,10 +598,10 @@ public class DataBaseAdapter {
 
     public int insertAttachment(Attachment attach) {
         ContentValues cv = new ContentValues();
-        cv.put("ds_local_path", attach.getLocalPath());
-        cv.put("ds_server_path", attach.getServerPath());
-        cv.put("tp_attachment", attach.getType());
-        cv.put("nm_file", attach.getNameFile());
+        cv.put("tp_attachment", attach.getTpAttachment());
+        cv.put("nm_file", attach.getNmFile());
+        cv.put("nm_system", attach.getNmSystem());
+        cv.put("id_attachment_srv", attach.getidAttachmentSrv());
 
         try {
             db.insert("tb_attachment", null, cv);
@@ -626,10 +626,10 @@ public class DataBaseAdapter {
             c = db.rawQuery(sql, null);
             if (c.moveToFirst()) {
                 attch.setIdAttachment(c.getInt(0));
-                attch.setLocalPath(c.getString(1));
-                attch.setServerPath(c.getString(2));
-                attch.setType(c.getString(3));
-                attch.setNameFile(c.getString(4));
+                attch.setTpAttachment(c.getString(1));
+                attch.setNmFile(c.getString(2));
+                attch.setNmSystem(c.getString(3));
+                attch.setIdAttachmentSrv(c.getInt(4));
             } else {
                 Log.e(tag, "não encontrou a id relacionada a este anexo no banco");
             }
@@ -1089,7 +1089,7 @@ public class DataBaseAdapter {
     }
 
     private Attachment cursorToAttachment(Cursor cursor) {
-        Attachment attachment = new Attachment(cursor.getInt(0), cursor.getString(1), cursor.getString(2), cursor.getString(3), cursor.getString(4), cursor.getInt(5));
+        Attachment attachment = new Attachment(cursor.getInt(0), cursor.getString(1), cursor.getString(2), cursor.getString(3), cursor.getInt(4));
         return attachment;
     }
 
@@ -1389,11 +1389,10 @@ public class DataBaseAdapter {
     public void insertAttachment(LinkedList<Attachment> anexos) {
         for (Attachment a : anexos) {
             ContentValues cv = new ContentValues();
-            cv.put("ds_local_path", a.getLocalPath());
-            cv.put("ds_server_path", a.getServerPath());
-            cv.put("tp_attachment", a.getType());
-            cv.put("nm_file", a.getNameFile());
-            cv.put("id_attachment_server", a.getidAttachmentSrv());
+            cv.put("tp_attachment", a.getTpAttachment());
+            cv.put("nm_file", a.getNmFile());
+            cv.put("nm_system", a.getNmSystem());
+            cv.put("id_attachment_srv", a.getidAttachmentSrv());
 
             try {
                 db.insert("tb_attachment", null, cv);

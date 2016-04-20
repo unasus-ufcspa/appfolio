@@ -11,8 +11,6 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.ufcspa.unasus.appportfolio.Activities.MainActivity;
 import com.ufcspa.unasus.appportfolio.Model.Attachment;
-import com.ufcspa.unasus.appportfolio.Model.AttachmentActivity;
-import com.ufcspa.unasus.appportfolio.Model.AttachmentComment;
 import com.ufcspa.unasus.appportfolio.Model.Comentario;
 import com.ufcspa.unasus.appportfolio.Model.Notification;
 import com.ufcspa.unasus.appportfolio.Model.Reference;
@@ -22,6 +20,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 /**
@@ -114,11 +113,24 @@ public class FullDataClient extends HttpClient {
                                             comentario.setDateComment(dt_comment);
                                             comentario.setIdNote(nu_comment_activity);
 
-                                            fullData.addComments(comentario);
+                                            JSONObject attachments = temp.getJSONObject("attachment");
+                                            if (attachments.has("id_attachment")) {
+                                                Attachment attachment = new Attachment();
 
-                                            // ...
-                                            //"attachment": {}
+                                                String tp_attachment = attachments.getString("tp_attachment");
+                                                String nm_file = attachments.getString("nm_file");
+                                                String nm_system = attachments.getString("nm_system");
+                                                int id_attachment_srv = attachments.getInt("id_attachment");
 
+                                                attachment.setTpAttachment(tp_attachment);
+                                                attachment.setNmFile(nm_file);
+                                                attachment.setNmSystem(nm_system);
+                                                attachment.setIdAttachmentSrv(id_attachment_srv);
+
+                                                fullData.addCommentAttachment(comentario, attachment);
+                                            } else {
+                                                fullData.addComments(comentario);
+                                            }
                                         }
                                     }
                                 }
@@ -173,9 +185,10 @@ public class FullDataClient extends HttpClient {
                                     JSONObject activityStudent = data.getJSONObject("activityStudent");
                                     if (activityStudent.has("tb_activity_student")) {
                                         JSONArray tb_activity_student = activityStudent.getJSONArray("tb_activity_student");
+                                        HashMap<Integer, ArrayList<Attachment>> list = new HashMap<>();
                                         for (int i = 0; i < tb_activity_student.length(); i++) {
                                             JSONObject temp = tb_activity_student.getJSONObject(i);
-                                            HashMap<Attachment, Integer> attachments = new HashMap<>();
+                                            ArrayList<Attachment> attachments = new ArrayList<>();
 
                                             int id_activity_student = temp.getInt("id_activity_student");
                                             JSONArray attachmentsArray = temp.getJSONArray("attachment");
@@ -183,174 +196,24 @@ public class FullDataClient extends HttpClient {
                                             for (int j = 0; j < attachmentsArray.length(); j++) {
                                                 JSONObject attachmentTemp = attachmentsArray.getJSONObject(i);
                                                 Attachment attachment = new Attachment();
-                                                //.. attachments
+
+                                                String tp_attachment = attachmentTemp.getString("tp_attachment");
+                                                String nm_file = attachmentTemp.getString("nm_file");
+                                                String nm_system = attachmentTemp.getString("nm_system");
+                                                int id_attachment_srv = attachmentTemp.getInt("id_attachment");
+
+                                                attachment.setTpAttachment(tp_attachment);
+                                                attachment.setNmFile(nm_file);
+                                                attachment.setNmSystem(nm_system);
+                                                attachment.setIdAttachmentSrv(id_attachment_srv);
+
+                                                attachments.add(attachment);
                                             }
+
+                                            list.put(id_activity_student, attachments);
                                         }
+                                        fullData.addAttachments(list);
                                     }
-                                }
-                            }
-
-                            if (resp.has("versionActivity")) {
-                                // GET Version Activity
-                                JSONObject objPs = resp.getJSONObject("versionActivity");
-                                JSONArray tb_version_activity = objPs.getJSONArray("tb_version_activity");
-                                // POPULATE Version Activity
-                                for (int i = 0; i < tb_version_activity.length(); i++) {
-                                    JSONObject temp = tb_version_activity.getJSONObject(i);
-                                    VersionActivity va = new VersionActivity();
-
-                                    // GET DATA FROM JSON
-                                    int id_activity_student = temp.getInt("id_activity_student");
-                                    String tx_activity = temp.getString("tx_activity");
-                                    String dt_last_access = temp.getString("dt_last_access");
-                                    String dt_submission = temp.getString("dt_submission");
-                                    String dt_verification = temp.getString("dt_verification");
-                                    int id_version_activit_srv = temp.getInt("id_version_activit_srv");
-
-                                    //POPULATE OBJECT WITH DATA
-                                    va.setId_activity_student(id_activity_student);
-                                    va.setTx_activity(tx_activity);
-                                    va.setDt_last_access(dt_last_access);
-                                    va.setDt_submission(dt_submission);
-                                    va.setDt_verification(dt_verification);
-                                    va.setId_version_activit_srv(id_version_activit_srv);
-
-                                    //ADD TO LINKEDLIST
-                                    fullData.addVersion(va);
-                                }
-                            }
-
-                            if (resp.has("Comment")) {
-                                // GET Comments
-                                JSONObject objPs = resp.getJSONObject("Comment");
-                                JSONArray tb_comment = objPs.getJSONArray("tb_comment");
-                                // POPULATE Comments
-                                for (int i = 0; i < tb_comment.length(); i++) {
-                                    JSONObject temp = tb_comment.getJSONObject(i);
-                                    Comentario c = new Comentario();
-
-                                    // GET DATA FROM JSON
-                                    int idActivityStudent = temp.getInt("id_activity_student");
-                                    int idAuthor = temp.getInt("id_author");
-                                    String txtComment = temp.getString("tx_comment");
-                                    String txtReference = temp.getString("tx_reference");
-                                    String typeComment = temp.getString("tp_comment");
-                                    int nuCommentActivity = temp.getInt("nu_comment_activity");
-                                    int idCommentSrv = temp.getInt("id_comment_srv");
-                                    String dateComment = temp.getString("dt_comment");
-                                    String dateSend = temp.getString("dt_send");
-
-                                    //POPULATE OBJECT WITH DATA
-                                    c.setIdActivityStudent(idActivityStudent);
-                                    c.setIdAuthor(idAuthor);
-                                    c.setTxtComment(txtComment);
-                                    c.setTxtReference(txtReference);
-                                    c.setTypeComment(typeComment);
-                                    c.setIdNote(nuCommentActivity);
-                                    c.setIdCommentSrv(idCommentSrv);
-                                    c.setDateComment(dateComment);
-                                    c.setDateSend(dateSend);
-
-                                    //ADD TO LINKEDLIST
-                                    fullData.addComments(c);
-                                }
-                            }
-
-                            if (resp.has("AttachComment")) {
-                                // GET AttachComment
-                                JSONObject objPs = resp.getJSONObject("AttachComment");
-                                JSONArray tb_attach_comment = objPs.getJSONArray("tb_attach_comment");
-                                // POPULATE AttachComment
-                                for (int i = 0; i < tb_attach_comment.length(); i++) {
-                                    JSONObject temp = tb_attach_comment.getJSONObject(i);
-                                    AttachmentComment ac = new AttachmentComment();
-
-                                    // GET DATA FROM JSON
-                                    int id_attachment = temp.getInt("id_attachment");
-                                    int id_comment = temp.getInt("id_comment");
-//                                    int id_attach_comment_srv = temp.getInt("id_attach_comment_srv");
-
-                                    //POPULATE OBJECT WITH DATA
-                                    ac.setId_attachment(id_attachment);
-                                    ac.setId_comment(id_comment);
-//                                    ac.setId_srv(id_attach_comment_srv);
-
-                                    //ADD TO LINKEDLIST
-                                    fullData.addAttachmentComment(ac);
-                                }
-                            }
-
-                            if (resp.has("AttachActivity")) {
-                                // GET AttachActivity
-                                JSONObject objPs = resp.getJSONObject("AttachActivity");
-                                JSONArray tb_attach_activity = objPs.getJSONArray("tb_attach_activity");
-                                // POPULATE AttachActivity
-                                for (int i = 0; i < tb_attach_activity.length(); i++) {
-                                    JSONObject temp = tb_attach_activity.getJSONObject(i);
-                                    AttachmentActivity aa = new AttachmentActivity();
-
-                                    // GET DATA FROM JSON
-                                    int id_attachment = temp.getInt("id_attachment");
-                                    int id_activity_student = temp.getInt("id_activity_student");
-//                                    int id_attach_activity_srv = temp.getInt("id_attach_activity_srv");
-
-                                    //POPULATE OBJECT WITH DATA
-                                    aa.setId_attachment(id_attachment);
-                                    aa.setId_activity_student(id_activity_student);
-//                                    aa.setId_srv(id_attach_activity_srv);
-
-                                    //ADD TO LINKEDLIST
-                                    fullData.addAttachmentActivity(aa);
-                                }
-                            }
-
-                            if (resp.has("Attachment")) {
-                                // GET Attachment
-                                JSONObject objPs = resp.getJSONObject("Attachment");
-                                JSONArray tb_attachment = objPs.getJSONArray("tb_attachment");
-                                // POPULATE Attachment
-                                for (int i = 0; i < tb_attachment.length(); i++) {
-                                    JSONObject temp = tb_attachment.getJSONObject(i);
-                                    Attachment a = new Attachment();
-
-                                    // GET DATA FROM JSON
-                                    String ds_server_path = temp.getString("ds_server_path");
-                                    String tp_attachment = temp.getString("tp_attachment");
-                                    String nm_file = temp.getString("nm_file");
-                                    int id_attachment_srv = temp.getInt("id_attachment_srv");
-
-                                    //POPULATE OBJECT WITH DATA
-                                    a.setServerPath(ds_server_path);
-                                    a.setType(tp_attachment);
-                                    a.setNameFile(nm_file);
-                                    a.setIdAttachmentSrv(id_attachment_srv);
-
-                                    //ADD TO LINKEDLIST
-                                    fullData.addAttachments(a);
-                                }
-                            }
-
-                            if (resp.has("Reference")) {
-                                // GET Reference
-                                JSONObject objPs = resp.getJSONObject("Reference");
-                                JSONArray tb_reference = objPs.getJSONArray("tb_reference");
-                                // POPULATE Reference
-                                for (int i = 0; i < tb_reference.length(); i++) {
-                                    JSONObject temp = tb_reference.getJSONObject(i);
-                                    Reference r = new Reference();
-
-                                    // GET DATA FROM JSON
-                                    int id_activity_student = temp.getInt("id_activity_student");
-                                    String ds_url = temp.getString("ds_url");
-                                    int id_reference_srv = temp.getInt("id_reference_srv");
-
-                                    //POPULATE OBJECT WITH DATA
-                                    r.setIdActStudent(id_activity_student);
-                                    r.setDsUrl(ds_url);
-                                    r.setIdRefSrv(id_reference_srv);
-
-                                    //ADD TO LINKEDLIST
-                                    fullData.addReference(r);
                                 }
                             }
                         } catch (JSONException e) {

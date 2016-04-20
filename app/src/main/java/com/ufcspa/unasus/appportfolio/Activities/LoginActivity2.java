@@ -6,6 +6,7 @@ import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
 import android.app.AlertDialog;
 import android.app.LoaderManager.LoaderCallbacks;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.CursorLoader;
 import android.content.DialogInterface;
@@ -75,6 +76,7 @@ public class LoginActivity2 extends AppCompatActivity implements LoaderCallbacks
     public static boolean isBasicDataSucessful;
     public static boolean isBasicDataSyncNotSucessful;
     LoginActivity2 l = this;
+    ProgressDialog dialog;
     /**
      * Keep track of the login task to ensure we can cancel it if requested.
      */
@@ -138,7 +140,8 @@ public class LoginActivity2 extends AppCompatActivity implements LoaderCallbacks
             @Override
             public synchronized void onClick(View view) {
                 if (isOnline()) {
-                    showProgress(true);
+//                    showProgress(true);
+                    dialog = ProgressDialog.show(LoginActivity2.this, "Baixando novos dados", "Por favor aguarde...", true);
                     final Thread myThread =new Thread(new Runnable() {
                         @Override
                         public void run() {
@@ -174,7 +177,8 @@ public class LoginActivity2 extends AppCompatActivity implements LoaderCallbacks
                                         @Override
                                         public void run() {
                                             Toast.makeText(getApplicationContext(), "Erro interno. Por favor tente novamente", Toast.LENGTH_LONG).show();
-                                            showProgress(false);
+//                                            showProgress(false);
+                                            dialog.dismiss();
                                             mEmailView.setEnabled(false);
                                             mPasswordView.setEnabled(false);
                                         }
@@ -184,7 +188,8 @@ public class LoginActivity2 extends AppCompatActivity implements LoaderCallbacks
                                 new Handler(Looper.getMainLooper()).post(new Runnable() {
                                     @Override
                                     public void run() {
-                                        showProgress(false);
+//                                        showProgress(false);
+                                        dialog.dismiss();
                                         Toast.makeText(getApplicationContext(), Singleton.getInstance().erro, Toast.LENGTH_LONG).show();
                                         findViewById(R.id.scrollView).setVisibility(View.VISIBLE);
                                         isLoginSucessful = false;
@@ -205,7 +210,8 @@ public class LoginActivity2 extends AppCompatActivity implements LoaderCallbacks
         if (extras != null) {
             if (extras.containsKey("dont_have_basic_data")) {
                 if (isOnline()) {
-                    showProgress(true);
+//                    showProgress(true);
+                    dialog = ProgressDialog.show(LoginActivity2.this, "Baixando novos dados", "Por favor aguarde...", true);
                     new Thread(new Runnable() {
                         @Override
                         public void run() {
@@ -230,7 +236,8 @@ public class LoginActivity2 extends AppCompatActivity implements LoaderCallbacks
                                     @Override
                                     public void run() {
                                         Toast.makeText(getApplicationContext(), "Erro interno. Por favor tente novamente", Toast.LENGTH_LONG).show();
-                                        showProgress(false);
+//                                        showProgress(false);
+                                        dialog.dismiss();
                                         mEmailView.setEnabled(false);
                                         mPasswordView.setEnabled(false);
                                         isLoginSucessful = true;

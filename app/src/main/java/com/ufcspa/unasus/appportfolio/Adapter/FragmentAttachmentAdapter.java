@@ -68,7 +68,7 @@ public class FragmentAttachmentAdapter extends BaseAdapter {
 
         final Attachment aux = attachments.get(position);
 
-        switch (aux.getType()) {
+        switch (aux.getTpAttachment()) {
             case "I":
                 rowView.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -80,7 +80,7 @@ public class FragmentAttachmentAdapter extends BaseAdapter {
                     }
                 });
                 components.imgAttachment.setImageResource(R.drawable.attachment_image);
-                components.descAttachment.setText(aux.getNameFile());
+                components.descAttachment.setText(aux.getNmFile());
                 break;
             case "V":
                 rowView.setOnClickListener(new View.OnClickListener() {
@@ -93,7 +93,7 @@ public class FragmentAttachmentAdapter extends BaseAdapter {
                     }
                 });
                 components.imgAttachment.setImageResource(R.drawable.attachment_video);
-                components.descAttachment.setText(aux.getNameFile());
+                components.descAttachment.setText(aux.getNmFile());
                 break;
             case "T":
                 rowView.setOnClickListener(new View.OnClickListener() {
@@ -106,7 +106,7 @@ public class FragmentAttachmentAdapter extends BaseAdapter {
                     }
                 });
                 components.imgAttachment.setImageResource(R.drawable.attachment_file);
-                components.descAttachment.setText(aux.getNameFile());
+                components.descAttachment.setText(aux.getNmFile());
                 break;
             default:
                 if (!canDelete) {

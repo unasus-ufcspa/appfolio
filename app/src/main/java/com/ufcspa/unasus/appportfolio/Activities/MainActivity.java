@@ -1,6 +1,7 @@
 package com.ufcspa.unasus.appportfolio.Activities;
 
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -24,6 +25,7 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
+import android.widget.Toast;
 
 import com.mikepenz.crossfader.Crossfader;
 import com.ufcspa.unasus.appportfolio.Activities.Fragments.FragmentAttachment;
@@ -46,6 +48,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public static boolean isFullDataSucessful;
     public static boolean isFullSyncNotSucessful;
     final GestureDetector gestureDetector = new GestureDetector(new GestureListener());
+    ProgressDialog dialog;
     private Crossfader crossFader;
     private View fragmentContainer;
     private View bigDrawer;
@@ -53,8 +56,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private Singleton singleton;
     private boolean shouldCreateDrawer;
     private View clicked;
-    private RelativeLayout progress_bar;
-
     private BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -89,7 +90,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 if (name.isEmpty()) {
                     name = "Anexo";
                 }
-                singleton.lastIdAttach = dataBaseAdapter.insertAttachment(new Attachment(0, path, "", type, name, 0));
+                singleton.lastIdAttach = dataBaseAdapter.insertAttachment(new Attachment(0, type, name, path, 0));
                 dataBaseAdapter.insertAttachActivity(singleton.lastIdAttach, singleton.idActivityStudent);
             }
         });
@@ -156,7 +157,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
              */
             changeFragment(0);
     }
-
 
     private void initMiniDrawer() {
         ImageButton portfolios = (ImageButton) miniDrawer.findViewById(R.id.btn_members);
@@ -292,11 +292,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         switch (id)
         {
             case 0:
-                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new FragmentSelectPortfolio()).addToBackStack("Frag").commit();//FragmentSelectPortfolio
+//                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new FragmentSelectPortfolio()).addToBackStack("Frag").commit();//FragmentSelectPortfolio
+                downloadFullData(-1, id);
                 break;
             case 1:
-                if(singleton.portfolioClass != null)
-                    getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new FragmentStudentActivities()).addToBackStack("Frag").commit();
+                if (singleton.portfolioClass != null) {
+//                    getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new FragmentStudentActivities()).addToBackStack("Frag").commit();
+                    downloadFullData(-1, id);
+                }
                 break;
             case 2:
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new FragmentReference()).addToBackStack("Frag").commit();
@@ -307,7 +310,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new FragmentAttachment()).addToBackStack("Frag").commit();
                 break;
             case 5:
-                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new FragmentRTEditor()).addToBackStack("Frag").commit();
+//                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new FragmentRTEditor()).addToBackStack("Frag").commit();
+                downloadFullData(singleton.idActivityStudent, id);
                 break;
             default:
                 break;
@@ -371,11 +375,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         return cm.getActiveNetworkInfo() != null && cm.getActiveNetworkInfo().isConnectedOrConnecting();
     }
 
-    public void downloadFullData(final int id_activity_student) {
+    public void downloadFullData(final int id_activity_student, final int change_fragment) {
         isFullDataSucessful = false;
         isFullSyncNotSucessful = false;
 
         if (isOnline()) {
+            dialog = ProgressDialog.show(this, "Baixando novos dados", "Por favor aguarde...", true);
             final Thread myThread = new Thread(new Runnable() {
                 @Override
                 public void run() {
@@ -390,14 +395,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                             @Override
                             public void run() {
                                 // Atualizar as notificações e o layout
-                                removeProgressBar();
+                                removeProgressBar(change_fragment);
                             }
                         });
                     } else {
                         new Handler(Looper.getMainLooper()).post(new Runnable() {
                             @Override
                             public void run() {
-                                removeProgressBar();
+                                removeProgressBar(change_fragment);
+                                Toast.makeText(getApplicationContext(), "Erro interno. Por favor tente novamente", Toast.LENGTH_LONG).show();
                             }
                         });
                     }
@@ -406,11 +412,27 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             myThread.start();
         } else {
             // Atualizar a interface
-            removeProgressBar();
+            removeProgressBar(change_fragment);
+            Toast.makeText(getApplicationContext(), "Sem conexão com a internet", Toast.LENGTH_LONG).show();
         }
     }
 
-    public void removeProgressBar() {
+    public void removeProgressBar(int change_fragment) {
+        dialog.dismiss();
+
+        switch (change_fragment) {
+            case 0:
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new FragmentSelectPortfolio()).addToBackStack("Frag").commit();//FragmentSelectPortfolio
+                break;
+            case 1:
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new FragmentStudentActivities()).addToBackStack("Frag").commit();
+                break;
+            case 5:
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new FragmentRTEditor()).addToBackStack("Frag").commit();
+                break;
+            default:
+                break;
+        }
     }
 
     private class GestureListener extends GestureDetector.SimpleOnGestureListener {

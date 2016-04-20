@@ -14,6 +14,8 @@ import com.ufcspa.unasus.appportfolio.database.DataBaseAdapter;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.LinkedList;
 
 /**
@@ -60,16 +62,12 @@ public class FullData {
         comentarios.add(comentario);
     }
 
-    public void addAttachments(Attachment attachment) {
-        anexos.add(attachment);
+    public void addCommentAttachment(Comentario comentario, Attachment attachment) {
+//        comentarios.add(comentario);
     }
 
-    public void addAttachmentActivity(AttachmentActivity attachmentActivity) {
-        anexosAtivade.add(attachmentActivity);
-    }
-
-    public void addAttachmentComment(AttachmentComment attachmentComment) {
-        anexosComentario.add(attachmentComment);
+    public void addAttachments(HashMap<Integer, ArrayList<Attachment>> list) {
+//        anexos.add(attachment);
     }
 
     public void addReference(Reference reference) {
@@ -78,34 +76,6 @@ public class FullData {
 
     public void addNotification(Notification notification) {
         notifications.add(notification);
-    }
-
-    public LinkedList<VersionActivity> getVersionActs() {
-        return versionActs;
-    }
-
-    public LinkedList<Comentario> getComentarios() {
-        return comentarios;
-    }
-
-    public LinkedList<Attachment> getAnexos() {
-        return anexos;
-    }
-
-    public LinkedList<AttachmentActivity> getAnexosAtivade() {
-        return anexosAtivade;
-    }
-
-    public LinkedList<AttachmentComment> getAnexosComentario() {
-        return anexosComentario;
-    }
-
-    public LinkedList<Reference> getReferences() {
-        return references;
-    }
-
-    public LinkedList<Notification> getNotifications() {
-        return notifications;
     }
 
     public Context getContext() {
