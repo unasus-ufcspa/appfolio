@@ -6,7 +6,10 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.net.ConnectivityManager;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
 import android.text.InputType;
@@ -32,11 +35,16 @@ import com.ufcspa.unasus.appportfolio.Model.Attachment;
 import com.ufcspa.unasus.appportfolio.Model.Note;
 import com.ufcspa.unasus.appportfolio.Model.Singleton;
 import com.ufcspa.unasus.appportfolio.R;
+import com.ufcspa.unasus.appportfolio.WebClient.FullData;
+import com.ufcspa.unasus.appportfolio.WebClient.FullDataClient;
 import com.ufcspa.unasus.appportfolio.database.DataBaseAdapter;
+
+import io.github.skyhacker2.sqliteonweb.SQLiteOnWeb;
 
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
-
+    public static boolean isFullDataSucessful;
+    public static boolean isFullSyncNotSucessful;
     final GestureDetector gestureDetector = new GestureDetector(new GestureListener());
     private Crossfader crossFader;
     private View fragmentContainer;
@@ -45,6 +53,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private Singleton singleton;
     private boolean shouldCreateDrawer;
     private View clicked;
+    private RelativeLayout progress_bar;
 
     private BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
         @Override
@@ -95,6 +104,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         setContentView(R.layout.activity_main);
         getSupportActionBar().hide();
 
+        SQLiteOnWeb.init(getApplicationContext()).start();
+
         if (savedInstanceState == null) {
             Bundle extras = getIntent().getExtras();
             if (extras == null) {
@@ -124,7 +135,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             final float scale = getResources().getDisplayMetrics().density;
             int pixelsMini = (int) (80 * scale + 0.5f);
             int pixelsBig = (int) (250 * scale + 0.5f);
-
 
             crossFader = new Crossfader()
                     .withContent(fragmentContainer)
@@ -349,6 +359,58 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         if (singleton.isFullscreen)
             if (getSupportFragmentManager().getBackStackEntryCount() > 0)
                 super.onBackPressed();
+    }
+
+    public void getFullData(int id_activity_student) {
+        FullDataClient client = new FullDataClient(this);
+        client.postJson(FullData.toJSON(singleton.device.get_id_device(), id_activity_student));
+    }
+
+    public boolean isOnline() {
+        ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        return cm.getActiveNetworkInfo() != null && cm.getActiveNetworkInfo().isConnectedOrConnecting();
+    }
+
+    public void downloadFullData(final int id_activity_student) {
+        isFullDataSucessful = false;
+        isFullSyncNotSucessful = false;
+
+        if (isOnline()) {
+            final Thread myThread = new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    getFullData(id_activity_student);
+
+                    while (!isFullDataSucessful)
+                        if (isFullSyncNotSucessful)
+                            break;
+
+                    if (!isFullSyncNotSucessful) {
+                        new Handler(Looper.getMainLooper()).post(new Runnable() {
+                            @Override
+                            public void run() {
+                                // Atualizar as notificações e o layout
+                                removeProgressBar();
+                            }
+                        });
+                    } else {
+                        new Handler(Looper.getMainLooper()).post(new Runnable() {
+                            @Override
+                            public void run() {
+                                removeProgressBar();
+                            }
+                        });
+                    }
+                }
+            });
+            myThread.start();
+        } else {
+            // Atualizar a interface
+            removeProgressBar();
+        }
+    }
+
+    public void removeProgressBar() {
     }
 
     private class GestureListener extends GestureDetector.SimpleOnGestureListener {

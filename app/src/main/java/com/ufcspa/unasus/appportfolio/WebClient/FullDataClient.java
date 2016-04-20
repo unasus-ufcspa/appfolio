@@ -9,7 +9,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
-import com.ufcspa.unasus.appportfolio.Activities.Fragments.Frag;
+import com.ufcspa.unasus.appportfolio.Activities.MainActivity;
 import com.ufcspa.unasus.appportfolio.Model.Attachment;
 import com.ufcspa.unasus.appportfolio.Model.AttachmentActivity;
 import com.ufcspa.unasus.appportfolio.Model.AttachmentComment;
@@ -22,6 +22,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.HashMap;
+
 /**
  * Created by Arthur Zettler on 18/04/2016.
  */
@@ -29,12 +31,10 @@ public class FullDataClient extends HttpClient {
     private String method = "fullDataSrvDev";
     private Context context;
     private FullData fullData;
-    private Frag fragment;
 
-    public FullDataClient(Context context, Frag fragment) {
+    public FullDataClient(Context context) {
         super(context);
         this.context = context;
-        this.fragment = fragment;
     }
 
     public void postJson(JSONObject jsonFirstRequest) {
@@ -46,7 +46,7 @@ public class FullDataClient extends HttpClient {
                 try {
                     Log.d(tag, "JSON RESPONSE: " + response.toString().replaceAll("\\{", "\n{"));
                     if (response.has("erro")) {
-                        fragment.isFullSyncNotSucessful = true;
+                        MainActivity.isFullSyncNotSucessful = true;
                         Log.e(tag, "sincronizacao de dados full falhou");
                     } else if (response.has("fullDataSrvDev_response")) {
                         Log.d(tag, "JSON POST existe Full Data response");
@@ -124,12 +124,22 @@ public class FullDataClient extends HttpClient {
                                 }
 
                                 if (data.has("reference")) {
-                                    JSONObject reference = data.getJSONObject("reference");
-                                    if (reference.has("tb_reference")) {
-                                        JSONArray tb_reference = reference.getJSONArray("tb_reference");
+                                    JSONObject references = data.getJSONObject("reference");
+                                    if (references.has("tb_reference")) {
+                                        JSONArray tb_reference = references.getJSONArray("tb_reference");
                                         for (int i = 0; i < tb_reference.length(); i++) {
                                             JSONObject temp = tb_reference.getJSONObject(i);
-                                            // ...
+                                            Reference reference = new Reference();
+
+                                            int id_activity_student = temp.getInt("id_activity_student");
+                                            int id_reference_srv = temp.getInt("id_reference");
+                                            String ds_url = temp.getString("ds_url");
+
+                                            reference.setIdActStudent(id_activity_student);
+                                            reference.setIdRefSrv(id_reference_srv);
+                                            reference.setDsUrl(ds_url);
+
+                                            fullData.addReference(reference);
                                         }
                                     }
                                 }
@@ -140,7 +150,21 @@ public class FullDataClient extends HttpClient {
                                         JSONArray tb_version_activity = version.getJSONArray("tb_version_activity");
                                         for (int i = 0; i < tb_version_activity.length(); i++) {
                                             JSONObject temp = tb_version_activity.getJSONObject(i);
-                                            // ...
+                                            VersionActivity versionActivity = new VersionActivity();
+
+                                            int id_activity_student = temp.getInt("id_activity_student");
+                                            String tx_activity = temp.getString("tx_activity");
+                                            String dt_last_access = temp.getString("dt_last_access");
+                                            String dt_submission = temp.getString("dt_submission");
+                                            String dt_verification = temp.getString("dt_verification");
+
+                                            versionActivity.setId_activity_student(id_activity_student);
+                                            versionActivity.setTx_activity(tx_activity);
+                                            versionActivity.setDt_last_access(dt_last_access);
+                                            versionActivity.setDt_submission(dt_submission);
+                                            versionActivity.setDt_verification(dt_verification);
+
+                                            fullData.addVersion(versionActivity);
                                         }
                                     }
                                 }
@@ -151,7 +175,16 @@ public class FullDataClient extends HttpClient {
                                         JSONArray tb_activity_student = activityStudent.getJSONArray("tb_activity_student");
                                         for (int i = 0; i < tb_activity_student.length(); i++) {
                                             JSONObject temp = tb_activity_student.getJSONObject(i);
-                                            // ...
+                                            HashMap<Attachment, Integer> attachments = new HashMap<>();
+
+                                            int id_activity_student = temp.getInt("id_activity_student");
+                                            JSONArray attachmentsArray = temp.getJSONArray("attachment");
+
+                                            for (int j = 0; j < attachmentsArray.length(); j++) {
+                                                JSONObject attachmentTemp = attachmentsArray.getJSONObject(i);
+                                                Attachment attachment = new Attachment();
+                                                //.. attachments
+                                            }
                                         }
                                     }
                                 }
@@ -321,17 +354,17 @@ public class FullDataClient extends HttpClient {
                                 }
                             }
                         } catch (JSONException e) {
-                            fragment.isFullSyncNotSucessful = true;
+                            MainActivity.isFullSyncNotSucessful = true;
                             e.printStackTrace();
                         } catch (Exception v) {
-                            fragment.isFullSyncNotSucessful = true;
+                            MainActivity.isFullSyncNotSucessful = true;
                             v.printStackTrace();
                         }
 
                         Log.d(tag, "Fim  da request");
                         //EXECUTE INSERTS IN SQLITE
                         fullData.insertDataIntoSQLITE();
-                        fragment.isFullDataSucessful = true;
+                        MainActivity.isFullDataSucessful = true;
                     }
                 } finally {
                 }
@@ -339,7 +372,7 @@ public class FullDataClient extends HttpClient {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError volleyError) {
-                fragment.isFullSyncNotSucessful = true;
+                MainActivity.isFullSyncNotSucessful = true;
                 Log.e(tag, "Erro  na request");
                 Log.e(tag, "erro=" + volleyError.getMessage());
                 volleyError.printStackTrace();
