@@ -11,6 +11,7 @@ import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+import android.provider.Settings;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
 import android.text.InputType;
@@ -39,7 +40,11 @@ import com.ufcspa.unasus.appportfolio.Model.Singleton;
 import com.ufcspa.unasus.appportfolio.R;
 import com.ufcspa.unasus.appportfolio.WebClient.FullData;
 import com.ufcspa.unasus.appportfolio.WebClient.FullDataClient;
+import com.ufcspa.unasus.appportfolio.WebClient.SendData;
+import com.ufcspa.unasus.appportfolio.WebClient.SendFullDataClient;
 import com.ufcspa.unasus.appportfolio.database.DataBaseAdapter;
+
+import org.json.JSONObject;
 
 import io.github.skyhacker2.sqliteonweb.SQLiteOnWeb;
 
@@ -293,10 +298,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         {
             case 0:
                 downloadFullData(0, id);
+                uploadFullData();
                 break;
             case 1:
                 if (singleton.portfolioClass != null)
                     downloadFullData(0, id);
+                    uploadFullData();
                 break;
             case 2:
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new FragmentReference()).addToBackStack("Frag").commit();
@@ -411,6 +418,23 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             // Atualizar a interface
             removeProgressBar(change_fragment);
             Toast.makeText(getApplicationContext(), "Sem conexão com a internet", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    public void uploadFullData(){
+
+        if(isOnline()) {
+            SendData data = new SendData(getApplicationContext());
+            String idDevice = Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID);
+            if(data.getSyncs()>0) {
+                JSONObject send = data.GenerateJSON(idDevice);
+                SendFullDataClient client = new SendFullDataClient(this, data);
+                //Toast.makeText(getApplicationContext(), "Dados enviados com sucesso", Toast.LENGTH_SHORT).show();
+            }else{
+                Toast.makeText(getApplicationContext(), "sem sincronizações para enviar", Toast.LENGTH_SHORT).show();
+            }
+        }else{
+            Toast.makeText(getApplicationContext(), "sem conexão para enviar syncs", Toast.LENGTH_SHORT).show();
         }
     }
 

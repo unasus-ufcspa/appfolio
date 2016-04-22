@@ -62,10 +62,9 @@ public class FragmentStudentActivities extends Frag {
         list_activities = (ListView) getView().findViewById(R.id.list_activities);
         list_activities.setAdapter(gridAdapter);
         list_activities.setOnTouchListener(new View.OnTouchListener() {
-
             @Override
             public boolean onTouch(View v, MotionEvent event) {
-
+                Log.d("tela atividades","clicou na caixa");
                 getView().findViewById(R.id.activities_list).getParent()
                         .requestDisallowInterceptTouchEvent(false);
                 return false;

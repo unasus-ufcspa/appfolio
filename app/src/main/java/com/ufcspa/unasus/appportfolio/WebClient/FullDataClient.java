@@ -45,6 +45,7 @@ public class FullDataClient extends HttpClient {
                 Log.d(tag, "Retornou do request");
                 try {
                     Log.d(tag, "JSON RESPONSE: " + response.toString().replaceAll("\\{", "\n{"));
+                    System.out.print(response.toString().replaceAll("\\{", "\n{"));
                     if (response.has("erro")) {
                         MainActivity.isFullSyncNotSucessful = true;
                         Log.e(tag, "sincronizacao de dados full falhou");

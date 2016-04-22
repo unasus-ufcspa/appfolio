@@ -26,14 +26,15 @@ public class SendFullDataClient extends HttpClient{
     private SendData sendData;
 
 
-    public SendFullDataClient(Context context) {
+    public SendFullDataClient(Context context,SendData send) {
         super(context);
         this.context=context;
+        this.sendData=send;
     }
 
-    public void postJson(JSONObject jsonFirstRequest) {
+    public void postJson(JSONObject jsonSendFullData) {
         Log.d(tag, "URL: " + URL + method);
-        JsonObjectRequest jsObjReq = new JsonObjectRequest(Request.Method.POST, URL + method, jsonFirstRequest, new Response.Listener<JSONObject>() {
+        JsonObjectRequest jsObjReq = new JsonObjectRequest(Request.Method.POST, URL + method, jsonSendFullData, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
                 Log.d(tag, "Retornou do request");
@@ -58,6 +59,7 @@ public class SendFullDataClient extends HttpClient{
                                 holder.clear();
                             }
                         }
+
 
 
                         //atualiza dados recebidos via json no sqlite

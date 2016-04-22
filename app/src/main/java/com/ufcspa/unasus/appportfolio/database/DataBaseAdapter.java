@@ -3,6 +3,7 @@ package com.ufcspa.unasus.appportfolio.database;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
+import android.database.sqlite.SQLiteConstraintException;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
@@ -111,8 +112,12 @@ public class DataBaseAdapter {
             try {
                 db.insert("tb_user", null, cv);
 
-            } catch (Exception e) {
-                Log.d(tag, "erro ao inserir tb_user:" + e.getMessage());
+            }catch (SQLiteConstraintException v){
+                Log.e(tag, "errro, usuario já existe no banco");
+                v.printStackTrace();
+            }
+            catch (Exception e) {
+                Log.e(tag, "erro ao inserir tb_user:" + e.getMessage());
                 e.printStackTrace();
             }
 

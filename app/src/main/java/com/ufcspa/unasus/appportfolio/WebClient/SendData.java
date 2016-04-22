@@ -37,14 +37,18 @@ public class SendData {
         this.context = context;
         sincronias= new ArrayList<>();
         data= DataBaseAdapter.getInstance(context);
+
     }
 
-    public void getSyncs(){
-
+    public int getSyncs(){
+        Log.d("json send full data ","obtendo lista de sincronizações");
         sincronias=data.getSyncs();
+        Log.d("json send full data ","numero de sincronias:"+sincronias.size());
+        //sincronias.size();
         dadosAgrupados= new LinkedHashMap<>();
         for (Sync s:sincronias) {
             if(dadosAgrupados.get((s.getNm_table()))== null){
+                Log.d("json send full data ","encontrou tabela a ser sincronizada");
                 LinkedList l= new LinkedList();
                 dadosAgrupados.put(s.getNm_table(),l);
             }
@@ -52,10 +56,12 @@ public class SendData {
                     l.add(s.getCo_id_table());
             dadosAgrupados.put(s.getNm_table(),l);
         }
+        return sincronias.size();
     }
 
     public void getDataFromTables(){
-       // String tbComm="tb_comment";
+        Log.d("json send full data ","obtendo dados das tabelas a serem sincronizadas ");
+        // String tbComm="tb_comment";
         String tbVers="tb_version_activity";
       if(dadosAgrupados.get(tbComm)!=null){
           comentarios=(LinkedList)data.getCommentsByIDs(dadosAgrupados.get(tbComm));
@@ -71,13 +77,16 @@ public class SendData {
         // insert data by json response sendfulldata
 
         if(dadosResponse.get(tbComm)!=null){
+            Log.d("json send full data ","atualizando tabela "+tbComm+"...");
             data.updateCommentBySendFullData(dadosResponse.get(tbComm));
+            Log.d("json send full data ", "conseguiu atualizar com sucesso id server");
+
         }
     }
 
 
 
-    public JSONObject GenerateJSON(int idDevice){
+    public JSONObject GenerateJSON(String idDevice){
         getSyncs();// obtem lista de sincronizações
         getDataFromTables(); // obtem listas das tabelas a serem enviadas
 
@@ -93,33 +102,34 @@ public class SendData {
         try {
 
             // mount JSON comment
-            for (Comentario c: comentarios) {
-                jsonComment.put("id_comment",c.getIdComment());
-                jsonComment.put("id_activity_student",c.getIdActivityStudent());
-                jsonComment.put("id_author",c.getIdAuthor());
-                jsonComment.put("tx_comment",c.getTxtComment());
-                jsonComment.put("tx_reference",c.getTxtReference());
-                jsonComment.put("tp_comment",c.getTypeComment());
-                jsonComment.put("dt_comment",c.getDateComment());
-                jsonComment.put("nu_comment_activity",c.getIdNote());
-                jsonComments.put(jsonComment);
+            if(comentarios!=null) {
+                for (Comentario c : comentarios) {
+                    jsonComment.put("id_comment", c.getIdComment());
+                    jsonComment.put("id_activity_student", c.getIdActivityStudent());
+                    jsonComment.put("id_author", c.getIdAuthor());
+                    jsonComment.put("tx_comment", c.getTxtComment());
+                    jsonComment.put("tx_reference", c.getTxtReference());
+                    jsonComment.put("tp_comment", c.getTypeComment());
+                    jsonComment.put("dt_comment", c.getDateComment());
+                    jsonComment.put("nu_comment_activity", c.getIdNote());
+                    jsonComments.put(jsonComment);
+                }
             }
 
             //mount device
             device.put("id_device",idDevice);
 
 
-
             //mount pseudo final
             jsonPseudoFinal.put("device",device);
             jsonPseudoFinal.put("comment",jsonComments);
 
-            jsonFinal.put("fullDataDevSrv_request",jsonPseudoFinal);
+            jsonFinal.put("fullDataDevSrv_request", jsonPseudoFinal);
 
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        Log.d("json send full data ",jsonFinal.toString());
+        Log.d("json send full data ",jsonFinal.toString().replaceAll("\\{", "\n{"));
         return jsonFinal;
     }
 

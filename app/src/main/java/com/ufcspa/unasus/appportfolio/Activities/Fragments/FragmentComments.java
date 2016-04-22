@@ -352,16 +352,22 @@ public class FragmentComments extends Frag {
         } catch (Exception e) {
             Log.e("Erro:", "" + e.getMessage());
         }
+        String idDevice = Settings.Secure.getString(getActivity().getContentResolver(), Settings.Secure.ANDROID_ID);
+        if(isOnline()) {
+            Log.d("Banco:", c.toJSON().toString());
+            try {
+                CommentClient client = new CommentClient(getActivity().getApplicationContext(), c);
+                //System.out.println(c.toJSON().toString());
 
-        Log.d("Banco:", c.toJSON().toString());
-        try{
-            CommentClient client = new CommentClient(getActivity().getApplicationContext(),c);
-            //System.out.println(c.toJSON().toString());
-            String idDevice= Settings.Secure.getString(getActivity().getContentResolver(), Settings.Secure.ANDROID_ID);
-            Sync sync = new Sync(idDevice,"tb_comment",42);
-            client.postJson(c.toJSON(),sync.toJSON());
-        } catch (Exception e){
-            Log.e("JSON act", "" + e.getMessage());
+                Sync sync = new Sync(idDevice, "tb_comment", 42);
+                client.postJson(c.toJSON(), sync.toJSON());
+            } catch (Exception e) {
+                Log.e("JSON act", "" + e.getMessage());
+            }
+        }else{
+            // add in sync queue
+            Sync sync = new Sync(idDevice,"tb_comment",lastID);
+            DataBaseAdapter.getInstance(getContext()).insertIntoTBSync(sync);
         }
 
     }
