@@ -1,0 +1,87 @@
+package com.ufcspa.unasus.appportfolio.WebClient;
+
+import android.content.Context;
+import android.util.Log;
+
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
+import com.ufcspa.unasus.appportfolio.Model.Comentario;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.LinkedList;
+
+/**
+ * Created by icaromsc on 22/04/2016.
+ */
+public class SendFullDataClient extends HttpClient{
+    private String method = "fullDataDevSrv";
+    private Context context;
+    private SendData sendData;
+
+
+    public SendFullDataClient(Context context) {
+        super(context);
+        this.context=context;
+    }
+
+    public void postJson(JSONObject jsonFirstRequest) {
+        Log.d(tag, "URL: " + URL + method);
+        JsonObjectRequest jsObjReq = new JsonObjectRequest(Request.Method.POST, URL + method, jsonFirstRequest, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                Log.d(tag, "Retornou do request");
+                try {
+                    Log.d(tag, "JSON RESPONSE: " + response.toString().replaceAll("\\{", "\n{"));
+                    if (response.has("erro")) {
+                        Log.e(tag, "sincronizacao de dados full falhou");
+                    } else if (response.has("fullDataDevSrv_response")) {
+                        Log.d(tag, "JSON POST existe Send Full Data response");
+                        JSONObject jResp = new JSONObject();
+                        JSONObject comment = jResp.getJSONObject("comment");
+                        HolderIDS holder = new HolderIDS();
+                        if (comment.has("tb_comment")) {
+                            JSONArray tb_comment = comment.getJSONArray("tb_comment");
+                            for (int i = 0; i < tb_comment.length(); i++) {
+                                JSONObject temp = tb_comment.getJSONObject(i);
+                                int id_comment = temp.getInt("id_comment");
+                                int id_comment_srv = temp.getInt("id_comment_srv");
+                                holder.id=id_comment;
+                                holder.idSrv=id_comment_srv;
+                                sendData.dadosResponse.put("tb_comment",holder);
+                                holder.clear();
+                            }
+                        }
+
+
+                        //atualiza dados recebidos via json no sqlite
+                        sendData.insertDataOnResponse();
+                    }
+                } catch (Exception v) {
+                    //MainActivity.isFullSyncNotSucessful = true;
+                    v.printStackTrace();
+                }finally {
+                    Log.d(tag, "Fim  da request");
+                    //EXECUTE INSERTS IN SQLITE
+                    //MainActivity.isFullDataSucessful = true;
+                }
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError volleyError) {
+                //MainActivity.isFullSyncNotSucessful = true;
+                Log.e(tag, "Erro  na request");
+                Log.e(tag, "erro=" + volleyError.getMessage());
+                volleyError.printStackTrace();
+            }
+        });
+        RequestQueue queue = Volley.newRequestQueue(context);
+        queue.add(jsObjReq);
+    }
+}

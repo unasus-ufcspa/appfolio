@@ -20,6 +20,7 @@ import com.ufcspa.unasus.appportfolio.Model.Sync;
 import com.ufcspa.unasus.appportfolio.Model.Team;
 import com.ufcspa.unasus.appportfolio.Model.User;
 import com.ufcspa.unasus.appportfolio.Model.VersionActivity;
+import com.ufcspa.unasus.appportfolio.WebClient.HolderIDS;
 
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -1475,5 +1476,106 @@ public class DataBaseAdapter {
 
         }
     }
+
+
+
+
+    /*
+        ************************* CRUD FULL DATA SEND ***************************
+    */
+
+    public List<Comentario> getCommentsByIDs(LinkedList<Integer> ids) {
+        StringBuilder sb = new StringBuilder("select * from tb_comment where id_comment in ( ");
+        for (int id :ids){
+            if(id==ids.getLast()){
+                sb.append(""+id+" );");
+                break;
+            }else{
+                sb.append(""+id+" , ");
+            }
+        }
+        Log.d(tag+" get comments by ids"," query:"+sb.toString());
+        String query = sb.toString();
+        Cursor c = db.rawQuery(query, null);
+        LinkedList lista = new LinkedList<Comentario>();
+        if (c.moveToFirst()) {
+            do {
+                c.moveToFirst();
+                Comentario comm = new Comentario();
+                comm.setIdComment(c.getInt(0));
+                comm.setIdActivityStudent(c.getInt(1));
+                comm.setIdAuthor(c.getInt(2));
+                comm.setTxtComment(c.getString(3));
+                comm.setTxtReference(c.getString(4));
+                comm.setTypeComment(c.getString(5));
+                comm.setDateComment(c.getString(6));
+                lista.add(comm);
+                c.close();
+            } while (c.moveToNext());
+        } else {
+            Log.d(tag, "Nao retornou nada na consulta");
+        }
+        return lista;
+    }
+
+
+    //nao finalizado ainda
+    public List<VersionActivity> getVersionActivitiesByIDs(LinkedList<Integer> ids) {
+        StringBuilder sb = new StringBuilder("select * from tb_version_activity where id_comment in ( ");
+        for (int id :ids){
+            if(id==ids.getLast()){
+                sb.append(""+id+" );");
+                break;
+            }else{
+                sb.append(""+id+" , ");
+            }
+        }
+        Log.d(tag+" get comments by ids"," query:"+sb.toString());
+        String query = sb.toString();
+        Cursor c = db.rawQuery(query, null);
+        LinkedList lista = new LinkedList<Comentario>();
+        if (c.moveToFirst()) {
+            do {
+                c.moveToFirst();
+                Comentario comm = new Comentario();
+                comm.setIdComment(c.getInt(0));
+                comm.setIdActivityStudent(c.getInt(1));
+                comm.setIdAuthor(c.getInt(2));
+                comm.setTxtComment(c.getString(3));
+                comm.setTxtReference(c.getString(4));
+                comm.setTypeComment(c.getString(5));
+                comm.setDateComment(c.getString(6));
+                lista.add(comm);
+                c.close();
+            } while (c.moveToNext());
+        } else {
+            Log.d(tag, "Nao retornou nada na consulta");
+        }
+        return lista;
+    }
+
+    public void updateCommentBySendFullData(HolderIDS ids) {
+        ContentValues cv = new ContentValues();
+        cv.put("id_comment_srv", ids.getIdSrv());
+        try {
+            db.update("tb_comment", cv, "id_comment=?", new String[]{"" + ids.getId()});
+        } catch (Exception e) {
+            Log.d(tag, e.getMessage());
+        }
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 }
