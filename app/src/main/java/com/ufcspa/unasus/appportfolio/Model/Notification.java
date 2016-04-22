@@ -9,7 +9,6 @@ public class Notification {
     private int id_destination;
     private int id_activity_student;
     private String nm_table;
-    private int co_id_table;
     private int co_id_table_srv;
     private String dt_notice;
     private String dt_read;
@@ -55,14 +54,6 @@ public class Notification {
 
     public void setNm_table(String nm_table) {
         this.nm_table = nm_table;
-    }
-
-    public int getCo_id_table() {
-        return co_id_table;
-    }
-
-    public void setCo_id_table(int co_id_table) {
-        this.co_id_table = co_id_table;
     }
 
     public int getCo_id_table_srv() {

@@ -14,6 +14,7 @@ import com.ufcspa.unasus.appportfolio.Model.Attachment;
 import com.ufcspa.unasus.appportfolio.Model.Comentario;
 import com.ufcspa.unasus.appportfolio.Model.Notification;
 import com.ufcspa.unasus.appportfolio.Model.Reference;
+import com.ufcspa.unasus.appportfolio.Model.Tuple;
 import com.ufcspa.unasus.appportfolio.Model.VersionActivity;
 
 import org.json.JSONArray;
@@ -68,19 +69,17 @@ public class FullDataClient extends HttpClient {
                                         int id_destination = temp.getInt("id_destination");
                                         int id_activity_student = temp.getInt("id_activity_student");
                                         String nm_table = temp.getString("nm_table");
-                                        int co_id_table = temp.getInt("co_id_table");
                                         int co_id_table_srv = temp.getInt("co_id_table_srv");
                                         String dt_notice = temp.getString("dt_notice");
-                                        String dt_read = temp.getString("dt_read");
+//                                        String dt_read = temp.getString("dt_read");
 
                                         notification.setId_author(id_author);
                                         notification.setId_destination(id_destination);
                                         notification.setId_activity_student(id_activity_student);
                                         notification.setNm_table(nm_table);
-                                        notification.setCo_id_table(co_id_table);
                                         notification.setCo_id_table_srv(co_id_table_srv);
                                         notification.setDt_notice(dt_notice);
-                                        notification.setDt_read(dt_read);
+//                                        notification.setDt_read(dt_read);
 
                                         fullData.addNotification(notification);
                                     }
@@ -103,7 +102,10 @@ public class FullDataClient extends HttpClient {
                                             String tx_reference = temp.getString("tx_reference");
                                             String tp_comment = temp.getString("tp_comment");
                                             String dt_comment = temp.getString("dt_comment");
-                                            int nu_comment_activity = temp.getInt("nu_comment_activity");
+                                            int nu_comment_activity = -1;
+                                            if (!temp.isNull("nu_comment_activity"))
+                                                nu_comment_activity = temp.getInt("nu_comment_activity");
+                                            int id_comment_srv = temp.getInt("id_comment");
 
                                             comentario.setIdActivityStudent(id_activity_student);
                                             comentario.setIdAuthor(id_author);
@@ -112,8 +114,14 @@ public class FullDataClient extends HttpClient {
                                             comentario.setTypeComment(tp_comment);
                                             comentario.setDateComment(dt_comment);
                                             comentario.setIdNote(nu_comment_activity);
+                                            comentario.setIdCommentSrv(id_comment_srv);
 
-                                            JSONObject attachments = temp.getJSONObject("attachment");
+                                            JSONObject attachments = new JSONObject();
+                                            try {
+                                                attachments = temp.getJSONObject("attachment");
+                                            } catch (Exception e) {
+                                            }
+
                                             if (attachments.has("id_attachment")) {
                                                 Attachment attachment = new Attachment();
 
@@ -127,7 +135,7 @@ public class FullDataClient extends HttpClient {
                                                 attachment.setNmSystem(nm_system);
                                                 attachment.setIdAttachmentSrv(id_attachment_srv);
 
-                                                fullData.addCommentAttachment(comentario, attachment);
+                                                fullData.addCommentAttachment(new Tuple<Comentario, Attachment>(comentario, attachment));
                                             } else {
                                                 fullData.addComments(comentario);
                                             }
@@ -156,8 +164,8 @@ public class FullDataClient extends HttpClient {
                                     }
                                 }
 
-                                if (data.has("version")) {
-                                    JSONObject version = data.getJSONObject("version");
+                                if (data.has("version_activity")) {
+                                    JSONObject version = data.getJSONObject("version_activity");
                                     if (version.has("tb_version_activity")) {
                                         JSONArray tb_version_activity = version.getJSONArray("tb_version_activity");
                                         for (int i = 0; i < tb_version_activity.length(); i++) {
@@ -169,12 +177,14 @@ public class FullDataClient extends HttpClient {
                                             String dt_last_access = temp.getString("dt_last_access");
                                             String dt_submission = temp.getString("dt_submission");
                                             String dt_verification = temp.getString("dt_verification");
+                                            int id_version_activity_srv = temp.getInt("id_version_activity");
 
                                             versionActivity.setId_activity_student(id_activity_student);
                                             versionActivity.setTx_activity(tx_activity);
                                             versionActivity.setDt_last_access(dt_last_access);
                                             versionActivity.setDt_submission(dt_submission);
                                             versionActivity.setDt_verification(dt_verification);
+                                            versionActivity.setId_version_activit_srv(id_version_activity_srv);
 
                                             fullData.addVersion(versionActivity);
                                         }

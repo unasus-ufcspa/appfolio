@@ -10,6 +10,11 @@ public class AttachmentActivity {
     private int id_srv;
     private String file;
 
+    public AttachmentActivity(int id_activity_student, int id_attachment) {
+        this.id_activity_student = id_activity_student;
+        this.id_attachment = id_attachment;
+    }
+
     public String getFile() {
         return file;
     }

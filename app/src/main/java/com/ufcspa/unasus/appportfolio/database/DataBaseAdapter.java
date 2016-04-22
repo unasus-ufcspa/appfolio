@@ -9,7 +9,6 @@ import android.util.Log;
 import com.ufcspa.unasus.appportfolio.Model.Activity;
 import com.ufcspa.unasus.appportfolio.Model.ActivityStudent;
 import com.ufcspa.unasus.appportfolio.Model.Attachment;
-import com.ufcspa.unasus.appportfolio.Model.AttachmentActivity;
 import com.ufcspa.unasus.appportfolio.Model.AttachmentComment;
 import com.ufcspa.unasus.appportfolio.Model.Comentario;
 import com.ufcspa.unasus.appportfolio.Model.Device;
@@ -106,8 +105,8 @@ public class DataBaseAdapter {
             cv.put("nm_user", u.getNm_user());
             cv.put("id_user", u.getIdUser());
             cv.put("nu_identification", u.getNu_identification());
-//        cv.put("ds_email", u.getEmail());
-//        cv.put("nu_cellphone", u.getCellphone());
+            cv.put("ds_email", u.getEmail());
+            cv.put("nu_cellphone", u.getCellphone());
             try {
                 db.insert("tb_user", null, cv);
 
@@ -1406,12 +1405,10 @@ public class DataBaseAdapter {
         }
     }
 
-    public void insertAttachmentActivity(LinkedList<AttachmentActivity> anexosAtivade) {
-        for (AttachmentActivity aa : anexosAtivade) {
+    public void insertAttachmentActivity(int id_activity_student, int id_attachment) {
             ContentValues cv = new ContentValues();
-            cv.put("id_attachment", aa.getId_attachment());
-            cv.put("id_activity_student", aa.getId_activity_student());
-//            cv.put("id_attach_activity_srv", aa.getId_srv());
+        cv.put("id_attachment", id_attachment);
+        cv.put("id_activity_student", id_activity_student);
 
             try {
                 db.insert("tb_attach_activity", null, cv);
@@ -1420,7 +1417,6 @@ public class DataBaseAdapter {
                 Log.d(tag, "erro ao inserir na tb_attach_activity:" + e.getMessage());
                 e.printStackTrace();
             }
-        }
     }
 
     public void insertAttachmentComment(LinkedList<AttachmentComment> anexosComentario) {
@@ -1465,7 +1461,6 @@ public class DataBaseAdapter {
             cv.put("id_destination", n.getId_destination());
             cv.put("id_activity_student", n.getId_activity_student());
             cv.put("nm_table", n.getNm_table());
-            cv.put("co_id_table", n.getCo_id_table());
             cv.put("co_id_table_srv", n.getCo_id_table_srv());
             cv.put("dt_notice", n.getDt_notice());
             cv.put("dt_read", n.getDt_read());

@@ -43,7 +43,6 @@ public class FragmentStudentActivities extends Frag {
     public void init() {
         singleton = Singleton.getInstance();
         source = DataBaseAdapter.getInstance(getActivity());
-        //        downloadFullData(-1);
 
         try {
 
@@ -72,8 +71,5 @@ public class FragmentStudentActivities extends Frag {
                 return false;
             }
         });
-    }
-
-    public void removeProgressBar() {
     }
 }

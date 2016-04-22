@@ -260,8 +260,6 @@ public class FragmentComments extends Frag {
         edtMessage.setText("");
     }
 
-
-
     /**
      *  MÉTODOS PARA RECUPERAR OBJETO COMENTARIO DA VIEW
      *

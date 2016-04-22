@@ -13,6 +13,7 @@ import com.ufcspa.unasus.appportfolio.Model.Singleton;
 import com.ufcspa.unasus.appportfolio.R;
 import com.ufcspa.unasus.appportfolio.database.DataBaseAdapter;
 
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -49,6 +50,8 @@ public class FragmentSelectPortfolio extends Frag {
         } catch (Exception e) {
             Log.wtf("ERRO", e.getMessage());
         }
+
+        Collections.sort(portclasses);
 
         SelectPortfolioClassAdapter gridAdapter = new SelectPortfolioClassAdapter(getActivity(), portclasses);
         grid_classes = (GridView) getView().findViewById(R.id.grid_classes);

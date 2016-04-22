@@ -3,7 +3,7 @@ package com.ufcspa.unasus.appportfolio.Model;
 /**
  * Created by Desenvolvimento on 17/11/2015.
  */
-public class PortfolioClass {
+public class PortfolioClass implements Comparable<PortfolioClass> {
     private int idPortClass;
     private int idPortfolioStudent;
     private String classCode;
@@ -27,9 +27,6 @@ public class PortfolioClass {
         this.studentName = studentName;
         this.portfolioTitle = portfolioTitle;
     }
-
-
-
 
     public int getIdPortfolioStudent() {
         return idPortfolioStudent;
@@ -88,5 +85,23 @@ public class PortfolioClass {
                 ", portfolioTitle='" + portfolioTitle + '\'' +
                 ", perfil='" + perfil + '\'' +
                 '}';
+    }
+
+    @Override
+    public int compareTo(PortfolioClass another) {
+        int thisClassCode;
+        int anotherClassCode;
+
+        try {
+            thisClassCode = Integer.valueOf(this.classCode.substring(1));
+            anotherClassCode = Integer.valueOf(another.getClassCode().substring(1));
+        } catch (Exception e) {
+            return 0;
+        }
+
+        if (thisClassCode < anotherClassCode) return -1;
+        if (thisClassCode > anotherClassCode) return 1;
+
+        return 0;
     }
 }

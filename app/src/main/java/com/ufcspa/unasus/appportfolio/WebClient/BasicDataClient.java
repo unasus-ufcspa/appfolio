@@ -296,10 +296,10 @@ public class BasicDataClient extends HttpClient {
                                 }
                             }
 
-                            if (resp.has("students")) {
+                            if (resp.has("users")) {
                                 // GET OBJECT
                                 Log.d(tag, "recebendo user via json");
-                                JSONObject objPs = resp.getJSONObject("students");
+                                JSONObject objPs = resp.getJSONObject("users");
                                 JSONArray tb = objPs.getJSONArray("tb_user");
                                 // POPULATE OBJECT
                                 for (int i = 0; i < tb.length(); i++) {

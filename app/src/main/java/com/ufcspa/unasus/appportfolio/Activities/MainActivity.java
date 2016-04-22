@@ -292,11 +292,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         switch (id)
         {
             case 0:
-                downloadFullData(-1, id);
+                downloadFullData(0, id);
                 break;
             case 1:
                 if (singleton.portfolioClass != null)
-                    downloadFullData(-1, id);
+                    downloadFullData(0, id);
                 break;
             case 2:
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new FragmentReference()).addToBackStack("Frag").commit();
@@ -392,7 +392,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                             public void run() {
                                 // Atualizar as notificações e o layout
                                 removeProgressBar(change_fragment);
-                                Toast.makeText(getApplicationContext(), "Nada foi atualizado", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(getApplicationContext(), "Novos dados baixados com sucesso", Toast.LENGTH_SHORT).show();
                             }
                         });
                     } else {
