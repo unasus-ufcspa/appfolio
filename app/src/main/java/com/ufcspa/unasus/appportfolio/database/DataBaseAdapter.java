@@ -1123,7 +1123,7 @@ public class DataBaseAdapter {
         cv.put("id_device", sync.getId_device());
         cv.put("nm_table", sync.getNm_table());
         cv.put("co_id_table", sync.getCo_id_table());
-        cv.put("dt_sync", sync.getDt_sync());
+        //cv.put("dt_send", sync.getDt_sync());
         try {
             db.insert("tb_sync", null, cv);
         } catch (Exception e) {
@@ -1137,7 +1137,7 @@ public class DataBaseAdapter {
         Cursor c = db.rawQuery(query, null);
         if (c.moveToFirst()) {
             do {
-                Sync s = new Sync(c.getInt(0), c.getString(1), c.getInt(2), c.getString(3), c.getString(4));
+                Sync s = new Sync(c.getInt(0), c.getString(1), c.getInt(2), c.getString(3));
                 syncs.add(s);
             } while (c.moveToNext());
         } else {
