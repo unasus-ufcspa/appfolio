@@ -27,6 +27,7 @@ public class SendData {
     private LinkedList<Comentario> comentarios;
     private DataBaseAdapter data;
     private String tbComm="tb_comment";
+    private String tbVers="tb_version_activity";
     //ids to response
     //-2 is default value
     private int id=-2;
@@ -62,7 +63,7 @@ public class SendData {
     public void getDataFromTables(){
         Log.d("json send full data ","obtendo dados das tabelas a serem sincronizadas ");
         // String tbComm="tb_comment";
-        String tbVers="tb_version_activity";
+
       if(dadosAgrupados.get(tbComm)!=null){
           comentarios=(LinkedList)data.getCommentsByIDs(dadosAgrupados.get(tbComm));
       }
