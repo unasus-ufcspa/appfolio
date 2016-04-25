@@ -52,7 +52,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
-import io.github.skyhacker2.sqliteonweb.SQLiteOnWeb;
+//import io.github.skyhacker2.sqliteonweb.SQLiteOnWeb;
 
 import static android.Manifest.permission.READ_CONTACTS;
 
@@ -98,7 +98,7 @@ public class LoginActivity2 extends AppCompatActivity implements LoaderCallbacks
         getSupportActionBar().hide();
 
         bd = DataBaseAdapter.getInstance(this);
-        SQLiteOnWeb.init(this).start();
+        //SQLiteOnWeb.init(this).start();
 
         isBasicDataSucessful = false;
         isBasicDataSyncNotSucessful = false;
@@ -262,7 +262,7 @@ public class LoginActivity2 extends AppCompatActivity implements LoaderCallbacks
         if (isOnline()) {
             BasicDataClient client = new BasicDataClient(getBaseContext());
             JSONObject jsonObject = new JSONObject();
-            client.postJson(BasicData.toJSON(Singleton.getInstance().user.getIdUser()));// mandando id
+            client.postJson(BasicData.toJSON(Singleton.getInstance().user.getIdUser(), Singleton.getInstance().device.get_id_device()));// mandando id
         } else {
             new Handler(Looper.getMainLooper()).post(new Runnable() {
                 @Override

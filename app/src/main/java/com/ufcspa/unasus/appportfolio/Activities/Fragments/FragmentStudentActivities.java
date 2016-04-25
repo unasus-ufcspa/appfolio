@@ -64,7 +64,7 @@ public class FragmentStudentActivities extends Frag {
         list_activities.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
-                Log.d("tela atividades","clicou na caixa");
+                //Log.d("tela atividades","clicou na caixa");
                 getView().findViewById(R.id.activities_list).getParent()
                         .requestDisallowInterceptTouchEvent(false);
                 return false;
