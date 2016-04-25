@@ -167,6 +167,7 @@ public class LoginActivity2 extends AppCompatActivity implements LoaderCallbacks
                                     new Handler(Looper.getMainLooper()).post(new Runnable() {
                                         @Override
                                         public void run() {
+                                            dialog.dismiss();
                                             Log.d("tela login", "terminou conexão");
                                             startActivity(new Intent(getApplicationContext(), MainActivity.class));
                                             finish();
@@ -226,6 +227,7 @@ public class LoginActivity2 extends AppCompatActivity implements LoaderCallbacks
                                 new Handler(Looper.getMainLooper()).post(new Runnable() {
                                     @Override
                                     public void run() {
+                                        dialog.dismiss();
                                         Log.d("tela login", "terminou conexão");
                                         startActivity(new Intent(getApplicationContext(), MainActivity.class));
                                         finish();

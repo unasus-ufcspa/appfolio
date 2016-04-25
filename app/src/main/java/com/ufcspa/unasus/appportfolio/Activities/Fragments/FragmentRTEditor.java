@@ -140,7 +140,7 @@ public class FragmentRTEditor extends Frag {
      *
      * */
     public void loadLastText() {
-        acStudent = source.listActivityStudent(singleton.idActivityStudent);
+        acStudent = source.listLastVersionActivityStudent(singleton.idActivityStudent);
         if (singleton.firsttime) {
             mRTMessageField.setRichTextEditing(true, acStudent.getTxtActivity());
             singleton.firsttime = false;

@@ -537,7 +537,7 @@ public class DataBaseAdapter {
         //sql+=" ORDER BY dt_comment ASC;";
         stBuild.append(" ORDER BY dt_comment ASC;");
         sql = stBuild.toString();
-        Log.e(tag, "sql listComments:" + sql);
+        //Log.e(tag, "sql listComments:" + sql);
         Cursor c = db.rawQuery(sql, null);
         Comentario cmm;
         if (c.moveToFirst()) {
@@ -570,7 +570,7 @@ public class DataBaseAdapter {
     public List<Integer> listSpecificComments(int idActStu) {
         ArrayList<Integer> comentarios = new ArrayList<Integer>();
         String sql = "SELECT DISTINCT nu_comment_activity from tb_comment WHERE id_activity_student =" + idActStu + " AND tp_comment='O'";
-        Log.e(tag, "sql listComments:" + sql);
+        //Log.e(tag, "sql listComments:" + sql);
         Cursor c = db.rawQuery(sql, null);
         Integer id;
         if (c.moveToFirst()) {
@@ -671,16 +671,16 @@ public class DataBaseAdapter {
         cv.put("tx_activity", activityStudent.getTxtActivity());
         cv.put("dt_last_access", activityStudent.getDtLastAcess());
         try {
-            db.update("tb_activity_student", cv, "id_activity_student=?", new String[]{String.valueOf(activityStudent.getIdActivityStudent())});
+            db.update("tb_version_activity", cv, "id_activity_student=?", new String[]{String.valueOf(activityStudent.getIdActivityStudent())});
             Log.d(tag, "conseguiu salvar alteração da atividade");
         } catch (Exception e) {
             Log.e(tag, "erro ao atualizar acStudent:" + e.getMessage());
         }
     }
 
-    public ActivityStudent listActivityStudent(int idActivityStudent) {
+    public ActivityStudent listLastVersionActivityStudent(int idActivityStudent) {
         ActivityStudent acStudent = new ActivityStudent();
-        String query = "select tx_activity from tb_activity_student WHERE id_activity_student = " + idActivityStudent + ";";
+        String query = "select tx_activity from tb_version_activity WHERE id_activity_student = " + idActivityStudent + ";";
         Cursor c = null;
         Log.d(tag, "query lista act Stu:" + query);
         try {
@@ -1430,7 +1430,6 @@ public class DataBaseAdapter {
             ContentValues cv = new ContentValues();
             cv.put("id_attachment", ac.getId_attachment());
             cv.put("id_comment", ac.getId_comment());
-//            cv.put("id_attach_comment_srv", ac.getId_srv());
 
             try {
                 db.insert("tb_attach_comment", null, cv);

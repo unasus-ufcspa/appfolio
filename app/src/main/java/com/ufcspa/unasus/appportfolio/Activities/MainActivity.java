@@ -422,7 +422,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     public void uploadFullData(){
-
         if(isOnline()) {
             SendData data = new SendData(getApplicationContext());
             String idDevice = Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID);
@@ -431,15 +430,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 SendFullDataClient client = new SendFullDataClient(this, data);
                 //Toast.makeText(getApplicationContext(), "Dados enviados com sucesso", Toast.LENGTH_SHORT).show();
             }else{
-                Toast.makeText(getApplicationContext(), "sem sincronizações para enviar", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), "Sem sincronizações para enviar", Toast.LENGTH_SHORT).show();
             }
         }else{
-            Toast.makeText(getApplicationContext(), "sem conexão para enviar syncs", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getApplicationContext(), "Sem conexão para enviar sincronizações", Toast.LENGTH_SHORT).show();
         }
     }
 
     public void removeProgressBar(int change_fragment) {
-        dialog.dismiss();
+        if(dialog != null)
+            dialog.dismiss();
 
         switch (change_fragment) {
             case 0:
