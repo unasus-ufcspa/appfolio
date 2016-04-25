@@ -443,10 +443,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         switch (change_fragment) {
             case 0:
-                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new FragmentSelectPortfolio()).addToBackStack("Frag").commit();//FragmentSelectPortfolio
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new FragmentSelectPortfolio()).addToBackStack("Frag").commitAllowingStateLoss();//FragmentSelectPortfolio
                 break;
             case 1:
-                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new FragmentStudentActivities()).addToBackStack("Frag").commit();
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new FragmentStudentActivities()).addToBackStack("Frag").commitAllowingStateLoss();
                 break;
             case 5:
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new FragmentRTEditor()).addToBackStack("Frag").commit();

@@ -48,11 +48,12 @@ public class BasicData {
         this.context=c;
     }
 
-    public static JSONObject toJSON(int idUser) {
+    public static JSONObject toJSON(int idUser, String idDevice) {
         JSONObject json = new JSONObject();
         JSONObject basic = new JSONObject();
         try {
             basic.put("id_user", idUser);
+            basic.put("id_device", idDevice);
             json.put("basicData_request", basic);
         } catch (JSONException e) {
             e.printStackTrace();
