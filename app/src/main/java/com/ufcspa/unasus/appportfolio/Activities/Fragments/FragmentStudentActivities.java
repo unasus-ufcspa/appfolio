@@ -47,6 +47,7 @@ public class FragmentStudentActivities extends Frag {
         try {
 
             list = source.selectListActivitiesAndStudents(singleton.portfolioClass.getIdPortClass(), singleton.portfolioClass.getPerfil(), singleton.user.getIdUser());
+            Log.e("BANCO", "atividades (SelectActivitiesAactivity):"+ list.toString());
         } catch (Exception e) {
             Log.e("BANCO", "falha em pegar atividades (SelectActivitiesAactivity):" + e.getMessage());
         }
@@ -64,7 +65,7 @@ public class FragmentStudentActivities extends Frag {
         list_activities.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
-                Log.d("tela atividades","clicou na caixa");
+                //Log.d("tela atividades","clicou na caixa");
                 getView().findViewById(R.id.activities_list).getParent()
                         .requestDisallowInterceptTouchEvent(false);
                 return false;
