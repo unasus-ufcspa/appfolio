@@ -428,6 +428,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             if(data.getSyncs()>0) {
                 JSONObject send = data.GenerateJSON(idDevice);
                 SendFullDataClient client = new SendFullDataClient(this, data);
+                client.postJson(send);
                 //Toast.makeText(getApplicationContext(), "Dados enviados com sucesso", Toast.LENGTH_SHORT).show();
             }else{
                 Toast.makeText(getApplicationContext(), "Sem sincronizações para enviar", Toast.LENGTH_SHORT).show();

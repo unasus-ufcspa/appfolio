@@ -38,6 +38,7 @@ public class SendData {
         this.context = context;
         sincronias= new ArrayList<>();
         data= DataBaseAdapter.getInstance(context);
+        comentarios= new LinkedList<Comentario>();
 
     }
 
@@ -48,6 +49,7 @@ public class SendData {
         //sincronias.size();
         dadosAgrupados= new LinkedHashMap<>();
         for (Sync s:sincronias) {
+            Log.d("json send full data ","syncs:"+s.toString());
             if(dadosAgrupados.get((s.getNm_table()))== null){
                 Log.d("json send full data ","encontrou tabela a ser sincronizada");
                 LinkedList l= new LinkedList();
@@ -61,11 +63,13 @@ public class SendData {
     }
 
     public void getDataFromTables(){
-        Log.d("json send full data ","obtendo dados das tabelas a serem sincronizadas ");
+        Log.d("json send full data ","obtendo dados das tabelas a serem sincronizadas " +dadosAgrupados.size());
         // String tbComm="tb_comment";
-
+        Log.d("json send full data ","hashmap dados agrupados " +dadosAgrupados.toString());
       if(dadosAgrupados.get(tbComm)!=null){
           comentarios=(LinkedList)data.getCommentsByIDs(dadosAgrupados.get(tbComm));
+          Log.d("json send full data ","encontrou tb comentarios");
+          Log.d("json send full data ","comentarios:"+comentarios.toString());
       }
       if(dadosAgrupados.get(tbVers)!=null){
 

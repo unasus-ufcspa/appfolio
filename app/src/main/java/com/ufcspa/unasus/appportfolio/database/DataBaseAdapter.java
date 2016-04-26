@@ -1132,16 +1132,16 @@ public class DataBaseAdapter {
     }
 
     public ArrayList getSyncs() {
-        String query = "SELECT * from tb_sync";
+        String query = "SELECT id_sync,id_device,nm_table,co_id_table from tb_sync";
         ArrayList syncs = new ArrayList<Sync>();
         Cursor c = db.rawQuery(query, null);
         if (c.moveToFirst()) {
             do {
-                Sync s = new Sync(c.getInt(0), c.getString(1), c.getInt(2), c.getString(3));
+                Sync s = new Sync(c.getInt(0), c.getString(1), c.getString(2), c.getInt(3));
                 syncs.add(s);
             } while (c.moveToNext());
         } else {
-
+            
         }
 
 //        db.close();
