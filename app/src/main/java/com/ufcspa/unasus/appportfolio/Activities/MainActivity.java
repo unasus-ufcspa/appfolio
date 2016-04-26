@@ -431,21 +431,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     if (data.getSyncs() > 0) {
                         JSONObject send = data.GenerateJSON(idDevice);
                         SendFullDataClient client = new SendFullDataClient(MainActivity.this, data);
-                        //Toast.makeText(getApplicationContext(), "Dados enviados com sucesso", Toast.LENGTH_SHORT).show();
                         client.postJson(send);
-                    } else {
-                        new Handler(Looper.getMainLooper()).post(new Runnable() {
-                            @Override
-                            public void run() {
-                                Toast.makeText(getApplicationContext(), "Sem sincronizações para enviar", Toast.LENGTH_SHORT).show();
-                            }
-                        });
                     }
                 }
             });
             myThread.start();
-        }else{
-            Toast.makeText(getApplicationContext(), "Sem conexão para enviar sincronizações", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -462,27 +452,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     while (!isFullDataSucessful)
                         if (isFullSyncNotSucessful)
                             break;
-
-                    if (!isFullSyncNotSucessful) {
-                        new Handler(Looper.getMainLooper()).post(new Runnable() {
-                            @Override
-                            public void run() {
-                                Toast.makeText(getApplicationContext(), "Novos dados baixados com sucesso", Toast.LENGTH_SHORT).show();
-                            }
-                        });
-                    } else {
-                        new Handler(Looper.getMainLooper()).post(new Runnable() {
-                            @Override
-                            public void run() {
-                                Toast.makeText(getApplicationContext(), "Erro interno. Por favor tente novamente", Toast.LENGTH_SHORT).show();
-                            }
-                        });
-                    }
                 }
             });
             myThread.start();
-        } else {
-            Toast.makeText(getApplicationContext(), "Sem conexão com a internet", Toast.LENGTH_SHORT).show();
         }
     }
 

@@ -20,7 +20,7 @@ import java.util.LinkedList;
  * Created by icaromsc on 19/04/2016.
  */
 public class SendData {
-    protected LinkedHashMap<String, HolderIDS> dadosResponse;
+    protected LinkedHashMap<String, LinkedList<HolderIDS>> dadosResponse;
     private Context context;
     private LinkedList<Integer> idSync;
     private ArrayList<Sync> sincronias;
@@ -81,7 +81,7 @@ public class SendData {
         if(dadosResponse.get(tbComm)!=null){
             Log.d("json send full data ","atualizando tabela "+tbComm+"...");
             data.updateCommentBySendFullData(dadosResponse.get(tbComm));
-            data.deleteSync(idSync);
+            data.deleteCommentsFromTBSync(dadosResponse.get(tbComm));
             Log.d("json send full data ", "conseguiu atualizar com sucesso id server");
         }
     }

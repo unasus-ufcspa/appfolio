@@ -13,6 +13,9 @@ import com.android.volley.toolbox.Volley;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.util.LinkedHashMap;
+import java.util.LinkedList;
+
 /**
  * Created by icaromsc on 22/04/2016.
  */
@@ -39,20 +42,26 @@ public class SendFullDataClient extends HttpClient{
                     if (response.has("erro")) {
                         Log.e(tag, "sincronizacao de dados full falhou");
                     } else if (response.has("fullDataDevSrv_response")) {
+                        sendData.dadosResponse = new LinkedHashMap<>();
+
+                        JSONObject resp = response.getJSONObject("fullDataDevSrv_response");
                         Log.d(tag, "JSON POST existe Send Full Data response");
-                        JSONObject jResp = new JSONObject();
-                        JSONObject comment = jResp.getJSONObject("comment");
-                        HolderIDS holder = new HolderIDS();
-                        if (comment.has("tb_comment")) {
-                            JSONArray tb_comment = comment.getJSONArray("tb_comment");
-                            for (int i = 0; i < tb_comment.length(); i++) {
-                                JSONObject temp = tb_comment.getJSONObject(i);
-                                int id_comment = temp.getInt("id_comment");
-                                int id_comment_srv = temp.getInt("id_comment_srv");
-                                holder.id=id_comment;
-                                holder.idSrv=id_comment_srv;
-                                sendData.dadosResponse.put("tb_comment",holder);
-                                holder.clear();
+                        if (resp.has("comment")) {
+                            JSONObject comment = resp.getJSONObject("comment");
+                            LinkedList<HolderIDS> holders = new LinkedList<>();
+                            if (comment.has("tb_comment")) {
+                                JSONArray tb_comment = comment.getJSONArray("tb_comment");
+                                for (int i = 0; i < tb_comment.length(); i++) {
+                                    HolderIDS holder = new HolderIDS();
+                                    JSONObject temp = tb_comment.getJSONObject(i);
+                                    int id_comment = temp.getInt("id_comment");
+                                    int id_comment_srv = temp.getInt("id_comment_srv");
+                                    holder.id = id_comment;
+                                    holder.idSrv = id_comment_srv;
+
+                                    holders.add(holder);
+                                }
+                                sendData.dadosResponse.put("tb_comment", holders);
                             }
                         }
 

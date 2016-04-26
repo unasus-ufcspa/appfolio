@@ -91,7 +91,7 @@ public class FragmentComments extends Frag {
         Log.d("Comments", "On create entrou");
 
         final Handler h = new Handler();
-        final int delay = 10000; //milliseconds
+        final int delay = 30000; //milliseconds
 
         h.postDelayed(new Runnable() {
             public void run() {
@@ -100,6 +100,7 @@ public class FragmentComments extends Frag {
                     main.downloadFullDataComments(Singleton.getInstance().idActivityStudent);
                     main.uploadFullData();
                 }
+
                 loadCom();
                 adapterComments.refresh(oneComments);
                 h.postDelayed(this, delay);
