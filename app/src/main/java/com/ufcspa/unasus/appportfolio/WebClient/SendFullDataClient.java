@@ -9,13 +9,9 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
-import com.ufcspa.unasus.appportfolio.Model.Comentario;
 
 import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
-
-import java.util.LinkedList;
 
 /**
  * Created by icaromsc on 22/04/2016.
@@ -60,8 +56,6 @@ public class SendFullDataClient extends HttpClient{
                             }
                         }
 
-
-
                         //atualiza dados recebidos via json no sqlite
                         sendData.insertDataOnResponse();
                     }
@@ -83,6 +77,7 @@ public class SendFullDataClient extends HttpClient{
                 volleyError.printStackTrace();
             }
         });
+
         RequestQueue queue = Volley.newRequestQueue(context);
         queue.add(jsObjReq);
     }

@@ -1123,6 +1123,7 @@ public class DataBaseAdapter {
         cv.put("id_device", sync.getId_device());
         cv.put("nm_table", sync.getNm_table());
         cv.put("co_id_table", sync.getCo_id_table());
+        cv.put("id_activity_student", sync.getId_activity_student());
         //cv.put("dt_send", sync.getDt_sync());
         try {
             db.insert("tb_sync", null, cv);
@@ -1132,7 +1133,7 @@ public class DataBaseAdapter {
     }
 
     public ArrayList getSyncs() {
-        String query = "SELECT * from tb_sync";
+        String query = "SELECT id_sync, id_device, co_id_table, nm_table from tb_sync";
         ArrayList syncs = new ArrayList<Sync>();
         Cursor c = db.rawQuery(query, null);
         if (c.moveToFirst()) {
@@ -1489,7 +1490,16 @@ public class DataBaseAdapter {
     */
 
     public List<Comentario> getCommentsByIDs(LinkedList<Integer> ids) {
-        StringBuilder sb = new StringBuilder("select * from tb_comment where id_comment in ( ");
+        StringBuilder sb = new StringBuilder("select " +
+                "id_comment," +
+                "id_activity_student," +
+                "id_author," +
+                "tx_comment," +
+                "tx_reference," +
+                "tp_comment," +
+                "dt_comment," +
+                "nu_comment_activity" +
+                " from tb_comment where id_comment in ( ");
         for (int id :ids){
             if(id==ids.getLast()){
                 sb.append(""+id+" );");
@@ -1504,7 +1514,6 @@ public class DataBaseAdapter {
         LinkedList lista = new LinkedList<Comentario>();
         if (c.moveToFirst()) {
             do {
-                c.moveToFirst();
                 Comentario comm = new Comentario();
                 comm.setIdComment(c.getInt(0));
                 comm.setIdActivityStudent(c.getInt(1));
@@ -1513,8 +1522,8 @@ public class DataBaseAdapter {
                 comm.setTxtReference(c.getString(4));
                 comm.setTypeComment(c.getString(5));
                 comm.setDateComment(c.getString(6));
+                comm.setIdNote(c.getInt(7));
                 lista.add(comm);
-                c.close();
             } while (c.moveToNext());
         } else {
             Log.d(tag, "Nao retornou nada na consulta");
@@ -1534,7 +1543,7 @@ public class DataBaseAdapter {
                 sb.append(""+id+" , ");
             }
         }
-        Log.d(tag+" get comments by ids"," query:"+sb.toString());
+        Log.d(tag + "get comments by ids", " query:" + sb.toString());
         String query = sb.toString();
         Cursor c = db.rawQuery(query, null);
         LinkedList lista = new LinkedList<Comentario>();
@@ -1569,17 +1578,23 @@ public class DataBaseAdapter {
     }
 
 
+    public void deleteSync(LinkedList<Integer> ids) {
+        StringBuilder sb = new StringBuilder("DELETE FROM tb_sync where id_sync in (");
+        for (int id : ids) {
+            if (id == ids.getLast()) {
+                sb.append("" + id + " );");
+                break;
+            } else {
+                sb.append("" + id + " , ");
+            }
+        }
+        Log.d(tag + " DELETE tb_sync", " query:" + sb.toString());
+        String query = sb.toString();
 
-
-
-
-
-
-
-
-
-
-
-
-
+        try {
+            db.execSQL(query);
+        } catch (Exception e) {
+            Log.d(tag, "Nao deletou da tb_sync");
+        }
+    }
 }

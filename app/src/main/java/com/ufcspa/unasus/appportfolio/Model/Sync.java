@@ -25,6 +25,13 @@ public class Sync {
         this.co_id_table = co_id_table;
     }
 
+    public Sync(String id_device, String nm_table, int co_id_table, int id_activity_student) {
+        this.id_device = id_device;
+        this.nm_table = nm_table;
+        this.co_id_table = co_id_table;
+        this.id_activity_student = id_activity_student;
+    }
+
     public Sync(int id_sync, String id_device, int co_id_table, String nm_table) {
         this.id_sync = id_sync;
         this.id_device = id_device;

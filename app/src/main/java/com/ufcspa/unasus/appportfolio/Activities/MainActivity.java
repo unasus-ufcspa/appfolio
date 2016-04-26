@@ -423,17 +423,66 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     public void uploadFullData(){
         if(isOnline()) {
-            SendData data = new SendData(getApplicationContext());
-            String idDevice = Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID);
-            if(data.getSyncs()>0) {
-                JSONObject send = data.GenerateJSON(idDevice);
-                SendFullDataClient client = new SendFullDataClient(this, data);
-                //Toast.makeText(getApplicationContext(), "Dados enviados com sucesso", Toast.LENGTH_SHORT).show();
-            }else{
-                Toast.makeText(getApplicationContext(), "Sem sincronizações para enviar", Toast.LENGTH_SHORT).show();
-            }
+            final Thread myThread = new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    SendData data = new SendData(getApplicationContext());
+                    String idDevice = Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID);
+                    if (data.getSyncs() > 0) {
+                        JSONObject send = data.GenerateJSON(idDevice);
+                        SendFullDataClient client = new SendFullDataClient(MainActivity.this, data);
+                        //Toast.makeText(getApplicationContext(), "Dados enviados com sucesso", Toast.LENGTH_SHORT).show();
+                        client.postJson(send);
+                    } else {
+                        new Handler(Looper.getMainLooper()).post(new Runnable() {
+                            @Override
+                            public void run() {
+                                Toast.makeText(getApplicationContext(), "Sem sincronizações para enviar", Toast.LENGTH_SHORT).show();
+                            }
+                        });
+                    }
+                }
+            });
+            myThread.start();
         }else{
             Toast.makeText(getApplicationContext(), "Sem conexão para enviar sincronizações", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    public void downloadFullDataComments(final int id_activity_student) {
+        isFullDataSucessful = false;
+        isFullSyncNotSucessful = false;
+
+        if (isOnline()) {
+            final Thread myThread = new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    getFullData(id_activity_student);
+
+                    while (!isFullDataSucessful)
+                        if (isFullSyncNotSucessful)
+                            break;
+
+                    if (!isFullSyncNotSucessful) {
+                        new Handler(Looper.getMainLooper()).post(new Runnable() {
+                            @Override
+                            public void run() {
+                                Toast.makeText(getApplicationContext(), "Novos dados baixados com sucesso", Toast.LENGTH_SHORT).show();
+                            }
+                        });
+                    } else {
+                        new Handler(Looper.getMainLooper()).post(new Runnable() {
+                            @Override
+                            public void run() {
+                                Toast.makeText(getApplicationContext(), "Erro interno. Por favor tente novamente", Toast.LENGTH_SHORT).show();
+                            }
+                        });
+                    }
+                }
+            });
+            myThread.start();
+        } else {
+            Toast.makeText(getApplicationContext(), "Sem conexão com a internet", Toast.LENGTH_SHORT).show();
         }
     }
 
