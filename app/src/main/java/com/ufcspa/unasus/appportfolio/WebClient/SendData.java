@@ -5,6 +5,7 @@ import android.util.Log;
 
 import com.ufcspa.unasus.appportfolio.Model.Comentario;
 import com.ufcspa.unasus.appportfolio.Model.Sync;
+import com.ufcspa.unasus.appportfolio.Model.VersionActivity;
 import com.ufcspa.unasus.appportfolio.database.DataBaseAdapter;
 
 import org.json.JSONArray;
@@ -12,7 +13,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 
@@ -20,11 +20,13 @@ import java.util.LinkedList;
  * Created by icaromsc on 19/04/2016.
  */
 public class SendData {
+    protected LinkedHashMap<String, HolderIDS> dadosResponse;
     private Context context;
+    private LinkedList<Integer> idSync;
     private ArrayList<Sync> sincronias;
     private LinkedHashMap<String,LinkedList<Integer>> dadosAgrupados;
-    protected LinkedHashMap<String,HolderIDS> dadosResponse;
     private LinkedList<Comentario> comentarios;
+    private LinkedList<VersionActivity> versions;
     private DataBaseAdapter data;
     private String tbComm="tb_comment";
     private String tbVers="tb_version_activity";
@@ -38,54 +40,49 @@ public class SendData {
         this.context = context;
         sincronias= new ArrayList<>();
         data= DataBaseAdapter.getInstance(context);
-        comentarios= new LinkedList<Comentario>();
-
+        versions = new LinkedList<>();
+        comentarios = new LinkedList<>();
+        idSync = new LinkedList<>();
     }
 
     public int getSyncs(){
         Log.d("json send full data ","obtendo lista de sincronizações");
-        sincronias=data.getSyncs();
+        sincronias = data.getSyncs();
         Log.d("json send full data ","numero de sincronias:"+sincronias.size());
         //sincronias.size();
         dadosAgrupados= new LinkedHashMap<>();
         for (Sync s:sincronias) {
-            Log.d("json send full data ","syncs:"+s.toString());
             if(dadosAgrupados.get((s.getNm_table()))== null){
                 Log.d("json send full data ","encontrou tabela a ser sincronizada");
                 LinkedList l= new LinkedList();
                 dadosAgrupados.put(s.getNm_table(),l);
             }
-            LinkedList l =dadosAgrupados.get(s.getNm_table());
-                    l.add(s.getCo_id_table());
+            idSync.add(s.getId_sync());
+            LinkedList l = dadosAgrupados.get(s.getNm_table());
+            l.add(s.getCo_id_table());
             dadosAgrupados.put(s.getNm_table(),l);
         }
         return sincronias.size();
     }
 
     public void getDataFromTables(){
-        Log.d("json send full data ","obtendo dados das tabelas a serem sincronizadas " +dadosAgrupados.size());
+        Log.d("json send full data ","obtendo dados das tabelas a serem sincronizadas ");
         // String tbComm="tb_comment";
-        Log.d("json send full data ","hashmap dados agrupados " +dadosAgrupados.toString());
-      if(dadosAgrupados.get(tbComm)!=null){
-          comentarios=(LinkedList)data.getCommentsByIDs(dadosAgrupados.get(tbComm));
-          Log.d("json send full data ","encontrou tb comentarios");
-          Log.d("json send full data ","comentarios:"+comentarios.toString());
+        if (dadosAgrupados.get(tbComm) != null) {
+            comentarios = (LinkedList) data.getCommentsByIDs(dadosAgrupados.get(tbComm));
       }
       if(dadosAgrupados.get(tbVers)!=null){
-
+          versions = (LinkedList) data.getVersionActivitiesByIDs(dadosAgrupados.get(tbVers));
       }
-
-
     }
 
     public void insertDataOnResponse(){
         // insert data by json response sendfulldata
-
         if(dadosResponse.get(tbComm)!=null){
             Log.d("json send full data ","atualizando tabela "+tbComm+"...");
             data.updateCommentBySendFullData(dadosResponse.get(tbComm));
+            data.deleteSync(idSync);
             Log.d("json send full data ", "conseguiu atualizar com sucesso id server");
-
         }
     }
 
@@ -127,7 +124,7 @@ public class SendData {
 
             //mount pseudo final
             jsonPseudoFinal.put("device",device);
-            jsonPseudoFinal.put("comment",jsonComments);
+            jsonPseudoFinal.put("comment", new JSONObject().put("tb_comment", jsonComments));
 
             jsonFinal.put("fullDataDevSrv_request", jsonPseudoFinal);
 

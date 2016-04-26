@@ -9,6 +9,7 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
 import android.provider.MediaStore;
 import android.provider.Settings;
 import android.text.InputType;
@@ -22,6 +23,7 @@ import android.widget.EditText;
 import android.widget.ListView;
 
 import com.onegravity.rteditor.utils.Constants;
+import com.ufcspa.unasus.appportfolio.Activities.MainActivity;
 import com.ufcspa.unasus.appportfolio.Adapter.CommentAdapter;
 import com.ufcspa.unasus.appportfolio.Model.Attachment;
 import com.ufcspa.unasus.appportfolio.Model.Comentario;
@@ -29,7 +31,6 @@ import com.ufcspa.unasus.appportfolio.Model.OneComment;
 import com.ufcspa.unasus.appportfolio.Model.Singleton;
 import com.ufcspa.unasus.appportfolio.Model.Sync;
 import com.ufcspa.unasus.appportfolio.R;
-import com.ufcspa.unasus.appportfolio.WebClient.CommentClient;
 import com.ufcspa.unasus.appportfolio.database.DataBaseAdapter;
 
 import java.text.ParseException;
@@ -88,6 +89,22 @@ public class FragmentComments extends Frag {
         loadComments = new LoadComments();
         loadComments.execute();
         Log.d("Comments", "On create entrou");
+
+        final Handler h = new Handler();
+        final int delay = 10000; //milliseconds
+
+        h.postDelayed(new Runnable() {
+            public void run() {
+                MainActivity main = ((MainActivity) getActivity());
+                if (main != null) {
+                    main.downloadFullDataComments(Singleton.getInstance().idActivityStudent);
+                    main.uploadFullData();
+                }
+                loadCom();
+                adapterComments.refresh(oneComments);
+                h.postDelayed(this, delay);
+            }
+        }, delay);
     }
 
     @Override
@@ -153,6 +170,8 @@ public class FragmentComments extends Frag {
             oneComment = new OneComment(false, "Anexo", convertDateToTime(c.getDateComment()), convertDateToDate(c.getDateComment()), true);
             oneComment.idAttach= Singleton.getInstance().lastIdAttach;
         } else {
+            c.setDateComment("2012-12-12 00:00:00"); //TODO
+            c.setTxtReference("");
             insertComment(c);
             oneComment = new OneComment(false, edtMessage.getText().toString(), convertDateToTime(c.getDateComment()), convertDateToDate(c.getDateComment()));
         }
@@ -353,23 +372,27 @@ public class FragmentComments extends Frag {
             Log.e("Erro:", "" + e.getMessage());
         }
         String idDevice = Settings.Secure.getString(getActivity().getContentResolver(), Settings.Secure.ANDROID_ID);
-        if(isOnline()) {
-            Log.d("Banco:", c.toJSON().toString());
-            try {
-                CommentClient client = new CommentClient(getActivity().getApplicationContext(), c);
-                //System.out.println(c.toJSON().toString());
-
-                Sync sync = new Sync(idDevice, "tb_comment", 42);
-                client.postJson(c.toJSON(), sync.toJSON());
-            } catch (Exception e) {
-                Log.e("JSON act", "" + e.getMessage());
-            }
-        }else{
+//        if(isOnline()) {
+//            Log.d("Banco:", c.toJSON().toString());
+//            try {
+//                CommentClient client = new CommentClient(getActivity().getApplicationContext(), c);
+//                //System.out.println(c.toJSON().toString());
+//
+//                Sync sync = new Sync(idDevice, "tb_comment", 42);
+//                client.postJson(c.toJSON(), sync.toJSON());
+//            } catch (Exception e) {
+//                Log.e("JSON act", "" + e.getMessage());
+//            }
+//        }else{
             // add in sync queue
-            Sync sync = new Sync(idDevice,"tb_comment",lastID);
+        Sync sync = new Sync(idDevice, "tb_comment", lastID, singleton.idActivityStudent);
             DataBaseAdapter.getInstance(getContext()).insertIntoTBSync(sync);
-        }
 
+        MainActivity main = ((MainActivity) getActivity());
+        if (main != null)
+            main.uploadFullData();
+
+//        }
     }
 
     /**
@@ -377,8 +400,6 @@ public class FragmentComments extends Frag {
      *
      *
      * */
-
-
     @Override
     public void insertFileIntoDataBase(final String path, final String type) {
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
