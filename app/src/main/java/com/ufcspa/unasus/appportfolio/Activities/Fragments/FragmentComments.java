@@ -106,6 +106,7 @@ public class FragmentComments extends Frag {
                 h.postDelayed(this, delay);
             }
         }, delay);
+
     }
 
     @Override
