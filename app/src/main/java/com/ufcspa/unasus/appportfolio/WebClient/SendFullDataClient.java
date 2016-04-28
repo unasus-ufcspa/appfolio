@@ -30,6 +30,7 @@ public class SendFullDataClient extends HttpClient{
 
     public void postJson(JSONObject jsonSendFullData) {
         Log.d(tag, "URL: " + URL + method);
+        System.out.println("json send fulldata: " + jsonSendFullData.toString());
         JsonObjectRequest jsObjReq = new JsonObjectRequest(Request.Method.POST, URL + method, jsonSendFullData, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
