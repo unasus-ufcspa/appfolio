@@ -55,6 +55,22 @@ public class FragmentComments extends Frag {
     //private LoremIpsum ipsum;
     private EditText edtMessage;
     private LoadComments loadComments;
+    private final Handler h = new Handler();
+    private Runnable myRunnable = new Runnable() {
+        @Override
+        public void run() {
+            Log.d("Handler","Handler is running...");
+            MainActivity main = ((MainActivity) getActivity());
+            if (main != null) {
+                main.downloadFullDataComments(Singleton.getInstance().idActivityStudent);
+//                    main.uploadFullData();
+            }
+
+            loadCom();
+            adapterComments.refresh(oneComments);
+            h.postDelayed(this, 1000);
+        }
+    };
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_messages, null);
@@ -90,23 +106,7 @@ public class FragmentComments extends Frag {
         loadComments.execute();
         Log.d("Comments", "On create entrou");
 
-        final Handler h = new Handler();
-        final int delay = 5000; //milliseconds
-
-        h.postDelayed(new Runnable() {
-            public void run() {
-                MainActivity main = ((MainActivity) getActivity());
-                if (main != null) {
-                    main.downloadFullDataComments(Singleton.getInstance().idActivityStudent);
-//                    main.uploadFullData();
-                }
-
-                loadCom();
-                adapterComments.refresh(oneComments);
-                h.postDelayed(this, delay);
-            }
-        }, delay);
-
+        h.postDelayed(myRunnable, 1000);
     }
 
     @Override
@@ -152,11 +152,11 @@ public class FragmentComments extends Frag {
     }
 
     @Override
-    public void onStop() {
-        super.onStop();
-        Log.d("comment frag ", "pausou a fragment");
+    public void onDestroy() {
+        Log.d("LifeCycle", "onDestroy");
+        h.removeCallbacks(myRunnable);
+        super.onDestroy();
     }
-
 
     /**
      *  MÉTODO PARA ADICIONAR UM COMENTARIO NA VIEW, CASO PASSE TRUE POR PARAMETRO SERÁ INSERIDO UM ANEXO
@@ -388,7 +388,7 @@ public class FragmentComments extends Frag {
 //        }else{
             // add in sync queue
         Sync sync = new Sync(idDevice, "tb_comment", lastID, singleton.idActivityStudent);
-            DataBaseAdapter.getInstance(getContext()).insertIntoTBSync(sync);
+        DataBaseAdapter.getInstance(getContext()).insertIntoTBSync(sync);
 
         MainActivity main = ((MainActivity) getActivity());
         if (main != null)

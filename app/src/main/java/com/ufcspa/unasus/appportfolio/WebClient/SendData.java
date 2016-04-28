@@ -50,7 +50,7 @@ public class SendData {
         sincronias = data.getSyncs();
         Log.d("json send full data ","numero de sincronias:"+sincronias.size());
         //sincronias.size();
-        dadosAgrupados= new LinkedHashMap<>();
+        dadosAgrupados = new LinkedHashMap<>();
         for (Sync s:sincronias) {
             if(dadosAgrupados.get((s.getNm_table()))== null){
                 Log.d("json send full data ","encontrou tabela a ser sincronizada");
@@ -81,7 +81,7 @@ public class SendData {
         if(dadosResponse.get(tbComm)!=null){
             Log.d("json send full data ","atualizando tabela "+tbComm+"...");
             data.updateCommentBySendFullData(dadosResponse.get(tbComm));
-            data.deleteCommentsFromTBSync(dadosResponse.get(tbComm));
+            data.deleteSync(idSync);
             Log.d("json send full data ", "conseguiu atualizar com sucesso id server");
         }
     }

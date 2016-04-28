@@ -1464,8 +1464,8 @@ public class DataBaseAdapter {
     public void insertNotifications(LinkedList<Notification> notifications) {
         for (Notification n : notifications) {
             ContentValues cv = new ContentValues();
-            if(n.getId_notification()>0)
-                cv.put("id_notification", n.getId_notification());
+            if(n.getId_notice()>0)
+                cv.put("id_notice", n.getId_notification());
             cv.put("id_author", n.getId_author());
             cv.put("id_destination", n.getId_destination());
             cv.put("id_activity_student", n.getId_activity_student());
@@ -1605,6 +1605,7 @@ public class DataBaseAdapter {
 
         try {
             db.execSQL(query);
+            Log.d(tag, "Deletou da tb_sync com sucesso");
         } catch (Exception e) {
             Log.d(tag, "Nao deletou da tb_sync");
         }

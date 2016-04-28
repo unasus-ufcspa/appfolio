@@ -303,7 +303,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             case 1:
                 if (singleton.portfolioClass != null)
                     downloadFullData(0, id);
-                    uploadFullData();
                 break;
             case 2:
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new FragmentReference()).addToBackStack("Frag").commit();
