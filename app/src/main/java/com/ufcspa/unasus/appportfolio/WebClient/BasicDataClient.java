@@ -51,7 +51,7 @@ public class BasicDataClient extends HttpClient {
                 try {
                     Log.d(tag, "JSON RESPONSE: " + response.toString().replaceAll("\\{","\n{"));
                     System.out.print(response.toString().replaceAll("\\{","\n{"));
-                    if( response.has("erro")) {
+                    if (response.has("error")) {
                         Log.e(tag, "sincronizacao de dados iniciais falhou");
                         LoginActivity2.isBasicDataSyncNotSucessful = true;
                         Log.d(tag, "JSon response receiving:" + response.toString());

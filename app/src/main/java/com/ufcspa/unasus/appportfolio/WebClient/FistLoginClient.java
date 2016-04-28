@@ -46,7 +46,7 @@ public class FistLoginClient extends HttpClient {
                 try {
                     Log.d(tag, "JSON RESPONSE: " + response.toString());
                     if( response.has("firstLogin_response")) {
-                        if(response.getJSONObject("firstLogin_response").has("erro")){
+                        if (response.getJSONObject("firstLogin_response").has("error")) {
                             Log.e(tag, "JSON usuario ou senha invalidos");
                             singleton.erro = "Erro interno. Por favor tente novamente";
                             LoginActivity2.isBasicDataSyncNotSucessful = true;

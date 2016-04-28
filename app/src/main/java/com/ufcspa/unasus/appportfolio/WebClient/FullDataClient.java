@@ -1,6 +1,7 @@
 package com.ufcspa.unasus.appportfolio.WebClient;
 
 import android.content.Context;
+import android.util.Log;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -37,20 +38,19 @@ public class FullDataClient extends HttpClient {
     }
 
     public void postJson(JSONObject jsonFirstRequest) {
-        //Log.d(tag, "URL: " + URL + method);
+        Log.d(tag, "URL: " + URL + method);
         JsonObjectRequest jsObjReq = new JsonObjectRequest(Request.Method.POST, URL + method, jsonFirstRequest, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
-                //Log.d(tag, "Retornou do request");
+                Log.d(tag, "Retornou do request");
                 try {
-                    // Log.d(tag, "JSON RESPONSE: " + response.toString().replaceAll("\\{", "\n{"));
+                    Log.d(tag, "JSON RESPONSE: " + response.toString().replaceAll("\\{", "\n{"));
                     System.out.print(response.toString().replaceAll("\\{", "\n{"));
-                    if (response.has("erro")) {
+                    if (response.has("error")) {
                         MainActivity.isFullSyncNotSucessful = true;
                         // Log.e(tag, "sincronizacao de dados full falhou");
                     } else if (response.has("fullDataSrvDev_response")) {
-                        // Log.d(tag, "JSON POST existe Full Data response");
-
+                        Log.d(tag, "JSON POST existe Full Data response");
                         fullData = new FullData(context);
                         JSONObject resp = new JSONObject();
                         try {
@@ -65,6 +65,7 @@ public class FullDataClient extends HttpClient {
                                         JSONObject temp = tb_notice.getJSONObject(i);
                                         Notification notification = new Notification();
 
+                                        int id_notice = temp.getInt("id_notice");
                                         int id_author = temp.getInt("id_author");
                                         int id_destination = temp.getInt("id_destination");
                                         int id_activity_student = temp.getInt("id_activity_student");
@@ -73,6 +74,7 @@ public class FullDataClient extends HttpClient {
                                         String dt_notice = temp.getString("dt_notice");
 //                                        String dt_read = temp.getString("dt_read");
 
+                                        notification.setId_notice(id_notice);
                                         notification.setId_author(id_author);
                                         notification.setId_destination(id_destination);
                                         notification.setId_activity_student(id_activity_student);
@@ -251,7 +253,7 @@ public class FullDataClient extends HttpClient {
             public void onErrorResponse(VolleyError volleyError) {
                 MainActivity.isFullSyncNotSucessful = true;
                 // Log.e(tag, "Erro  na request");
-                // Log.e(tag, "erro=" + volleyError.getMessage());
+                Log.e(tag, "erro=" + volleyError.getMessage());
                 volleyError.printStackTrace();
             }
         });

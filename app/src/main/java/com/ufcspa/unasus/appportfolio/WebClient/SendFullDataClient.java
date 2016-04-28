@@ -39,7 +39,7 @@ public class SendFullDataClient extends HttpClient{
                 Log.d(tag, "Retornou do request");
                 try {
                     Log.d(tag, "JSON RESPONSE: " + response.toString().replaceAll("\\{", "\n{"));
-                    if (response.has("erro")) {
+                    if (response.has("error")) {
                         Log.e(tag, "sincronizacao de dados full falhou");
                     } else if (response.has("fullDataDevSrv_response")) {
                         sendData.dadosResponse = new LinkedHashMap<>();
