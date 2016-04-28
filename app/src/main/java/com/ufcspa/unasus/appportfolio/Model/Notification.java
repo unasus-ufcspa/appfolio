@@ -4,6 +4,7 @@ package com.ufcspa.unasus.appportfolio.Model;
  * Created by Arthur Zettler on 19/04/2016.
  */
 public class Notification {
+    private int id_notification;
     private int id_notice;
     private int id_author;
     private int id_destination;
@@ -14,6 +15,14 @@ public class Notification {
     private String dt_read;
 
     public Notification() {
+    }
+
+    public int getId_notification() {
+        return id_notification;
+    }
+
+    public void setId_notification(int id_notification) {
+        this.id_notification = id_notification;
     }
 
     public int getId_notice() {

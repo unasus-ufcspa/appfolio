@@ -5,6 +5,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteConstraintException;
 import android.database.sqlite.SQLiteDatabase;
+import android.security.KeyChain;
 import android.util.Log;
 
 import com.ufcspa.unasus.appportfolio.Model.Activity;
@@ -1463,6 +1464,8 @@ public class DataBaseAdapter {
     public void insertNotifications(LinkedList<Notification> notifications) {
         for (Notification n : notifications) {
             ContentValues cv = new ContentValues();
+            if(n.getId_notification()>0)
+                cv.put("id_notification", n.getId_notification());
             cv.put("id_author", n.getId_author());
             cv.put("id_destination", n.getId_destination());
             cv.put("id_activity_student", n.getId_activity_student());
@@ -1474,7 +1477,14 @@ public class DataBaseAdapter {
             try {
                 db.insert("tb_notice", null, cv);
 
-            } catch (Exception e) {
+
+            }
+            catch (SQLiteConstraintException v){
+                Log.d(tag, "id notification já existe:" + v.getMessage());
+                v.printStackTrace();
+            }
+
+            catch (Exception e) {
                 Log.d(tag, "erro ao inserir na tb_notice:" + e.getMessage());
                 e.printStackTrace();
             }
@@ -1540,7 +1550,7 @@ public class DataBaseAdapter {
                 sb.append(""+id+" );");
                 break;
             }else{
-                sb.append(""+id+" , ");
+                sb.append("" + id + " , ");
             }
         }
         Log.d(tag + "get comments by ids", " query:" + sb.toString());
