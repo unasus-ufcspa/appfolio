@@ -45,6 +45,7 @@ import java.util.Date;
  * Created by Desenvolvimento on 07/12/2015.
  */
 public class FragmentComments extends Frag {
+    private final Handler h = new Handler();
     ArrayList<OneComment> oneComments;
     CommentAdapter adapterComments;
     int lastID;
@@ -55,7 +56,6 @@ public class FragmentComments extends Frag {
     //private LoremIpsum ipsum;
     private EditText edtMessage;
     private LoadComments loadComments;
-    private final Handler h = new Handler();
     private Runnable myRunnable = new Runnable() {
         @Override
         public void run() {
@@ -172,7 +172,9 @@ public class FragmentComments extends Frag {
             oneComment = new OneComment(false, "Anexo", convertDateToTime(c.getDateComment()), convertDateToDate(c.getDateComment()), true);
             oneComment.idAttach= Singleton.getInstance().lastIdAttach;
         } else {
-            c.setDateComment("2012-12-12 00:00:00"); //TODO
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            String currentDateandTime = sdf.format(new Date());
+            c.setDateComment(currentDateandTime); //TODO
             c.setTxtReference("");
             insertComment(c);
             oneComment = new OneComment(false, edtMessage.getText().toString(), convertDateToTime(c.getDateComment()), convertDateToDate(c.getDateComment()));
@@ -291,7 +293,7 @@ public class FragmentComments extends Frag {
         Comentario c = new Comentario();
         c.setDateComment(getActualTime());
         c.setIdAuthor(singleton.user.getIdUser());
-        c.setTypeComment("C");
+        c.setTypeComment("G");
         c.setTxtComment(edtMessage.getText().toString());
         c.setIdActivityStudent(singleton.activity.getIdActivityStudent());
         return c;
