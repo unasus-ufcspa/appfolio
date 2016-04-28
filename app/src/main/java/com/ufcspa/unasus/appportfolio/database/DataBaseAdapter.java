@@ -1567,13 +1567,15 @@ public class DataBaseAdapter {
         return lista;
     }
 
-    public void updateCommentBySendFullData(HolderIDS ids) {
+    public void updateCommentBySendFullData(LinkedList<HolderIDS> holderIDS) {
         ContentValues cv = new ContentValues();
-        cv.put("id_comment_srv", ids.getIdSrv());
-        try {
-            db.update("tb_comment", cv, "id_comment=?", new String[]{"" + ids.getId()});
-        } catch (Exception e) {
-            Log.d(tag, e.getMessage());
+        for (HolderIDS ids : holderIDS) {
+            cv.put("id_comment_srv", ids.getIdSrv());
+            try {
+                db.update("tb_comment", cv, "id_comment=?", new String[]{"" + ids.getId()});
+            } catch (Exception e) {
+                Log.d(tag, e.getMessage());
+            }
         }
     }
 
@@ -1586,6 +1588,26 @@ public class DataBaseAdapter {
                 break;
             } else {
                 sb.append("" + id + " , ");
+            }
+        }
+        Log.d(tag + " DELETE tb_sync", " query:" + sb.toString());
+        String query = sb.toString();
+
+        try {
+            db.execSQL(query);
+        } catch (Exception e) {
+            Log.d(tag, "Nao deletou da tb_sync");
+        }
+    }
+
+    public void deleteCommentsFromTBSync(LinkedList<HolderIDS> holderIDS) {
+        StringBuilder sb = new StringBuilder("DELETE FROM tb_sync where nm_table = 'tb_comment' AND id_sync in (");
+        for (HolderIDS id : holderIDS) {
+            if (id == holderIDS.getLast()) {
+                sb.append("" + id.getId() + " );");
+                break;
+            } else {
+                sb.append("" + id.getId() + " , ");
             }
         }
         Log.d(tag + " DELETE tb_sync", " query:" + sb.toString());

@@ -1,7 +1,6 @@
 package com.ufcspa.unasus.appportfolio.WebClient;
 
 import android.content.Context;
-import android.util.Log;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -38,19 +37,19 @@ public class FullDataClient extends HttpClient {
     }
 
     public void postJson(JSONObject jsonFirstRequest) {
-        Log.d(tag, "URL: " + URL + method);
+        //Log.d(tag, "URL: " + URL + method);
         JsonObjectRequest jsObjReq = new JsonObjectRequest(Request.Method.POST, URL + method, jsonFirstRequest, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
-                Log.d(tag, "Retornou do request");
+                //Log.d(tag, "Retornou do request");
                 try {
-                    Log.d(tag, "JSON RESPONSE: " + response.toString().replaceAll("\\{", "\n{"));
+                    // Log.d(tag, "JSON RESPONSE: " + response.toString().replaceAll("\\{", "\n{"));
                     System.out.print(response.toString().replaceAll("\\{", "\n{"));
                     if (response.has("erro")) {
                         MainActivity.isFullSyncNotSucessful = true;
-                        Log.e(tag, "sincronizacao de dados full falhou");
+                        // Log.e(tag, "sincronizacao de dados full falhou");
                     } else if (response.has("fullDataSrvDev_response")) {
-                        Log.d(tag, "JSON POST existe Full Data response");
+                        // Log.d(tag, "JSON POST existe Full Data response");
 
                         fullData = new FullData(context);
                         JSONObject resp = new JSONObject();
@@ -88,7 +87,11 @@ public class FullDataClient extends HttpClient {
                             }
 
                             if (resp.has("data")) {
-                                JSONObject data = resp.getJSONObject("data");
+                                JSONObject data = new JSONObject();
+                                try {
+                                    data = resp.getJSONObject("data");
+                                } catch (Exception e) {
+                                }
                                 if (data.has("comment")) {
                                     JSONObject comment = data.getJSONObject("comment");
                                     if (comment.has("tb_comment")) {
@@ -235,7 +238,7 @@ public class FullDataClient extends HttpClient {
                             v.printStackTrace();
                         }
 
-                        Log.d(tag, "Fim  da request");
+                        // Log.d(tag, "Fim  da request");
                         //EXECUTE INSERTS IN SQLITE
                         fullData.insertDataIntoSQLITE();
                         MainActivity.isFullDataSucessful = true;
@@ -247,8 +250,8 @@ public class FullDataClient extends HttpClient {
             @Override
             public void onErrorResponse(VolleyError volleyError) {
                 MainActivity.isFullSyncNotSucessful = true;
-                Log.e(tag, "Erro  na request");
-                Log.e(tag, "erro=" + volleyError.getMessage());
+                // Log.e(tag, "Erro  na request");
+                // Log.e(tag, "erro=" + volleyError.getMessage());
                 volleyError.printStackTrace();
             }
         });
