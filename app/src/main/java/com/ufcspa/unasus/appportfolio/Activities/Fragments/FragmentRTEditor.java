@@ -52,10 +52,14 @@ import com.ufcspa.unasus.appportfolio.Model.ActivityStudent;
 import com.ufcspa.unasus.appportfolio.Model.Comentario;
 import com.ufcspa.unasus.appportfolio.Model.Note;
 import com.ufcspa.unasus.appportfolio.Model.Singleton;
+import com.ufcspa.unasus.appportfolio.Model.Sync;
+import com.ufcspa.unasus.appportfolio.Model.VersionActivity;
 import com.ufcspa.unasus.appportfolio.R;
 import com.ufcspa.unasus.appportfolio.database.DataBaseAdapter;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
 
 
@@ -315,16 +319,34 @@ public class FragmentRTEditor extends Frag {
             public void onClick(View v) {
                 Log.d("rteditor", mRTMessageField.getText(RTFormat.HTML));
                 saveText();
+//
+//                if (singleton.isFullscreen) {
+//                    singleton.wasFullscreen = true;
+//                    singleton.isFullscreen = false;
+//                } else {
+//                    singleton.wasFullscreen = false;
+//                    singleton.isFullscreen = true;
+//                }
+//
+//                ((MainActivity) getActivity()).dontCreateCrossfader();
 
-                if (singleton.isFullscreen) {
-                    singleton.wasFullscreen = true;
-                    singleton.isFullscreen = false;
-                } else {
-                    singleton.wasFullscreen = false;
-                    singleton.isFullscreen = true;
-                }
+                //SALVA NOVA VERSION ACTIVITY
+                DataBaseAdapter data =DataBaseAdapter.getInstance(getContext());
+                VersionActivity version= new VersionActivity();
+                version.setTx_activity(mRTMessageField.getText(RTFormat.HTML));
+                version.setId_activity_student(Singleton.getInstance().idActivityStudent);
+                version.setDt_last_access(getActualTime());
+                int last_id=data.insertVersionActivity(version);
 
-                ((MainActivity) getActivity()).dontCreateCrossfader();
+                //POPULA SYNC PARA SINCRONIZAR
+                Sync sync = new Sync();
+                sync.setNm_table("tb_version_activity");
+                sync.setCo_id_table(last_id);
+                sync.setId_activity_student(Singleton.getInstance().idActivityStudent);
+                //sync.setId_device(Singleton.getInstance().device.get_id_device());
+                data.insertIntoTBSync(sync);
+
+
             }
         });
 
@@ -334,6 +356,13 @@ public class FragmentRTEditor extends Frag {
         LocalBroadcastManager.getInstance(getActivity()).registerReceiver(broadcastReceiver, new IntentFilter("call.attachmentdialog.action"));
 
         return view;
+    }
+
+    public String getActualTime() {
+        Calendar c = Calendar.getInstance();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String strDate = sdf.format(c.getTime());
+        return strDate;
     }
 
     @Override

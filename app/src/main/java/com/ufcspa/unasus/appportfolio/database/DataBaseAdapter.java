@@ -672,7 +672,7 @@ public class DataBaseAdapter {
         cv.put("tx_activity", activityStudent.getTxtActivity());
         cv.put("dt_last_access", activityStudent.getDtLastAcess());
         try {
-            db.update("tb_version_activity", cv, "id_activity_student=?", new String[]{String.valueOf(activityStudent.getIdActivityStudent())});
+            db.update("tb_version_activity", cv, "id_version_activity=(SELECT MAX(id_version_activity) FROM tb_activity_version WHERE id_activity_student=?)", new String[]{String.valueOf(activityStudent.getIdActivityStudent())});
             Log.d(tag, "conseguiu salvar alteração da atividade");
         } catch (Exception e) {
             Log.e(tag, "erro ao atualizar acStudent:" + e.getMessage());
@@ -681,7 +681,7 @@ public class DataBaseAdapter {
 
     public ActivityStudent listLastVersionActivityStudent(int idActivityStudent) {
         ActivityStudent acStudent = new ActivityStudent();
-        String query = "select tx_activity from tb_version_activity WHERE id_activity_student = " + idActivityStudent + ";";
+        String query = "select tx_activity from tb_version_activity WHERE id_version_activity=(SELECT MAX(id_version_activity) FROM tb_activity_version WHERE id_activity_student=" + idActivityStudent + ");";
         Cursor c = null;
         Log.d(tag, "query lista act Stu:" + query);
         try {
@@ -704,6 +704,29 @@ public class DataBaseAdapter {
 //        db.close();
         return acStudent;
     }
+    public int insertVersionActivity(VersionActivity v){
+        ContentValues cv = new ContentValues();
+        cv.put("tx_activity", v.getTx_activity());
+        cv.put("dt_last_access", v.getDt_last_access());
+        cv.put("id_activity_student", v.getId_activity_student());
+        int result=-1;
+        try {
+            db.insert("tb_version_activity",null,cv);
+            Log.d(tag, "conseguiu salvar versão da atividade");
+            Cursor cursor = db.rawQuery("select seq from sqlite_sequence where name='tb_version_activity'", null);
+            if (cursor.moveToFirst()) {
+                result = cursor.getInt(0);
+                Log.d(tag, "last id_version_activity in table:" + result);
+            }
+
+        } catch (Exception e) {
+            Log.e(tag, "erro ao salvar versao:" + e.getMessage());
+        }
+
+        return result;
+    }
+
+
 
 
     public List<PortfolioClass> listarPortfolio(int idClass, char userType, int idUser) {
