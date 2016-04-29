@@ -9,6 +9,7 @@ import android.content.res.Configuration;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
+import android.support.v4.app.Fragment;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.widget.SlidingPaneLayout;
 import android.text.Editable;
@@ -339,12 +340,9 @@ public class FragmentRTEditor extends Frag {
     @Override
     public void onResume() {
         saveText();
-//        downloadFullData(singleton.idActivityStudent);
         super.onResume();
     }
 
-    public void removeProgressBar() {
-    }
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
@@ -376,17 +374,27 @@ public class FragmentRTEditor extends Frag {
     @Override
     public void onDestroyView() {
         saveText();
+        if (mRTManager != null) {
+            mRTManager.onDestroy(true);
+        }
+        LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(broadcastReceiver);
+
+        Fragment frag = getActivity().getSupportFragmentManager().findFragmentById(R.id.comments_container);
+        if (frag != null) {
+            getActivity().getSupportFragmentManager().beginTransaction().remove(frag).commit();
+        }
+
         super.onDestroyView();
     }
 
     @Override
     public void onDestroy() {
-        saveText();
-        if (mRTManager != null) {
-            mRTManager.onDestroy(true);
-        }
-        LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(broadcastReceiver);
         super.onDestroy();
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
     }
 
     @Override
@@ -428,7 +436,7 @@ public class FragmentRTEditor extends Frag {
             }
         });
 
-        getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.comments_container, new FragmentComments()).addToBackStack("Frag").commit();
+//        getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.comments_container, new FragmentComments()).addToBackStack("Frag").commit();
 
         final SlidingPaneLayout layout = (SlidingPaneLayout) view.findViewById(R.id.rteditor_fragment);
 
@@ -442,33 +450,33 @@ public class FragmentRTEditor extends Frag {
 
             @Override
             public void onPanelOpened(View panel) {
-                showCommentsTab(false);
-//                if (panel != null) {
-//                    Fragment frag = getActivity().getSupportFragmentManager().findFragmentById(R.id.comments_container);
-//                    if (frag != null) {
-//                        getActivity().getSupportFragmentManager().beginTransaction().remove(frag).commit();
-//                    }
-//
-//                    int childs = rightBarSpecificComments.getChildCount();
-//                    for (int i = childs - 1; i >= 0; i--)
-//                        rightBarSpecificComments.getChildAt(i).setVisibility(View.GONE);
-//                    slider.findViewById(R.id.rightbar_green).setVisibility(View.INVISIBLE);
-//                }
+//                showCommentsTab(false);
+                if (panel != null) {
+                    Fragment frag = getActivity().getSupportFragmentManager().findFragmentById(R.id.comments_container);
+                    if (frag != null) {
+                        getActivity().getSupportFragmentManager().beginTransaction().remove(frag).commit();
+                    }
+
+                    int childs = rightBarSpecificComments.getChildCount();
+                    for (int i = childs - 1; i >= 0; i--)
+                        rightBarSpecificComments.getChildAt(i).setVisibility(View.GONE);
+                    slider.findViewById(R.id.rightbar_green).setVisibility(View.INVISIBLE);
+                }
             }
 
             @Override
             public void onPanelClosed(View panel) {
-//                if (panel != null) {
-//                    Fragment frag = getActivity().getSupportFragmentManager().findFragmentById(R.id.comments_container);
-//                    if (frag != null) {
-//                        String tag = frag.getTag();
-//                        if (tag.equals("G"))
-//                            showCommentsTab(false);
-//                        else
-//                            showCommentsTab(true);
-//                    } else
-//                        showCommentsTab(false);
-//                }
+                if (panel != null) {
+                    Fragment frag = getActivity().getSupportFragmentManager().findFragmentById(R.id.comments_container);
+                    if (frag != null) {
+                        String tag = frag.getTag();
+                        if (tag.equals("G"))
+                            showCommentsTab(false);
+                        else
+                            showCommentsTab(true);
+                    } else
+                        showCommentsTab(false);
+                }
             }
         });
 

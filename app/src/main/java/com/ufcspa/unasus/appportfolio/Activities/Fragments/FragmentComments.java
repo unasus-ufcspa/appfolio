@@ -68,6 +68,7 @@ public class FragmentComments extends Frag {
 
             loadCom();
             adapterComments.refresh(oneComments);
+
             h.postDelayed(this, 1000);
         }
     };
@@ -80,6 +81,7 @@ public class FragmentComments extends Frag {
         singleton = Singleton.getInstance();
 //        singleton.idActivityStudent = source.getActivityStudentID(singleton.activity.getIdAtivity(), singleton.portfolioClass.getIdPortfolioStudent());
         Log.d("Comments", "On createView entrou");
+
         return view;
     }
 
@@ -105,14 +107,14 @@ public class FragmentComments extends Frag {
         loadComments = new LoadComments();
         loadComments.execute();
         Log.d("Comments", "On create entrou");
-
-        h.postDelayed(myRunnable, 1000);
     }
 
     @Override
     public void onResume() {
         Log.d("Comments", "On resume entrou");
         super.onResume();
+        h.postDelayed(myRunnable, 1000);
+
         edtMessage = (EditText) getView().findViewById(R.id.edtMessage);
         btGenMess = (Button) getView().findViewById(R.id.gen_messag_bt);
         btAttachment = (Button) getView().findViewById(R.id.bt_add_attachment);
@@ -302,7 +304,7 @@ public class FragmentComments extends Frag {
     public void loadCom() {
         DataBaseAdapter db = DataBaseAdapter.getInstance(getActivity());
         Singleton singleton = Singleton.getInstance();
-        ArrayList<Comentario> lista = (ArrayList<Comentario>) db.listComments(singleton.activity.getIdActivityStudent(), "C", 0);//lista comentario gerais filtrando por C
+        ArrayList<Comentario> lista = (ArrayList<Comentario>) db.listComments(singleton.activity.getIdActivityStudent(), "G", 0);//lista comentario gerais filtrando por C
         oneComments = new ArrayList<OneComment>(20);
         if (lista.size() != 0) {
 
