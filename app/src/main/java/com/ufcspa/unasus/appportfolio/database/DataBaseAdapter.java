@@ -5,7 +5,6 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteConstraintException;
 import android.database.sqlite.SQLiteDatabase;
-import android.security.KeyChain;
 import android.util.Log;
 
 import com.ufcspa.unasus.appportfolio.Model.Activity;
@@ -672,7 +671,7 @@ public class DataBaseAdapter {
         cv.put("tx_activity", activityStudent.getTxtActivity());
         cv.put("dt_last_access", activityStudent.getDtLastAcess());
         try {
-            db.update("tb_version_activity", cv, "id_version_activity=(SELECT MAX(id_version_activity) FROM tb_activity_version WHERE id_activity_student=?)", new String[]{String.valueOf(activityStudent.getIdActivityStudent())});
+            db.update("tb_version_activity", cv, "id_version_activity=(SELECT MAX(id_version_activity) FROM tb_version_activity WHERE id_activity_student=?)", new String[]{String.valueOf(activityStudent.getIdActivityStudent())});
             Log.d(tag, "conseguiu salvar alteração da atividade");
         } catch (Exception e) {
             Log.e(tag, "erro ao atualizar acStudent:" + e.getMessage());
@@ -681,7 +680,7 @@ public class DataBaseAdapter {
 
     public ActivityStudent listLastVersionActivityStudent(int idActivityStudent) {
         ActivityStudent acStudent = new ActivityStudent();
-        String query = "select tx_activity from tb_version_activity WHERE id_version_activity=(SELECT MAX(id_version_activity) FROM tb_activity_version WHERE id_activity_student=" + idActivityStudent + ");";
+        String query = "select tx_activity from tb_version_activity WHERE id_version_activity=(SELECT MAX(id_version_activity) FROM tb_version_activity WHERE id_activity_student=" + idActivityStudent + ");";
         Cursor c = null;
         Log.d(tag, "query lista act Stu:" + query);
         try {

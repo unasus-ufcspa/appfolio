@@ -9,6 +9,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.ufcspa.unasus.appportfolio.Activities.MainActivity;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -42,6 +43,7 @@ public class SendFullDataClient extends HttpClient{
                     Log.d(tag, "JSON RESPONSE: " + response.toString().replaceAll("\\{", "\n{"));
                     if (response.has("error")) {
                         Log.e(tag, "sincronizacao de dados full falhou");
+                        MainActivity.sendResponseNotReceived = false;
                     } else if (response.has("fullDataDevSrv_response")) {
                         sendData.dadosResponse = new LinkedHashMap<>();
 
@@ -76,6 +78,7 @@ public class SendFullDataClient extends HttpClient{
                     Log.d(tag, "Fim  da request");
                     //EXECUTE INSERTS IN SQLITE
                     //MainActivity.isFullDataSucessful = true;
+                    MainActivity.sendResponseNotReceived = false;
                 }
             }
         }, new Response.ErrorListener() {
@@ -85,6 +88,7 @@ public class SendFullDataClient extends HttpClient{
                 Log.e(tag, "Erro  na request");
                 Log.e(tag, "erro=" + volleyError.getMessage());
                 volleyError.printStackTrace();
+                MainActivity.sendResponseNotReceived = false;
             }
         });
 

@@ -8,6 +8,7 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
 import android.provider.MediaStore;
 import android.text.InputType;
 import android.text.method.ScrollingMovementMethod;
@@ -22,12 +23,14 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.onegravity.rteditor.utils.Constants;
+import com.ufcspa.unasus.appportfolio.Activities.MainActivity;
 import com.ufcspa.unasus.appportfolio.Adapter.SpecificCommentAdapter;
 import com.ufcspa.unasus.appportfolio.Model.Attachment;
 import com.ufcspa.unasus.appportfolio.Model.Comentario;
 import com.ufcspa.unasus.appportfolio.Model.Note;
 import com.ufcspa.unasus.appportfolio.Model.OneComment;
 import com.ufcspa.unasus.appportfolio.Model.Singleton;
+import com.ufcspa.unasus.appportfolio.Model.Sync;
 import com.ufcspa.unasus.appportfolio.R;
 import com.ufcspa.unasus.appportfolio.database.DataBaseAdapter;
 
@@ -43,6 +46,7 @@ import java.util.Date;
 public class FragmentSpecificComments extends Frag {
 
     private static boolean EXPANDED_FLAG = false;
+    private final Handler h = new Handler();
     int lastID;
     private SpecificCommentAdapter spcAdapter;
     private ListView lv;
@@ -56,8 +60,22 @@ public class FragmentSpecificComments extends Frag {
     private Note noteNow;
     private ArrayList<Comentario> lista;
     private ArrayList<OneComment> oneComments;
-    private LoadCommentsFromDB loadCommentsFromDB;
 //    private ImageButton btExpand;
+private LoadCommentsFromDB loadCommentsFromDB;
+    private Runnable myRunnable = new Runnable() {
+        @Override
+        public void run() {
+            Log.d("Handler", "Handler is running...");
+            MainActivity main = ((MainActivity) getActivity());
+            if (main != null)
+                main.downloadFullDataComments(Singleton.getInstance().idActivityStudent);
+
+            loadCommentsFromDB();
+            spcAdapter.refresh(oneComments);
+
+            h.postDelayed(this, 1000);
+        }
+    };
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -152,6 +170,15 @@ public class FragmentSpecificComments extends Frag {
             }
         });
         setarListView();
+
+        h.postDelayed(myRunnable, 1000);
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        h.removeCallbacks(myRunnable);
+        MainActivity.shouldSend = false;
     }
 
     public Comentario getCommentFromText(){
@@ -159,7 +186,7 @@ public class FragmentSpecificComments extends Frag {
         Comentario c = new Comentario();
         c.setDateComment(getActualTime());
         c.setIdAuthor(singleton.user.getIdUser());
-        c.setTypeComment("O");
+        c.setTypeComment("S");
         //Log.d("comments", "reference setting in C spcific comment:" + txNote.getText().toString());
         c.setTxtReference(txNote.getText().toString());
         c.setTxtComment(edtMessage.getText().toString());
@@ -171,7 +198,7 @@ public class FragmentSpecificComments extends Frag {
         try {
             DataBaseAdapter db = DataBaseAdapter.getInstance(getActivity());
             Singleton singleton = Singleton.getInstance();
-            lista = (ArrayList<Comentario>) db.listComments(singleton.activity.getIdActivityStudent(), "O", singleton.note.getBtId());//lista comentario gerais filtrando por O
+            lista = (ArrayList<Comentario>) db.listComments(singleton.activity.getIdActivityStudent(), "S", singleton.note.getBtId());//lista comentario gerais filtrando por O
             oneComments= new ArrayList<>(10);
 
             if (lista.size() != 0) {
@@ -356,6 +383,13 @@ public class FragmentSpecificComments extends Frag {
         try {
             DataBaseAdapter db = DataBaseAdapter.getInstance(getActivity());
             lastID=db.insertSpecificComment(c, noteNow.getBtId());
+
+            Sync sync = new Sync(singleton.device.get_id_device(), "tb_comment", lastID, singleton.idActivityStudent);
+            DataBaseAdapter.getInstance(getContext()).insertIntoTBSync(sync);
+
+            MainActivity main = ((MainActivity) getActivity());
+            if (main != null)
+                main.uploadFullData();
             Log.d("Banco:", "comentario inserido no bd interno com sucesso");
         }
         catch (Exception e) {
