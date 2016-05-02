@@ -678,6 +678,21 @@ public class DataBaseAdapter {
         }
     }
 
+    public int getLastIDVersionActivity(int idActivityStudent) {
+        String query = "SELECT MAX(id_version_activity) FROM tb_version_activity WHERE id_activity_student=" + idActivityStudent;
+        Cursor c = null;
+        try {
+            c = db.rawQuery(query, null);
+            if (c.moveToFirst())
+                return c.getInt(0);
+            else
+                return 0;
+        } catch (Exception e) {
+            Log.e(tag, "erro ao buscar last id version:" + e.getMessage());
+        }
+        return 0;
+    }
+
     public ActivityStudent listLastVersionActivityStudent(int idActivityStudent) {
         ActivityStudent acStudent = new ActivityStudent();
         String query = "select tx_activity from tb_version_activity WHERE id_version_activity=(SELECT MAX(id_version_activity) FROM tb_version_activity WHERE id_activity_student=" + idActivityStudent + ");";
@@ -703,6 +718,7 @@ public class DataBaseAdapter {
 //        db.close();
         return acStudent;
     }
+
     public int insertVersionActivity(VersionActivity v){
         ContentValues cv = new ContentValues();
         cv.put("tx_activity", v.getTx_activity());
@@ -724,9 +740,6 @@ public class DataBaseAdapter {
 
         return result;
     }
-
-
-
 
     public List<PortfolioClass> listarPortfolio(int idClass, char userType, int idUser) {
         String query = "SELECT * FROM tb_portfolio";
@@ -769,15 +782,9 @@ public class DataBaseAdapter {
         return pc;
     }
 
-
-
-
-
     /*
-
     *************************MÉTODO DESCOBRIR PERFIL DO USUÀRIO***********************************
-
-*/
+    */
 
     public char verifyUserType(int idUser) {
         String query = "select \n" +
@@ -801,7 +808,6 @@ public class DataBaseAdapter {
 //        db.close();
         return userType;
     }
-
 
     /*
 
@@ -869,8 +875,6 @@ public class DataBaseAdapter {
 //        db.close();
         return team;
     }
-
-
 
     /*
 
@@ -1566,7 +1570,7 @@ public class DataBaseAdapter {
 
     //nao finalizado ainda
     public List<VersionActivity> getVersionActivitiesByIDs(LinkedList<Integer> ids) {
-        StringBuilder sb = new StringBuilder("select * from tb_version_activity where id_comment in ( ");
+        StringBuilder sb = new StringBuilder("select * from tb_version_activity where id_version_activity in ( ");
         for (int id :ids){
             if(id==ids.getLast()){
                 sb.append(""+id+" );");
@@ -1578,20 +1582,31 @@ public class DataBaseAdapter {
         Log.d(tag + "get comments by ids", " query:" + sb.toString());
         String query = sb.toString();
         Cursor c = db.rawQuery(query, null);
-        LinkedList lista = new LinkedList<Comentario>();
+        LinkedList lista = new LinkedList<VersionActivity>();
         if (c.moveToFirst()) {
             do {
-                c.moveToFirst();
-                Comentario comm = new Comentario();
-                comm.setIdComment(c.getInt(0));
-                comm.setIdActivityStudent(c.getInt(1));
-                comm.setIdAuthor(c.getInt(2));
-                comm.setTxtComment(c.getString(3));
-                comm.setTxtReference(c.getString(4));
-                comm.setTypeComment(c.getString(5));
-                comm.setDateComment(c.getString(6));
-                lista.add(comm);
-                c.close();
+//                c.moveToFirst();
+                VersionActivity versionActivity = new VersionActivity();
+                versionActivity.setId_version_activity(c.getInt(0));
+                versionActivity.setId_activity_student(c.getInt(1));
+                versionActivity.setTx_activity(c.getString(2));
+                if (c.getString(3) != null)
+                    versionActivity.setDt_last_access(c.getString(3));
+                else
+                    versionActivity.setDt_last_access("2000-01-01 00:00:00");
+
+                if (c.getString(4) != null)
+                    versionActivity.setDt_submission(c.getString(4));
+                else
+                    versionActivity.setDt_submission("");
+
+                if (c.getString(5) != null)
+                    versionActivity.setDt_verification(c.getString(5));
+                else
+                    versionActivity.setDt_verification("");
+
+                lista.add(versionActivity);
+//                c.close();
             } while (c.moveToNext());
         } else {
             Log.d(tag, "Nao retornou nada na consulta");
@@ -1605,6 +1620,18 @@ public class DataBaseAdapter {
             cv.put("id_comment_srv", ids.getIdSrv());
             try {
                 db.update("tb_comment", cv, "id_comment=?", new String[]{"" + ids.getId()});
+            } catch (Exception e) {
+                Log.d(tag, e.getMessage());
+            }
+        }
+    }
+
+    public void updateVersionsBySendFullData(LinkedList<HolderIDS> holderIDS) {
+        ContentValues cv = new ContentValues();
+        for (HolderIDS ids : holderIDS) {
+            cv.put("id_version_activity_srv", ids.getIdSrv());
+            try {
+                db.update("tb_version_activity", cv, "id_version_activity=?", new String[]{"" + ids.getId()});
             } catch (Exception e) {
                 Log.d(tag, e.getMessage());
             }

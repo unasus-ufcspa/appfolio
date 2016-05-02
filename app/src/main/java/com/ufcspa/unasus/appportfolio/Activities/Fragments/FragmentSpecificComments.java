@@ -73,7 +73,7 @@ private LoadCommentsFromDB loadCommentsFromDB;
             loadCommentsFromDB();
             spcAdapter.refresh(oneComments);
 
-            h.postDelayed(this, 1000);
+            h.postDelayed(this, 5000);
         }
     };
 
@@ -171,7 +171,7 @@ private LoadCommentsFromDB loadCommentsFromDB;
         });
         setarListView();
 
-        h.postDelayed(myRunnable, 1000);
+        h.postDelayed(myRunnable, 5000);
     }
 
     @Override

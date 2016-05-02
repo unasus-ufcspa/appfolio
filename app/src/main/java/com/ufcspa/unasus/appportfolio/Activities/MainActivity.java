@@ -295,7 +295,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private void changeFragment(int id)
     {
-        shouldSend = false;
         singleton.firsttime = true;
         singleton.note = new Note(0, "null", 0);
         ((InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(findViewById(R.id.fragment_container).getWindowToken(), 0);
@@ -304,6 +303,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             case 0:
                 downloadFullData(0, id);
                 uploadFullData();
+                shouldSend = false;
                 break;
             case 1:
                 if (singleton.portfolioClass != null)
@@ -470,9 +470,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     public void removeProgressBar(int change_fragment) {
-        if(dialog != null)
-            dialog.dismiss();
-
+        if (dialog != null) {
+            try {
+                dialog.dismiss();
+            } catch (Exception e) {
+            }
+        }
         switch (change_fragment) {
             case 0:
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new FragmentSelectPortfolio()).addToBackStack("Frag").commitAllowingStateLoss();//FragmentSelectPortfolio

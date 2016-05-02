@@ -296,15 +296,15 @@ public class FragmentRTEditor extends Frag {
             mRTMessageField.setTextIsSelectable(true);
             mRTManager.setToolbarVisibility(RTManager.ToolbarVisibility.HIDE);
 
-            mRTMessageField.setText("Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris enim lacus, gravida egestas ex fringilla, molestie sollicitudin turpis. Curabitur et congue justo. Etiam tincidunt, est vel euismod facilisis, dui urna pellentesque nunc, vitae pharetra est nisi ultrices ex. Pellentesque sollicitudin porttitor condimentum. Ut auctor enim pulvinar, hendrerit sem eu, facilisis erat. Sed tempus convallis iaculis. Duis imperdiet rhoncus ipsum et congue. Aenean pellentesque volutpat neque ac semper. Donec consectetur lacinia nisi, et molestie dolor rhoncus in. Praesent ultricies massa nec nisi dictum hendrerit. Proin nec pellentesque lacus, ut fringilla sapien. Donec quis enim interdum, molestie lacus et, ullamcorper ligula.\n" +
-                    "\n" +
-                    "Ut sit amet odio ornare, vehicula urna a, volutpat est. Nunc ut ante massa. Maecenas eget est quis sapien venenatis bibendum. Fusce id porta nulla. Nunc luctus sapien libero, eget imperdiet massa laoreet at. Etiam dolor tortor, lacinia quis congue eu, varius nec turpis. Suspendisse urna leo, rutrum eget porta ut, tempus vel urna.\n" +
-                    "\n" +
-                    "Suspendisse eget velit accumsan, cursus lectus vitae, dapibus justo. Proin vel dolor orci. Nullam euismod fringilla nunc. Proin eu libero nec est mattis semper in eget purus. Integer eleifend sodales justo, id luctus tortor feugiat sit amet. Phasellus convallis neque ut est mollis aliquet. Ut semper volutpat velit. Aliquam eget lectus sit amet turpis condimentum elementum. Phasellus sollicitudin turpis quis euismod mattis. Sed id nisl lectus. Mauris pharetra non ipsum dapibus imperdiet. Sed sagittis tellus ac lacus consectetur pretium. Nam tristique iaculis pellentesque. Ut suscipit neque ligula.\n" +
-                    "\n" +
-                    "Pellentesque non malesuada purus, in posuere tellus. Quisque in scelerisque odio, quis eleifend lectus. Aliquam mattis urna vel feugiat ornare. Proin lectus ex, iaculis nec iaculis id, ultricies in nisi. In a lectus eros. Nulla interdum cursus nunc, ac congue massa ullamcorper eget. Integer turpis orci, accumsan non egestas vel, porta vel nunc. Nullam consequat turpis in vehicula condimentum. Phasellus libero arcu, pretium sit amet lorem at, vehicula mollis velit. Nulla rhoncus ornare gravida. Nulla facilisi. Fusce porttitor tellus eget nunc suscipit, a tempus libero accumsan. Maecenas at lacus tempor, ullamcorper urna in, viverra ex. Proin tincidunt ex elit, ac malesuada diam porta eget. Morbi sed ornare lectus, aliquam scelerisque mauris.\n" +
-                    "\n" +
-                    "Morbi in quam et ante egestas molestie. Proin ut tellus molestie libero mattis blandit. Integer ac lorem neque. Aenean elementum, nunc in congue tempus, enim nibh feugiat velit, id sollicitudin tellus enim ac purus. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Cras in felis eu neque dictum interdum in nec tellus. Etiam quis dolor ultrices tortor pharetra gravida. Suspendisse auctor malesuada eros, posuere tincidunt risus posuere eget. Aenean quis magna et lacus fringilla tristique vel et tortor. Duis ultrices ut purus viverra dignissim.");
+//            mRTMessageField.setText("Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris enim lacus, gravida egestas ex fringilla, molestie sollicitudin turpis. Curabitur et congue justo. Etiam tincidunt, est vel euismod facilisis, dui urna pellentesque nunc, vitae pharetra est nisi ultrices ex. Pellentesque sollicitudin porttitor condimentum. Ut auctor enim pulvinar, hendrerit sem eu, facilisis erat. Sed tempus convallis iaculis. Duis imperdiet rhoncus ipsum et congue. Aenean pellentesque volutpat neque ac semper. Donec consectetur lacinia nisi, et molestie dolor rhoncus in. Praesent ultricies massa nec nisi dictum hendrerit. Proin nec pellentesque lacus, ut fringilla sapien. Donec quis enim interdum, molestie lacus et, ullamcorper ligula.\n" +
+//                    "\n" +
+//                    "Ut sit amet odio ornare, vehicula urna a, volutpat est. Nunc ut ante massa. Maecenas eget est quis sapien venenatis bibendum. Fusce id porta nulla. Nunc luctus sapien libero, eget imperdiet massa laoreet at. Etiam dolor tortor, lacinia quis congue eu, varius nec turpis. Suspendisse urna leo, rutrum eget porta ut, tempus vel urna.\n" +
+//                    "\n" +
+//                    "Suspendisse eget velit accumsan, cursus lectus vitae, dapibus justo. Proin vel dolor orci. Nullam euismod fringilla nunc. Proin eu libero nec est mattis semper in eget purus. Integer eleifend sodales justo, id luctus tortor feugiat sit amet. Phasellus convallis neque ut est mollis aliquet. Ut semper volutpat velit. Aliquam eget lectus sit amet turpis condimentum elementum. Phasellus sollicitudin turpis quis euismod mattis. Sed id nisl lectus. Mauris pharetra non ipsum dapibus imperdiet. Sed sagittis tellus ac lacus consectetur pretium. Nam tristique iaculis pellentesque. Ut suscipit neque ligula.\n" +
+//                    "\n" +
+//                    "Pellentesque non malesuada purus, in posuere tellus. Quisque in scelerisque odio, quis eleifend lectus. Aliquam mattis urna vel feugiat ornare. Proin lectus ex, iaculis nec iaculis id, ultricies in nisi. In a lectus eros. Nulla interdum cursus nunc, ac congue massa ullamcorper eget. Integer turpis orci, accumsan non egestas vel, porta vel nunc. Nullam consequat turpis in vehicula condimentum. Phasellus libero arcu, pretium sit amet lorem at, vehicula mollis velit. Nulla rhoncus ornare gravida. Nulla facilisi. Fusce porttitor tellus eget nunc suscipit, a tempus libero accumsan. Maecenas at lacus tempor, ullamcorper urna in, viverra ex. Proin tincidunt ex elit, ac malesuada diam porta eget. Morbi sed ornare lectus, aliquam scelerisque mauris.\n" +
+//                    "\n" +
+//                    "Morbi in quam et ante egestas molestie. Proin ut tellus molestie libero mattis blandit. Integer ac lorem neque. Aenean elementum, nunc in congue tempus, enim nibh feugiat velit, id sollicitudin tellus enim ac purus. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Cras in felis eu neque dictum interdum in nec tellus. Etiam quis dolor ultrices tortor pharetra gravida. Suspendisse auctor malesuada eros, posuere tincidunt risus posuere eget. Aenean quis magna et lacus fringilla tristique vel et tortor. Duis ultrices ut purus viverra dignissim.");
 
         }
         LinearLayout layout = (LinearLayout) view.findViewById(R.id.info_rteditor_container);
@@ -331,23 +331,25 @@ public class FragmentRTEditor extends Frag {
 //
 //                ((MainActivity) getActivity()).dontCreateCrossfader();
 
+                //POPULA SYNC PARA SINCRONIZAR
+                Sync sync = new Sync();
+                sync.setNm_table("tb_version_activity");
+                sync.setCo_id_table(source.getLastIDVersionActivity(singleton.idActivityStudent));
+                sync.setId_activity_student(Singleton.getInstance().idActivityStudent);
+                //sync.setId_device(Singleton.getInstance().device.get_id_device());
+                source.insertIntoTBSync(sync);
+
                 //SALVA NOVA VERSION ACTIVITY
                 DataBaseAdapter data =DataBaseAdapter.getInstance(getContext());
                 VersionActivity version= new VersionActivity();
                 version.setTx_activity(mRTMessageField.getText(RTFormat.HTML));
                 version.setId_activity_student(Singleton.getInstance().idActivityStudent);
                 version.setDt_last_access(getActualTime());
-                int last_id=data.insertVersionActivity(version);
+                data.insertVersionActivity(version);
 
-                //POPULA SYNC PARA SINCRONIZAR
-                Sync sync = new Sync();
-                sync.setNm_table("tb_version_activity");
-                sync.setCo_id_table(last_id);
-                sync.setId_activity_student(Singleton.getInstance().idActivityStudent);
-                //sync.setId_device(Singleton.getInstance().device.get_id_device());
-                data.insertIntoTBSync(sync);
-
-
+                MainActivity main = ((MainActivity) getActivity());
+                if (main != null)
+                    main.uploadFullData();
             }
         });
 
@@ -355,6 +357,14 @@ public class FragmentRTEditor extends Frag {
         initTopBar(view);
 
         LocalBroadcastManager.getInstance(getActivity()).registerReceiver(broadcastReceiver, new IntentFilter("call.attachmentdialog.action"));
+
+        if (source.getLastIDVersionActivity(singleton.idActivityStudent) == 0 && singleton.portfolioClass.getPerfil().equals("S")) {
+            VersionActivity version = new VersionActivity();
+            version.setTx_activity("");
+            version.setId_activity_student(Singleton.getInstance().idActivityStudent);
+            version.setDt_last_access(getActualTime());
+            source.insertVersionActivity(version);
+        }
 
         return view;
     }
@@ -376,9 +386,9 @@ public class FragmentRTEditor extends Frag {
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        saveText();
         if (mRTManager != null)
             mRTManager.onSaveInstanceState(outState);
+        saveText();
         outState.putInt("currentSpecificComment", currentSpecificComment);
         outState.putSerializable("specificCommentsNotes", specificCommentsNotes);
     }

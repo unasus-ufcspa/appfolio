@@ -67,7 +67,7 @@ public class FragmentComments extends Frag {
             loadCom();
             adapterComments.refresh(oneComments);
 
-            h.postDelayed(this, 1000);
+            h.postDelayed(this, 5000);
         }
     };
     @Override
@@ -148,7 +148,7 @@ public class FragmentComments extends Frag {
         //addItems();
         setarListView();
 
-        h.postDelayed(myRunnable, 1000);
+        h.postDelayed(myRunnable, 5000);
     }
 
     @Override
