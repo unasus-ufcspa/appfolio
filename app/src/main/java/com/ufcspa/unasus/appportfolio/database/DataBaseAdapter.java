@@ -672,7 +672,7 @@ public class DataBaseAdapter {
         cv.put("tx_activity", activityStudent.getTxtActivity());
         cv.put("dt_last_access", activityStudent.getDtLastAcess());
         try {
-            db.update("tb_version_activity", cv, "id_version_activity=(SELECT MAX(id_version_activity) FROM tb_activity_version WHERE id_activity_student=?)", new String[]{String.valueOf(activityStudent.getIdActivityStudent())});
+            db.update("tb_version_activity", cv, "id_version_activity=(SELECT MAX(id_version_activity) FROM tb_version_activity WHERE id_activity_student=?)", new String[]{String.valueOf(activityStudent.getIdActivityStudent())});
             Log.d(tag, "conseguiu salvar alteração da atividade");
         } catch (Exception e) {
             Log.e(tag, "erro ao atualizar acStudent:" + e.getMessage());
