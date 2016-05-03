@@ -9,6 +9,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.ufcspa.unasus.appportfolio.Activities.MainActivity;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -42,6 +43,7 @@ public class SendFullDataClient extends HttpClient{
                     Log.d(tag, "JSON RESPONSE: " + response.toString().replaceAll("\\{", "\n{"));
                     if (response.has("error")) {
                         Log.e(tag, "sincronizacao de dados full falhou");
+                        MainActivity.sendResponseNotReceived = false;
                     } else if (response.has("fullDataDevSrv_response")) {
                         sendData.dadosResponse = new LinkedHashMap<>();
 
@@ -65,9 +67,28 @@ public class SendFullDataClient extends HttpClient{
                                 sendData.dadosResponse.put("tb_comment", holders);
                             }
                         }
+                        if (resp.has("version")) {
+                            JSONObject version = resp.getJSONObject("version");
+                            LinkedList<HolderIDS> holders = new LinkedList<>();
+                            if (version.has("tb_version_activity")) {
+                                JSONArray tb_version_activity = version.getJSONArray("tb_version_activity");
+                                for (int i = 0; i < tb_version_activity.length(); i++) {
+                                    HolderIDS holder = new HolderIDS();
+                                    JSONObject temp = tb_version_activity.getJSONObject(i);
+                                    int id_version_activity = temp.getInt("id_version_activity");
+                                    int id_version_activity_srv = temp.getInt("id_version_activity_srv");
+                                    holder.id = id_version_activity;
+                                    holder.idSrv = id_version_activity_srv;
+
+                                    holders.add(holder);
+                                }
+                                sendData.dadosResponse.put("tb_version_activity", holders);
+                            }
+                        }
 
                         //atualiza dados recebidos via json no sqlite
                         sendData.insertDataOnResponse();
+                        MainActivity.shouldSend = false;
                     }
                 } catch (Exception v) {
                     //MainActivity.isFullSyncNotSucessful = true;
@@ -76,6 +97,7 @@ public class SendFullDataClient extends HttpClient{
                     Log.d(tag, "Fim  da request");
                     //EXECUTE INSERTS IN SQLITE
                     //MainActivity.isFullDataSucessful = true;
+                    MainActivity.sendResponseNotReceived = false;
                 }
             }
         }, new Response.ErrorListener() {
@@ -85,6 +107,7 @@ public class SendFullDataClient extends HttpClient{
                 Log.e(tag, "Erro  na request");
                 Log.e(tag, "erro=" + volleyError.getMessage());
                 volleyError.printStackTrace();
+                MainActivity.sendResponseNotReceived = false;
             }
         });
 

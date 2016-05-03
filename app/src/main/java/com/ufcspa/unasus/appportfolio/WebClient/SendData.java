@@ -26,7 +26,7 @@ public class SendData {
     private ArrayList<Sync> sincronias;
     private LinkedHashMap<String,LinkedList<Integer>> dadosAgrupados;
     private LinkedList<Comentario> comentarios;
-    private LinkedList<VersionActivity> versions_list;
+    private LinkedList<VersionActivity> versions;
     private DataBaseAdapter data;
     private String tbComm="tb_comment";
     private String tbVers="tb_version_activity";
@@ -40,7 +40,7 @@ public class SendData {
         this.context = context;
         sincronias= new ArrayList<>();
         data= DataBaseAdapter.getInstance(context);
-        versions_list = new LinkedList<>();
+        versions = new LinkedList<VersionActivity>();
         comentarios = new LinkedList<>();
         idSync = new LinkedList<>();
     }
@@ -72,18 +72,25 @@ public class SendData {
             comentarios = (LinkedList) data.getCommentsByIDs(dadosAgrupados.get(tbComm));
       }
       if(dadosAgrupados.get(tbVers)!=null){
-          versions_list = (LinkedList) data.getVersionActivitiesByIDs(dadosAgrupados.get(tbVers));
+          versions = (LinkedList) data.getVersionActivitiesByIDs(dadosAgrupados.get(tbVers));
       }
     }
 
     public void insertDataOnResponse(){
         // insert data by json response sendfulldata
         if(dadosResponse.get(tbComm)!=null){
-            Log.d("json send full data ","atualizando tabela "+tbComm+"...");
+            Log.d("json send full data ", "atualizando tabela " + tbComm + "...");
             data.updateCommentBySendFullData(dadosResponse.get(tbComm));
-            data.deleteSync(idSync);
+//            data.deleteSync(idSync);
             Log.d("json send full data ", "conseguiu atualizar com sucesso id server");
         }
+        if (dadosResponse.get(tbVers) != null) {
+            Log.d("json send full data ", "atualizando tabela " + tbVers + "...");
+            data.updateVersionsBySendFullData(dadosResponse.get(tbComm));
+//            data.deleteSync(idSync);
+            Log.d("json send full data ", "conseguiu atualizar com sucesso id server");
+        }
+        data.deleteSync(idSync);
     }
 
 
@@ -118,15 +125,17 @@ public class SendData {
                     jsonComments.put(jsonComment);
                 }
             }
-            if(versions_list !=null){
-                for (VersionActivity v : versions_list){
-                    jsonVersion.put("id_version_activity",v.getId_version_activity());
-                    jsonVersion.put("id_activity_student",v.getId_activity_student());
-                    jsonVersion.put("tx_activity",v.getTx_activity());
-                    jsonVersion.put("dt_last_access",v.getDt_last_access());
-                    jsonVersion.put("dt_submission",v.getDt_submission());
+            if (versions != null) {
+//                for (VersionActivity v : versions_list){
+                for (int i = 0; i < versions.size(); i++) {
+                    VersionActivity v = versions.get(i);
+                    jsonVersion.put("id_version_activity", v.getId_version_activity());
+                    jsonVersion.put("id_activity_student", v.getId_activity_student());
+                    jsonVersion.put("tx_activity", v.getTx_activity());
+                    jsonVersion.put("dt_last_access", v.getDt_last_access());
                     jsonArrayVersions.put(jsonVersion);
                 }
+//                }
             }
 
             //mount device

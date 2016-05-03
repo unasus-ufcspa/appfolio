@@ -59,31 +59,33 @@ public class FullDataClient extends HttpClient {
                             if (resp.has("notice")) {
                                 JSONObject notice = resp.getJSONObject("notice");
                                 if (notice.has("tb_notice")) {
-                                    JSONArray tb_notice = notice.getJSONArray("tb_notice");
+                                    if (notice.get("tb_notice") instanceof JSONArray) {
+                                        JSONArray tb_notice = notice.getJSONArray("tb_notice");
 
-                                    for (int i = 0; i < tb_notice.length(); i++) {
-                                        JSONObject temp = tb_notice.getJSONObject(i);
-                                        Notification notification = new Notification();
+                                        for (int i = 0; i < tb_notice.length(); i++) {
+                                            JSONObject temp = tb_notice.getJSONObject(i);
+                                            Notification notification = new Notification();
 
-                                        int id_notice = temp.getInt("id_notice");
-                                        int id_author = temp.getInt("id_author");
-                                        int id_destination = temp.getInt("id_destination");
-                                        int id_activity_student = temp.getInt("id_activity_student");
-                                        String nm_table = temp.getString("nm_table");
-                                        int co_id_table_srv = temp.getInt("co_id_table_srv");
-                                        String dt_notice = temp.getString("dt_notice");
-//                                        String dt_read = temp.getString("dt_read");
+                                            int id_notice = temp.getInt("id_notice");
+                                            int id_author = temp.getInt("id_author");
+                                            int id_destination = temp.getInt("id_destination");
+                                            int id_activity_student = temp.getInt("id_activity_student");
+                                            String nm_table = temp.getString("nm_table");
+                                            int co_id_table_srv = temp.getInt("co_id_table_srv");
+                                            String dt_notice = temp.getString("dt_notice");
+                                            //                                        String dt_read = temp.getString("dt_read");
 
-                                        notification.setId_notice(id_notice);
-                                        notification.setId_author(id_author);
-                                        notification.setId_destination(id_destination);
-                                        notification.setId_activity_student(id_activity_student);
-                                        notification.setNm_table(nm_table);
-                                        notification.setCo_id_table_srv(co_id_table_srv);
-                                        notification.setDt_notice(dt_notice);
-//                                        notification.setDt_read(dt_read);
+                                            notification.setId_notice(id_notice);
+                                            notification.setId_author(id_author);
+                                            notification.setId_destination(id_destination);
+                                            notification.setId_activity_student(id_activity_student);
+                                            notification.setNm_table(nm_table);
+                                            notification.setCo_id_table_srv(co_id_table_srv);
+                                            notification.setDt_notice(dt_notice);
+                                            //                                        notification.setDt_read(dt_read);
 
-                                        fullData.addNotification(notification);
+                                            fullData.addNotification(notification);
+                                        }
                                     }
                                 }
                             }

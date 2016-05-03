@@ -52,6 +52,10 @@ import io.github.skyhacker2.sqliteonweb.SQLiteOnWeb;
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
     public static boolean isFullDataSucessful;
     public static boolean isFullSyncNotSucessful;
+
+    public static boolean shouldSend;
+    public static boolean sendResponseNotReceived;
+
     final GestureDetector gestureDetector = new GestureDetector(new GestureListener());
     ProgressDialog dialog;
     private Crossfader crossFader;
@@ -299,6 +303,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             case 0:
                 downloadFullData(0, id);
                 uploadFullData();
+                shouldSend = false;
                 break;
             case 1:
                 if (singleton.portfolioClass != null)
@@ -421,20 +426,27 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     public void uploadFullData(){
+        shouldSend = true;
+        sendResponseNotReceived = true;
+
         if(isOnline()) {
-            final Thread myThread = new Thread(new Runnable() {
+            final Thread sendThread = new Thread(new Runnable() {
                 @Override
                 public void run() {
-                    SendData data = new SendData(getApplicationContext());
-                    String idDevice = Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID);
-                    if (data.getSyncs() > 0) {
-                        JSONObject send = data.GenerateJSON(idDevice);
-                        SendFullDataClient client = new SendFullDataClient(MainActivity.this, data);
-                        client.postJson(send);
+                    while (shouldSend) {
+                        SendData data = new SendData(getApplicationContext());
+                        String idDevice = Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID);
+                        if (data.getSyncs() > 0) {
+                            JSONObject send = data.GenerateJSON(idDevice);
+                            SendFullDataClient client = new SendFullDataClient(MainActivity.this, data);
+                            client.postJson(send);
+                        }
+                        sendResponseNotReceived = true;
+                        while (sendResponseNotReceived) ;
                     }
                 }
             });
-            myThread.start();
+            sendThread.start();
         }
     }
 
@@ -458,9 +470,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     public void removeProgressBar(int change_fragment) {
-        if(dialog != null)
-            dialog.dismiss();
-
+        if (dialog != null) {
+            try {
+                dialog.dismiss();
+            } catch (Exception e) {
+            }
+        }
         switch (change_fragment) {
             case 0:
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new FragmentSelectPortfolio()).addToBackStack("Frag").commitAllowingStateLoss();//FragmentSelectPortfolio

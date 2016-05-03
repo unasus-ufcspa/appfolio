@@ -61,15 +61,13 @@ public class FragmentComments extends Frag {
         public void run() {
             Log.d("Handler","Handler is running...");
             MainActivity main = ((MainActivity) getActivity());
-            if (main != null) {
+            if (main != null)
                 main.downloadFullDataComments(Singleton.getInstance().idActivityStudent);
-//                    main.uploadFullData();
-            }
 
             loadCom();
             adapterComments.refresh(oneComments);
 
-            h.postDelayed(this, 1000);
+            h.postDelayed(this, 5000);
         }
     };
     @Override
@@ -113,8 +111,6 @@ public class FragmentComments extends Frag {
     public void onResume() {
         Log.d("Comments", "On resume entrou");
         super.onResume();
-        h.postDelayed(myRunnable, 1000);
-
         edtMessage = (EditText) getView().findViewById(R.id.edtMessage);
         btGenMess = (Button) getView().findViewById(R.id.gen_messag_bt);
         btAttachment = (Button) getView().findViewById(R.id.bt_add_attachment);
@@ -151,12 +147,15 @@ public class FragmentComments extends Frag {
         });
         //addItems();
         setarListView();
+
+        h.postDelayed(myRunnable, 5000);
     }
 
     @Override
     public void onDestroy() {
         Log.d("LifeCycle", "onDestroy");
         h.removeCallbacks(myRunnable);
+        MainActivity.shouldSend = false;
         super.onDestroy();
     }
 
