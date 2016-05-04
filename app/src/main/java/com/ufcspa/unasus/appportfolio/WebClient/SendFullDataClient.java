@@ -71,18 +71,20 @@ public class SendFullDataClient extends HttpClient{
                             JSONObject version = resp.getJSONObject("version");
                             LinkedList<HolderIDS> holders = new LinkedList<>();
                             if (version.has("tb_version_activity")) {
-                                JSONArray tb_version_activity = version.getJSONArray("tb_version_activity");
-                                for (int i = 0; i < tb_version_activity.length(); i++) {
-                                    HolderIDS holder = new HolderIDS();
-                                    JSONObject temp = tb_version_activity.getJSONObject(i);
-                                    int id_version_activity = temp.getInt("id_version_activity");
-                                    int id_version_activity_srv = temp.getInt("id_version_activity_srv");
-                                    holder.id = id_version_activity;
-                                    holder.idSrv = id_version_activity_srv;
+                                if (version.get("tb_version_activity") instanceof JSONArray) {
+                                    JSONArray tb_version_activity = version.getJSONArray("tb_version_activity");
+                                    for (int i = 0; i < tb_version_activity.length(); i++) {
+                                        HolderIDS holder = new HolderIDS();
+                                        JSONObject temp = tb_version_activity.getJSONObject(i);
+                                        int id_version_activity = temp.getInt("id_version_activity");
+                                        int id_version_activity_srv = temp.getInt("id_version_activity_srv");
+                                        holder.id = id_version_activity;
+                                        holder.idSrv = id_version_activity_srv;
 
-                                    holders.add(holder);
+                                        holders.add(holder);
+                                    }
+                                    sendData.dadosResponse.put("tb_version_activity", holders);
                                 }
-                                sendData.dadosResponse.put("tb_version_activity", holders);
                             }
                         }
 

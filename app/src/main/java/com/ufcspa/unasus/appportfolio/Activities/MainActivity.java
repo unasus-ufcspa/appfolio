@@ -302,7 +302,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         {
             case 0:
                 downloadFullData(0, id);
-                uploadFullData();
+                sendFullData();
                 shouldSend = false;
                 break;
             case 1:
@@ -450,6 +450,24 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
+    public void sendFullData() {
+        if (isOnline()) {
+            final Thread sendThread = new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    SendData data = new SendData(getApplicationContext());
+                    String idDevice = Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID);
+                    if (data.getSyncs() > 0) {
+                        JSONObject send = data.GenerateJSON(idDevice);
+                        SendFullDataClient client = new SendFullDataClient(MainActivity.this, data);
+                        client.postJson(send);
+                    }
+                }
+            });
+            sendThread.start();
+        }
+    }
+
     public void downloadFullDataComments(final int id_activity_student) {
         isFullDataSucessful = false;
         isFullSyncNotSucessful = false;
@@ -473,21 +491,22 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         if (dialog != null) {
             try {
                 dialog.dismiss();
+
+                switch (change_fragment) {
+                    case 0:
+                        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new FragmentSelectPortfolio()).addToBackStack("Frag").commitAllowingStateLoss();//FragmentSelectPortfolio
+                        break;
+                    case 1:
+                        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new FragmentStudentActivities()).addToBackStack("Frag").commitAllowingStateLoss();
+                        break;
+                    case 5:
+                        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new FragmentRTEditor()).addToBackStack("Frag").commit();
+                        break;
+                    default:
+                        break;
+                }
             } catch (Exception e) {
             }
-        }
-        switch (change_fragment) {
-            case 0:
-                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new FragmentSelectPortfolio()).addToBackStack("Frag").commitAllowingStateLoss();//FragmentSelectPortfolio
-                break;
-            case 1:
-                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new FragmentStudentActivities()).addToBackStack("Frag").commitAllowingStateLoss();
-                break;
-            case 5:
-                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new FragmentRTEditor()).addToBackStack("Frag").commit();
-                break;
-            default:
-                break;
         }
     }
 

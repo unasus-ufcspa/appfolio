@@ -186,7 +186,7 @@ private LoadCommentsFromDB loadCommentsFromDB;
         Comentario c = new Comentario();
         c.setDateComment(getActualTime());
         c.setIdAuthor(singleton.user.getIdUser());
-        c.setTypeComment("S");
+        c.setTypeComment("O");
         //Log.d("comments", "reference setting in C spcific comment:" + txNote.getText().toString());
         c.setTxtReference(txNote.getText().toString());
         c.setTxtComment(edtMessage.getText().toString());
@@ -198,7 +198,7 @@ private LoadCommentsFromDB loadCommentsFromDB;
         try {
             DataBaseAdapter db = DataBaseAdapter.getInstance(getActivity());
             Singleton singleton = Singleton.getInstance();
-            lista = (ArrayList<Comentario>) db.listComments(singleton.activity.getIdActivityStudent(), "S", singleton.note.getBtId());//lista comentario gerais filtrando por O
+            lista = (ArrayList<Comentario>) db.listComments(singleton.activity.getIdActivityStudent(), "O", singleton.note.getBtId());//lista comentario gerais filtrando por O
             oneComments= new ArrayList<>(10);
 
             if (lista.size() != 0) {
@@ -389,7 +389,7 @@ private LoadCommentsFromDB loadCommentsFromDB;
 
             MainActivity main = ((MainActivity) getActivity());
             if (main != null)
-                main.uploadFullData();
+                main.sendFullData();
             Log.d("Banco:", "comentario inserido no bd interno com sucesso");
         }
         catch (Exception e) {

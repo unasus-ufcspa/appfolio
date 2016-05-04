@@ -3,7 +3,7 @@ package com.ufcspa.unasus.appportfolio.Model;
 /**
  * Created by icaromsc on 18/04/2016.
  */
-public class VersionActivity {
+public class VersionActivity implements Comparable<VersionActivity> {
     private int id_version_activity;
     private int id_activity_student;
     private String tx_activity;
@@ -79,5 +79,14 @@ public class VersionActivity {
 
     public void setId_version_activit_srv(int id_version_activit_srv) {
         this.id_version_activit_srv = id_version_activit_srv;
+    }
+
+    @Override
+    public int compareTo(VersionActivity another) {
+        if (this.id_version_activity < another.getId_version_activity())
+            return 1;
+        if (this.id_version_activity > another.getId_version_activity())
+            return -1;
+        return 0;
     }
 }

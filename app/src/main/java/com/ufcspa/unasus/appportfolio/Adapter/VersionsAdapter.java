@@ -7,9 +7,11 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
+import com.ufcspa.unasus.appportfolio.Model.VersionActivity;
 import com.ufcspa.unasus.appportfolio.R;
 
-import java.util.List;
+import java.util.ArrayList;
+import java.util.Collections;
 
 /**
  * Created by Arthur Zettler on 31/03/2016.
@@ -17,13 +19,16 @@ import java.util.List;
 public class VersionsAdapter extends BaseAdapter {
     private static LayoutInflater inflater = null;
     private Context context;
-    private List<String> list;
+    private ArrayList<VersionActivity> list;
     private Holder holder;
 
-    public VersionsAdapter(Context context, List<String> list) {
+    public VersionsAdapter(Context context, ArrayList<VersionActivity> list) {
         this.context = context;
         this.list = list;
         this.holder = new Holder();
+
+        Collections.sort(this.list);
+
         inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
 
@@ -33,7 +38,7 @@ public class VersionsAdapter extends BaseAdapter {
     }
 
     @Override
-    public String getItem(int position) {
+    public VersionActivity getItem(int position) {
         return list.get(position);
     }
 
@@ -47,12 +52,31 @@ public class VersionsAdapter extends BaseAdapter {
         if (convertView == null)
             convertView = inflater.inflate(R.layout.adapter_versions, null);
 
-        String aux = list.get(position);
+        VersionActivity aux = list.get(position);
 
         holder.date = (TextView) convertView.findViewById(R.id.version_date);
         holder.time = (TextView) convertView.findViewById(R.id.version_time);
+        String[] dateAndTime = null;
+        if (aux.getDt_submission() != null) {
+            dateAndTime = aux.getDt_submission().split(" ");
+        } else {
+            dateAndTime = aux.getDt_last_access().split(" ");
+        }
+
+        if (dateAndTime != null) {
+            holder.date.setText(dateAndTime[0]);
+            holder.time.setText(dateAndTime[1]);
+        }
 
         return convertView;
+    }
+
+    public void refresh(ArrayList<VersionActivity> versionActivities) {
+        this.list = versionActivities;
+
+        Collections.sort(this.list);
+
+        notifyDataSetChanged();
     }
 
     public class Holder {

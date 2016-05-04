@@ -336,7 +336,7 @@ public class DataBaseAdapter {
         } else {
             r = "Não há users!";
         }
-        c.close();
+//        c.close();
 //        db.close();
         Log.d(tag, "resultado string:" + r);
         return r;
@@ -412,7 +412,7 @@ public class DataBaseAdapter {
                 }
                 //add references
             } while (c.moveToNext());
-            c.close();
+//            c.close();
 //            db.close();
         } else {
             Log.d(tag, "não retornoun nada");
@@ -488,7 +488,7 @@ public class DataBaseAdapter {
             comm.setTxtReference(c.getString(4));
             comm.setTypeComment(c.getString(5));
             comm.setDateComment(c.getString(6));
-            c.close();
+//            c.close();
             return comm;
         } else {
             return null;
@@ -666,12 +666,12 @@ public class DataBaseAdapter {
 
 */
 
-    public void updateActivityStudent(ActivityStudent activityStudent) {
+    public void updateActivityStudent(ActivityStudent activityStudent, String dateLastAccess, int idCurrentVersionActivity) {
         ContentValues cv = new ContentValues();
         cv.put("tx_activity", activityStudent.getTxtActivity());
-        cv.put("dt_last_access", activityStudent.getDtLastAcess());
+        cv.put("dt_last_access", dateLastAccess);
         try {
-            db.update("tb_version_activity", cv, "id_version_activity=(SELECT MAX(id_version_activity) FROM tb_version_activity WHERE id_activity_student=?)", new String[]{String.valueOf(activityStudent.getIdActivityStudent())});
+            db.update("tb_version_activity", cv, "id_version_activity=?", new String[]{String.valueOf(idCurrentVersionActivity)});
             Log.d(tag, "conseguiu salvar alteração da atividade");
         } catch (Exception e) {
             Log.e(tag, "erro ao atualizar acStudent:" + e.getMessage());
@@ -719,6 +719,22 @@ public class DataBaseAdapter {
         return acStudent;
     }
 
+    public String getTextFromCurrentVersion(int idVersionActivity) {
+        String query = "select tx_activity from tb_version_activity WHERE id_version_activity=" + idVersionActivity;
+        Cursor c = null;
+        try {
+            c = db.rawQuery(query, null);
+            if (c.moveToFirst()) {
+                return c.getString(0);
+            }
+            c.close();
+        } catch (Exception e) {
+            Log.e(tag, "erro ao listar atividade do estudante:" + e.getMessage());
+        }
+
+        return null;
+    }
+
     public int insertVersionActivity(VersionActivity v){
         ContentValues cv = new ContentValues();
         cv.put("tx_activity", v.getTx_activity());
@@ -739,6 +755,39 @@ public class DataBaseAdapter {
         }
 
         return result;
+    }
+
+    public ArrayList<VersionActivity> getAllVersionsFromActivityStudent() {
+        String query = "SELECT id_version_activity, " +
+                "id_activity_student, " +
+                "tx_activity, " +
+                "dt_last_access, " +
+                "dt_submission, " +
+                "dt_verification, " +
+                "id_version_activity_srv " +
+                "FROM tb_version_activity";
+        ArrayList<VersionActivity> versionActivities = new ArrayList<VersionActivity>();
+        Cursor c = db.rawQuery(query, null);
+        if (c.moveToFirst()) {
+            do {
+                versionActivities.add(cursorToVersionActivity(c));
+            } while (c.moveToNext());
+        }
+        return versionActivities;
+    }
+
+    private VersionActivity cursorToVersionActivity(Cursor c) {
+        VersionActivity aux = new VersionActivity();
+
+        aux.setId_version_activity(c.getInt(0));
+        aux.setId_activity_student(c.getInt(1));
+        aux.setTx_activity(c.getString(2));
+        aux.setDt_last_access(c.getString(3));
+        aux.setDt_submission(c.getString(4));
+        aux.setDt_verification(c.getString(5));
+        aux.setId_version_activit_srv(c.getInt(6));
+
+        return aux;
     }
 
     public List<PortfolioClass> listarPortfolio(int idClass, char userType, int idUser) {
@@ -814,8 +863,6 @@ public class DataBaseAdapter {
     *************************CRUD TURMAS***********************************
 
 */
-
-
     public List<Team> getClasses(int idUser, char userType) {
         String query = "select distinct\n" +
                 "\tf.id_class,\n" +
@@ -1478,7 +1525,6 @@ public class DataBaseAdapter {
 
             try {
                 db.insert("tb_reference", null, cv);
-
             } catch (Exception e) {
                 Log.d(tag, "erro ao inserir na tb_reference:" + e.getMessage());
                 e.printStackTrace();
@@ -1502,8 +1548,6 @@ public class DataBaseAdapter {
 
             try {
                 db.insert("tb_notice", null, cv);
-
-
             }
             catch (SQLiteConstraintException v){
                 Log.d(tag, "id notification já existe:" + v.getMessage());

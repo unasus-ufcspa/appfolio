@@ -4,9 +4,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ListView;
 
-import com.ufcspa.unasus.appportfolio.Adapter.VersionsAdapter;
 import com.ufcspa.unasus.appportfolio.R;
 
 import java.util.ArrayList;
@@ -24,8 +22,8 @@ public class FragmentVersions extends Frag {
         for (int i = 0; i < 10; i++)
             list.add("");
 
-        final ListView versionList = (ListView) view.findViewById(R.id.version_list);
-        versionList.setAdapter(new VersionsAdapter(getActivity(), list));
+//        final ListView versionList = (ListView) view.findViewById(R.id.version_list);
+//        versionList.setAdapter(new VersionsAdapter(getActivity(), list));
 
         return view;
     }

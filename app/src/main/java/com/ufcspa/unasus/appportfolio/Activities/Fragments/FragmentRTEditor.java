@@ -25,6 +25,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.GridView;
 import android.widget.ImageButton;
@@ -79,6 +80,7 @@ public class FragmentRTEditor extends Frag {
     // Layout
     private ViewGroup scrollview;
     private ImageButton fullScreen;
+    private Button sendVersion;
     private RelativeLayout slider;
     private ViewGroup rightBarSpecificComments;
     private View importPanel;
@@ -89,6 +91,10 @@ public class FragmentRTEditor extends Frag {
     // Cores
     private int greenLight;
     private int greenDark;
+    // Versoes
+    private VersionsAdapter versionAdapter;
+    private ArrayList<VersionActivity> versions;
+
     // Receptor de eventos
     private BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
         @Override
@@ -146,8 +152,12 @@ public class FragmentRTEditor extends Frag {
      * */
     public void loadLastText() {
         acStudent = source.listLastVersionActivityStudent(singleton.idActivityStudent);
+//        if (singleton.firsttime) {
+//            mRTMessageField.setRichTextEditing(true, acStudent.getTxtActivity());
+//            singleton.firsttime = false;
+//        }
         if (singleton.firsttime) {
-            mRTMessageField.setRichTextEditing(true, acStudent.getTxtActivity());
+            mRTMessageField.setRichTextEditing(true, source.getTextFromCurrentVersion(singleton.idCurrentVersionActivity));
             singleton.firsttime = false;
         }
     }
@@ -159,9 +169,10 @@ public class FragmentRTEditor extends Frag {
      * */
     public void saveText() {
         Log.d("editor DB", "salvando texto..");
-        if (mRTMessageField != null) {
+
+        if (mRTMessageField != null && mRTMessageField.isMediaFactoryRegister() != null) {
             acStudent.setTxtActivity(mRTMessageField.getText(RTFormat.HTML));
-            source.updateActivityStudent(acStudent);
+            source.updateActivityStudent(acStudent, getActualTime(), singleton.idCurrentVersionActivity);
         }
     }
 
@@ -183,6 +194,86 @@ public class FragmentRTEditor extends Frag {
         scrollview = (ViewGroup) view.findViewById(R.id.comments);
         rightBarSpecificComments = (ViewGroup) view.findViewById(R.id.obs_view);
 
+        createEditor(view, savedInstanceState);
+
+        fullScreen = (ImageButton) view.findViewById(R.id.fullscreen);
+        if (!singleton.isFullscreen)
+            fullScreen.setBackgroundResource(R.drawable.fullscreen1);
+        else
+            fullScreen.setBackgroundResource(R.drawable.fullscreen2);
+        fullScreen.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.d("rteditor", mRTMessageField.getText(RTFormat.HTML));
+                saveText();
+
+                if (singleton.isFullscreen) {
+                    singleton.wasFullscreen = true;
+                    singleton.isFullscreen = false;
+                } else {
+                    singleton.wasFullscreen = false;
+                    singleton.isFullscreen = true;
+                }
+
+                ((MainActivity) getActivity()).dontCreateCrossfader();
+            }
+        });
+
+        sendVersion = (Button) view.findViewById(R.id.send_version);
+        sendVersion.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (singleton.portfolioClass.getPerfil().equals("S") && (singleton.idCurrentVersionActivity == singleton.idVersionActivity)) {
+                    Log.d("RTEditor", "Enviando versão!");
+
+                    saveText();
+                    //POPULA SYNC PARA SINCRONIZAR
+                    Sync sync = new Sync();
+                    sync.setNm_table("tb_version_activity");
+                    sync.setCo_id_table(source.getLastIDVersionActivity(singleton.idActivityStudent));
+                    sync.setId_activity_student(Singleton.getInstance().idActivityStudent);
+                    sync.setId_device(singleton.device.get_id_device());
+                    source.insertIntoTBSync(sync);
+
+                    //SALVA NOVA VERSION ACTIVITY
+                    DataBaseAdapter data = DataBaseAdapter.getInstance(getContext());
+                    VersionActivity version = new VersionActivity();
+                    version.setTx_activity(mRTMessageField.getText(RTFormat.HTML));
+                    version.setId_activity_student(Singleton.getInstance().idActivityStudent);
+                    version.setDt_last_access(getActualTime());
+                    int id = data.insertVersionActivity(version);
+                    singleton.idVersionActivity = id;
+                    singleton.idCurrentVersionActivity = id;
+
+                    MainActivity main = ((MainActivity) getActivity());
+                    if (main != null)
+                        main.sendFullData();
+                }
+            }
+        });
+        if (singleton.portfolioClass.getPerfil().equals("T") || (singleton.idCurrentVersionActivity != singleton.idVersionActivity)) {
+            sendVersion.setVisibility(View.GONE);
+        }
+
+        initCommentsTab(view);
+        initTopBar(view);
+
+        LocalBroadcastManager.getInstance(getActivity()).registerReceiver(broadcastReceiver, new IntentFilter("call.attachmentdialog.action"));
+
+        if (source.getLastIDVersionActivity(singleton.idActivityStudent) == 0 && singleton.portfolioClass.getPerfil().equals("S")) {
+            VersionActivity version = new VersionActivity();
+            version.setTx_activity("");
+            version.setId_activity_student(Singleton.getInstance().idActivityStudent);
+            version.setDt_last_access(getActualTime());
+            int id = source.insertVersionActivity(version);
+            singleton.idVersionActivity = id;
+            singleton.idCurrentVersionActivity = id;
+        }
+
+        return view;
+    }
+
+    public void createEditor(View view, Bundle savedInstanceState) {
         // create RTManager
         RTApi rtApi = new RTApi(getActivity(), new RTProxyImpl(getActivity()), new RTMediaFactoryImpl(getActivity(), true));
 
@@ -247,41 +338,41 @@ public class FragmentRTEditor extends Frag {
                         int id = singleton.note.getBtId();
                         if (specificCommentsOpen && id > 0) {
                             ArrayList<Comentario> lista = (ArrayList<Comentario>) source.listComments(singleton.activity.getIdActivityStudent(), "O", id);
-                                if (lista == null || lista.size() == 0) {
-                                    //Remove note from hash map
-                                    specificCommentsNotes.remove(id);
-                                    currentSpecificComment--;
+                            if (lista == null || lista.size() == 0) {
+                                //Remove note from hash map
+                                specificCommentsNotes.remove(id);
+                                currentSpecificComment--;
 
-                                    //Remove background color from text
-                                    Spannable textSpanned = mRTMessageField.getText();
-                                    BackgroundColorSpan[] spans = textSpanned.getSpans(0, textSpanned.length(), BackgroundColorSpan.class);
+                                //Remove background color from text
+                                Spannable textSpanned = mRTMessageField.getText();
+                                BackgroundColorSpan[] spans = textSpanned.getSpans(0, textSpanned.length(), BackgroundColorSpan.class);
 
-                                    for (BackgroundColorSpan s : spans) {
-                                        if (s.getId() == id) {
-                                            textSpanned.removeSpan(s);
-                                            break;
-                                        }
+                                for (BackgroundColorSpan s : spans) {
+                                    if (s.getId() == id) {
+                                        textSpanned.removeSpan(s);
+                                        break;
                                     }
-
-                                    //Remove button from right drawer
-                                    Button btn = (Button) scrollview.findViewById(id);
-                                    singleton.note = new Note(0, "null", 0);
-
-                                    int childs = rightBarSpecificComments.getChildCount();
-                                    for (int i = childs - 1; i >= 0; i--)
-                                        rightBarSpecificComments.removeViewAt(i);
-
-                                    final float scale = getResources().getDisplayMetrics().density;
-                                    int btnBegin = (int) (40 * scale + 0.5f);
-                                    if (btn.getText().equals("..."))
-                                        createMultiButtonsRightTabBar((LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE), btn, btnBegin);
-
-                                    showCommentsTab(false);
-
-                                    //Remove button from rteditor
-                                    scrollview.removeView(btn);
-                                    setSpecificCommentNoteValue();
                                 }
+
+                                //Remove button from right drawer
+                                Button btn = (Button) scrollview.findViewById(id);
+                                singleton.note = new Note(0, "null", 0);
+
+                                int childs = rightBarSpecificComments.getChildCount();
+                                for (int i = childs - 1; i >= 0; i--)
+                                    rightBarSpecificComments.removeViewAt(i);
+
+                                final float scale = getResources().getDisplayMetrics().density;
+                                int btnBegin = (int) (40 * scale + 0.5f);
+                                if (btn.getText().equals("..."))
+                                    createMultiButtonsRightTabBar((LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE), btn, btnBegin);
+
+                                showCommentsTab(false);
+
+                                //Remove button from rteditor
+                                scrollview.removeView(btn);
+                                setSpecificCommentNoteValue();
+                            }
                         }
                     }
                 }
@@ -289,84 +380,14 @@ public class FragmentRTEditor extends Frag {
         });
 
         mRTMessageField.setCanPaste(true);
-        if (singleton.portfolioClass.getPerfil().equals("T")) {
-//            mRTMessageField.setInputType(InputType.TYPE_NULL);
-//            mRTMessageField.setCanPaste(false);
+        mRTManager.setToolbarVisibility(RTManager.ToolbarVisibility.SHOW);
+        if (singleton.portfolioClass.getPerfil().equals("T") || (singleton.idCurrentVersionActivity != singleton.idVersionActivity)) {
             mRTMessageField.setKeyListener(null);
             mRTMessageField.setTextIsSelectable(true);
             mRTManager.setToolbarVisibility(RTManager.ToolbarVisibility.HIDE);
-
-//            mRTMessageField.setText("Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris enim lacus, gravida egestas ex fringilla, molestie sollicitudin turpis. Curabitur et congue justo. Etiam tincidunt, est vel euismod facilisis, dui urna pellentesque nunc, vitae pharetra est nisi ultrices ex. Pellentesque sollicitudin porttitor condimentum. Ut auctor enim pulvinar, hendrerit sem eu, facilisis erat. Sed tempus convallis iaculis. Duis imperdiet rhoncus ipsum et congue. Aenean pellentesque volutpat neque ac semper. Donec consectetur lacinia nisi, et molestie dolor rhoncus in. Praesent ultricies massa nec nisi dictum hendrerit. Proin nec pellentesque lacus, ut fringilla sapien. Donec quis enim interdum, molestie lacus et, ullamcorper ligula.\n" +
-//                    "\n" +
-//                    "Ut sit amet odio ornare, vehicula urna a, volutpat est. Nunc ut ante massa. Maecenas eget est quis sapien venenatis bibendum. Fusce id porta nulla. Nunc luctus sapien libero, eget imperdiet massa laoreet at. Etiam dolor tortor, lacinia quis congue eu, varius nec turpis. Suspendisse urna leo, rutrum eget porta ut, tempus vel urna.\n" +
-//                    "\n" +
-//                    "Suspendisse eget velit accumsan, cursus lectus vitae, dapibus justo. Proin vel dolor orci. Nullam euismod fringilla nunc. Proin eu libero nec est mattis semper in eget purus. Integer eleifend sodales justo, id luctus tortor feugiat sit amet. Phasellus convallis neque ut est mollis aliquet. Ut semper volutpat velit. Aliquam eget lectus sit amet turpis condimentum elementum. Phasellus sollicitudin turpis quis euismod mattis. Sed id nisl lectus. Mauris pharetra non ipsum dapibus imperdiet. Sed sagittis tellus ac lacus consectetur pretium. Nam tristique iaculis pellentesque. Ut suscipit neque ligula.\n" +
-//                    "\n" +
-//                    "Pellentesque non malesuada purus, in posuere tellus. Quisque in scelerisque odio, quis eleifend lectus. Aliquam mattis urna vel feugiat ornare. Proin lectus ex, iaculis nec iaculis id, ultricies in nisi. In a lectus eros. Nulla interdum cursus nunc, ac congue massa ullamcorper eget. Integer turpis orci, accumsan non egestas vel, porta vel nunc. Nullam consequat turpis in vehicula condimentum. Phasellus libero arcu, pretium sit amet lorem at, vehicula mollis velit. Nulla rhoncus ornare gravida. Nulla facilisi. Fusce porttitor tellus eget nunc suscipit, a tempus libero accumsan. Maecenas at lacus tempor, ullamcorper urna in, viverra ex. Proin tincidunt ex elit, ac malesuada diam porta eget. Morbi sed ornare lectus, aliquam scelerisque mauris.\n" +
-//                    "\n" +
-//                    "Morbi in quam et ante egestas molestie. Proin ut tellus molestie libero mattis blandit. Integer ac lorem neque. Aenean elementum, nunc in congue tempus, enim nibh feugiat velit, id sollicitudin tellus enim ac purus. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Cras in felis eu neque dictum interdum in nec tellus. Etiam quis dolor ultrices tortor pharetra gravida. Suspendisse auctor malesuada eros, posuere tincidunt risus posuere eget. Aenean quis magna et lacus fringilla tristique vel et tortor. Duis ultrices ut purus viverra dignissim.");
-
         }
         LinearLayout layout = (LinearLayout) view.findViewById(R.id.info_rteditor_container);
         layout.clearFocus();
-
-        fullScreen = (ImageButton) view.findViewById(R.id.fullscreen);
-        if (!singleton.isFullscreen)
-            fullScreen.setBackgroundResource(R.drawable.fullscreen1);
-        else
-            fullScreen.setBackgroundResource(R.drawable.fullscreen2);
-        fullScreen.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Log.d("rteditor", mRTMessageField.getText(RTFormat.HTML));
-                saveText();
-//
-//                if (singleton.isFullscreen) {
-//                    singleton.wasFullscreen = true;
-//                    singleton.isFullscreen = false;
-//                } else {
-//                    singleton.wasFullscreen = false;
-//                    singleton.isFullscreen = true;
-//                }
-//
-//                ((MainActivity) getActivity()).dontCreateCrossfader();
-
-                //POPULA SYNC PARA SINCRONIZAR
-                Sync sync = new Sync();
-                sync.setNm_table("tb_version_activity");
-                sync.setCo_id_table(source.getLastIDVersionActivity(singleton.idActivityStudent));
-                sync.setId_activity_student(Singleton.getInstance().idActivityStudent);
-                //sync.setId_device(Singleton.getInstance().device.get_id_device());
-                source.insertIntoTBSync(sync);
-
-                //SALVA NOVA VERSION ACTIVITY
-                DataBaseAdapter data =DataBaseAdapter.getInstance(getContext());
-                VersionActivity version= new VersionActivity();
-                version.setTx_activity(mRTMessageField.getText(RTFormat.HTML));
-                version.setId_activity_student(Singleton.getInstance().idActivityStudent);
-                version.setDt_last_access(getActualTime());
-                data.insertVersionActivity(version);
-
-                MainActivity main = ((MainActivity) getActivity());
-                if (main != null)
-                    main.uploadFullData();
-            }
-        });
-
-        initCommentsTab(view);
-        initTopBar(view);
-
-        LocalBroadcastManager.getInstance(getActivity()).registerReceiver(broadcastReceiver, new IntentFilter("call.attachmentdialog.action"));
-
-        if (source.getLastIDVersionActivity(singleton.idActivityStudent) == 0 && singleton.portfolioClass.getPerfil().equals("S")) {
-            VersionActivity version = new VersionActivity();
-            version.setTx_activity("");
-            version.setId_activity_student(Singleton.getInstance().idActivityStudent);
-            version.setDt_last_access(getActualTime());
-            source.insertVersionActivity(version);
-        }
-
-        return view;
     }
 
     public String getActualTime() {
@@ -386,9 +407,10 @@ public class FragmentRTEditor extends Frag {
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        if (mRTManager != null)
+        if (mRTManager != null) {
             mRTManager.onSaveInstanceState(outState);
-        saveText();
+            saveText();
+        }
         outState.putInt("currentSpecificComment", currentSpecificComment);
         outState.putSerializable("specificCommentsNotes", specificCommentsNotes);
     }
@@ -551,16 +573,48 @@ public class FragmentRTEditor extends Frag {
             public void onClick(View v) {
                 getView().findViewById(R.id.personal_comment_container).setVisibility(View.GONE);
                 displayVersionsDialog(importPanel);
+                saveText();
+                versionAdapter.refresh(source.getAllVersionsFromActivityStudent());
             }
         });
 
         importPanel = view.findViewById(R.id.versions_container);
-        ArrayList<String> list = new ArrayList<>();
-        for (int i = 0; i < 100; i++)
-            list.add("");
+        versions = source.getAllVersionsFromActivityStudent();
 
         GridView versionList = (GridView) importPanel.findViewById(R.id.version_list);
-        versionList.setAdapter(new VersionsAdapter(getActivity(), list));
+        versionAdapter = new VersionsAdapter(getActivity(), versions);
+        versionList.setAdapter(versionAdapter);
+        versionList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                //TODO Click em uma versão
+//                displayVersionsDialog(importPanel);
+                saveText();
+                if (position <= versions.size() - 1) {
+                    singleton.idCurrentVersionActivity = versions.get(position).getId_version_activity();
+                    singleton.firsttime = true;
+                    loadLastText();
+                    if (singleton.portfolioClass.getPerfil().equals("T") || (singleton.idCurrentVersionActivity != singleton.idVersionActivity)) {
+                        mRTMessageField.setKeyListener(null);
+                        mRTMessageField.setTextIsSelectable(true);
+                        mRTManager.setToolbarVisibility(RTManager.ToolbarVisibility.HIDE);
+
+                        sendVersion.setVisibility(View.GONE);
+                    }
+                    if (singleton.portfolioClass.getPerfil().equals("S") && (singleton.idCurrentVersionActivity == singleton.idVersionActivity)) {
+                        if (!singleton.isFullscreen) {
+                            singleton.wasFullscreen = true;
+                            singleton.isFullscreen = false;
+                        } else {
+                            singleton.wasFullscreen = false;
+                            singleton.isFullscreen = true;
+                        }
+
+                        ((MainActivity) getActivity()).dontCreateCrossfader();
+                    }
+                }
+            }
+        });
 
         studentName.setText(singleton.portfolioClass.getStudentName());
         activityName.setText("Ativ. " + singleton.activity.getNuOrder() + ": " + singleton.activity.getTitle());
@@ -935,9 +989,9 @@ public class FragmentRTEditor extends Frag {
 
         @Override
         public boolean onCreateActionMode(ActionMode mode, Menu menu) {
+            ((InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(getView().getWindowToken(), 0);
+            mode.getMenuInflater().inflate(R.menu.menu, menu);
             if (singleton.portfolioClass.getPerfil().equals("T")) {
-                ((InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(getView().getWindowToken(), 0);
-                mode.getMenuInflater().inflate(R.menu.menu, menu);
                 menu.removeItem(android.R.id.paste);
                 menu.removeItem(android.R.id.cut);
             }
