@@ -118,6 +118,10 @@ private LoadCommentsFromDB loadCommentsFromDB;
         super.onResume();
         if (Singleton.getInstance().note.getBtId() == 0)
             hide();
+
+        singleton = Singleton.getInstance();
+        source = DataBaseAdapter.getInstance(getContext());
+
         btGenMess = (Button) getView().findViewById(R.id.gen_messag_bt);
         btAttachment = (Button) getView().findViewById(R.id.bt_add_attachment);
         edtMessage = (EditText) getView().findViewById(R.id.edtMessage);

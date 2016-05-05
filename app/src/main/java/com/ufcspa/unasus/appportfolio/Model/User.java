@@ -10,6 +10,8 @@ public class User {
     private Character userType;
     private String email;
     private String cellphone;
+    private String photo;
+    private String password;
 
     public User(Integer idUser, String name, String idCode, String email, String cellphone) {
         this.idUser = idUser;
@@ -74,6 +76,22 @@ public class User {
 
     public void setCellphone(String cellphone) {
         this.cellphone = cellphone;
+    }
+
+    public String getPhoto() {
+        return photo;
+    }
+
+    public void setPhoto(String photo) {
+        this.photo = photo;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     @Override

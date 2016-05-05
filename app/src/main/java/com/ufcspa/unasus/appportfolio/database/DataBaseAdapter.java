@@ -720,10 +720,9 @@ public class DataBaseAdapter {
     }
 
     public String getTextFromCurrentVersion(int idVersionActivity) {
-        String query = "select tx_activity from tb_version_activity WHERE id_version_activity=" + idVersionActivity;
-        Cursor c = null;
+        Cursor c;
         try {
-            c = db.rawQuery(query, null);
+            c = db.rawQuery("SELECT tx_activity FROM tb_version_activity WHERE id_version_activity = ?", new String[]{String.valueOf(idVersionActivity)});
             if (c.moveToFirst()) {
                 return c.getString(0);
             }
@@ -1387,6 +1386,19 @@ public class DataBaseAdapter {
             Log.e(tag, "Conseguiu alterar tb_device fl_basic_data");
         } catch (Exception e) {
             Log.e(tag, "Erro ao alterar tb_device fl_basic_data");
+        }
+    }
+
+    public void updateTBUser(User user) {
+        ContentValues cv = new ContentValues();
+        cv.put("ds_email", user.getEmail());
+        cv.put("ds_password", user.getPassword());
+        cv.put("nu_cellphone", user.getCellphone());
+        try {
+            db.update("tb_user", cv, "id_user = ?", new String[]{String.valueOf(user.getIdUser())});
+            Log.e(tag, "Conseguiu alterar tb_user");
+        } catch (Exception e) {
+            Log.e(tag, "Erro ao alterar tb_user");
         }
     }
 

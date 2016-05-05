@@ -30,6 +30,7 @@ import android.widget.Toast;
 
 import com.mikepenz.crossfader.Crossfader;
 import com.ufcspa.unasus.appportfolio.Activities.Fragments.FragmentAttachment;
+import com.ufcspa.unasus.appportfolio.Activities.Fragments.FragmentConfiguracoes;
 import com.ufcspa.unasus.appportfolio.Activities.Fragments.FragmentRTEditor;
 import com.ufcspa.unasus.appportfolio.Activities.Fragments.FragmentReference;
 import com.ufcspa.unasus.appportfolio.Activities.Fragments.FragmentSelectPortfolio;
@@ -313,6 +314,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new FragmentReference()).addToBackStack("Frag").commit();
                 break;
             case 3:
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new FragmentConfiguracoes()).addToBackStack("Frag").commit();
                 break;
             case 4:
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new FragmentAttachment()).addToBackStack("Frag").commit();

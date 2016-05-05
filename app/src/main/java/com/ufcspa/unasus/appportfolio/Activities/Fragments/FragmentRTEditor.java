@@ -157,7 +157,8 @@ public class FragmentRTEditor extends Frag {
 //            singleton.firsttime = false;
 //        }
         if (singleton.firsttime) {
-            mRTMessageField.setRichTextEditing(true, source.getTextFromCurrentVersion(singleton.idCurrentVersionActivity));
+            String text = source.getTextFromCurrentVersion(singleton.idCurrentVersionActivity);
+            mRTMessageField.setRichTextEditing(true, text);
             singleton.firsttime = false;
         }
     }
@@ -403,7 +404,6 @@ public class FragmentRTEditor extends Frag {
         super.onResume();
     }
 
-
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
@@ -571,10 +571,11 @@ public class FragmentRTEditor extends Frag {
         versionsButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                getView().findViewById(R.id.personal_comment_container).setVisibility(View.GONE);
-                displayVersionsDialog(importPanel);
                 saveText();
                 versionAdapter.refresh(source.getAllVersionsFromActivityStudent());
+
+                getView().findViewById(R.id.personal_comment_container).setVisibility(View.GONE);
+                displayVersionsDialog(importPanel);
             }
         });
 
