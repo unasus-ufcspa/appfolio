@@ -12,6 +12,7 @@ import com.ufcspa.unasus.appportfolio.Model.ActivityStudent;
 import com.ufcspa.unasus.appportfolio.Model.Attachment;
 import com.ufcspa.unasus.appportfolio.Model.AttachmentComment;
 import com.ufcspa.unasus.appportfolio.Model.Comentario;
+import com.ufcspa.unasus.appportfolio.Model.CommentVersion;
 import com.ufcspa.unasus.appportfolio.Model.Device;
 import com.ufcspa.unasus.appportfolio.Model.Notification;
 import com.ufcspa.unasus.appportfolio.Model.PortfolioClass;
@@ -526,7 +527,7 @@ public class DataBaseAdapter {
                 "\tWHERE 1=1 AND c.id_activity_student = " + idActStu;
 
         StringBuilder stBuild = new StringBuilder(sql);
-        if (typeComment.equalsIgnoreCase("C") || typeComment.equalsIgnoreCase("O") || typeComment.equalsIgnoreCase("P")) {
+        if (typeComment.equalsIgnoreCase("G") || typeComment.equalsIgnoreCase("O") || typeComment.equalsIgnoreCase("P")) {
             //sql+=" AND tp_comment='"+typeComment+"' ";
             stBuild.append(" AND tp_comment='" + typeComment + "' ");
             if (typeComment.equalsIgnoreCase("O")) {
@@ -788,6 +789,24 @@ public class DataBaseAdapter {
 
         return aux;
     }
+
+    public void insertCommentVersion(CommentVersion cVersion){
+        ContentValues cv = new ContentValues();
+        cv.put("id_version_activity", cVersion.getId_version_activity());
+        cv.put("id_comment", cVersion.getId_comment());
+        cv.put("fl_active", String.valueOf(cVersion.getFl_active()));
+        try {
+            db.insert("tb_comment_version",null,cv);
+            Log.d(tag, "conseguiu salvar na tb_comment_version");
+            //Cursor cursor = db.rawQuery("select seq from sqlite_sequence where name='tb_version_activity'", null);
+
+        } catch (Exception e) {
+            Log.e(tag, "erro ao salvar na tb_comment_version:" + e.getMessage());
+        }
+    }
+
+
+
 
     public List<PortfolioClass> listarPortfolio(int idClass, char userType, int idUser) {
         String query = "SELECT * FROM tb_portfolio";

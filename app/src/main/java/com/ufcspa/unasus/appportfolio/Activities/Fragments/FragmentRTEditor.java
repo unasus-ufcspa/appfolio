@@ -27,11 +27,13 @@ import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.GridView;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.Switch;
 import android.widget.TextView;
 
 import com.onegravity.rteditor.RTEditText;
@@ -81,6 +83,7 @@ public class FragmentRTEditor extends Frag {
     private ViewGroup scrollview;
     private ImageButton fullScreen;
     private Button sendVersion;
+    private Switch switchNote;
     private RelativeLayout slider;
     private ViewGroup rightBarSpecificComments;
     private View importPanel;
@@ -105,7 +108,8 @@ public class FragmentRTEditor extends Frag {
         }
     };
 
-    public FragmentRTEditor() {}
+    public FragmentRTEditor() {
+    }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -146,10 +150,8 @@ public class FragmentRTEditor extends Frag {
     }
 
     /**
-     *  MÉTODO PARA CARREGAR  A ULTIMA VERSÃO DO TEXTO
-     *
-     *
-     * */
+     * MÉTODO PARA CARREGAR  A ULTIMA VERSÃO DO TEXTO
+     */
     public void loadLastText() {
         acStudent = source.listLastVersionActivityStudent(singleton.idActivityStudent);
 //        if (singleton.firsttime) {
@@ -164,10 +166,8 @@ public class FragmentRTEditor extends Frag {
     }
 
     /**
-     *  MÉTODO PARA SALVAR TEXTO NO FORMATO HTML
-     *
-     *
-     * */
+     * MÉTODO PARA SALVAR TEXTO NO FORMATO HTML
+     */
     public void saveText() {
         Log.d("editor DB", "salvando texto..");
 
@@ -252,6 +252,16 @@ public class FragmentRTEditor extends Frag {
                 }
             }
         });
+
+        switchNote = (Switch) view.findViewById(R.id.switch_note);
+        switchNote.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                    hideNotes(isChecked);
+                //
+            }
+        });
+
         if (singleton.portfolioClass.getPerfil().equals("T") || (singleton.idCurrentVersionActivity != singleton.idVersionActivity)) {
             sendVersion.setVisibility(View.GONE);
         }
@@ -426,7 +436,7 @@ public class FragmentRTEditor extends Frag {
 
         if (savedInstanceState != null) {
             if (savedInstanceState.getSerializable("specificCommentsNotes") != null) {
-                specificCommentsNotes = (HashMap<Integer,Note>) savedInstanceState.getSerializable("specificCommentsNotes" );
+                specificCommentsNotes = (HashMap<Integer, Note>) savedInstanceState.getSerializable("specificCommentsNotes");
             }
             currentSpecificComment = savedInstanceState.getInt("currentSpecificComment", -1);
         }
@@ -480,8 +490,8 @@ public class FragmentRTEditor extends Frag {
         slider.requestLayout();
         slider.bringToFront();
 
-        TextView geral = (TextView)view.findViewById(R.id.btn_geral);
-        TextView specific = (TextView)view.findViewById(R.id.btn_specific);
+        TextView geral = (TextView) view.findViewById(R.id.btn_geral);
+        TextView specific = (TextView) view.findViewById(R.id.btn_specific);
 
         geral.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -633,16 +643,14 @@ public class FragmentRTEditor extends Frag {
     }
 
     /**
-     *  MÉTODO PARA RECUPERAR A ID DE CADA NOTA SALVA NO BANCO
-     *
-     *
-     * */
-    public void getIdNotesFromDB(){
+     * MÉTODO PARA RECUPERAR A ID DE CADA NOTA SALVA NO BANCO
+     */
+    public void getIdNotesFromDB() {
         ArrayList<Integer> ids = (ArrayList<Integer>) source.listSpecificComments(singleton.idActivityStudent);
-        for(int id : ids){
-            specificCommentsNotes.put(id,new Note(id,"",0));
+        for (int id : ids) {
+            specificCommentsNotes.put(id, new Note(id, "", 0));
         }
-        currentSpecificComment=specificCommentsNotes.size();
+        currentSpecificComment = specificCommentsNotes.size();
         Log.d("editor notes", "currentSpecificComment:" + currentSpecificComment);
     }
 
@@ -804,11 +812,9 @@ public class FragmentRTEditor extends Frag {
     }
 
     /**
-     *  MÉTODO PARA RECUPERAR O TEXTO SELECIONADO NO FORMATO HTML
-     *
-     *
-     * */
-    private String getSelectedText(){
+     * MÉTODO PARA RECUPERAR O TEXTO SELECIONADO NO FORMATO HTML
+     */
+    private String getSelectedText() {
         int selStart = mRTMessageField.getSelectionStart();
         int selEnd = mRTMessageField.getSelectionEnd();
         Spannable text = (Spannable) mRTMessageField.getText().subSequence(selStart, selEnd);
@@ -818,10 +824,8 @@ public class FragmentRTEditor extends Frag {
     }
 
     /**
-     *  MÉTODO PARA ALTERAR A COR DO TEXTO PELA ID DE UMA NOTA
-     *
-     *
-     * */
+     * MÉTODO PARA ALTERAR A COR DO TEXTO PELA ID DE UMA NOTA
+     */
     private void changeColor(int id) {
         Spannable textSpanned = mRTMessageField.getText();
         BackgroundColorSpan[] spans = textSpanned.getSpans(0, textSpanned.length(), BackgroundColorSpan.class);
@@ -830,22 +834,18 @@ public class FragmentRTEditor extends Frag {
         int auxStart = 0;
         int auxEnd = 0;
 
-        for(BackgroundColorSpan spm : spans)
-        {
-            if(spm.getId() == id)
-            {
+        for (BackgroundColorSpan spm : spans) {
+            if (spm.getId() == id) {
                 aux = spm;
                 auxStart = textSpanned.getSpanStart(spm);
                 auxEnd = textSpanned.getSpanEnd(spm);
-            }
-            else {
+            } else {
                 if (spm.getId() != -1 && spm.getBackgroundColor() != greenLight)
                     spm.setColor(greenLight);
             }
         }
 
-        if(aux != null)
-        {
+        if (aux != null) {
             textSpanned.removeSpan(aux);
             aux.setColor(greenDark);
             textSpanned.setSpan(aux, auxStart, auxEnd, 1);
@@ -1037,4 +1037,22 @@ public class FragmentRTEditor extends Frag {
         }
     }
 
+
+    private void hideNotes(boolean f) {
+        View v = getView();
+        if (v != null) {
+            ArrayList<Note> aux = new ArrayList<>();
+            aux.addAll(specificCommentsNotes.values());
+
+            for (int i = 0; i < aux.size(); i++) {
+                Note first = aux.get(i);
+                Button btnFirst = (Button) v.findViewById(first.getBtId());
+                if (f == true)
+                    btnFirst.setVisibility(View.GONE);
+                else
+                    btnFirst.setVisibility(View.VISIBLE);
+            }
+
+        }
+    }
 }
