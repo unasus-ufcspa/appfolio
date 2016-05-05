@@ -21,6 +21,15 @@
 
         </RelativeLayout>
 
+        <Button
+            android:id="@+id/send_version"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_above="@+id/fullscreen"
+            android:layout_alignParentBottom="false"
+            android:layout_alignParentRight="true"
+            android:text="S" />
+
         <ImageButton
             android:id="@+id/fullscreen"
             android:layout_width="48dp"

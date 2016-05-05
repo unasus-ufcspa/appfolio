@@ -51,6 +51,7 @@ public class SendData {
         Log.d("json send full data ","numero de sincronias:"+sincronias.size());
         //sincronias.size();
         dadosAgrupados = new LinkedHashMap<>();
+        idSync = new LinkedList<>();
         for (Sync s:sincronias) {
             if(dadosAgrupados.get((s.getNm_table()))== null){
                 Log.d("json send full data ","encontrou tabela a ser sincronizada");
@@ -86,7 +87,7 @@ public class SendData {
         }
         if (dadosResponse.get(tbVers) != null) {
             Log.d("json send full data ", "atualizando tabela " + tbVers + "...");
-            data.updateVersionsBySendFullData(dadosResponse.get(tbComm));
+            data.updateVersionsBySendFullData(dadosResponse.get(tbVers));
 //            data.deleteSync(idSync);
             Log.d("json send full data ", "conseguiu atualizar com sucesso id server");
         }
@@ -105,42 +106,39 @@ public class SendData {
         JSONObject jsonPseudoFinal= new JSONObject();
         JSONObject reference = new JSONObject();
         JSONObject device = new JSONObject();
-        JSONObject jsonVersion = new JSONObject();
+
         JSONArray jsonArrayVersions = new JSONArray();
         JSONArray jsonComments = new JSONArray();
-        JSONObject jsonComment= new JSONObject();
-        try {
 
+        try {
             // mount JSON comment
             if(comentarios!=null) {
-                for (Comentario c : comentarios) {
-                    jsonComment.put("id_comment", c.getIdComment());
-                    jsonComment.put("id_activity_student", c.getIdActivityStudent());
-                    jsonComment.put("id_author", c.getIdAuthor());
-                    jsonComment.put("tx_comment", c.getTxtComment());
-                    jsonComment.put("tx_reference", c.getTxtReference());
-                    jsonComment.put("tp_comment", c.getTypeComment());
-                    jsonComment.put("dt_comment", c.getDateComment());
-                    jsonComment.put("nu_comment_activity", c.getIdNote());
+                for (Comentario comment : comentarios) {
+                    JSONObject jsonComment = new JSONObject();
+                    jsonComment.put("id_comment", comment.getIdComment());
+                    jsonComment.put("id_activity_student", comment.getIdActivityStudent());
+                    jsonComment.put("id_author", comment.getIdAuthor());
+                    jsonComment.put("tx_comment", comment.getTxtComment());
+                    jsonComment.put("tx_reference", comment.getTxtReference());
+                    jsonComment.put("tp_comment", comment.getTypeComment());
+                    jsonComment.put("dt_comment", comment.getDateComment());
+                    jsonComment.put("nu_comment_activity", comment.getIdNote());
                     jsonComments.put(jsonComment);
                 }
             }
             if (versions != null) {
-//                for (VersionActivity v : versions_list){
-                for (int i = 0; i < versions.size(); i++) {
-                    VersionActivity v = versions.get(i);
+                for (VersionActivity v : versions) {
+                    JSONObject jsonVersion = new JSONObject();
                     jsonVersion.put("id_version_activity", v.getId_version_activity());
                     jsonVersion.put("id_activity_student", v.getId_activity_student());
                     jsonVersion.put("tx_activity", v.getTx_activity());
                     jsonVersion.put("dt_last_access", v.getDt_last_access());
                     jsonArrayVersions.put(jsonVersion);
                 }
-//                }
             }
 
             //mount device
             device.put("id_device",idDevice);
-
 
             //mount pseudo final
             jsonPseudoFinal.put("device",device);

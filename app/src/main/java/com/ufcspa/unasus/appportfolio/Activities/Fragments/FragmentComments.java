@@ -395,7 +395,7 @@ public class FragmentComments extends Frag {
 
         MainActivity main = ((MainActivity) getActivity());
         if (main != null)
-            main.uploadFullData();
+            main.sendFullData();
 
 //        }
     }
