@@ -5,6 +5,7 @@ import android.util.Log;
 
 import com.ufcspa.unasus.appportfolio.Model.Comentario;
 import com.ufcspa.unasus.appportfolio.Model.Sync;
+import com.ufcspa.unasus.appportfolio.Model.User;
 import com.ufcspa.unasus.appportfolio.Model.VersionActivity;
 import com.ufcspa.unasus.appportfolio.database.DataBaseAdapter;
 
@@ -26,10 +27,12 @@ public class SendData {
     private ArrayList<Sync> sincronias;
     private LinkedHashMap<String,LinkedList<Integer>> dadosAgrupados;
     private LinkedList<Comentario> comentarios;
+    private LinkedList<User> users;
     private LinkedList<VersionActivity> versions;
     private DataBaseAdapter data;
     private String tbComm="tb_comment";
     private String tbVers="tb_version_activity";
+    private String tbUser = "tb_user";
     //ids to response
     //-2 is default value
     private int id=-2;
@@ -71,10 +74,13 @@ public class SendData {
         // String tbComm="tb_comment";
         if (dadosAgrupados.get(tbComm) != null) {
             comentarios = (LinkedList) data.getCommentsByIDs(dadosAgrupados.get(tbComm));
-      }
-      if(dadosAgrupados.get(tbVers)!=null){
-          versions = (LinkedList) data.getVersionActivitiesByIDs(dadosAgrupados.get(tbVers));
-      }
+        }
+        if (dadosAgrupados.get(tbVers) != null) {
+            versions = (LinkedList) data.getVersionActivitiesByIDs(dadosAgrupados.get(tbVers));
+        }
+        if (dadosAgrupados.get(tbUser) != null) {
+            users = (LinkedList) data.getUsersByIDs(dadosAgrupados.get(tbUser));
+        }
     }
 
     public void insertDataOnResponse(){
@@ -110,6 +116,8 @@ public class SendData {
         JSONArray jsonArrayVersions = new JSONArray();
         JSONArray jsonComments = new JSONArray();
 
+        JSONObject jsonUser = new JSONObject();
+
         try {
             // mount JSON comment
             if(comentarios!=null) {
@@ -137,6 +145,15 @@ public class SendData {
                 }
             }
 
+            if (users != null && users.size() > 0) {
+                jsonUser.put("id_user", users.getFirst().getIdUser());
+                jsonUser.put("nm_user", users.getFirst().getName());
+                jsonUser.put("nu_identification", users.getFirst().getIdCode());
+                jsonUser.put("ds_email", users.getFirst().getEmail());
+                jsonUser.put("nu_cellphone", users.getFirst().getCellphone());
+                jsonUser.put("im_photo", users.getFirst().getPhoto());
+            }
+
             //mount device
             device.put("id_device",idDevice);
 
@@ -144,6 +161,7 @@ public class SendData {
             jsonPseudoFinal.put("device",device);
             jsonPseudoFinal.put("comment", new JSONObject().put("tb_comment", jsonComments));
             jsonPseudoFinal.put("version", new JSONObject().put("tb_version_activity", jsonArrayVersions));
+            jsonPseudoFinal.put("user", jsonUser);
 
             jsonFinal.put("fullDataDevSrv_request", jsonPseudoFinal);
 

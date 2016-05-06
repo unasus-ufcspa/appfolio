@@ -1,6 +1,7 @@
 package com.ufcspa.unasus.appportfolio.Adapter;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -8,6 +9,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.ufcspa.unasus.appportfolio.Model.DividerItemDecoration;
@@ -71,10 +73,15 @@ public class StudentActivitiesAdapter extends BaseAdapter
         holder.recyclerView.setLayoutManager(layoutManager);
         holder.recyclerView.addItemDecoration(new DividerItemDecoration(context, DividerItemDecoration.HORIZONTAL_LIST, 100));
 
-        holder.recyclerView.setAdapter(new ActivitiesAdapter(context, aux.getListActivities(), aux.getNameStudent()));
+        holder.recyclerView.setAdapter(new ActivitiesAdapter(context, aux.getListActivities(), aux.getNameStudent(), aux));
 
         holder.studentName = (TextView) rowView.findViewById(R.id.student_name);
         holder.studentName.setText(aux.getNameStudent());
+
+        holder.studentPhoto = (ImageView) rowView.findViewById(R.id.student_image);
+        Bitmap bitmap = aux.getPhoto();
+        if (bitmap != null)
+            holder.studentPhoto.setImageBitmap(bitmap);
 
         return rowView;
     }
@@ -83,5 +90,6 @@ public class StudentActivitiesAdapter extends BaseAdapter
     {
         RecyclerView recyclerView;
         TextView studentName;
+        ImageView studentPhoto;
     }
 }

@@ -9,6 +9,7 @@ import com.ufcspa.unasus.appportfolio.Model.Notification;
 import com.ufcspa.unasus.appportfolio.Model.Reference;
 import com.ufcspa.unasus.appportfolio.Model.Tuple;
 import com.ufcspa.unasus.appportfolio.Model.VersionActivity;
+import com.ufcspa.unasus.appportfolio.Model.basicData.User;
 import com.ufcspa.unasus.appportfolio.database.DataBaseAdapter;
 
 import org.json.JSONException;
@@ -35,6 +36,7 @@ public class FullData {
     private LinkedList<Tuple<Comentario, Attachment>> comentarioAttachment;
     private LinkedList<Reference> references;
     private LinkedList<Notification> notifications;
+    private LinkedList<User> users;
 
     private Context context;
 
@@ -45,6 +47,7 @@ public class FullData {
         this.comentarioAttachment = new LinkedList<>();
         this.references = new LinkedList<>();
         this.notifications = new LinkedList<>();
+        this.users = new LinkedList<>();
 
         this.context = context;
     }
@@ -57,6 +60,10 @@ public class FullData {
             e.printStackTrace();
         }
         return json;
+    }
+
+    public void addUser(User u) {
+        users.add(u);
     }
 
     public void addVersion(VersionActivity versionActivity) {
@@ -98,6 +105,7 @@ public class FullData {
         data.insertVersionActivity(versionActs);
         data.insertReference(references);
         data.insertComments(comentarios);
+        data.updateTBUser(users);
 
         Integer[] keys = anexos.keySet().toArray(new Integer[anexos.keySet().size()]);
         for (int i = 0; i < keys.length; i++) {
@@ -160,4 +168,6 @@ public class FullData {
             Log.i("ERROR DOWNLOADING FILES", "ERROR IS" + e);
         }
     }
+
+
 }

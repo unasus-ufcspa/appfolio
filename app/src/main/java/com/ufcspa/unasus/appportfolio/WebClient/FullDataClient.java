@@ -104,48 +104,50 @@ public class FullDataClient extends HttpClient {
                                             JSONObject temp = tb_comment.getJSONObject(i);
                                             Comentario comentario = new Comentario();
 
-                                            int id_activity_student = temp.getInt("id_activity_student");
-                                            int id_author = temp.getInt("id_author");
-                                            String tx_comment = temp.getString("tx_comment");
-                                            String tx_reference = temp.getString("tx_reference");
-                                            String tp_comment = temp.getString("tp_comment");
-                                            String dt_comment = temp.getString("dt_comment");
-                                            int nu_comment_activity = -1;
-                                            if (!temp.isNull("nu_comment_activity"))
-                                                nu_comment_activity = temp.getInt("nu_comment_activity");
-                                            int id_comment_srv = temp.getInt("id_comment");
+                                            if (!temp.has("error")) {
+                                                int id_activity_student = temp.getInt("id_activity_student");
+                                                int id_author = temp.getInt("id_author");
+                                                String tx_comment = temp.getString("tx_comment");
+                                                String tx_reference = temp.getString("tx_reference");
+                                                String tp_comment = temp.getString("tp_comment");
+                                                String dt_comment = temp.getString("dt_comment");
+                                                int nu_comment_activity = -1;
+                                                if (!temp.isNull("nu_comment_activity"))
+                                                    nu_comment_activity = temp.getInt("nu_comment_activity");
+                                                int id_comment_srv = temp.getInt("id_comment");
 
-                                            comentario.setIdActivityStudent(id_activity_student);
-                                            comentario.setIdAuthor(id_author);
-                                            comentario.setTxtComment(tx_comment);
-                                            comentario.setTxtReference(tx_reference);
-                                            comentario.setTypeComment(tp_comment);
-                                            comentario.setDateComment(dt_comment);
-                                            comentario.setIdNote(nu_comment_activity);
-                                            comentario.setIdCommentSrv(id_comment_srv);
+                                                comentario.setIdActivityStudent(id_activity_student);
+                                                comentario.setIdAuthor(id_author);
+                                                comentario.setTxtComment(tx_comment);
+                                                comentario.setTxtReference(tx_reference);
+                                                comentario.setTypeComment(tp_comment);
+                                                comentario.setDateComment(dt_comment);
+                                                comentario.setIdNote(nu_comment_activity);
+                                                comentario.setIdCommentSrv(id_comment_srv);
 
-                                            JSONObject attachments = new JSONObject();
-                                            try {
-                                                attachments = temp.getJSONObject("attachment");
-                                            } catch (Exception e) {
-                                            }
+                                                JSONObject attachments = new JSONObject();
+                                                try {
+                                                    attachments = temp.getJSONObject("attachment");
+                                                } catch (Exception e) {
+                                                }
 
-                                            if (attachments.has("id_attachment")) {
-                                                Attachment attachment = new Attachment();
+                                                if (attachments.has("id_attachment")) {
+                                                    Attachment attachment = new Attachment();
 
-                                                String tp_attachment = attachments.getString("tp_attachment");
-                                                String nm_file = attachments.getString("nm_file");
-                                                String nm_system = attachments.getString("nm_system");
-                                                int id_attachment_srv = attachments.getInt("id_attachment");
+                                                    String tp_attachment = attachments.getString("tp_attachment");
+                                                    String nm_file = attachments.getString("nm_file");
+                                                    String nm_system = attachments.getString("nm_system");
+                                                    int id_attachment_srv = attachments.getInt("id_attachment");
 
-                                                attachment.setTpAttachment(tp_attachment);
-                                                attachment.setNmFile(nm_file);
-                                                attachment.setNmSystem(nm_system);
-                                                attachment.setIdAttachmentSrv(id_attachment_srv);
+                                                    attachment.setTpAttachment(tp_attachment);
+                                                    attachment.setNmFile(nm_file);
+                                                    attachment.setNmSystem(nm_system);
+                                                    attachment.setIdAttachmentSrv(id_attachment_srv);
 
-                                                fullData.addCommentAttachment(new Tuple<Comentario, Attachment>(comentario, attachment));
-                                            } else {
-                                                fullData.addComments(comentario);
+                                                    fullData.addCommentAttachment(new Tuple<Comentario, Attachment>(comentario, attachment));
+                                                } else {
+                                                    fullData.addComments(comentario);
+                                                }
                                             }
                                         }
                                     }
@@ -195,6 +197,33 @@ public class FullDataClient extends HttpClient {
                                             versionActivity.setId_version_activit_srv(id_version_activity_srv);
 
                                             fullData.addVersion(versionActivity);
+                                        }
+                                    }
+                                }
+
+                                if (data.has("user")) {
+                                    JSONObject user = data.getJSONObject("user");
+                                    if (user.has("tb_user")) {
+                                        JSONArray tb_user = user.getJSONArray("tb_user");
+                                        for (int i = 0; i < tb_user.length(); i++) {
+                                            JSONObject temp = tb_user.getJSONObject(i);
+                                            com.ufcspa.unasus.appportfolio.Model.basicData.User u = new com.ufcspa.unasus.appportfolio.Model.basicData.User();
+
+                                            int id_user = temp.getInt("id_user");
+                                            String nm_user = temp.getString("nm_user");
+                                            String nu_identification = temp.getString("nu_identification");
+                                            String nu_cellphone = temp.getString("nu_cellphone");
+                                            String ds_email = temp.getString("ds_email");
+                                            String im_photo = temp.getString("ds_email");
+
+                                            u.setIdUser(id_user);
+                                            u.setNm_user(nm_user);
+                                            u.setNu_identification(nu_identification);
+                                            u.setEmail(ds_email);
+                                            u.setCellphone(nu_cellphone);
+                                            u.setPhoto(im_photo);
+
+                                            fullData.addUser(u);
                                         }
                                     }
                                 }

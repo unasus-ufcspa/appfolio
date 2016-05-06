@@ -1,5 +1,9 @@
 package com.ufcspa.unasus.appportfolio.Model;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.util.Base64;
+
 /**
  * Created by Desenvolvimento on 13/11/2015.
  */
@@ -12,6 +16,7 @@ public class User {
     private String cellphone;
     private String photo;
     private String password;
+    private Bitmap photoBitmap;
 
     public User(Integer idUser, String name, String idCode, String email, String cellphone) {
         this.idUser = idUser;
@@ -82,8 +87,16 @@ public class User {
         return photo;
     }
 
-    public void setPhoto(String photo) {
+    public void setPhoto(String photo, Bitmap bitmap) {
         this.photo = photo;
+        if (bitmap != null)
+            this.photoBitmap = bitmap;
+        else {
+            if (photo != null) {
+                byte[] decodedString = Base64.decode(photo, Base64.DEFAULT);
+                this.photoBitmap = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+            }
+        }
     }
 
     public String getPassword() {
@@ -92,6 +105,10 @@ public class User {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public Bitmap getPhotoBitmap() {
+        return photoBitmap;
     }
 
     @Override

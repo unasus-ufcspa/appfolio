@@ -9,6 +9,7 @@ public class User {
     private String nu_identification;
     private String email;
     private String cellphone;
+    private String photo;
 
     public Integer getIdUser() {
         return idUser;
@@ -48,5 +49,13 @@ public class User {
 
     public void setCellphone(String cellphone) {
         this.cellphone = cellphone;
+    }
+
+    public String getPhoto() {
+        return photo;
+    }
+
+    public void setPhoto(String photo) {
+        this.photo = photo;
     }
 }

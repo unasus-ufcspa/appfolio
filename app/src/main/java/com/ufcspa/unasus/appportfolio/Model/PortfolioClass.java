@@ -1,5 +1,7 @@
 package com.ufcspa.unasus.appportfolio.Model;
 
+import android.graphics.Bitmap;
+
 /**
  * Created by Desenvolvimento on 17/11/2015.
  */
@@ -10,6 +12,8 @@ public class PortfolioClass implements Comparable<PortfolioClass> {
     private String studentName;
     private String portfolioTitle;
     private String perfil;
+    private String cellphone;
+    private Bitmap photo;
 
     public PortfolioClass() {
     }
@@ -74,6 +78,22 @@ public class PortfolioClass implements Comparable<PortfolioClass> {
 
     public void setIdPortClass(int idPortClass) {
         this.idPortClass = idPortClass;
+    }
+
+    public String getCellphone() {
+        return cellphone;
+    }
+
+    public void setCellphone(String cellphone) {
+        this.cellphone = cellphone;
+    }
+
+    public Bitmap getPhoto() {
+        return photo;
+    }
+
+    public void setPhoto(Bitmap photo) {
+        this.photo = photo;
     }
 
     @Override

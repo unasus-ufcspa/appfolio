@@ -30,7 +30,7 @@
             android:layout_marginLeft="30dp"
             android:background="@drawable/rounded_corner"
             android:elevation="10dp"
-            android:src="@drawable/ex_user_img" />
+            android:src="@drawable/default_profile_picture" />
 
         <TextView
             android:id="@+id/student_name"
@@ -70,12 +70,12 @@
                 android:id="@+id/activities_list"
                 android:layout_width="match_parent"
                 android:layout_height="170dp"
-                android:layout_gravity="center_vertical"
                 android:layout_alignParentBottom="true"
-                android:layout_toRightOf="@+id/arrow_left"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="30dp"
                 android:layout_toLeftOf="@+id/imageView5"
-                android:layout_toStartOf="@+id/imageView5"
-                android:layout_marginLeft="30dp" />
+                android:layout_toRightOf="@+id/arrow_left"
+                android:layout_toStartOf="@+id/imageView5" />
 
             <ImageView
                 android:id="@+id/imageView5"

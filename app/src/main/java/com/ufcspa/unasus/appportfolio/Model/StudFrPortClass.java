@@ -1,5 +1,9 @@
 package com.ufcspa.unasus.appportfolio.Model;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.util.Base64;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -11,7 +15,13 @@ import java.util.List;
 
 public class StudFrPortClass {
     private String nameStudent;
+    private Bitmap photo;
+    private String photo64;
     private List<Activity> listActivities;
+
+    public StudFrPortClass() {
+        listActivities = new ArrayList<Activity>();
+    }
 
     public String getNameStudent() {
         return nameStudent;
@@ -29,10 +39,21 @@ public class StudFrPortClass {
         this.listActivities = listActivities;
     }
 
-    public StudFrPortClass() {
-        listActivities= new ArrayList<Activity>();
+    public String getPhoto64() {
+        return photo64;
     }
 
+    public Bitmap getPhoto() {
+        return photo;
+    }
+
+    public void setPhoto(String photo) {
+        if (photo != null) {
+            this.photo64 = photo;
+            byte[] decodedString = Base64.decode(photo, Base64.DEFAULT);
+            this.photo = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+        }
+    }
 
     public void add(Activity a){
         listActivities.add(a);

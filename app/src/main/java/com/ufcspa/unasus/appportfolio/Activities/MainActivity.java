@@ -30,7 +30,9 @@ import android.widget.Toast;
 
 import com.mikepenz.crossfader.Crossfader;
 import com.ufcspa.unasus.appportfolio.Activities.Fragments.FragmentAttachment;
-import com.ufcspa.unasus.appportfolio.Activities.Fragments.FragmentConfiguracoes;
+import com.ufcspa.unasus.appportfolio.Activities.Fragments.FragmentConfig;
+import com.ufcspa.unasus.appportfolio.Activities.Fragments.FragmentConfigPassword;
+import com.ufcspa.unasus.appportfolio.Activities.Fragments.FragmentConfigUser;
 import com.ufcspa.unasus.appportfolio.Activities.Fragments.FragmentRTEditor;
 import com.ufcspa.unasus.appportfolio.Activities.Fragments.FragmentReference;
 import com.ufcspa.unasus.appportfolio.Activities.Fragments.FragmentSelectPortfolio;
@@ -170,7 +172,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private void initMiniDrawer() {
         ImageButton portfolios = (ImageButton) miniDrawer.findViewById(R.id.btn_members);
-        ImageButton activities  = (ImageButton) miniDrawer.findViewById(R.id.btn_activities);
+        ImageButton activities = (ImageButton) miniDrawer.findViewById(R.id.btn_activities);
         ImageButton reports = (ImageButton) miniDrawer.findViewById(R.id.btn_reports);
         ImageButton config = (ImageButton) miniDrawer.findViewById(R.id.btn_config);
         ImageButton attachments = (ImageButton) miniDrawer.findViewById(R.id.btn_attachments);
@@ -249,24 +251,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     public void onClick(View v) {
-        if(v.getId() == R.id.btn_members || v.getId() == R.id.portfolios)
-        {
+        if (v.getId() == R.id.btn_members || v.getId() == R.id.portfolios) {
             changeFragment(0);
-        }
-        else if(v.getId() == R.id.btn_activities || v.getId() == R.id.activities)
-        {
+        } else if (v.getId() == R.id.btn_activities || v.getId() == R.id.activities) {
             changeFragment(1);
-        }
-        else if(v.getId() == R.id.btn_reports || v.getId() == R.id.reports)
-        {
+        } else if (v.getId() == R.id.btn_reports || v.getId() == R.id.reports) {
             changeFragment(2);
-        }
-        else if(v.getId() == R.id.btn_config || v.getId() == R.id.settings)
-        {
+        } else if (v.getId() == R.id.btn_config || v.getId() == R.id.settings) {
             changeFragment(3);
-        }
-        else if(v.getId() == R.id.btn_attachments || v.getId() == R.id.attachments)
-        {
+        } else if (v.getId() == R.id.btn_attachments || v.getId() == R.id.attachments) {
             changeFragment(4);
         }
     }
@@ -294,13 +287,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         super.onDestroy();
     }
 
-    private void changeFragment(int id)
-    {
+    private void changeFragment(int id) {
         singleton.firsttime = true;
         singleton.note = new Note(0, "null", 0);
         ((InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(findViewById(R.id.fragment_container).getWindowToken(), 0);
-        switch (id)
-        {
+        switch (id) {
             case 0:
                 downloadFullData(0, id);
                 sendFullData();
@@ -314,7 +305,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new FragmentReference()).addToBackStack("Frag").commit();
                 break;
             case 3:
-                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new FragmentConfiguracoes()).addToBackStack("Frag").commit();
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new FragmentConfig()).addToBackStack("Frag").commit();
                 break;
             case 4:
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new FragmentAttachment()).addToBackStack("Frag").commit();
@@ -427,11 +418,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
-    public void uploadFullData(){
+    public void uploadFullData() {
         shouldSend = true;
         sendResponseNotReceived = true;
 
-        if(isOnline()) {
+        if (isOnline()) {
             final Thread sendThread = new Thread(new Runnable() {
                 @Override
                 public void run() {
@@ -490,26 +481,34 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     public void removeProgressBar(int change_fragment) {
-        if (dialog != null) {
-            try {
+        try {
+            if (dialog != null) {
                 dialog.dismiss();
-
-                switch (change_fragment) {
-                    case 0:
-                        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new FragmentSelectPortfolio()).addToBackStack("Frag").commitAllowingStateLoss();//FragmentSelectPortfolio
-                        break;
-                    case 1:
-                        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new FragmentStudentActivities()).addToBackStack("Frag").commitAllowingStateLoss();
-                        break;
-                    case 5:
-                        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new FragmentRTEditor()).addToBackStack("Frag").commit();
-                        break;
-                    default:
-                        break;
-                }
-            } catch (Exception e) {
             }
+
+            switch (change_fragment) {
+                case 0:
+                    getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new FragmentSelectPortfolio()).addToBackStack("Frag").commitAllowingStateLoss();//FragmentSelectPortfolio
+                    break;
+                case 1:
+                    getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new FragmentStudentActivities()).addToBackStack("Frag").commitAllowingStateLoss();
+                    break;
+                case 5:
+                    getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new FragmentRTEditor()).addToBackStack("Frag").commit();
+                    break;
+                default:
+                    break;
+            }
+        } catch (Exception e) {
         }
+    }
+
+    public void initChangePasswordFragment() {
+        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new FragmentConfigPassword()).addToBackStack("Frag").commit();
+    }
+
+    public void initChangeProfileFragment() {
+        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new FragmentConfigUser()).addToBackStack("Frag").commit();
     }
 
     private class GestureListener extends GestureDetector.SimpleOnGestureListener {

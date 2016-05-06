@@ -995,7 +995,8 @@ public class DataBaseAdapter {
                 "a.ds_description,\n" +
                 "u.nm_user as nm_student,\n" +
                 "tas.id_portfolio_student,\n" +
-                "tas.id_activity\n" +
+                "tas.id_activity,\n" +
+                "u.im_photo\n" +
                 "FROM\n" +
                 "\ttb_activity_student as tas\n" +
                 "\tjoin tb_activity a on tas.id_activity = a.id_activity\n" +
@@ -1017,6 +1018,7 @@ public class DataBaseAdapter {
                 idUser = c.getInt(1);
 
                 String nameStudent = c.getString(4);
+                String photo = c.getString(7);
                 Activity a = new Activity(c.getInt(0), c.getInt(6), c.getString(2), c.getString(3));
                 a.setId_portfolio(c.getInt(5));
 
@@ -1027,6 +1029,7 @@ public class DataBaseAdapter {
                     StudFrPortClass student = new StudFrPortClass();
                     student.setNameStudent(nameStudent);
                     student.add(a);
+                    student.setPhoto(photo);
                     students.add(student);
                     cont++;
                 }
@@ -1408,16 +1411,37 @@ public class DataBaseAdapter {
         }
     }
 
-    public void updateTBUser(User user) {
+    public boolean updateTBUser(User user) {
         ContentValues cv = new ContentValues();
         cv.put("ds_email", user.getEmail());
-        cv.put("ds_password", user.getPassword());
-        cv.put("nu_cellphone", user.getCellphone());
+        if (user.getPassword() != null)
+            cv.put("ds_password", user.getPassword());
+        if (user.getCellphone() != null)
+            cv.put("nu_cellphone", user.getCellphone());
+        if (user.getPhoto() != null)
+            cv.put("im_photo", user.getPhoto());
         try {
             db.update("tb_user", cv, "id_user = ?", new String[]{String.valueOf(user.getIdUser())});
             Log.e(tag, "Conseguiu alterar tb_user");
+            return true;
         } catch (Exception e) {
             Log.e(tag, "Erro ao alterar tb_user");
+            return false;
+        }
+    }
+
+    public void updateTBUser(LinkedList<com.ufcspa.unasus.appportfolio.Model.basicData.User> users) {
+        for (com.ufcspa.unasus.appportfolio.Model.basicData.User u : users) {
+            ContentValues cv = new ContentValues();
+            cv.put("ds_email", u.getEmail());
+            cv.put("nu_cellphone", u.getCellphone());
+            cv.put("im_photo", u.getPhoto());
+            try {
+                db.update("tb_user", cv, "id_user = ?", new String[]{String.valueOf(u.getIdUser())});
+                Log.e(tag, "Conseguiu alterar tb_user");
+            } catch (Exception e) {
+                Log.e(tag, "Erro ao alterar tb_user");
+            }
         }
     }
 
@@ -1439,11 +1463,12 @@ public class DataBaseAdapter {
         if (c.moveToFirst()) {
             int id_user = c.getInt(0);
 
-            query = "SELECT nm_user, nu_identification, ds_email, nu_cellphone FROM tb_user WHERE id_user = " + id_user;
+            query = "SELECT nm_user, nu_identification, ds_email, nu_cellphone, im_photo FROM tb_user WHERE id_user = " + id_user;
             c = db.rawQuery(query, null);
 
             if (c.moveToFirst()) {
                 user = new User(id_user, c.getString(0), c.getString(1), c.getString(2), c.getString(3));
+                user.setPhoto(c.getString(4), null);
             }
         }
 
@@ -1599,6 +1624,35 @@ public class DataBaseAdapter {
     /*
         ************************* CRUD FULL DATA SEND ***************************
     */
+    public List<User> getUsersByIDs(LinkedList<Integer> ids) {
+        StringBuilder sb = new StringBuilder("select " +
+                "id_user," +
+                "nm_user," +
+                "nu_identification," +
+                "ds_email," +
+                "nu_cellphone," +
+                "im_photo" +
+                " from tb_user where id_user = " + ids.get(0));
+        Log.d(tag + " get users by ids", " query:" + sb.toString());
+        String query = sb.toString();
+        Cursor c = db.rawQuery(query, null);
+        LinkedList lista = new LinkedList<User>();
+        if (c.moveToFirst()) {
+            do {
+                User user = new User();
+                user.setIdUser(c.getInt(0));
+                user.setName(c.getString(1));
+                user.setIdCode(c.getString(2));
+                user.setEmail(c.getString(3));
+                user.setCellphone(c.getString(4));
+                user.setPhoto(c.getString(5), null);
+                lista.add(user);
+            } while (c.moveToNext());
+        } else {
+            Log.d(tag, "Nao retornou nada na consulta");
+        }
+        return lista;
+    }
 
     public List<Comentario> getCommentsByIDs(LinkedList<Integer> ids) {
         StringBuilder sb = new StringBuilder("select " +

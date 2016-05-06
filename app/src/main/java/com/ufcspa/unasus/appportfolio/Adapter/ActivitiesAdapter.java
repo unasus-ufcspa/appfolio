@@ -15,6 +15,7 @@ import android.widget.Toast;
 
 import com.ufcspa.unasus.appportfolio.Model.Activity;
 import com.ufcspa.unasus.appportfolio.Model.Singleton;
+import com.ufcspa.unasus.appportfolio.Model.StudFrPortClass;
 import com.ufcspa.unasus.appportfolio.R;
 import com.ufcspa.unasus.appportfolio.database.DataBaseAdapter;
 
@@ -30,13 +31,15 @@ public class ActivitiesAdapter extends RecyclerView.Adapter<ActivitiesAdapter.Vi
     private Singleton singleton;
     private String studentName;
     private DataBaseAdapter source;
+    private StudFrPortClass studFrPortClass;
 
-    public ActivitiesAdapter(Context context, List<Activity> list, String studName) {
+    public ActivitiesAdapter(Context context, List<Activity> list, String studName, StudFrPortClass aux) {
         this.list = list;
         this.context = context;
         this.singleton = Singleton.getInstance();
         Collections.sort(this.list);
         this.studentName = studName;
+        this.studFrPortClass = aux;
         source = DataBaseAdapter.getInstance(context);
     }
 
@@ -90,6 +93,7 @@ public class ActivitiesAdapter extends RecyclerView.Adapter<ActivitiesAdapter.Vi
                 singleton.idCurrentVersionActivity = singleton.idVersionActivity;
                 singleton.portfolioClass.setIdPortfolioStudent(list.get(position).getIdPortfolio());
                 singleton.portfolioClass.setStudentName(studentName);
+                singleton.portfolioClass.setPhoto(studFrPortClass.getPhoto());
                 LocalBroadcastManager.getInstance(context).sendBroadcast(new Intent("call.fragments.action").putExtra("ID", 5));
             }
         });

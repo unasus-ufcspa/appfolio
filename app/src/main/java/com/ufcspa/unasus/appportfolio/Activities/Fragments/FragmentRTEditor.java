@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.res.Configuration;
+import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
@@ -474,7 +475,7 @@ public class FragmentRTEditor extends Frag {
     }
 
     private void initCommentsTab(final View view) {
-        view.findViewById(R.id.usr_photo_left).bringToFront();
+        view.findViewById(R.id.usr_photo).bringToFront();
 
         slider = (RelativeLayout) view.findViewById(R.id.slider);
 
@@ -560,7 +561,7 @@ public class FragmentRTEditor extends Frag {
     private void initTopBar(View view) {
         TextView studentName = (TextView) view.findViewById(R.id.student_name);
         TextView activityName = (TextView) view.findViewById(R.id.activity_name);
-        ImageView usrPhoto = (ImageView) view.findViewById(R.id.usr_photo_left);
+        ImageView usrPhoto = (ImageView) view.findViewById(R.id.usr_photo);
         ImageButton personalCommentButton = (ImageButton) view.findViewById(R.id.personal_comment);
         ImageButton versionsButton = (ImageButton) view.findViewById(R.id.btn_versions);
 
@@ -628,6 +629,9 @@ public class FragmentRTEditor extends Frag {
         });
 
         studentName.setText(singleton.portfolioClass.getStudentName());
+        Bitmap photo = singleton.portfolioClass.getPhoto();
+        if (photo != null)
+            usrPhoto.setImageBitmap(photo);
         activityName.setText("Ativ. " + singleton.activity.getNuOrder() + ": " + singleton.activity.getTitle());
     }
 
@@ -961,6 +965,24 @@ public class FragmentRTEditor extends Frag {
         }
     }
 
+    private void hideNotes(boolean f) {
+        View v = getView();
+        if (v != null) {
+            ArrayList<Note> aux = new ArrayList<>();
+            aux.addAll(specificCommentsNotes.values());
+
+            for (int i = 0; i < aux.size(); i++) {
+                Note first = aux.get(i);
+                Button btnFirst = (Button) v.findViewById(first.getBtId());
+                if (f == true)
+                    btnFirst.setVisibility(View.GONE);
+                else
+                    btnFirst.setVisibility(View.VISIBLE);
+            }
+
+        }
+    }
+
     private class ActionBarCallBack implements ActionMode.Callback {
 
         int startSelection;
@@ -1034,25 +1056,6 @@ public class FragmentRTEditor extends Frag {
             setSpecificCommentNoteValue();
 
             btn.callOnClick();
-        }
-    }
-
-
-    private void hideNotes(boolean f) {
-        View v = getView();
-        if (v != null) {
-            ArrayList<Note> aux = new ArrayList<>();
-            aux.addAll(specificCommentsNotes.values());
-
-            for (int i = 0; i < aux.size(); i++) {
-                Note first = aux.get(i);
-                Button btnFirst = (Button) v.findViewById(first.getBtId());
-                if (f == true)
-                    btnFirst.setVisibility(View.GONE);
-                else
-                    btnFirst.setVisibility(View.VISIBLE);
-            }
-
         }
     }
 }
