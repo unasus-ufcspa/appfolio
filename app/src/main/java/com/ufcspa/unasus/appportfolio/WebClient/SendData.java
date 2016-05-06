@@ -26,7 +26,7 @@ public class SendData {
     private LinkedList<Integer> idSync;
     private ArrayList<Sync> sincronias;
     private LinkedHashMap<String,LinkedList<Integer>> dadosAgrupados;
-    private LinkedHashMap<Integer,LinkedList<Comentario>> commentsByVersions;
+    private LinkedHashMap<Integer, LinkedList<Comentario>> commentsByVersions;
     private LinkedList<Comentario> comentarios;
     private LinkedList<User> users;
     private LinkedList<Comentario> commentByVersion;
@@ -47,6 +47,8 @@ public class SendData {
         data= DataBaseAdapter.getInstance(context);
         versions = new LinkedList<VersionActivity>();
         comentarios = new LinkedList<>();
+        commentsByVersions = new LinkedHashMap<>();
+        commentByVersion = new LinkedList<>();
         idSync = new LinkedList<>();
     }
 
@@ -77,10 +79,10 @@ public class SendData {
         if (dadosAgrupados.get(tbComm) != null) {
             comentarios = (LinkedList) data.getCommentsByIDs(dadosAgrupados.get(tbComm));
         }
-        if(dadosAgrupados.get(tbVers)!=null){
+        if (dadosAgrupados.get(tbVers) != null) {
             versions = (LinkedList) data.getVersionActivitiesByIDs(dadosAgrupados.get(tbVers));
-            for (VersionActivity v:versions) {
-                commentsByVersions.put(v.getId_version_activity(),data.getCommentVersion(v.getId_version_activity()));
+            for (VersionActivity v : versions) {
+                commentsByVersions.put(v.getId_version_activity(), data.getCommentVersion(v.getId_version_activity()));
             }
         }
         if (dadosAgrupados.get(tbUser) != null) {
@@ -147,10 +149,10 @@ public class SendData {
                     jsonVersion.put("tx_activity", v.getTx_activity());
                     jsonVersion.put("dt_last_access", v.getDt_last_access());
                     jsonArrayVersions.put(jsonVersion);
-                    if(commentsByVersions.containsKey(v.getId_version_activity())){
-                        commentByVersion=commentsByVersions.get(v.getId_version_activity());
-                        JSONArray jsonCommentsByVersion= new JSONArray();
-                        for (Comentario c:commentByVersion) {
+                    if (commentsByVersions.containsKey(v.getId_version_activity())) {
+                        commentByVersion = commentsByVersions.get(v.getId_version_activity());
+                        JSONArray jsonCommentsByVersion = new JSONArray();
+                        for (Comentario c : commentByVersion) {
                             JSONObject jComment = new JSONObject();
                             jComment.put("id_comment", c.getIdComment());
                             jComment.put("id_activity_student", c.getIdActivityStudent());
@@ -163,9 +165,9 @@ public class SendData {
 
                             jsonCommentsByVersion.put(jComment);
                         }
-                        JSONObject jTb_comment= new JSONObject();
-                        jTb_comment.put("tb_comment",jsonCommentsByVersion);
-                        jsonVersion.put("comment",jTb_comment);
+                        JSONObject jTb_comment = new JSONObject();
+                        jTb_comment.put("tb_comment", jsonCommentsByVersion);
+                        jsonVersion.put("comment", jTb_comment);
                     }
                 }
             }

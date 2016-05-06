@@ -965,6 +965,40 @@ public class FragmentRTEditor extends Frag {
         }
     }
 
+    private void hideNotes(boolean f) {
+        View v = getView();
+        if (v != null) {
+            ArrayList<Note> aux = new ArrayList<>();
+            aux.addAll(specificCommentsNotes.values());
+
+            for (int i = 0; i < aux.size(); i++) {
+                Note first = aux.get(i);
+                Button btnFirst = (Button) v.findViewById(first.getBtId());
+                if (f == true)
+                    btnFirst.setVisibility(View.GONE);
+                else
+                    btnFirst.setVisibility(View.VISIBLE);
+                resetColorNote(f);
+            }
+
+        }
+    }
+
+    private void resetColorNote(boolean flag) {
+        Spannable textSpanned = mRTMessageField.getText();
+        BackgroundColorSpan[] spans = textSpanned.getSpans(0, textSpanned.length(), BackgroundColorSpan.class);
+
+        for (BackgroundColorSpan spm : spans) {
+            if (spm.getId() != -1) {
+                if (flag)
+                    spm.setColor(greenLight);
+                else
+                    spm.setColor(Color.BLUE);
+            }
+        }
+        //noteFollowText();
+    }
+
     private class ActionBarCallBack implements ActionMode.Callback {
 
         int startSelection;
@@ -1040,42 +1074,6 @@ public class FragmentRTEditor extends Frag {
             btn.callOnClick();
         }
     }
-
-
-    private void hideNotes(boolean f) {
-        View v = getView();
-        if (v != null) {
-            ArrayList<Note> aux = new ArrayList<>();
-            aux.addAll(specificCommentsNotes.values());
-
-            for (int i = 0; i < aux.size(); i++) {
-                Note first = aux.get(i);
-                Button btnFirst = (Button) v.findViewById(first.getBtId());
-                if (f == true)
-                    btnFirst.setVisibility(View.GONE);
-                else
-                    btnFirst.setVisibility(View.VISIBLE);
-                resetColorNote(f);
-            }
-
-        }
-    }
-
-    private void resetColorNote(boolean flag) {
-        Spannable textSpanned = mRTMessageField.getText();
-        BackgroundColorSpan[] spans = textSpanned.getSpans(0, textSpanned.length(), BackgroundColorSpan.class);
-
-            for (BackgroundColorSpan spm : spans) {
-                    if (spm.getId() != -1){
-                        if(flag)
-                            spm.setColor(greenLight);
-                        else
-                            spm.setColor(Color.BLUE);
-                    }
-            }
-        //noteFollowText();
-        }
-
 
 
 }

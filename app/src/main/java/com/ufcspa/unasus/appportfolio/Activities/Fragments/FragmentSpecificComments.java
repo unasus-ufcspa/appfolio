@@ -31,7 +31,6 @@ import com.ufcspa.unasus.appportfolio.Model.CommentVersion;
 import com.ufcspa.unasus.appportfolio.Model.Note;
 import com.ufcspa.unasus.appportfolio.Model.OneComment;
 import com.ufcspa.unasus.appportfolio.Model.Singleton;
-import com.ufcspa.unasus.appportfolio.Model.Sync;
 import com.ufcspa.unasus.appportfolio.R;
 import com.ufcspa.unasus.appportfolio.database.DataBaseAdapter;
 

@@ -806,7 +806,7 @@ public class DataBaseAdapter {
     }
 
 
-    public LinkedList<Comentario> getCommentVersion(int idVersion){
+    public LinkedList<Comentario> getCommentVersion(int idVersion) {
         String query = "SELECT " +
                 "\tc.id_comment,\n" +
                 "\tc.id_activity_student,\n" +
@@ -816,7 +816,7 @@ public class DataBaseAdapter {
                 "\tc.dt_comment\n" +
                 "\tFROM tb_comment_version cv \n" +
                 "\t\tJOIN  tb_comment c on cv.id_comment = c.id_comment\n" +
-                "	WHERE 1=1 AND c.id_comment_srv IS NULL AND cv.id_version_activity ="+idVersion;
+                "	WHERE 1=1 AND c.id_comment_srv IS NULL AND cv.id_version_activity =" + idVersion;
         LinkedList<Comentario> comentarios = new LinkedList<Comentario>();
         Cursor c = db.rawQuery(query, null);
         Comentario cmm;
@@ -838,8 +838,6 @@ public class DataBaseAdapter {
         }
         return comentarios;
     }
-
-
 
 
     public List<PortfolioClass> listarPortfolio(int idClass, char userType, int idUser) {
@@ -1523,7 +1521,7 @@ public class DataBaseAdapter {
             cv.put("id_version_activity_srv", va.getId_version_activit_srv());
 
 
-            String query = "SELECT id_version_activity FROM tb_version_activity WHERE id_version_activity_srv="+va.getId_version_activit_srv();
+            String query = "SELECT id_version_activity FROM tb_version_activity WHERE id_version_activity_srv=" + va.getId_version_activit_srv();
             Cursor c = db.rawQuery(query, null);
 
             if (c.moveToFirst()) {
