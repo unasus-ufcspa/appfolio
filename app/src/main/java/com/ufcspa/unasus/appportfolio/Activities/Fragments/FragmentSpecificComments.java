@@ -27,6 +27,7 @@ import com.ufcspa.unasus.appportfolio.Activities.MainActivity;
 import com.ufcspa.unasus.appportfolio.Adapter.SpecificCommentAdapter;
 import com.ufcspa.unasus.appportfolio.Model.Attachment;
 import com.ufcspa.unasus.appportfolio.Model.Comentario;
+import com.ufcspa.unasus.appportfolio.Model.CommentVersion;
 import com.ufcspa.unasus.appportfolio.Model.Note;
 import com.ufcspa.unasus.appportfolio.Model.OneComment;
 import com.ufcspa.unasus.appportfolio.Model.Singleton;
@@ -387,6 +388,15 @@ private LoadCommentsFromDB loadCommentsFromDB;
         try {
             DataBaseAdapter db = DataBaseAdapter.getInstance(getActivity());
             lastID=db.insertSpecificComment(c, noteNow.getBtId());
+            CommentVersion cv = new CommentVersion();
+            cv.setId_comment(lastID);
+            cv.setId_version_activity(singleton.idCurrentVersionActivity);
+            db.insertCommentVersion(cv);
+
+
+           /*
+
+                EMPILHA COMENTARIO ESPECIFICO NA SYNC(ANTIGO)
 
             Sync sync = new Sync(singleton.device.get_id_device(), "tb_comment", lastID, singleton.idActivityStudent);
             DataBaseAdapter.getInstance(getContext()).insertIntoTBSync(sync);
@@ -394,7 +404,10 @@ private LoadCommentsFromDB loadCommentsFromDB;
             MainActivity main = ((MainActivity) getActivity());
             if (main != null)
                 main.sendFullData();
-            Log.d("Banco:", "comentario inserido no bd interno com sucesso");
+            Log.d("Banco:", "comentario inserido no bd interno com sucesso");*/
+
+
+
         }
         catch (Exception e) {
             Log.e("Banco", "Erro:"+e.getMessage());
