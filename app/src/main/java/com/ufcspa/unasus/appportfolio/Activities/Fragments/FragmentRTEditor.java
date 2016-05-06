@@ -1051,8 +1051,27 @@ public class FragmentRTEditor extends Frag {
                     btnFirst.setVisibility(View.GONE);
                 else
                     btnFirst.setVisibility(View.VISIBLE);
+                resetColorNote(f);
             }
 
         }
     }
+
+    private void resetColorNote(boolean flag) {
+        Spannable textSpanned = mRTMessageField.getText();
+        BackgroundColorSpan[] spans = textSpanned.getSpans(0, textSpanned.length(), BackgroundColorSpan.class);
+
+            for (BackgroundColorSpan spm : spans) {
+                    if (spm.getId() != -1){
+                        if(flag)
+                            spm.setColor(greenLight);
+                        else
+                            spm.setColor(Color.BLUE);
+                    }
+            }
+        //noteFollowText();
+        }
+
+
+
 }

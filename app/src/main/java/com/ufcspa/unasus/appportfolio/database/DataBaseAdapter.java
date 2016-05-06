@@ -806,6 +806,40 @@ public class DataBaseAdapter {
     }
 
 
+    public LinkedList<Comentario> getCommentVersion(int idVersion){
+        String query = "SELECT " +
+                "\tc.id_comment,\n" +
+                "\tc.id_activity_student,\n" +
+                "\tc.id_author,\n" +
+                "\tc.tx_reference,\n" +
+                "\tc.tx_comment,\n" +
+                "\tc.dt_comment\n" +
+                "\tFROM tb_comment_version cv \n" +
+                "\t\tJOIN  tb_comment c on cv.id_comment = c.id_comment\n" +
+                "	WHERE 1=1 AND c.id_comment_srv IS NULL AND cv.id_version_activity ="+idVersion;
+        LinkedList<Comentario> comentarios = new LinkedList<Comentario>();
+        Cursor c = db.rawQuery(query, null);
+        Comentario cmm;
+        if (c.moveToFirst()) {
+            do {
+                try {
+                    cmm = new Comentario();
+                    cmm.setIdComment(c.getInt(0));
+                    cmm.setIdActivityStudent(c.getInt(1));
+                    cmm.setIdAuthor(c.getInt(2));
+                    cmm.setTxtReference(c.getString(3));
+                    cmm.setTxtComment(c.getString(4));
+                    cmm.setDateComment(c.getString(5));
+                    comentarios.add(cmm);
+                } catch (Exception v) {
+                    Log.e(tag, "erro ao pegar dados do banco:" + v.getMessage());
+                }
+            } while (c.moveToNext());
+        }
+        return comentarios;
+    }
+
+
 
 
     public List<PortfolioClass> listarPortfolio(int idClass, char userType, int idUser) {
@@ -1463,6 +1497,14 @@ public class DataBaseAdapter {
             cv.put("dt_verification", va.getDt_verification());
             cv.put("id_version_activity_srv", va.getId_version_activit_srv());
 
+
+            String query = "SELECT id_version_activity FROM tb_version_activity WHERE id_version_activity_srv="+va.getId_version_activit_srv();
+            Cursor c = db.rawQuery(query, null);
+
+            if (c.moveToFirst()) {
+                db.update("tb_version_activity", cv, "id_version_activity_srv=" + va.getId_version_activit_srv(), null);
+                continue;
+            }
             try {
                 db.insert("tb_version_activity", null, cv);
 
@@ -1470,7 +1512,6 @@ public class DataBaseAdapter {
                 Log.d(tag, "erro ao inserir na tb_version_activity:" + e.getMessage());
                 e.printStackTrace();
             }
-
         }
     }
 
