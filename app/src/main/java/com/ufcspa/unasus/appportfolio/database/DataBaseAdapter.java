@@ -757,7 +757,7 @@ public class DataBaseAdapter {
         return result;
     }
 
-    public ArrayList<VersionActivity> getAllVersionsFromActivityStudent() {
+    public ArrayList<VersionActivity> getAllVersionsFromActivityStudent(int id_activity_student) {
         String query = "SELECT id_version_activity, " +
                 "id_activity_student, " +
                 "tx_activity, " +
@@ -765,7 +765,8 @@ public class DataBaseAdapter {
                 "dt_submission, " +
                 "dt_verification, " +
                 "id_version_activity_srv " +
-                "FROM tb_version_activity";
+                "FROM tb_version_activity " +
+                "WHERE id_activity_student = " + id_activity_student;
         ArrayList<VersionActivity> versionActivities = new ArrayList<VersionActivity>();
         Cursor c = db.rawQuery(query, null);
         if (c.moveToFirst()) {
@@ -1643,8 +1644,7 @@ public class DataBaseAdapter {
     public void insertNotifications(LinkedList<Notification> notifications) {
         for (Notification n : notifications) {
             ContentValues cv = new ContentValues();
-            if(n.getId_notice()>0)
-                cv.put("id_notice", n.getId_notification());
+            cv.put("id_notice", n.getId_notice());
             cv.put("id_author", n.getId_author());
             cv.put("id_destination", n.getId_destination());
             cv.put("id_activity_student", n.getId_activity_student());

@@ -3,6 +3,7 @@ package com.ufcspa.unasus.appportfolio.Activities.Fragments;
 import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.res.Configuration;
@@ -13,6 +14,7 @@ import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.widget.SlidingPaneLayout;
+import android.support.v7.app.AlertDialog;
 import android.text.Editable;
 import android.text.Layout;
 import android.text.Spannable;
@@ -227,31 +229,55 @@ public class FragmentRTEditor extends Frag {
             @Override
             public void onClick(View v) {
                 if (singleton.portfolioClass.getPerfil().equals("S") && (singleton.idCurrentVersionActivity == singleton.idVersionActivity)) {
-                    Log.d("RTEditor", "Enviando versão!");
-                    Toast.makeText(getContext(), "Enviando versão!", Toast.LENGTH_SHORT).show();
+                    new AlertDialog.Builder(getContext())
+                            .setTitle("Enviar Versão")
+                            .setMessage("Você tem certeza que deseja enviar essa versão da atividade?")
+                            .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                    Log.d("RTEditor", "Enviando versão!");
+                                    Toast.makeText(getContext(), "Enviando versão!", Toast.LENGTH_SHORT).show();
 
-                    saveText();
-                    //POPULA SYNC PARA SINCRONIZAR
-                    Sync sync = new Sync();
-                    sync.setNm_table("tb_version_activity");
-                    sync.setCo_id_table(source.getLastIDVersionActivity(singleton.idActivityStudent));
-                    sync.setId_activity_student(Singleton.getInstance().idActivityStudent);
-                    sync.setId_device(singleton.device.get_id_device());
-                    source.insertIntoTBSync(sync);
+                                    saveText();
+                                    //POPULA SYNC PARA SINCRONIZAR
+                                    Sync sync = new Sync();
+                                    sync.setNm_table("tb_version_activity");
+                                    sync.setCo_id_table(source.getLastIDVersionActivity(singleton.idActivityStudent));
+                                    sync.setId_activity_student(Singleton.getInstance().idActivityStudent);
+                                    sync.setId_device(singleton.device.get_id_device());
+                                    source.insertIntoTBSync(sync);
 
-                    //SALVA NOVA VERSION ACTIVITY
-                    DataBaseAdapter data = DataBaseAdapter.getInstance(getContext());
-                    VersionActivity version = new VersionActivity();
-                    version.setTx_activity(mRTMessageField.getText(RTFormat.HTML));
-                    version.setId_activity_student(Singleton.getInstance().idActivityStudent);
-                    version.setDt_last_access(getActualTime());
-                    int id = data.insertVersionActivity(version);
-                    singleton.idVersionActivity = id;
-                    singleton.idCurrentVersionActivity = id;
+                                    //SALVA NOVA VERSION ACTIVITY
+                                    DataBaseAdapter data = DataBaseAdapter.getInstance(getContext());
+                                    VersionActivity version = new VersionActivity();
+                                    version.setTx_activity(mRTMessageField.getText(RTFormat.HTML));
+                                    version.setId_activity_student(Singleton.getInstance().idActivityStudent);
+                                    version.setDt_last_access(getActualTime());
+                                    int id = data.insertVersionActivity(version);
+                                    singleton.idVersionActivity = id;
+                                    singleton.idCurrentVersionActivity = id;
 
-                    MainActivity main = ((MainActivity) getActivity());
-                    if (main != null)
-                        main.sendFullData();
+                                    MainActivity main = ((MainActivity) getActivity());
+                                    if (main != null)
+                                        main.sendFullData();
+
+                                    if (!singleton.isFullscreen) {
+                                        singleton.wasFullscreen = true;
+                                        singleton.isFullscreen = false;
+                                    } else {
+                                        singleton.wasFullscreen = false;
+                                        singleton.isFullscreen = true;
+                                    }
+
+                                    ((MainActivity) getActivity()).dontCreateCrossfader();
+                                }
+                            })
+                            .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                    // do nothing
+                                }
+                            })
+                            .setIcon(android.R.drawable.ic_dialog_alert)
+                            .show();
                 }
             }
         });
@@ -261,7 +287,6 @@ public class FragmentRTEditor extends Frag {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 hideNotes(isChecked);
-                //
             }
         });
 
@@ -284,7 +309,7 @@ public class FragmentRTEditor extends Frag {
             singleton.idCurrentVersionActivity = id;
         }
 
-        //TODO deletar notificações baseado no tipo de tabela
+        //TODO deletar notificações baseado no tipo de tabela, mas antes enviar a dt_read atualizada
         source.deleteAllNotifications(singleton.idActivityStudent);
 
         return view;
@@ -588,7 +613,7 @@ public class FragmentRTEditor extends Frag {
             @Override
             public void onClick(View v) {
                 saveText();
-                versionAdapter.refresh(source.getAllVersionsFromActivityStudent());
+                versionAdapter.refresh(source.getAllVersionsFromActivityStudent(singleton.idActivityStudent));
 
                 getView().findViewById(R.id.personal_comment_container).setVisibility(View.GONE);
                 displayVersionsDialog(importPanel);
@@ -596,7 +621,7 @@ public class FragmentRTEditor extends Frag {
         });
 
         importPanel = view.findViewById(R.id.versions_container);
-        versions = source.getAllVersionsFromActivityStudent();
+        versions = source.getAllVersionsFromActivityStudent(singleton.idActivityStudent);
 
         GridView versionList = (GridView) importPanel.findViewById(R.id.version_list);
         versionAdapter = new VersionsAdapter(getActivity(), versions);
@@ -604,8 +629,6 @@ public class FragmentRTEditor extends Frag {
         versionList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                //TODO Click em uma versão
-//                displayVersionsDialog(importPanel);
                 saveText();
                 if (position <= versions.size() - 1) {
                     singleton.idCurrentVersionActivity = versions.get(position).getId_version_activity();

@@ -215,7 +215,7 @@ public class FullDataClient extends HttpClient {
                                             String nu_identification = temp.getString("nu_identification");
                                             String nu_cellphone = temp.getString("nu_cellphone");
                                             String ds_email = temp.getString("ds_email");
-                                            String im_photo = temp.getString("ds_email");
+                                            String im_photo = temp.getString("im_photo");
 
                                             u.setIdUser(id_user);
                                             u.setNm_user(nm_user);

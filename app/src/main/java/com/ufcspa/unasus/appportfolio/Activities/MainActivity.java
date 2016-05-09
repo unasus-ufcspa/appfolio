@@ -26,7 +26,6 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
-import android.widget.Toast;
 
 import com.mikepenz.crossfader.Crossfader;
 import com.ufcspa.unasus.appportfolio.Activities.Fragments.FragmentAttachment;
@@ -396,7 +395,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                             public void run() {
                                 // Atualizar as notificações e o layout
                                 removeProgressBar(change_fragment);
-                                Toast.makeText(getApplicationContext(), "Novos dados baixados com sucesso", Toast.LENGTH_SHORT).show();
+//                                Toast.makeText(getApplicationContext(), "Novos dados baixados com sucesso", Toast.LENGTH_SHORT).show();
                             }
                         });
                     } else {
@@ -404,7 +403,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                             @Override
                             public void run() {
                                 removeProgressBar(change_fragment);
-                                Toast.makeText(getApplicationContext(), "Erro interno. Por favor tente novamente", Toast.LENGTH_SHORT).show();
+//                                Toast.makeText(getApplicationContext(), "Erro interno. Por favor tente novamente", Toast.LENGTH_SHORT).show();
                             }
                         });
                     }
@@ -414,7 +413,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         } else {
             // Atualizar a interface
             removeProgressBar(change_fragment);
-            Toast.makeText(getApplicationContext(), "Sem conexão com a internet", Toast.LENGTH_SHORT).show();
+//            Toast.makeText(getApplicationContext(), "Sem conexão com a internet", Toast.LENGTH_SHORT).show();
         }
     }
 
