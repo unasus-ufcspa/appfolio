@@ -817,7 +817,7 @@ public class DataBaseAdapter {
                 "\tc.tp_comment,\n" +
                 "\tc.nu_comment_activity\n" +
                 "\tFROM tb_comment_version cv \n" +
-                "\t\tJOIN  tb_comment c on cv.id_comment = c.id_comment\n" +
+                "\t\t JOIN  tb_comment c on cv.id_comment = c.id_comment\n" +
                 "	WHERE 1=1 AND c.id_comment_srv IS NULL AND cv.id_version_activity =" + idVersion;
         LinkedList<Comentario> comentarios = new LinkedList<Comentario>();
         Cursor c = db.rawQuery(query, null);
