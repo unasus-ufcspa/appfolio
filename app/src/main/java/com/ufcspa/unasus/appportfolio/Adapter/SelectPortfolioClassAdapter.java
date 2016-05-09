@@ -71,14 +71,8 @@ public class SelectPortfolioClassAdapter extends BaseAdapter {
         holder.txt_port_title=(TextView) rowView.findViewById(R.id.adapter_item_class_txv_ds_title);
         holder.background=(TextView) rowView.findViewById(R.id.item_color_background);
         holder.btnInfo=(ImageButton) rowView.findViewById(R.id.btn_info);
-        holder.nofificationIcon = (TextView) rowView.findViewById(R.id.item_class_notification_icon);
+        holder.notificationIcon = (TextView) rowView.findViewById(R.id.item_class_notification_icon);
         final PortfolioClass portClass=portclasses.get(position);
-
-        int notifications = dataBaseAdapter.getPortfolioClassNotification(portClass.getIdPortClass());
-        if (notifications == 0)
-            holder.nofificationIcon.setVisibility(View.INVISIBLE);
-        else
-            holder.nofificationIcon.setText(notifications + "");
 
         if(portClass.getPerfil().equals("S")){
             holder.background.setBackgroundResource(R.color.base_green);
@@ -86,8 +80,8 @@ public class SelectPortfolioClassAdapter extends BaseAdapter {
             holder.txt_port_title.setTextColor(Color.GRAY);
             holder.txt_port.setTextColor(Color.GRAY);
             holder.btnInfo.setImageResource(R.drawable.btn_open_white);
-            holder.nofificationIcon.setBackgroundResource(R.drawable.rounded_student);
-            holder.nofificationIcon.setVisibility(View.VISIBLE);
+            holder.notificationIcon.setBackgroundResource(R.drawable.rounded_student);
+            holder.notificationIcon.setVisibility(View.VISIBLE);
         }
         holder.txt_class_code.setText(portClass.getClassCode());
         holder.txt_class_code_info.setText(portClass.getClassCode());
@@ -115,8 +109,8 @@ public class SelectPortfolioClassAdapter extends BaseAdapter {
         holder.btnInfo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                holder.infoView.setVisibility(View.VISIBLE);
-                holder.infoView.startAnimation(AnimationUtils.loadAnimation(context, R.anim.anim_right));
+//                holder.infoView.setVisibility(View.VISIBLE);
+//                holder.infoView.startAnimation(AnimationUtils.loadAnimation(context, R.anim.anim_right));
             }
         });
 
@@ -141,6 +135,14 @@ public class SelectPortfolioClassAdapter extends BaseAdapter {
             }
         });
 
+        int notifications = dataBaseAdapter.getPortfolioClassNotification(portClass.getIdPortClass());
+        if (notifications == 0)
+            holder.notificationIcon.setVisibility(View.INVISIBLE);
+        else {
+            holder.notificationIcon.setVisibility(View.VISIBLE);
+            holder.notificationIcon.setText(notifications + "");
+        }
+
         return rowView;
     }
 
@@ -157,7 +159,7 @@ public class SelectPortfolioClassAdapter extends BaseAdapter {
         TextView txt_port;
         TextView background;
         ImageButton btnInfo;
-        TextView nofificationIcon;
+        TextView notificationIcon;
 
         RelativeLayout infoView;
         TextView txt_class_code_info;

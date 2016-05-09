@@ -36,6 +36,7 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.Switch;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.onegravity.rteditor.RTEditText;
 import com.onegravity.rteditor.RTManager;
@@ -227,6 +228,7 @@ public class FragmentRTEditor extends Frag {
             public void onClick(View v) {
                 if (singleton.portfolioClass.getPerfil().equals("S") && (singleton.idCurrentVersionActivity == singleton.idVersionActivity)) {
                     Log.d("RTEditor", "Enviando versão!");
+                    Toast.makeText(getContext(), "Enviando versão!", Toast.LENGTH_SHORT).show();
 
                     saveText();
                     //POPULA SYNC PARA SINCRONIZAR
@@ -258,7 +260,7 @@ public class FragmentRTEditor extends Frag {
         switchNote.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                    hideNotes(isChecked);
+                hideNotes(isChecked);
                 //
             }
         });
@@ -559,7 +561,7 @@ public class FragmentRTEditor extends Frag {
     }
 
     private void initTopBar(View view) {
-        TextView studentName = (TextView) view.findViewById(R.id.student_name);
+        TextView studentName = (TextView) view.findViewById(R.id.p_student_name);
         TextView activityName = (TextView) view.findViewById(R.id.activity_name);
         ImageView usrPhoto = (ImageView) view.findViewById(R.id.usr_photo);
         ImageButton personalCommentButton = (ImageButton) view.findViewById(R.id.personal_comment);
@@ -953,8 +955,17 @@ public class FragmentRTEditor extends Frag {
     private void displayPersonalComment(View anchorView) {
         if (anchorView.getVisibility() == View.VISIBLE)
             anchorView.setVisibility(View.GONE);
-        else
+        else {
             anchorView.setVisibility(View.VISIBLE);
+            TextView student_name = (TextView) anchorView.findViewById(R.id.p_student_name);
+            TextView student_cell = (TextView) anchorView.findViewById(R.id.student_phone);
+            student_name.setText(singleton.portfolioClass.getStudentName());
+            String cellphone = singleton.portfolioClass.getCellphone();
+            if (cellphone != null)
+                student_cell.setText(singleton.portfolioClass.getCellphone());
+            else
+                student_cell.setText("");
+        }
     }
 
     private void displayVersionsDialog(View anchorView) {

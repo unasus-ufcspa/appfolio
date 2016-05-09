@@ -75,7 +75,7 @@ public class StudentActivitiesAdapter extends BaseAdapter
 
         holder.recyclerView.setAdapter(new ActivitiesAdapter(context, aux.getListActivities(), aux.getNameStudent(), aux));
 
-        holder.studentName = (TextView) rowView.findViewById(R.id.student_name);
+        holder.studentName = (TextView) rowView.findViewById(R.id.p_student_name);
         holder.studentName.setText(aux.getNameStudent());
 
         holder.studentPhoto = (ImageView) rowView.findViewById(R.id.student_image);

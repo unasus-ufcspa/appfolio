@@ -210,7 +210,6 @@
         android:autoText="false"
         android:background="@drawable/rounded_corner"
         android:gravity="center"
-        android:text="10"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:textColor="#ffffff"
         android:textSize="20dp" />

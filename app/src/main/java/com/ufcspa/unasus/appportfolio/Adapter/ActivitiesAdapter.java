@@ -71,8 +71,8 @@ public class ActivitiesAdapter extends RecyclerView.Adapter<ActivitiesAdapter.Vi
         holder.moreInfo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                holder.infoView.setVisibility(View.VISIBLE);
-                holder.infoView.startAnimation(AnimationUtils.loadAnimation(context, R.anim.anim_right));
+//                holder.infoView.setVisibility(View.VISIBLE);
+//                holder.infoView.startAnimation(AnimationUtils.loadAnimation(context, R.anim.anim_right));
             }
         });
 
@@ -94,6 +94,7 @@ public class ActivitiesAdapter extends RecyclerView.Adapter<ActivitiesAdapter.Vi
                 singleton.portfolioClass.setIdPortfolioStudent(list.get(position).getIdPortfolio());
                 singleton.portfolioClass.setStudentName(studentName);
                 singleton.portfolioClass.setPhoto(studFrPortClass.getPhoto());
+                singleton.portfolioClass.setCellphone(studFrPortClass.getCellphone());
                 LocalBroadcastManager.getInstance(context).sendBroadcast(new Intent("call.fragments.action").putExtra("ID", 5));
             }
         });

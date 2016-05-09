@@ -17,6 +17,7 @@ public class StudFrPortClass {
     private String nameStudent;
     private Bitmap photo;
     private String photo64;
+    private String cellphone;
     private List<Activity> listActivities;
 
     public StudFrPortClass() {
@@ -57,6 +58,14 @@ public class StudFrPortClass {
 
     public void add(Activity a){
         listActivities.add(a);
+    }
+
+    public String getCellphone() {
+        return cellphone;
+    }
+
+    public void setCellphone(String cellphone) {
+        this.cellphone = cellphone;
     }
 
     @Override
