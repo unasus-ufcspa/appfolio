@@ -142,10 +142,12 @@ private LoadCommentsFromDB loadCommentsFromDB;
         btGenMess.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Comentario c = getCommentFromText();
-                oneComments.add(new OneComment(false, edtMessage.getText().toString(), convertDateToTime(c.getDateComment()), convertDateToDate(c.getDateComment())));
-                edtMessage.setText("");
-                insertComment(c);
+                if (!edtMessage.getText().toString().isEmpty()) {
+                    Comentario c = getCommentFromText();
+                    oneComments.add(new OneComment(false, edtMessage.getText().toString(), convertDateToTime(c.getDateComment()), convertDateToDate(c.getDateComment())));
+                    edtMessage.setText("");
+                    insertComment(c);
+                }
             }
         });
         txNote.setOnClickListener(new View.OnClickListener() {

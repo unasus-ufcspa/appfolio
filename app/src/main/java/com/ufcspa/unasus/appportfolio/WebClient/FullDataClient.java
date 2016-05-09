@@ -229,6 +229,30 @@ public class FullDataClient extends HttpClient {
                                     }
                                 }
 
+                                if (data.has("commentVersion")) {
+                                    JSONObject user = data.getJSONObject("commentVersion");
+                                    if (user.has("tb_comment_version")) {
+                                        JSONArray tb_user = user.getJSONArray("tb_comment_version");
+                                        for (int i = 0; i < tb_user.length(); i++) {
+                                            JSONObject temp = tb_user.getJSONObject(i);
+                                            com.ufcspa.unasus.appportfolio.Model.CommentVersion cm = new com.ufcspa.unasus.appportfolio.Model.CommentVersion();
+
+                                            int id_version_activity = temp.getInt("id_version_activity");
+                                            int  id_comment = temp.getInt("id_comment");
+                                            int  id_comment_version = temp.getInt("id_comment_version");
+
+
+                                            cm.setId_comment_version(id_comment_version);
+                                            cm.setId_comment(id_comment);
+                                            cm.setId_version_activity(id_version_activity);
+
+
+                                            fullData.addCommentVersion(cm);
+                                        }
+                                    }
+                                }
+
+
                                 if (data.has("activityStudent")) {
                                     JSONObject activityStudent = data.getJSONObject("activityStudent");
                                     if (activityStudent.has("tb_activity_student")) {
