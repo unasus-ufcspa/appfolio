@@ -284,6 +284,9 @@ public class FragmentRTEditor extends Frag {
             singleton.idCurrentVersionActivity = id;
         }
 
+        //TODO deletar notificações baseado no tipo de tabela
+        source.deleteAllNotifications(singleton.idActivityStudent);
+
         return view;
     }
 

@@ -1293,12 +1293,12 @@ public class DataBaseAdapter {
 
     }
 
-    public int getActivityNotification(int id_activity) {
+    public int getActivityNotification(int id_activity_student) {
         String query = "SELECT COUNT(*) \n" +
                 "FROM tb_activity_student as tbas \n" +
                 "\tJOIN tb_notice tbs on tbs.id_activity_student = tbas.id_activity_student \n" +
                 "WHERE\n" +
-                "\ttbas.id_activity = " + id_activity;
+                "\ttbs.id_activity_student = " + id_activity_student;
         int result = 0;
 
         Cursor c = db.rawQuery(query, null);
@@ -1311,7 +1311,7 @@ public class DataBaseAdapter {
     }
 
     public int getPortfolioClassNotification(int id_portfolio_class) {
-        String query = "SELECT id_portfolio_student \n" +
+        String query = "SELECT DISTINCT id_portfolio_student \n" +
                 "FROM tb_portfolio_student as tbps" +
                 " WHERE tbps.id_portfolio_class = " + id_portfolio_class;
         int result = 0;
@@ -1328,10 +1328,9 @@ public class DataBaseAdapter {
 
     private int getNumNotifications(int id_portfolio_student) {
         String query = "SELECT COUNT(*) \n" +
-                "FROM tb_portfolio_student as tps\n" +
-                "\tJOIN tb_activity_student tbas on tbas.id_portfolio_student = tps.id_portfolio_student\n" +
-                "\tJOIN tb_notice tbs on tbs.id_activity_student = tbas.id_activity_student\n" +
-                " WHERE tps.id_portfolio_student = " + id_portfolio_student;
+                "FROM tb_notice as tbn\n" +
+                "\tJOIN tb_activity_student tbas on tbas.id_activity_student = tbn.id_activity_student\n" +
+                " WHERE tbas.id_portfolio_student = " + id_portfolio_student;
         // ADICIONAR CLAUSULAS WHERE PARA VEFIFICAR SE O TIPO DE COMENTÁRIO É R (RECEBIMENTO) E SE A DATA DE READ É NULL
         int result = 0;
 
@@ -1342,6 +1341,15 @@ public class DataBaseAdapter {
         }
 
         return result;
+    }
+
+    public void deleteAllNotifications(int id_activity_student) {
+        try {
+            db.delete("tb_notice", "id_activity_student=?", new String[]{String.valueOf(id_activity_student)});
+            Log.d(tag, "removeu NOTICES");
+        } catch (Exception e) {
+            Log.e(tag, "erro ao delete NOTICES:" + e.getMessage());
+        }
     }
 
 

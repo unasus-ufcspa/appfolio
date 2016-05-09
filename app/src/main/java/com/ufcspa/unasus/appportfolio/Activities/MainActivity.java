@@ -49,7 +49,7 @@ import com.ufcspa.unasus.appportfolio.database.DataBaseAdapter;
 
 import org.json.JSONObject;
 
-import io.github.skyhacker2.sqliteonweb.SQLiteOnWeb;
+//import io.github.skyhacker2.sqliteonweb.SQLiteOnWeb;
 
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
@@ -117,7 +117,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         setContentView(R.layout.activity_main);
         getSupportActionBar().hide();
 
-        SQLiteOnWeb.init(getApplicationContext()).start();
+//        SQLiteOnWeb.init(getApplicationContext()).start();
 
         if (savedInstanceState == null) {
             Bundle extras = getIntent().getExtras();

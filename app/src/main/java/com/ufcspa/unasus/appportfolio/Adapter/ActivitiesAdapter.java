@@ -112,7 +112,7 @@ public class ActivitiesAdapter extends RecyclerView.Adapter<ActivitiesAdapter.Vi
             }
         });
 
-        int r = source.getActivityNotification(aux.getIdActivity());
+        int r = source.getActivityNotification(aux.getIdActivityStudent());
         if (r == 0) {
             holder.notificationIcon.setVisibility(View.INVISIBLE);
         } else {
