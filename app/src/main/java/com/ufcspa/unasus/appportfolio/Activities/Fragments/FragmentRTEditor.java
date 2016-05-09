@@ -451,12 +451,20 @@ public class FragmentRTEditor extends Frag {
         }
         LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(broadcastReceiver);
 
+        super.onDestroyView();
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
         Fragment frag = getActivity().getSupportFragmentManager().findFragmentById(R.id.comments_container);
         if (frag != null) {
-            getActivity().getSupportFragmentManager().beginTransaction().remove(frag).commit();
+            try {
+                getActivity().getSupportFragmentManager().beginTransaction().remove(frag).commitAllowingStateLoss();
+            }catch (IllegalStateException e){
+                e.printStackTrace();
+            }
         }
-
-        super.onDestroyView();
     }
 
     @Override

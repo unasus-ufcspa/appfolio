@@ -3,10 +3,13 @@ package com.ufcspa.unasus.appportfolio.Activities;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 
 import com.ufcspa.unasus.appportfolio.Model.Device;
 import com.ufcspa.unasus.appportfolio.Model.Singleton;
 import com.ufcspa.unasus.appportfolio.database.DataBaseAdapter;
+
+import java.util.LinkedList;
 
 /**
  * Created by Zago on 17/12/2015.
@@ -26,6 +29,10 @@ public class SplashActivity extends AppCompatActivity {
 
         DataBaseAdapter adapter = DataBaseAdapter.getInstance(this);
         Singleton singleton = Singleton.getInstance();
+
+        LinkedList d =adapter.getCommentVersion(adapter.getLastIDVersionActivity(13));
+
+        Log.d("splash","comments:"+d.toString());
 
         Device device = adapter.getDevice();
 

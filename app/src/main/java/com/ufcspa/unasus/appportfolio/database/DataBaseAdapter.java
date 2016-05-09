@@ -813,7 +813,9 @@ public class DataBaseAdapter {
                 "\tc.id_author,\n" +
                 "\tc.tx_reference,\n" +
                 "\tc.tx_comment,\n" +
-                "\tc.dt_comment\n" +
+                "\tc.dt_comment,\n" +
+                "\tc.tp_comment,\n" +
+                "\tc.nu_comment_activity\n" +
                 "\tFROM tb_comment_version cv \n" +
                 "\t\tJOIN  tb_comment c on cv.id_comment = c.id_comment\n" +
                 "	WHERE 1=1 AND c.id_comment_srv IS NULL AND cv.id_version_activity =" + idVersion;
@@ -830,6 +832,8 @@ public class DataBaseAdapter {
                     cmm.setTxtReference(c.getString(3));
                     cmm.setTxtComment(c.getString(4));
                     cmm.setDateComment(c.getString(5));
+                    cmm.setTypeComment(c.getString(6));
+                    cmm.setIdNote(c.getInt(7));
                     comentarios.add(cmm);
                 } catch (Exception v) {
                     Log.e(tag, "erro ao pegar dados do banco:" + v.getMessage());

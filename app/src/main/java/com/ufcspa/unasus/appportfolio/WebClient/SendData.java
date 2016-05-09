@@ -148,7 +148,7 @@ public class SendData {
                     jsonVersion.put("id_activity_student", v.getId_activity_student());
                     jsonVersion.put("tx_activity", v.getTx_activity());
                     jsonVersion.put("dt_last_access", v.getDt_last_access());
-                    jsonArrayVersions.put(jsonVersion);
+
                     if (commentsByVersions.containsKey(v.getId_version_activity())) {
                         commentByVersion = commentsByVersions.get(v.getId_version_activity());
                         JSONArray jsonCommentsByVersion = new JSONArray();
@@ -168,7 +168,9 @@ public class SendData {
                         JSONObject jTb_comment = new JSONObject();
                         jTb_comment.put("tb_comment", jsonCommentsByVersion);
                         jsonVersion.put("comment", jTb_comment);
+
                     }
+                    jsonArrayVersions.put(jsonVersion);
                 }
             }
 

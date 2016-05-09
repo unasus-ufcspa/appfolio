@@ -5,6 +5,7 @@ import android.util.Log;
 
 import com.ufcspa.unasus.appportfolio.Model.Attachment;
 import com.ufcspa.unasus.appportfolio.Model.Comentario;
+import com.ufcspa.unasus.appportfolio.Model.CommentVersion;
 import com.ufcspa.unasus.appportfolio.Model.Notification;
 import com.ufcspa.unasus.appportfolio.Model.Reference;
 import com.ufcspa.unasus.appportfolio.Model.Tuple;
@@ -37,6 +38,8 @@ public class FullData {
     private LinkedList<Reference> references;
     private LinkedList<Notification> notifications;
     private LinkedList<User> users;
+    private LinkedList<CommentVersion> commentVersions;
+
 
     private Context context;
 
@@ -48,7 +51,7 @@ public class FullData {
         this.references = new LinkedList<>();
         this.notifications = new LinkedList<>();
         this.users = new LinkedList<>();
-
+        this.commentVersions = new LinkedList<CommentVersion>();
         this.context = context;
     }
 
@@ -64,6 +67,10 @@ public class FullData {
 
     public void addUser(User u) {
         users.add(u);
+    }
+
+    public void addCommentVersion(CommentVersion cv) {
+        commentVersions.add(cv);
     }
 
     public void addVersion(VersionActivity versionActivity) {
@@ -105,6 +112,9 @@ public class FullData {
         data.insertVersionActivity(versionActs);
         data.insertReference(references);
         data.insertComments(comentarios);
+        for (CommentVersion cv: commentVersions) {
+            data.insertCommentVersion(cv);
+        }
         data.updateTBUser(users);
 
         Integer[] keys = anexos.keySet().toArray(new Integer[anexos.keySet().size()]);
