@@ -961,7 +961,7 @@ public class FragmentRTEditor extends Frag {
             TextView student_cell = (TextView) anchorView.findViewById(R.id.student_phone);
             student_name.setText(singleton.portfolioClass.getStudentName());
             String cellphone = singleton.portfolioClass.getCellphone();
-            if (cellphone != null)
+            if (cellphone != null || !cellphone.equals("null"))
                 student_cell.setText(singleton.portfolioClass.getCellphone());
             else
                 student_cell.setText("");

@@ -45,7 +45,6 @@ public class FragmentStudentActivities extends Frag {
         source = DataBaseAdapter.getInstance(getActivity());
 
         try {
-
             list = source.selectListActivitiesAndStudents(singleton.portfolioClass.getIdPortClass(), singleton.portfolioClass.getPerfil(), singleton.user.getIdUser());
             Log.e("BANCO", "atividades (SelectActivitiesAactivity):"+ list.toString());
         } catch (Exception e) {

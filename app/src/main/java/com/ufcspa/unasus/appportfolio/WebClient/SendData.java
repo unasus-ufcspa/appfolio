@@ -188,7 +188,7 @@ public class SendData {
             jsonPseudoFinal.put("device",device);
             jsonPseudoFinal.put("comment", new JSONObject().put("tb_comment", jsonComments));
             jsonPseudoFinal.put("version", new JSONObject().put("tb_version_activity", jsonArrayVersions));
-            jsonPseudoFinal.put("user", jsonUser);
+            jsonPseudoFinal.put("user", new JSONObject().put("tb_user", jsonUser));
 
             jsonFinal.put("fullDataDevSrv_request", jsonPseudoFinal);
 
