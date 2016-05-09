@@ -1029,7 +1029,8 @@ public class DataBaseAdapter {
                 "tas.id_portfolio_student,\n" +
                 "tas.id_activity,\n" +
                 "u.im_photo,\n" +
-                "u.nu_cellphone\n" +
+                "u.nu_cellphone,\n" +
+                "a.nu_order\n" +
                 "FROM\n" +
                 "\ttb_activity_student as tas\n" +
                 "\tjoin tb_activity a on tas.id_activity = a.id_activity\n" +
@@ -1053,7 +1054,7 @@ public class DataBaseAdapter {
                 String nameStudent = c.getString(4);
                 String photo = c.getString(7);
                 String cellphone = c.getString(8);
-                Activity a = new Activity(c.getInt(0), c.getInt(6), c.getString(2), c.getString(3));
+                Activity a = new Activity(c.getInt(0), c.getInt(6), c.getString(2), c.getString(3), c.getInt(9));
                 a.setId_portfolio(c.getInt(5));
 
                 if (lastid == idUser) {
