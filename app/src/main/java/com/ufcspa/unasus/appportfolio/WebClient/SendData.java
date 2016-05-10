@@ -149,6 +149,8 @@ public class SendData {
                     jsonVersion.put("tx_activity", v.getTx_activity());
                     jsonVersion.put("dt_last_access", v.getDt_last_access());
 
+                    Log.wtf("json send data:",jsonVersion.toString());
+
                     if (commentsByVersions.containsKey(v.getId_version_activity())) {
                         commentByVersion = commentsByVersions.get(v.getId_version_activity());
                         JSONArray jsonCommentsByVersion = new JSONArray();
@@ -197,7 +199,7 @@ public class SendData {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        Log.d("json send full data ",jsonFinal.toString().replaceAll("\\{", "\n{"));
+        Log.e("jsonsendfulldata ",jsonFinal.toString().replaceAll("\\{", "\n{"));
         return jsonFinal;
     }
 

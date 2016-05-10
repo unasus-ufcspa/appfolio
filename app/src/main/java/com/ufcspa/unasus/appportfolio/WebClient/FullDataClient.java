@@ -185,6 +185,8 @@ public class FullDataClient extends HttpClient {
 
                                             int id_activity_student = temp.getInt("id_activity_student");
                                             String tx_activity = temp.getString("tx_activity");
+                                            tx_activity= tx_activity.replaceAll("\'","");
+                                            System.out.println("json replace tx activity"+"\nold:"+temp.getString("tx_activity") + " new:"+tx_activity);
                                             String dt_last_access = temp.getString("dt_last_access");
                                             String dt_submission = temp.getString("dt_submission");
                                             String dt_verification = temp.getString("dt_verification");
@@ -229,7 +231,7 @@ public class FullDataClient extends HttpClient {
                                     }
                                 }
 
-                                if (data.has("commentVersion")) {
+                                if (data.has("comment_version")) {
                                     JSONObject user = data.getJSONObject("commentVersion");
                                     if (user.has("tb_comment_version")) {
                                         JSONArray tb_user = user.getJSONArray("tb_comment_version");
