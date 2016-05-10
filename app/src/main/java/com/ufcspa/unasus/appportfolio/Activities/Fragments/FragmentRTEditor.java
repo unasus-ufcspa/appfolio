@@ -1025,7 +1025,6 @@ public class FragmentRTEditor extends Frag {
                     btnFirst.setVisibility(View.VISIBLE);
                 resetColorNote(f);
             }
-
         }
     }
 
@@ -1074,8 +1073,12 @@ public class FragmentRTEditor extends Frag {
         @Override
         public boolean onCreateActionMode(ActionMode mode, Menu menu) {
             ((InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(getView().getWindowToken(), 0);
-            mode.getMenuInflater().inflate(R.menu.menu, menu);
+            if (singleton.portfolioClass.getPerfil().equals("S") && singleton.idVersionActivity != singleton.idCurrentVersionActivity)
+                mode.getMenuInflater().inflate(R.menu.menu, menu);
+            else
+                mode.getMenu();
             if (singleton.portfolioClass.getPerfil().equals("T")) {
+                mode.getMenuInflater().inflate(R.menu.menu, menu);
                 menu.removeItem(android.R.id.paste);
                 menu.removeItem(android.R.id.cut);
             }
