@@ -3,10 +3,10 @@ package com.ufcspa.unasus.appportfolio.WebClient;
 import android.content.Context;
 import android.util.Log;
 
+import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
-import com.android.volley.RetryPolicy;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
@@ -21,6 +21,7 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Created by Desenvolvimento on 18/12/2015.
@@ -150,22 +151,10 @@ public class CommentClient extends HttpClient{
             }
         });
 
-        jsObjReq.setRetryPolicy(new RetryPolicy() {
-            @Override
-            public int getCurrentTimeout() {
-                return 50000;
-            }
-
-            @Override
-            public int getCurrentRetryCount() {
-                return 50000;
-            }
-
-            @Override
-            public void retry(VolleyError error) throws VolleyError {
-
-            }
-        });
+        jsObjReq.setRetryPolicy(new DefaultRetryPolicy(
+                (int) TimeUnit.SECONDS.toMillis(10),
+                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
 
         RequestQueue  queue= Volley.newRequestQueue(context);
         queue.add(jsObjReq);
