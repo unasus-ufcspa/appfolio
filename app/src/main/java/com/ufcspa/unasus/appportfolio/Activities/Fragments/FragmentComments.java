@@ -52,6 +52,7 @@ public class FragmentComments extends Frag {
     private boolean attach;
     private ListView lv;
     private Button btGenMess;
+    ArrayList<Comentario> lista;
     private Button btAttachment;
     //private LoremIpsum ipsum;
     private EditText edtMessage;
@@ -303,7 +304,7 @@ public class FragmentComments extends Frag {
     public void loadCom() {
         DataBaseAdapter db = DataBaseAdapter.getInstance(getActivity());
         Singleton singleton = Singleton.getInstance();
-        ArrayList<Comentario> lista = (ArrayList<Comentario>) db.listComments(singleton.activity.getIdActivityStudent(), "G", 0);//lista comentario gerais filtrando por C
+        lista = (ArrayList<Comentario>) db.listComments(singleton.activity.getIdActivityStudent(), "G", 0);//lista comentario gerais filtrando por C
         oneComments = new ArrayList<OneComment>(20);
         if (lista.size() != 0) {
 

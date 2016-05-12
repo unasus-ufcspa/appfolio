@@ -228,7 +228,8 @@ public class FragmentRTEditor extends Frag {
         sendVersion.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (singleton.portfolioClass.getPerfil().equals("S") && (singleton.idCurrentVersionActivity == singleton.idVersionActivity)) {
+//                if (singleton.portfolioClass.getPerfil().equals("S") && (singleton.idCurrentVersionActivity == singleton.idVersionActivity)) {
+                if ((singleton.idCurrentVersionActivity == singleton.idVersionActivity)) {
                     new AlertDialog.Builder(getContext())
                             .setTitle("Enviar Versão")
                             .setMessage("Você tem certeza que deseja enviar essa versão da atividade?")
@@ -290,7 +291,8 @@ public class FragmentRTEditor extends Frag {
             }
         });
 
-        if (singleton.portfolioClass.getPerfil().equals("T") || (singleton.idCurrentVersionActivity != singleton.idVersionActivity)) {
+//        if (singleton.portfolioClass.getPerfil().equals("T") || (singleton.idCurrentVersionActivity != singleton.idVersionActivity)) {
+        if (singleton.portfolioClass.getPerfil().equals("Z") || (singleton.idCurrentVersionActivity != singleton.idVersionActivity)) {
             sendVersion.setVisibility(View.GONE);
         }
 
@@ -1035,9 +1037,9 @@ public class FragmentRTEditor extends Frag {
         for (BackgroundColorSpan spm : spans) {
             if (spm.getId() != -1) {
                 if (flag)
-                    spm.setColor(greenLight);
+                    spm.setColor(greenDark);
                 else
-                    spm.setColor(Color.BLUE);
+                    spm.setColor(greenLight);
             }
         }
         //noteFollowText();

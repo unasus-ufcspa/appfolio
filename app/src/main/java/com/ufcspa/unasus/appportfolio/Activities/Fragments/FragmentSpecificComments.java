@@ -210,7 +210,7 @@ private LoadCommentsFromDB loadCommentsFromDB;
             if (lista.size() != 0) {
 
                 for(Comentario c : lista){
-                    OneComment one = new OneComment(c.getIdAuthor() != singleton.user.getIdUser(),
+                    OneComment one = new OneComment(c.getIdAuthor() == singleton.user.getIdUser(),
                             c.getTxtComment(), convertDateToTime(c.getDateComment()), convertDateToDate(c.getDateComment()));
                     if(c.getIdAttach()!=0) {
                         one.atach = true;
