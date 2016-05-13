@@ -476,6 +476,59 @@ public class DataBaseAdapter {
 
     }
 
+
+    public int getPersonalComment(int idActSt){
+       int id=-1;
+        String sql = "select * from tb_comment WHERE tp_comment ='P' AND id_activity_student=" + idActSt + ";";
+        Cursor c = db.rawQuery(sql, null);
+        if (c.moveToFirst()) {
+            c.moveToFirst();
+            id=(c.getInt(0));
+//            c.close();
+        }
+        return id;
+    }
+
+    public int insertPersonalComment(Comentario c) {
+        ContentValues cv = new ContentValues();
+        cv.put("id_activity_student", c.getIdActivityStudent());
+        cv.put("id_author", c.getIdAuthor());
+        cv.put("tx_comment", c.getTxtComment());
+        cv.put("tp_comment","P");
+        cv.put("dt_comment", c.getDateComment());
+        db.insert("tb_comment", null, cv);
+        try {
+//            db.close();
+            Log.d(tag, "inseriu comentario no banco");
+        } catch (Exception e) {
+            Log.e(tag, "erro ao inserir:" + e.getMessage());
+        }
+        Cursor cursor = db.rawQuery("select seq from sqlite_sequence where name='tb_comment'", null);
+        int lastID = 0;
+        if (cursor.moveToFirst()) {
+            lastID = cursor.getInt(0);
+            Log.d(tag, "last id_comment id table:" + lastID);
+        }
+        return lastID;
+    }
+
+
+
+    public void updatePersonalComment(Comentario c) {
+        ContentValues cv = new ContentValues();
+        cv.put("id_author", c.getIdAuthor());
+        cv.put("tx_comment", c.getTxtComment());
+        cv.put("dt_comment", c.getDateComment());
+        db.update("tb_comment", cv, "tp_comment ='P' AND id_activity_student ="+c.getIdActivityStudent(),null);
+        try {
+//            db.close();
+            Log.d(tag, "inseriu comentario no banco");
+        } catch (Exception e) {
+            Log.e(tag, "erro ao inserir:" + e.getMessage());
+        }
+    }
+
+
     public Comentario getCommentById(int id) {
         String sql = "select * from tb_comment WHERE id_comment =" + id + ";";
         Cursor c = db.rawQuery(sql, null);

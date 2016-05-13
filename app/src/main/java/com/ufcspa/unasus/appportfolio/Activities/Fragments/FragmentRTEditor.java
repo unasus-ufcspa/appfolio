@@ -10,6 +10,7 @@ import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.LocalBroadcastManager;
@@ -31,6 +32,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.CompoundButton;
+import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -69,6 +71,8 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
 
 
 public class FragmentRTEditor extends Frag {
@@ -101,6 +105,12 @@ public class FragmentRTEditor extends Frag {
     // Versoes
     private VersionsAdapter versionAdapter;
     private ArrayList<VersionActivity> versions;
+
+
+
+    private boolean personalCommentChanged;
+    private String txtPersonal;
+    private EditText edtTextPersonal;
 
     // Receptor de eventos
     private BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
@@ -297,7 +307,9 @@ public class FragmentRTEditor extends Frag {
         }
 
         initCommentsTab(view);
+
         initTopBar(view);
+
 
         LocalBroadcastManager.getInstance(getActivity()).registerReceiver(broadcastReceiver, new IntentFilter("call.attachmentdialog.action"));
 
@@ -443,7 +455,7 @@ public class FragmentRTEditor extends Frag {
 
     @Override
     public void onResume() {
-        saveText();
+        //saveText();
         super.onResume();
     }
 
@@ -478,11 +490,17 @@ public class FragmentRTEditor extends Frag {
     @Override
     public void onDestroyView() {
         saveText();
+        if(personalCommentChanged) {
+            int idPersonalComment = source.getPersonalComment(singleton.idActivityStudent);
+            String idDevice = Settings.Secure.getString(getActivity().getContentResolver(), Settings.Secure.ANDROID_ID);
+            Sync sync = new Sync(idDevice, "tb_comment", idPersonalComment, singleton.idActivityStudent);
+            DataBaseAdapter.getInstance(getContext()).insertIntoTBSync(sync);
+            personalCommentChanged=false;
+        }
         if (mRTManager != null) {
             mRTManager.onDestroy(true);
         }
         LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(broadcastReceiver);
-
         super.onDestroyView();
     }
 
@@ -556,7 +574,16 @@ public class FragmentRTEditor extends Frag {
             @Override
             public void onPanelSlide(View panel, float slideOffset) {
                 importPanel.setVisibility(View.GONE);
+                if(edtTextPersonal!=null){
+                    if(source.getPersonalComment(singleton.idActivityStudent)<=0)// se nao possui nenhum comentario pessoal, cria um novo
+                        savePersonalComment(edtTextPersonal.getText().toString(),true);
+                    else
+                        savePersonalComment(edtTextPersonal.getText().toString(),false); // senao atualiza o antigo
+                    edtTextPersonal=null;
+                }
+
                 getView().findViewById(R.id.personal_comment_container).setVisibility(View.GONE);
+
                 ((InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(getView().getWindowToken(), 0);
             }
 
@@ -605,25 +632,42 @@ public class FragmentRTEditor extends Frag {
         ImageButton personalCommentButton = (ImageButton) view.findViewById(R.id.personal_comment);
         ImageButton versionsButton = (ImageButton) view.findViewById(R.id.btn_versions);
 
-        usrPhoto.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                importPanel.setVisibility(View.GONE);
-                displayPersonalComment(getView().findViewById(R.id.personal_comment_container));
-            }
-        });
-        personalCommentButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                importPanel.setVisibility(View.GONE);
-                displayPersonalComment(getView().findViewById(R.id.personal_comment_container));
-            }
-        });
+
+
+
+
+        if(!singleton.portfolioClass.getPerfil().equals("V")){
+            personalCommentButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                    importPanel.setVisibility(View.GONE);
+                    displayPersonalComment(getView().findViewById(R.id.personal_comment_container));
+
+
+                }
+            });
+            usrPhoto.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    importPanel.setVisibility(View.GONE);
+                    displayPersonalComment(getView().findViewById(R.id.personal_comment_container));
+                }
+            });
+        }else {
+            personalCommentButton.setVisibility(View.GONE);
+        }
+
         versionsButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 saveText();
                 versionAdapter.refresh(source.getAllVersionsFromActivityStudent(singleton.idActivityStudent));
+
+                if(edtTextPersonal!=null){
+                    savePersonalComment(edtTextPersonal.getText().toString(),!edtTextPersonal.getText().toString().isEmpty());
+                    edtTextPersonal=null;
+                }
 
                 getView().findViewById(R.id.personal_comment_container).setVisibility(View.GONE);
                 displayVersionsDialog(importPanel);
@@ -995,6 +1039,14 @@ public class FragmentRTEditor extends Frag {
             anchorView.setVisibility(View.VISIBLE);
             TextView student_name = (TextView) anchorView.findViewById(R.id.p_student_name);
             TextView student_cell = (TextView) anchorView.findViewById(R.id.student_phone);
+            edtTextPersonal = (EditText) anchorView.findViewById(R.id.edittext_personal_comment);
+            ArrayList<Comentario> cs=(ArrayList)source.listComments(singleton.idActivityStudent, "P", 0);
+            if(cs!=null && cs.size()!=0){
+                if(cs.get(0).getTxtComment()!=null){
+                    edtTextPersonal.setText(cs.get(0).getTxtComment());
+                }
+            }
+
             student_name.setText(singleton.portfolioClass.getStudentName());
             String cellphone = singleton.portfolioClass.getCellphone();
             if (cellphone != null || !cellphone.equals("null"))
@@ -1002,6 +1054,8 @@ public class FragmentRTEditor extends Frag {
             else
                 student_cell.setText("");
         }
+
+
     }
 
     private void displayVersionsDialog(View anchorView) {
@@ -1124,6 +1178,26 @@ public class FragmentRTEditor extends Frag {
             btn.callOnClick();
         }
     }
+
+
+    private void savePersonalComment(String txtPersonal,boolean v){
+        Comentario c = new Comentario();
+        c.setTxtComment(txtPersonal);
+        c.setIdAuthor(singleton.user.getIdUser());
+        c.setDateComment(getActualTime());
+        c.setIdActivityStudent(singleton.idActivityStudent);
+        c.setTypeComment("P");
+
+
+        if(v)
+            source.insertPersonalComment(c);
+        else {
+            source.updatePersonalComment(c);
+            personalCommentChanged=true;
+        }
+    }
+
+
 
 
 }
