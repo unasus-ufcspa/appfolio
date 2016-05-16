@@ -32,6 +32,7 @@ import com.ufcspa.unasus.appportfolio.Activities.Fragments.FragmentAttachment;
 import com.ufcspa.unasus.appportfolio.Activities.Fragments.FragmentConfig;
 import com.ufcspa.unasus.appportfolio.Activities.Fragments.FragmentConfigPassword;
 import com.ufcspa.unasus.appportfolio.Activities.Fragments.FragmentConfigUser;
+import com.ufcspa.unasus.appportfolio.Activities.Fragments.FragmentPrivacyPolicy;
 import com.ufcspa.unasus.appportfolio.Activities.Fragments.FragmentRTEditor;
 import com.ufcspa.unasus.appportfolio.Activities.Fragments.FragmentReference;
 import com.ufcspa.unasus.appportfolio.Activities.Fragments.FragmentSelectPortfolio;
@@ -166,7 +167,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
              0 para select portfolio
              5 para rtEditor
              */
-            changeFragment(0);
+            changeFragment(6);
     }
 
     private void initMiniDrawer() {
@@ -312,6 +313,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             case 5:
                 downloadFullData(singleton.idActivityStudent, id);
                 break;
+            case 6:
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new FragmentPrivacyPolicy()).addToBackStack("Frag").commit();
             default:
                 break;
         }
