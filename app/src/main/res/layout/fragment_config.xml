@@ -32,6 +32,14 @@
                 android:layout_below="@+id/btn_profile"
                 android:layout_centerHorizontal="true"
                 android:text="Alterar Senha" />
+
+            <Button
+                android:id="@+id/btn_logout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/btn_password"
+                android:layout_centerHorizontal="true"
+                android:text="Sair" />
         </RelativeLayout>
     </ScrollView>
 

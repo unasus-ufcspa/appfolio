@@ -111,7 +111,7 @@ public class FragmentConfigUser extends Frag implements View.OnClickListener {
 
         edt_email.setText(singleton.user.getEmail());
 
-        if (singleton.user.getCellphone() != null)
+        if (singleton.user.getCellphone() != null && !singleton.user.getCellphone().equals("null"))
             edt_telefone.setText(singleton.user.getCellphone());
 
         btn_change_image.setOnClickListener(this);
@@ -178,5 +178,4 @@ public class FragmentConfigUser extends Frag implements View.OnClickListener {
             }
         }
     }
-
 }

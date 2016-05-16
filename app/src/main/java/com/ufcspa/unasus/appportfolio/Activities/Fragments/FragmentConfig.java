@@ -1,6 +1,7 @@
 package com.ufcspa.unasus.appportfolio.Activities.Fragments;
 
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -8,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
+import com.ufcspa.unasus.appportfolio.Activities.LoginActivity2;
 import com.ufcspa.unasus.appportfolio.Activities.MainActivity;
 import com.ufcspa.unasus.appportfolio.Model.Singleton;
 import com.ufcspa.unasus.appportfolio.R;
@@ -19,6 +21,7 @@ import com.ufcspa.unasus.appportfolio.database.DataBaseAdapter;
 public class FragmentConfig extends Frag implements View.OnClickListener {
     private Button btn_profile;
     private Button btn_password;
+    private Button btn_logout;
 
     public FragmentConfig() {
         // Required empty public constructor
@@ -40,9 +43,11 @@ public class FragmentConfig extends Frag implements View.OnClickListener {
     private void init(View view) {
         btn_profile = (Button) view.findViewById(R.id.btn_profile);
         btn_password = (Button) view.findViewById(R.id.btn_password);
+        btn_logout = (Button) view.findViewById(R.id.btn_logout);
 
         btn_profile.setOnClickListener(this);
         btn_password.setOnClickListener(this);
+        btn_logout.setOnClickListener(this);
     }
 
     @Override
@@ -52,6 +57,12 @@ public class FragmentConfig extends Frag implements View.OnClickListener {
         }
         if (v.getId() == R.id.btn_password) {
             ((MainActivity) getActivity()).initChangePasswordFragment();
+        }
+        if (v.getId() == R.id.btn_logout) {
+            // TODO Mandar informação de LogOut para o Servidor
+            source.cleanDataBase();
+            startActivity(new Intent(getContext(), LoginActivity2.class));
+            ((MainActivity) getActivity()).finish();
         }
     }
 }

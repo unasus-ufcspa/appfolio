@@ -1,5 +1,6 @@
 <resources>
     <string name="app_name">Fólio</string>
+    <string name="db_name">folio.sqlite</string>
     <string name="title_edit_activity">Edit your activity</string>
     <string name="title_activity_login">PROTOTIFOLIOS</string>
     <string name="title_activity_select_class">Select your class</string>

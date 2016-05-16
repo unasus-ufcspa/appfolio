@@ -41,10 +41,12 @@ public class DataBaseAdapter {
     private SQLiteDatabase db;
     private DataBase helper;
     private String tag = "BANCO DE DADOS ";
+    private Context context;
 
     private DataBaseAdapter(Context ctx) {
         helper = new DataBase(ctx);
         db = helper.getDatabase();
+        context = ctx;
     }
 
     public static DataBaseAdapter getInstance(Context ctx) {
@@ -494,7 +496,7 @@ public class DataBaseAdapter {
         cv.put("id_activity_student", c.getIdActivityStudent());
         cv.put("id_author", c.getIdAuthor());
         cv.put("tx_comment", c.getTxtComment());
-        cv.put("tp_comment","P");
+        cv.put("tp_comment", "P");
         cv.put("dt_comment", c.getDateComment());
         db.insert("tb_comment", null, cv);
         try {
@@ -1915,5 +1917,9 @@ public class DataBaseAdapter {
         } catch (Exception e) {
             Log.d(tag, "Nao deletou da tb_sync");
         }
+    }
+
+    public void cleanDataBase() {
+        context.deleteDatabase("folio.sqlite");
     }
 }

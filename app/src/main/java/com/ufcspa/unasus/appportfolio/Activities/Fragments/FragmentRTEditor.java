@@ -71,8 +71,6 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
 
 
 public class FragmentRTEditor extends Frag {
@@ -632,11 +630,7 @@ public class FragmentRTEditor extends Frag {
         ImageButton personalCommentButton = (ImageButton) view.findViewById(R.id.personal_comment);
         ImageButton versionsButton = (ImageButton) view.findViewById(R.id.btn_versions);
 
-
-
-
-
-        if(!singleton.portfolioClass.getPerfil().equals("V")){
+        if (singleton.portfolioClass.getPerfil().equals("T")) {
             personalCommentButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -1049,7 +1043,7 @@ public class FragmentRTEditor extends Frag {
 
             student_name.setText(singleton.portfolioClass.getStudentName());
             String cellphone = singleton.portfolioClass.getCellphone();
-            if (cellphone != null || !cellphone.equals("null"))
+            if (cellphone != null && !cellphone.equals("null"))
                 student_cell.setText(singleton.portfolioClass.getCellphone());
             else
                 student_cell.setText("");
@@ -1097,6 +1091,23 @@ public class FragmentRTEditor extends Frag {
             }
         }
         //noteFollowText();
+    }
+
+    private void savePersonalComment(String txtPersonal, boolean v) {
+        Comentario c = new Comentario();
+        c.setTxtComment(txtPersonal);
+        c.setIdAuthor(singleton.user.getIdUser());
+        c.setDateComment(getActualTime());
+        c.setIdActivityStudent(singleton.idActivityStudent);
+        c.setTypeComment("P");
+
+
+        if (v)
+            source.insertPersonalComment(c);
+        else {
+            source.updatePersonalComment(c);
+            personalCommentChanged = true;
+        }
     }
 
     private class ActionBarCallBack implements ActionMode.Callback {
@@ -1176,24 +1187,6 @@ public class FragmentRTEditor extends Frag {
             setSpecificCommentNoteValue();
 
             btn.callOnClick();
-        }
-    }
-
-
-    private void savePersonalComment(String txtPersonal,boolean v){
-        Comentario c = new Comentario();
-        c.setTxtComment(txtPersonal);
-        c.setIdAuthor(singleton.user.getIdUser());
-        c.setDateComment(getActualTime());
-        c.setIdActivityStudent(singleton.idActivityStudent);
-        c.setTypeComment("P");
-
-
-        if(v)
-            source.insertPersonalComment(c);
-        else {
-            source.updatePersonalComment(c);
-            personalCommentChanged=true;
         }
     }
 
