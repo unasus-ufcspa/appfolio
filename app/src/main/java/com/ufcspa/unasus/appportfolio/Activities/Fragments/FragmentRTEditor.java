@@ -572,12 +572,12 @@ public class FragmentRTEditor extends Frag {
             @Override
             public void onPanelSlide(View panel, float slideOffset) {
                 importPanel.setVisibility(View.GONE);
-                if(edtTextPersonal!=null){
-                    if(source.getPersonalComment(singleton.idActivityStudent)<=0)// se nao possui nenhum comentario pessoal, cria um novo
-                        savePersonalComment(edtTextPersonal.getText().toString(),true);
+                if (edtTextPersonal != null) {
+                    if (source.getPersonalComment(singleton.idActivityStudent) <= 0)// se nao possui nenhum comentario pessoal, cria um novo
+                        savePersonalComment(edtTextPersonal.getText().toString(), true);
                     else
-                        savePersonalComment(edtTextPersonal.getText().toString(),false); // senao atualiza o antigo
-                    edtTextPersonal=null;
+                        savePersonalComment(edtTextPersonal.getText().toString(), false); // senao atualiza o antigo
+                    edtTextPersonal = null;
                 }
 
                 getView().findViewById(R.id.personal_comment_container).setVisibility(View.GONE);
@@ -649,7 +649,7 @@ public class FragmentRTEditor extends Frag {
                 }
             });
         }else {
-            personalCommentButton.setVisibility(View.GONE);
+            personalCommentButton.setVisibility(View.INVISIBLE);
         }
 
         versionsButton.setOnClickListener(new View.OnClickListener() {
@@ -1117,43 +1117,57 @@ public class FragmentRTEditor extends Frag {
 
         @Override
         public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
-            if (item.getItemId() == R.id.action_favorite) {
-                if (!mRTMessageField.getText().toString().isEmpty()) {
-                    startSelection = mRTMessageField.getSelectionStart();
-                    endSelection = mRTMessageField.getSelectionEnd();
-                    String selectedText = getSelectedText();
-
-                    if (!selectedText.isEmpty()) {
-                        if (selectedText.length() > 0) {
-                            if (canCreateButton(startSelection, endSelection)) {
-                                singleton.selectedText = mRTMessageField.getText().toString().substring(startSelection, endSelection);
-                                createSpecificCommentNote(getCaretYPosition(startSelection), selectedText);
-                            }
-                        }
-                    }
-                }
-                return true;
-            }
+//            if (item.getItemId() == R.id.action_favorite) {
+//                if (!mRTMessageField.getText().toString().isEmpty()) {
+//                    startSelection = mRTMessageField.getSelectionStart();
+//                    endSelection = mRTMessageField.getSelectionEnd();
+//                    String selectedText = getSelectedText();
+//
+//                    if (!selectedText.isEmpty()) {
+//                        if (selectedText.length() > 0) {
+//                            if (canCreateButton(startSelection, endSelection)) {
+//                                singleton.selectedText = mRTMessageField.getText().toString().substring(startSelection, endSelection);
+//                                createSpecificCommentNote(getCaretYPosition(startSelection), selectedText);
+//                            }
+//                        }
+//                    }
+//                }
+//                return true;
+//            }
             return false;
         }
 
         @Override
         public boolean onCreateActionMode(ActionMode mode, Menu menu) {
             ((InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(getView().getWindowToken(), 0);
+//            if (singleton.portfolioClass.getPerfil().equals("S") && singleton.idVersionActivity != singleton.idCurrentVersionActivity)
+//                mode.getMenuInflater().inflate(R.menu.menu, menu);
+//            else
+//                mode.getMenu();
+//            if (singleton.portfolioClass.getPerfil().equals("T")) {
+//                mode.getMenuInflater().inflate(R.menu.menu, menu);
+//                menu.removeItem(android.R.id.paste);
+//                menu.removeItem(android.R.id.cut);
+//            }
+//
+//            createAddSpecificCommentButton(getCaretYPosition(mRTMessageField.getSelectionStart()));
             if (singleton.portfolioClass.getPerfil().equals("S") && singleton.idVersionActivity != singleton.idCurrentVersionActivity)
-                mode.getMenuInflater().inflate(R.menu.menu, menu);
-            else
-                mode.getMenu();
+                createAddSpecificCommentButton(getCaretYPosition(mRTMessageField.getSelectionStart()));
+
             if (singleton.portfolioClass.getPerfil().equals("T")) {
-                mode.getMenuInflater().inflate(R.menu.menu, menu);
+                createAddSpecificCommentButton(getCaretYPosition(mRTMessageField.getSelectionStart()));
                 menu.removeItem(android.R.id.paste);
                 menu.removeItem(android.R.id.cut);
             }
+
             return true;
         }
 
         @Override
         public void onDestroyActionMode(ActionMode mode) {
+            View v = getView().findViewWithTag("plus");
+            if (v != null)
+                scrollview.removeView(v);
         }
 
         @Override
@@ -1188,9 +1202,39 @@ public class FragmentRTEditor extends Frag {
 
             btn.callOnClick();
         }
+
+        private void createAddSpecificCommentButton(float y) {
+            Context context = getContext();
+            if (context != null) {
+                final LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                Button add_button = (Button) inflater.inflate(R.layout.btn_specific_comment, scrollview, false);
+                add_button.setY(y);
+                add_button.setX(5);
+                add_button.setTag("plus");
+                add_button.setText("+");
+
+                add_button.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if (!mRTMessageField.getText().toString().isEmpty()) {
+                            startSelection = mRTMessageField.getSelectionStart();
+                            endSelection = mRTMessageField.getSelectionEnd();
+                            String selectedText = getSelectedText();
+
+                            if (!selectedText.isEmpty()) {
+                                if (selectedText.length() > 0) {
+                                    if (canCreateButton(startSelection, endSelection)) {
+                                        singleton.selectedText = mRTMessageField.getText().toString().substring(startSelection, endSelection);
+                                        createSpecificCommentNote(getCaretYPosition(startSelection), selectedText);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                });
+
+                scrollview.addView(add_button);
+            }
+        }
     }
-
-
-
-
 }
