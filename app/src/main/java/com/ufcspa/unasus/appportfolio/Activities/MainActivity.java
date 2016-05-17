@@ -559,6 +559,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         lastFragName = "FragmentConfigUser";
     }
 
+    public void logout() {
+        DataBaseAdapter.getInstance(this).cleanDataBase();
+        startActivity(new Intent(this, LoginActivity2.class));
+        finish();
+    }
+
     private class GestureListener extends GestureDetector.SimpleOnGestureListener {
         @Override
         public boolean onSingleTapConfirmed(MotionEvent event) {

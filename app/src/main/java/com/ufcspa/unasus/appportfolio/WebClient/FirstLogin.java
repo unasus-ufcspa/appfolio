@@ -17,9 +17,6 @@ public class FirstLogin {
     private String tpDevice;
     //RESPONSE
 
-
-
-
     public String getEmail() {
         return email;
     }

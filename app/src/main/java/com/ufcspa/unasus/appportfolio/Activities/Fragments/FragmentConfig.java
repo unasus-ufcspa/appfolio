@@ -1,30 +1,40 @@
 package com.ufcspa.unasus.appportfolio.Activities.Fragments;
 
 
-import android.content.Intent;
+import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
-import com.ufcspa.unasus.appportfolio.Activities.LoginActivity2;
 import com.ufcspa.unasus.appportfolio.Activities.MainActivity;
 import com.ufcspa.unasus.appportfolio.Model.Singleton;
 import com.ufcspa.unasus.appportfolio.R;
+import com.ufcspa.unasus.appportfolio.WebClient.Logout;
 import com.ufcspa.unasus.appportfolio.database.DataBaseAdapter;
 
 /**
  * A simple {@link Fragment} subclass.
  */
 public class FragmentConfig extends Frag implements View.OnClickListener {
+    private static ProgressDialog dialog;
     private Button btn_profile;
     private Button btn_password;
     private Button btn_logout;
 
     public FragmentConfig() {
         // Required empty public constructor
+    }
+
+    public static void logout(FragmentActivity main) {
+        ((MainActivity) main).logout();
+    }
+
+    public static void couldNotLogout() {
+        dialog.dismiss();
     }
 
     @Override
@@ -59,10 +69,11 @@ public class FragmentConfig extends Frag implements View.OnClickListener {
             ((MainActivity) getActivity()).initChangePasswordFragment();
         }
         if (v.getId() == R.id.btn_logout) {
-            // TODO Mandar informação de LogOut para o Servidor
-            source.cleanDataBase();
-            startActivity(new Intent(getContext(), LoginActivity2.class));
-            ((MainActivity) getActivity()).finish();
+            if (isOnline()) {
+                dialog = ProgressDialog.show(getContext(), "Saindo", "Por favor aguarde...", true);
+                Logout logout = new Logout(getContext(), getActivity());
+                logout.postJson();
+            }
         }
     }
 }
