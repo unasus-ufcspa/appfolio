@@ -1151,7 +1151,7 @@ public class FragmentRTEditor extends Frag {
 //            }
 //
 //            createAddSpecificCommentButton(getCaretYPosition(mRTMessageField.getSelectionStart()));
-            if (singleton.portfolioClass.getPerfil().equals("S") && singleton.idVersionActivity != singleton.idCurrentVersionActivity)
+            if (singleton.portfolioClass.getPerfil().equals("S") && singleton.idVersionActivity == singleton.idCurrentVersionActivity)
                 createAddSpecificCommentButton(getCaretYPosition(mRTMessageField.getSelectionStart()));
 
             if (singleton.portfolioClass.getPerfil().equals("T")) {
