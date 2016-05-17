@@ -477,6 +477,20 @@ public class DataBaseAdapter {
         return lastID;
 
     }
+    public boolean isFirstSpecificComment(int idActSt,int nu_comment_activity){
+        int id=-1;
+        String sql = "select * from tb_comment WHERE tp_comment ='O' AND id_activity_student=" + idActSt + " AND nu_comment_activity= "+nu_comment_activity;
+        Cursor c = db.rawQuery(sql, null);
+        if (c.moveToFirst()) {
+            return true;
+        }else{
+            return false;
+        }
+
+    }
+
+
+
 
 
     public int getPersonalComment(int idActSt){
@@ -1843,6 +1857,8 @@ public class DataBaseAdapter {
                     versionActivity.setDt_verification(c.getString(5));
                 else
                     versionActivity.setDt_verification("");
+
+                versionActivity.setId_version_activit_srv(6);
 
                 lista.add(versionActivity);
 //                c.close();

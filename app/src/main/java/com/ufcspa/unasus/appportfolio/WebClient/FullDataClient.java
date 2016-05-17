@@ -193,6 +193,7 @@ public class FullDataClient extends HttpClient {
                                             String dt_verification = temp.getString("dt_verification");
                                             int id_version_activity_srv = temp.getInt("id_version_activity");
 
+
                                             versionActivity.setId_activity_student(id_activity_student);
                                             versionActivity.setTx_activity(tx_activity);
                                             versionActivity.setDt_last_access(dt_last_access);

@@ -31,6 +31,7 @@ import com.ufcspa.unasus.appportfolio.Model.CommentVersion;
 import com.ufcspa.unasus.appportfolio.Model.Note;
 import com.ufcspa.unasus.appportfolio.Model.OneComment;
 import com.ufcspa.unasus.appportfolio.Model.Singleton;
+import com.ufcspa.unasus.appportfolio.Model.Sync;
 import com.ufcspa.unasus.appportfolio.R;
 import com.ufcspa.unasus.appportfolio.database.DataBaseAdapter;
 
@@ -387,12 +388,27 @@ private LoadCommentsFromDB loadCommentsFromDB;
 
     private void insertComment(Comentario c){
         try {
-            DataBaseAdapter db = DataBaseAdapter.getInstance(getActivity());
-            lastID=db.insertSpecificComment(c, noteNow.getBtId());
-            CommentVersion cv = new CommentVersion();
-            cv.setId_comment(lastID);
-            cv.setId_version_activity(singleton.idCurrentVersionActivity);
-            db.insertCommentVersion(cv);
+            //DataBaseAdapter db = DataBaseAdapter.getInstance(getActivity());
+
+            if(source.isFirstSpecificComment(singleton.idActivityStudent,noteNow.getBtId()) && singleton.portfolioClass.getPerfil().equals("T")){
+                lastID=source.insertSpecificComment(c, noteNow.getBtId());
+                CommentVersion cv = new CommentVersion();
+                cv.setId_comment(lastID);
+                cv.setId_version_activity(singleton.idCurrentVersionActivity);
+                source.insertCommentVersion(cv);
+
+                Sync sync = new Sync();
+                sync.setNm_table("tb_version_activity");
+                sync.setCo_id_table(source.getLastIDVersionActivity(singleton.idActivityStudent));
+                sync.setId_activity_student(Singleton.getInstance().idActivityStudent);
+                sync.setId_device(singleton.device.get_id_device());
+                source.insertIntoTBSync(sync);
+            }else {
+                lastID=source.insertSpecificComment(c, noteNow.getBtId());
+                Sync sync = new Sync(singleton.device.get_id_device(), "tb_comment", lastID, singleton.idActivityStudent);
+                source.insertIntoTBSync(sync);
+            }
+
 
 
            /*
