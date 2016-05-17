@@ -22,13 +22,13 @@ import java.util.concurrent.TimeUnit;
 /**
  * Created by Arthur Zettler on 17/05/2016.
  */
-public class Logout extends HttpClient {
+public class LogoutClient extends HttpClient {
     private Context context;
     private String method = "logout";
     private Singleton singleton;
     private FragmentActivity activity;
 
-    public Logout(Context context, FragmentActivity activity) {
+    public LogoutClient(Context context, FragmentActivity activity) {
         super(context);
         this.context = context;
         this.singleton = Singleton.getInstance();
@@ -40,7 +40,7 @@ public class Logout extends HttpClient {
         Log.d(tag, "URL: " + URL + method);
         JSONObject logoutJson = null;
         try {
-            logoutJson = new JSONObject().put("logout", new JSONObject().put("id_user", singleton.user.getIdUser()).put("id_device", singleton.device.get_id_device()));
+            logoutJson = new JSONObject().put("logout_request", new JSONObject().put("id_user", singleton.user.getIdUser()).put("id_device", singleton.device.get_id_device()));
         } catch (JSONException e) {
             FragmentConfig.couldNotLogout();
             return;

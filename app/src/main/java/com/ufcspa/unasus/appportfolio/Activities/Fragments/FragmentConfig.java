@@ -13,7 +13,7 @@ import android.widget.Button;
 import com.ufcspa.unasus.appportfolio.Activities.MainActivity;
 import com.ufcspa.unasus.appportfolio.Model.Singleton;
 import com.ufcspa.unasus.appportfolio.R;
-import com.ufcspa.unasus.appportfolio.WebClient.Logout;
+import com.ufcspa.unasus.appportfolio.WebClient.LogoutClient;
 import com.ufcspa.unasus.appportfolio.database.DataBaseAdapter;
 
 /**
@@ -71,8 +71,8 @@ public class FragmentConfig extends Frag implements View.OnClickListener {
         if (v.getId() == R.id.btn_logout) {
             if (isOnline()) {
                 dialog = ProgressDialog.show(getContext(), "Saindo", "Por favor aguarde...", true);
-                Logout logout = new Logout(getContext(), getActivity());
-                logout.postJson();
+                LogoutClient logoutClient = new LogoutClient(getContext(), getActivity());
+                logoutClient.postJson();
             }
         }
     }
