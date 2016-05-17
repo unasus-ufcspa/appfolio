@@ -73,6 +73,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:ems="10"
+                    android:imeOptions="flagNoExtractUi"
                     android:inputType="textEmailAddress" />
 
                 <TextView
@@ -88,6 +89,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:ems="10"
+                    android:imeOptions="flagNoExtractUi"
                     android:inputType="phone" />
 
             </LinearLayout>

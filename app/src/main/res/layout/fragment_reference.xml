@@ -1,38 +1,40 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="fill_parent"
+    android:layout_width="fill_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     >
 
     <LinearLayout
-        android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_weight="4"
-        android:weightSum="1"
-        android:background="@android:color/white">
+        android:background="@android:color/white"
+        android:orientation="vertical"
+        android:weightSum="1">
 
         <ListView
+            android:id="@+id/frag_ref_listview"
             android:layout_width="match_parent"
             android:layout_height="274dp"
-            android:id="@+id/frag_ref_listview"
             android:layout_weight="0.96" />
 
         <EditText
             android:id="@+id/frag_ref_edt"
-            android:layout_height="150dp"
             android:layout_width="fill_parent"
-            android:inputType="textWebEmailAddress"
+            android:layout_height="150dp"
+            android:autoLink="web"
             android:hint="enter the reference here"
-            android:autoLink="web" />
+            android:imeOptions="flagNoExtractUi"
+            android:inputType="textWebEmailAddress" />
 
         <Button
+            android:id="@+id/frag_ref_btSave"
             style="?android:attr/buttonStyleSmall"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Save changes"
-            android:id="@+id/frag_ref_btSave"
-            android:layout_gravity="center" />
+            android:layout_gravity="center"
+            android:text="Save changes" />
     </LinearLayout>
 
 </LinearLayout>

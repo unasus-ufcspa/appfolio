@@ -87,6 +87,7 @@
             android:layout_below="@+id/lbl_privacy"
             android:background="@drawable/border_popup_personal_comment"
             android:gravity="left|top"
+            android:imeOptions="flagNoExtractUi"
             android:padding="15dp"
             android:scrollHorizontally="true"
             android:scrollbars="vertical" />

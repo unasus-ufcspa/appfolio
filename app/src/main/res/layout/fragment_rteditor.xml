@@ -101,9 +101,8 @@
                         android:layout_weight="1"
                         android:background="@color/gray_4"
                         android:gravity="top"
-                        android:imeOptions="actionDone|flagNoEnterAction"
+                        android:imeOptions="actionDone|flagNoEnterAction|flagNoExtractUi"
                         android:inputType="textMultiLine|textAutoCorrect|textCapSentences" />
-
                 </RelativeLayout>
             </ScrollView>
         </RelativeLayout>

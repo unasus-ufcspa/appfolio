@@ -70,6 +70,7 @@
             android:layout_toLeftOf="@+id/bt_add_attachment"
             android:background="@android:color/transparent"
             android:ems="20"
+            android:imeOptions="flagNoExtractUi"
             android:inputType="textMultiLine|textLongMessage"
             android:isScrollContainer="true"
             android:maxHeight="150dp"
