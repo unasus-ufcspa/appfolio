@@ -58,9 +58,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     public static boolean shouldSend;
     public static boolean sendResponseNotReceived;
-
     final GestureDetector gestureDetector = new GestureDetector(new GestureListener());
     ProgressDialog dialog;
+    private String lastFragName;
     private Crossfader crossFader;
     private View fragmentContainer;
     private View bigDrawer;
@@ -159,9 +159,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
         LocalBroadcastManager.getInstance(this).registerReceiver(broadcastReceiver, new IntentFilter("call.fragments.action"));
 
-        if (!shouldCreateDrawer || singleton.wasFullscreen)
-            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new FragmentRTEditor()).commit();
-        else if (savedInstanceState == null)
+        if (!shouldCreateDrawer || singleton.wasFullscreen) {
+            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new FragmentRTEditor()).addToBackStack("FragmentRTEditor").commit();
+            lastFragName = "FragmentRTEditor";
+        } else if (savedInstanceState == null)
            /*
              QUAL FRAGMENT IRA INICIAR APOS LOGIN?
              0 para select portfolio
@@ -270,6 +271,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             outState = crossFader.saveInstanceState(outState);
         outState.putBoolean("shouldCreateDrawer", shouldCreateDrawer);
         singleton.note = new Note(0, "null", 0);
+
+        outState.putString("frag", lastFragName);
+
         super.onSaveInstanceState(outState);
     }
 
@@ -277,8 +281,41 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
 
-        if (savedInstanceState != null)
+        if (savedInstanceState != null) {
             shouldCreateDrawer = savedInstanceState.getBoolean("shouldCreateDrawer");
+            lastFragName = savedInstanceState.getString("frag");
+
+            switch (lastFragName) {
+                case "FragmentRTEditor":
+                    getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new FragmentRTEditor()).addToBackStack(lastFragName).commit();
+                    break;
+                case "FragmentReference":
+                    getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new FragmentReference()).addToBackStack(lastFragName).commit();
+                    break;
+                case "FragmentConfig":
+                    getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new FragmentConfig()).addToBackStack(lastFragName).commit();
+                    break;
+                case "FragmentAttachment":
+                    getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new FragmentAttachment()).addToBackStack(lastFragName).commit();
+                    break;
+                case "FragmentPrivacyPolicy":
+                    getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new FragmentPrivacyPolicy()).addToBackStack(lastFragName).commit();
+                    break;
+                case "FragmentSelectPortfolio":
+                    getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new FragmentSelectPortfolio()).addToBackStack(lastFragName).commit();
+                    break;
+                case "FragmentStudentActivities":
+                    getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new FragmentStudentActivities()).addToBackStack(lastFragName).commit();
+                    break;
+                case "FragmentConfigPassword":
+                    getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new FragmentConfigPassword()).addToBackStack(lastFragName).commit();
+                    break;
+                case "FragmentConfigUser":
+                    getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new FragmentConfigUser()).addToBackStack(lastFragName).commit();
+                    break;
+            }
+
+        }
     }
 
     @Override
@@ -302,19 +339,23 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     downloadFullData(0, id);
                 break;
             case 2:
-                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new FragmentReference()).addToBackStack("Frag").commit();
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new FragmentReference()).addToBackStack("FragmentReference").commit();
+                lastFragName = "FragmentReference";
                 break;
             case 3:
-                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new FragmentConfig()).addToBackStack("Frag").commit();
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new FragmentConfig()).addToBackStack("FragmentConfig").commit();
+                lastFragName = "FragmentConfig";
                 break;
             case 4:
-                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new FragmentAttachment()).addToBackStack("Frag").commit();
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new FragmentAttachment()).addToBackStack("FragmentAttachment").commit();
+                lastFragName = "FragmentAttachment";
                 break;
             case 5:
                 downloadFullData(singleton.idActivityStudent, id);
                 break;
             case 6:
-                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new FragmentPrivacyPolicy()).addToBackStack("Frag").commit();
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new FragmentPrivacyPolicy()).addToBackStack("FragmentPrivacyPolicy").commit();
+                lastFragName = "FragmentPrivacyPolicy";
             default:
                 break;
         }
@@ -490,13 +531,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
             switch (change_fragment) {
                 case 0:
-                    getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new FragmentSelectPortfolio()).addToBackStack("Frag").commitAllowingStateLoss();//FragmentSelectPortfolio
+                    getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new FragmentSelectPortfolio()).addToBackStack("FragmentSelectPortfolio").commitAllowingStateLoss();//FragmentSelectPortfolio
+                    lastFragName = "FragmentSelectPortfolio";
                     break;
                 case 1:
-                    getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new FragmentStudentActivities()).addToBackStack("Frag").commitAllowingStateLoss();
+                    getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new FragmentStudentActivities()).addToBackStack("FragmentStudentActivities").commitAllowingStateLoss();
+                    lastFragName = "FragmentStudentActivities";
                     break;
                 case 5:
-                    getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new FragmentRTEditor()).addToBackStack("Frag").commit();
+                    getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new FragmentRTEditor()).addToBackStack("FragmentRTEditor").commit();
+                    lastFragName = "FragmentRTEditor";
                     break;
                 default:
                     break;
@@ -506,11 +550,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     public void initChangePasswordFragment() {
-        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new FragmentConfigPassword()).addToBackStack("Frag").commit();
+        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new FragmentConfigPassword()).addToBackStack("FragmentConfigPassword").commit();
+        lastFragName = "FragmentConfigPassword";
     }
 
     public void initChangeProfileFragment() {
-        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new FragmentConfigUser()).addToBackStack("Frag").commit();
+        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new FragmentConfigUser()).addToBackStack("FragmentConfigUser").commit();
+        lastFragName = "FragmentConfigUser";
     }
 
     private class GestureListener extends GestureDetector.SimpleOnGestureListener {

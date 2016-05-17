@@ -93,6 +93,9 @@ public class FragmentRTEditor extends Frag {
     private RelativeLayout slider;
     private ViewGroup rightBarSpecificComments;
     private View importPanel;
+    private ImageButton personalCommentButton;
+    private ImageButton versionsButton;
+    private ImageView usrPhoto;
     // Model
     private ActivityStudent acStudent;
     private DataBaseAdapter source;
@@ -103,9 +106,7 @@ public class FragmentRTEditor extends Frag {
     // Versoes
     private VersionsAdapter versionAdapter;
     private ArrayList<VersionActivity> versions;
-
-
-
+    // Personal Comment
     private boolean personalCommentChanged;
     private String txtPersonal;
     private EditText edtTextPersonal;
@@ -472,17 +473,15 @@ public class FragmentRTEditor extends Frag {
     public void onViewStateRestored(Bundle savedInstanceState) {
         super.onViewStateRestored(savedInstanceState);
 
-        if (singleton.isFullscreen) {
-            singleton.firsttime = true;
-            loadLastText();
-        }
-
         if (savedInstanceState != null) {
             if (savedInstanceState.getSerializable("specificCommentsNotes") != null) {
                 specificCommentsNotes = (HashMap<Integer, Note>) savedInstanceState.getSerializable("specificCommentsNotes");
             }
             currentSpecificComment = savedInstanceState.getInt("currentSpecificComment", -1);
         }
+
+        singleton.firsttime = true;
+        loadLastText();
     }
 
     @Override
@@ -598,6 +597,8 @@ public class FragmentRTEditor extends Frag {
                     for (int i = childs - 1; i >= 0; i--)
                         rightBarSpecificComments.getChildAt(i).setVisibility(View.GONE);
                     slider.findViewById(R.id.rightbar_green).setVisibility(View.INVISIBLE);
+
+                    onClickTopBar(true);
                 }
             }
 
@@ -613,6 +614,8 @@ public class FragmentRTEditor extends Frag {
                             showCommentsTab(true);
                     } else
                         showCommentsTab(false);
+
+                    onClickTopBar(false);
                 }
             }
         });
@@ -626,47 +629,11 @@ public class FragmentRTEditor extends Frag {
     private void initTopBar(View view) {
         TextView studentName = (TextView) view.findViewById(R.id.p_student_name);
         TextView activityName = (TextView) view.findViewById(R.id.activity_name);
-        ImageView usrPhoto = (ImageView) view.findViewById(R.id.usr_photo);
-        ImageButton personalCommentButton = (ImageButton) view.findViewById(R.id.personal_comment);
-        ImageButton versionsButton = (ImageButton) view.findViewById(R.id.btn_versions);
+        usrPhoto = (ImageView) view.findViewById(R.id.usr_photo);
+        personalCommentButton = (ImageButton) view.findViewById(R.id.personal_comment);
+        versionsButton = (ImageButton) view.findViewById(R.id.btn_versions);
 
-        if (singleton.portfolioClass.getPerfil().equals("T")) {
-            personalCommentButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-
-                    importPanel.setVisibility(View.GONE);
-                    displayPersonalComment(getView().findViewById(R.id.personal_comment_container));
-
-
-                }
-            });
-            usrPhoto.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    importPanel.setVisibility(View.GONE);
-                    displayPersonalComment(getView().findViewById(R.id.personal_comment_container));
-                }
-            });
-        }else {
-            personalCommentButton.setVisibility(View.INVISIBLE);
-        }
-
-        versionsButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                saveText();
-                versionAdapter.refresh(source.getAllVersionsFromActivityStudent(singleton.idActivityStudent));
-
-                if(edtTextPersonal!=null){
-                    savePersonalComment(edtTextPersonal.getText().toString(),!edtTextPersonal.getText().toString().isEmpty());
-                    edtTextPersonal=null;
-                }
-
-                getView().findViewById(R.id.personal_comment_container).setVisibility(View.GONE);
-                displayVersionsDialog(importPanel);
-            }
-        });
+        onClickTopBar(true);
 
         importPanel = view.findViewById(R.id.versions_container);
         versions = source.getAllVersionsFromActivityStudent(singleton.idActivityStudent);
@@ -700,6 +667,7 @@ public class FragmentRTEditor extends Frag {
 
                         ((MainActivity) getActivity()).dontCreateCrossfader();
                     }
+                    displayVersionsDialog(importPanel);
                 }
             }
         });
@@ -709,6 +677,61 @@ public class FragmentRTEditor extends Frag {
         if (photo != null)
             usrPhoto.setImageBitmap(photo);
         activityName.setText("Ativ. " + singleton.activity.getNuOrder() + ": " + singleton.activity.getTitle());
+    }
+
+    private void onClickTopBar(boolean shouldClick) {
+        if (shouldClick) {
+            if (singleton.portfolioClass.getPerfil().equals("T")) {
+                personalCommentButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        importPanel.setVisibility(View.GONE);
+                        displayPersonalComment(getView().findViewById(R.id.personal_comment_container));
+                    }
+                });
+                usrPhoto.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        importPanel.setVisibility(View.GONE);
+                        displayPersonalComment(getView().findViewById(R.id.personal_comment_container));
+                    }
+                });
+            } else {
+                personalCommentButton.setVisibility(View.INVISIBLE);
+            }
+
+            versionsButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    saveText();
+                    versionAdapter.refresh(source.getAllVersionsFromActivityStudent(singleton.idActivityStudent));
+
+                    if (edtTextPersonal != null) {
+                        savePersonalComment(edtTextPersonal.getText().toString(), !edtTextPersonal.getText().toString().isEmpty());
+                        edtTextPersonal = null;
+                    }
+
+                    getView().findViewById(R.id.personal_comment_container).setVisibility(View.GONE);
+                    displayVersionsDialog(importPanel);
+                }
+            });
+        } else {
+            personalCommentButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                }
+            });
+            usrPhoto.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                }
+            });
+            versionsButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                }
+            });
+        }
     }
 
     private float getCaretYPosition(int position) {
@@ -1151,8 +1174,15 @@ public class FragmentRTEditor extends Frag {
 //            }
 //
 //            createAddSpecificCommentButton(getCaretYPosition(mRTMessageField.getSelectionStart()));
-            if (singleton.portfolioClass.getPerfil().equals("S") && singleton.idVersionActivity != singleton.idCurrentVersionActivity)
-                createAddSpecificCommentButton(getCaretYPosition(mRTMessageField.getSelectionStart()));
+            if (singleton.portfolioClass.getPerfil().equals("S")) {
+                if (singleton.idVersionActivity == singleton.idCurrentVersionActivity) {
+                    createAddSpecificCommentButton(getCaretYPosition(mRTMessageField.getSelectionStart()));
+                    mode.getMenu();
+                } else {
+                    menu.removeItem(android.R.id.paste);
+                    menu.removeItem(android.R.id.cut);
+                }
+            }
 
             if (singleton.portfolioClass.getPerfil().equals("T")) {
                 createAddSpecificCommentButton(getCaretYPosition(mRTMessageField.getSelectionStart()));

@@ -63,7 +63,7 @@ public class SendFullDataClient extends HttpClient{
                                     int id_comment_srv = temp.getInt("id_comment_srv");
                                     holder.id = id_comment;
                                     holder.idSrv = id_comment_srv;
-
+                                    // TODO Receber data do comentário e atualizar a data dele.
                                     holders.add(holder);
                                 }
                                 sendData.dadosResponse.put("tb_comment", holders);
@@ -82,7 +82,7 @@ public class SendFullDataClient extends HttpClient{
                                         int id_version_activity_srv = temp.getInt("id_version_activity_srv");
                                         holder.id = id_version_activity;
                                         holder.idSrv = id_version_activity_srv;
-
+                                        // TODO Receber data da versão e atualizar a data de submissão
                                         holders.add(holder);
                                     }
                                     sendData.dadosResponse.put("tb_version_activity", holders);

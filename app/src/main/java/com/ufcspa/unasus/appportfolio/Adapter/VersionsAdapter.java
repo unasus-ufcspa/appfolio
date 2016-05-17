@@ -56,6 +56,8 @@ public class VersionsAdapter extends BaseAdapter {
 
         holder.date = (TextView) convertView.findViewById(R.id.version_date);
         holder.time = (TextView) convertView.findViewById(R.id.version_time);
+        holder.versionNumber = (TextView) convertView.findViewById(R.id.version_number);
+
         String[] dateAndTime = null;
         if (aux.getDt_submission() != null) {
             dateAndTime = aux.getDt_submission().split(" ");
@@ -64,9 +66,16 @@ public class VersionsAdapter extends BaseAdapter {
         }
 
         if (dateAndTime != null) {
-            holder.date.setText(dateAndTime[0]);
-            holder.time.setText(dateAndTime[1]);
+            if (position == 0) {
+                holder.date.setText("Versão Atual");
+                holder.time.setVisibility(View.GONE);
+            } else {
+                holder.date.setText(dateAndTime[0]);
+                holder.time.setText(dateAndTime[1]);
+            }
         }
+
+        holder.versionNumber.setText("" + (list.size() - position));
 
         return convertView;
     }
@@ -82,5 +91,6 @@ public class VersionsAdapter extends BaseAdapter {
     public class Holder {
         TextView date;
         TextView time;
+        TextView versionNumber;
     }
 }
