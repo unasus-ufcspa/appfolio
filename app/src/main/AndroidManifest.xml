@@ -64,11 +64,12 @@
         <activity
             android:name=".Activities.LoginActivity2"
             android:label="@string/title_activity_login2"
-            android:windowSoftInputMode="adjustPan"></activity>
+            android:windowSoftInputMode="adjustPan" />
         <activity
             android:name=".Activities.TesteDownloadImage"
             android:label="@string/title_activity_teste_download_image"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".Activities.PrivacyPolicyActivity"></activity>
     </application>
 
 </manifest>
