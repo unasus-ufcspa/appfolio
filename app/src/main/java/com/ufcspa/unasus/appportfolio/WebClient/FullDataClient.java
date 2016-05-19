@@ -256,7 +256,6 @@ public class FullDataClient extends HttpClient {
                                     }
                                 }
 
-
                                 if (data.has("activityStudent")) {
                                     JSONObject activityStudent = data.getJSONObject("activityStudent");
                                     if (activityStudent.has("tb_activity_student")) {

@@ -1670,6 +1670,7 @@ public class DataBaseAdapter {
     */
     public void insertVersionActivity(LinkedList<VersionActivity> versionActs) {
         for (VersionActivity va : versionActs) {
+
             ContentValues cv = new ContentValues();
             cv.put("id_activity_student", va.getId_activity_student());
             cv.put("tx_activity", va.getTx_activity());
