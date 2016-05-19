@@ -389,6 +389,9 @@ private LoadCommentsFromDB loadCommentsFromDB;
     private void insertComment(Comentario c){
         try {
             //DataBaseAdapter db = DataBaseAdapter.getInstance(getActivity());
+            if (singleton.portfolioClass.getPerfil().equals("T") && source.isFirstSpecificComment(singleton.idActivityStudent, noteNow.getBtId()))
+                singleton.isFirstSpecificComment = true;
+
             lastID = source.insertSpecificComment(c, noteNow.getBtId());
 
             CommentVersion cv = new CommentVersion();
@@ -402,9 +405,6 @@ private LoadCommentsFromDB loadCommentsFromDB;
             sync.setId_activity_student(singleton.idActivityStudent);
             sync.setId_device(singleton.device.get_id_device());
             source.insertIntoTBSync(sync);
-
-            if (singleton.portfolioClass.getPerfil().equals("T") && source.isFirstSpecificComment(singleton.idActivityStudent, noteNow.getBtId()))
-                singleton.isFirstSpecificComment = true;
            /*
                 EMPILHA COMENTARIO ESPECIFICO NA SYNC(ANTIGO)
 

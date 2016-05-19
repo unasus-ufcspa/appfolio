@@ -152,7 +152,7 @@ public class CommentClient extends HttpClient{
         });
 
         jsObjReq.setRetryPolicy(new DefaultRetryPolicy(
-                (int) TimeUnit.SECONDS.toMillis(10),
+                (int) TimeUnit.SECONDS.toMillis(20),
                 DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
                 DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
 

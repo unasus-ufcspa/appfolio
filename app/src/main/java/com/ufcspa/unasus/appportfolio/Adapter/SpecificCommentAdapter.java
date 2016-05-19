@@ -56,9 +56,6 @@ public class SpecificCommentAdapter extends BaseAdapter {
         else
             rowView = inflater.inflate(R.layout.specific_comment_item, null);
 
-
-
-
         Holder holder = new Holder();
 
         //getting from xml
@@ -96,8 +93,8 @@ public class SpecificCommentAdapter extends BaseAdapter {
             }
         }
         if(c.atach==false) {
-            holder.message.setBackgroundResource(c.orientation ? R.drawable.final_b_ger_left : R.drawable.final_b_ger_right);
-            holder.wraper.setGravity(c.orientation ? Gravity.LEFT : Gravity.RIGHT);
+            holder.message.setBackgroundResource(c.orientation ? R.drawable.final_b_ger_right : R.drawable.final_b_ger_left);
+            holder.wraper.setGravity(c.orientation ? Gravity.RIGHT : Gravity.LEFT);
         }
         //////////---------------////////////////////
         return rowView;

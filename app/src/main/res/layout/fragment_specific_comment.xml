@@ -11,7 +11,7 @@
     <TextView
         android:id="@+id/txSelectedNote"
         android:layout_width="match_parent"
-        android:layout_height="70px"
+        android:layout_height="75px"
         android:layout_marginBottom="10dp"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"

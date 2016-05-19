@@ -7,11 +7,19 @@ package com.ufcspa.unasus.appportfolio.WebClient;
 public class HolderIDS {
     protected int id;
     protected int idSrv;
+    protected String date;
 
 
     public HolderIDS(int id, int idSrv) {
         this.id = id;
         this.idSrv = idSrv;
+        this.date = null;
+    }
+
+    public HolderIDS(int id, int idSrv, String date) {
+        this.id = id;
+        this.idSrv = idSrv;
+        this.date = date;
     }
 
     public HolderIDS() {}
@@ -32,6 +40,13 @@ public class HolderIDS {
         this.idSrv = idSrv;
     }
 
+    public String getDate() {
+        return date;
+    }
+
+    public void setDate(String date) {
+        this.date = date;
+    }
 
     public void clear(){
         this.id=-1;

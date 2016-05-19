@@ -61,9 +61,10 @@ public class SendFullDataClient extends HttpClient{
                                     JSONObject temp = tb_comment.getJSONObject(i);
                                     int id_comment = temp.getInt("id_comment");
                                     int id_comment_srv = temp.getInt("id_comment_srv");
+                                    String dt_comment_srv = temp.getString("dt_comment_srv");
                                     holder.id = id_comment;
                                     holder.idSrv = id_comment_srv;
-                                    // TODO Receber data do comentário e atualizar a data dele.
+                                    holder.date = dt_comment_srv;
                                     holders.add(holder);
                                 }
                                 sendData.dadosResponse.put("tb_comment", holders);
@@ -80,9 +81,10 @@ public class SendFullDataClient extends HttpClient{
                                         JSONObject temp = tb_version_activity.getJSONObject(i);
                                         int id_version_activity = temp.getInt("id_version_activity");
                                         int id_version_activity_srv = temp.getInt("id_version_activity_srv");
+                                        String dt_submission = temp.getString("dt_submission");
                                         holder.id = id_version_activity;
                                         holder.idSrv = id_version_activity_srv;
-                                        // TODO Receber data da versão e atualizar a data de submissão
+                                        holder.date = dt_submission;
                                         holders.add(holder);
                                     }
                                     sendData.dadosResponse.put("tb_version_activity", holders);
@@ -116,7 +118,7 @@ public class SendFullDataClient extends HttpClient{
         });
 
         jsObjReq.setRetryPolicy(new DefaultRetryPolicy(
-                (int) TimeUnit.SECONDS.toMillis(10),
+                (int) TimeUnit.SECONDS.toMillis(20),
                 DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
                 DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
 

@@ -359,7 +359,7 @@ public class BasicDataClient extends HttpClient {
         });
 
         jsObjReq.setRetryPolicy(new DefaultRetryPolicy(
-                (int) TimeUnit.SECONDS.toMillis(20),
+                (int) TimeUnit.SECONDS.toMillis(30),
                 DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
                 DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
         RequestQueue queue = Volley.newRequestQueue(context);

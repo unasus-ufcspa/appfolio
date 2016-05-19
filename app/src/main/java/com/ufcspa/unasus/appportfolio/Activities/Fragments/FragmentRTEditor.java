@@ -101,6 +101,7 @@ public class FragmentRTEditor extends Frag {
     private DataBaseAdapter source;
     private Singleton singleton;
     // Cores
+    private int trasnparent;
     private int greenLight;
     private int greenDark;
     // Versoes
@@ -199,10 +200,10 @@ public class FragmentRTEditor extends Frag {
 
         specificCommentsOpen = false;
 
+        trasnparent = getResources().getColor(android.R.color.transparent);
         greenLight = getResources().getColor(R.color.base_green_light);
         greenDark = getResources().getColor(R.color.base_green);
 
-        specificCommentsNotes = new HashMap<>();
         getIdNotesFromDB();
 
         scrollview = (ViewGroup) view.findViewById(R.id.comments);
@@ -649,6 +650,7 @@ public class FragmentRTEditor extends Frag {
                     singleton.idCurrentVersionActivity = versions.get(position).getId_version_activity();
                     singleton.firsttime = true;
                     loadLastText();
+
                     if (singleton.portfolioClass.getPerfil().equals("T") || (singleton.idCurrentVersionActivity != singleton.idVersionActivity)) {
                         mRTMessageField.setKeyListener(null);
                         mRTMessageField.setTextIsSelectable(true);
@@ -668,6 +670,7 @@ public class FragmentRTEditor extends Frag {
                         ((MainActivity) getActivity()).dontCreateCrossfader();
                     }
                     getIdNotesFromDB();
+                    noteFollowText();
                     displayVersionsDialog(importPanel);
                 }
             }
@@ -750,7 +753,8 @@ public class FragmentRTEditor extends Frag {
      * MÉTODO PARA RECUPERAR A ID DE CADA NOTA SALVA NO BANCO
      */
     public void getIdNotesFromDB() {
-        ArrayList<Integer> ids = (ArrayList<Integer>) source.listSpecificComments(singleton.idActivityStudent);//source.listNotesSpecificComments(singleton.idCurrentVersionActivity);
+        specificCommentsNotes = new HashMap<>();
+        ArrayList<Integer> ids = (ArrayList<Integer>) source.listSpecificComments(singleton.idActivityStudent);// source.listNotesSpecificComments(singleton.idCurrentVersionActivity);
         for (int id : ids) {
             specificCommentsNotes.put(id, new Note(id, "", 0));
         }
@@ -977,21 +981,24 @@ public class FragmentRTEditor extends Frag {
     }
 
     private void changeNotePosition() {
-        if (specificCommentsNotes != null && specificCommentsNotes.size() != 0) {
-            Spannable textSpanned = mRTMessageField.getText();
-            BackgroundColorSpan[] spans = textSpanned.getSpans(0, textSpanned.length(), BackgroundColorSpan.class);
+        try {
+            if (specificCommentsNotes != null && specificCommentsNotes.size() != 0 && !switchNote.isChecked()) {
+                Spannable textSpanned = mRTMessageField.getText();
+                BackgroundColorSpan[] spans = textSpanned.getSpans(0, textSpanned.length(), BackgroundColorSpan.class);
 
-            for (BackgroundColorSpan spm : spans) {
-                if (spm.getId() != -1) {
-                    Note aux = specificCommentsNotes.get(spm.getId());
-                    float bcsPosition = getCaretYPosition(textSpanned.getSpanStart(spm));
-                    if (aux != null && bcsPosition != aux.getBtY()) {
-                        aux.setBtY(bcsPosition);
-                        Button btn = (Button) scrollview.findViewById(aux.getBtId());
-                        btn.setY(bcsPosition);
+                for (BackgroundColorSpan spm : spans) {
+                    if (spm.getId() != -1) {
+                        Note aux = specificCommentsNotes.get(spm.getId());
+                        float bcsPosition = getCaretYPosition(textSpanned.getSpanStart(spm));
+                        if (aux != null && bcsPosition != aux.getBtY()) {
+                            aux.setBtY(bcsPosition);
+                            Button btn = (Button) scrollview.findViewById(aux.getBtId());
+                            btn.setY(bcsPosition);
+                        }
                     }
                 }
             }
+        } catch (NullPointerException e) {
         }
     }
 
@@ -1085,20 +1092,23 @@ public class FragmentRTEditor extends Frag {
     }
 
     private void hideNotes(boolean f) {
-        View v = getView();
-        if (v != null) {
-            ArrayList<Note> aux = new ArrayList<>();
-            aux.addAll(specificCommentsNotes.values());
+        try {
+            View v = getView();
+            if (v != null) {
+                ArrayList<Note> aux = new ArrayList<>();
+                aux.addAll(specificCommentsNotes.values());
 
-            for (int i = 0; i < aux.size(); i++) {
-                Note first = aux.get(i);
-                Button btnFirst = (Button) v.findViewById(first.getBtId());
-                if (f == true)
-                    btnFirst.setVisibility(View.GONE);
-                else
-                    btnFirst.setVisibility(View.VISIBLE);
-                resetColorNote(f);
+                for (int i = 0; i < aux.size(); i++) {
+                    Note first = aux.get(i);
+                    Button btnFirst = (Button) v.findViewById(first.getBtId());
+                    if (f == true)
+                        btnFirst.setVisibility(View.GONE);
+                    else
+                        btnFirst.setVisibility(View.VISIBLE);
+                    resetColorNote(f);
+                }
             }
+        } catch (NullPointerException e) {
         }
     }
 
@@ -1109,11 +1119,12 @@ public class FragmentRTEditor extends Frag {
         for (BackgroundColorSpan spm : spans) {
             if (spm.getId() != -1) {
                 if (flag)
-                    spm.setColor(greenDark);
+                    spm.setColor(trasnparent);
                 else
                     spm.setColor(greenLight);
             }
         }
+        mRTMessageField.invalidate();
         //noteFollowText();
     }
 

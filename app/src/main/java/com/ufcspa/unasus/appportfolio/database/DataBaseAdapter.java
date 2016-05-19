@@ -482,9 +482,9 @@ public class DataBaseAdapter {
         String sql = "select * from tb_comment WHERE tp_comment ='O' AND id_activity_student=" + idActSt + " AND nu_comment_activity= "+nu_comment_activity;
         Cursor c = db.rawQuery(sql, null);
         if (c.moveToFirst()) {
-            return true;
-        }else{
             return false;
+        }else{
+            return true;
         }
 
     }
@@ -1945,6 +1945,7 @@ public class DataBaseAdapter {
         ContentValues cv = new ContentValues();
         for (HolderIDS ids : holderIDS) {
             cv.put("id_comment_srv", ids.getIdSrv());
+            cv.put("dt_comment", ids.getDate());
             try {
                 db.update("tb_comment", cv, "id_comment=?", new String[]{"" + ids.getId()});
             } catch (Exception e) {
@@ -1957,6 +1958,7 @@ public class DataBaseAdapter {
         ContentValues cv = new ContentValues();
         for (HolderIDS ids : holderIDS) {
             cv.put("id_version_activity_srv", ids.getIdSrv());
+            cv.put("dt_submission", ids.getDate());
             try {
                 db.update("tb_version_activity", cv, "id_version_activity=?", new String[]{"" + ids.getId()});
             } catch (Exception e) {

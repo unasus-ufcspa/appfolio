@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
+import com.ufcspa.unasus.appportfolio.Model.Singleton;
 import com.ufcspa.unasus.appportfolio.Model.VersionActivity;
 import com.ufcspa.unasus.appportfolio.R;
 
@@ -66,7 +67,7 @@ public class VersionsAdapter extends BaseAdapter {
         }
 
         if (dateAndTime != null) {
-            if (position == 0) {
+            if (position == 0 && Singleton.getInstance().portfolioClass.getPerfil().equals("S")) {
                 holder.date.setText("Versão Atual");
                 holder.time.setVisibility(View.GONE);
             } else {
