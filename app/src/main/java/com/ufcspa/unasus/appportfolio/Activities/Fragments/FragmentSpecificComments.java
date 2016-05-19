@@ -389,30 +389,23 @@ private LoadCommentsFromDB loadCommentsFromDB;
     private void insertComment(Comentario c){
         try {
             //DataBaseAdapter db = DataBaseAdapter.getInstance(getActivity());
+            lastID = source.insertSpecificComment(c, noteNow.getBtId());
 
-            if(source.isFirstSpecificComment(singleton.idActivityStudent,noteNow.getBtId()) && singleton.portfolioClass.getPerfil().equals("T")){
-                lastID=source.insertSpecificComment(c, noteNow.getBtId());
-                CommentVersion cv = new CommentVersion();
-                cv.setId_comment(lastID);
-                cv.setId_version_activity(singleton.idCurrentVersionActivity);
-                source.insertCommentVersion(cv);
+            CommentVersion cv = new CommentVersion();
+            cv.setId_comment(lastID);
+            cv.setId_version_activity(singleton.idCurrentVersionActivity);
+            int idCommentVersion = source.insertCommentVersion(cv);
 
-                Sync sync = new Sync();
-                sync.setNm_table("tb_version_activity");
-                sync.setCo_id_table(source.getLastIDVersionActivity(singleton.idActivityStudent));
-                sync.setId_activity_student(Singleton.getInstance().idActivityStudent);
-                sync.setId_device(singleton.device.get_id_device());
-                source.insertIntoTBSync(sync);
-            }else {
-                lastID=source.insertSpecificComment(c, noteNow.getBtId());
-                Sync sync = new Sync(singleton.device.get_id_device(), "tb_comment", lastID, singleton.idActivityStudent);
-                source.insertIntoTBSync(sync);
-            }
+            Sync sync = new Sync();
+            sync.setNm_table("tb_comment_version");
+            sync.setCo_id_table(idCommentVersion);
+            sync.setId_activity_student(singleton.idActivityStudent);
+            sync.setId_device(singleton.device.get_id_device());
+            source.insertIntoTBSync(sync);
 
-
-
+            if (singleton.portfolioClass.getPerfil().equals("T") && source.isFirstSpecificComment(singleton.idActivityStudent, noteNow.getBtId()))
+                singleton.isFirstSpecificComment = true;
            /*
-
                 EMPILHA COMENTARIO ESPECIFICO NA SYNC(ANTIGO)
 
             Sync sync = new Sync(singleton.device.get_id_device(), "tb_comment", lastID, singleton.idActivityStudent);
@@ -422,9 +415,9 @@ private LoadCommentsFromDB loadCommentsFromDB;
             if (main != null)
                 main.sendFullData();
             Log.d("Banco:", "comentario inserido no bd interno com sucesso");*/
-
-
-
+            MainActivity main = ((MainActivity) getActivity());
+            if (main != null)
+                main.sendFullData();
         }
         catch (Exception e) {
             Log.e("Banco", "Erro:"+e.getMessage());

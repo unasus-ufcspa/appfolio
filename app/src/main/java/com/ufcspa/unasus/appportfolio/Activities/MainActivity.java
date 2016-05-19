@@ -167,8 +167,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
              QUAL FRAGMENT IRA INICIAR APOS LOGIN?
              0 para select portfolio
              5 para rtEditor
+
              */
-            changeFragment(6);
+            changeFragment(0);
     }
 
     private void initMiniDrawer() {

@@ -301,7 +301,7 @@ public class FragmentRTEditor extends Frag {
         });
 
 //        if (singleton.portfolioClass.getPerfil().equals("T") || (singleton.idCurrentVersionActivity != singleton.idVersionActivity)) {
-        if (singleton.portfolioClass.getPerfil().equals("Z") || (singleton.idCurrentVersionActivity != singleton.idVersionActivity)) {
+        if (singleton.portfolioClass.getPerfil().equals("T") || (singleton.idCurrentVersionActivity != singleton.idVersionActivity)) {
             sendVersion.setVisibility(View.GONE);
         }
 
@@ -667,6 +667,7 @@ public class FragmentRTEditor extends Frag {
 
                         ((MainActivity) getActivity()).dontCreateCrossfader();
                     }
+                    getIdNotesFromDB();
                     displayVersionsDialog(importPanel);
                 }
             }
@@ -749,7 +750,7 @@ public class FragmentRTEditor extends Frag {
      * MÉTODO PARA RECUPERAR A ID DE CADA NOTA SALVA NO BANCO
      */
     public void getIdNotesFromDB() {
-        ArrayList<Integer> ids = (ArrayList<Integer>) source.listSpecificComments(singleton.idActivityStudent);
+        ArrayList<Integer> ids = (ArrayList<Integer>) source.listSpecificComments(singleton.idActivityStudent);//source.listNotesSpecificComments(singleton.idCurrentVersionActivity);
         for (int id : ids) {
             specificCommentsNotes.put(id, new Note(id, "", 0));
         }
@@ -1140,45 +1141,22 @@ public class FragmentRTEditor extends Frag {
 
         @Override
         public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
-//            if (item.getItemId() == R.id.action_favorite) {
-//                if (!mRTMessageField.getText().toString().isEmpty()) {
-//                    startSelection = mRTMessageField.getSelectionStart();
-//                    endSelection = mRTMessageField.getSelectionEnd();
-//                    String selectedText = getSelectedText();
-//
-//                    if (!selectedText.isEmpty()) {
-//                        if (selectedText.length() > 0) {
-//                            if (canCreateButton(startSelection, endSelection)) {
-//                                singleton.selectedText = mRTMessageField.getText().toString().substring(startSelection, endSelection);
-//                                createSpecificCommentNote(getCaretYPosition(startSelection), selectedText);
-//                            }
-//                        }
-//                    }
-//                }
-//                return true;
-//            }
             return false;
         }
 
         @Override
         public boolean onCreateActionMode(ActionMode mode, Menu menu) {
             ((InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(getView().getWindowToken(), 0);
-//            if (singleton.portfolioClass.getPerfil().equals("S") && singleton.idVersionActivity != singleton.idCurrentVersionActivity)
-//                mode.getMenuInflater().inflate(R.menu.menu, menu);
-//            else
-//                mode.getMenu();
-//            if (singleton.portfolioClass.getPerfil().equals("T")) {
-//                mode.getMenuInflater().inflate(R.menu.menu, menu);
-//                menu.removeItem(android.R.id.paste);
-//                menu.removeItem(android.R.id.cut);
-//            }
-//
-//            createAddSpecificCommentButton(getCaretYPosition(mRTMessageField.getSelectionStart()));
             if (singleton.portfolioClass.getPerfil().equals("S")) {
-                if (singleton.idVersionActivity == singleton.idCurrentVersionActivity) {
-                    createAddSpecificCommentButton(getCaretYPosition(mRTMessageField.getSelectionStart()));
-                    mode.getMenu();
-                } else {
+//                if (singleton.idVersionActivity == singleton.idCurrentVersionActivity) {
+//                    createAddSpecificCommentButton(getCaretYPosition(mRTMessageField.getSelectionStart()));
+//                    mode.getMenu();
+//                } else {
+//                    menu.removeItem(android.R.id.paste);
+//                    menu.removeItem(android.R.id.cut);
+//                }
+
+                if (singleton.idVersionActivity != singleton.idCurrentVersionActivity) {
                     menu.removeItem(android.R.id.paste);
                     menu.removeItem(android.R.id.cut);
                 }
@@ -1230,6 +1208,8 @@ public class FragmentRTEditor extends Frag {
 
             setSpecificCommentNoteValue();
 
+            saveText();
+
             btn.callOnClick();
         }
 
@@ -1267,4 +1247,18 @@ public class FragmentRTEditor extends Frag {
             }
         }
     }
+
+//    public static void specificCommentAdded(Context context, String text)
+//    {
+//        if (mRTMessageField != null && mRTMessageField.isMediaFactoryRegister() != null) {
+//            acStudent.setTxtActivity(mRTMessageField.getText(RTFormat.HTML));
+//
+//            Calendar c = Calendar.getInstance();
+//            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+//            String strDate = sdf.format(c.getTime());
+//
+//            DataBaseAdapter.getInstance(context).updateActivityStudent();
+//            source.updateActivityStudent(acStudent, getActualTime(), singleton.idCurrentVersionActivity);
+//        }
+//    }
 }

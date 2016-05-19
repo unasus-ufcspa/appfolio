@@ -535,7 +535,7 @@ public class DataBaseAdapter {
         cv.put("id_author", c.getIdAuthor());
         cv.put("tx_comment", c.getTxtComment());
         cv.put("dt_comment", c.getDateComment());
-        db.update("tb_comment", cv, "tp_comment ='P' AND id_activity_student ="+c.getIdActivityStudent(),null);
+        db.update("tb_comment", cv, "tp_comment ='P' AND id_activity_student =" + c.getIdActivityStudent(), null);
         try {
 //            db.close();
             Log.d(tag, "inseriu comentario no banco");
@@ -557,7 +557,10 @@ public class DataBaseAdapter {
             comm.setTxtComment(c.getString(3));
             comm.setTxtReference(c.getString(4));
             comm.setTypeComment(c.getString(5));
-            comm.setDateComment(c.getString(6));
+            comm.setIdNote(c.getInt(6));
+            comm.setIdCommentSrv(c.getInt(7));
+            comm.setDateComment(c.getString(8));
+            comm.setDateSend(c.getString(9));
 //            c.close();
             return comm;
         } else {
@@ -663,8 +666,29 @@ public class DataBaseAdapter {
         return comentarios;
     }
 
-
-
+    public List<Integer> listNotesSpecificComments(int version) {
+        ArrayList<Integer> v = new ArrayList<>();
+        String sql = "SELECT DISTINCT nu_comment_activity from tb_comment as tbc " +
+                "JOIN tb_comment_version as tbcv on tbcv.id_comment = tbc.id_comment " +
+                "JOIN tb_version_activity as tbva on tbva.id_version_activity = tbcv.id_version_activity" +
+                " WHERE tbva.id_version_activity =" + version;
+        //Log.e(tag, "sql listComments:" + sql);
+        Cursor c = db.rawQuery(sql, null);
+        Integer id;
+        if (c.moveToFirst()) {
+            do {
+                try {
+                    id = c.getInt(0);
+                    v.add(id);
+                } catch (Exception e) {
+                }
+            } while (c.moveToNext());
+            c.close();
+        } else {
+            Log.d(tag + " listSpecific comments", "não retornou nada");
+        }
+        return v;
+    }
 
     /*
 
@@ -809,6 +833,7 @@ public class DataBaseAdapter {
         cv.put("tx_activity", v.getTx_activity());
         cv.put("dt_last_access", v.getDt_last_access());
         cv.put("id_activity_student", v.getId_activity_student());
+        cv.put("id_version_activity_srv", v.getId_version_activit_srv());
         int result=-1;
         try {
             db.insert("tb_version_activity",null,cv);
@@ -846,6 +871,23 @@ public class DataBaseAdapter {
         return versionActivities;
     }
 
+    public VersionActivity getVersionActivitiesByID(int id) {
+        String query = "SELECT id_version_activity, " +
+                "id_activity_student, " +
+                "tx_activity, " +
+                "dt_last_access, " +
+                "dt_submission, " +
+                "dt_verification, " +
+                "id_version_activity_srv " +
+                "FROM tb_version_activity " +
+                "WHERE id_version_activity = " + id;
+        Cursor c = db.rawQuery(query, null);
+        if (c.moveToFirst()) {
+            return cursorToVersionActivity(c);
+        }
+        return null;
+    }
+
     private VersionActivity cursorToVersionActivity(Cursor c) {
         VersionActivity aux = new VersionActivity();
 
@@ -860,19 +902,49 @@ public class DataBaseAdapter {
         return aux;
     }
 
-    public void insertCommentVersion(CommentVersion cVersion){
+    public int insertCommentVersion(CommentVersion cVersion) {
         ContentValues cv = new ContentValues();
         cv.put("id_version_activity", cVersion.getId_version_activity());
         cv.put("id_comment", cVersion.getId_comment());
         cv.put("fl_active", String.valueOf(cVersion.getFl_active()));
-        try {
-            db.insert("tb_comment_version",null,cv);
-            Log.d(tag, "conseguiu salvar na tb_comment_version");
-            //Cursor cursor = db.rawQuery("select seq from sqlite_sequence where name='tb_version_activity'", null);
 
+        int result = -1;
+
+        try {
+            db.insert("tb_comment_version", null, cv);
+            Log.d(tag, "conseguiu salvar na tb_comment_version");
+            Cursor cursor = db.rawQuery("select seq from sqlite_sequence where name='tb_comment_version'", null);
+            if (cursor.moveToFirst())
+                result = cursor.getInt(0);
         } catch (Exception e) {
             Log.e(tag, "erro ao salvar na tb_comment_version:" + e.getMessage());
         }
+
+        return result;
+    }
+
+    public LinkedHashMap<Integer, LinkedList<Comentario>> getCommentVersion(LinkedList<Integer> idList) {
+        LinkedHashMap<Integer, LinkedList<Comentario>> aux = new LinkedHashMap<>();
+
+        for (Integer id : idList) {
+            String query = "SELECT id_version_activity, id_comment FROM tb_comment_version WHERE id_comment_version = " + id;
+            Cursor c = db.rawQuery(query, null);
+            if (c.moveToFirst()) {
+                int id_version_activity = c.getInt(0);
+                int id_comment = c.getInt(1);
+
+                Comentario comment = getCommentById(id_comment);
+
+                if (comment != null) {
+                    if (!aux.containsKey(id_version_activity))
+                        aux.put(id_version_activity, new LinkedList<Comentario>());
+
+                    aux.get(id_version_activity).add(comment);
+                }
+            }
+        }
+
+        return aux;
     }
 
 
@@ -1858,7 +1930,7 @@ public class DataBaseAdapter {
                 else
                     versionActivity.setDt_verification("");
 
-                versionActivity.setId_version_activit_srv(6);
+                versionActivity.setId_version_activit_srv(c.getInt(6));
 
                 lista.add(versionActivity);
 //                c.close();
@@ -1938,4 +2010,6 @@ public class DataBaseAdapter {
     public void cleanDataBase() {
         context.deleteDatabase("folio.sqlite");
     }
+
+
 }

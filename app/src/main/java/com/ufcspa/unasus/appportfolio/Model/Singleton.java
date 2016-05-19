@@ -11,6 +11,7 @@ public class Singleton {
     public Activity activity = new Activity(1,1,1,"Atividade final","legal");
     public Device device = new Device();
     public String selectedText = "null";
+    public String activityText = "";
     public Note note = new Note(0,"null",0);
     public int idActivityStudent = -1;
     public int idVersionActivity = -1;
@@ -19,6 +20,7 @@ public class Singleton {
     public boolean firsttime = false;
     public boolean isFullscreen = false;
     public boolean wasFullscreen = false;
+    public boolean isFirstSpecificComment = false;
 
     public String erro = "Erro interno. Por favor tente novamente";
 
