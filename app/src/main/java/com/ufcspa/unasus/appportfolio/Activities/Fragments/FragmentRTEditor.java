@@ -670,7 +670,6 @@ public class FragmentRTEditor extends Frag {
                         ((MainActivity) getActivity()).dontCreateCrossfader();
                     }
                     getIdNotesFromDB();
-                    noteFollowText();
                     displayVersionsDialog(importPanel);
                 }
             }
