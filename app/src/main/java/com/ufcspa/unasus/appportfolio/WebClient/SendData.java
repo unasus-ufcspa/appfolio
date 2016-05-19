@@ -31,11 +31,13 @@ public class SendData {
     private LinkedList<Comentario> comentarios;
     private LinkedList<User> users;
     private LinkedList<VersionActivity> versions;
+    private LinkedList<Integer> notices;
     private DataBaseAdapter data;
     private String tbComm="tb_comment";
     private String tbVers="tb_version_activity";
     private String tbUser = "tb_user";
     private String tbCommVers = "tb_comment_version";
+    private String tbNotice = "tb_notice";
     private Singleton singleton;
     //ids to response
     //-2 is default value
@@ -50,6 +52,7 @@ public class SendData {
         versions = new LinkedList<>();
         comentarios = new LinkedList<>();
         commentsByVersions = new LinkedHashMap<>();
+        notices = new LinkedList<>();
         idSync = new LinkedList<>();
         singleton = Singleton.getInstance();
     }
@@ -93,6 +96,9 @@ public class SendData {
         if (dadosAgrupados.get(tbCommVers) != null) {
             commentsByVersions = data.getCommentVersion(dadosAgrupados.get(tbCommVers));
         }
+        if (dadosAgrupados.get(tbNotice) != null) {
+            notices = dadosAgrupados.get(tbNotice);
+        }
     }
 
     public void insertDataOnResponse(){
@@ -127,6 +133,7 @@ public class SendData {
 
         JSONArray jsonArrayVersions = new JSONArray();
         JSONArray jsonComments = new JSONArray();
+        JSONArray jsonNotice = new JSONArray();
 
         JSONObject jsonUser = new JSONObject();
 
@@ -158,7 +165,7 @@ public class SendData {
                     jsonVersion.put("tx_activity", v.getTx_activity());
                     jsonVersion.put("dt_last_access", v.getDt_last_access());
 
-                    Log.wtf("json send data:",jsonVersion.toString());
+                    Log.wtf("json send data:", jsonVersion.toString());
 
                     JSONArray jsonCommentsByVersion = new JSONArray();
                     if (commentsByVersions.containsKey(v.getId_version_activity())) {
@@ -232,6 +239,16 @@ public class SendData {
                 jsonUser.put("im_photo", users.getFirst().getPhoto());
             }
 
+            if (notices != null && notices.size() != 0) {
+                for (Integer notice : notices) {
+                    JSONObject jnotice = new JSONObject();
+                    jnotice.put("id_notice", notice);
+
+                    jsonNotice.put(jnotice);
+                }
+            }
+
+
             //mount device
             device.put("id_device",idDevice);
 
@@ -240,6 +257,7 @@ public class SendData {
             jsonPseudoFinal.put("comment", new JSONObject().put("tb_comment", jsonComments));
             jsonPseudoFinal.put("version", new JSONObject().put("tb_version_activity", jsonArrayVersions));
             jsonPseudoFinal.put("user", new JSONObject().put("tb_user", jsonUser));
+            jsonPseudoFinal.put("notice", new JSONObject().put("tb_notice", jsonNotice));
 
             jsonFinal.put("fullDataDevSrv_request", jsonPseudoFinal);
 

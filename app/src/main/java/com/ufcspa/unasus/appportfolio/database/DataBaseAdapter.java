@@ -1498,6 +1498,19 @@ public class DataBaseAdapter {
         }
     }
 
+    public ArrayList<Integer> getAllNotifications(int idActivityStudent) {
+        String query = "SELECT id_notice FROM tb_notice WHERE id_activity_student = " + idActivityStudent;
+        ArrayList<Integer> aux = new ArrayList<>();
+
+        Cursor c = db.rawQuery(query, null);
+        if (c.moveToFirst()) {
+            do {
+                aux.add(c.getInt(0));
+            } while (c.moveToNext());
+        }
+
+        return aux;
+    }
 
      /*
         ************************* CRUD TB_DEVICE ***************************
@@ -2013,6 +2026,4 @@ public class DataBaseAdapter {
     public void cleanDataBase() {
         context.deleteDatabase("folio.sqlite");
     }
-
-
 }

@@ -323,8 +323,18 @@ public class FragmentRTEditor extends Frag {
             singleton.idCurrentVersionActivity = id;
         }
 
-        //TODO deletar notificações baseado no tipo de tabela, mas antes enviar a dt_read atualizada
+        //TODO deletar notificações baseado no tipo de tabela
+        ArrayList<Integer> idsNotification = source.getAllNotifications(singleton.idActivityStudent);
+        for (Integer id : idsNotification) {
+            Sync sync = new Sync(singleton.device.get_id_device(), "tb_notice", id, singleton.idActivityStudent);
+            DataBaseAdapter.getInstance(getContext()).insertIntoTBSync(sync);
+        }
+
         source.deleteAllNotifications(singleton.idActivityStudent);
+
+        MainActivity main = ((MainActivity) getActivity());
+        if (main != null)
+            main.sendFullData();
 
         return view;
     }
