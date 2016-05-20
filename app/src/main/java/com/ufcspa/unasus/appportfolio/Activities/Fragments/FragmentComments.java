@@ -190,6 +190,7 @@ public class FragmentComments extends Frag {
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             String currentDateandTime = sdf.format(new Date());
             c.setDateComment(currentDateandTime); //TODO
+            c.setDateSend(c.getDateComment());
             c.setTxtReference("");
             insertComment(c);
             oneComment = new OneComment(false, edtMessage.getText().toString(), convertDateToTime(c.getDateComment()), convertDateToDate(c.getDateComment()));

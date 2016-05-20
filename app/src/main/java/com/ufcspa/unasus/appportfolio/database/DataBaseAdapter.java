@@ -436,6 +436,7 @@ public class DataBaseAdapter {
         cv.put("tx_reference", c.getTxtReference());
         cv.put("tp_comment", c.getTypeComment());
         cv.put("dt_comment", c.getDateComment());
+        cv.put("dt_send", c.getDateSend());
         db.insert("tb_comment", null, cv);
         try {
 //            db.close();
@@ -604,7 +605,7 @@ public class DataBaseAdapter {
             }
         }
         //sql+=" ORDER BY dt_comment ASC;";
-        stBuild.append(" ORDER BY dt_comment ASC;");
+        stBuild.append(" ORDER BY dt_send ASC;");
         sql = stBuild.toString();
         //Log.e(tag, "sql listComments:" + sql);
         Cursor c = db.rawQuery(sql, null);
