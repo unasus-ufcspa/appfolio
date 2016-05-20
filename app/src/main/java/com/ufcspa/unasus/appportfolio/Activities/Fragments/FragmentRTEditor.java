@@ -209,6 +209,9 @@ public class FragmentRTEditor extends Frag {
         scrollview = (ViewGroup) view.findViewById(R.id.comments);
         rightBarSpecificComments = (ViewGroup) view.findViewById(R.id.obs_view);
 
+        if (singleton.portfolioClass.getPerfil().equals("T") || (singleton.idCurrentVersionActivity != singleton.idVersionActivity))
+            view.findViewById(R.id.rte_toolbar_container).setVisibility(View.INVISIBLE);
+
         createEditor(view, savedInstanceState);
 
         fullScreen = (ImageButton) view.findViewById(R.id.fullscreen);
@@ -309,7 +312,6 @@ public class FragmentRTEditor extends Frag {
         initCommentsTab(view);
 
         initTopBar(view);
-
 
         LocalBroadcastManager.getInstance(getActivity()).registerReceiver(broadcastReceiver, new IntentFilter("call.attachmentdialog.action"));
 
@@ -651,35 +653,47 @@ public class FragmentRTEditor extends Frag {
         versionList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                saveText();
-                if (position <= versions.size() - 1) {
-                    singleton.idCurrentVersionActivity = versions.get(position).getId_version_activity();
-                    singleton.firsttime = true;
-                    loadLastText();
+//                saveText();
+//                if (position <= versions.size() - 1) {
+//                    singleton.idCurrentVersionActivity = versions.get(position).getId_version_activity();
+//                    singleton.firsttime = true;
+//
+//                    if (!singleton.isFullscreen) {
+//                        singleton.wasFullscreen = true;
+//                        singleton.isFullscreen = false;
+//                    } else {
+//                        singleton.wasFullscreen = false;
+//                        singleton.isFullscreen = true;
+//                    }
+//
+//                    ((MainActivity) getActivity()).dontCreateCrossfader();
+//                }
+                singleton.idCurrentVersionActivity = versions.get(position).getId_version_activity();
+                singleton.firsttime = true;
+                loadLastText();
 
-                    if (singleton.portfolioClass.getPerfil().equals("T") || (singleton.idCurrentVersionActivity != singleton.idVersionActivity)) {
-                        mRTMessageField.setKeyListener(null);
-                        mRTMessageField.setTextIsSelectable(true);
-                        mRTManager.setToolbarVisibility(RTManager.ToolbarVisibility.HIDE);
+                if (singleton.portfolioClass.getPerfil().equals("T") || (singleton.idCurrentVersionActivity != singleton.idVersionActivity)) {
+                    mRTMessageField.setKeyListener(null);
+                    mRTMessageField.setTextIsSelectable(true);
+                    mRTManager.setToolbarVisibility(RTManager.ToolbarVisibility.HIDE);
 
-                        sendVersion.setVisibility(View.GONE);
-                    }
-                    if (singleton.portfolioClass.getPerfil().equals("S") && (singleton.idCurrentVersionActivity == singleton.idVersionActivity)) {
-                        if (!singleton.isFullscreen) {
-                            singleton.wasFullscreen = true;
-                            singleton.isFullscreen = false;
-                        } else {
-                            singleton.wasFullscreen = false;
-                            singleton.isFullscreen = true;
-                        }
-
-                        ((MainActivity) getActivity()).dontCreateCrossfader();
-                    }
-                    getIdNotesFromDB();
-                    changeNotePosition();
-//                    noteFollowText();
-                    displayVersionsDialog(importPanel);
+                    sendVersion.setVisibility(View.GONE);
                 }
+                if (singleton.portfolioClass.getPerfil().equals("S") && (singleton.idCurrentVersionActivity == singleton.idVersionActivity)) {
+                    if (!singleton.isFullscreen) {
+                        singleton.wasFullscreen = true;
+                        singleton.isFullscreen = false;
+                    } else {
+                        singleton.wasFullscreen = false;
+                        singleton.isFullscreen = true;
+                    }
+
+                    ((MainActivity) getActivity()).dontCreateCrossfader();
+                }
+                getIdNotesFromDB();
+                changeNotePosition();
+//                    noteFollowText();
+                displayVersionsDialog(importPanel);
             }
         });
 
@@ -965,6 +979,8 @@ public class FragmentRTEditor extends Frag {
             aux.setColor(greenDark);
             textSpanned.setSpan(aux, auxStart, auxEnd, 1);
         }
+
+        mRTMessageField.invalidate();
     }
 
     public void showCommentsTab(Boolean isSpecificComment) {
