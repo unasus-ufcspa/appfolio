@@ -40,6 +40,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.ServiceLoader;
 
 /**
  * Created by icaromsc on 15/02/2016.
@@ -422,7 +423,8 @@ private LoadCommentsFromDB loadCommentsFromDB;
         catch (Exception e) {
             Log.e("Banco", "Erro:"+e.getMessage());
         }
-        spcAdapter.notifyDataSetChanged();
+        loadCommentsFromDB();
+        spcAdapter.refresh(oneComments);
     }
 
     private void insertReference(){
