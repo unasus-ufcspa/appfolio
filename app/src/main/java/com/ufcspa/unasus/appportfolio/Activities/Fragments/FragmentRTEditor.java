@@ -653,33 +653,12 @@ public class FragmentRTEditor extends Frag {
         versionList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-//                saveText();
-//                if (position <= versions.size() - 1) {
-//                    singleton.idCurrentVersionActivity = versions.get(position).getId_version_activity();
-//                    singleton.firsttime = true;
-//
-//                    if (!singleton.isFullscreen) {
-//                        singleton.wasFullscreen = true;
-//                        singleton.isFullscreen = false;
-//                    } else {
-//                        singleton.wasFullscreen = false;
-//                        singleton.isFullscreen = true;
-//                    }
-//
-//                    ((MainActivity) getActivity()).dontCreateCrossfader();
-//                }
-                singleton.idCurrentVersionActivity = versions.get(position).getId_version_activity();
-                singleton.firsttime = true;
-                loadLastText();
+                /***********************************************/
+                saveText();
+                if (position <= versions.size() - 1) {
+                    singleton.idCurrentVersionActivity = versions.get(position).getId_version_activity();
+                    singleton.firsttime = true;
 
-                if (singleton.portfolioClass.getPerfil().equals("T") || (singleton.idCurrentVersionActivity != singleton.idVersionActivity)) {
-                    mRTMessageField.setKeyListener(null);
-                    mRTMessageField.setTextIsSelectable(true);
-                    mRTManager.setToolbarVisibility(RTManager.ToolbarVisibility.HIDE);
-
-                    sendVersion.setVisibility(View.GONE);
-                }
-                if (singleton.portfolioClass.getPerfil().equals("S") && (singleton.idCurrentVersionActivity == singleton.idVersionActivity)) {
                     if (!singleton.isFullscreen) {
                         singleton.wasFullscreen = true;
                         singleton.isFullscreen = false;
@@ -690,10 +669,33 @@ public class FragmentRTEditor extends Frag {
 
                     ((MainActivity) getActivity()).dontCreateCrossfader();
                 }
-                getIdNotesFromDB();
-                changeNotePosition();
-//                    noteFollowText();
-                displayVersionsDialog(importPanel);
+                /***********************************************/
+//                singleton.idCurrentVersionActivity = versions.get(position).getId_version_activity();
+//                singleton.firsttime = true;
+//                loadLastText();
+//
+//                if (singleton.portfolioClass.getPerfil().equals("T") || (singleton.idCurrentVersionActivity != singleton.idVersionActivity)) {
+//                    mRTMessageField.setKeyListener(null);
+//                    mRTMessageField.setTextIsSelectable(true);
+//                    mRTManager.setToolbarVisibility(RTManager.ToolbarVisibility.HIDE);
+//
+//                    sendVersion.setVisibility(View.GONE);
+//                }
+//                if (singleton.portfolioClass.getPerfil().equals("S") && (singleton.idCurrentVersionActivity == singleton.idVersionActivity)) {
+//                    if (!singleton.isFullscreen) {
+//                        singleton.wasFullscreen = true;
+//                        singleton.isFullscreen = false;
+//                    } else {
+//                        singleton.wasFullscreen = false;
+//                        singleton.isFullscreen = true;
+//                    }
+//
+//                    ((MainActivity) getActivity()).dontCreateCrossfader();
+//                }
+//                getIdNotesFromDB();
+//                changeNotePosition();
+//
+//                displayVersionsDialog(importPanel);
             }
         });
 
