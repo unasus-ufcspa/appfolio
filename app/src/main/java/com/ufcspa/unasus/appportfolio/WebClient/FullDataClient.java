@@ -13,6 +13,7 @@ import com.android.volley.toolbox.Volley;
 import com.ufcspa.unasus.appportfolio.Activities.MainActivity;
 import com.ufcspa.unasus.appportfolio.Model.Attachment;
 import com.ufcspa.unasus.appportfolio.Model.Comentario;
+import com.ufcspa.unasus.appportfolio.Model.CommentVersion;
 import com.ufcspa.unasus.appportfolio.Model.Notification;
 import com.ufcspa.unasus.appportfolio.Model.Reference;
 import com.ufcspa.unasus.appportfolio.Model.Tuple;
@@ -239,17 +240,15 @@ public class FullDataClient extends HttpClient {
                                         JSONArray tb_comment_version = comment_version.getJSONArray("tb_comment_version");
                                         for (int i = 0; i < tb_comment_version.length(); i++) {
                                             JSONObject temp = tb_comment_version.getJSONObject(i);
-                                            com.ufcspa.unasus.appportfolio.Model.CommentVersion cm = new com.ufcspa.unasus.appportfolio.Model.CommentVersion();
+                                            CommentVersion commentVersion = new CommentVersion();
 
                                             int id_version_activity = temp.getInt("id_version_activity");
                                             int id_comment = temp.getInt("id_comment");
-                                            int id_comment_version = temp.getInt("id_comment_version");
 
-                                            cm.setId_comment_version(id_comment_version);
-                                            cm.setId_comment(id_comment);
-                                            cm.setId_version_activity(id_version_activity);
+                                            commentVersion.setId_comment(id_comment);
+                                            commentVersion.setId_version_activity(id_version_activity);
 
-                                            fullData.addCommentVersion(cm);
+                                            fullData.addCommentVersion(commentVersion);
                                         }
                                     }
                                 }
@@ -300,6 +299,7 @@ public class FullDataClient extends HttpClient {
                         // Log.d(tag, "Fim  da request");
                         //EXECUTE INSERTS IN SQLITE
                         fullData.insertDataIntoSQLITE();
+
                         MainActivity.isFullDataSucessful = true;
                     }
                 } finally {

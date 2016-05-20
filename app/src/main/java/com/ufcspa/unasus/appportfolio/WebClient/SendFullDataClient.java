@@ -11,6 +11,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.ufcspa.unasus.appportfolio.Activities.MainActivity;
+import com.ufcspa.unasus.appportfolio.database.DataBaseAdapter;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -91,11 +92,11 @@ public class SendFullDataClient extends HttpClient{
                                 }
                             }
                         }
-
                         //atualiza dados recebidos via json no sqlite
                         sendData.insertDataOnResponse();
                         MainActivity.shouldSend = false;
                     }
+                    DataBaseAdapter.getInstance(context).deleteAllNotificationsFromSync();
                 } catch (Exception v) {
                     //MainActivity.isFullSyncNotSucessful = true;
                     v.printStackTrace();

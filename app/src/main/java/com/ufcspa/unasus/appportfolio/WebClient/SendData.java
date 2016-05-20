@@ -113,7 +113,6 @@ public class SendData {
             data.updateVersionsBySendFullData(dadosResponse.get(tbVers));
             Log.d("json send full data ", "conseguiu atualizar com sucesso id server");
         }
-        data.deleteAllNotificationsFromSync();
         data.deleteSync(idSync);
     }
 

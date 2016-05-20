@@ -489,10 +489,6 @@ public class DataBaseAdapter {
 
     }
 
-
-
-
-
     public int getPersonalComment(int idActSt){
        int id=-1;
         String sql = "select * from tb_comment WHERE tp_comment ='P' AND id_activity_student=" + idActSt + ";";
@@ -608,7 +604,7 @@ public class DataBaseAdapter {
             }
         }
         //sql+=" ORDER BY dt_comment ASC;";
-        stBuild.append(" ORDER BY dt_comment ASC;");
+        stBuild.append(" ORDER BY dt_send ASC;");
         sql = stBuild.toString();
         //Log.e(tag, "sql listComments:" + sql);
         Cursor c = db.rawQuery(sql, null);
@@ -902,7 +898,48 @@ public class DataBaseAdapter {
         return aux;
     }
 
+    private int getIdVersionFromIdVersionSrv(int idSrv) {
+        String query = "SELECT id_version_activity FROM tb_version_activity WHERE id_version_activity_srv = " + idSrv;
+        Cursor cursor = db.rawQuery(query, null);
+        if (cursor.moveToFirst()) {
+            return cursor.getInt(0);
+        }
+        cursor.close();
+        return -1;
+    }
+
+    private int getIdCommentFromIdCommentSrv(int idSrv) {
+        String query = "SELECT id_comment FROM tb_comment WHERE id_comment_srv = " + idSrv;
+        Cursor cursor = db.rawQuery(query, null);
+        if (cursor.moveToFirst()) {
+            return cursor.getInt(0);
+        }
+        cursor.close();
+        return -1;
+    }
+
     public int insertCommentVersion(CommentVersion cVersion) {
+        ContentValues cv = new ContentValues();
+        cv.put("id_version_activity", getIdVersionFromIdVersionSrv(cVersion.getId_version_activity()));
+        cv.put("id_comment", getIdCommentFromIdCommentSrv(cVersion.getId_comment()));
+        cv.put("fl_active", String.valueOf(cVersion.getFl_active()));
+
+        int result = -1;
+
+        try {
+            db.insert("tb_comment_version", null, cv);
+            Log.d(tag, "conseguiu salvar na tb_comment_version");
+            Cursor cursor = db.rawQuery("select seq from sqlite_sequence where name='tb_comment_version'", null);
+            if (cursor.moveToFirst())
+                result = cursor.getInt(0);
+        } catch (Exception e) {
+            Log.e(tag, "erro ao salvar na tb_comment_version:" + e.getMessage());
+        }
+
+        return result;
+    }
+
+    public int insertCommentVersionWhenUserComment(CommentVersion cVersion) {
         ContentValues cv = new ContentValues();
         cv.put("id_version_activity", cVersion.getId_version_activity());
         cv.put("id_comment", cVersion.getId_comment());
@@ -1959,7 +1996,7 @@ public class DataBaseAdapter {
         ContentValues cv = new ContentValues();
         for (HolderIDS ids : holderIDS) {
             cv.put("id_comment_srv", ids.getIdSrv());
-            cv.put("dt_comment", ids.getDate());
+            cv.put("dt_send", ids.getDate());
             try {
                 db.update("tb_comment", cv, "id_comment=?", new String[]{"" + ids.getId()});
             } catch (Exception e) {

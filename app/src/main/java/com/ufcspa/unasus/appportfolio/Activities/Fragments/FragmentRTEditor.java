@@ -332,10 +332,6 @@ public class FragmentRTEditor extends Frag {
 
         source.deleteAllNotifications(singleton.idActivityStudent);
 
-        MainActivity main = ((MainActivity) getActivity());
-        if (main != null)
-            main.sendFullData();
-
         return view;
     }
 
@@ -680,8 +676,9 @@ public class FragmentRTEditor extends Frag {
                         ((MainActivity) getActivity()).dontCreateCrossfader();
                     }
                     getIdNotesFromDB();
+                    changeNotePosition();
+//                    noteFollowText();
                     displayVersionsDialog(importPanel);
-
                 }
             }
         });
@@ -764,7 +761,7 @@ public class FragmentRTEditor extends Frag {
      */
     public void getIdNotesFromDB() {
         specificCommentsNotes = new HashMap<>();
-        ArrayList<Integer> ids = (ArrayList<Integer>) source.listSpecificComments(singleton.idActivityStudent);// source.listNotesSpecificComments(singleton.idCurrentVersionActivity);
+        ArrayList<Integer> ids = (ArrayList<Integer>) source.listSpecificComments(singleton.idActivityStudent); //source.listNotesSpecificComments(singleton.idCurrentVersionActivity);
         for (int id : ids) {
             specificCommentsNotes.put(id, new Note(id, "", 0));
         }

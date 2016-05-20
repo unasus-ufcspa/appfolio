@@ -2,14 +2,18 @@ package com.ufcspa.unasus.appportfolio.Activities.Fragments;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.provider.MediaStore;
+import android.support.v4.content.LocalBroadcastManager;
 import android.text.InputType;
 import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
@@ -40,7 +44,6 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.ServiceLoader;
 
 /**
  * Created by icaromsc on 15/02/2016.
@@ -72,10 +75,18 @@ private LoadCommentsFromDB loadCommentsFromDB;
             if (main != null)
                 main.downloadFullDataComments(Singleton.getInstance().idActivityStudent);
 
-            loadCommentsFromDB();
-            spcAdapter.refresh(oneComments);
+//            loadCommentsFromDB();
+//            spcAdapter.refresh(oneComments);
 
             h.postDelayed(this, 5000);
+        }
+    };
+
+    private BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            loadCommentsFromDB();
+            spcAdapter.refresh(oneComments);
         }
     };
 
@@ -94,6 +105,7 @@ private LoadCommentsFromDB loadCommentsFromDB;
         loadCommentsFromDB = new LoadCommentsFromDB();
         loadCommentsFromDB.execute();
         Log.d("Comments", "On create entrou");
+        LocalBroadcastManager.getInstance(getContext()).registerReceiver(broadcastReceiver, new IntentFilter("call.connection.action"));
     }
 
     private void hide() {
@@ -187,6 +199,7 @@ private LoadCommentsFromDB loadCommentsFromDB;
         super.onDestroy();
         h.removeCallbacks(myRunnable);
         MainActivity.shouldSend = false;
+        LocalBroadcastManager.getInstance(getContext()).unregisterReceiver(broadcastReceiver);
     }
 
     public Comentario getCommentFromText(){
@@ -398,7 +411,7 @@ private LoadCommentsFromDB loadCommentsFromDB;
             CommentVersion cv = new CommentVersion();
             cv.setId_comment(lastID);
             cv.setId_version_activity(singleton.idCurrentVersionActivity);
-            int idCommentVersion = source.insertCommentVersion(cv);
+            int idCommentVersion = source.insertCommentVersionWhenUserComment(cv);
 
             Sync sync = new Sync();
             sync.setNm_table("tb_comment_version");

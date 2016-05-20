@@ -2,9 +2,11 @@ package com.ufcspa.unasus.appportfolio.Activities.Fragments;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -12,6 +14,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.provider.MediaStore;
 import android.provider.Settings;
+import android.support.v4.content.LocalBroadcastManager;
 import android.text.InputType;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -49,10 +52,10 @@ public class FragmentComments extends Frag {
     ArrayList<OneComment> oneComments;
     CommentAdapter adapterComments;
     int lastID;
+    ArrayList<Comentario> lista;
     private boolean attach;
     private ListView lv;
     private Button btGenMess;
-    ArrayList<Comentario> lista;
     private Button btAttachment;
     //private LoremIpsum ipsum;
     private EditText edtMessage;
@@ -65,12 +68,21 @@ public class FragmentComments extends Frag {
             if (main != null)
                 main.downloadFullDataComments(Singleton.getInstance().idActivityStudent);
 
-            loadCom();
-            adapterComments.refresh(oneComments);
+//            loadCom();
+//            adapterComments.refresh(oneComments);
 
             h.postDelayed(this, 5000);
         }
     };
+
+    private BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            loadCom();
+            adapterComments.refresh(oneComments);
+        }
+    };
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_messages, null);
@@ -94,7 +106,6 @@ public class FragmentComments extends Frag {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-
     }
 
     @Override
@@ -106,6 +117,7 @@ public class FragmentComments extends Frag {
         loadComments = new LoadComments();
         loadComments.execute();
         Log.d("Comments", "On create entrou");
+        LocalBroadcastManager.getInstance(getContext()).registerReceiver(broadcastReceiver, new IntentFilter("call.connection.action"));
     }
 
     @Override
@@ -157,6 +169,7 @@ public class FragmentComments extends Frag {
         Log.d("LifeCycle", "onDestroy");
         h.removeCallbacks(myRunnable);
         MainActivity.shouldSend = false;
+        LocalBroadcastManager.getInstance(getContext()).unregisterReceiver(broadcastReceiver);
         super.onDestroy();
     }
 
@@ -328,9 +341,7 @@ public class FragmentComments extends Frag {
 
     /**
      *  MÉTODO PARA SETAR O ADAPTER COMMENTS NA LISTVIEW E ABRIR O ANEXO CONFORME SEU TIPO
-     *
-     *
-     * */
+     **/
     public void setarListView() {
         lv.setAdapter(adapterComments);
         lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
