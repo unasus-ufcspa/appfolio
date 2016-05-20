@@ -234,7 +234,8 @@ public class FullDataClient extends HttpClient {
                                 }
 
                                 if (data.has("comment_version")) {
-                                    JSONObject user = data.getJSONObject("commentVersion");
+                                    Log.d("fullDataClient","tem comment version");
+                                    JSONObject user = data.getJSONObject("comment_version");
                                     if (user.has("tb_comment_version")) {
                                         JSONArray tb_user = user.getJSONArray("tb_comment_version");
                                         for (int i = 0; i < tb_user.length(); i++) {
