@@ -106,15 +106,14 @@ public class SendData {
         if(dadosResponse.get(tbComm)!=null){
             Log.d("json send full data ", "atualizando tabela " + tbComm + "...");
             data.updateCommentBySendFullData(dadosResponse.get(tbComm));
-//            data.deleteSync(idSync);
             Log.d("json send full data ", "conseguiu atualizar com sucesso id server");
         }
         if (dadosResponse.get(tbVers) != null) {
             Log.d("json send full data ", "atualizando tabela " + tbVers + "...");
             data.updateVersionsBySendFullData(dadosResponse.get(tbVers));
-//            data.deleteSync(idSync);
             Log.d("json send full data ", "conseguiu atualizar com sucesso id server");
         }
+        data.deleteAllNotificationsFromSync();
         data.deleteSync(idSync);
     }
 
@@ -247,8 +246,6 @@ public class SendData {
                     jsonNotice.put(jnotice);
                 }
             }
-
-
             //mount device
             device.put("id_device",idDevice);
 

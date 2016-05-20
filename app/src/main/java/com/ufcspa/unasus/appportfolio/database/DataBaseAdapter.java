@@ -2003,6 +2003,15 @@ public class DataBaseAdapter {
         }
     }
 
+    public void deleteAllNotificationsFromSync() {
+        String query = "DELETE FROM tb_sync WHERE nm_table = 'tb_notice'";
+        try {
+            db.execSQL(query);
+        } catch (Exception e) {
+            Log.d(tag, "Nao deletou da Notificações da tb_sync");
+        }
+    }
+
     public void deleteCommentsFromTBSync(LinkedList<HolderIDS> holderIDS) {
         StringBuilder sb = new StringBuilder("DELETE FROM tb_sync where nm_table = 'tb_comment' AND id_sync in (");
         for (HolderIDS id : holderIDS) {
