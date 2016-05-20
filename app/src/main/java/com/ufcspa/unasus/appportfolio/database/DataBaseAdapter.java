@@ -604,7 +604,7 @@ public class DataBaseAdapter {
             }
         }
         //sql+=" ORDER BY dt_comment ASC;";
-        stBuild.append(" ORDER BY dt_send ASC;");
+        stBuild.append(" ORDER BY dt_comment ASC;");
         sql = stBuild.toString();
         //Log.e(tag, "sql listComments:" + sql);
         Cursor c = db.rawQuery(sql, null);
