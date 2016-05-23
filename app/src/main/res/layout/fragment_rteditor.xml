@@ -190,16 +190,34 @@
                 android:textSize="20dp"
                 android:visibility="visible" />
 
-            <ImageButton
-                android:id="@+id/btn_versions"
+            <RelativeLayout
                 android:layout_width="110dp"
-                android:layout_height="50dp"
-                android:layout_alignParentBottom="true"
-                android:layout_alignParentEnd="true"
-                android:layout_alignParentRight="true"
-                android:background="@android:color/transparent"
-                android:scaleType="fitXY"
-                android:src="@drawable/versions" />
+                android:layout_height="50dp">
+
+                <ImageButton
+                    android:id="@+id/btn_versions"
+                    android:layout_width="110dp"
+                    android:layout_height="50dp"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="true"
+                    android:layout_alignParentTop="true"
+                    android:background="@android:color/transparent"
+                    android:scaleType="fitXY"
+                    android:src="@drawable/versions" />
+
+                <ImageView
+                    android:id="@+id/specific_comment_notice"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentRight="true"
+                    android:layout_alignParentTop="true"
+                    android:gravity="center"
+                    android:src="@drawable/specific_comment_notice"
+                    android:text="1"
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:textStyle="bold" />
+            </RelativeLayout>
 
             <ImageButton
                 android:id="@+id/personal_comment"
@@ -318,7 +336,9 @@
                 android:id="@+id/relativeLayout4"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
-                android:background="@color/gray_1"></RelativeLayout>
+                android:background="@color/gray_1">
+
+            </RelativeLayout>
 
             <RelativeLayout
                 android:id="@+id/rightbar_green"
@@ -335,6 +355,21 @@
                 android:layout_height="match_parent"
                 android:layout_below="@+id/relativeLayout4"
                 android:visibility="visible"></RelativeLayout>
+
+            <TextView
+                android:id="@+id/general_comment_notice"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_alignParentBottom="false"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentTop="true"
+                android:layout_marginTop="40dp"
+                android:background="@drawable/btn_border"
+                android:gravity="center"
+                android:text="1"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:textStyle="bold" />
 
         </RelativeLayout>
 

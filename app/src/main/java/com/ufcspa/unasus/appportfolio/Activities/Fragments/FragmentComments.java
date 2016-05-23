@@ -80,8 +80,19 @@ public class FragmentComments extends Frag {
         public void onReceive(Context context, Intent intent) {
             loadCom();
             adapterComments.refresh(oneComments);
+
+            removeGeneralCommentsNotifications();
         }
     };
+
+    private void removeGeneralCommentsNotifications() {
+        ArrayList<Integer> idsNotification = source.getGeneralCommentsNotifications(singleton.idActivityStudent);
+        for (Integer id : idsNotification) {
+            Sync sync = new Sync(singleton.device.get_id_device(), "tb_notice", id, singleton.idActivityStudent);
+            DataBaseAdapter.getInstance(getContext()).insertIntoTBSync(sync);
+        }
+        source.deleteAllNotifications(idsNotification);
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {

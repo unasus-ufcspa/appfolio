@@ -310,7 +310,6 @@ public class FragmentRTEditor extends Frag {
         }
 
         initCommentsTab(view);
-
         initTopBar(view);
 
         LocalBroadcastManager.getInstance(getActivity()).registerReceiver(broadcastReceiver, new IntentFilter("call.attachmentdialog.action"));
@@ -325,14 +324,8 @@ public class FragmentRTEditor extends Frag {
             singleton.idCurrentVersionActivity = id;
         }
 
-        //TODO deletar notificações baseado no tipo de tabela?
-        ArrayList<Integer> idsNotification = source.getAllNotifications(singleton.idActivityStudent);
-        for (Integer id : idsNotification) {
-            Sync sync = new Sync(singleton.device.get_id_device(), "tb_notice", id, singleton.idActivityStudent);
-            DataBaseAdapter.getInstance(getContext()).insertIntoTBSync(sync);
-        }
-
-        source.deleteAllNotifications(singleton.idActivityStudent);
+        verifyNotifications(view);
+        removeOthersNotifications();
 
         return view;
     }
@@ -555,7 +548,7 @@ public class FragmentRTEditor extends Frag {
         slider.requestLayout();
         slider.bringToFront();
 
-        TextView geral = (TextView) view.findViewById(R.id.btn_geral);
+        final TextView geral = (TextView) view.findViewById(R.id.btn_geral);
         TextView specific = (TextView) view.findViewById(R.id.btn_specific);
 
         geral.setOnClickListener(new View.OnClickListener() {
@@ -568,6 +561,7 @@ public class FragmentRTEditor extends Frag {
         specific.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                getView().findViewById(R.id.general_comment_notice).setVisibility(View.GONE);
                 showCommentsTab(true);
             }
         });
@@ -608,6 +602,8 @@ public class FragmentRTEditor extends Frag {
                     slider.findViewById(R.id.rightbar_green).setVisibility(View.INVISIBLE);
 
                     onClickTopBar(true);
+
+                    verifyNotifications(getView());
                 }
             }
 
@@ -619,8 +615,10 @@ public class FragmentRTEditor extends Frag {
                         String tag = frag.getTag();
                         if (tag.equals("G"))
                             showCommentsTab(false);
-                        else
+                        else {
+                            getView().findViewById(R.id.general_comment_notice).setVisibility(View.GONE);
                             showCommentsTab(true);
+                        }
                     } else
                         showCommentsTab(false);
 
@@ -653,11 +651,13 @@ public class FragmentRTEditor extends Frag {
         versionList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                /***********************************************/
-                saveText();
                 if (position <= versions.size() - 1) {
+                    saveText();
+
                     singleton.idCurrentVersionActivity = versions.get(position).getId_version_activity();
                     singleton.firsttime = true;
+
+                    removeSpecificCommentsNotifications();
 
                     if (!singleton.isFullscreen) {
                         singleton.wasFullscreen = true;
@@ -669,33 +669,6 @@ public class FragmentRTEditor extends Frag {
 
                     ((MainActivity) getActivity()).dontCreateCrossfader();
                 }
-                /***********************************************/
-//                singleton.idCurrentVersionActivity = versions.get(position).getId_version_activity();
-//                singleton.firsttime = true;
-//                loadLastText();
-//
-//                if (singleton.portfolioClass.getPerfil().equals("T") || (singleton.idCurrentVersionActivity != singleton.idVersionActivity)) {
-//                    mRTMessageField.setKeyListener(null);
-//                    mRTMessageField.setTextIsSelectable(true);
-//                    mRTManager.setToolbarVisibility(RTManager.ToolbarVisibility.HIDE);
-//
-//                    sendVersion.setVisibility(View.GONE);
-//                }
-//                if (singleton.portfolioClass.getPerfil().equals("S") && (singleton.idCurrentVersionActivity == singleton.idVersionActivity)) {
-//                    if (!singleton.isFullscreen) {
-//                        singleton.wasFullscreen = true;
-//                        singleton.isFullscreen = false;
-//                    } else {
-//                        singleton.wasFullscreen = false;
-//                        singleton.isFullscreen = true;
-//                    }
-//
-//                    ((MainActivity) getActivity()).dontCreateCrossfader();
-//                }
-//                getIdNotesFromDB();
-//                changeNotePosition();
-//
-//                displayVersionsDialog(importPanel);
             }
         });
 
@@ -730,7 +703,7 @@ public class FragmentRTEditor extends Frag {
             versionsButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    saveText();
+//                    saveText();
                     versionAdapter.refresh(source.getAllVersionsFromActivityStudent(singleton.idActivityStudent));
 
                     if (edtTextPersonal != null) {
@@ -814,6 +787,7 @@ public class FragmentRTEditor extends Frag {
                     singleton.note.setSelectedText(selectedActualText);
                     singleton.note.setBtId(id);
 
+                    getView().findViewById(R.id.general_comment_notice).setVisibility(View.GONE);
                     showCommentsTab(true);
 
                     final float scale = getResources().getDisplayMetrics().density;
@@ -894,6 +868,7 @@ public class FragmentRTEditor extends Frag {
                         singleton.note.setSelectedText(selectedActualText);
                         singleton.note.setBtId((int) btn.getTag());
 
+                        getView().findViewById(R.id.general_comment_notice).setVisibility(View.GONE);
                         showCommentsTab(true);
                     }
                 });
@@ -997,6 +972,9 @@ public class FragmentRTEditor extends Frag {
             SlidingPaneLayout layout = (SlidingPaneLayout) getView().findViewById(R.id.rteditor_fragment);
             layout.closePane();
         } else {
+            removeGeneralCommentsNotifications();
+            getView().findViewById(R.id.general_comment_notice).setVisibility(View.GONE);
+
             int childs = rightBarSpecificComments.getChildCount();
             for (int i = childs - 1; i >= 0; i--)
                 rightBarSpecificComments.getChildAt(i).setVisibility(View.GONE);
@@ -1170,6 +1148,54 @@ public class FragmentRTEditor extends Frag {
         }
     }
 
+    /**
+     * NOTIFICATIONS
+     */
+    private void removeOthersNotifications() {
+        ArrayList<Integer> idsNotification = source.getNonCommentsNotifications(singleton.idActivityStudent);
+        for (Integer id : idsNotification) {
+            Sync sync = new Sync(singleton.device.get_id_device(), "tb_notice", id, singleton.idActivityStudent);
+            DataBaseAdapter.getInstance(getContext()).insertIntoTBSync(sync);
+        }
+
+        source.deleteAllNotifications(idsNotification);
+    }
+
+    private void removeGeneralCommentsNotifications() {
+        ArrayList<Integer> idsNotification = source.getGeneralCommentsNotifications(singleton.idActivityStudent);
+        for (Integer id : idsNotification) {
+            Sync sync = new Sync(singleton.device.get_id_device(), "tb_notice", id, singleton.idActivityStudent);
+            DataBaseAdapter.getInstance(getContext()).insertIntoTBSync(sync);
+        }
+        source.deleteAllNotifications(idsNotification);
+    }
+
+    private void removeSpecificCommentsNotifications() {
+        ArrayList<Integer> idsNotification = source.getSpecificCommentsNotificationsID(singleton.idActivityStudent, singleton.idCurrentVersionActivity);
+        for (Integer id : idsNotification) {
+            Sync sync = new Sync(singleton.device.get_id_device(), "tb_notice", id, singleton.idActivityStudent);
+            DataBaseAdapter.getInstance(getContext()).insertIntoTBSync(sync);
+        }
+        source.deleteAllNotifications(idsNotification);
+    }
+
+    private void verifyNotifications(View view) {
+        if (view != null) {
+            int generalCommentsNotifications = source.getAllGeneralCommentsNotifications(singleton.idActivityStudent);
+            TextView generalNotice = (TextView) view.findViewById(R.id.general_comment_notice);
+            if (generalCommentsNotifications != 0) {
+                generalNotice.setText(String.valueOf(generalCommentsNotifications));
+                generalNotice.setVisibility(View.VISIBLE);
+            } else {
+                generalNotice.setVisibility(View.GONE);
+            }
+
+            ImageView specificCommentNotice = (ImageView) view.findViewById(R.id.specific_comment_notice);
+            if (!source.hasSpecificComment(singleton.idActivityStudent))
+                specificCommentNotice.setVisibility(View.GONE);
+        }
+    }
+
     private class ActionBarCallBack implements ActionMode.Callback {
 
         int startSelection;
@@ -1283,18 +1309,4 @@ public class FragmentRTEditor extends Frag {
             }
         }
     }
-
-//    public static void specificCommentAdded(Context context, String text)
-//    {
-//        if (mRTMessageField != null && mRTMessageField.isMediaFactoryRegister() != null) {
-//            acStudent.setTxtActivity(mRTMessageField.getText(RTFormat.HTML));
-//
-//            Calendar c = Calendar.getInstance();
-//            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-//            String strDate = sdf.format(c.getTime());
-//
-//            DataBaseAdapter.getInstance(context).updateActivityStudent();
-//            source.updateActivityStudent(acStudent, getActualTime(), singleton.idCurrentVersionActivity);
-//        }
-//    }
 }

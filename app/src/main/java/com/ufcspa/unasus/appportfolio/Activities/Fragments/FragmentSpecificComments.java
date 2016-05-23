@@ -87,8 +87,19 @@ private LoadCommentsFromDB loadCommentsFromDB;
         public void onReceive(Context context, Intent intent) {
             loadCommentsFromDB();
             spcAdapter.refresh(oneComments);
+
+            removeSpecificCommentsNotifications();
         }
     };
+
+    private void removeSpecificCommentsNotifications() {
+        ArrayList<Integer> idsNotification = source.getSpecificCommentsNotificationsID(singleton.idActivityStudent, singleton.idCurrentVersionActivity);
+        for (Integer id : idsNotification) {
+            Sync sync = new Sync(singleton.device.get_id_device(), "tb_notice", id, singleton.idActivityStudent);
+            DataBaseAdapter.getInstance(getContext()).insertIntoTBSync(sync);
+        }
+        source.deleteAllNotifications(idsNotification);
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {

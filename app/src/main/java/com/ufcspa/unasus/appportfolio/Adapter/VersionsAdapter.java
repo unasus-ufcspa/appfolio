@@ -10,6 +10,7 @@ import android.widget.TextView;
 import com.ufcspa.unasus.appportfolio.Model.Singleton;
 import com.ufcspa.unasus.appportfolio.Model.VersionActivity;
 import com.ufcspa.unasus.appportfolio.R;
+import com.ufcspa.unasus.appportfolio.database.DataBaseAdapter;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -22,11 +23,13 @@ public class VersionsAdapter extends BaseAdapter {
     private Context context;
     private ArrayList<VersionActivity> list;
     private Holder holder;
+    private DataBaseAdapter source;
 
     public VersionsAdapter(Context context, ArrayList<VersionActivity> list) {
         this.context = context;
         this.list = list;
         this.holder = new Holder();
+        this.source = DataBaseAdapter.getInstance(context);
 
         Collections.sort(this.list);
 
@@ -58,6 +61,7 @@ public class VersionsAdapter extends BaseAdapter {
         holder.date = (TextView) convertView.findViewById(R.id.version_date);
         holder.time = (TextView) convertView.findViewById(R.id.version_time);
         holder.versionNumber = (TextView) convertView.findViewById(R.id.version_number);
+        holder.notificationIcon = (TextView) convertView.findViewById(R.id.specific_comment_notice_version);
 
         String[] dateAndTime = null;
         if (aux.getDt_submission() != null) {
@@ -78,6 +82,12 @@ public class VersionsAdapter extends BaseAdapter {
 
         holder.versionNumber.setText("" + (list.size() - position));
 
+        int notifications = source.getSpecificCommentNotifications(aux.getId_activity_student(), aux.getId_version_activity());
+        if (notifications > 0)
+            holder.notificationIcon.setText(String.valueOf(notifications));
+        else
+            holder.notificationIcon.setVisibility(View.GONE);
+
         return convertView;
     }
 
@@ -93,5 +103,6 @@ public class VersionsAdapter extends BaseAdapter {
         TextView date;
         TextView time;
         TextView versionNumber;
+        TextView notificationIcon;
     }
 }

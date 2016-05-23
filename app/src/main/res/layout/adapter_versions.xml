@@ -24,6 +24,7 @@
             android:textStyle="bold" />
 
         <RelativeLayout
+            android:id="@+id/relativeLayout3"
             android:layout_width="115dp"
             android:layout_height="wrap_content"
             android:layout_alignBottom="@+id/version_number"
@@ -60,6 +61,19 @@
                 android:textStyle="bold"
                 android:visibility="visible" />
         </RelativeLayout>
+
+        <TextView
+            android:id="@+id/specific_comment_notice_version"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_alignParentTop="true"
+            android:layout_toLeftOf="@+id/relativeLayout3"
+            android:layout_toStartOf="@+id/relativeLayout3"
+            android:background="@drawable/btn_border"
+            android:gravity="center"
+            android:text="1"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:textStyle="bold" />
     </RelativeLayout>
 
 </RelativeLayout>

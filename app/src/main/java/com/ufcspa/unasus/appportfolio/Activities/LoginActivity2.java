@@ -49,12 +49,13 @@ import com.ufcspa.unasus.appportfolio.database.DataBaseAdapter;
 
 import org.json.JSONObject;
 
+import java.security.MessageDigest;
 import java.util.ArrayList;
 import java.util.List;
 
-//import io.github.skyhacker2.sqliteonweb.SQLiteOnWeb;
-
 import static android.Manifest.permission.READ_CONTACTS;
+
+//import io.github.skyhacker2.sqliteonweb.SQLiteOnWeb;
 
 /**
  * A login screen that offers login via email/password.
@@ -90,6 +91,24 @@ public class LoginActivity2 extends AppCompatActivity implements LoaderCallbacks
     private User user;
     // Singleton
     private Singleton session;
+
+    public static String sha256(String base) {
+        try {
+            MessageDigest digest = MessageDigest.getInstance("SHA-256");
+            byte[] hash = digest.digest(base.getBytes("UTF-8"));
+            StringBuffer hexString = new StringBuffer();
+
+            for (int i = 0; i < hash.length; i++) {
+                String hex = Integer.toHexString(0xff & hash[i]);
+                if (hex.length() == 1) hexString.append('0');
+                hexString.append(hex);
+            }
+
+            return hexString.toString();
+        } catch (Exception ex) {
+            throw new RuntimeException(ex);
+        }
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -273,7 +292,6 @@ public class LoginActivity2 extends AppCompatActivity implements LoaderCallbacks
         }
     }
 
-
     public boolean isTablet() {
         TelephonyManager manager = (TelephonyManager) this.getSystemService(Context.TELEPHONY_SERVICE);
         if (manager.getPhoneType() == TelephonyManager.PHONE_TYPE_NONE) {
@@ -282,7 +300,6 @@ public class LoginActivity2 extends AppCompatActivity implements LoaderCallbacks
             return false;
         }
     }
-
 
     private void showChooseTutorOrStudentPopup() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -322,7 +339,6 @@ public class LoginActivity2 extends AppCompatActivity implements LoaderCallbacks
         DataBaseAdapter bd = DataBaseAdapter.getInstance(this);
         return bd.verifyUserType(idUser);
     }
-
 
     @Override
     protected void onResume() {
@@ -365,6 +381,8 @@ public class LoginActivity2 extends AppCompatActivity implements LoaderCallbacks
             first.setIdDevice(android_id);
             first.setTpDevice(tpDevice);
             first.setEmail(mEmailView.getText().toString());
+        // TODO SHA-256 -> (sha256(mPasswordView.getText().toString()));
+        // http://stackoverflow.com/questions/3103652/hash-string-via-sha-256-in-java
             first.setPasswd(mPasswordView.getText().toString());
 
             //ADD TO SINGLETON
@@ -385,8 +403,6 @@ public class LoginActivity2 extends AppCompatActivity implements LoaderCallbacks
         //showProgress(true);
         return isLoginSucessful;
     }
-
-
 
     private boolean mayRequestContacts() {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {

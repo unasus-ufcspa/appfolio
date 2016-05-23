@@ -45,6 +45,7 @@ public class FullDataClient extends HttpClient {
         JsonObjectRequest jsObjReq = new JsonObjectRequest(Request.Method.POST, URL + method, jsonFirstRequest, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
+
                 Log.d(tag, "Retornou do request");
                 try {
                     Log.d(tag, "JSON RESPONSE: " + response.toString().replaceAll("\\{", "\n{"));

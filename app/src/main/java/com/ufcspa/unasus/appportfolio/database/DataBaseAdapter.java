@@ -1490,6 +1490,8 @@ public class DataBaseAdapter {
             result += num;
         }
 
+        c.close();
+
         return result;
     }
 
@@ -1505,6 +1507,8 @@ public class DataBaseAdapter {
                 int id = c.getInt(0);
                 result += getNumNotifications(id);
             } while (c.moveToNext());
+
+        c.close();
 
         return result;
     }
@@ -1523,20 +1527,34 @@ public class DataBaseAdapter {
             result = val;
         }
 
+        c.close();
+
         return result;
     }
 
-    public void deleteAllNotifications(int id_activity_student) {
-        try {
-            db.delete("tb_notice", "id_activity_student=?", new String[]{String.valueOf(id_activity_student)});
-            Log.d(tag, "removeu NOTICES");
-        } catch (Exception e) {
-            Log.e(tag, "erro ao delete NOTICES:" + e.getMessage());
+    public void deleteAllNotifications(ArrayList<Integer> ids) {
+        if (ids != null && ids.size() != 0) {
+            StringBuilder query = new StringBuilder();
+            query.append("DELETE FROM tb_notice WHERE id_notice IN (");
+            query.append(ids.get(0));
+
+            for (int i = 1; i < ids.size(); i++) {
+                query.append(", " + ids.get(i));
+            }
+
+            query.append(");");
+
+            try {
+                db.execSQL(query.toString());
+                Log.d(tag, "removeu NOTICES");
+            } catch (Exception e) {
+                Log.e(tag, "erro ao delete NOTICES:" + e.getMessage());
+            }
         }
     }
 
-    public ArrayList<Integer> getAllNotifications(int idActivityStudent) {
-        String query = "SELECT id_notice FROM tb_notice WHERE id_activity_student = " + idActivityStudent;
+    public ArrayList<Integer> getNonCommentsNotifications(int idActivityStudent) {
+        String query = "SELECT id_notice FROM tb_notice WHERE id_activity_student = " + idActivityStudent + " AND nm_table != 'tb_comment'";
         ArrayList<Integer> aux = new ArrayList<>();
 
         Cursor c = db.rawQuery(query, null);
@@ -1546,7 +1564,139 @@ public class DataBaseAdapter {
             } while (c.moveToNext());
         }
 
+        c.close();
+
         return aux;
+    }
+
+    public ArrayList<Integer> getCommentNotificationIds(int id_activity_student) {
+        String query = "SELECT tbs.co_id_table_srv FROM tb_activity_student as tbas\n" +
+                "JOIN tb_notice tbs on tbs.id_activity_student = tbas.id_activity_student\n" +
+                "WHERE tbs.id_activity_student = " + id_activity_student + " AND tbs.nm_table = 'tb_comment'";
+        ArrayList<Integer> result = new ArrayList<>();
+
+        Cursor c = db.rawQuery(query, null);
+        if (c.moveToFirst()) {
+            do {
+                result.add(c.getInt(0));
+            } while (c.moveToNext());
+        }
+
+        c.close();
+
+        return result;
+    }
+
+    public int getAllGeneralCommentsNotifications(int idActivityStudent) {
+        int result = 0;
+        for (Integer id : getCommentNotificationIds(idActivityStudent)) {
+            String query = "SELECT COUNT(*) FROM tb_comment tbc WHERE \n" +
+                    "\ttbc.tp_comment = 'G' AND\n" +
+                    "\ttbc.id_comment_srv = " + id;
+            Cursor c = db.rawQuery(query, null);
+            if (c.moveToFirst()) {
+                result += c.getInt(0);
+            }
+            c.close();
+        }
+
+        return result;
+    }
+
+    public ArrayList<Integer> getGeneralCommentsNotifications(int idActivityStudent) {
+        String query = "SELECT tbs.co_id_table_srv, tbs.id_notice FROM tb_activity_student as tbas\n" +
+                "JOIN tb_notice tbs on tbs.id_activity_student = tbas.id_activity_student\n" +
+                "WHERE tbs.id_activity_student = " + idActivityStudent + " AND tbs.nm_table = 'tb_comment'";
+        ArrayList<Integer> result = new ArrayList<>();
+
+        Cursor c = db.rawQuery(query, null);
+        if (c.moveToFirst()) {
+            do {
+                String sql = "SELECT COUNT(*) FROM tb_comment tbc WHERE \n" +
+                        "\ttbc.tp_comment = 'G' AND\n" +
+                        "\ttbc.id_comment_srv = " + c.getInt(0);
+                Cursor newCursor = db.rawQuery(sql, null);
+                if (newCursor.moveToFirst()) {
+                    if (newCursor.getInt(0) > 0)
+                        result.add(c.getInt(1));
+                }
+                newCursor.close();
+
+            } while (c.moveToNext());
+        }
+
+        c.close();
+
+        return result;
+    }
+
+    public ArrayList<Integer> getSpecificCommentsNotificationsID(int idActivityStudent, int idVersionActivity) {
+        String query = "SELECT tbs.co_id_table_srv, tbs.id_notice FROM tb_activity_student as tbas\n" +
+                "JOIN tb_notice tbs on tbs.id_activity_student = tbas.id_activity_student\n" +
+                "WHERE tbs.id_activity_student = " + idActivityStudent + " AND tbs.nm_table = 'tb_comment'";
+        ArrayList<Integer> result = new ArrayList<>();
+
+        Cursor c = db.rawQuery(query, null);
+        if (c.moveToFirst()) {
+            do {
+                String sql = "SELECT COUNT(*) from tb_comment as tbc " +
+                        "JOIN tb_comment_version as tbcv on tbcv.id_comment = tbc.id_comment " +
+                        "JOIN tb_version_activity as tbva on tbva.id_version_activity = tbcv.id_version_activity" +
+                        " WHERE tbva.id_version_activity = " + idVersionActivity + " AND tbc.id_comment_srv = " + c.getInt(0) + " AND tbc.tp_comment = 'O'";
+
+                Cursor newCursor = db.rawQuery(sql, null);
+                if (newCursor.moveToFirst()) {
+                    if (newCursor.getInt(0) > 0)
+                        result.add(c.getInt(1));
+                }
+                newCursor.close();
+            } while (c.moveToNext());
+        }
+
+        c.close();
+        return result;
+    }
+
+    public boolean hasSpecificComment(int idActivityStudent) {
+        for (Integer id : getCommentNotificationIds(idActivityStudent)) {
+            String query = "SELECT COUNT(*) FROM tb_comment tbc WHERE \n" +
+                    "\ttbc.tp_comment = 'O' AND\n" +
+                    "\ttbc.id_comment_srv = " + id;
+
+            Cursor c = db.rawQuery(query, null);
+            if (c.moveToFirst()) {
+                return true;
+            }
+            c.close();
+        }
+
+        return false;
+    }
+
+    public int getSpecificCommentNotifications(int idActivityStudent, int idVersionActivity) {
+        String query = "SELECT tbs.co_id_table_srv FROM tb_activity_student as tbas\n" +
+                "JOIN tb_notice tbs on tbs.id_activity_student = tbas.id_activity_student\n" +
+                "WHERE tbs.id_activity_student = " + idActivityStudent + " AND tbs.nm_table = 'tb_comment'";
+        Integer result = 0;
+
+        Cursor c = db.rawQuery(query, null);
+        if (c.moveToFirst()) {
+            do {
+                String sql = "SELECT COUNT(*) from tb_comment as tbc " +
+                        "JOIN tb_comment_version as tbcv on tbcv.id_comment = tbc.id_comment " +
+                        "JOIN tb_version_activity as tbva on tbva.id_version_activity = tbcv.id_version_activity" +
+                        " WHERE tbva.id_version_activity = " + idVersionActivity + " AND tbc.id_comment_srv = " + c.getInt(0) + " AND tbc.tp_comment = 'O'";
+
+                Cursor newCursor = db.rawQuery(sql, null);
+                if (newCursor.moveToFirst()) {
+                    result += newCursor.getInt(0);
+                }
+                newCursor.close();
+            } while (c.moveToNext());
+        }
+
+        c.close();
+        return result;
     }
 
      /*
