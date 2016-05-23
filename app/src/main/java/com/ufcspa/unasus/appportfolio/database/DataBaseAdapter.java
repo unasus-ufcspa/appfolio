@@ -436,6 +436,7 @@ public class DataBaseAdapter {
         cv.put("tx_reference", c.getTxtReference());
         cv.put("tp_comment", c.getTypeComment());
         cv.put("dt_comment", c.getDateComment());
+        cv.put("dt_send", c.getDateSend());
         db.insert("tb_comment", null, cv);
         try {
 //            db.close();
@@ -896,6 +897,32 @@ public class DataBaseAdapter {
         aux.setId_version_activit_srv(c.getInt(6));
 
         return aux;
+    }
+
+
+
+    public User getTutorPerfil(int idActStudent){
+
+        User u = new User();
+        String query = "SELECT \n" +
+                "\t\tps.id_tutor,\n" +
+                "\t\tu.nm_user,\n" +
+                "\t\tu.nu_cellphone,\n" +
+                "\t\tu.im_photo\n" +
+                "\t\t\n" +
+                "\tFROM tb_activity_student as acs\n" +
+                "\tINNER JOIN tb_portfolio_student as ps ON  ps.id_portfolio_student = acs.id_portfolio_student\n" +
+                "\tINNER JOIN tb_user as u ON u.id_user = ps.id_tutor\n" +
+                "\tWHERE acs.id_activity_student = "+idActStudent;
+        Cursor cursor = db.rawQuery(query, null);
+        if (cursor.moveToFirst()) {
+            u.setIdUser(cursor.getInt(0));
+            u.setName(cursor.getString(1));
+            u.setCellphone(cursor.getString(2));
+            u.setPhoto(cursor.getString(3),null);
+        }
+        cursor.close();
+        return u;
     }
 
     private int getIdVersionFromIdVersionSrv(int idSrv) {

@@ -115,6 +115,9 @@ public class FullDataClient extends HttpClient {
                                                 String tx_reference = temp.getString("tx_reference");
                                                 String tp_comment = temp.getString("tp_comment");
                                                 String dt_comment = temp.getString("dt_comment");
+                                                String dt_send=dt_comment;
+                                                if(temp.has("dt_comment_srv"))
+                                                    dt_send=temp.getString("dt_comment_srv");
                                                 int nu_comment_activity = -1;
                                                 if (!temp.isNull("nu_comment_activity"))
                                                     nu_comment_activity = temp.getInt("nu_comment_activity");
@@ -126,6 +129,7 @@ public class FullDataClient extends HttpClient {
                                                 comentario.setTxtReference(tx_reference);
                                                 comentario.setTypeComment(tp_comment);
                                                 comentario.setDateComment(dt_comment);
+                                                comentario.setDateSend(dt_send);
                                                 comentario.setIdNote(nu_comment_activity);
                                                 comentario.setIdCommentSrv(id_comment_srv);
 
