@@ -605,7 +605,7 @@ public class DataBaseAdapter {
             }
         }
         //sql+=" ORDER BY dt_comment ASC;";
-        stBuild.append(" ORDER BY dt_send ASC;");
+        stBuild.append(" ORDER BY dt_comment ASC;");
         sql = stBuild.toString();
         //Log.e(tag, "sql listComments:" + sql);
         Cursor c = db.rawQuery(sql, null);
@@ -897,6 +897,32 @@ public class DataBaseAdapter {
         aux.setId_version_activit_srv(c.getInt(6));
 
         return aux;
+    }
+
+
+
+    public User getTutorPerfil(int idActStudent){
+
+        User u = new User();
+        String query = "SELECT \n" +
+                "\t\tps.id_tutor,\n" +
+                "\t\tu.nm_user,\n" +
+                "\t\tu.nu_cellphone,\n" +
+                "\t\tu.im_photo\n" +
+                "\t\t\n" +
+                "\tFROM tb_activity_student as acs\n" +
+                "\tINNER JOIN tb_portfolio_student as ps ON  ps.id_portfolio_student = acs.id_portfolio_student\n" +
+                "\tINNER JOIN tb_user as u ON u.id_user = ps.id_tutor\n" +
+                "\tWHERE acs.id_activity_student = "+idActStudent;
+        Cursor cursor = db.rawQuery(query, null);
+        if (cursor.moveToFirst()) {
+            u.setIdUser(cursor.getInt(0));
+            u.setName(cursor.getString(1));
+            u.setCellphone(cursor.getString(2));
+            u.setPhoto(cursor.getString(3),null);
+        }
+        cursor.close();
+        return u;
     }
 
     private int getIdVersionFromIdVersionSrv(int idSrv) {

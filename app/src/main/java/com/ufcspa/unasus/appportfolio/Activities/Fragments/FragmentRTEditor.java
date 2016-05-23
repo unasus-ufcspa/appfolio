@@ -63,6 +63,7 @@ import com.ufcspa.unasus.appportfolio.Model.Comentario;
 import com.ufcspa.unasus.appportfolio.Model.Note;
 import com.ufcspa.unasus.appportfolio.Model.Singleton;
 import com.ufcspa.unasus.appportfolio.Model.Sync;
+import com.ufcspa.unasus.appportfolio.Model.User;
 import com.ufcspa.unasus.appportfolio.Model.VersionActivity;
 import com.ufcspa.unasus.appportfolio.R;
 import com.ufcspa.unasus.appportfolio.database.DataBaseAdapter;
@@ -100,6 +101,7 @@ public class FragmentRTEditor extends Frag {
     private ActivityStudent acStudent;
     private DataBaseAdapter source;
     private Singleton singleton;
+    User userPerfil; // dados do tutor
     // Cores
     private int trasnparent;
     private int greenLight;
@@ -197,6 +199,10 @@ public class FragmentRTEditor extends Frag {
 
         singleton = Singleton.getInstance();
         source = DataBaseAdapter.getInstance(getActivity());
+        if(singleton.portfolioClass.getPerfil().equals("S")) {  // SE È ALUNO, MOSTRAR INFORMAÇÔES DO TUTOR
+            userPerfil = source.getTutorPerfil(singleton.idActivityStudent);
+            Log.d("tutorPerfil", "tutor data:" + userPerfil.toString());
+        }
 
         specificCommentsOpen = false;
 
@@ -698,17 +704,26 @@ public class FragmentRTEditor extends Frag {
 //                displayVersionsDialog(importPanel);
             }
         });
+        if(singleton.portfolioClass.getPerfil().equals("S")){
+            studentName.setText(userPerfil.getName());
+            Bitmap photo = userPerfil.getPhotoBitmap();
+            if (photo != null)
+                usrPhoto.setImageBitmap(photo);
+            activityName.setText("Ativ. " + singleton.activity.getNuOrder() + ": " + singleton.activity.getTitle());
+        }else{
+            studentName.setText(singleton.portfolioClass.getStudentName());
+            Bitmap photo = singleton.portfolioClass.getPhoto();
+            if (photo != null)
+                usrPhoto.setImageBitmap(photo);
+            activityName.setText("Ativ. " + singleton.activity.getNuOrder() + ": " + singleton.activity.getTitle());
+        }
 
-        studentName.setText(singleton.portfolioClass.getStudentName());
-        Bitmap photo = singleton.portfolioClass.getPhoto();
-        if (photo != null)
-            usrPhoto.setImageBitmap(photo);
-        activityName.setText("Ativ. " + singleton.activity.getNuOrder() + ": " + singleton.activity.getTitle());
+
     }
 
     private void onClickTopBar(boolean shouldClick) {
         if (shouldClick) {
-            if (singleton.portfolioClass.getPerfil().equals("T")) {
+            if (!singleton.portfolioClass.getPerfil().equals("Z")) {
                 personalCommentButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -724,7 +739,8 @@ public class FragmentRTEditor extends Frag {
                     }
                 });
             } else {
-                personalCommentButton.setVisibility(View.INVISIBLE);
+                //personalCommentButton.setVisibility(View.INVISIBLE);
+
             }
 
             versionsButton.setOnClickListener(new View.OnClickListener() {
@@ -1097,8 +1113,21 @@ public class FragmentRTEditor extends Frag {
                 }
             }
 
-            student_name.setText(singleton.portfolioClass.getStudentName());
-            String cellphone = singleton.portfolioClass.getCellphone();
+            String cellphone;
+            if(singleton.portfolioClass.getPerfil().equals("S")){
+                student_name.setText(userPerfil.getName());
+                cellphone = userPerfil.getCellphone();
+                edtTextPersonal.setVisibility(View.GONE);
+                TextView lblPrivacy = (TextView) anchorView.findViewById(R.id.lbl_privacy);
+                TextView lblTextPersonal = (TextView) anchorView.findViewById(R.id.lbl_personal_comment);
+                lblPrivacy.setVisibility(View.GONE);
+                lblTextPersonal.setVisibility(View.GONE);
+
+            }else{
+                student_name.setText(singleton.portfolioClass.getStudentName());
+                cellphone = singleton.portfolioClass.getCellphone();
+            }
+
             if (cellphone != null && !cellphone.equals("null"))
                 student_cell.setText(singleton.portfolioClass.getCellphone());
             else
