@@ -9,11 +9,11 @@
     <!--android:id="@+id/scrollView3">-->
 
     <RelativeLayout
+        android:id="@+id/layout_personal_dialog"
         android:layout_width="450dp"
         android:layout_height="wrap_content"
         android:background="@drawable/border_popup_rteditor"
         android:padding="20dp"
-        android:id="@+id/layout_personal_dialog"
 
         >
 
@@ -91,10 +91,10 @@
             android:background="@drawable/border_popup_personal_comment"
             android:gravity="left|top"
             android:imeOptions="flagNoExtractUi"
+            android:maxHeight="250dp"
             android:padding="15dp"
             android:scrollHorizontally="true"
             android:scrollbars="vertical"
-            android:maxHeight="125dp"
 
             />
 

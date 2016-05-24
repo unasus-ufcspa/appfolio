@@ -254,41 +254,45 @@ public class FragmentRTEditor extends Frag {
                             .setMessage("Você tem certeza que deseja enviar essa versão da atividade?")
                             .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int which) {
-                                    Log.d("RTEditor", "Enviando versão!");
-                                    Toast.makeText(getContext(), "Enviando versão!", Toast.LENGTH_SHORT).show();
+                                    if (mRTMessageField.getText().toString().trim().length() != 0) {
+                                        Log.d("RTEditor", "Enviando versão!");
+                                        Toast.makeText(getContext(), "Enviando versão!", Toast.LENGTH_SHORT).show();
 
-                                    saveText();
-                                    //POPULA SYNC PARA SINCRONIZAR
-                                    Sync sync = new Sync();
-                                    sync.setNm_table("tb_version_activity");
-                                    sync.setCo_id_table(source.getLastIDVersionActivity(singleton.idActivityStudent));
-                                    sync.setId_activity_student(Singleton.getInstance().idActivityStudent);
-                                    sync.setId_device(singleton.device.get_id_device());
-                                    source.insertIntoTBSync(sync);
+                                        saveText();
+                                        //POPULA SYNC PARA SINCRONIZAR
+                                        Sync sync = new Sync();
+                                        sync.setNm_table("tb_version_activity");
+                                        sync.setCo_id_table(source.getLastIDVersionActivity(singleton.idActivityStudent));
+                                        sync.setId_activity_student(Singleton.getInstance().idActivityStudent);
+                                        sync.setId_device(singleton.device.get_id_device());
+                                        source.insertIntoTBSync(sync);
 
-                                    //SALVA NOVA VERSION ACTIVITY
-                                    DataBaseAdapter data = DataBaseAdapter.getInstance(getContext());
-                                    VersionActivity version = new VersionActivity();
-                                    version.setTx_activity(mRTMessageField.getText(RTFormat.HTML));
-                                    version.setId_activity_student(Singleton.getInstance().idActivityStudent);
-                                    version.setDt_last_access(getActualTime());
-                                    int id = data.insertVersionActivity(version);
-                                    singleton.idVersionActivity = id;
-                                    singleton.idCurrentVersionActivity = id;
+                                        //SALVA NOVA VERSION ACTIVITY
+                                        DataBaseAdapter data = DataBaseAdapter.getInstance(getContext());
+                                        VersionActivity version = new VersionActivity();
+                                        version.setTx_activity(mRTMessageField.getText(RTFormat.HTML));
+                                        version.setId_activity_student(Singleton.getInstance().idActivityStudent);
+                                        version.setDt_last_access(getActualTime());
+                                        int id = data.insertVersionActivity(version);
+                                        singleton.idVersionActivity = id;
+                                        singleton.idCurrentVersionActivity = id;
 
-                                    MainActivity main = ((MainActivity) getActivity());
-                                    if (main != null)
-                                        main.sendFullData();
+                                        MainActivity main = ((MainActivity) getActivity());
+                                        if (main != null)
+                                            main.sendFullData();
 
-                                    if (!singleton.isFullscreen) {
-                                        singleton.wasFullscreen = true;
-                                        singleton.isFullscreen = false;
+                                        if (!singleton.isFullscreen) {
+                                            singleton.wasFullscreen = true;
+                                            singleton.isFullscreen = false;
+                                        } else {
+                                            singleton.wasFullscreen = false;
+                                            singleton.isFullscreen = true;
+                                        }
+
+                                        ((MainActivity) getActivity()).dontCreateCrossfader();
                                     } else {
-                                        singleton.wasFullscreen = false;
-                                        singleton.isFullscreen = true;
+                                        mRTMessageField.setError("Você não pode enviar uma versão sem texto.");
                                     }
-
-                                    ((MainActivity) getActivity()).dontCreateCrossfader();
                                 }
                             })
                             .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {

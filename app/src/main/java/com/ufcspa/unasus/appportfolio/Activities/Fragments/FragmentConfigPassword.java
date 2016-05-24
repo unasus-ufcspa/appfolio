@@ -27,7 +27,7 @@ public class FragmentConfigPassword extends Frag implements View.OnClickListener
     public FragmentConfigPassword() {
     }
 
-    public static String sha256(String base) {
+    public String sha256(String base) {
         try {
             MessageDigest digest = MessageDigest.getInstance("SHA-256");
             byte[] hash = digest.digest(base.getBytes("UTF-8"));
@@ -41,7 +41,8 @@ public class FragmentConfigPassword extends Frag implements View.OnClickListener
 
             return hexString.toString();
         } catch (Exception ex) {
-            throw new RuntimeException(ex);
+//            throw new RuntimeException(ex);
+            return null;
         }
     }
 
@@ -66,18 +67,24 @@ public class FragmentConfigPassword extends Frag implements View.OnClickListener
     @Override
     public void onClick(View v) {
         if (isOnline()) {
-            if (old_pass.getText().equals(""))
-                Toast.makeText(getContext(), "Por favor, preencha a senha antiga.", Toast.LENGTH_SHORT).show();
-            else if (new_pass.getText().equals(""))
-                Toast.makeText(getContext(), "Por favor, preencha a sua nova senha.", Toast.LENGTH_SHORT).show();
-            else if (confirm_new_pass.getText().equals(""))
-                Toast.makeText(getContext(), "Por favor, preencha o campo confirme a sua senha.", Toast.LENGTH_SHORT).show();
-            else if (!new_pass.getText().equals(confirm_new_pass.getText()))
-                Toast.makeText(getContext(), "Os campos nova senha e confirmação devem ser iguais.", Toast.LENGTH_SHORT).show();
-            else {
+            if (old_pass.getText().toString().trim().length() == 0)
+                old_pass.setError("Por favor, preencha a senha antiga.");
+            else if (new_pass.getText().toString().trim().length() == 0)
+                new_pass.setError("Por favor, preencha a sua nova senha.");
+            else if (confirm_new_pass.getText().toString().trim().length() == 0)
+                confirm_new_pass.setError("Por favor, preencha o campo confirme a sua senha.");
+            else if (!new_pass.getText().equals(confirm_new_pass.getText())) {
+                confirm_new_pass.setError("As duas senhas não são iguais.");
+            } else {
                 // TODO Enviar nova senha ...
-                //LogoutClient logoutClient = new LogoutClient(getContext(), getActivity());
-                //logoutClient.postJson();
+//                String oldPass = sha256(old_pass.getText().toString());
+//                String newPass = sha256(new_pass.getText().toString());
+//
+//                if(oldPass != null && newPass != null)
+//                {
+//                    PasswordClient passwordClient = new PasswordClient(getContext(), getActivity());
+//                    passwordClient.postJson(oldPass, newPass);
+//                }
             }
         } else {
             Toast.makeText(getContext(), "Você deve estar online para trocar a sua senha.", Toast.LENGTH_SHORT).show();
