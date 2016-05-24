@@ -113,6 +113,12 @@ public class User {
 
     @Override
     public String toString() {
-        return "User["+"id:"+idUser+", type:"+userType+", name:"+name+"]";
+        return "User{" +
+                "idUser=" + idUser +
+                ", name='" + name + '\'' +
+                ", email='" + email + '\'' +
+                ", cellphone='" + cellphone + '\'' +
+                ", photo='" + photo + '\'' +
+                '}';
     }
 }

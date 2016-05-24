@@ -1100,16 +1100,20 @@ public class FragmentRTEditor extends Frag {
                 TextView lblTextPersonal = (TextView) anchorView.findViewById(R.id.lbl_personal_comment);
                 lblPrivacy.setVisibility(View.GONE);
                 lblTextPersonal.setVisibility(View.GONE);
+                RelativeLayout l = (RelativeLayout)  anchorView.findViewById(R.id.layout_personal_dialog);
+
+
 
             }else{
                 student_name.setText(singleton.portfolioClass.getStudentName());
                 cellphone = singleton.portfolioClass.getCellphone();
+                if (cellphone != null && !cellphone.equals("null") && singleton.portfolioClass.getPerfil().equals("S") )
+                    student_cell.setText(singleton.portfolioClass.getCellphone());
+                else
+                    student_cell.setText("");
             }
 
-            if (cellphone != null && !cellphone.equals("null"))
-                student_cell.setText(singleton.portfolioClass.getCellphone());
-            else
-                student_cell.setText("");
+
         }
 
 
