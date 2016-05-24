@@ -92,8 +92,6 @@ public class SendFullDataClient extends HttpClient{
                                 }
                             }
                         }
-
-                        // TODO Receber resposta do servidor quando mandamos alguma alteração no usuário
                         //atualiza dados recebidos via json no sqlite
                         sendData.insertDataOnResponse();
                         MainActivity.shouldSend = false;
