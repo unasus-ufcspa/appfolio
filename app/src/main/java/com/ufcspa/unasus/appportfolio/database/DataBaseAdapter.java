@@ -2228,6 +2228,15 @@ public class DataBaseAdapter {
         }
     }
 
+    public void deleteTBUserFromSync() {
+        String query = "DELETE FROM tb_sync WHERE nm_table = 'tb_user'";
+        try {
+            db.execSQL(query);
+        } catch (Exception e) {
+            Log.d(tag, "Nao deletou a TB_USER da tb_sync");
+        }
+    }
+
     public void deleteCommentsFromTBSync(LinkedList<HolderIDS> holderIDS) {
         StringBuilder sb = new StringBuilder("DELETE FROM tb_sync where nm_table = 'tb_comment' AND id_sync in (");
         for (HolderIDS id : holderIDS) {
