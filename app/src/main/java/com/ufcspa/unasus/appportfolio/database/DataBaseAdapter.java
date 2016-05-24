@@ -666,8 +666,8 @@ public class DataBaseAdapter {
     public List<Integer> listNotesSpecificComments(int version) {
         ArrayList<Integer> v = new ArrayList<>();
         String sql = "SELECT DISTINCT nu_comment_activity from tb_comment as tbc " +
-                "JOIN tb_comment_version as tbcv on tbcv.id_comment = tbc.id_comment " +
-                "JOIN tb_version_activity as tbva on tbva.id_version_activity = tbcv.id_version_activity" +
+                "LEFT JOIN tb_comment_version as tbcv on tbcv.id_comment = tbc.id_comment " +
+                "LEFT JOIN tb_version_activity as tbva on tbva.id_version_activity = tbcv.id_version_activity" +
                 " WHERE tbva.id_version_activity =" + version;
         //Log.e(tag, "sql listComments:" + sql);
         Cursor c = db.rawQuery(sql, null);
@@ -686,6 +686,7 @@ public class DataBaseAdapter {
         }
         return v;
     }
+
 
     /*
 
@@ -1692,7 +1693,8 @@ public class DataBaseAdapter {
 
             Cursor c = db.rawQuery(query, null);
             if (c.moveToFirst()) {
-                return true;
+                if (c.getInt(0) > 0)
+                    return true;
             }
             c.close();
         }

@@ -114,6 +114,7 @@
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
             android:layout_below="@+id/info_rteditor_container"
+            android:layout_marginLeft="18dp"
             android:layout_marginRight="99dp"
             android:layout_weight="1"
             android:gravity="right"
@@ -196,7 +197,7 @@
 
                 <ImageButton
                     android:id="@+id/btn_versions"
-                    android:layout_width="110dp"
+                    android:layout_width="105dp"
                     android:layout_height="50dp"
                     android:layout_alignParentLeft="true"
                     android:layout_alignParentStart="true"
@@ -213,7 +214,7 @@
                     android:layout_alignParentRight="true"
                     android:layout_alignParentTop="true"
                     android:gravity="center"
-                    android:src="@drawable/specific_comment_notice"
+                    android:src="@drawable/specific_comment_ballon"
                     android:text="1"
                     android:textAppearance="?android:attr/textAppearanceSmall"
                     android:textStyle="bold" />
@@ -356,22 +357,22 @@
                 android:layout_below="@+id/relativeLayout4"
                 android:visibility="visible"></RelativeLayout>
 
-            <TextView
-                android:id="@+id/general_comment_notice"
-                android:layout_width="20dp"
-                android:layout_height="20dp"
-                android:layout_alignParentBottom="false"
-                android:layout_alignParentEnd="true"
-                android:layout_alignParentRight="true"
-                android:layout_alignParentTop="true"
-                android:layout_marginTop="40dp"
-                android:background="@drawable/btn_border"
-                android:gravity="center"
-                android:text="1"
-                android:textAppearance="?android:attr/textAppearanceSmall"
-                android:textStyle="bold" />
-
         </RelativeLayout>
+
+        <TextView
+            android:id="@+id/general_comment_notice"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_alignParentLeft="false"
+            android:layout_marginTop="80dp"
+            android:background="@drawable/general_comment_ballon"
+            android:gravity="center"
+            android:paddingBottom="5dp"
+            android:paddingLeft="2dp"
+            android:singleLine="true"
+            android:text="3"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:textStyle="bold" />
 
     </RelativeLayout>
 

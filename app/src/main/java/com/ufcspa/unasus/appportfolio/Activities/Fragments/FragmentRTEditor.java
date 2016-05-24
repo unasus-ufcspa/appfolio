@@ -77,6 +77,7 @@ import java.util.HashMap;
 public class FragmentRTEditor extends Frag {
     // Constante
     static final int REQUEST_FOLIO_ATTACHMENT = 5;
+    User userPerfil; // dados do tutor
     // Editor
     private RTManager mRTManager;
     private RTEditText mRTMessageField;
@@ -101,7 +102,6 @@ public class FragmentRTEditor extends Frag {
     private ActivityStudent acStudent;
     private DataBaseAdapter source;
     private Singleton singleton;
-    User userPerfil; // dados do tutor
     // Cores
     private int trasnparent;
     private int greenLight;
@@ -766,7 +766,7 @@ public class FragmentRTEditor extends Frag {
      */
     public void getIdNotesFromDB() {
         specificCommentsNotes = new HashMap<>();
-        ArrayList<Integer> ids = (ArrayList<Integer>) source.listSpecificComments(singleton.idActivityStudent); //source.listNotesSpecificComments(singleton.idCurrentVersionActivity);
+        ArrayList<Integer> ids = (ArrayList<Integer>) source.listNotesSpecificComments(singleton.idCurrentVersionActivity); //source.listSpecificComments(singleton.idActivityStudent);
         for (int id : ids) {
             specificCommentsNotes.put(id, new Note(id, "", 0));
         }
