@@ -286,36 +286,36 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             shouldCreateDrawer = savedInstanceState.getBoolean("shouldCreateDrawer");
             lastFragName = savedInstanceState.getString("frag");
 
-            switch (lastFragName) {
-                case "FragmentRTEditor":
-                    getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new FragmentRTEditor()).addToBackStack(lastFragName).commit();
-                    break;
-                case "FragmentReference":
-                    getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new FragmentReference()).addToBackStack(lastFragName).commit();
-                    break;
-                case "FragmentConfig":
-                    getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new FragmentConfig()).addToBackStack(lastFragName).commit();
-                    break;
-                case "FragmentAttachment":
-                    getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new FragmentAttachment()).addToBackStack(lastFragName).commit();
-                    break;
-                case "FragmentPrivacyPolicy":
-                    getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new FragmentPrivacyPolicy()).addToBackStack(lastFragName).commit();
-                    break;
-                case "FragmentSelectPortfolio":
-                    getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new FragmentSelectPortfolio()).addToBackStack(lastFragName).commit();
-                    break;
-                case "FragmentStudentActivities":
-                    getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new FragmentStudentActivities()).addToBackStack(lastFragName).commit();
-                    break;
-                case "FragmentConfigPassword":
-                    getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new FragmentConfigPassword()).addToBackStack(lastFragName).commit();
-                    break;
-                case "FragmentConfigUser":
-                    getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new FragmentConfigUser()).addToBackStack(lastFragName).commit();
-                    break;
-            }
-
+            if (lastFragName != null)
+                switch (lastFragName) {
+                    case "FragmentRTEditor":
+                        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new FragmentRTEditor()).addToBackStack(lastFragName).commit();
+                        break;
+                    case "FragmentReference":
+                        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new FragmentReference()).addToBackStack(lastFragName).commit();
+                        break;
+                    case "FragmentConfig":
+                        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new FragmentConfig()).addToBackStack(lastFragName).commit();
+                        break;
+                    case "FragmentAttachment":
+                        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new FragmentAttachment()).addToBackStack(lastFragName).commit();
+                        break;
+                    case "FragmentPrivacyPolicy":
+                        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new FragmentPrivacyPolicy()).addToBackStack(lastFragName).commit();
+                        break;
+                    case "FragmentSelectPortfolio":
+                        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new FragmentSelectPortfolio()).addToBackStack(lastFragName).commit();
+                        break;
+                    case "FragmentStudentActivities":
+                        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new FragmentStudentActivities()).addToBackStack(lastFragName).commit();
+                        break;
+                    case "FragmentConfigPassword":
+                        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new FragmentConfigPassword()).addToBackStack(lastFragName).commit();
+                        break;
+                    case "FragmentConfigUser":
+                        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new FragmentConfigUser()).addToBackStack(lastFragName).commit();
+                        break;
+                }
         }
     }
 

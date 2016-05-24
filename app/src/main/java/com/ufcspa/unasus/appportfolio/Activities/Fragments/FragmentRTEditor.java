@@ -1100,6 +1100,7 @@ public class FragmentRTEditor extends Frag {
                 TextView lblTextPersonal = (TextView) anchorView.findViewById(R.id.lbl_personal_comment);
                 lblPrivacy.setVisibility(View.GONE);
                 lblTextPersonal.setVisibility(View.GONE);
+                anchorView.findViewById(R.id.circle).setVisibility(View.GONE);
                 RelativeLayout l = (RelativeLayout)  anchorView.findViewById(R.id.layout_personal_dialog);
 
 
