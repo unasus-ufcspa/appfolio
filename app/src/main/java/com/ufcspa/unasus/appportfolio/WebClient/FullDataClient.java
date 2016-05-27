@@ -116,8 +116,8 @@ public class FullDataClient extends HttpClient {
                                                 String tp_comment = temp.getString("tp_comment");
                                                 String dt_comment = temp.getString("dt_comment");
                                                 String dt_send=dt_comment;
-                                                if(temp.has("dt_comment_srv"))
-                                                    dt_send=temp.getString("dt_comment_srv");
+                                                if(temp.has("dt_send"))
+                                                    dt_send=temp.getString("dt_send");
                                                 int nu_comment_activity = -1;
                                                 if (!temp.isNull("nu_comment_activity"))
                                                     nu_comment_activity = temp.getInt("nu_comment_activity");

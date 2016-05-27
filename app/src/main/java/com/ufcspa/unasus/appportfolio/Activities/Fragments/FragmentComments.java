@@ -335,7 +335,7 @@ public class FragmentComments extends Frag {
 
             for (Comentario c : lista) {
                 OneComment one = new OneComment(c.getIdAuthor() != singleton.user.getIdUser(),
-                        c.getTxtComment(), convertDateToTime(c.getDateComment()), convertDateToDate(c.getDateComment()));
+                        c.getTxtComment(), convertDateToTime(c.getDateSend()), convertDateToDate(c.getDateSend()));
                 if (c.getIdAttach() != 0) {
                     one.atach = true;
                     one.idAttach = c.getIdAttach();
