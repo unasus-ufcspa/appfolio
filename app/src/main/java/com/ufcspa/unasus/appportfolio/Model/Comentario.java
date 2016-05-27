@@ -114,9 +114,16 @@ public class Comentario {
                 ", txtReference='" + txtReference + '\'' +
                 ", typeComment='" + typeComment + '\'' +
                 ", dateComment='" + dateComment + '\'' +
+                ", dateSend='" + dateSend + '\'' +
+                ", idComment=" + idComment +
+                ", idActivityStudent=" + idActivityStudent +
                 ", idAuthor=" + idAuthor +
+                ", idNote=" + idNote +
+                ", idAttach=" + idAttach +
+                ", idCommentSrv=" + idCommentSrv +
                 '}';
     }
+
     public JSONObject toJSON(){
         JSONObject c= new JSONObject();// c is comment JSON OBJECT
         try {

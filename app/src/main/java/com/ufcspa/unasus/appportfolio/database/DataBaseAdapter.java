@@ -590,7 +590,8 @@ public class DataBaseAdapter {
                 "\tc.tx_reference,\n" +
                 "\tc.tx_comment,\n" +
                 "\tc.dt_comment,\n" +
-                "\tac.id_attachment \n" +
+                "\tac.id_attachment,\n" +
+                "\tc.dt_send\n" +
                 "\tFROM tb_comment c \n" +
                 "\t\tLEFT JOIN  tb_attach_comment ac on ac.id_comment = c.id_comment\n" +
                 "\tWHERE 1=1 AND c.id_activity_student = " + idActStu;
@@ -605,7 +606,7 @@ public class DataBaseAdapter {
             }
         }
         //sql+=" ORDER BY dt_comment ASC;";
-        stBuild.append(" ORDER BY dt_comment ASC;");
+        stBuild.append(" ORDER BY dt_send ASC,dt_comment ASC;");
         sql = stBuild.toString();
         //Log.e(tag, "sql listComments:" + sql);
         Cursor c = db.rawQuery(sql, null);
@@ -621,6 +622,7 @@ public class DataBaseAdapter {
                     cmm.setTxtComment(c.getString(4));
                     cmm.setDateComment(c.getString(5));
                     cmm.setIdAttach(c.getInt(6));
+                    cmm.setDateSend(c.getString(7));
                     comentarios.add(cmm);
                 } catch (Exception v) {
                     Log.e(tag, "erro ao pegar dados do banco:" + v.getMessage());
@@ -632,7 +634,7 @@ public class DataBaseAdapter {
         } else {
             Log.d(tag, "não retornoun nada");
         }
-        Log.d(tag, "listou comentarios no banco n:" + comentarios.size());
+        Log.d(tag, "listou comentarios no banco :" + comentarios.toString());
         return comentarios;
     }
 
@@ -1949,6 +1951,8 @@ public class DataBaseAdapter {
 
         }
     }
+
+
 
     public void insertAttachment(LinkedList<Attachment> anexos) {
         for (Attachment a : anexos) {
