@@ -774,7 +774,7 @@ public class FragmentRTEditor extends Frag {
         for (int id : ids) {
             specificCommentsNotes.put(id, new Note(id, "", 0));
         }
-        currentSpecificComment = specificCommentsNotes.size();
+        currentSpecificComment = (source.listSpecificComments(singleton.idActivityStudent)).size();//specificCommentsNotes.size();
         Log.d("editor notes", "currentSpecificComment:" + currentSpecificComment);
     }
 
@@ -1120,8 +1120,6 @@ public class FragmentRTEditor extends Frag {
 
 
         }
-
-
     }
 
     private void displayVersionsDialog(View anchorView) {

@@ -12,6 +12,7 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.ufcspa.unasus.appportfolio.Activities.MainActivity;
 import com.ufcspa.unasus.appportfolio.Model.DividerItemDecoration;
 import com.ufcspa.unasus.appportfolio.Model.StudFrPortClass;
 import com.ufcspa.unasus.appportfolio.R;
@@ -24,10 +25,10 @@ import java.util.List;
 public class StudentActivitiesAdapter extends BaseAdapter
 {
     private static LayoutInflater inflater = null;
-    private Context context;
+    private MainActivity context;
     private List<StudFrPortClass> list;
 
-    public StudentActivitiesAdapter(Context context, List<StudFrPortClass> list)
+    public StudentActivitiesAdapter(MainActivity context, List<StudFrPortClass> list)
     {
         this.context = context;
         this.list = list;

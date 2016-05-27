@@ -1,8 +1,9 @@
 package com.ufcspa.unasus.appportfolio.Adapter;
 
-import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.v4.content.LocalBroadcastManager;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,6 +14,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.ufcspa.unasus.appportfolio.Activities.MainActivity;
 import com.ufcspa.unasus.appportfolio.Model.Activity;
 import com.ufcspa.unasus.appportfolio.Model.Singleton;
 import com.ufcspa.unasus.appportfolio.Model.StudFrPortClass;
@@ -27,13 +29,13 @@ import java.util.List;
  */
 public class ActivitiesAdapter extends RecyclerView.Adapter<ActivitiesAdapter.ViewHolder> {
     private List<Activity> list;
-    private Context context;
+    private MainActivity context;
     private Singleton singleton;
     private String studentName;
     private DataBaseAdapter source;
     private StudFrPortClass studFrPortClass;
 
-    public ActivitiesAdapter(Context context, List<Activity> list, String studName, StudFrPortClass aux) {
+    public ActivitiesAdapter(MainActivity context, List<Activity> list, String studName, StudFrPortClass aux) {
         this.list = list;
         this.context = context;
         this.singleton = Singleton.getInstance();
@@ -63,7 +65,7 @@ public class ActivitiesAdapter extends RecyclerView.Adapter<ActivitiesAdapter.Vi
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, final int position) {
-        Activity aux = list.get(position);
+        final Activity aux = list.get(position);
 
         holder.title.setText(aux.getTitle());
         holder.txt_class_code_info.setText(aux.getTitle());
@@ -73,6 +75,16 @@ public class ActivitiesAdapter extends RecyclerView.Adapter<ActivitiesAdapter.Vi
             public void onClick(View v) {
 //                holder.infoView.setVisibility(View.VISIBLE);
 //                holder.infoView.startAnimation(AnimationUtils.loadAnimation(context, R.anim.anim_right));
+
+                new AlertDialog.Builder(context)
+                        .setTitle(aux.getTitle())
+                        .setMessage(aux.getDescription())
+                        .setPositiveButton("Fechar", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                            }
+                        })
+                        .show();
             }
         });
 

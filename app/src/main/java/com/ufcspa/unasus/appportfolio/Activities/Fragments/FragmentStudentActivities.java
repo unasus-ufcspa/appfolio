@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.ufcspa.unasus.appportfolio.Activities.MainActivity;
 import com.ufcspa.unasus.appportfolio.Adapter.StudentActivitiesAdapter;
 import com.ufcspa.unasus.appportfolio.Model.Singleton;
 import com.ufcspa.unasus.appportfolio.Model.StudFrPortClass;
@@ -57,7 +58,7 @@ public class FragmentStudentActivities extends Frag {
         className.setText(singleton.portfolioClass.getClassCode());
         portfolioName.setText(singleton.portfolioClass.getPortfolioTitle());
 
-        StudentActivitiesAdapter gridAdapter = new StudentActivitiesAdapter(getActivity(), list);
+        StudentActivitiesAdapter gridAdapter = new StudentActivitiesAdapter((MainActivity) getActivity(), list);
 
         list_activities = (ListView) getView().findViewById(R.id.list_activities);
         list_activities.setAdapter(gridAdapter);
