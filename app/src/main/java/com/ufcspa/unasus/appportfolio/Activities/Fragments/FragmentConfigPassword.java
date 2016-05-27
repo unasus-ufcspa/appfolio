@@ -11,6 +11,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.ufcspa.unasus.appportfolio.R;
+import com.ufcspa.unasus.appportfolio.WebClient.PasswordClient;
 
 import java.security.MessageDigest;
 
@@ -77,14 +78,13 @@ public class FragmentConfigPassword extends Frag implements View.OnClickListener
                 confirm_new_pass.setError("As duas senhas não são iguais.");
             } else {
                 // TODO Enviar nova senha ...
-//                String oldPass = sha256(old_pass.getText().toString());
-//                String newPass = sha256(new_pass.getText().toString());
-//
-//                if(oldPass != null && newPass != null)
-//                {
-//                    PasswordClient passwordClient = new PasswordClient(getContext(), getActivity());
-//                    passwordClient.postJson(oldPass, newPass);
-//                }
+                String oldPass = sha256(old_pass.getText().toString());
+                String newPass = sha256(new_pass.getText().toString());
+
+                if (oldPass != null && newPass != null) {
+                    PasswordClient passwordClient = new PasswordClient(getContext(), getActivity());
+                    passwordClient.postJson(oldPass, newPass);
+                }
             }
         } else {
             Toast.makeText(getContext(), "Você deve estar online para trocar a sua senha.", Toast.LENGTH_SHORT).show();

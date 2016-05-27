@@ -462,7 +462,10 @@ public class RTManager implements RTToolbarListener, RTEditTextListener {
 
     @Override
     public void onPickAttachment() {
-        LocalBroadcastManager.getInstance(mRTContext).sendBroadcast(new Intent("call.attachmentdialog.action").putExtra("Position", getActiveEditor().getSelection().start()));
+        try {
+            LocalBroadcastManager.getInstance(mRTContext).sendBroadcast(new Intent("call.attachmentdialog.action").putExtra("Position", getActiveEditor().getSelection().start()));
+        } catch (Exception e) {
+        }
     }
 
     private void onRecordVideo(MediaAction mediaAction)

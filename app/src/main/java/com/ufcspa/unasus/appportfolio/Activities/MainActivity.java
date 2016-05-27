@@ -8,6 +8,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.net.ConnectivityManager;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -15,6 +16,7 @@ import android.provider.Settings;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
 import android.text.InputType;
+import android.util.Log;
 import android.view.GestureDetector;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -37,6 +39,7 @@ import com.ufcspa.unasus.appportfolio.Activities.Fragments.FragmentRTEditor;
 import com.ufcspa.unasus.appportfolio.Activities.Fragments.FragmentReference;
 import com.ufcspa.unasus.appportfolio.Activities.Fragments.FragmentSelectPortfolio;
 import com.ufcspa.unasus.appportfolio.Activities.Fragments.FragmentStudentActivities;
+import com.ufcspa.unasus.appportfolio.Model.AndroidMultiPartEntity;
 import com.ufcspa.unasus.appportfolio.Model.Attachment;
 import com.ufcspa.unasus.appportfolio.Model.Note;
 import com.ufcspa.unasus.appportfolio.Model.Singleton;
@@ -47,7 +50,19 @@ import com.ufcspa.unasus.appportfolio.WebClient.SendData;
 import com.ufcspa.unasus.appportfolio.WebClient.SendFullDataClient;
 import com.ufcspa.unasus.appportfolio.database.DataBaseAdapter;
 
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpResponse;
+import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.mime.content.FileBody;
+import org.apache.http.entity.mime.content.StringBody;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.util.EntityUtils;
 import org.json.JSONObject;
+
+import java.io.File;
+import java.io.IOException;
 
 //import io.github.skyhacker2.sqliteonweb.SQLiteOnWeb;
 
@@ -59,7 +74,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public static boolean shouldSend;
     public static boolean sendResponseNotReceived;
     final GestureDetector gestureDetector = new GestureDetector(new GestureListener());
-    ProgressDialog dialog;
+    private ProgressDialog dialog;
     private String lastFragName;
     private Crossfader crossFader;
     private View fragmentContainer;
@@ -71,11 +86,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            if (intent.hasExtra("Image"))
+            if (intent.hasExtra("Image")) {
                 insertFileIntoDataBase(intent.getStringExtra("Image"), "I");
-            else if (intent.hasExtra("Video"))
+//                new UploadFileToServer().execute(intent.getStringExtra("Image"));
+            } else if (intent.hasExtra("Video")) {
                 insertFileIntoDataBase(intent.getStringExtra("Video"), "V");
-            else {
+//                new UploadFileToServer().execute(intent.getStringExtra("Video"));
+            } else {
                 int id = intent.getIntExtra("ID", 0);
                 changeFragment(id);
             }
@@ -594,5 +611,99 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
             return false;
         }
+    }
+
+    /**
+     * Uploading the file to server
+     */
+    private class UploadFileToServer extends AsyncTask<String, Integer, String> {
+        long totalSize = 0;
+
+        @Override
+        protected void onPreExecute() {
+            // setting progress bar to zero
+//            progressBar.setProgress(0);
+            super.onPreExecute();
+        }
+
+        @Override
+        protected void onProgressUpdate(Integer... progress) {
+            // Making progress bar visible
+//            progressBar.setVisibility(View.VISIBLE);
+
+            // updating progress bar value
+//            progressBar.setProgress(progress[0]);
+
+            // updating percentage value
+//            txtPercentage.setText(String.valueOf(progress[0]) + "%");
+        }
+
+        @Override
+        protected String doInBackground(String... params) {
+            return uploadFile(params[0]);
+        }
+
+        @SuppressWarnings("deprecation")
+        private String uploadFile(String filePath) {
+            String responseString = null;
+
+            HttpClient httpclient = new DefaultHttpClient();
+            HttpPost httppost = new HttpPost("URL");
+
+            try {
+                AndroidMultiPartEntity entity = new AndroidMultiPartEntity(
+                        new AndroidMultiPartEntity.ProgressListener() {
+
+                            @Override
+                            public void transferred(long num) {
+                                publishProgress((int) ((num / (float) totalSize) * 100));
+                            }
+                        });
+
+                File sourceFile = new File(filePath);
+
+                // Adding file data to http body
+                entity.addPart("image", new FileBody(sourceFile));
+
+                // Extra parameters if you want to pass to server
+                entity.addPart("website", new StringBody("www.androidhive.info"));
+                entity.addPart("email", new StringBody("abc@gmail.com"));
+
+                totalSize = entity.getContentLength();
+                httppost.setEntity(entity);
+
+                // Making server call
+                HttpResponse response = httpclient.execute(httppost);
+                HttpEntity r_entity = response.getEntity();
+
+                int statusCode = response.getStatusLine().getStatusCode();
+                if (statusCode == 200) {
+                    // Server response
+                    responseString = EntityUtils.toString(r_entity);
+                } else {
+                    responseString = "Error occurred! Http Status Code: "
+                            + statusCode;
+                }
+
+            } catch (ClientProtocolException e) {
+                responseString = e.toString();
+            } catch (IOException e) {
+                responseString = e.toString();
+            }
+
+            return responseString;
+
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+            Log.e("SENDFILE", "Response from server: " + result);
+
+            // showing the server response in an alert dialog
+//            showAlert(result);
+
+            super.onPostExecute(result);
+        }
+
     }
 }

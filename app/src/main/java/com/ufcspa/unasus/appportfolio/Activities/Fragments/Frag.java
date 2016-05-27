@@ -859,8 +859,10 @@ public class Frag extends Fragment {
         String[] path = mCurrentPhotoPath.split("/");
         String[] secondPath = path[path.length - 1].split("\\.");
         secondPath[0] += "_new";
-        path[path.length - 1] = secondPath[0] + "." + secondPath[1];
-
+        if (path.length > 0)
+            path[path.length - 1] = secondPath[0] + "." + secondPath[1];
+        else
+            path[0] = secondPath[0] + "." + secondPath[1];
         String newPath = "";
         for (int i = 1; i < path.length; i++)
             newPath += "/" + path[i];
