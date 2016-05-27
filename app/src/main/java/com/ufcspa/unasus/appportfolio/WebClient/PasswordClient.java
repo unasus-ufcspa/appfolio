@@ -3,6 +3,7 @@ package com.ufcspa.unasus.appportfolio.WebClient;
 import android.content.Context;
 import android.support.v4.app.FragmentActivity;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
@@ -11,7 +12,6 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
-import com.ufcspa.unasus.appportfolio.Activities.Fragments.FragmentConfig;
 import com.ufcspa.unasus.appportfolio.Model.Singleton;
 
 import org.json.JSONException;
@@ -24,7 +24,7 @@ import java.util.concurrent.TimeUnit;
  */
 public class PasswordClient extends HttpClient {
     private Context context;
-    private String method = "password";
+    private String method = "password_request";
     private Singleton singleton;
     private FragmentActivity activity;
 
@@ -39,9 +39,9 @@ public class PasswordClient extends HttpClient {
     public void postJson(String old_pass, String new_pass) {
         JSONObject logoutJson = null;
         try {
-            logoutJson = new JSONObject().put("password_request", new JSONObject().put("old_pass", old_pass).put("new_pass", new_pass));
+            logoutJson = new JSONObject().put("password_request", new JSONObject().put("id_user", singleton.user.getIdUser()).put("old_password", old_pass).put("new_password", new_pass));
         } catch (JSONException e) {
-//            FragmentConfig.couldNotLogout();
+            Toast.makeText(context, "Ocorreu um erro e sua senha não foi alterada", Toast.LENGTH_SHORT).show();
             return;
         }
 
@@ -51,14 +51,16 @@ public class PasswordClient extends HttpClient {
                 try {
                     Log.d(tag, "JSON RESPONSE: " + response.toString());
 
-                    if (response.has("password"))
-                        if (response.getJSONObject("password").has("success")) {
-//                            FragmentConfig.logout(activity);
+                    if (response.has("password_response"))
+                        if (response.getJSONObject("password_response").has("success")) {
+                            Toast.makeText(context, "Senha alterada com sucesso", Toast.LENGTH_SHORT).show();
+                            return;
+                        } else if (response.getJSONObject("password_response").has("error")) {
+                            Toast.makeText(context, response.getJSONObject("password_response").getString("error"), Toast.LENGTH_SHORT).show();
                             return;
                         }
 
                 } catch (JSONException e) {
-                    FragmentConfig.couldNotLogout();
                 }
             }
         }, new Response.ErrorListener() {
@@ -66,7 +68,6 @@ public class PasswordClient extends HttpClient {
             public void onErrorResponse(VolleyError volleyError) {
                 Log.e(tag, "Erro  na request");
                 volleyError.printStackTrace();
-                FragmentConfig.couldNotLogout();
             }
         });
 

@@ -383,7 +383,7 @@ public class LoginActivity2 extends AppCompatActivity implements LoaderCallbacks
             first.setEmail(mEmailView.getText().toString());
         // TODO SHA-256 -> (sha256(mPasswordView.getText().toString()));
         // http://stackoverflow.com/questions/3103652/hash-string-via-sha-256-in-java
-            first.setPasswd(mPasswordView.getText().toString());
+        first.setPasswd(sha256(mPasswordView.getText().toString()));//(mPasswordView.getText().toString());
 
             //ADD TO SINGLETON
             Singleton.getInstance().device.set_id_device(android_id);
