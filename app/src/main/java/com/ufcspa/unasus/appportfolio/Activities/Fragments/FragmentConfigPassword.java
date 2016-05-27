@@ -3,6 +3,7 @@ package com.ufcspa.unasus.appportfolio.Activities.Fragments;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -67,6 +68,7 @@ public class FragmentConfigPassword extends Frag implements View.OnClickListener
 
     @Override
     public void onClick(View v) {
+        Log.d("Password", sha256(new_pass.getText().toString()));
         if (isOnline()) {
             if (old_pass.getText().toString().trim().length() == 0)
                 old_pass.setError("Por favor, preencha a senha antiga.");
