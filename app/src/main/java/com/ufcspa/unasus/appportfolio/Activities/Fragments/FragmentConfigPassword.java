@@ -3,7 +3,6 @@ package com.ufcspa.unasus.appportfolio.Activities.Fragments;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -68,20 +67,24 @@ public class FragmentConfigPassword extends Frag implements View.OnClickListener
 
     @Override
     public void onClick(View v) {
-        Log.d("Password", sha256(new_pass.getText().toString()));
+        //Log.d("Password", sha256(new_pass.getText().toString()));
+        String oldPassword = old_pass.getText().toString();
+        String newPassword = new_pass.getText().toString();
+        String confirmNewPassword = confirm_new_pass.getText().toString();
+
         if (isOnline()) {
-            if (old_pass.getText().toString().trim().length() == 0)
+            if (oldPassword.trim().length() == 0)
                 old_pass.setError("Por favor, preencha a senha antiga.");
-            else if (new_pass.getText().toString().trim().length() == 0)
+            else if (newPassword.trim().length() == 0)
                 new_pass.setError("Por favor, preencha a sua nova senha.");
-            else if (confirm_new_pass.getText().toString().trim().length() == 0)
+            else if (confirmNewPassword.trim().length() == 0)
                 confirm_new_pass.setError("Por favor, preencha o campo confirme a sua senha.");
-            else if (!new_pass.getText().equals(confirm_new_pass.getText())) {
+            else if (!(newPassword.equals(confirmNewPassword)))
                 confirm_new_pass.setError("As duas senhas não são iguais.");
-            } else {
+            else {
                 // TODO Enviar nova senha ...
-                String oldPass = sha256(old_pass.getText().toString());
-                String newPass = sha256(new_pass.getText().toString());
+                String oldPass = sha256(oldPassword);
+                String newPass = sha256(newPassword);
 
                 if (oldPass != null && newPass != null) {
                     PasswordClient passwordClient = new PasswordClient(getContext(), getActivity());
