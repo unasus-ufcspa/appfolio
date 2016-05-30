@@ -56,6 +56,7 @@ import com.onegravity.rteditor.api.media.RTVideo;
 import com.onegravity.rteditor.converter.ConverterSpannedToHtml;
 import com.onegravity.rteditor.effects.Effects;
 import com.onegravity.rteditor.spans.BackgroundColorSpan;
+import com.onegravity.rteditor.spans.MediaSpan;
 import com.ufcspa.unasus.appportfolio.Activities.MainActivity;
 import com.ufcspa.unasus.appportfolio.Adapter.VersionsAdapter;
 import com.ufcspa.unasus.appportfolio.Model.ActivityStudent;
@@ -186,7 +187,6 @@ public class FragmentRTEditor extends Frag {
      */
     public void saveText() {
         Log.d("editor DB", "salvando texto..");
-
         if (mRTMessageField != null && mRTMessageField.isMediaFactoryRegister() != null) {
             acStudent.setTxtActivity(mRTMessageField.getText(RTFormat.HTML));
             source.updateActivityStudent(acStudent, getActualTime(), singleton.idCurrentVersionActivity);
@@ -257,8 +257,11 @@ public class FragmentRTEditor extends Frag {
                                     if (mRTMessageField.getText().toString().trim().length() != 0) {
                                         Log.d("RTEditor", "Enviando versão!");
                                         Toast.makeText(getContext(), "Enviando versão!", Toast.LENGTH_SHORT).show();
-
                                         saveText();
+
+                                        //ANEXOS QUE DEVEM SER ENVIADOS
+//                                        handleSendAttachments();
+
                                         //POPULA SYNC PARA SINCRONIZAR
                                         Sync sync = new Sync();
                                         sync.setNm_table("tb_version_activity");
@@ -338,6 +341,27 @@ public class FragmentRTEditor extends Frag {
         removeOthersNotifications();
 
         return view;
+    }
+
+
+    private void handleSendAttachments() {
+
+        Spannable textSpanned = mRTMessageField.getText();
+        MediaSpan[] spans = textSpanned.getSpans(0, textSpanned.length(), MediaSpan.class);
+        for (MediaSpan s : spans) {
+            int idAttachment = source.getAttachmentByPath(s.getMedia().getFilePath(RTFormat.PLAIN_TEXT));
+            if (idAttachment != -1) {
+                int idAttachActivity = source.insertAttachActivity(idAttachment, singleton.idActivityStudent);
+
+                //POPULA SYNC PARA SINCRONIZAR
+                Sync sync = new Sync();
+                sync.setNm_table("tb_attach_activity");
+                sync.setCo_id_table(idAttachActivity);
+                sync.setId_activity_student(singleton.idActivityStudent);
+                sync.setId_device(singleton.device.get_id_device());
+                source.insertIntoTBSync(sync);
+            }
+        }
     }
 
     public void createEditor(View view, Bundle savedInstanceState) {
@@ -694,8 +718,6 @@ public class FragmentRTEditor extends Frag {
                 usrPhoto.setImageBitmap(photo);
             activityName.setText("Ativ. " + singleton.activity.getNuOrder() + ": " + singleton.activity.getTitle());
         }
-
-
     }
 
     private void onClickTopBar(boolean shouldClick) {
@@ -723,7 +745,6 @@ public class FragmentRTEditor extends Frag {
             versionsButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-//                    saveText();
                     versionAdapter.refresh(source.getAllVersionsFromActivityStudent(singleton.idActivityStudent));
 
                     if (edtTextPersonal != null) {

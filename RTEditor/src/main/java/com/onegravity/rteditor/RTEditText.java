@@ -59,53 +59,41 @@ import java.util.Set;
  */
 public class RTEditText extends EditText implements TextWatcher, SpanWatcher, LinkSpanListener {
 
+    // we need to keep track of the media for this editor to be able to clean up after we're done
+    public Set<RTMedia> mOriginalMedia = new HashSet<RTMedia>();
+    public Set<RTMedia> mAddedMedia = new HashSet<RTMedia>();
     // don't allow any formatting in text mode
     private boolean mUseRTFormatting = true;
-
     // for performance reasons we compute a new layout only if the text has changed
     private boolean mLayoutChanged;
     private RTLayout mRTLayout;    // don't call this mLayout because TextView has a mLayout too (no shadowing as both are private but still...)
-
     // while onSaveInstanceState() is running, don't modify any spans
     private boolean mIsSaving;
-
     /// while selection is changing don't apply any effects
     private boolean mIsSelectionChanging = false;
-
     // text has changed
     private boolean mTextChanged;
-
     // this indicates whether text is selected or not -> ignore window focus changes (by spinners)
     private boolean mTextSelected;
-
     private RTEditTextListener mListener;
-
     private RTMediaFactory<RTImage, RTAudio, RTVideo> mMediaFactory;
-
     // used to check if selection has changed
     private int mOldSelStart = -1;
     private int mOldSelEnd = -1;
+
+    /* Used for the undo / redo functions */
     // we don't want to call Effects.cleanupParagraphs() if the paragraphs are already up to date
     private boolean mParagraphsAreUp2Date;
     // while Effects.cleanupParagraphs() is called, we ignore changes that would alter mParagraphsAreUp2Date
     private boolean mIgnoreParagraphChanges;
-
-    /* Used for the undo / redo functions */
-
     // if True then text changes are not registered for undo/redo
     // we need this during the actual undo/redo operation (or an undo would create a change event itself)
     private boolean mIgnoreTextChanges;
-
     private int mSelStartBefore;        // selection start before text changed
     private int mSelEndBefore;          // selection end before text changed
     private String mOldText;            // old text before it changed
     private String mNewText;            // new text after it changed (needed in afterTextChanged to see if the text has changed)
     private Spannable mOldSpannable;    // undo/redo
-
-    // we need to keep track of the media for this editor to be able to clean up after we're done
-    private Set<RTMedia> mOriginalMedia = new HashSet<RTMedia>();
-    private Set<RTMedia> mAddedMedia = new HashSet<RTMedia>();
-
     private boolean canPaste = true;
 
     // ****************************************** Lifecycle Methods *******************************************

@@ -739,6 +739,22 @@ public class DataBaseAdapter {
         return attch;
     }
 
+    public int getAttachmentByPath(String filePath) {
+        String sql = "SELECT id_attachment FROM tb_attachment WHERE nm_system =" + filePath;
+        Cursor c = null;
+        try {
+            c = db.rawQuery(sql, null);
+            if (c.moveToFirst()) {
+                return c.getInt(0);
+            } else {
+                Log.e(tag, "não encontrou a id relacionada a este anexo no banco");
+            }
+        } catch (Exception e) {
+            Log.wtf(tag, "erro ao tentar buscar anexo no banco:" + e.getMessage());
+        }
+        return -1;
+    }
+
 
     public void insertAttachComment(int idComment, int idAttach) {
         ContentValues cv = new ContentValues();
@@ -1444,7 +1460,7 @@ public class DataBaseAdapter {
     }
 
 
-    public void insertAttachActivity(int lastIdAttach, int idActivityStudent) {
+    public int insertAttachActivity(int lastIdAttach, int idActivityStudent) {
         ContentValues cv = new ContentValues();
         cv.put("id_attachment", lastIdAttach);
         cv.put("id_activity_student", idActivityStudent);
@@ -1454,6 +1470,14 @@ public class DataBaseAdapter {
         } catch (Exception e) {
             Log.e(tag, "erro ao salvar na tabela tb_attach_activity:" + e.getMessage());
         }
+
+        Cursor cursor = db.rawQuery("select seq from sqlite_sequence where name='tb_attach_activity'", null);
+        int lastID = 0;
+        if (cursor.moveToFirst()) {
+            lastID = cursor.getInt(0);
+            Log.d(tag, "last id_comment id table:" + lastID);
+        }
+        return lastID;
     }
 
 
