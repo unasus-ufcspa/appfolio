@@ -763,10 +763,11 @@ public class DataBaseAdapter {
     }
 
     public int getAttachmentByPath(String filePath) {
-        if (filePath.contains("_video")) {
-            filePath.replace("_video", "");
+        String path = filePath;
+        if (path.contains("_video.")) {
+            path = path.replace("_video.", ".");
         }
-        String sql = "SELECT id_attachment FROM tb_attachment WHERE nm_system = '" + filePath + "'";
+        String sql = "SELECT id_attachment FROM tb_attachment WHERE nm_system = '" + path + "'";
         Cursor c = null;
         try {
             c = db.rawQuery(sql, null);
