@@ -446,7 +446,7 @@ public class Frag extends Fragment {
     public void saveSmallImage() {
         String[] path = mCurrentPhotoPath.split("/");
         String[] secondPath = path[path.length - 1].split("\\.");
-        secondPath[0] += "_small";
+        secondPath[0] += "_video";
         path[path.length - 1] = secondPath[0] + "." + secondPath[1];
 
         String newPath = "";

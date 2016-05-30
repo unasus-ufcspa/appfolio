@@ -15,7 +15,6 @@ import android.provider.Settings;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
 import android.text.InputType;
-import android.util.Log;
 import android.view.GestureDetector;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -42,14 +41,13 @@ import com.ufcspa.unasus.appportfolio.Model.Attachment;
 import com.ufcspa.unasus.appportfolio.Model.Note;
 import com.ufcspa.unasus.appportfolio.Model.Singleton;
 import com.ufcspa.unasus.appportfolio.R;
+import com.ufcspa.unasus.appportfolio.WebClient.BasicData;
+import com.ufcspa.unasus.appportfolio.WebClient.BasicDataClient;
 import com.ufcspa.unasus.appportfolio.WebClient.FullData;
 import com.ufcspa.unasus.appportfolio.WebClient.FullDataClient;
 import com.ufcspa.unasus.appportfolio.WebClient.SendData;
 import com.ufcspa.unasus.appportfolio.WebClient.SendFullDataClient;
 import com.ufcspa.unasus.appportfolio.database.DataBaseAdapter;
-
-import net.gotev.uploadservice.MultipartUploadRequest;
-import net.gotev.uploadservice.UploadNotificationConfig;
 
 import org.json.JSONObject;
 
@@ -77,10 +75,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         public void onReceive(Context context, Intent intent) {
             if (intent.hasExtra("Image")) {
                 insertFileIntoDataBase(intent.getStringExtra("Image"), "I");
-//                uploadMultipart(getApplicationContext(), "http://192.168.0.25/webfolio/app_dev.php/upload", intent.getStringExtra("Image"));//http://192.168.0.25/webfolio/app_dev.php/upload
             } else if (intent.hasExtra("Video")) {
                 insertFileIntoDataBase(intent.getStringExtra("Video"), "V");
-//                uploadMultipart(getApplicationContext(),"http://192.168.0.25/webfolio/app_dev.php/upload",intent.getStringExtra("Video"));//"http://posttestserver.com/post.php?dir=TESTE"
             } else {
                 int id = intent.getIntExtra("ID", 0);
                 changeFragment(id);
@@ -109,7 +105,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     name = "Anexo";
                 }
                 singleton.lastIdAttach = dataBaseAdapter.insertAttachment(new Attachment(0, type, name, path, 0));
-                dataBaseAdapter.insertAttachActivity(singleton.lastIdAttach, singleton.idActivityStudent);
+                //dataBaseAdapter.insertAttachActivity(singleton.lastIdAttach, singleton.idActivityStudent);
             }
         });
 
@@ -338,6 +334,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         switch (id) {
             case 0:
                 downloadFullData(0, id);
+                getBasicData();
                 sendFullData();
                 shouldSend = false;
                 break;
@@ -365,6 +362,20 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 lastFragName = "FragmentPrivacyPolicy";
             default:
                 break;
+        }
+    }
+
+    public void getBasicData() {
+        if (isOnline()) {
+            BasicDataClient client = new BasicDataClient(getBaseContext());
+            JSONObject jsonObject = new JSONObject();
+            client.postJson(BasicData.toJSON(Singleton.getInstance().user.getIdUser(), Singleton.getInstance().device.get_id_device()));// mandando id
+        } else {
+            new Handler(Looper.getMainLooper()).post(new Runnable() {
+                @Override
+                public void run() {
+                }
+            });
         }
     }
 
@@ -570,19 +581,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         DataBaseAdapter.getInstance(this).cleanDataBase();
         startActivity(new Intent(this, LoginActivity2.class));
         finish();
-    }
-
-    //https://github.com/gotev/android-upload-service
-    public void uploadMultipart(final Context context, String server, String filePath) {
-        try {
-            String uploadId = new MultipartUploadRequest(context, server)
-                    .addFileToUpload(filePath, "arquivo")
-                    .setNotificationConfig(new UploadNotificationConfig())
-                    .setMaxRetries(2)
-                    .startUpload();
-        } catch (Exception exc) {
-            Log.e("AndroidUploadService", exc.getMessage(), exc);
-        }
     }
 
     private class GestureListener extends GestureDetector.SimpleOnGestureListener {

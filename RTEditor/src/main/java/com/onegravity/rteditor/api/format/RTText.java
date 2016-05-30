@@ -21,6 +21,8 @@ import com.onegravity.rteditor.api.media.RTAudio;
 import com.onegravity.rteditor.api.media.RTImage;
 import com.onegravity.rteditor.api.media.RTVideo;
 
+import java.util.HashMap;
+
 /**
  * The RTText is the base class for all classes representing a rich text.
  * <p>
@@ -85,4 +87,13 @@ public abstract class RTText {
                 + destFormat.getClass().getSimpleName());
     }
 
+    public RTText convertTo(RTFormat destFormat, RTMediaFactory<RTImage, RTAudio, RTVideo> mediaFactory, HashMap<String, String> aux) {
+        if (destFormat == mRTFormat) {
+            return this;
+        }
+
+        throw new UnsupportedOperationException("Can't convert from "
+                + mRTFormat.getClass().getSimpleName() + " to "
+                + destFormat.getClass().getSimpleName());
+    }
 }

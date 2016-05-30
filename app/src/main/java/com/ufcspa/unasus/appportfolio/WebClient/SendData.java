@@ -3,12 +3,16 @@ package com.ufcspa.unasus.appportfolio.WebClient;
 import android.content.Context;
 import android.util.Log;
 
+import com.ufcspa.unasus.appportfolio.Model.Attachment;
 import com.ufcspa.unasus.appportfolio.Model.Comentario;
 import com.ufcspa.unasus.appportfolio.Model.Singleton;
 import com.ufcspa.unasus.appportfolio.Model.Sync;
 import com.ufcspa.unasus.appportfolio.Model.User;
 import com.ufcspa.unasus.appportfolio.Model.VersionActivity;
 import com.ufcspa.unasus.appportfolio.database.DataBaseAdapter;
+
+import net.gotev.uploadservice.MultipartUploadRequest;
+import net.gotev.uploadservice.UploadNotificationConfig;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -32,12 +36,14 @@ public class SendData {
     private LinkedList<User> users;
     private LinkedList<VersionActivity> versions;
     private LinkedList<Integer> notices;
+    private LinkedHashMap<Integer, LinkedList<Attachment>> attachments;
     private DataBaseAdapter data;
     private String tbComm="tb_comment";
     private String tbVers="tb_version_activity";
     private String tbUser = "tb_user";
     private String tbCommVers = "tb_comment_version";
     private String tbNotice = "tb_notice";
+    private String tbAttachActivity = "tb_attach_activity";
     private Singleton singleton;
     //ids to response
     //-2 is default value
@@ -54,6 +60,7 @@ public class SendData {
         commentsByVersions = new LinkedHashMap<>();
         notices = new LinkedList<>();
         idSync = new LinkedList<>();
+        attachments = new LinkedHashMap<>();
         singleton = Singleton.getInstance();
     }
 
@@ -99,6 +106,9 @@ public class SendData {
         if (dadosAgrupados.get(tbNotice) != null) {
             notices = dadosAgrupados.get(tbNotice);
         }
+        if (dadosAgrupados.get(tbAttachActivity) != null) {
+            attachments = data.getAttachments(dadosAgrupados.get(tbAttachActivity));
+        }
     }
 
     public void insertDataOnResponse(){
@@ -114,9 +124,12 @@ public class SendData {
             Log.d("json send full data ", "conseguiu atualizar com sucesso id server");
         }
         data.deleteSync(idSync);
+        for (Integer id : attachments.keySet()) {
+            for (Attachment a : attachments.get(id)) {
+                uploadMultipart(context, "http://192.168.0.25/webfolio/app_dev.php/upload", a.getNmSystem());
+            }
+        }
     }
-
-
 
     public JSONObject GenerateJSON(String idDevice){
         getSyncs();// obtem lista de sincronizações
@@ -245,6 +258,37 @@ public class SendData {
                     jsonNotice.put(jnotice);
                 }
             }
+
+            if (attachments != null && attachments.size() != 0) {
+                JSONObject attachActivityStudent = new JSONObject();
+                JSONArray attachTb_activity_student = new JSONArray();
+                for (Integer idActivityStudent : attachments.keySet()) {
+                    JSONObject attachAttachment = new JSONObject();
+                    JSONArray attachment = new JSONArray();
+
+                    for (Attachment a : attachments.get(idActivityStudent)) {
+                        JSONObject attach = new JSONObject();
+                        attach.put("id_attachment", a.getIdAttachment());
+                        attach.put("tp_attachment", a.getTpAttachment());
+                        attach.put("nm_file", a.getNmFile());
+                        String[] aux = a.getNmSystem().split("/");
+                        String path = a.getNmSystem();
+                        if (aux.length > 0)
+                            path = aux[aux.length - 1];
+                        attach.put("nm_system", path);
+                        attach.put("id_attachment_srv", a.getidAttachmentSrv());
+
+                        attachment.put(attach);
+                    }
+                    attachAttachment.put("id_activity_student", idActivityStudent).put("attachment", attachment);
+
+                    attachTb_activity_student.put(attachAttachment);
+                }
+
+                attachActivityStudent.put("tb_activity_student", attachTb_activity_student);
+                jsonPseudoFinal.put("activityStudent", attachActivityStudent);
+            }
+
             //mount device
             device.put("id_device",idDevice);
 
@@ -260,13 +304,26 @@ public class SendData {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        Log.e("jsonsendfulldata ",jsonFinal.toString().replaceAll("\\{", "\n{"));
+        Log.e("jsonsendfulldata ", jsonFinal.toString().replaceAll("\\{", "\n{"));
         return jsonFinal;
     }
 
     private void clear(){
         id=-2;
         idserver=-2;
+    }
+
+    //https://github.com/gotev/android-upload-service
+    public void uploadMultipart(final Context context, String server, String filePath) {
+        try {
+            String uploadId = new MultipartUploadRequest(context, server)
+                    .addFileToUpload(filePath, "arquivo")
+                    .setNotificationConfig(new UploadNotificationConfig())
+                    .setMaxRetries(2)
+                    .startUpload();
+        } catch (Exception exc) {
+            Log.e("AndroidUploadService", exc.getMessage(), exc);
+        }
     }
 
 }

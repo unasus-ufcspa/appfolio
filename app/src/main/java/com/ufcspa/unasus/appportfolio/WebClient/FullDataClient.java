@@ -258,8 +258,8 @@ public class FullDataClient extends HttpClient {
                                     }
                                 }
 
-                                if (data.has("activityStudent")) {
-                                    JSONObject activityStudent = data.getJSONObject("activityStudent");
+                                if (data.has("activity_student")) {
+                                    JSONObject activityStudent = data.getJSONObject("activity_student");
                                     if (activityStudent.has("tb_activity_student")) {
                                         JSONArray tb_activity_student = activityStudent.getJSONArray("tb_activity_student");
                                         HashMap<Integer, ArrayList<Attachment>> list = new HashMap<>();
@@ -271,13 +271,13 @@ public class FullDataClient extends HttpClient {
                                             JSONArray attachmentsArray = temp.getJSONArray("attachment");
 
                                             for (int j = 0; j < attachmentsArray.length(); j++) {
-                                                JSONObject attachmentTemp = attachmentsArray.getJSONObject(i);
+                                                JSONObject attachmentTemp = attachmentsArray.getJSONObject(j);
                                                 Attachment attachment = new Attachment();
 
-                                                String tp_attachment = attachmentTemp.getString("tp_attachment");
+                                                String tp_attachment = attachmentTemp.getString("tp_attachment").replaceAll("\\s+", "");
                                                 String nm_file = attachmentTemp.getString("nm_file");
                                                 String nm_system = attachmentTemp.getString("nm_system");
-                                                int id_attachment_srv = attachmentTemp.getInt("id_attachment");
+                                                int id_attachment_srv = attachmentTemp.getInt("id_attachment_srv");
 
                                                 attachment.setTpAttachment(tp_attachment);
                                                 attachment.setNmFile(nm_file);

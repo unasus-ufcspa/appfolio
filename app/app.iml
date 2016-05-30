@@ -120,6 +120,7 @@
     <orderEntry type="library" exported="" name="universal-image-loader-1.9.5" level="project" />
     <orderEntry type="library" exported="" name="appcompat-v7-23.2.1" level="project" />
     <orderEntry type="library" exported="" name="iconics-core-2.5.1" level="project" />
+    <orderEntry type="library" exported="" name="android-http-download-manager-1.5.3" level="project" />
     <orderEntry type="module" module-name="RTEditor-Toolbar" exported="" />
     <orderEntry type="module" module-name="RTEditor" exported="" />
     <orderEntry type="library" exported="" name="org.apache.http.legacy-android-23" level="project" />
