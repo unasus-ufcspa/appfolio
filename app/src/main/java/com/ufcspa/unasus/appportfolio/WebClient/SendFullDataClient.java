@@ -49,12 +49,13 @@ public class SendFullDataClient extends HttpClient{
                         MainActivity.sendResponseNotReceived = false;
                     } else if (response.has("fullDataDevSrv_response")) {
                         sendData.dadosResponse = new LinkedHashMap<>();
+                        LinkedList<HolderIDS> holdersComments = new LinkedList<>();
 
                         JSONObject resp = response.getJSONObject("fullDataDevSrv_response");
                         Log.d(tag, "JSON POST existe Send Full Data response");
                         if (resp.has("comment")) {
                             JSONObject comment = resp.getJSONObject("comment");
-                            LinkedList<HolderIDS> holders = new LinkedList<>();
+
                             if (comment.has("tb_comment")) {
                                 JSONArray tb_comment = comment.getJSONArray("tb_comment");
                                 for (int i = 0; i < tb_comment.length(); i++) {
@@ -66,9 +67,9 @@ public class SendFullDataClient extends HttpClient{
                                     holder.id = id_comment;
                                     holder.idSrv = id_comment_srv;
                                     holder.date = dt_comment_srv;
-                                    holders.add(holder);
+                                    holdersComments.add(holder);
                                 }
-                                sendData.dadosResponse.put("tb_comment", holders);
+                                sendData.dadosResponse.put("tb_comment", holdersComments);
                             }
                         }
                         if (resp.has("version")) {
@@ -76,6 +77,7 @@ public class SendFullDataClient extends HttpClient{
                             LinkedList<HolderIDS> holders = new LinkedList<>();
                             if (version.has("tb_version_activity")) {
                                 if (version.get("tb_version_activity") instanceof JSONArray) {
+                                    Log.d("json","tem tb_version_activity");
                                     JSONArray tb_version_activity = version.getJSONArray("tb_version_activity");
                                     for (int i = 0; i < tb_version_activity.length(); i++) {
                                         HolderIDS holder = new HolderIDS();
@@ -87,6 +89,29 @@ public class SendFullDataClient extends HttpClient{
                                         holder.idSrv = id_version_activity_srv;
                                         holder.date = dt_submission;
                                         holders.add(holder);
+
+                                        if (temp.has("tb_comment")) {
+                                            Log.d("json","tem tb_comment dentro de version");
+                                            JSONArray tb_comment = temp.getJSONArray("tb_comment");
+                                            for (int j= 0; j < tb_comment.length(); j++) {
+                                                Log.d("json","encontrou comment");
+                                                HolderIDS holder2 = new HolderIDS();
+                                                JSONObject temp2 = tb_comment.getJSONObject(j);
+                                                int id_comment = temp2.getInt("id_comment");
+                                                //int id_comment_srv = temp2.getInt("id_comment_srv");
+                                                String dt_comment_srv = temp2.getString("dt_send");
+                                                holder2.id = id_comment;
+                                                //holder2.idSrv = id_comment_srv;
+                                                holder2.date = dt_comment_srv;
+                                                Log.d("json","holder2:"+holder2.toString());
+                                                holdersComments.add(holder2);
+                                            }
+                                            sendData.dadosResponse.remove("tb_comment");
+                                            sendData.dadosResponse.put("tb_comment", holdersComments);
+                                            Log.d("json", "deu put em dados response na tb_comment:"+holdersComments);
+                                        }else{
+                                            Log.d("json","não tem tb_comment dentro de version");
+                                        }
                                     }
                                     sendData.dadosResponse.put("tb_version_activity", holders);
                                 }

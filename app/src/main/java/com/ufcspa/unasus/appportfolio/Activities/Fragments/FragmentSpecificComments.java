@@ -217,6 +217,7 @@ private LoadCommentsFromDB loadCommentsFromDB;
         Singleton singleton = Singleton.getInstance();
         Comentario c = new Comentario();
         c.setDateComment(getActualTime());
+        c.setDateSend(c.getDateComment());
         c.setIdAuthor(singleton.user.getIdUser());
         c.setTypeComment("O");
         //Log.d("comments", "reference setting in C spcific comment:" + txNote.getText().toString());
@@ -232,12 +233,13 @@ private LoadCommentsFromDB loadCommentsFromDB;
             Singleton singleton = Singleton.getInstance();
             lista = (ArrayList<Comentario>) db.listComments(singleton.activity.getIdActivityStudent(), "O", singleton.note.getBtId());//lista comentario gerais filtrando por O
             oneComments= new ArrayList<>(10);
+            Log.d("comments","comentarios especificos:"+lista.toString());
 
             if (lista.size() != 0) {
 
                 for(Comentario c : lista){
                     OneComment one = new OneComment(c.getIdAuthor() == singleton.user.getIdUser(),
-                            c.getTxtComment(), convertDateToTime(c.getDateComment()), convertDateToDate(c.getDateComment()));
+                            c.getTxtComment(), convertDateToTime(c.getDateSend()), convertDateToDate(c.getDateSend()));
                     if(c.getIdAttach()!=0) {
                         one.atach = true;
                         one.idAttach=c.getIdAttach();
@@ -245,14 +247,16 @@ private LoadCommentsFromDB loadCommentsFromDB;
                     }
                     oneComments.add(one);
                 }
+                Log.d("comments", "one Comments exist, size:" + oneComments.size());
+//            spcAdapter.refresh(oneComments);
+                Log.d("comments", "adapter itens:" + spcAdapter.getCount());
             } else {
                 Log.d("Banco", "Lista retornou vazia!");
             }
-            Log.d("specific comments", "one Comments exist, size:" + oneComments.size());
-//            spcAdapter.refresh(oneComments);
-            Log.d("specific comments", "adapter itens:" + spcAdapter.getCount());
-        } catch (Exception e) {
 
+        } catch (Exception e) {
+            e.printStackTrace();
+            Log.wtf("comments","erro doido em popular specific comments:"+e.getMessage());
         }
     }
 
@@ -513,10 +517,12 @@ private LoadCommentsFromDB loadCommentsFromDB;
         try {
             SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             Date date = null;
-            date = df.parse(atualDate);
-            SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-            shortTimeStr = sdf.format(date);
-            Log.d("comments","date to other date format :"+shortTimeStr);
+            if(df!=null) {
+                date = df.parse(atualDate);
+                SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+                shortTimeStr = sdf.format(date);
+                Log.d("comments", "date to other date format :" + shortTimeStr);
+            }
         } catch (ParseException e) {
             // To change body of catch statement use File | Settings | File Templates.
             e.printStackTrace();

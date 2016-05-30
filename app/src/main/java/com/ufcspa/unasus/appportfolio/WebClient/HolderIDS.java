@@ -52,4 +52,14 @@ public class HolderIDS {
         this.id=-1;
         this.idSrv=-1;
     }
+
+
+    @Override
+    public String toString() {
+        return "HolderIDS{" +
+                "id=" + id +
+                ", idSrv=" + idSrv +
+                ", date='" + date + '\'' +
+                '}';
+    }
 }
