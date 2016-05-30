@@ -2,9 +2,13 @@ package com.ufcspa.unasus.appportfolio.WebClient;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.Environment;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 
+import com.coolerfall.download.DownloadCallback;
+import com.coolerfall.download.DownloadManager;
+import com.coolerfall.download.DownloadRequest;
 import com.ufcspa.unasus.appportfolio.Model.Attachment;
 import com.ufcspa.unasus.appportfolio.Model.Comentario;
 import com.ufcspa.unasus.appportfolio.Model.CommentVersion;
@@ -91,7 +95,7 @@ public class FullData {
         Integer[] keys = list.keySet().toArray(new Integer[list.keySet().size()]);
         for (int i = 0; i < keys.length; i++) {
             Integer activity_student = keys[i];
-            list.put(activity_student, list.get(activity_student));
+            anexos.put(activity_student, list.get(activity_student));
         }
     }
 
@@ -123,11 +127,29 @@ public class FullData {
         for (int i = 0; i < keys.length; i++) {
             Integer id_activity_student = keys[i];
             ArrayList<Attachment> attachments = anexos.get(id_activity_student);
+            DownloadManager manager = new DownloadManager();
             for (Attachment a : attachments) {
-                int id_attachment = data.insertAttachment(a);
+                int id_attachment = data.insertAttachmentDownload(a);
                 data.insertAttachmentActivity(id_activity_student, id_attachment);
                 // BAIXAR OS ATTACHMENTS!!!!!!!!
-//                downloadAttachment("http://blog.concretesolutions.com.br/wp-content/uploads/2015/04/Android1.png", "android.png");
+                String filePath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES) + File.separator + a.getNmSystem();
+                Log.d("File Path", filePath);
+                DownloadRequest request = new DownloadRequest()
+                        .setUrl("http://192.168.0.25/webfolio/app_dev.php/download/" + a.getNmSystem())
+                        .setDestFilePath(filePath)
+                        .setDownloadCallback(new DownloadCallback() {
+                            @Override
+                            public void onSuccess(int downloadId, String filePath) {
+                                super.onSuccess(downloadId, filePath);
+                            }
+
+                            @Override
+                            public void onFailure(int downloadId, int statusCode, String errMsg) {
+                                super.onFailure(downloadId, statusCode, errMsg);
+                            }
+                        });
+                manager.add(request);
+//                downloadAttachment("http://stuffpoint.com/stardoll/image/54056-stardoll-sdfs.jpg" + a.getNmSystem(), a.getNmFile());
             }
         }
 

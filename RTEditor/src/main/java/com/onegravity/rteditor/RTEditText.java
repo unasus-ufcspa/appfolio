@@ -50,6 +50,7 @@ import com.onegravity.rteditor.utils.Paragraph;
 import com.onegravity.rteditor.utils.RTLayout;
 import com.onegravity.rteditor.utils.Selection;
 
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -96,6 +97,8 @@ public class RTEditText extends EditText implements TextWatcher, SpanWatcher, Li
     private Spannable mOldSpannable;    // undo/redo
     private boolean canPaste = true;
 
+    private HashMap<String, String> attachments;
+
     // ****************************************** Lifecycle Methods *******************************************
 
     public RTEditText(Context context) {
@@ -117,6 +120,8 @@ public class RTEditText extends EditText implements TextWatcher, SpanWatcher, Li
         addTextChangedListener(this);
         // we need this or links won't be clickable
         setMovementMethod(RTEditorMovementMethod.getInstance());
+
+        attachments = new HashMap<>();
     }
 
     /**
@@ -291,6 +296,55 @@ public class RTEditText extends EditText implements TextWatcher, SpanWatcher, Li
                 new RTPlainText(content);
 
         setText(rtText);
+    }
+
+    public void setRichTextEditing(boolean useRTFormatting, String content, HashMap<String, String> aux) {
+        assertRegistration();
+
+        attachments = aux;
+
+        if (useRTFormatting != mUseRTFormatting) {
+            mUseRTFormatting = useRTFormatting;
+
+            if (mListener != null) {
+                mListener.onRichTextEditingChanged(this, mUseRTFormatting);
+            }
+        }
+
+        RTText rtText = useRTFormatting ?
+                new RTHtml<RTImage, RTAudio, RTVideo>(RTFormat.HTML, content) :
+                new RTPlainText(content);
+
+        setText(rtText, aux);
+    }
+
+    private void setText(RTText rtText, HashMap<String, String> aux) {
+        assertRegistration();
+
+        if (rtText.getFormat() instanceof RTFormat.Html) {
+            if (mUseRTFormatting) {
+                RTText rtSpanned = rtText.convertTo(RTFormat.SPANNED, mMediaFactory, aux);
+
+                super.setText(rtSpanned.getText(), TextView.BufferType.EDITABLE);
+                addSpanWatcher();
+
+                // collect all current media
+                Spannable text = getText();
+                for (MediaSpan span : text.getSpans(0, text.length(), MediaSpan.class)) {
+                    mOriginalMedia.add(span.getMedia());
+                }
+
+                Effects.cleanupParagraphs(this);
+            } else {
+                RTText rtPlainText = rtText.convertTo(RTFormat.PLAIN_TEXT, mMediaFactory);
+                super.setText(rtPlainText.getText());
+            }
+        } else if (rtText.getFormat() instanceof RTFormat.PlainText) {
+            CharSequence text = rtText.getText();
+            super.setText(text == null ? "" : text.toString());
+        }
+
+        onSelectionChanged(0, 0);
     }
 
     /**
@@ -517,7 +571,7 @@ public class RTEditText extends EditText implements TextWatcher, SpanWatcher, Li
         if(state instanceof SavedState) {
             SavedState savedState = (SavedState)state;
             super.onRestoreInstanceState(savedState.getSuperState());
-            setRichTextEditing(savedState.useRTFormatting(), savedState.getContent());
+            setRichTextEditing(savedState.useRTFormatting(), savedState.getContent(), attachments);
         }
         else {
             super.onRestoreInstanceState(state);

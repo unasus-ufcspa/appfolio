@@ -35,6 +35,8 @@ public interface RTMedia extends Serializable {
      */
     String getFilePath(RTFormat format);
 
+    void setFilePath(String filePath);
+
     /**
      * Returns the file name (e.g. image.png)
      */

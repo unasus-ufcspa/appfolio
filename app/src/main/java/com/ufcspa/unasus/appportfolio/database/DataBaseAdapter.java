@@ -5,6 +5,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteConstraintException;
 import android.database.sqlite.SQLiteDatabase;
+import android.os.Environment;
 import android.util.Log;
 
 import com.ufcspa.unasus.appportfolio.Model.Activity;
@@ -24,6 +25,7 @@ import com.ufcspa.unasus.appportfolio.Model.User;
 import com.ufcspa.unasus.appportfolio.Model.VersionActivity;
 import com.ufcspa.unasus.appportfolio.WebClient.HolderIDS;
 
+import java.io.File;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -695,12 +697,33 @@ public class DataBaseAdapter {
     *************************CRUD ANEXOS***********************************
 
 */
-
     public int insertAttachment(Attachment attach) {
         ContentValues cv = new ContentValues();
         cv.put("tp_attachment", attach.getTpAttachment());
         cv.put("nm_file", attach.getNmFile());
         cv.put("nm_system", attach.getNmSystem());
+        cv.put("id_attachment_srv", attach.getidAttachmentSrv());
+
+        try {
+            db.insert("tb_attachment", null, cv);
+            Log.d(tag, "conseguiu salvar id anexo no comentario do bd");
+        } catch (Exception e) {
+            Log.e(tag, "erro ao salvar na tabela tb_attach_comment:" + e.getMessage());
+        }
+        Cursor cursor = db.rawQuery("select seq from sqlite_sequence where name='tb_attachment'", null);
+        int lastID = 0;
+        if (cursor.moveToFirst()) {
+            lastID = cursor.getInt(0);
+            Log.d(tag, "last id_attachment in table:" + lastID);
+        }
+        return lastID;
+    }
+
+    public int insertAttachmentDownload(Attachment attach) {
+        ContentValues cv = new ContentValues();
+        cv.put("tp_attachment", attach.getTpAttachment());
+        cv.put("nm_file", attach.getNmFile());
+        cv.put("nm_system", Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES) + File.separator + attach.getNmSystem());
         cv.put("id_attachment_srv", attach.getidAttachmentSrv());
 
         try {
@@ -740,7 +763,10 @@ public class DataBaseAdapter {
     }
 
     public int getAttachmentByPath(String filePath) {
-        String sql = "SELECT id_attachment FROM tb_attachment WHERE nm_system =" + filePath;
+        if (filePath.contains("_video")) {
+            filePath.replace("_video", "");
+        }
+        String sql = "SELECT id_attachment FROM tb_attachment WHERE nm_system = '" + filePath + "'";
         Cursor c = null;
         try {
             c = db.rawQuery(sql, null);
@@ -2287,5 +2313,53 @@ public class DataBaseAdapter {
 
     public void cleanDataBase() {
         context.deleteDatabase("folio.sqlite");
+    }
+
+    public LinkedHashMap<Integer, LinkedList<Attachment>> getAttachments(LinkedList<Integer> integers) {
+        LinkedHashMap<Integer, LinkedList<Attachment>> aux = new LinkedHashMap<>();
+
+        for (Integer id : integers) {
+            String query = "SELECT id_attachment, id_activity_student FROM tb_attach_activity WHERE id_attach_activity = " + id;
+            Cursor c = db.rawQuery(query, null);
+            if (c.moveToFirst()) {
+                int idAttachment = c.getInt(0);
+                int idActivityStudent = c.getInt(1);
+
+                if (!aux.containsKey(idActivityStudent))
+                    aux.put(idActivityStudent, new LinkedList<Attachment>());
+
+                String queryAttachment = "SELECT * FROM tb_attachment WHERE id_attachment = " + idAttachment;
+                Cursor cAttachment = db.rawQuery(queryAttachment, null);
+
+                if (cAttachment.moveToFirst())
+                    aux.get(idActivityStudent).add(cursorToAttachment(cAttachment));
+            }
+        }
+
+        return aux;
+    }
+
+    public HashMap<String, String> getAllAttachmentsNames(int idActivityStudent) {
+
+        HashMap<String, String> aux = new HashMap<>();
+
+        String query = "SELECT tba.nm_system FROM tb_attachment as tba " +
+                "JOIN tb_attach_activity as tbaa on tbaa.id_attachment = tba.id_attachment " +
+                "WHERE tbaa.id_activity_student = " + idActivityStudent;
+        Cursor c = db.rawQuery(query, null);
+
+        if (c.moveToFirst()) {
+            String nmSystem = c.getString(0);
+            String key = "";
+            String[] a = nmSystem.split("/");
+            if (a.length > 0)
+                key = a[a.length - 1];
+
+            if (!aux.containsKey(key))
+                aux.put(key, nmSystem);
+        }
+
+        return aux;
+
     }
 }

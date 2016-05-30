@@ -7,7 +7,7 @@ import android.content.Context;
  */
 public class HttpClient {
     //    private static final String ip = "folio.unasus.ufcspa.edu.br";
-    private static final String ip = "200.18.67.9";//"192.168.0.25"; //
+    private static final String ip = "192.168.0.25";//"192.168.0.25"; //200.18.67.9
     protected static final String URL = "http://" + ip + "/webfolio/app_dev.php/";
     protected String tag="JSON";
     private Context context;

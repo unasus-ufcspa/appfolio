@@ -24,6 +24,7 @@ import com.onegravity.rteditor.converter.ConverterHtmlToSpanned;
 import com.onegravity.rteditor.converter.ConverterHtmlToText;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -65,6 +66,17 @@ public class RTHtml<I extends RTImage, A extends RTAudio, V extends RTVideo> ext
             return ConverterHtmlToText.convert(this);
         } else if (destFormat instanceof RTFormat.Spanned) {
             return new ConverterHtmlToSpanned().convert(this, mediaFactory);
+        }
+
+        return super.convertTo(destFormat, mediaFactory);
+    }
+
+    @Override
+    public RTText convertTo(RTFormat destFormat, RTMediaFactory<RTImage, RTAudio, RTVideo> mediaFactory, HashMap<String, String> aux) {
+        if (destFormat instanceof RTFormat.PlainText) {
+            return ConverterHtmlToText.convert(this);
+        } else if (destFormat instanceof RTFormat.Spanned) {
+            return new ConverterHtmlToSpanned().convert(this, mediaFactory, aux);
         }
 
         return super.convertTo(destFormat, mediaFactory);

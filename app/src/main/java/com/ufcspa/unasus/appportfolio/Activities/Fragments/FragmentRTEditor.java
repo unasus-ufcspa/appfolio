@@ -160,8 +160,8 @@ public class FragmentRTEditor extends Frag {
                         break;
                 }
 
-                if (idAttachment != -1)
-                    source.insertAttachActivity(idAttachment, singleton.idActivityStudent);
+                //if (idAttachment != -1)
+                //source.insertAttachActivity(idAttachment, singleton.idActivityStudent);
             }
         }
     }
@@ -177,7 +177,10 @@ public class FragmentRTEditor extends Frag {
 //        }
         if (singleton.firsttime) {
             String text = source.getTextFromCurrentVersion(singleton.idCurrentVersionActivity);
-            mRTMessageField.setRichTextEditing(true, text);
+
+            HashMap<String, String> aux = source.getAllAttachmentsNames(singleton.idActivityStudent);
+
+            mRTMessageField.setRichTextEditing(true, text, aux);
             singleton.firsttime = false;
         }
     }
@@ -260,7 +263,7 @@ public class FragmentRTEditor extends Frag {
                                         saveText();
 
                                         //ANEXOS QUE DEVEM SER ENVIADOS
-//                                        handleSendAttachments();
+                                        handleSendAttachments();
 
                                         //POPULA SYNC PARA SINCRONIZAR
                                         Sync sync = new Sync();
@@ -345,7 +348,6 @@ public class FragmentRTEditor extends Frag {
 
 
     private void handleSendAttachments() {
-
         Spannable textSpanned = mRTMessageField.getText();
         MediaSpan[] spans = textSpanned.getSpans(0, textSpanned.length(), MediaSpan.class);
         for (MediaSpan s : spans) {
@@ -1267,20 +1269,11 @@ public class FragmentRTEditor extends Frag {
         public boolean onCreateActionMode(ActionMode mode, Menu menu) {
             ((InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(getView().getWindowToken(), 0);
             if (singleton.portfolioClass.getPerfil().equals("S")) {
-//                if (singleton.idVersionActivity == singleton.idCurrentVersionActivity) {
-//                    createAddSpecificCommentButton(getCaretYPosition(mRTMessageField.getSelectionStart()));
-//                    mode.getMenu();
-//                } else {
-//                    menu.removeItem(android.R.id.paste);
-//                    menu.removeItem(android.R.id.cut);
-//                }
-
                 if (singleton.idVersionActivity != singleton.idCurrentVersionActivity) {
                     menu.removeItem(android.R.id.paste);
                     menu.removeItem(android.R.id.cut);
                 }
             }
-
             if (singleton.portfolioClass.getPerfil().equals("T")) {
                 createAddSpecificCommentButton(getCaretYPosition(mRTMessageField.getSelectionStart()));
                 menu.removeItem(android.R.id.paste);

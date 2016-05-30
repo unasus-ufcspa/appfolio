@@ -17,24 +17,18 @@
 package com.onegravity.rteditor.converter;
 
 import android.annotation.SuppressLint;
-import android.graphics.Color;
-import android.text.Html;
 import android.text.Layout;
-import android.text.Spannable;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
 import android.text.TextUtils;
 import android.text.style.AbsoluteSizeSpan;
-//import android.text.style.BackgroundColorSpan;
 import android.text.style.ForegroundColorSpan;
 import android.text.style.QuoteSpan;
 import android.text.style.RelativeSizeSpan;
 import android.text.style.StrikethroughSpan;
 import android.text.style.SubscriptSpan;
 import android.text.style.SuperscriptSpan;
-import android.util.Log;
 
-import com.onegravity.rteditor.R;
 import com.onegravity.rteditor.api.RTMediaFactory;
 import com.onegravity.rteditor.api.format.RTFormat;
 import com.onegravity.rteditor.api.format.RTHtml;
@@ -80,6 +74,8 @@ import java.util.Stack;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+//import android.text.style.BackgroundColorSpan;
+
 /**
  * Converts html to Spanned text using TagSoup
  */
@@ -88,21 +84,15 @@ public class ConverterHtmlToSpanned implements ContentHandler {
     private static final float[] HEADER_SIZES = {
             1.5f, 1.4f, 1.3f, 1.2f, 1.1f, 1f,
     };
-
-    private String mSource;
-    private RTMediaFactory<? extends RTImage, ? extends RTAudio, ? extends RTVideo> mMediaFactory;
-    private Parser mParser;
-    private SpannableStringBuilder mResult;
-
-    private Stack<AccumulatedParagraphStyle> mParagraphStyles = new Stack<AccumulatedParagraphStyle>();
-
-    /**
-     * If this is set to True we ignore all characters till it's set to false again.
-     * This way be can ignore e.g. style information or even the whole header
-     */
-    private boolean mIgnoreContent;
-
     private static final Set<String> sIgnoreTags = new HashSet<String>();
+    /*
+     * Examples:
+     * <font style="font-size:25px;background-color:#00ff00;color:#ff0000">This is heading 1</font>
+	 * <font style="font-size:50px;background-color:#0000FF;color:#FFFF00">This is heading 2</font>
+     */
+    private static final Pattern FONT_SIZE = Pattern.compile("\\d+");
+    private static final Pattern FONT_COLOR = Pattern.compile("#[a-f0-9]+");
+    private static HashMap<String, Integer> COLORS = new HashMap<String, Integer>();
 
     static {
         sIgnoreTags.add("header");
@@ -110,13 +100,103 @@ public class ConverterHtmlToSpanned implements ContentHandler {
         sIgnoreTags.add("meta");
     }
 
+    static {
+        COLORS.put("aqua", 0x00FFFF);
+        COLORS.put("black", 0x000000);
+        COLORS.put("blue", 0x0000FF);
+        COLORS.put("fuchsia", 0xFF00FF);
+        COLORS.put("green", 0x008000);
+        COLORS.put("grey", 0x808080);
+        COLORS.put("lime", 0x00FF00);
+        COLORS.put("maroon", 0x800000);
+        COLORS.put("navy", 0x000080);
+        COLORS.put("olive", 0x808000);
+        COLORS.put("purple", 0x800080);
+        COLORS.put("red", 0xFF0000);
+        COLORS.put("silver", 0xC0C0C0);
+        COLORS.put("teal", 0x008080);
+        COLORS.put("white", 0xFFFFFF);
+        COLORS.put("yellow", 0xFFFF00);
+    }
+
+    private String mSource;
+    private RTMediaFactory<? extends RTImage, ? extends RTAudio, ? extends RTVideo> mMediaFactory;
+    private Parser mParser;
+    private SpannableStringBuilder mResult;
+    private HashMap<String, String> attach;
+    private Stack<AccumulatedParagraphStyle> mParagraphStyles = new Stack<AccumulatedParagraphStyle>();
     /**
-     * Lazy initialization holder for HTML parser. This class will
-     * a) be pre-loaded by zygote, or
-     * b) not loaded until absolutely necessary.
+     * If this is set to True we ignore all characters till it's set to false again.
+     * This way be can ignore e.g. style information or even the whole header
      */
-    private static class HtmlParser {
-        private static final HTMLSchema SCHEMA = new HTMLSchema();
+    private boolean mIgnoreContent;
+
+    // ****************************************** org.xml.sax.ContentHandler *******************************************
+
+    /**
+     * Converts an HTML color (named or numeric) to an integer RGB value.
+     *
+     * @param color Non-null color string.
+     * @return A color value, or {@code -1} if the color string could not be interpreted.
+     */
+    @SuppressLint("DefaultLocale")
+    private static int getHtmlColor(String color) {
+        Integer i = COLORS.get(color.toLowerCase());
+        if (i != null) {
+            return i;
+        } else {
+            try {
+                return convertValueToInt(color, -1);
+            } catch (NumberFormatException nfe) {
+                return -1;
+            }
+        }
+    }
+
+    private static final int convertValueToInt(CharSequence charSeq, int defaultValue) {
+        if (null == charSeq)
+            return defaultValue;
+
+        String nm = charSeq.toString();
+
+        // XXX This code is copied from Integer.decode() so we don't
+        // have to instantiate an Integer!
+
+        int sign = 1;
+        int index = 0;
+        int len = nm.length();
+        int base = 10;
+
+        if ('-' == nm.charAt(0)) {
+            sign = -1;
+            index++;
+        }
+
+        if ('0' == nm.charAt(index)) {
+            // Quick check for a zero by itself
+            if (index == (len - 1))
+                return 0;
+
+            char c = nm.charAt(index + 1);
+
+            if ('x' == c || 'X' == c) {
+                index += 2;
+                base = 16;
+            } else {
+                index++;
+                base = 8;
+            }
+        } else if ('#' == nm.charAt(index)) {
+            index++;
+            base = 16;
+        }
+
+        return Integer.parseInt(nm.substring(index), base) * sign;
+    }
+
+    public RTSpanned convert(RTHtml<? extends RTImage, ? extends RTAudio, ? extends RTVideo> input, RTMediaFactory<? extends RTImage, ? extends RTAudio, ? extends RTVideo> mediaFactory, HashMap<String, String> aux) {
+        attach = aux;
+        return convert(input, mediaFactory);
     }
 
     public RTSpanned convert(RTHtml<? extends RTImage, ? extends RTAudio, ? extends RTVideo> input,
@@ -172,8 +252,6 @@ public class ConverterHtmlToSpanned implements ContentHandler {
         }
     }
 
-    // ****************************************** org.xml.sax.ContentHandler *******************************************
-
     @Override
     public void setDocumentLocator(Locator locator) {
     }
@@ -198,6 +276,8 @@ public class ConverterHtmlToSpanned implements ContentHandler {
     public void startElement(String uri, String localName, String qName, Attributes attributes) throws SAXException {
         handleStartTag(localName, attributes);
     }
+
+    // ****************************************** Handle Tags *******************************************
 
     @Override
     public void endElement(String uri, String localName, String qName) throws SAXException {
@@ -254,8 +334,6 @@ public class ConverterHtmlToSpanned implements ContentHandler {
     @Override
     public void skippedEntity(String name) throws SAXException {
     }
-
-    // ****************************************** Handle Tags *******************************************
 
     private void handleStartTag(String tag, Attributes attributes) {
         if (tag.equalsIgnoreCase("br")) {
@@ -596,7 +674,14 @@ public class ConverterHtmlToSpanned implements ContentHandler {
 
     private void startImg(Attributes attributes) {
         int len = mResult.length();
+
         String src = attributes.getValue("", "src");
+        String[] aux = src.split("/");
+        if (aux.length > 0)
+            src = aux[aux.length - 1];
+        if (attach.containsKey(src))
+            src = attach.get(src);
+
         RTImage image = mMediaFactory.createImage(src);
 
         if (image != null && image.exists()) {
@@ -621,14 +706,6 @@ public class ConverterHtmlToSpanned implements ContentHandler {
 
     private void startAudio(Attributes attributes) {
     }
-
-    /*
-     * Examples:
-     * <font style="font-size:25px;background-color:#00ff00;color:#ff0000">This is heading 1</font>
-	 * <font style="font-size:50px;background-color:#0000FF;color:#FFFF00">This is heading 2</font>
-     */
-    private static final Pattern FONT_SIZE = Pattern.compile("\\d+");
-    private static final Pattern FONT_COLOR = Pattern.compile("#[a-f0-9]+");
 
     private void startFont(Attributes attributes) {
         int size = Integer.MIN_VALUE;
@@ -731,6 +808,8 @@ public class ConverterHtmlToSpanned implements ContentHandler {
         }
     }
 
+    // ****************************************** Helper Data Structures *******************************************
+
     private void startAHref(Attributes attributes) {
         String href = attributes.getValue("", "href");
         int len = mResult.length();
@@ -772,7 +851,14 @@ public class ConverterHtmlToSpanned implements ContentHandler {
         }
     }
 
-    // ****************************************** Helper Data Structures *******************************************
+    /**
+     * Lazy initialization holder for HTML parser. This class will
+     * a) be pre-loaded by zygote, or
+     * b) not loaded until absolutely necessary.
+     */
+    private static class HtmlParser {
+        private static final HTMLSchema SCHEMA = new HTMLSchema();
+    }
 
     /*
      * While the spanned text is build we need to use SPAN_EXCLUSIVE_EXCLUSIVE instead of SPAN_EXCLUSIVE_INCLUSIVE
@@ -857,6 +943,8 @@ public class ConverterHtmlToSpanned implements ContentHandler {
         }
     }
 
+    // ****************************************** Color Methods *******************************************
+
     private static class OL extends List {
         OL(int nrOfIndents, boolean isIndentation) {
             super(nrOfIndents, isIndentation);
@@ -889,7 +977,7 @@ public class ConverterHtmlToSpanned implements ContentHandler {
             mId = id;
             return this;
         }
-        
+
         private Font setFontFace(String fontFace) {
             mFontFace = fontFace;
             return this;
@@ -926,90 +1014,6 @@ public class ConverterHtmlToSpanned implements ContentHandler {
         Header(int level) {
             mLevel = level;
         }
-    }
-
-    // ****************************************** Color Methods *******************************************
-
-    private static HashMap<String, Integer> COLORS = new HashMap<String, Integer>();
-
-    static {
-        COLORS.put("aqua", 0x00FFFF);
-        COLORS.put("black", 0x000000);
-        COLORS.put("blue", 0x0000FF);
-        COLORS.put("fuchsia", 0xFF00FF);
-        COLORS.put("green", 0x008000);
-        COLORS.put("grey", 0x808080);
-        COLORS.put("lime", 0x00FF00);
-        COLORS.put("maroon", 0x800000);
-        COLORS.put("navy", 0x000080);
-        COLORS.put("olive", 0x808000);
-        COLORS.put("purple", 0x800080);
-        COLORS.put("red", 0xFF0000);
-        COLORS.put("silver", 0xC0C0C0);
-        COLORS.put("teal", 0x008080);
-        COLORS.put("white", 0xFFFFFF);
-        COLORS.put("yellow", 0xFFFF00);
-    }
-
-    /**
-     * Converts an HTML color (named or numeric) to an integer RGB value.
-     *
-     * @param color Non-null color string.
-     * @return A color value, or {@code -1} if the color string could not be interpreted.
-     */
-    @SuppressLint("DefaultLocale")
-    private static int getHtmlColor(String color) {
-        Integer i = COLORS.get(color.toLowerCase());
-        if (i != null) {
-            return i;
-        } else {
-            try {
-                return convertValueToInt(color, -1);
-            } catch (NumberFormatException nfe) {
-                return -1;
-            }
-        }
-    }
-
-    private static final int convertValueToInt(CharSequence charSeq, int defaultValue) {
-        if (null == charSeq)
-            return defaultValue;
-
-        String nm = charSeq.toString();
-
-        // XXX This code is copied from Integer.decode() so we don't
-        // have to instantiate an Integer!
-
-        int sign = 1;
-        int index = 0;
-        int len = nm.length();
-        int base = 10;
-
-        if ('-' == nm.charAt(0)) {
-            sign = -1;
-            index++;
-        }
-
-        if ('0' == nm.charAt(index)) {
-            // Quick check for a zero by itself
-            if (index == (len - 1))
-                return 0;
-
-            char c = nm.charAt(index + 1);
-
-            if ('x' == c || 'X' == c) {
-                index += 2;
-                base = 16;
-            } else {
-                index++;
-                base = 8;
-            }
-        } else if ('#' == nm.charAt(index)) {
-            index++;
-            base = 16;
-        }
-
-        return Integer.parseInt(nm.substring(index), base) * sign;
     }
 
 }

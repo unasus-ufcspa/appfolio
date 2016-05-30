@@ -21,7 +21,6 @@ import android.media.ExifInterface;
 import android.util.Log;
 
 import com.onegravity.rteditor.api.format.RTFormat;
-
 import com.onegravity.rteditor.utils.io.FilenameUtils;
 
 import java.io.File;
@@ -94,7 +93,7 @@ public abstract class RTMediaImpl implements RTMedia {
      * We need this since sub classes might want to use a custom
      * Serialization implementation.
      */
-    protected void setFilePath(String filePath) {
+    public void setFilePath(String filePath) {
         mFilePath = filePath;
     }
 
