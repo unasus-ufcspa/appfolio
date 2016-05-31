@@ -677,10 +677,23 @@ public class ConverterHtmlToSpanned implements ContentHandler {
 
         String src = attributes.getValue("", "src");
         String[] aux = src.split("/");
-        if (aux.length > 0)
-            if (attach != null && attach.containsKey(aux[aux.length - 1]))
+        if (aux.length > 0) {
+            String replace = aux[aux.length - 1].replace("_video.", ".");
+            aux[aux.length - 1] = replace;
+            if (attach != null && attach.containsKey(aux[aux.length - 1])) {
                 src = attach.get(aux[aux.length - 1]);
+                if (src.contains(".mp4")) {
+                    String[] path = src.split("/");
+                    String[] secondPath = path[path.length - 1].split("\\.");
+                    secondPath[0] += "_video";
+                    path[path.length - 1] = secondPath[0] + "." + secondPath[1];
 
+                    src = "";
+                    for (int i = 1; i < path.length; i++)
+                        src += "/" + path[i];
+                }
+            }
+        }
         RTImage image = mMediaFactory.createImage(src);
 
         if (image != null && image.exists()) {

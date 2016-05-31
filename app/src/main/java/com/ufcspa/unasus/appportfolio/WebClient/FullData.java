@@ -2,7 +2,10 @@ package com.ufcspa.unasus.appportfolio.WebClient;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.media.ThumbnailUtils;
 import android.os.Environment;
+import android.provider.MediaStore;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 
@@ -24,7 +27,9 @@ import org.json.JSONObject;
 
 import java.io.BufferedInputStream;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.URL;
@@ -141,6 +146,9 @@ public class FullData {
                             @Override
                             public void onSuccess(int downloadId, String filePath) {
                                 super.onSuccess(downloadId, filePath);
+                                if (filePath.contains(".mp4")) {
+                                    saveSmallImage(filePath);
+                                }
                             }
 
                             @Override
@@ -162,6 +170,51 @@ public class FullData {
 
         if (comentarios.size() > 0)
             LocalBroadcastManager.getInstance(context).sendBroadcast(new Intent("call.connection.action"));
+    }
+
+    public String saveSmallImage(String videoPath) {
+        String[] path = videoPath.split("/");
+        String[] secondPath = path[path.length - 1].split("\\.");
+        secondPath[0] += "_video";
+        path[path.length - 1] = secondPath[0] + "." + secondPath[1];
+
+        String newPath = "";
+        for (int i = 1; i < path.length; i++)
+            newPath += "/" + path[i];
+
+        OutputStream fOutputStream = null;
+        File file = new File(newPath);
+        if (!file.exists()) {
+            try {
+                file.createNewFile();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+        try {
+            fOutputStream = new FileOutputStream(file);
+
+            Bitmap bitmap = createThumbnailFromPath(videoPath, MediaStore.Images.Thumbnails.MICRO_KIND);
+            videoPath = newPath;
+
+            Bitmap resized = Bitmap.createScaledBitmap(bitmap, 320, 240, true);
+            resized.compress(Bitmap.CompressFormat.PNG, 40, fOutputStream);
+
+            fOutputStream.flush();
+            fOutputStream.close();
+
+            MediaStore.Images.Media.insertImage(context.getContentResolver(), file.getAbsolutePath(), file.getName(), file.getName());
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return videoPath;
+    }
+
+    public Bitmap createThumbnailFromPath(String filePath, int type) {
+        return ThumbnailUtils.createVideoThumbnail(filePath, type);
     }
 
     /*

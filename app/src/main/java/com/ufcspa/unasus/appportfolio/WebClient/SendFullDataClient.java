@@ -69,6 +69,7 @@ public class SendFullDataClient extends HttpClient{
                                     holder.date = dt_comment_srv;
                                     holdersComments.add(holder);
                                 }
+
                                 sendData.dadosResponse.put("tb_comment", holdersComments);
                             }
                         }
@@ -108,7 +109,7 @@ public class SendFullDataClient extends HttpClient{
                                             }
                                             sendData.dadosResponse.remove("tb_comment");
                                             sendData.dadosResponse.put("tb_comment", holdersComments);
-                                            Log.d("json", "deu put em dados response na tb_comment:"+holdersComments);
+                                            Log.d("json", "deu put em dados response na tb_comment:" + holdersComments);
                                         }else{
                                             Log.d("json","não tem tb_comment dentro de version");
                                         }

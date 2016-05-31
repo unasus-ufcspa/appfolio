@@ -1,6 +1,8 @@
 package com.ufcspa.unasus.appportfolio.WebClient;
 
 import android.content.Context;
+import android.content.Intent;
+import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 
 import com.ufcspa.unasus.appportfolio.Model.Attachment;
@@ -129,6 +131,7 @@ public class SendData {
                 uploadMultipart(context, "http://192.168.0.25/webfolio/app_dev.php/upload", a.getNmSystem());
             }
         }
+        LocalBroadcastManager.getInstance(context).sendBroadcast(new Intent("call.connection.action"));
     }
 
     public JSONObject GenerateJSON(String idDevice){

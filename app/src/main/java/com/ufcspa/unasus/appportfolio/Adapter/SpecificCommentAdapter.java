@@ -81,7 +81,6 @@ public class SpecificCommentAdapter extends BaseAdapter {
            // Log.d("comments", "datenow get:" + lastDate);
             holder.date.setVisibility(View.VISIBLE);
         }else {
-
             if (!lastDate.equals(c.date)) {
                 //Log.d("comments", "dateNow:" + c.date + "is diferent to lastDate:" + lastDate);
                 lastDate = c.date;

@@ -119,8 +119,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         setContentView(R.layout.activity_main);
         getSupportActionBar().hide();
 
-//        SQLiteOnWeb.init(getApplicationContext()).start();
-
         if (savedInstanceState == null) {
             Bundle extras = getIntent().getExtras();
             if (extras == null) {
@@ -134,9 +132,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         singleton = Singleton.getInstance();
         singleton.note = new Note(0, "null", 0);
-        //////////ID activity do MARIO///////////
-//        singleton.idActivityStudent=1;
-        /////////--------------------///////////
 
         fragmentContainer = findViewById(R.id.fragment_container);
         if (shouldCreateDrawer) {
@@ -165,13 +160,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new FragmentRTEditor()).addToBackStack("FragmentRTEditor").commit();
             lastFragName = "FragmentRTEditor";
         } else if (savedInstanceState == null)
-           /*
-             QUAL FRAGMENT IRA INICIAR APOS LOGIN?
-             0 para select portfolio
-             5 para rtEditor
-
-             */
             changeFragment(0);
+        /*
+        File exst = Environment.getExternalStorageDirectory();
+        String exstPath = exst.getPath();
+        File newFile = new File(exstPath+"/folio");
+        if(!newFile.exists())//check if file already exists
+        {
+            newFile.mkdirs();//if not, create it
+        }
+        */
     }
 
     private void initMiniDrawer() {

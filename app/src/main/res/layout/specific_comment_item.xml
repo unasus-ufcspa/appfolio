@@ -26,7 +26,7 @@
             android:textIsSelectable="true"
             android:textSize="11dp"
             android:textStyle="italic"
-            android:visibility="visible" />
+            android:visibility="gone" />
     </RelativeLayout>
 
     <RelativeLayout
