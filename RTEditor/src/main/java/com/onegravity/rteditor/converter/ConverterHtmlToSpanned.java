@@ -678,9 +678,8 @@ public class ConverterHtmlToSpanned implements ContentHandler {
         String src = attributes.getValue("", "src");
         String[] aux = src.split("/");
         if (aux.length > 0)
-            src = aux[aux.length - 1];
-        if (attach.containsKey(src))
-            src = attach.get(src);
+            if (attach != null && attach.containsKey(aux[aux.length - 1]))
+                src = attach.get(aux[aux.length - 1]);
 
         RTImage image = mMediaFactory.createImage(src);
 
