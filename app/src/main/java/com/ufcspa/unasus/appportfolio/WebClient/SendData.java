@@ -116,7 +116,7 @@ public class SendData {
         if(dadosResponse.get(tbComm)!=null){
             Log.d("json send full data ", "atualizando tabela " + tbComm + "...");
             data.updateCommentBySendFullData(dadosResponse.get(tbComm));
-            Log.d("json send full data ", "conseguiu atualizar com sucesso id server");
+            Log.d("json send full data ", "conseguiu atualizar com sucesso comment to server");
         }
         if (dadosResponse.get(tbVers) != null) {
             Log.d("json send full data ", "atualizando tabela " + tbVers + "...");
