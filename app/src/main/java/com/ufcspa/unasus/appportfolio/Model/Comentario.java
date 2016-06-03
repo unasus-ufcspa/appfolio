@@ -13,11 +13,20 @@ public class Comentario {
     String dateComment;
     private String dateSend;
     private int idComment;
+    private int id_comment_version;
     private int idActivityStudent;
     private int idAuthor;
     private int idNote;
     private int idAttach;
     private int idCommentSrv;
+
+    public int getId_comment_version() {
+        return id_comment_version;
+    }
+
+    public void setId_comment_version(int id_comment_version) {
+        this.id_comment_version = id_comment_version;
+    }
 
     public int getIdAttach() {
         return idAttach;

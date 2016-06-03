@@ -16,6 +16,7 @@ import com.ufcspa.unasus.appportfolio.Model.Comentario;
 import com.ufcspa.unasus.appportfolio.Model.CommentVersion;
 import com.ufcspa.unasus.appportfolio.Model.Device;
 import com.ufcspa.unasus.appportfolio.Model.Notification;
+import com.ufcspa.unasus.appportfolio.Model.Observation;
 import com.ufcspa.unasus.appportfolio.Model.PortfolioClass;
 import com.ufcspa.unasus.appportfolio.Model.Reference;
 import com.ufcspa.unasus.appportfolio.Model.StudFrPortClass;
@@ -481,17 +482,110 @@ public class DataBaseAdapter {
         return lastID;
 
     }
-    public boolean isFirstSpecificComment(int idActSt,int nu_comment_activity){
-        int id=-1;
-        String sql = "select * from tb_comment WHERE tp_comment ='O' AND id_activity_student=" + idActSt + " AND nu_comment_activity= "+nu_comment_activity;
+    public boolean isFirstSpecificComment(int idActSt,int nu_comment_activity) {
+        int id = -1;
+        String sql = "select * from tb_comment WHERE tp_comment ='O' AND id_activity_student=" + idActSt + " AND nu_comment_activity= " + nu_comment_activity;
         Cursor c = db.rawQuery(sql, null);
         if (c.moveToFirst()) {
             return false;
-        }else{
+        } else {
             return true;
         }
 
     }
+
+    /* ---------    ****************************          ---------
+       --------- CRUD COMENTARIOS ESPECIFICOS NOVA VERSÃO --------
+       --------- *************************************** ---------- */
+
+
+    public int insertSpecificCommenNEW(Comentario c, int idNote) {
+        ContentValues cv = new ContentValues();
+        cv.put("id_activity_student", c.getIdActivityStudent());
+        cv.put("id_author", c.getIdAuthor());
+        cv.put("id_comment_version", c.getIdAuthor());
+        cv.put("tx_comment", c.getTxtComment());
+        cv.put("tp_comment", c.getTypeComment());
+        cv.put("dt_comment", c.getDateComment());
+        cv.put("dt_send", c.getDateSend());
+
+        db.insert("tb_comment", null, cv);
+        try {
+            Log.d(tag + " insertSpecificComment", "inseriu comentario no banco");
+        } catch (Exception e) {
+            Log.e(tag + " insertSpecificComment", "erro ao inserir:" + e.getMessage());
+        }
+        Cursor cursor = db.rawQuery("select seq from sqlite_sequence where name='tb_comment'", null);
+        int lastID = 0;
+        if (cursor.moveToFirst()) {
+            lastID = cursor.getInt(0);
+            Log.d(tag, "last id_comment id table:" + lastID);
+        }
+        return lastID;
+    }
+
+    public int insertObservationByVersion(Observation o){
+        ContentValues cv = new ContentValues();
+        cv.put("id_comment_version",o.getId_comment_version());
+        cv.put("id_version_activity", o.getId_version_activity());
+        cv.put("tx_reference", o.getTx_reference());
+        cv.put("nu_comment_activity", o.getNu_comment_activity());
+        cv.put("nu_initial_pos",o.getNu_initial_position());
+        cv.put("nu_size", o.getNu_size());
+        try {
+            db.insert("tb_comment_version", null, cv);
+            Log.d(tag + " insert", "inseriu observação no banco");
+        } catch (Exception e) {
+            Log.e(tag + " insert", "erro ao inserir observação:" + e.getMessage());
+        }
+        Cursor cursor = db.rawQuery("select seq from sqlite_sequence where name='tb_comment_version'", null);
+        int lastID = 0;
+        if (cursor.moveToFirst()) {
+            lastID = cursor.getInt(0);
+            Log.d(tag, "last id_comment id table:" + lastID);
+        }
+        return lastID;
+    }
+
+    public List<Observation> getObservationsByVersion(int idversion, int idActivityStudent){
+        ArrayList<Observation>  obs= new ArrayList<Observation>();
+        String sql = "SELECT * from tb_comment WHERE id_activity_student =" + idActivityStudent + " AND id_version_activity="+idversion+";";
+        //Log.e(tag, "sql listComments:" + sql);
+        Cursor c = db.rawQuery(sql, null);
+
+        if (c.moveToFirst()) {
+            do {
+                try {
+                    Observation o= new Observation();
+                    o.setId_comment_version(c.getInt(0));
+                    o.setId_version_activity(c.getInt(1));
+                    o.setTx_reference(c.getString(2));
+                    o.setNu_comment_activity(c.getInt(3));
+                    o.setNu_initial_position(c.getInt(4));
+                    o.setNu_size(c.getInt(5));
+                    obs.add(o);
+                } catch (Exception v) {
+                    Log.e(tag, "erro ao pegar dados do banco:" + v.getMessage());
+                }
+                //add comment
+            } while (c.moveToNext());
+            c.close();
+//            db.close();
+        } else {
+            Log.d(tag + " get", "não retornou nenhuma observação");
+        }
+        //Log.d(tag, "listou notas no banco n:" + comentarios.size());
+        return obs;
+    }
+
+
+
+
+
+
+
+
+
 
     public int getPersonalComment(int idActSt){
        int id=-1;
