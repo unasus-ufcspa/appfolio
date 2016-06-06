@@ -104,7 +104,7 @@ public class FragmentRTEditor extends Frag {
     private DataBaseAdapter source;
     private Singleton singleton;
     // Cores
-    private int trasnparent;
+    private int transparent;
     private int greenLight;
     private int greenDark;
     // Versoes
@@ -180,6 +180,8 @@ public class FragmentRTEditor extends Frag {
 
             HashMap<String, String> aux = source.getAllAttachmentsNames(singleton.idActivityStudent);
 
+            // TODO Processar o texto inserindo as tags de comentário específico
+
             mRTMessageField.setRichTextEditing(true, text, aux);
             singleton.firsttime = false;
         }
@@ -209,7 +211,7 @@ public class FragmentRTEditor extends Frag {
 
         specificCommentsOpen = false;
 
-        trasnparent = getResources().getColor(android.R.color.transparent);
+        transparent = getResources().getColor(android.R.color.transparent);
         greenLight = getResources().getColor(R.color.base_green_light);
         greenDark = getResources().getColor(R.color.base_green);
 
@@ -272,6 +274,9 @@ public class FragmentRTEditor extends Frag {
                                         sync.setId_activity_student(Singleton.getInstance().idActivityStudent);
                                         sync.setId_device(singleton.device.get_id_device());
                                         source.insertIntoTBSync(sync);
+
+                                        // TODO Adicionar comentários específicos ao sincronismo
+                                        // TODO Processar o texto removendo as tags de comentário específico
 
                                         //SALVA NOVA VERSION ACTIVITY
                                         DataBaseAdapter data = DataBaseAdapter.getInstance(getContext());
@@ -1181,7 +1186,7 @@ public class FragmentRTEditor extends Frag {
         for (BackgroundColorSpan spm : spans) {
             if (spm.getId() != -1) {
                 if (flag)
-                    spm.setColor(trasnparent);
+                    spm.setColor(transparent);
                 else
                     spm.setColor(greenLight);
             }
