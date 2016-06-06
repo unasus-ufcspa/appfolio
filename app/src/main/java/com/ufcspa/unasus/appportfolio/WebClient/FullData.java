@@ -140,7 +140,7 @@ public class FullData {
                 String filePath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES) + File.separator + a.getNmSystem();
                 Log.d("File Path", filePath);
                 DownloadRequest request = new DownloadRequest()
-                        .setUrl("http://192.168.0.25/webfolio/app_dev.php/download/" + a.getNmSystem())
+                        .setUrl("http://" + new HttpClient(context).ip + "/webfolio/app_dev.php/download/" + a.getNmSystem())
                         .setDestFilePath(filePath)
                         .setDownloadCallback(new DownloadCallback() {
                             @Override

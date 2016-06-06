@@ -128,7 +128,7 @@ public class SendData {
         data.deleteSync(idSync);
         for (Integer id : attachments.keySet()) {
             for (Attachment a : attachments.get(id)) {
-                uploadMultipart(context, "http://192.168.0.25/webfolio/app_dev.php/upload", a.getNmSystem());
+                uploadMultipart(context, "http://" + new HttpClient(context).ip + "/webfolio/app_dev.php/upload", a.getNmSystem());
             }
         }
         LocalBroadcastManager.getInstance(context).sendBroadcast(new Intent("call.connection.action"));
