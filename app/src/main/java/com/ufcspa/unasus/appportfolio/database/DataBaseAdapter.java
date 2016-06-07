@@ -2074,7 +2074,9 @@ public class DataBaseAdapter {
         }
     }
 
-    public void insertComments(LinkedList<Comentario> comentarios) {
+
+    // VERSÃO ANTIGA DE INSERT COMMENTS, ATÉ 07/06/2016
+    public void insertCommentsOLD(LinkedList<Comentario> comentarios) {
         for (Comentario c : comentarios) {
             ContentValues cv = new ContentValues();
             cv.put("id_activity_student", c.getIdActivityStudent());
@@ -2097,6 +2099,31 @@ public class DataBaseAdapter {
 
         }
     }
+
+    public void insertComments(LinkedList<Comentario> comentarios) {
+        for (Comentario c : comentarios) {
+            ContentValues cv = new ContentValues();
+            cv.put("id_activity_student", c.getIdActivityStudent());
+            cv.put("id_comment_version", c.getId_comment_version());
+            cv.put("id_author", c.getIdAuthor());
+            cv.put("tx_comment", c.getTxtComment());
+            cv.put("tp_comment", c.getTypeComment());
+            cv.put("id_comment_srv", c.getIdCommentSrv());
+            cv.put("dt_comment", c.getDateComment());
+            cv.put("dt_send", c.getDateSend());
+
+            try {
+                db.insert("tb_comment", null, cv);
+
+            } catch (Exception e) {
+                Log.d(tag, "erro ao inserir na tb_comment:" + e.getMessage());
+                e.printStackTrace();
+            }
+
+        }
+    }
+
+
 
 
 

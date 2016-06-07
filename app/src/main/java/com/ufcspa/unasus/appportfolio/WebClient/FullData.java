@@ -16,6 +16,7 @@ import com.ufcspa.unasus.appportfolio.Model.Attachment;
 import com.ufcspa.unasus.appportfolio.Model.Comentario;
 import com.ufcspa.unasus.appportfolio.Model.CommentVersion;
 import com.ufcspa.unasus.appportfolio.Model.Notification;
+import com.ufcspa.unasus.appportfolio.Model.Observation;
 import com.ufcspa.unasus.appportfolio.Model.Reference;
 import com.ufcspa.unasus.appportfolio.Model.Tuple;
 import com.ufcspa.unasus.appportfolio.Model.VersionActivity;
@@ -50,6 +51,7 @@ public class FullData {
     private LinkedList<Notification> notifications;
     private LinkedList<User> users;
     private LinkedList<CommentVersion> commentVersions;
+    private LinkedList<Observation> observations;
 
 
     private Context context;
@@ -64,6 +66,8 @@ public class FullData {
         this.users = new LinkedList<>();
         this.commentVersions = new LinkedList<CommentVersion>();
         this.context = context;
+        this.observations= new LinkedList<Observation>();
+
     }
 
     public static JSONObject toJSON(String idDevice, int idActivityStudent) {
@@ -82,6 +86,10 @@ public class FullData {
 
     public void addCommentVersion(CommentVersion cv) {
         commentVersions.add(cv);
+    }
+
+    public void addObservation(Observation obs) {
+        observations.add(obs);
     }
 
     public void addVersion(VersionActivity versionActivity) {
@@ -125,6 +133,9 @@ public class FullData {
         data.insertComments(comentarios);
         for (CommentVersion cv: commentVersions) {
             data.insertCommentVersion(cv);
+        }
+        for(Observation obs: observations){
+            data.insertObservationByVersion(obs);
         }
         data.updateTBUser(users);
 

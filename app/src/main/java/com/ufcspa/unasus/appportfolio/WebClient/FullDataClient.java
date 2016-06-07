@@ -15,6 +15,7 @@ import com.ufcspa.unasus.appportfolio.Model.Attachment;
 import com.ufcspa.unasus.appportfolio.Model.Comentario;
 import com.ufcspa.unasus.appportfolio.Model.CommentVersion;
 import com.ufcspa.unasus.appportfolio.Model.Notification;
+import com.ufcspa.unasus.appportfolio.Model.Observation;
 import com.ufcspa.unasus.appportfolio.Model.Reference;
 import com.ufcspa.unasus.appportfolio.Model.Tuple;
 import com.ufcspa.unasus.appportfolio.Model.VersionActivity;
@@ -102,6 +103,7 @@ public class FullDataClient extends HttpClient {
                                 }
                                 if (data.has("comment")) {
                                     JSONObject comment = data.getJSONObject("comment");
+                                    /* VERSÃO ANTIGA ATE 07/06/2016
                                     if (comment.has("tb_comment")) {
                                         JSONArray tb_comment = comment.getJSONArray("tb_comment");
                                         for (int i = 0; i < tb_comment.length(); i++) {
@@ -158,7 +160,63 @@ public class FullDataClient extends HttpClient {
                                                 }
                                             }
                                         }
+                                    }*/
+                                    if (comment.has("tb_comment")) {
+                                        JSONArray tb_comment = comment.getJSONArray("tb_comment");
+                                        for (int i = 0; i < tb_comment.length(); i++) {
+                                            JSONObject temp = tb_comment.getJSONObject(i);
+                                            Comentario comentario = new Comentario();
+
+                                            if (!temp.has("error")) {
+                                                int id_activity_student = temp.getInt("id_activity_student");
+                                                int id_author = temp.getInt("id_author");
+                                                //String tx_comment = temp.getString("tx_comment");
+                                                String tx_reference = temp.getString("tx_reference");
+                                                String tp_comment = temp.getString("tp_comment");
+                                                String dt_comment = temp.getString("dt_comment");
+                                                String dt_send=dt_comment;
+                                                if(temp.has("dt_send"))
+                                                    dt_send=temp.getString("dt_send");
+                                                int id_comment_srv = temp.getInt("id_comment");
+                                                int id_comment_version = temp.getInt("id_comment_version");
+
+                                                comentario.setIdActivityStudent(id_activity_student);
+                                                comentario.setIdAuthor(id_author);
+                                                //comentario.setTxtComment(tx_comment);
+                                                comentario.setTxtReference(tx_reference);
+                                                comentario.setTypeComment(tp_comment);
+                                                comentario.setDateComment(dt_comment);
+                                                comentario.setDateSend(dt_send);
+                                                comentario.setId_comment_version(id_comment_version);
+                                                comentario.setIdCommentSrv(id_comment_srv);
+
+                                                JSONObject attachments = new JSONObject();
+                                                try {
+                                                    attachments = temp.getJSONObject("attachment");
+                                                } catch (Exception e) {
+                                                }
+
+                                                if (attachments.has("id_attachment")) {
+                                                    Attachment attachment = new Attachment();
+
+                                                    String tp_attachment = attachments.getString("tp_attachment");
+                                                    String nm_file = attachments.getString("nm_file");
+                                                    String nm_system = attachments.getString("nm_system");
+                                                    int id_attachment_srv = attachments.getInt("id_attachment");
+
+                                                    attachment.setTpAttachment(tp_attachment);
+                                                    attachment.setNmFile(nm_file);
+                                                    attachment.setNmSystem(nm_system);
+                                                    attachment.setIdAttachmentSrv(id_attachment_srv);
+
+                                                    fullData.addCommentAttachment(new Tuple<Comentario, Attachment>(comentario, attachment));
+                                                } else {
+                                                    fullData.addComments(comentario);
+                                                }
+                                            }
+                                        }
                                     }
+
                                 }
 
                                 if (data.has("reference")) {
@@ -239,14 +297,14 @@ public class FullDataClient extends HttpClient {
                                     }
                                 }
 
-                                if (data.has("comment_version")) {
+                               /* VERSÃO ANTIGA
+                               if (data.has("comment_version")) {
                                     JSONObject comment_version = data.getJSONObject("comment_version");
                                     if (comment_version.has("tb_comment_version")) {
                                         JSONArray tb_comment_version = comment_version.getJSONArray("tb_comment_version");
                                         for (int i = 0; i < tb_comment_version.length(); i++) {
                                             JSONObject temp = tb_comment_version.getJSONObject(i);
                                             CommentVersion commentVersion = new CommentVersion();
-
                                             int id_version_activity = temp.getInt("id_version_activity");
                                             int id_comment = temp.getInt("id_comment");
 
@@ -256,7 +314,31 @@ public class FullDataClient extends HttpClient {
                                             fullData.addCommentVersion(commentVersion);
                                         }
                                     }
+                                }*/
+                                if (data.has("comment_version")) {
+                                    JSONObject comment_version = data.getJSONObject("comment_version");
+                                    if (comment_version.has("tb_comment_version")) {
+                                        JSONArray tb_comment_version = comment_version.getJSONArray("tb_comment_version");
+                                        for (int i = 0; i < tb_comment_version.length(); i++) {
+                                            JSONObject temp = tb_comment_version.getJSONObject(i);
+                                            Observation obs = new Observation();
+                                            int id_version_activity = temp.getInt("id_version_activity");
+                                            int nu_comment_activity = temp.getInt("nu_comment_activity");
+                                            int nu_initial_pos = temp.getInt("nu_initial_pos");
+                                            int nu_size = temp.getInt("nu_size");
+                                            String  tx_reference = temp.getString("tx_reference");
+                                            obs.setNu_initial_position(nu_initial_pos);
+                                            obs.setNu_size(nu_size);
+                                            obs.setId_comment_version(nu_comment_activity);
+                                            obs.setId_version_activity(id_version_activity);
+                                            obs.setTx_reference(tx_reference);
+                                            fullData.addObservation(obs);
+                                        }
+                                    }
                                 }
+
+
+
 
                                 if (data.has("activity_student")) {
                                     JSONObject activityStudent = data.getJSONObject("activity_student");
