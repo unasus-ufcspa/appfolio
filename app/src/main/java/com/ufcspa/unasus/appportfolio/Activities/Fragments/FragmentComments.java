@@ -424,6 +424,8 @@ public class FragmentComments extends Frag {
 //        }
     }
 
+
+
     /**
      *  REESCRITA DO MÉTODO DA CLASSE FRAG, USADO PARA SALVAR COMETARIO COM ANEXO NA TABELA ATTACH_COMMENT
      *

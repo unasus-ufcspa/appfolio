@@ -456,6 +456,36 @@ public class DataBaseAdapter {
         return lastID;
     }
 
+
+    // atualizado para versão de 07/06/2016
+    public int insertSCommenNEW(Comentario c) {
+        ContentValues cv = new ContentValues();
+        cv.put("id_activity_student", c.getIdActivityStudent());
+        cv.put("id_author", c.getIdAuthor());
+        cv.put("id_comment_version", c.getIdAuthor());
+        cv.put("tx_comment", c.getTxtComment());
+        cv.put("tp_comment", c.getTypeComment());
+        cv.put("dt_comment", c.getDateComment());
+        cv.put("dt_send", c.getDateSend());
+
+        db.insert("tb_comment", null, cv);
+        try {
+            Log.d(tag + " insertSpecificComment", "inseriu comentario no banco");
+        } catch (Exception e) {
+            Log.e(tag + " insertSpecificComment", "erro ao inserir:" + e.getMessage());
+        }
+        Cursor cursor = db.rawQuery("select seq from sqlite_sequence where name='tb_comment'", null);
+        int lastID = 0;
+        if (cursor.moveToFirst()) {
+            lastID = cursor.getInt(0);
+            Log.d(tag, "last id_comment id table:" + lastID);
+        }
+        return lastID;
+    }
+
+
+
+
     public int insertSpecificComment(Comentario c, int idNote) {
         ContentValues cv = new ContentValues();
         cv.put("id_activity_student", c.getIdActivityStudent());
@@ -499,7 +529,7 @@ public class DataBaseAdapter {
        --------- *************************************** ---------- */
 
 
-    public int insertSpecificCommenNEW(Comentario c, int idNote) {
+    public int insertSpecificCommenNEW(Comentario c) {
         ContentValues cv = new ContentValues();
         cv.put("id_activity_student", c.getIdActivityStudent());
         cv.put("id_author", c.getIdAuthor());
@@ -716,6 +746,61 @@ public class DataBaseAdapter {
                     cmm.setIdActivityStudent(c.getInt(1));
                     cmm.setIdAuthor(c.getInt(2));
                     cmm.setTxtReference(c.getString(3));
+                    cmm.setTxtComment(c.getString(4));
+                    cmm.setDateComment(c.getString(5));
+                    cmm.setIdAttach(c.getInt(6));
+                    cmm.setDateSend(c.getString(7));
+                    comentarios.add(cmm);
+                } catch (Exception v) {
+                    Log.e(tag, "erro ao pegar dados do banco:" + v.getMessage());
+                }
+                //add comment
+            } while (c.moveToNext());
+            c.close();
+//            db.close();
+        } else {
+            Log.d(tag, "não retornoun nada");
+        }
+        Log.d(tag, "listou comentarios no banco :" + comentarios.toString());
+        return comentarios;
+    }
+
+    //Atualizado para nova versão banco 07/06/2016
+    public List<Comentario> listCommentsNEW(int idActStu, String typeComment) {
+        ArrayList<Comentario> comentarios = new ArrayList<Comentario>();
+        //String sql = "select * from tb_comment WHERE id_activity_student =" + idActStu;
+        String sql = "SELECT\n" +
+                "\tc.id_comment,\n" +
+                "\tc.id_activity_student,\n" +
+                "\tc.id_author,\n" +
+                "\tc.id_comment_version,\n" +
+                "\tc.tx_comment,\n" +
+                "\tc.dt_comment,\n" +
+                "\tac.id_attachment,\n" +
+                "\tc.dt_send\n" +
+                "\tFROM tb_comment c \n" +
+                "\t\tLEFT JOIN  tb_attach_comment ac on ac.id_comment = c.id_comment\n" +
+                "\tWHERE 1=1 AND c.id_activity_student = " + idActStu;
+
+        StringBuilder stBuild = new StringBuilder(sql);
+        if (typeComment.equalsIgnoreCase("G") || typeComment.equalsIgnoreCase("O") || typeComment.equalsIgnoreCase("P")) {
+            //sql+=" AND tp_comment='"+typeComment+"' ";
+            stBuild.append(" AND tp_comment='" + typeComment + "' ");
+        }
+        //sql+=" ORDER BY dt_comment ASC;";
+        stBuild.append(" ORDER BY dt_send ASC");
+        sql = stBuild.toString();
+        //Log.e(tag, "sql listComments:" + sql);
+        Cursor c = db.rawQuery(sql, null);
+        Comentario cmm;
+        if (c.moveToFirst()) {
+            do {
+                try {
+                    cmm = new Comentario();
+                    cmm.setIdComment(c.getInt(0));
+                    cmm.setIdActivityStudent(c.getInt(1));
+                    cmm.setIdAuthor(c.getInt(2));
+                    cmm.setId_comment_version(c.getInt(3));
                     cmm.setTxtComment(c.getString(4));
                     cmm.setDateComment(c.getString(5));
                     cmm.setIdAttach(c.getInt(6));
