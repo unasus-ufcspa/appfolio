@@ -7,6 +7,7 @@ import android.util.Log;
 
 import com.ufcspa.unasus.appportfolio.Model.Attachment;
 import com.ufcspa.unasus.appportfolio.Model.Comentario;
+import com.ufcspa.unasus.appportfolio.Model.Observation;
 import com.ufcspa.unasus.appportfolio.Model.Singleton;
 import com.ufcspa.unasus.appportfolio.Model.Sync;
 import com.ufcspa.unasus.appportfolio.Model.User;
@@ -34,6 +35,7 @@ public class SendData {
     private ArrayList<Sync> sincronias;
     private LinkedHashMap<String,LinkedList<Integer>> dadosAgrupados;
     private LinkedHashMap<Integer, LinkedList<Comentario>> commentsByVersions;
+    private LinkedList<Observation> observationByVersions;
     private LinkedList<Comentario> comentarios;
     private LinkedList<User> users;
     private LinkedList<VersionActivity> versions;
@@ -60,6 +62,7 @@ public class SendData {
         versions = new LinkedList<>();
         comentarios = new LinkedList<>();
         commentsByVersions = new LinkedHashMap<>();
+        observationByVersions= new LinkedList<Observation>();
         notices = new LinkedList<>();
         idSync = new LinkedList<>();
         attachments = new LinkedHashMap<>();
@@ -104,7 +107,10 @@ public class SendData {
         }
         if (dadosAgrupados.get(tbCommVers) != null) {
             commentsByVersions = data.getCommentVersion(dadosAgrupados.get(tbCommVers));
+            observationByVersions= data.getObservationByVersions(dadosAgrupados.get(tbCommVers));
         }
+
+
         if (dadosAgrupados.get(tbNotice) != null) {
             notices = dadosAgrupados.get(tbNotice);
         }
@@ -133,6 +139,9 @@ public class SendData {
         }
         LocalBroadcastManager.getInstance(context).sendBroadcast(new Intent("call.connection.action"));
     }
+
+
+
 
     public JSONObject GenerateJSON(String idDevice){
         getSyncs();// obtem lista de sincronizações
@@ -310,6 +319,181 @@ public class SendData {
         Log.e("jsonsendfulldata ", jsonFinal.toString().replaceAll("\\{", "\n{"));
         return jsonFinal;
     }
+
+    public JSONObject GenerateJSONNEW(String idDevice){
+        getSyncs();// obtem lista de sincronizações
+        getDataFromTables(); // obtem listas das tabelas a serem enviadas
+
+        //gera json a partir das listas de tabelas
+
+        JSONObject jsonFinal= new JSONObject();
+        JSONObject jsonPseudoFinal= new JSONObject();
+        JSONObject reference = new JSONObject();
+        JSONObject device = new JSONObject();
+
+        JSONArray jsonArrayVersions = new JSONArray();
+        JSONArray jsonComments = new JSONArray();
+        JSONArray jsonNotice = new JSONArray();
+
+        JSONObject jsonUser = new JSONObject();
+
+        try {
+            // mount JSON comment
+            if(comentarios!=null) {
+                for (Comentario comment : comentarios) {
+                    JSONObject jsonComment = new JSONObject();
+                    jsonComment.put("id_comment", comment.getIdComment());
+                    jsonComment.put("id_activity_student", comment.getIdActivityStudent());
+                    jsonComment.put("id_comment_version", comment.getId_comment_version());
+                    jsonComment.put("id_author", comment.getIdAuthor());
+                    jsonComment.put("tx_comment", comment.getTxtComment());
+                    jsonComment.put("tp_comment", comment.getTypeComment());
+                    jsonComment.put("dt_comment", comment.getDateComment());
+                    jsonComments.put(jsonComment);
+                }
+            }
+            if (versions != null) {
+                for (VersionActivity v : versions) {
+                    JSONObject jsonVersion = new JSONObject();
+                    jsonVersion.put("id_version_activity", v.getId_version_activity());
+                    if (v.getId_version_activit_srv() != -1)
+                        jsonVersion.put("id_version_activity_srv", v.getId_version_activit_srv());
+                    else
+                        jsonVersion.put("id_version_activity_srv", "");
+                    jsonVersion.put("id_activity_student", v.getId_activity_student());
+                    jsonVersion.put("tx_activity", v.getTx_activity());
+                    jsonVersion.put("dt_last_access", v.getDt_last_access());
+
+                    Log.wtf("json send data:", jsonVersion.toString());
+
+                    JSONArray jsonCommentsByVersion = new JSONArray();
+                    if (observationByVersions.size()!=0) {
+                        for (Observation c : observationByVersions) {
+                            JSONObject jComment = new JSONObject();
+                            jComment.put("id_comment_version", c.getId_comment_version());
+                            jComment.put("id_version_activity", c.getId_version_activity());
+                            jComment.put("tx_reference", c.getTx_reference());
+                            jComment.put("nu_comment_activity", c.getNu_comment_activity());
+                            jComment.put("nu_initial_pos", c.getNu_initial_position());
+                            jComment.put("nu_size", c.getNu_size());
+
+                            jsonCommentsByVersion.put(jComment);
+                        }
+                    }
+                    JSONObject jTb_comment = new JSONObject();
+                    jTb_comment.put("tb_comment", jsonCommentsByVersion);
+                    jsonVersion.put("comment", jTb_comment);
+
+                    jsonArrayVersions.put(jsonVersion);
+                }
+            }
+
+            if (commentsByVersions != null && commentsByVersions.size() != 0) {
+                JSONObject jsonVersion = new JSONObject();
+                for (Integer versionId : commentsByVersions.keySet()) {
+                    VersionActivity version = data.getVersionActivitiesByID(versionId);
+
+                    jsonVersion.put("id_version_activity", version.getId_version_activity());
+                    jsonVersion.put("id_version_activity_srv", version.getId_version_activit_srv());
+                    jsonVersion.put("id_activity_student", version.getId_activity_student());
+
+                    if (singleton.isFirstSpecificComment)
+                        jsonVersion.put("tx_activity", version.getTx_activity());
+                    else
+                        jsonVersion.put("tx_activity", "");
+
+                    jsonVersion.put("dt_last_access", "");
+
+                    JSONArray jsonCommentsByVersion = new JSONArray();
+                    for (Comentario comentario : commentsByVersions.get(versionId)) {
+                        JSONObject jComment = new JSONObject();
+                        jComment.put("id_comment", comentario.getIdComment());
+                        jComment.put("id_activity_student", comentario.getIdActivityStudent());
+                        jComment.put("id_author", comentario.getIdAuthor());
+                        jComment.put("tx_comment", comentario.getTxtComment());
+                        jComment.put("tx_reference", comentario.getTxtReference());
+                        jComment.put("tp_comment", comentario.getTypeComment());
+                        jComment.put("dt_comment", comentario.getDateComment());
+                        jComment.put("nu_comment_activity", comentario.getIdNote());
+
+                        jsonCommentsByVersion.put(jComment);
+                    }
+                    JSONObject jTb_comment = new JSONObject();
+                    jTb_comment.put("tb_comment", jsonCommentsByVersion);
+                    jsonVersion.put("comment", jTb_comment);
+                }
+                jsonArrayVersions.put(jsonVersion);
+                singleton.isFirstSpecificComment = false;
+            }
+
+            if (users != null && users.size() > 0) {
+                jsonUser.put("id_user", users.getFirst().getIdUser());
+                jsonUser.put("nm_user", users.getFirst().getName());
+                jsonUser.put("nu_identification", users.getFirst().getIdCode());
+                jsonUser.put("ds_email", users.getFirst().getEmail());
+                jsonUser.put("nu_cellphone", users.getFirst().getCellphone());
+                jsonUser.put("im_photo", users.getFirst().getPhoto());
+            }
+
+            if (notices != null && notices.size() != 0) {
+                for (Integer notice : notices) {
+                    JSONObject jnotice = new JSONObject();
+                    jnotice.put("id_notice", notice);
+
+                    jsonNotice.put(jnotice);
+                }
+            }
+
+            if (attachments != null && attachments.size() != 0) {
+                JSONObject attachActivityStudent = new JSONObject();
+                JSONArray attachTb_activity_student = new JSONArray();
+                for (Integer idActivityStudent : attachments.keySet()) {
+                    JSONObject attachAttachment = new JSONObject();
+                    JSONArray attachment = new JSONArray();
+
+                    for (Attachment a : attachments.get(idActivityStudent)) {
+                        JSONObject attach = new JSONObject();
+                        attach.put("id_attachment", a.getIdAttachment());
+                        attach.put("tp_attachment", a.getTpAttachment());
+                        attach.put("nm_file", a.getNmFile());
+                        String[] aux = a.getNmSystem().split("/");
+                        String path = a.getNmSystem();
+                        if (aux.length > 0)
+                            path = aux[aux.length - 1];
+                        attach.put("nm_system", path);
+                        attach.put("id_attachment_srv", a.getidAttachmentSrv());
+
+                        attachment.put(attach);
+                    }
+                    attachAttachment.put("id_activity_student", idActivityStudent).put("attachment", attachment);
+
+                    attachTb_activity_student.put(attachAttachment);
+                }
+
+                attachActivityStudent.put("tb_activity_student", attachTb_activity_student);
+                jsonPseudoFinal.put("activityStudent", attachActivityStudent);
+            }
+
+            //mount device
+            device.put("id_device",idDevice);
+
+            //mount pseudo final
+            jsonPseudoFinal.put("device",device);
+            jsonPseudoFinal.put("comment", new JSONObject().put("tb_comment", jsonComments));
+            jsonPseudoFinal.put("version", new JSONObject().put("tb_version_activity", jsonArrayVersions));
+            jsonPseudoFinal.put("user", new JSONObject().put("tb_user", jsonUser));
+            jsonPseudoFinal.put("notice", new JSONObject().put("tb_notice", jsonNotice));
+
+            jsonFinal.put("fullDataDevSrv_request", jsonPseudoFinal);
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        Log.e("jsonsendfulldata ", jsonFinal.toString().replaceAll("\\{", "\n{"));
+        return jsonFinal;
+    }
+
+
 
     private void clear(){
         id=-2;

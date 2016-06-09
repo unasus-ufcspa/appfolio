@@ -72,7 +72,7 @@
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/exploded-aar/com.android.support/animated-vector-drawable/23.2.1/jars" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.2.1/jars" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/exploded-aar/com.android.support/design/23.1.0/jars" />
-      <excludeFolder url="file://$MODULE_DIR$/build/intermediates/exploded-aar/com.android.support/recyclerview-v7/23.1.1/jars" />
+      <excludeFolder url="file://$MODULE_DIR$/build/intermediates/exploded-aar/com.android.support/recyclerview-v7/23.2.0/jars" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/exploded-aar/com.android.support/support-v4/23.2.1/jars" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/exploded-aar/com.android.support/support-vector-drawable/23.2.1/jars" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/exploded-aar/com.android/volley/1.0/jars" />
@@ -110,8 +110,8 @@
     <orderEntry type="library" exported="" name="crossfadedrawerlayout-0.0.2" level="project" />
     <orderEntry type="library" exported="" name="eventbus-2.4.1" level="project" />
     <orderEntry type="library" exported="" name="animated-vector-drawable-23.2.1" level="project" />
-    <orderEntry type="library" exported="" name="recyclerview-v7-23.1.1" level="project" />
     <orderEntry type="library" exported="" name="fontawesome-typeface-4.4.0.1" level="project" />
+    <orderEntry type="library" exported="" name="recyclerview-v7-23.2.0" level="project" />
     <orderEntry type="library" exported="" name="support-annotations-23.2.1" level="project" />
     <orderEntry type="library" exported="" name="materialdrawer-4.5.9" level="project" />
     <orderEntry type="library" exported="" name="volley-1.0" level="project" />

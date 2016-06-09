@@ -1236,6 +1236,47 @@ public class DataBaseAdapter {
 
         return aux;
     }
+    public LinkedList<Observation> getObservationByVersions(LinkedList<Integer> ids) {
+        LinkedHashMap<Integer, LinkedList<Comentario>> aux = new LinkedHashMap<>();
+        LinkedList obs = new LinkedList<Observation>();
+        if (ids != null && ids.size() != 0) {
+            StringBuilder query = new StringBuilder();
+            query.append("SELECT id_version_activity, id_comment FROM tb_comment_version WHERE id_comment_version IN (");
+            query.append(ids.get(0));
+
+            for (int i = 1; i < ids.size(); i++) {
+                query.append(", " + ids.get(i));
+            }
+
+            query.append(");");
+            Cursor c = db.rawQuery(query.toString(), null);
+            if (c.moveToFirst()) {
+                do {
+                    try {
+                        Observation o= new Observation();
+                        o.setId_comment_version(c.getInt(0));
+                        o.setId_version_activity(c.getInt(1));
+                        o.setTx_reference(c.getString(2));
+                        o.setNu_comment_activity(c.getInt(3));
+                        o.setNu_initial_position(c.getInt(4));
+                        o.setNu_size(c.getInt(5));
+                        obs.add(o);
+                    } catch (Exception v) {
+                        Log.e(tag, "erro ao pegar dados do banco:" + v.getMessage());
+                    }
+                    //add comment
+                } while (c.moveToNext());
+                c.close();
+//            db.close();
+            } else {
+                Log.d(tag + " get", "não retornou nenhuma observação");
+            }
+            //Log.d(tag, "listou notas no banco n:" + comentarios.size());
+            return obs;
+        }
+        return obs;
+
+    }
 
 
     public LinkedList<Comentario> getCommentVersion(int idVersion) {
