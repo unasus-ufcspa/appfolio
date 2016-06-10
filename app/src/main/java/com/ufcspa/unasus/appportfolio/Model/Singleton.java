@@ -22,6 +22,8 @@ public class Singleton {
     public boolean wasFullscreen = false;
     public boolean isFirstSpecificComment = false;
 
+    public Observation actualObservation= new Observation();
+
     public String erro = "Erro interno. Por favor tente novamente";
 
 

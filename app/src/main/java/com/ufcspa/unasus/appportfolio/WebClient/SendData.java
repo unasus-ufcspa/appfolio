@@ -35,7 +35,7 @@ public class SendData {
     private ArrayList<Sync> sincronias;
     private LinkedHashMap<String,LinkedList<Integer>> dadosAgrupados;
     private LinkedHashMap<Integer, LinkedList<Comentario>> commentsByVersions;
-    private LinkedList<Observation> observationByVersions;
+    private LinkedHashMap observationByVersions;
     private LinkedList<Comentario> comentarios;
     private LinkedList<User> users;
     private LinkedList<VersionActivity> versions;
@@ -62,7 +62,7 @@ public class SendData {
         versions = new LinkedList<>();
         comentarios = new LinkedList<>();
         commentsByVersions = new LinkedHashMap<>();
-        observationByVersions= new LinkedList<Observation>();
+        observationByVersions= new LinkedHashMap<Integer, LinkedList<Observation>>();
         notices = new LinkedList<>();
         idSync = new LinkedList<>();
         attachments = new LinkedHashMap<>();
@@ -367,8 +367,9 @@ public class SendData {
                     Log.wtf("json send data:", jsonVersion.toString());
 
                     JSONArray jsonCommentsByVersion = new JSONArray();
-                    if (observationByVersions.size()!=0) {
-                        for (Observation c : observationByVersions) {
+                    if (commentsByVersions.containsKey(v.getId_version_activity())) {
+                        LinkedList<Observation> observationLinkedList = (LinkedList<Observation>) observationByVersions.get(v.getId_version_activity());
+                        for (Observation c : observationLinkedList) {
                             JSONObject jComment = new JSONObject();
                             jComment.put("id_comment_version", c.getId_comment_version());
                             jComment.put("id_version_activity", c.getId_version_activity());
@@ -388,43 +389,43 @@ public class SendData {
                 }
             }
 
-            if (commentsByVersions != null && commentsByVersions.size() != 0) {
-                JSONObject jsonVersion = new JSONObject();
-                for (Integer versionId : commentsByVersions.keySet()) {
-                    VersionActivity version = data.getVersionActivitiesByID(versionId);
-
-                    jsonVersion.put("id_version_activity", version.getId_version_activity());
-                    jsonVersion.put("id_version_activity_srv", version.getId_version_activit_srv());
-                    jsonVersion.put("id_activity_student", version.getId_activity_student());
-
-                    if (singleton.isFirstSpecificComment)
-                        jsonVersion.put("tx_activity", version.getTx_activity());
-                    else
-                        jsonVersion.put("tx_activity", "");
-
-                    jsonVersion.put("dt_last_access", "");
-
-                    JSONArray jsonCommentsByVersion = new JSONArray();
-                    for (Comentario comentario : commentsByVersions.get(versionId)) {
-                        JSONObject jComment = new JSONObject();
-                        jComment.put("id_comment", comentario.getIdComment());
-                        jComment.put("id_activity_student", comentario.getIdActivityStudent());
-                        jComment.put("id_author", comentario.getIdAuthor());
-                        jComment.put("tx_comment", comentario.getTxtComment());
-                        jComment.put("tx_reference", comentario.getTxtReference());
-                        jComment.put("tp_comment", comentario.getTypeComment());
-                        jComment.put("dt_comment", comentario.getDateComment());
-                        jComment.put("nu_comment_activity", comentario.getIdNote());
-
-                        jsonCommentsByVersion.put(jComment);
-                    }
-                    JSONObject jTb_comment = new JSONObject();
-                    jTb_comment.put("tb_comment", jsonCommentsByVersion);
-                    jsonVersion.put("comment", jTb_comment);
-                }
-                jsonArrayVersions.put(jsonVersion);
-                singleton.isFirstSpecificComment = false;
-            }
+//            if (commentsByVersions != null && commentsByVersions.size() != 0) {
+//                JSONObject jsonVersion = new JSONObject();
+//                for (Integer versionId : commentsByVersions.keySet()) {
+//                    VersionActivity version = data.getVersionActivitiesByID(versionId);
+//
+//                    jsonVersion.put("id_version_activity", version.getId_version_activity());
+//                    jsonVersion.put("id_version_activity_srv", version.getId_version_activit_srv());
+//                    jsonVersion.put("id_activity_student", version.getId_activity_student());
+//
+//                    if (singleton.isFirstSpecificComment)
+//                        jsonVersion.put("tx_activity", version.getTx_activity());
+//                    else
+//                        jsonVersion.put("tx_activity", "");
+//
+//                    jsonVersion.put("dt_last_access", "");
+//
+//                    JSONArray jsonCommentsByVersion = new JSONArray();
+//                    for (Comentario comentario : commentsByVersions.get(versionId)) {
+//                        JSONObject jComment = new JSONObject();
+//                        jComment.put("id_comment", comentario.getIdComment());
+//                        jComment.put("id_activity_student", comentario.getIdActivityStudent());
+//                        jComment.put("id_author", comentario.getIdAuthor());
+//                        jComment.put("tx_comment", comentario.getTxtComment());
+//                        jComment.put("tx_reference", comentario.getTxtReference());
+//                        jComment.put("tp_comment", comentario.getTypeComment());
+//                        jComment.put("dt_comment", comentario.getDateComment());
+//                        jComment.put("nu_comment_activity", comentario.getIdNote());
+//
+//                        jsonCommentsByVersion.put(jComment);
+//                    }
+//                    JSONObject jTb_comment = new JSONObject();
+//                    jTb_comment.put("tb_comment", jsonCommentsByVersion);
+//                    jsonVersion.put("comment", jTb_comment);
+//                }
+//                jsonArrayVersions.put(jsonVersion);
+//                singleton.isFirstSpecificComment = false;
+//            }
 
             if (users != null && users.size() > 0) {
                 jsonUser.put("id_user", users.getFirst().getIdUser());

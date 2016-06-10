@@ -421,7 +421,25 @@ private LoadCommentsFromDB loadCommentsFromDB;
             if (singleton.portfolioClass.getPerfil().equals("T") && source.isFirstSpecificComment(singleton.idActivityStudent, noteNow.getBtId()))
                 singleton.isFirstSpecificComment = true;
 
-            lastID = source.insertSpecificComment(c, noteNow.getBtId());
+
+            // recupera n_nota criada
+            singleton.actualObservation.setNu_comment_activity(noteNow.getBtId());
+            singleton.actualObservation.setTx_reference(noteNow.getSelectedText());
+            singleton.actualObservation.setId_version_activity(singleton.idVersionActivity);
+
+            int idObservation;
+            if(singleton.isFirstSpecificComment){
+                idObservation = source.insertObservationByVersion(singleton.actualObservation);
+            }else{
+                idObservation = source.getIdObservationByNuCommentActivy(singleton.actualObservation.getNu_comment_activity());
+            }
+            c.setId_comment_version(idObservation);
+
+            lastID = source.insertSpecificComment(c);
+
+
+
+            //NECESSITA ATUALIZAR
 
             CommentVersion cv = new CommentVersion();
             cv.setId_comment(lastID);

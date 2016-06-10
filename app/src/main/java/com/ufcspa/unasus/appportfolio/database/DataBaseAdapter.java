@@ -458,7 +458,7 @@ public class DataBaseAdapter {
 
 
     // atualizado para versão de 07/06/2016
-    public int insertSCommenNEW(Comentario c) {
+    public int insertSpecificComment(Comentario c) {
         ContentValues cv = new ContentValues();
         cv.put("id_activity_student", c.getIdActivityStudent());
         cv.put("id_author", c.getIdAuthor());
@@ -486,7 +486,7 @@ public class DataBaseAdapter {
 
 
 
-    public int insertSpecificComment(Comentario c, int idNote) {
+    public int insertSpecificCommentOLD(Comentario c, int idNote) {
         ContentValues cv = new ContentValues();
         cv.put("id_activity_student", c.getIdActivityStudent());
         cv.put("id_author", c.getIdAuthor());
@@ -512,7 +512,7 @@ public class DataBaseAdapter {
         return lastID;
 
     }
-    public boolean isFirstSpecificComment(int idActSt,int nu_comment_activity) {
+    public boolean isFirstSpecificCommentOLD(int idActSt,int nu_comment_activity) {
         int id = -1;
         String sql = "select * from tb_comment WHERE tp_comment ='O' AND id_activity_student=" + idActSt + " AND nu_comment_activity= " + nu_comment_activity;
         Cursor c = db.rawQuery(sql, null);
@@ -523,6 +523,21 @@ public class DataBaseAdapter {
         }
 
     }
+
+    public boolean isFirstSpecificComment(int idActSt,int nu_comment_activity) {
+        int id = -1;
+        String sql = "select * from tb_comment_version WHERE id_activity_student=" + idActSt + " AND nu_comment_activity= " + nu_comment_activity;
+        Cursor c = db.rawQuery(sql, null);
+        if (c.moveToFirst()) {
+            return false;
+        } else {
+            return true;
+        }
+
+    }
+
+
+
 
     /* ---------    ****************************          ---------
        --------- CRUD COMENTARIOS ESPECIFICOS NOVA VERSÃO --------
@@ -577,9 +592,26 @@ public class DataBaseAdapter {
         return lastID;
     }
 
-    public List<Observation> getObservationsByVersion(int idversion, int idActivityStudent){
+
+
+
+
+    public int getIdObservationByNuCommentActivy(int nu_comment_activity) {
+        String query = "SELECT DISTINCT id_comment_version FROM tb_comment_version WHERE nu_comment_activity="+nu_comment_activity;
+        Cursor c = db.rawQuery(query, null);
+        int id=-1;
+        if (c.moveToFirst()) {
+            id = c.getInt(0);
+        }else {
+            id = 0;
+        }
+        return id;
+    }
+
+
+    public List<Observation> getObservationsByVersion(int idversion, int nu_comment_activity){
         ArrayList<Observation>  obs= new ArrayList<Observation>();
-        String sql = "SELECT * from tb_comment WHERE id_activity_student =" + idActivityStudent + " AND id_version_activity="+idversion+";";
+        String sql = "SELECT * from tb_comment_version WHERE nu_comment_activity =" + nu_comment_activity + " AND id_version_activity="+idversion+";";
         //Log.e(tag, "sql listComments:" + sql);
         Cursor c = db.rawQuery(sql, null);
 
@@ -823,6 +855,32 @@ public class DataBaseAdapter {
 
     public List<Integer> listSpecificComments(int idActStu) {
         ArrayList<Integer> comentarios = new ArrayList<Integer>();
+        String sql = "SELECT DISTINCT nu_comment_activity from tb_comment_version WHERE id_activity_student =" + idActStu;
+        //Log.e(tag, "sql listComments:" + sql);
+        Cursor c = db.rawQuery(sql, null);
+        Integer id;
+        if (c.moveToFirst()) {
+            do {
+                try {
+                    id = c.getInt(0);
+                    //Log.e(tag, "listSpecificComments idnow:" + id);
+                    comentarios.add(id);
+                } catch (Exception v) {
+                    Log.e(tag, "erro ao pegar dados do banco:" + v.getMessage());
+                }
+                //add comment
+            } while (c.moveToNext());
+            c.close();
+//            db.close();
+        } else {
+            Log.d(tag + " listSpecific comments", "não retornou nada");
+        }
+        Log.d(tag, "listou notas no banco n:" + comentarios.size());
+        return comentarios;
+    }
+
+    public List<Integer> listSpecificCommentsOLD(int idActStu) {
+        ArrayList<Integer> comentarios = new ArrayList<Integer>();
         String sql = "SELECT DISTINCT nu_comment_activity from tb_comment WHERE id_activity_student =" + idActStu + " AND tp_comment='O'";
         //Log.e(tag, "sql listComments:" + sql);
         Cursor c = db.rawQuery(sql, null);
@@ -847,7 +905,13 @@ public class DataBaseAdapter {
         return comentarios;
     }
 
-    public List<Integer> listNotesSpecificComments(int version) {
+
+
+
+
+
+
+    public List<Integer> listNotesSpecificCommentsOLD(int version) {
         ArrayList<Integer> v = new ArrayList<>();
         String sql = "SELECT DISTINCT nu_comment_activity from tb_comment as tbc " +
                 "LEFT JOIN tb_comment_version as tbcv on tbcv.id_comment = tbc.id_comment " +
@@ -870,6 +934,32 @@ public class DataBaseAdapter {
         }
         return v;
     }
+
+    public List<Integer> listNotesSpecificComments(int version) {
+        ArrayList<Integer> v = new ArrayList<>();
+        String sql = "SELECT DISTINCT nu_comment_activity from tb_comment_version as tbcv " +
+                "LEFT JOIN tb_version_activity as tbva on tbva.id_version_activity = tbcv.id_version_activity" +
+                " WHERE tbva.id_version_activity =" + version;
+        //Log.e(tag, "sql listComments:" + sql);
+        Cursor c = db.rawQuery(sql, null);
+        Integer id;
+        if (c.moveToFirst()) {
+            do {
+                try {
+                    id = c.getInt(0);
+                    v.add(id);
+                } catch (Exception e) {
+                }
+            } while (c.moveToNext());
+            c.close();
+        } else {
+            Log.d(tag + " listSpecific comments", "não retornou nada");
+        }
+        return v;
+    }
+
+
+
 
 
     /*
@@ -1236,12 +1326,12 @@ public class DataBaseAdapter {
 
         return aux;
     }
-    public LinkedList<Observation> getObservationByVersions(LinkedList<Integer> ids) {
-        LinkedHashMap<Integer, LinkedList<Comentario>> aux = new LinkedHashMap<>();
+    public LinkedHashMap<Integer, LinkedList<Observation>> getObservationByVersions(LinkedList<Integer> ids) {
+        LinkedHashMap<Integer, LinkedList<Observation>> aux = new LinkedHashMap<Integer, LinkedList<Observation>>();
         LinkedList obs = new LinkedList<Observation>();
         if (ids != null && ids.size() != 0) {
             StringBuilder query = new StringBuilder();
-            query.append("SELECT id_version_activity, id_comment FROM tb_comment_version WHERE id_comment_version IN (");
+            query.append("SELECT * FROM tb_comment_version WHERE id_comment_version IN (");
             query.append(ids.get(0));
 
             for (int i = 1; i < ids.size(); i++) {
@@ -1260,7 +1350,15 @@ public class DataBaseAdapter {
                         o.setNu_comment_activity(c.getInt(3));
                         o.setNu_initial_position(c.getInt(4));
                         o.setNu_size(c.getInt(5));
-                        obs.add(o);
+                        //obs.add(o);
+                        if (o != null) {
+                            if (!aux.containsKey(o.getId_version_activity()))
+                                aux.put(o.getId_version_activity(), new LinkedList<Observation>());
+
+                            aux.get(o.getId_version_activity()).add(o);
+                        }
+
+//                        aux.put(o.getId_version_activity(),);
                     } catch (Exception v) {
                         Log.e(tag, "erro ao pegar dados do banco:" + v.getMessage());
                     }
@@ -1272,9 +1370,9 @@ public class DataBaseAdapter {
                 Log.d(tag + " get", "não retornou nenhuma observação");
             }
             //Log.d(tag, "listou notas no banco n:" + comentarios.size());
-            return obs;
+            //return obs;
         }
-        return obs;
+        return aux;
 
     }
 
