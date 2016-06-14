@@ -431,12 +431,38 @@ public class DataBaseAdapter {
         *************************CRUD COMENTARIOS***********************************
 
     */
-    public int insertComment(Comentario c) {
+    public int insertCommentOLD(Comentario c) {
         ContentValues cv = new ContentValues();
         cv.put("id_activity_student", c.getIdActivityStudent());
         cv.put("id_author", c.getIdAuthor());
         cv.put("tx_comment", c.getTxtComment());
         cv.put("tx_reference", c.getTxtReference());
+        cv.put("tp_comment", c.getTypeComment());
+        cv.put("dt_comment", c.getDateComment());
+        cv.put("dt_send", c.getDateSend());
+        db.insert("tb_comment", null, cv);
+        try {
+//            db.close();
+            Log.d(tag, "inseriu comentario no banco");
+        } catch (Exception e) {
+            Log.e(tag, "erro ao inserir:" + e.getMessage());
+        }
+        Cursor cursor = db.rawQuery("select seq from sqlite_sequence where name='tb_comment'", null);
+        int lastID = 0;
+        if (cursor.moveToFirst()) {
+            lastID = cursor.getInt(0);
+            Log.d(tag, "last id_comment id table:" + lastID);
+        }
+        return lastID;
+    }
+
+
+
+    public int insertComment(Comentario c) {
+        ContentValues cv = new ContentValues();
+        cv.put("id_activity_student", c.getIdActivityStudent());
+        cv.put("id_author", c.getIdAuthor());
+        cv.put("tx_comment", c.getTxtComment());
         cv.put("tp_comment", c.getTypeComment());
         cv.put("dt_comment", c.getDateComment());
         cv.put("dt_send", c.getDateSend());
@@ -739,7 +765,7 @@ public class DataBaseAdapter {
     }
 
 
-    public List<Comentario> listComments(int idActStu, String typeComment, int idNote) {
+    public List<Comentario> listCommentsOLD(int idActStu, String typeComment, int idNote) {
         ArrayList<Comentario> comentarios = new ArrayList<Comentario>();
         //String sql = "select * from tb_comment WHERE id_activity_student =" + idActStu;
         String sql = "SELECT\n" +
@@ -761,7 +787,7 @@ public class DataBaseAdapter {
             stBuild.append(" AND tp_comment='" + typeComment + "' ");
             if (typeComment.equalsIgnoreCase("O")) {
                 //sql+=" AND nu_comment_activity="+idNote;
-                stBuild.append(" AND nu_comment_activity=" + idNote);
+                stBuild.append(" AND id_version_comment=" + idNote);
             }
         }
         //sql+=" ORDER BY dt_comment ASC;";
@@ -798,7 +824,7 @@ public class DataBaseAdapter {
     }
 
     //Atualizado para nova versão banco 07/06/2016
-    public List<Comentario> listCommentsNEW(int idActStu, String typeComment) {
+    public List<Comentario> listComments(int idActStu, String typeComment,int idNote) {
         ArrayList<Comentario> comentarios = new ArrayList<Comentario>();
         //String sql = "select * from tb_comment WHERE id_activity_student =" + idActStu;
         String sql = "SELECT\n" +
@@ -818,6 +844,10 @@ public class DataBaseAdapter {
         if (typeComment.equalsIgnoreCase("G") || typeComment.equalsIgnoreCase("O") || typeComment.equalsIgnoreCase("P")) {
             //sql+=" AND tp_comment='"+typeComment+"' ";
             stBuild.append(" AND tp_comment='" + typeComment + "' ");
+        }
+        if (typeComment.equalsIgnoreCase("O")) {
+            //sql+=" AND nu_comment_activity="+idNote;
+            stBuild.append(" AND id_version_comment=" + idNote);
         }
         //sql+=" ORDER BY dt_comment ASC;";
         stBuild.append(" ORDER BY dt_send ASC");
@@ -853,9 +883,10 @@ public class DataBaseAdapter {
     }
 
 
-    public List<Integer> listSpecificComments(int idActStu) {
-        ArrayList<Integer> comentarios = new ArrayList<Integer>();
-        String sql = "SELECT DISTINCT nu_comment_activity from tb_comment_version WHERE id_activity_student =" + idActStu;
+    public LinkedList<Integer> listSpecificComments(int idActStu) {
+        LinkedList<Integer> comentarios = new LinkedList<>();
+        String sql = "SELECT DISTINCT cv.nu_comment_activity from tb_comment_version cv " +
+                "   INNER JOIN tb_version_activity va ON cv.id_version_activity = va.id_version_activity WHERE va.id_activity_student =" + idActStu;
         //Log.e(tag, "sql listComments:" + sql);
         Cursor c = db.rawQuery(sql, null);
         Integer id;
@@ -1832,7 +1863,7 @@ public class DataBaseAdapter {
     */
 
 
-    public void insertIntoTBSync(Sync sync) {
+    public void insertIntoTBSyncOLD(Sync sync) {
         ContentValues cv = new ContentValues();
         cv.put("id_device", sync.getId_device());
         cv.put("nm_table", sync.getNm_table());
@@ -1846,13 +1877,28 @@ public class DataBaseAdapter {
         }
     }
 
+    public void insertIntoTBSync(Sync sync) {
+        ContentValues cv = new ContentValues();
+        cv.put("nm_table", sync.getNm_table());
+        cv.put("co_id_table", sync.getCo_id_table());
+        cv.put("id_activity_student", sync.getId_activity_student());
+        //cv.put("dt_send", sync.getDt_sync());
+        try {
+            db.insert("tb_sync", null, cv);
+        } catch (Exception e) {
+            Log.e(tag, "erro ao salvar na tabela tb_attach_activity:" + e.getMessage());
+        }
+    }
+
+
+
     public ArrayList getSyncs() {
-        String query = "SELECT id_sync, id_device, co_id_table, nm_table from tb_sync";
+        String query = "SELECT id_sync, co_id_table, nm_table from tb_sync";
         ArrayList syncs = new ArrayList<Sync>();
         Cursor c = db.rawQuery(query, null);
         if (c.moveToFirst()) {
             do {
-                Sync s = new Sync(c.getInt(0), c.getString(1), c.getInt(2), c.getString(3));
+                Sync s = new Sync(c.getInt(0), "-1", c.getInt(1), c.getString(2));
                 syncs.add(s);
             } while (c.moveToNext());
         } else {

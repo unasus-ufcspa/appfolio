@@ -73,6 +73,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
+import java.util.NoSuchElementException;
 
 
 public class FragmentRTEditor extends Frag {
@@ -801,9 +802,13 @@ public class FragmentRTEditor extends Frag {
         ArrayList<Integer> ids = (ArrayList<Integer>) source.listNotesSpecificComments(singleton.idCurrentVersionActivity); //source.listSpecificComments(singleton.idActivityStudent);
         for (int id : ids) {
             specificCommentsNotes.put(id, new Note(id, "", 0));
+        }try {
+            currentSpecificComment = (source.listSpecificComments(singleton.idActivityStudent)).getLast();//specificCommentsNotes.size();
+            Log.d("editor notes", "currentSpecificComment:" + currentSpecificComment);
+        }catch (NoSuchElementException e){
+            e.printStackTrace();
         }
-        currentSpecificComment = (source.listSpecificComments(singleton.idActivityStudent)).size();//specificCommentsNotes.size();
-        Log.d("editor notes", "currentSpecificComment:" + currentSpecificComment);
+
     }
 
     private Button createButton(final int id, final String value, final float yPosition) {

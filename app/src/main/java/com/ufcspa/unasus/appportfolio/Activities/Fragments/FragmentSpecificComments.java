@@ -33,6 +33,7 @@ import com.ufcspa.unasus.appportfolio.Model.Attachment;
 import com.ufcspa.unasus.appportfolio.Model.Comentario;
 import com.ufcspa.unasus.appportfolio.Model.CommentVersion;
 import com.ufcspa.unasus.appportfolio.Model.Note;
+import com.ufcspa.unasus.appportfolio.Model.Observation;
 import com.ufcspa.unasus.appportfolio.Model.OneComment;
 import com.ufcspa.unasus.appportfolio.Model.Singleton;
 import com.ufcspa.unasus.appportfolio.Model.Sync;
@@ -231,7 +232,8 @@ private LoadCommentsFromDB loadCommentsFromDB;
         try {
             DataBaseAdapter db = DataBaseAdapter.getInstance(getActivity());
             Singleton singleton = Singleton.getInstance();
-            lista = (ArrayList<Comentario>) db.listComments(singleton.activity.getIdActivityStudent(), "O", singleton.note.getBtId());//lista comentario gerais filtrando por O
+            //lista = (ArrayList<Comentario>) db.listComments(singleton.activity.getIdActivityStudent(), "O", singleton.note.getBtId());//lista comentario gerais filtrando por O
+            lista = (ArrayList<Comentario>) db.listComments(singleton.activity.getIdActivityStudent(), "O", singleton.actualObservation.getId_comment_version());
             oneComments= new ArrayList<>(10);
             Log.d("comments","comentarios especificos:"+lista.toString());
 
@@ -430,6 +432,13 @@ private LoadCommentsFromDB loadCommentsFromDB;
             int idObservation;
             if(singleton.isFirstSpecificComment){
                 idObservation = source.insertObservationByVersion(singleton.actualObservation);
+                Sync sync = new Sync();
+                sync.setNm_table("tb_comment_version");
+                sync.setCo_id_table(idObservation);
+                sync.setId_activity_student(singleton.idActivityStudent);
+                sync.setId_device(singleton.device.get_id_device());
+                source.insertIntoTBSync(sync);
+
             }else{
                 idObservation = source.getIdObservationByNuCommentActivy(singleton.actualObservation.getNu_comment_activity());
             }
@@ -438,8 +447,15 @@ private LoadCommentsFromDB loadCommentsFromDB;
             lastID = source.insertSpecificComment(c);
 
 
+            Sync sync = new Sync();
+            sync.setNm_table("tb_comment");
+            sync.setCo_id_table(lastID);
+            sync.setId_activity_student(singleton.idActivityStudent);
+            sync.setId_device(singleton.device.get_id_device());
+            source.insertIntoTBSync(sync);
 
-            //NECESSITA ATUALIZAR
+
+            /*//NECESSITA ATUALIZAR -- comentado em 13/06/2016
 
             CommentVersion cv = new CommentVersion();
             cv.setId_comment(lastID);
@@ -451,7 +467,7 @@ private LoadCommentsFromDB loadCommentsFromDB;
             sync.setCo_id_table(idCommentVersion);
             sync.setId_activity_student(singleton.idActivityStudent);
             sync.setId_device(singleton.device.get_id_device());
-            source.insertIntoTBSync(sync);
+            source.insertIntoTBSync(sync);*/
            /*
                 EMPILHA COMENTARIO ESPECIFICO NA SYNC(ANTIGO)
 

@@ -134,6 +134,8 @@ public class SendData {
         data.deleteSync(idSync);
         for (Integer id : attachments.keySet()) {
             for (Attachment a : attachments.get(id)) {
+                Log.d("sendMedia","send data from:"+a.getNmSystem());
+                Log.d("sendMedia","url"+"http://" + new HttpClient(context).ip + "/webfolio/app_dev.php/upload");
                 uploadMultipart(context, "http://" + new HttpClient(context).ip + "/webfolio/app_dev.php/upload", a.getNmSystem());
             }
         }
