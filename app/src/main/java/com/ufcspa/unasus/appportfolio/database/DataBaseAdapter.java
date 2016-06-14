@@ -2527,7 +2527,7 @@ public class DataBaseAdapter {
         return lista;
     }
 
-    public List<Comentario> getCommentsByIDs(LinkedList<Integer> ids) {
+    public List<Comentario> getCommentsByIDsOLD(LinkedList<Integer> ids) {
         StringBuilder sb = new StringBuilder("select " +
                 "id_comment," +
                 "id_activity_student," +
@@ -2568,6 +2568,48 @@ public class DataBaseAdapter {
         }
         return lista;
     }
+
+    public List<Comentario> getCommentsByIDs(LinkedList<Integer> ids) {
+        StringBuilder sb = new StringBuilder("select " +
+                "id_comment," +
+                "id_activity_student," +
+                "id_author," +
+                "tx_comment," +
+                "tp_comment," +
+                "dt_comment," +
+                "id_comment_version" +
+                " from tb_comment where id_comment in ( ");
+        for (int id :ids){
+            if(id==ids.getLast()){
+                sb.append(""+id+" );");
+                break;
+            }else{
+                sb.append(""+id+" , ");
+            }
+        }
+        Log.d(tag+" get comments by ids"," query:"+sb.toString());
+        String query = sb.toString();
+        Cursor c = db.rawQuery(query, null);
+        LinkedList lista = new LinkedList<Comentario>();
+        if (c.moveToFirst()) {
+            do {
+                Comentario comm = new Comentario();
+                comm.setIdComment(c.getInt(0));
+                comm.setIdActivityStudent(c.getInt(1));
+                comm.setIdAuthor(c.getInt(2));
+                comm.setTxtComment(c.getString(3));
+                comm.setTypeComment(c.getString(4));
+                comm.setDateComment(c.getString(5));
+                comm.setIdNote(c.getInt(6));
+                comm.setId_comment_version(c.getInt(6));
+                lista.add(comm);
+            } while (c.moveToNext());
+        } else {
+            Log.d(tag, "Nao retornou nada na consulta");
+        }
+        return lista;
+    }
+
 
 
     //nao finalizado ainda

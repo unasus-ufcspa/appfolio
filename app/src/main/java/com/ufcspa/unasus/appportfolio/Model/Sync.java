@@ -15,6 +15,8 @@ public class Sync {
     private int co_id_table;
     private String dt_sync;
     private String dt_read;
+    private int id_author;
+    private int id_destination;
 
     public Sync() {
     }

@@ -144,8 +144,8 @@ public class SendData {
 
 
 
-
-    public JSONObject GenerateJSON(String idDevice){
+    // versão antiga
+    public JSONObject GenerateJSONOLD(String idDevice){
         getSyncs();// obtem lista de sincronizações
         getDataFromTables(); // obtem listas das tabelas a serem enviadas
 
@@ -322,7 +322,7 @@ public class SendData {
         return jsonFinal;
     }
 
-    public JSONObject GenerateJSONNEW(String idDevice){
+    public JSONObject GenerateJSON(String idDevice){
         getSyncs();// obtem lista de sincronizações
         getDataFromTables(); // obtem listas das tabelas a serem enviadas
 
@@ -366,7 +366,7 @@ public class SendData {
                     jsonVersion.put("tx_activity", v.getTx_activity());
                     jsonVersion.put("dt_last_access", v.getDt_last_access());
 
-                    Log.wtf("json send data:", jsonVersion.toString());
+                    Log.d("json send data:", jsonVersion.toString());
 
                     JSONArray jsonCommentsByVersion = new JSONArray();
                     if (commentsByVersions.containsKey(v.getId_version_activity())) {
@@ -388,6 +388,10 @@ public class SendData {
                     jsonVersion.put("comment", jTb_comment);
 
                     jsonArrayVersions.put(jsonVersion);
+
+                    Log.d("json send data:", jsonVersion.toString());
+
+
                 }
             }
 
@@ -492,7 +496,9 @@ public class SendData {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        Log.e("jsonsendfulldata ", jsonFinal.toString().replaceAll("\\{", "\n{"));
+        Log.d("jsonsendfulldata ", jsonFinal.toString().replaceAll("\\{", "\n{"));
+        Log.d("sendData", "JSON REQUEST: " + jsonFinal.toString().replaceAll("\\{", "\n{"));
+        System.out.println("sendData"+ "JSON REQUEST: " + jsonFinal.toString().replaceAll("\\{", "\n{"));
         return jsonFinal;
     }
 
