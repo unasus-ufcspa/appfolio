@@ -18,6 +18,7 @@ import com.ufcspa.unasus.appportfolio.Model.CommentVersion;
 import com.ufcspa.unasus.appportfolio.Model.Notification;
 import com.ufcspa.unasus.appportfolio.Model.Observation;
 import com.ufcspa.unasus.appportfolio.Model.Reference;
+import com.ufcspa.unasus.appportfolio.Model.Singleton;
 import com.ufcspa.unasus.appportfolio.Model.Tuple;
 import com.ufcspa.unasus.appportfolio.Model.VersionActivity;
 import com.ufcspa.unasus.appportfolio.Model.basicData.User;
@@ -54,7 +55,7 @@ public class FullData {
     private LinkedList<Observation> observations;
 
 
-    private Context context;
+    private static Context context;
 
     public FullData(Context context) {
         this.versionActs = new LinkedList<>();
@@ -73,7 +74,10 @@ public class FullData {
     public static JSONObject toJSON(String idDevice, int idActivityStudent) {
         JSONObject json = new JSONObject();
         try {
-            json.put("fullDataSrvDev_request", new JSONObject().put("id_device", idDevice).put("id_activity_student", idActivityStudent));
+            Singleton.getInstance().device=DataBaseAdapter.getInstance(context).getDevice();
+            Log.d("sendData", "GET FROM DEVICE: "+Singleton.getInstance().device);
+
+            json.put("fullDataSrvDev_request", new JSONObject().put("ds_hash", idDevice).put("id_activity_student", 0).put("id_user", Singleton.getInstance().device.get_id_user()));
         } catch (JSONException e) {
             e.printStackTrace();
         }

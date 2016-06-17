@@ -55,7 +55,7 @@ public class FirstLogin {
         try {
             jsonInternal.put("email",getEmail());
             jsonInternal.put("passwd",getPasswd());
-            jsonInternal.put("id_device",getIdDevice());
+            jsonInternal.put("ds_hash",getIdDevice());
             jsonInternal.put("tp_device",getTpDevice());
             jsonFinal.put("firstLogin_request",jsonInternal);
             Log.d("JSON First login:",jsonFinal.toString());

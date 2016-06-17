@@ -40,7 +40,7 @@ public class LogoutClient extends HttpClient {
         Log.d(tag, "URL: " + URL + method);
         JSONObject logoutJson = null;
         try {
-            logoutJson = new JSONObject().put("logout_request", new JSONObject().put("id_user", singleton.user.getIdUser()).put("id_device", singleton.device.get_id_device()));
+            logoutJson = new JSONObject().put("logout_request", new JSONObject().put("id_user", singleton.user.getIdUser()).put("ds_hash", singleton.device.get_id_device()));
         } catch (JSONException e) {
             FragmentConfig.couldNotLogout();
             return;
@@ -55,6 +55,7 @@ public class LogoutClient extends HttpClient {
                     if (response.has("logout_response"))
                         if (response.getJSONObject("logout_response").has("success")) {
                             FragmentConfig.logout(activity);
+                            
                             return;
                         }
 

@@ -15,6 +15,7 @@ import android.provider.Settings;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
 import android.text.InputType;
+import android.util.Log;
 import android.view.GestureDetector;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -83,6 +84,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             }
         }
     };
+
+
 
     public void insertFileIntoDataBase(final String path, final String type) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -609,5 +612,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
             return false;
         }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Singleton.getInstance().device=DataBaseAdapter.getInstance(this).getDevice();
+        Log.d("main", "GET FROM DEVICE: " + Singleton.getInstance().device);
     }
 }

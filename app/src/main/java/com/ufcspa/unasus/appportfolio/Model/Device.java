@@ -4,13 +4,19 @@ package com.ufcspa.unasus.appportfolio.Model;
  * Created by icaromsc on 28/03/2016.
  */
 public class Device {
+
     private String _id_device;
     private int _id_user;
     private int _tp_device;
     private String fl_first_login;
     private String fl_basic_data;
 
-    public Device(){}
+    public Device(){
+        this._id_user=-1;
+        //
+    }
+
+
 
     public Device(String _id_device, int _id_user, int _tp_device, String fl_first_login, String fl_basic_data) {
         this._id_device = _id_device;

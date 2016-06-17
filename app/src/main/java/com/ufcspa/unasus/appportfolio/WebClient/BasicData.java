@@ -53,7 +53,7 @@ public class BasicData {
         JSONObject basic = new JSONObject();
         try {
             basic.put("id_user", idUser);
-            basic.put("id_device", idDevice);
+            basic.put("ds_hash", idDevice);
             json.put("basicData_request", basic);
         } catch (JSONException e) {
             e.printStackTrace();

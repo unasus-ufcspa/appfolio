@@ -347,6 +347,7 @@ public class SendData {
                     jsonComment.put("id_comment", comment.getIdComment());
                     jsonComment.put("id_activity_student", comment.getIdActivityStudent());
                     jsonComment.put("id_comment_version", comment.getId_comment_version());
+                    jsonComment.put("id_comment_srv", comment.getIdCommentSrv());
                     jsonComment.put("id_author", comment.getIdAuthor());
                     jsonComment.put("tx_comment", comment.getTxtComment());
                     jsonComment.put("tp_comment", comment.getTypeComment());
@@ -480,9 +481,12 @@ public class SendData {
                 attachActivityStudent.put("tb_activity_student", attachTb_activity_student);
                 jsonPseudoFinal.put("activityStudent", attachActivityStudent);
             }
+            Singleton.getInstance().device=DataBaseAdapter.getInstance(context).getDevice();
+            Log.d("sendData", "GET FROM DEVICE: "+Singleton.getInstance().device);
 
             //mount device
-            device.put("id_device",idDevice);
+            device.put("ds_hash",idDevice);
+            device.put("id_user",Singleton.getInstance().device.get_id_user());
 
             //mount pseudo final
             jsonPseudoFinal.put("device",device);
@@ -498,7 +502,7 @@ public class SendData {
         }
         Log.d("jsonsendfulldata ", jsonFinal.toString().replaceAll("\\{", "\n{"));
         Log.d("sendData", "JSON REQUEST: " + jsonFinal.toString().replaceAll("\\{", "\n{"));
-        System.out.println("sendData"+ "JSON REQUEST: " + jsonFinal.toString().replaceAll("\\{", "\n{"));
+        //System.out.println("sendData"+ "JSON REQUEST: " + jsonFinal.toString().replaceAll("\\{", "\n{"));
         return jsonFinal;
     }
 

@@ -2577,7 +2577,8 @@ public class DataBaseAdapter {
                 "tx_comment," +
                 "tp_comment," +
                 "dt_comment," +
-                "id_comment_version" +
+                "id_comment_version," +
+                "id_comment_srv" +
                 " from tb_comment where id_comment in ( ");
         for (int id :ids){
             if(id==ids.getLast()){
@@ -2602,6 +2603,7 @@ public class DataBaseAdapter {
                 comm.setDateComment(c.getString(5));
                 comm.setIdNote(c.getInt(6));
                 comm.setId_comment_version(c.getInt(6));
+                comm.setIdCommentSrv(c.getInt(7));
                 lista.add(comm);
             } while (c.moveToNext());
         } else {
