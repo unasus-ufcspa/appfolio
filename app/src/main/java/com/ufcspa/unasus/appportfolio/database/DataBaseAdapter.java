@@ -909,6 +909,39 @@ public class DataBaseAdapter {
         Log.d(tag, "listou notas no banco n:" + comentarios.size());
         return comentarios;
     }
+    public LinkedList<Observation> listSpecificCommentsObjects(int idActStu,int idVersionActivity) {
+        LinkedList<Observation> comentarios = new LinkedList<>();
+        String sql = "SELECT DISTINCT cv.id_comment_version,cv.nu_comment_activity,cv.tx_reference,cv.nu_initial_pos , cv.nu_size from tb_comment_version cv " +
+                "   INNER JOIN tb_version_activity va ON cv.id_version_activity = va.id_version_activity WHERE va.id_activity_student =" + idActStu + "AND cv.id_version_activity="+idVersionActivity;
+        //Log.e(tag, "sql listComments:" + sql);
+        Cursor c = db.rawQuery(sql, null);
+        Integer id;
+        if (c.moveToFirst()) {
+            do {
+                try {
+                    Observation ob = new Observation();
+                    ob.setId_comment_version(c.getInt(0));
+                    ob.setNu_comment_activity(c.getInt(1));
+                    ob.setTx_reference(c.getString(2));
+                    ob.setNu_initial_position(c.getInt(3));
+                    ob.setNu_size(4);
+                    //Log.e(tag, "listSpecificComments idnow:" + id);
+                    comentarios.add(ob);
+                } catch (Exception v) {
+                    Log.e(tag, "erro ao pegar dados do banco:" + v.getMessage());
+                }
+                //add comment
+            } while (c.moveToNext());
+            c.close();
+        } else {
+            Log.d(tag + " listSpecific comments", "não retornou nada");
+        }
+        Log.d(tag, "listou notas no banco n:" + comentarios.toString());
+        return comentarios;
+    }
+
+
+
 
     public List<Integer> listSpecificCommentsOLD(int idActStu) {
         ArrayList<Integer> comentarios = new ArrayList<Integer>();

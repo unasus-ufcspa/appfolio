@@ -55,7 +55,7 @@ public class LogoutClient extends HttpClient {
                     if (response.has("logout_response"))
                         if (response.getJSONObject("logout_response").has("success")) {
                             FragmentConfig.logout(activity);
-                            
+
                             return;
                         }
 

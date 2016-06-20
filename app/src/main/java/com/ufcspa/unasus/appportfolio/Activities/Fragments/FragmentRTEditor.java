@@ -62,6 +62,7 @@ import com.ufcspa.unasus.appportfolio.Adapter.VersionsAdapter;
 import com.ufcspa.unasus.appportfolio.Model.ActivityStudent;
 import com.ufcspa.unasus.appportfolio.Model.Comentario;
 import com.ufcspa.unasus.appportfolio.Model.Note;
+import com.ufcspa.unasus.appportfolio.Model.Observation;
 import com.ufcspa.unasus.appportfolio.Model.Singleton;
 import com.ufcspa.unasus.appportfolio.Model.Sync;
 import com.ufcspa.unasus.appportfolio.Model.User;
@@ -73,6 +74,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.NoSuchElementException;
 
 
@@ -89,6 +91,13 @@ public class FragmentRTEditor extends Frag {
     private HashMap<Integer, Note> specificCommentsNotes;
     private String selectedActualText = "null";
     private boolean specificCommentsOpen;
+
+
+    // Observação nova versão
+    private Observation currentSpecificCommentObject;
+    private HashMap<Integer, Observation> observationNotes;
+
+
     // Layout
     private ViewGroup scrollview;
     private ImageButton fullScreen;
@@ -800,9 +809,16 @@ public class FragmentRTEditor extends Frag {
     public void getIdNotesFromDB() {
         specificCommentsNotes = new HashMap<>();
         ArrayList<Integer> ids = (ArrayList<Integer>) source.listNotesSpecificComments(singleton.idCurrentVersionActivity); //source.listSpecificComments(singleton.idActivityStudent);
+        LinkedList<Observation> obs = source.listSpecificCommentsObjects(singleton.idActivityStudent,singleton.idCurrentVersionActivity);
         for (int id : ids) {
             specificCommentsNotes.put(id, new Note(id, "", 0));
-        }try {
+        }
+
+        for (Observation o : obs){
+            observationNotes.put(o.getNu_comment_activity(),o);
+        }
+
+        try {
             currentSpecificComment = (source.listSpecificComments(singleton.idActivityStudent)).getLast();//specificCommentsNotes.size();
             Log.d("editor notes", "currentSpecificComment:" + currentSpecificComment);
         }catch (NoSuchElementException e){
@@ -976,6 +992,12 @@ public class FragmentRTEditor extends Frag {
     private String getSelectedText() {
         int selStart = mRTMessageField.getSelectionStart();
         int selEnd = mRTMessageField.getSelectionEnd();
+
+        // salva posições do texto secionado no singleton
+        singleton.actualObservation.setNu_size(selEnd-selStart);
+        singleton.actualObservation.setNu_initial_position(selStart);
+
+        // converte para html
         Spannable text = (Spannable) mRTMessageField.getText().subSequence(selStart, selEnd);
         RTHtml<RTImage, RTAudio, RTVideo> rtHtml = new ConverterSpannedToHtml().convert(text, RTFormat.HTML);
         String thatsMySelectionInHTML = rtHtml.getText();
@@ -1357,6 +1379,10 @@ public class FragmentRTEditor extends Frag {
                                 if (selectedText.length() > 0) {
                                     if (canCreateButton(startSelection, endSelection)) {
                                         singleton.selectedText = mRTMessageField.getText().toString().substring(startSelection, endSelection);
+
+                                        //adiciona no singleton posições do texto da oservação criada
+                                        singleton.actualObservation.setNu_initial_position(startSelection);
+                                        singleton.actualObservation.setNu_size(endSelection-startSelection);
                                         createSpecificCommentNote(getCaretYPosition(startSelection), selectedText);
                                     }
                                 }
