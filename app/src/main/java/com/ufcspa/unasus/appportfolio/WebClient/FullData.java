@@ -256,7 +256,7 @@ public class FullData {
             InputStream input = new BufferedInputStream(url.openStream());
             OutputStream output = new FileOutputStream(dir + "/" + fileName);
 
-            byte data[] = new byte[1024];
+            byte data[] = new byte[2048];
             long total = 0;
             int count;
             while ((count = input.read(data)) != -1) {
