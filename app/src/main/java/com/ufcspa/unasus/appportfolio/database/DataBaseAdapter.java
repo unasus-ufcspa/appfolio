@@ -847,7 +847,7 @@ public class DataBaseAdapter {
         }
         if (typeComment.equalsIgnoreCase("O")) {
             //sql+=" AND nu_comment_activity="+idNote;
-            stBuild.append(" AND id_version_comment=" + idNote);
+            stBuild.append(" AND id_comment_version=" + idNote);
         }
         //sql+=" ORDER BY dt_comment ASC;";
         stBuild.append(" ORDER BY dt_send ASC");
