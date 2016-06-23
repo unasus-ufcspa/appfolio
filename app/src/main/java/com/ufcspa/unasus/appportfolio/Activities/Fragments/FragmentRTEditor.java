@@ -819,8 +819,11 @@ public class FragmentRTEditor extends Frag {
         }
 
         try {
-            currentSpecificComment = (source.listSpecificComments(singleton.idActivityStudent)).getLast();//specificCommentsNotes.size();
-            Log.d("editor notes", "currentSpecificComment:" + currentSpecificComment);
+            LinkedList<Integer> comments= source.listSpecificComments(singleton.idActivityStudent);
+            if(comments.getLast()!=null) {
+                currentSpecificComment = (comments).getLast();//specificCommentsNotes.size();
+                Log.d("editor notes", "currentSpecificComment:" + currentSpecificComment);
+            }
         }catch (NoSuchElementException e){
             e.printStackTrace();
         }

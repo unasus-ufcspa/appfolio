@@ -44,11 +44,11 @@ public class SplashActivity extends AppCompatActivity {
 
         Intent intent = new Intent(this, LoginActivity2.class);
 
-//        if (statusApp == 1) {
-//           intent = new Intent(this, MainActivity.class);
-//        } else if (statusApp == 0) {
-//            intent.putExtra("dont_have_basic_data", true);
-//        }
+        if (statusApp == 1) {
+           intent = new Intent(this, MainActivity.class);
+        } else if (statusApp == 0) {
+            intent.putExtra("dont_have_basic_data", true);
+        }
 
         startActivity(intent);
 //        startActivity(new Intent(this,TesteDownloadImage.class));
