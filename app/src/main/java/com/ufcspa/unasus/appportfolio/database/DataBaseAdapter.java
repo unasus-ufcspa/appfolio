@@ -912,7 +912,7 @@ public class DataBaseAdapter {
     public LinkedList<Observation> listSpecificCommentsObjects(int idActStu,int idVersionActivity) {
         LinkedList<Observation> comentarios = new LinkedList<>();
         String sql = "SELECT DISTINCT cv.id_comment_version,cv.nu_comment_activity,cv.tx_reference,cv.nu_initial_pos , cv.nu_size from tb_comment_version cv " +
-                "   INNER JOIN tb_version_activity va ON cv.id_version_activity = va.id_version_activity WHERE va.id_activity_student =" + idActStu + "AND cv.id_version_activity="+idVersionActivity;
+                "   INNER JOIN tb_version_activity va ON cv.id_version_activity = va.id_version_activity WHERE va.id_activity_student =" + idActStu + " AND cv.id_version_activity="+idVersionActivity;
         //Log.e(tag, "sql listComments:" + sql);
         Cursor c = db.rawQuery(sql, null);
         Integer id;
@@ -2162,9 +2162,9 @@ public class DataBaseAdapter {
         Cursor c = db.rawQuery(query, null);
         if (c.moveToFirst()) {
             do {
-                String sql = "SELECT COUNT(*) from tb_comment as tbc " +
-                        "JOIN tb_comment_version as tbcv on tbcv.id_comment = tbc.id_comment " +
-                        "JOIN tb_version_activity as tbva on tbva.id_version_activity = tbcv.id_version_activity" +
+                String sql = " SELECT COUNT(*) from tb_comment as tbc " +
+                        " JOIN tb_comment_version as tbcv on tbcv.id_comment = tbc.id_comment " +
+                        " JOIN tb_version_activity as tbva on tbva.id_version_activity = tbcv.id_version_activity " +
                         " WHERE tbva.id_version_activity = " + idVersionActivity + " AND tbc.id_comment_srv = " + c.getInt(0) + " AND tbc.tp_comment = 'O'";
 
                 Cursor newCursor = db.rawQuery(sql, null);
