@@ -23,6 +23,7 @@ import android.provider.MediaStore;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.text.InputType;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -420,6 +421,10 @@ public class Frag extends Fragment {
         String imageFileName = "JPEG_" + timeStamp + "_";
 
         File storageDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);//getContext().getExternalFilesDir(null);
+
+
+        Log.d("attach","dir attach:"+storageDir.getAbsolutePath());
+
 
         File image = File.createTempFile(
                 imageFileName,  /* prefix */
