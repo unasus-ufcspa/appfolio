@@ -24,6 +24,7 @@ public class DataBase extends SQLiteOpenHelper {
     //private static String DBNAME = "folio.sqlite"; //Classe SplashActivity => LoginActivity2
     //private static String DBNAME ="json.sqlite";
     private static String DBNAME = "db_portfolio_alpha_atual.sqlite";
+    //private static String DBNAME = "db_portfolio_alpha_ambiente_teste.sqlite";
 
     private Context context;
 
