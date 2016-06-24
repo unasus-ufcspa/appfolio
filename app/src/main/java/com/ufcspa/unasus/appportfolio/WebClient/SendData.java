@@ -385,8 +385,11 @@ public class SendData {
                         }
                     }
                     JSONObject jTb_comment = new JSONObject();
-                    jTb_comment.put("tb_comment", jsonCommentsByVersion);
-                    jsonVersion.put("comment", jTb_comment);
+//                    jTb_comment.put("tb_comment", jsonCommentsByVersion);
+//                    jsonVersion.put("comment", jTb_comment);
+
+                    //jTb_comment.put("tb_comment", jsonCommentsByVersion);
+                    jsonVersion.put("tb_comment_version", jsonCommentsByVersion);
 
                     jsonArrayVersions.put(jsonVersion);
 

@@ -170,23 +170,36 @@ public class FullDataClient extends HttpClient {
                                             if (!temp.has("error")) {
                                                 int id_activity_student = temp.getInt("id_activity_student");
                                                 int id_author = temp.getInt("id_author");
-                                                //String tx_comment = temp.getString("tx_comment");
-                                                String tx_reference = temp.getString("tx_reference");
+                                                String tx_comment = temp.getString("tx_comment");
+                                                if(temp.has("tx_reference")){
+                                                    String tx_reference = temp.getString("tx_reference");
+                                                    comentario.setTxtReference(tx_reference);
+                                                }
+
                                                 String tp_comment = temp.getString("tp_comment");
                                                 String dt_comment = temp.getString("dt_comment");
                                                 String dt_send=dt_comment;
                                                 if(temp.has("dt_send"))
                                                     dt_send=temp.getString("dt_send");
                                                 int id_comment_srv = temp.getInt("id_comment");
-                                                int id_comment_version = temp.getInt("id_comment_version");
+
+                                                int id_comment_version=-1;
+                                                if(temp.get("id_comment_version")!=null && temp.get("id_comment_version")instanceof String){
+                                                    if(temp.getString("id_comment_version")!=null && !temp.getString("id_comment_version").isEmpty())
+                                                        id_comment_version=Integer.getInteger(temp.getString("id_comment_version"));
+                                                }else{
+                                                    id_comment_version = temp.getInt("id_comment_version");
+                                                }
+
 
                                                 comentario.setIdActivityStudent(id_activity_student);
                                                 comentario.setIdAuthor(id_author);
-                                                //comentario.setTxtComment(tx_comment);
-                                                comentario.setTxtReference(tx_reference);
+                                                comentario.setTxtComment(tx_comment);
+
                                                 comentario.setTypeComment(tp_comment);
                                                 comentario.setDateComment(dt_comment);
                                                 comentario.setDateSend(dt_send);
+                                                //comentario.setTxtComment(tx_comment);
                                                 comentario.setId_comment_version(id_comment_version);
                                                 comentario.setIdCommentSrv(id_comment_srv);
 
@@ -211,6 +224,7 @@ public class FullDataClient extends HttpClient {
 
                                                     fullData.addCommentAttachment(new Tuple<Comentario, Attachment>(comentario, attachment));
                                                 } else {
+                                                    Log.d(tag,"adding comment:" +comentario);
                                                     fullData.addComments(comentario);
                                                 }
                                             }
