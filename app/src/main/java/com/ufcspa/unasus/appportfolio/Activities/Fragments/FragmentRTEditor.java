@@ -445,7 +445,7 @@ public class FragmentRTEditor extends Frag {
 
                         int id = singleton.note.getBtId();
                         if (specificCommentsOpen && id > 0) {
-                            ArrayList<Comentario> lista = (ArrayList<Comentario>) source.listComments(singleton.activity.getIdActivityStudent(), "O", id);
+                            ArrayList<Comentario> lista = (ArrayList<Comentario>) source.listComments(singleton.activity.getIdActivityStudent(),"Z", id);
                             if (lista == null || lista.size() == 0) {
                                 //Remove note from hash map
                                 specificCommentsNotes.remove(id);
@@ -820,7 +820,7 @@ public class FragmentRTEditor extends Frag {
 
         try {
             LinkedList<Integer> comments= source.listSpecificComments(singleton.idActivityStudent);
-            if(comments.getLast()!=null) {
+            if(comments!=null && comments.getLast()!=null) {
                 currentSpecificComment = (comments).getLast();//specificCommentsNotes.size();
                 Log.d("editor notes", "currentSpecificComment:" + currentSpecificComment);
             }

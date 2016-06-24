@@ -824,7 +824,7 @@ public class DataBaseAdapter {
     }
 
     //Atualizado para nova versão banco 07/06/2016
-    public List<Comentario> listComments(int idActStu, String typeComment,int idNote) {
+    public List<Comentario> listComments(int idActStu,String typeComment,int idNote) {
         ArrayList<Comentario> comentarios = new ArrayList<Comentario>();
         //String sql = "select * from tb_comment WHERE id_activity_student =" + idActStu;
         String sql = "SELECT\n" +
@@ -841,13 +841,13 @@ public class DataBaseAdapter {
                 "\tWHERE 1=1 AND c.id_activity_student = " + idActStu;
 
         StringBuilder stBuild = new StringBuilder(sql);
-        if (typeComment.equalsIgnoreCase("G") || typeComment.equalsIgnoreCase("O") || typeComment.equalsIgnoreCase("P")) {
+        if (typeComment.equalsIgnoreCase("P")) {
             //sql+=" AND tp_comment='"+typeComment+"' ";
             stBuild.append(" AND tp_comment='" + typeComment + "' ");
         }
-        if (typeComment.equalsIgnoreCase("O")) {
+        if (idNote>0) {
             //sql+=" AND nu_comment_activity="+idNote;
-            stBuild.append(" AND id_version_comment=" + idNote);
+            stBuild.append(" AND id_comment_version=" + idNote);
         }
         //sql+=" ORDER BY dt_comment ASC;";
         stBuild.append(" ORDER BY dt_send ASC");
@@ -881,6 +881,63 @@ public class DataBaseAdapter {
         Log.d(tag, "listou comentarios no banco :" + comentarios.toString());
         return comentarios;
     }
+
+
+    public List<Comentario> listCommentsTESTE() {
+        ArrayList<Comentario> comentarios = new ArrayList<Comentario>();
+        //String sql = "select * from tb_comment WHERE id_activity_student =" + idActStu;
+        String sql = "SELECT\n" +
+                "\tc.id_comment,\n" +
+                "\tc.id_activity_student,\n" +
+                "\tc.id_author,\n" +
+                "\tc.id_comment_version,\n" +
+                "\tc.tx_comment,\n" +
+                "\tc.dt_comment,\n" +
+                "\tac.id_attachment,\n" +
+                "\tc.dt_send\n" +
+                "\tFROM tb_comment c \n" +
+                "\t\tLEFT JOIN  tb_attach_comment ac on ac.id_comment = c.id_comment\n";
+
+        StringBuilder stBuild = new StringBuilder(sql);
+//        if (typeComment.equalsIgnoreCase("G") || typeComment.equalsIgnoreCase("O") || typeComment.equalsIgnoreCase("P")) {
+//            //sql+=" AND tp_comment='"+typeComment+"' ";
+//            stBuild.append(" AND tp_comment='" + typeComment + "' ");
+//        }
+
+        //sql+=" ORDER BY dt_comment ASC;";
+        stBuild.append(" ORDER BY dt_send ASC");
+        sql = stBuild.toString();
+        //Log.e(tag, "sql listComments:" + sql);
+        Cursor c = db.rawQuery(sql, null);
+        Comentario cmm;
+        if (c.moveToFirst()) {
+            do {
+                try {
+                    cmm = new Comentario();
+                    cmm.setIdComment(c.getInt(0));
+                    cmm.setIdActivityStudent(c.getInt(1));
+                    cmm.setIdAuthor(c.getInt(2));
+                    cmm.setId_comment_version(c.getInt(3));
+                    cmm.setTxtComment(c.getString(4));
+                    cmm.setDateComment(c.getString(5));
+                    cmm.setIdAttach(c.getInt(6));
+                    cmm.setDateSend(c.getString(7));
+                    comentarios.add(cmm);
+                } catch (Exception v) {
+                    Log.e(tag, "erro ao pegar dados do banco:" + v.getMessage());
+                }
+                //add comment
+            } while (c.moveToNext());
+            c.close();
+//            db.close();
+        } else {
+            Log.d(tag, "não retornoun nada");
+        }
+        Log.d(tag, "listou comentarios no banco :" + comentarios.toString());
+        return comentarios;
+    }
+
+
 
 
     public LinkedList<Integer> listSpecificComments(int idActStu) {
@@ -2404,6 +2461,8 @@ public class DataBaseAdapter {
     }
 
     public void insertComments(LinkedList<Comentario> comentarios) {
+
+        Log.d(tag, "cometarios a serem inseridos:"+comentarios);
         for (Comentario c : comentarios) {
             ContentValues cv = new ContentValues();
             cv.put("id_activity_student", c.getIdActivityStudent());
@@ -2417,9 +2476,9 @@ public class DataBaseAdapter {
 
             try {
                 db.insert("tb_comment", null, cv);
-
+                Log.d(tag, "inserindo comment no sqlite:"+c);
             } catch (Exception e) {
-                Log.d(tag, "erro ao inserir na tb_comment:" + e.getMessage());
+                Log.e(tag, "erro ao inserir na tb_comment:" + e.getMessage());
                 e.printStackTrace();
             }
 

@@ -329,7 +329,8 @@ public class FragmentComments extends Frag {
     public void loadCom() {
         DataBaseAdapter db = DataBaseAdapter.getInstance(getActivity());
         Singleton singleton = Singleton.getInstance();
-        lista = (ArrayList<Comentario>) db.listComments(singleton.activity.getIdActivityStudent(), "G", 0);//lista comentario gerais filtrando por C
+        lista = (ArrayList<Comentario>) db.listComments(singleton.activity.getIdActivityStudent(),"Z",0);//lista comentario gerais filtrando por C
+        lista = (ArrayList<Comentario>) db.listCommentsTESTE();
         oneComments = new ArrayList<OneComment>(20);
         if (lista.size() != 0) {
 
