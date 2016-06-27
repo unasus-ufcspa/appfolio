@@ -552,7 +552,7 @@ public class DataBaseAdapter {
 
     public boolean isFirstSpecificComment(int idActSt,int nu_comment_activity) {
         int id = -1;
-        String sql = "select * from tb_comment_version WHERE id_activity_student=" + idActSt + " AND nu_comment_activity= " + nu_comment_activity;
+        String sql = "select * from tb_comment_version cv JOIN tb_version_activity va ON va.id_version_activity=cv.id_version_activity WHERE va.id_activity_student=" + idActSt + " AND nu_comment_activity= " + nu_comment_activity;
         Cursor c = db.rawQuery(sql, null);
         if (c.moveToFirst()) {
             return false;
@@ -852,7 +852,7 @@ public class DataBaseAdapter {
         //sql+=" ORDER BY dt_comment ASC;";
         stBuild.append(" ORDER BY dt_send ASC");
         sql = stBuild.toString();
-        //Log.e(tag, "sql listComments:" + sql);
+        Log.d(tag, "sql listComments:" + sql);
         Cursor c = db.rawQuery(sql, null);
         Comentario cmm;
         if (c.moveToFirst()) {
@@ -907,7 +907,7 @@ public class DataBaseAdapter {
         //sql+=" ORDER BY dt_comment ASC;";
         stBuild.append(" ORDER BY dt_send ASC");
         sql = stBuild.toString();
-        //Log.e(tag, "sql listComments:" + sql);
+        Log.e(tag, "sql listComments:" + sql);
         Cursor c = db.rawQuery(sql, null);
         Comentario cmm;
         if (c.moveToFirst()) {
@@ -2462,7 +2462,7 @@ public class DataBaseAdapter {
 
     public void insertComments(LinkedList<Comentario> comentarios) {
 
-        Log.d(tag, "cometarios a serem inseridos:"+comentarios);
+        Log.d(tag, " full data response> cometarios a serem inseridos:\n"+comentarios);
         for (Comentario c : comentarios) {
             ContentValues cv = new ContentValues();
             cv.put("id_activity_student", c.getIdActivityStudent());
