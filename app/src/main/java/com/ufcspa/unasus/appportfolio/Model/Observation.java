@@ -59,4 +59,17 @@ public class Observation {
     public void setNu_size(int nu_size) {
         this.nu_size = nu_size;
     }
+
+
+    @Override
+    public String toString() {
+        return "Observation{" +
+                "id_comment_version=" + id_comment_version +
+                ", id_version_activity=" + id_version_activity +
+                ", tx_reference='" + tx_reference + '\'' +
+                ", nu_comment_activity=" + nu_comment_activity +
+                ", nu_initial_position=" + nu_initial_position +
+                ", nu_size=" + nu_size +
+                '}';
+    }
 }

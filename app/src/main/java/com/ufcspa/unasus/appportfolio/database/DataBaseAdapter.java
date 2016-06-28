@@ -597,7 +597,9 @@ public class DataBaseAdapter {
 
     public int insertObservationByVersion(Observation o){
         ContentValues cv = new ContentValues();
-        cv.put("id_comment_version",o.getId_comment_version());
+        if(o.getId_comment_version()>0) {
+            cv.put("id_comment_version", o.getId_comment_version());
+        }
         cv.put("id_version_activity", o.getId_version_activity());
         cv.put("tx_reference", o.getTx_reference());
         cv.put("nu_comment_activity", o.getNu_comment_activity());
@@ -838,6 +840,7 @@ public class DataBaseAdapter {
                 "\tc.dt_send\n" +
                 "\tFROM tb_comment c \n" +
                 "\t\tLEFT JOIN  tb_attach_comment ac on ac.id_comment = c.id_comment\n" +
+                "\t\tLEFT JOIN  tb_comment_version cv on cv.id_comment_version = c.id_comment_version" +
                 "\tWHERE 1=1 AND c.id_activity_student = " + idActStu;
 
         StringBuilder stBuild = new StringBuilder(sql);
@@ -847,7 +850,7 @@ public class DataBaseAdapter {
         }
         if (idNote>0) {
             //sql+=" AND nu_comment_activity="+idNote;
-            stBuild.append(" AND id_comment_version=" + idNote);
+            stBuild.append(" AND cv.nu_comment_activity=" + idNote);
         }
         //sql+=" ORDER BY dt_comment ASC;";
         stBuild.append(" ORDER BY dt_send ASC");

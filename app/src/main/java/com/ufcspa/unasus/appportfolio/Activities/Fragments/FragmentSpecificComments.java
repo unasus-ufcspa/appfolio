@@ -233,7 +233,9 @@ private LoadCommentsFromDB loadCommentsFromDB;
             DataBaseAdapter db = DataBaseAdapter.getInstance(getActivity());
             Singleton singleton = Singleton.getInstance();
             //lista = (ArrayList<Comentario>) db.listComments(singleton.activity.getIdActivityStudent(), "O", singleton.note.getBtId());//lista comentario gerais filtrando por O
-            lista = (ArrayList<Comentario>) db.listComments(singleton.activity.getIdActivityStudent(), "O", singleton.actualObservation.getId_comment_version());
+
+            Log.d("comments","observation in singleton: "+singleton.actualObservation.toString());
+            lista = (ArrayList<Comentario>) db.listComments(singleton.activity.getIdActivityStudent(), "O", singleton.actualObservation.getNu_comment_activity());
             oneComments= new ArrayList<>(10);
             Log.d("comments","comentarios especificos:"+lista.toString());
 

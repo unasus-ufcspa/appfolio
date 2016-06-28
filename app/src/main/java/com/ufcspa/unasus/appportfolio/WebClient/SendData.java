@@ -106,7 +106,7 @@ public class SendData {
             users = (LinkedList) data.getUsersByIDs(dadosAgrupados.get(tbUser));
         }
         if (dadosAgrupados.get(tbCommVers) != null) {
-            commentsByVersions = data.getCommentVersion(dadosAgrupados.get(tbCommVers));
+           // commentsByVersions = data.getCommentVersion(dadosAgrupados.get(tbCommVers));
             observationByVersions= data.getObservationByVersions(dadosAgrupados.get(tbCommVers));
         }
 
