@@ -189,7 +189,13 @@ public class SendFullDataClient extends HttpClient{
                                     JSONObject temp = tb_comment.getJSONObject(i);
                                     int id_comment = temp.getInt("id_comment");
                                     int id_comment_srv = temp.getInt("id_comment_srv");
-                                    String dt_comment_srv = temp.getString("dt_comment_srv");
+                                    String dt_comment_srv=null;
+                                    if(temp.has("dt_comment_srv")){
+                                        dt_comment_srv = temp.getString("dt_comment_srv");
+                                    }else{
+                                        Log.d("json","não encontrou campo json dt_comment_srv na response sendfulldata");
+                                    }
+
                                     holder.id = id_comment;
                                     holder.idSrv = id_comment_srv;
                                     holder.date = dt_comment_srv;
@@ -225,7 +231,7 @@ public class SendFullDataClient extends HttpClient{
                                                 JSONObject temp2 = tb_comment;
                                                 int id_comment = temp2.getInt("id_comment");
                                                 //int id_comment_srv = temp2.getInt("id_comment_srv");
-                                                String dt_comment_srv = temp2.getString("dt_send");
+                                                String dt_comment_srv = temp2.getString("dt_comment_srv");
                                                 holder2.id = id_comment;
                                                 //holder2.idSrv = id_comment_srv;
                                                 holder2.date = dt_comment_srv;

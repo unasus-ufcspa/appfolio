@@ -820,7 +820,8 @@ public class FragmentRTEditor extends Frag {
 
         try {
             LinkedList<Integer> comments= source.listSpecificComments(singleton.idActivityStudent);
-            if(comments!=null && comments.getLast()!=null) {
+            if(comments!=null && comments.size()>0) {
+
                 currentSpecificComment = (comments).getLast();//specificCommentsNotes.size();
                 Log.d("editor notes", "currentSpecificComment:" + currentSpecificComment);
             }
