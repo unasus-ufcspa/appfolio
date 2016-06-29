@@ -810,6 +810,7 @@ public class FragmentRTEditor extends Frag {
         specificCommentsNotes = new HashMap<>();
         ArrayList<Integer> ids = (ArrayList<Integer>) source.listNotesSpecificComments(singleton.idCurrentVersionActivity); //source.listSpecificComments(singleton.idActivityStudent);
         LinkedList<Observation> obs = source.listSpecificCommentsObjects(singleton.idActivityStudent,singleton.idCurrentVersionActivity);
+        observationNotes= new HashMap<Integer,Observation>();
         for (int id : ids) {
             specificCommentsNotes.put(id, new Note(id, "", 0));
         }
@@ -1386,7 +1387,9 @@ public class FragmentRTEditor extends Frag {
 
                                         //adiciona no singleton posições do texto da oservação criada
                                         singleton.actualObservation.setNu_initial_position(startSelection);
-                                        singleton.actualObservation.setNu_size(endSelection-startSelection);
+                                        singleton.actualObservation.setNu_size(endSelection - startSelection);
+                                        singleton.actualObservation.setTx_reference(singleton.selectedText);
+                                        Log.d("rteditor"," set tx reference:" + singleton.actualObservation.getTx_reference());
                                         createSpecificCommentNote(getCaretYPosition(startSelection), selectedText);
                                     }
                                 }
