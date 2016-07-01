@@ -235,7 +235,8 @@ private LoadCommentsFromDB loadCommentsFromDB;
             //lista = (ArrayList<Comentario>) db.listComments(singleton.activity.getIdActivityStudent(), "O", singleton.note.getBtId());//lista comentario gerais filtrando por O
 
             Log.d("comments","observation in singleton: "+singleton.actualObservation.toString());
-            lista = (ArrayList<Comentario>) db.listComments(singleton.activity.getIdActivityStudent(), "O", singleton.actualObservation.getNu_comment_activity());
+            //singleton.actualObservation.setNu_comment_activity(singleton.note.getBtId());
+            lista = (ArrayList<Comentario>) db.listComments(singleton.activity.getIdActivityStudent(), "O", 0);
             oneComments= new ArrayList<>(10);
             Log.d("comments","comentarios especificos:"+lista.toString());
 
@@ -431,6 +432,8 @@ private LoadCommentsFromDB loadCommentsFromDB;
             singleton.actualObservation.setTx_reference(noteNow.getSelectedText());
             singleton.actualObservation.setId_version_activity(singleton.idVersionActivity);
 
+
+            Log.d("specific","actual obs in single:"+singleton.actualObservation);
             int idObservation;
             if(singleton.isFirstSpecificComment){
                 idObservation = source.insertObservationByVersion(singleton.actualObservation);
@@ -440,6 +443,7 @@ private LoadCommentsFromDB loadCommentsFromDB;
                 sync.setId_activity_student(singleton.idActivityStudent);
                 sync.setId_device(singleton.device.get_id_device());
                 source.insertIntoTBSync(sync);
+                singleton.isFirstSpecificComment=false;
 
             }else{
                 idObservation = source.getIdObservationByNuCommentActivy(singleton.actualObservation.getNu_comment_activity());
@@ -534,12 +538,14 @@ private LoadCommentsFromDB loadCommentsFromDB;
         String shortTimeStr="00:00";
         Log.d("comments","date receiving :"+atualDate);
         try {
-            SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-            Date date = null;
-            date = df.parse(atualDate);
-            SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
-            shortTimeStr = sdf.format(date);
-            Log.d("comments","date to hour :"+shortTimeStr);
+            if(atualDate!=null) {
+                SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                Date date = null;
+                date = df.parse(atualDate);
+                SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
+                shortTimeStr = sdf.format(date);
+                Log.d("comments", "date to hour :" + shortTimeStr);
+            }
         } catch (ParseException e) {
             // To change body of catch statement use File | Settings | File Templates.
             e.printStackTrace();
@@ -553,7 +559,7 @@ private LoadCommentsFromDB loadCommentsFromDB;
         try {
             SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             Date date = null;
-            if(df!=null) {
+            if(df!=null && atualDate!=null) {
                 date = df.parse(atualDate);
                 SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
                 shortTimeStr = sdf.format(date);

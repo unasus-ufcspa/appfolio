@@ -485,11 +485,13 @@ public class FragmentComments extends Frag {
         String shortTimeStr = "00:00";
         //Log.d("comments","date receiving :"+atualDate);
         try {
-            SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-            Date date = null;
-            date = df.parse(atualDate);
-            SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
-            shortTimeStr = sdf.format(date);
+            if(atualDate!=null) {
+                SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                Date date = null;
+                date = df.parse(atualDate);
+                SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
+                shortTimeStr = sdf.format(date);
+            }
         } catch (ParseException e) {
             e.printStackTrace();
         }

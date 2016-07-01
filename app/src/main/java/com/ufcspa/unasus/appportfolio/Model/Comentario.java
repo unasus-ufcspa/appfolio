@@ -120,11 +120,10 @@ public class Comentario {
     public String toString() {
         return "Comentario{" +
                 "txtComment='" + txtComment + '\'' +
-                ", txtReference='" + txtReference + '\'' +
-                ", typeComment='" + typeComment + '\'' +
                 ", dateComment='" + dateComment + '\'' +
                 ", dateSend='" + dateSend + '\'' +
                 ", idComment=" + idComment +
+                ", id_comment_version=" + id_comment_version +
                 ", idActivityStudent=" + idActivityStudent +
                 ", idAuthor=" + idAuthor +
                 ", idNote=" + idNote +

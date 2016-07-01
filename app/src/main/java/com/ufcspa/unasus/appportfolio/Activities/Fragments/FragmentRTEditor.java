@@ -841,6 +841,7 @@ public class FragmentRTEditor extends Frag {
             note.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    Log.d("editor","clicou no bt");
                     changeColor(id);
 
                     Button btn = (Button) v;
@@ -858,7 +859,8 @@ public class FragmentRTEditor extends Frag {
                     }
 
                     singleton.note.setBtY(yPosition);
-                    singleton.note.setSelectedText(selectedActualText);
+                    if(selectedActualText!=null && !selectedActualText.isEmpty())
+                        singleton.note.setSelectedText(selectedActualText);
                     singleton.note.setBtId(id);
 
                     getView().findViewById(R.id.general_comment_notice).setVisibility(View.GONE);
@@ -1311,11 +1313,12 @@ public class FragmentRTEditor extends Frag {
                     menu.removeItem(android.R.id.cut);
                 }
             }
-            if (singleton.portfolioClass.getPerfil().equals("T")) {
+           // if (singleton.portfolioClass.getPerfil().equals("T")) {
                 createAddSpecificCommentButton(getCaretYPosition(mRTMessageField.getSelectionStart()));
                 menu.removeItem(android.R.id.paste);
                 menu.removeItem(android.R.id.cut);
-            }
+            //
+            //}
 
             return true;
         }
@@ -1389,6 +1392,7 @@ public class FragmentRTEditor extends Frag {
                                         singleton.actualObservation.setNu_initial_position(startSelection);
                                         singleton.actualObservation.setNu_size(endSelection - startSelection);
                                         singleton.actualObservation.setTx_reference(singleton.selectedText);
+                                        singleton.actualObservation.setNu_comment_activity(singleton.note.getBtId());
                                         Log.d("rteditor"," set tx reference:" + singleton.actualObservation.getTx_reference());
                                         createSpecificCommentNote(getCaretYPosition(startSelection), selectedText);
                                     }
