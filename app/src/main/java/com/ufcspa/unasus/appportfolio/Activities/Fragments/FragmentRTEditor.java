@@ -62,7 +62,6 @@ import com.ufcspa.unasus.appportfolio.Adapter.VersionsAdapter;
 import com.ufcspa.unasus.appportfolio.Model.ActivityStudent;
 import com.ufcspa.unasus.appportfolio.Model.Comentario;
 import com.ufcspa.unasus.appportfolio.Model.Note;
-import com.ufcspa.unasus.appportfolio.Model.Observation;
 import com.ufcspa.unasus.appportfolio.Model.Singleton;
 import com.ufcspa.unasus.appportfolio.Model.Sync;
 import com.ufcspa.unasus.appportfolio.Model.User;
@@ -74,8 +73,6 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.NoSuchElementException;
 
 
 public class FragmentRTEditor extends Frag {
@@ -91,13 +88,6 @@ public class FragmentRTEditor extends Frag {
     private HashMap<Integer, Note> specificCommentsNotes;
     private String selectedActualText = "null";
     private boolean specificCommentsOpen;
-
-
-    // Observação nova versão
-    private Observation currentSpecificCommentObject;
-    private HashMap<Integer, Observation> observationNotes;
-
-
     // Layout
     private ViewGroup scrollview;
     private ImageButton fullScreen;
@@ -114,7 +104,7 @@ public class FragmentRTEditor extends Frag {
     private DataBaseAdapter source;
     private Singleton singleton;
     // Cores
-    private int transparent;
+    private int trasnparent;
     private int greenLight;
     private int greenDark;
     // Versoes
@@ -190,8 +180,6 @@ public class FragmentRTEditor extends Frag {
 
             HashMap<String, String> aux = source.getAllAttachmentsNames(singleton.idActivityStudent);
 
-            // TODO Processar o texto inserindo as tags de comentário específico
-
             mRTMessageField.setRichTextEditing(true, text, aux);
             singleton.firsttime = false;
         }
@@ -221,7 +209,7 @@ public class FragmentRTEditor extends Frag {
 
         specificCommentsOpen = false;
 
-        transparent = getResources().getColor(android.R.color.transparent);
+        trasnparent = getResources().getColor(android.R.color.transparent);
         greenLight = getResources().getColor(R.color.base_green_light);
         greenDark = getResources().getColor(R.color.base_green);
 
@@ -284,9 +272,6 @@ public class FragmentRTEditor extends Frag {
                                         sync.setId_activity_student(Singleton.getInstance().idActivityStudent);
                                         sync.setId_device(singleton.device.get_id_device());
                                         source.insertIntoTBSync(sync);
-
-                                        // TODO Adicionar comentários específicos ao sincronismo
-                                        // TODO Processar o texto removendo as tags de comentário específico
 
                                         //SALVA NOVA VERSION ACTIVITY
                                         DataBaseAdapter data = DataBaseAdapter.getInstance(getContext());
@@ -445,7 +430,7 @@ public class FragmentRTEditor extends Frag {
 
                         int id = singleton.note.getBtId();
                         if (specificCommentsOpen && id > 0) {
-                            ArrayList<Comentario> lista = (ArrayList<Comentario>) source.listComments(singleton.activity.getIdActivityStudent(),"Z", id);
+                            ArrayList<Comentario> lista = (ArrayList<Comentario>) source.listComments(singleton.activity.getIdActivityStudent(), "O", id);
                             if (lista == null || lista.size() == 0) {
                                 //Remove note from hash map
                                 specificCommentsNotes.remove(id);
@@ -809,27 +794,11 @@ public class FragmentRTEditor extends Frag {
     public void getIdNotesFromDB() {
         specificCommentsNotes = new HashMap<>();
         ArrayList<Integer> ids = (ArrayList<Integer>) source.listNotesSpecificComments(singleton.idCurrentVersionActivity); //source.listSpecificComments(singleton.idActivityStudent);
-        LinkedList<Observation> obs = source.listSpecificCommentsObjects(singleton.idActivityStudent,singleton.idCurrentVersionActivity);
-        observationNotes= new HashMap<Integer,Observation>();
         for (int id : ids) {
             specificCommentsNotes.put(id, new Note(id, "", 0));
         }
-
-        for (Observation o : obs){
-            observationNotes.put(o.getNu_comment_activity(),o);
-        }
-
-        try {
-            LinkedList<Integer> comments= source.listSpecificComments(singleton.idActivityStudent);
-            if(comments!=null && comments.size()>0) {
-
-                currentSpecificComment = (comments).getLast();//specificCommentsNotes.size();
-                Log.d("editor notes", "currentSpecificComment:" + currentSpecificComment);
-            }
-        }catch (NoSuchElementException e){
-            e.printStackTrace();
-        }
-
+        currentSpecificComment = (source.listSpecificComments(singleton.idActivityStudent)).size();//specificCommentsNotes.size();
+        Log.d("editor notes", "currentSpecificComment:" + currentSpecificComment);
     }
 
     private Button createButton(final int id, final String value, final float yPosition) {
@@ -841,7 +810,6 @@ public class FragmentRTEditor extends Frag {
             note.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Log.d("editor","clicou no bt");
                     changeColor(id);
 
                     Button btn = (Button) v;
@@ -859,8 +827,7 @@ public class FragmentRTEditor extends Frag {
                     }
 
                     singleton.note.setBtY(yPosition);
-                    if(selectedActualText!=null && !selectedActualText.isEmpty())
-                        singleton.note.setSelectedText(selectedActualText);
+                    singleton.note.setSelectedText(selectedActualText);
                     singleton.note.setBtId(id);
 
                     getView().findViewById(R.id.general_comment_notice).setVisibility(View.GONE);
@@ -1000,11 +967,9 @@ public class FragmentRTEditor extends Frag {
         int selStart = mRTMessageField.getSelectionStart();
         int selEnd = mRTMessageField.getSelectionEnd();
 
-        // salva posições do texto secionado no singleton
         singleton.actualObservation.setNu_size(selEnd-selStart);
         singleton.actualObservation.setNu_initial_position(selStart);
-
-        // converte para html
+        
         Spannable text = (Spannable) mRTMessageField.getText().subSequence(selStart, selEnd);
         RTHtml<RTImage, RTAudio, RTVideo> rtHtml = new ConverterSpannedToHtml().convert(text, RTFormat.HTML);
         String thatsMySelectionInHTML = rtHtml.getText();
@@ -1220,7 +1185,7 @@ public class FragmentRTEditor extends Frag {
         for (BackgroundColorSpan spm : spans) {
             if (spm.getId() != -1) {
                 if (flag)
-                    spm.setColor(transparent);
+                    spm.setColor(trasnparent);
                 else
                     spm.setColor(greenLight);
             }
@@ -1313,12 +1278,12 @@ public class FragmentRTEditor extends Frag {
                     menu.removeItem(android.R.id.cut);
                 }
             }
-           // if (singleton.portfolioClass.getPerfil().equals("T")) {
+            createAddSpecificCommentButton(getCaretYPosition(mRTMessageField.getSelectionStart()));
+            if (singleton.portfolioClass.getPerfil().equals("T")) {
                 createAddSpecificCommentButton(getCaretYPosition(mRTMessageField.getSelectionStart()));
                 menu.removeItem(android.R.id.paste);
                 menu.removeItem(android.R.id.cut);
-            //
-            //}
+            }
 
             return true;
         }
@@ -1387,13 +1352,6 @@ public class FragmentRTEditor extends Frag {
                                 if (selectedText.length() > 0) {
                                     if (canCreateButton(startSelection, endSelection)) {
                                         singleton.selectedText = mRTMessageField.getText().toString().substring(startSelection, endSelection);
-
-                                        //adiciona no singleton posições do texto da oservação criada
-                                        singleton.actualObservation.setNu_initial_position(startSelection);
-                                        singleton.actualObservation.setNu_size(endSelection - startSelection);
-                                        singleton.actualObservation.setTx_reference(singleton.selectedText);
-                                        singleton.actualObservation.setNu_comment_activity(singleton.note.getBtId());
-                                        Log.d("rteditor"," set tx reference:" + singleton.actualObservation.getTx_reference());
                                         createSpecificCommentNote(getCaretYPosition(startSelection), selectedText);
                                     }
                                 }

@@ -33,7 +33,6 @@ import com.ufcspa.unasus.appportfolio.Model.Attachment;
 import com.ufcspa.unasus.appportfolio.Model.Comentario;
 import com.ufcspa.unasus.appportfolio.Model.CommentVersion;
 import com.ufcspa.unasus.appportfolio.Model.Note;
-import com.ufcspa.unasus.appportfolio.Model.Observation;
 import com.ufcspa.unasus.appportfolio.Model.OneComment;
 import com.ufcspa.unasus.appportfolio.Model.Singleton;
 import com.ufcspa.unasus.appportfolio.Model.Sync;
@@ -66,20 +65,20 @@ public class FragmentSpecificComments extends Frag {
     private Note noteNow;
     private ArrayList<Comentario> lista;
     private ArrayList<OneComment> oneComments;
-//    private ImageButton btExpand;
-private LoadCommentsFromDB loadCommentsFromDB;
+    //    private ImageButton btExpand;
+    private LoadCommentsFromDB loadCommentsFromDB;
     private Runnable myRunnable = new Runnable() {
         @Override
         public void run() {
-            Log.d("Handler", "Handler is running...");
-            MainActivity main = ((MainActivity) getActivity());
-            if (main != null)
-                main.downloadFullDataComments(Singleton.getInstance().idActivityStudent);
-
-//            loadCommentsFromDB();
-//            spcAdapter.refresh(oneComments);
-
-            h.postDelayed(this, 5000);
+//            Log.d("Handler", "Handler is running...");
+//            MainActivity main = ((MainActivity) getActivity());
+//            if (main != null)
+//                main.downloadFullDataComments(Singleton.getInstance().idActivityStudent);
+//
+////            loadCommentsFromDB();
+////            spcAdapter.refresh(oneComments);
+//
+//            h.postDelayed(this, 5000);
         }
     };
 
@@ -231,12 +230,10 @@ private LoadCommentsFromDB loadCommentsFromDB;
     public void loadCommentsFromDB(){
         try {
             DataBaseAdapter db = DataBaseAdapter.getInstance(getActivity());
-            Singleton singleton = Singleton.getInstance();
-            //lista = (ArrayList<Comentario>) db.listComments(singleton.activity.getIdActivityStudent(), "O", singleton.note.getBtId());//lista comentario gerais filtrando por O
 
-            Log.d("comments","observation in singleton: "+singleton.actualObservation.toString());
-            //singleton.actualObservation.setNu_comment_activity(singleton.note.getBtId());
-            lista = (ArrayList<Comentario>) db.listComments(singleton.activity.getIdActivityStudent(), "O", 0);
+            Log.d("observations","list observations:" + db.getObservation(1).toString());
+            Singleton singleton = Singleton.getInstance();
+            lista = (ArrayList<Comentario>) db.listComments(singleton.activity.getIdActivityStudent(), "O", singleton.note.getBtId());//lista comentario gerais filtrando por O
             oneComments= new ArrayList<>(10);
             Log.d("comments","comentarios especificos:"+lista.toString());
 
@@ -423,14 +420,19 @@ private LoadCommentsFromDB loadCommentsFromDB;
     private void insertComment(Comentario c){
         try {
             //DataBaseAdapter db = DataBaseAdapter.getInstance(getActivity());
-            if (singleton.portfolioClass.getPerfil().equals("T") && source.isFirstSpecificComment(singleton.idActivityStudent, noteNow.getBtId()))
-                singleton.isFirstSpecificComment = true;
+//            if (singleton.portfolioClass.getPerfil().equals("T") && source.isFirstSpecificComment(singleton.idActivityStudent, noteNow.getBtId()))
+//                singleton.isFirstSpecificComment = true;
 
+
+
+            if(source.isFirstSpecificComment(singleton.idActivityStudent, noteNow.getBtId()))
+                singleton.isFirstSpecificComment = true;
 
             // recupera n_nota criada
             singleton.actualObservation.setNu_comment_activity(noteNow.getBtId());
             singleton.actualObservation.setTx_reference(noteNow.getSelectedText());
             singleton.actualObservation.setId_version_activity(singleton.idVersionActivity);
+
 
 
             Log.d("specific","actual obs in single:"+singleton.actualObservation);
@@ -498,7 +500,11 @@ private LoadCommentsFromDB loadCommentsFromDB;
     private void insertReference(){
         if(spcAdapter!=null) {
             Singleton single = Singleton.getInstance();
+            String r=source.getIdObservationTextByNuCommentActivy(1);
+            if(!r.isEmpty())
+                single.note.setSelectedText(r);
             noteNow = single.note;
+
             if (lista != null && lista.size() != 0) { // se a lista nao estiver vazia quer dizer que a nota de referencia já existe no banco
                 for (Comentario c:lista) {
                     Log.d("comments noteNow","referencia é :"+c.toString());
@@ -538,14 +544,12 @@ private LoadCommentsFromDB loadCommentsFromDB;
         String shortTimeStr="00:00";
         Log.d("comments","date receiving :"+atualDate);
         try {
-            if(atualDate!=null) {
-                SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-                Date date = null;
-                date = df.parse(atualDate);
-                SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
-                shortTimeStr = sdf.format(date);
-                Log.d("comments", "date to hour :" + shortTimeStr);
-            }
+            SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            Date date = null;
+            date = df.parse(atualDate);
+            SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
+            shortTimeStr = sdf.format(date);
+            Log.d("comments","date to hour :"+shortTimeStr);
         } catch (ParseException e) {
             // To change body of catch statement use File | Settings | File Templates.
             e.printStackTrace();
@@ -559,7 +563,7 @@ private LoadCommentsFromDB loadCommentsFromDB;
         try {
             SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             Date date = null;
-            if(df!=null && atualDate!=null) {
+            if(df!=null) {
                 date = df.parse(atualDate);
                 SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
                 shortTimeStr = sdf.format(date);
