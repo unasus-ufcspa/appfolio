@@ -33,7 +33,6 @@ import com.ufcspa.unasus.appportfolio.Model.Attachment;
 import com.ufcspa.unasus.appportfolio.Model.Comentario;
 import com.ufcspa.unasus.appportfolio.Model.CommentVersion;
 import com.ufcspa.unasus.appportfolio.Model.Note;
-import com.ufcspa.unasus.appportfolio.Model.Observation;
 import com.ufcspa.unasus.appportfolio.Model.OneComment;
 import com.ufcspa.unasus.appportfolio.Model.Singleton;
 import com.ufcspa.unasus.appportfolio.Model.Sync;
@@ -66,20 +65,20 @@ public class FragmentSpecificComments extends Frag {
     private Note noteNow;
     private ArrayList<Comentario> lista;
     private ArrayList<OneComment> oneComments;
-//    private ImageButton btExpand;
-private LoadCommentsFromDB loadCommentsFromDB;
+    //    private ImageButton btExpand;
+    private LoadCommentsFromDB loadCommentsFromDB;
     private Runnable myRunnable = new Runnable() {
         @Override
         public void run() {
-            Log.d("Handler", "Handler is running...");
-            MainActivity main = ((MainActivity) getActivity());
-            if (main != null)
-                main.downloadFullDataComments(Singleton.getInstance().idActivityStudent);
-
-//            loadCommentsFromDB();
-//            spcAdapter.refresh(oneComments);
-
-            h.postDelayed(this, 5000);
+//            Log.d("Handler", "Handler is running...");
+//            MainActivity main = ((MainActivity) getActivity());
+//            if (main != null)
+//                main.downloadFullDataComments(Singleton.getInstance().idActivityStudent);
+//
+////            loadCommentsFromDB();
+////            spcAdapter.refresh(oneComments);
+//
+//            h.postDelayed(this, 5000);
         }
     };
 
@@ -180,7 +179,7 @@ private LoadCommentsFromDB loadCommentsFromDB;
             @Override
             public void onClick(View v) {
                 if (EXPANDED_FLAG == false) {
-                    txNote.getLayoutParams().height = 300;
+                    txNote.getLayoutParams().height = 330;
                     txNote.setMovementMethod(new ScrollingMovementMethod());
                     EXPANDED_FLAG = true;
                     txNote.requestLayout();
@@ -231,11 +230,10 @@ private LoadCommentsFromDB loadCommentsFromDB;
     public void loadCommentsFromDB(){
         try {
             DataBaseAdapter db = DataBaseAdapter.getInstance(getActivity());
-            Singleton singleton = Singleton.getInstance();
-            //lista = (ArrayList<Comentario>) db.listComments(singleton.activity.getIdActivityStudent(), "O", singleton.note.getBtId());//lista comentario gerais filtrando por O
 
-            Log.d("comments","observation in singleton: "+singleton.actualObservation.toString());
-            lista = (ArrayList<Comentario>) db.listComments(singleton.activity.getIdActivityStudent(), "O", singleton.actualObservation.getNu_comment_activity());
+            Log.d("observations","list observations:" + db.getObservation(1).toString());
+            Singleton singleton = Singleton.getInstance();
+            lista = (ArrayList<Comentario>) db.listComments(singleton.activity.getIdActivityStudent(), "O", singleton.note.getBtId());//lista comentario gerais filtrando por O
             oneComments= new ArrayList<>(10);
             Log.d("comments","comentarios especificos:"+lista.toString());
 
@@ -422,15 +420,22 @@ private LoadCommentsFromDB loadCommentsFromDB;
     private void insertComment(Comentario c){
         try {
             //DataBaseAdapter db = DataBaseAdapter.getInstance(getActivity());
-            if (singleton.portfolioClass.getPerfil().equals("T") && source.isFirstSpecificComment(singleton.idActivityStudent, noteNow.getBtId()))
-                singleton.isFirstSpecificComment = true;
+//            if (singleton.portfolioClass.getPerfil().equals("T") && source.isFirstSpecificComment(singleton.idActivityStudent, noteNow.getBtId()))
+//                singleton.isFirstSpecificComment = true;
 
+
+
+            if(source.isFirstSpecificComment(singleton.idActivityStudent, noteNow.getBtId()))
+                singleton.isFirstSpecificComment = true;
 
             // recupera n_nota criada
             singleton.actualObservation.setNu_comment_activity(noteNow.getBtId());
             singleton.actualObservation.setTx_reference(noteNow.getSelectedText());
             singleton.actualObservation.setId_version_activity(singleton.idVersionActivity);
 
+
+
+            Log.d("specific","actual obs in single:"+singleton.actualObservation);
             int idObservation;
             if(singleton.isFirstSpecificComment){
                 idObservation = source.insertObservationByVersion(singleton.actualObservation);
@@ -440,6 +445,7 @@ private LoadCommentsFromDB loadCommentsFromDB;
                 sync.setId_activity_student(singleton.idActivityStudent);
                 sync.setId_device(singleton.device.get_id_device());
                 source.insertIntoTBSync(sync);
+                singleton.isFirstSpecificComment=false;
 
             }else{
                 idObservation = source.getIdObservationByNuCommentActivy(singleton.actualObservation.getNu_comment_activity());
@@ -494,12 +500,18 @@ private LoadCommentsFromDB loadCommentsFromDB;
     private void insertReference(){
         if(spcAdapter!=null) {
             Singleton single = Singleton.getInstance();
+           // if(single.note.getSelectedText().isEmpty()) {
+            String r=source.getIdObservationTextByNuCommentActivy(single.note.getBtId());
+            if (!r.isEmpty())
+                single.note.setSelectedText(r);
+            //}
             noteNow = single.note;
+
             if (lista != null && lista.size() != 0) { // se a lista nao estiver vazia quer dizer que a nota de referencia já existe no banco
                 for (Comentario c:lista) {
                     Log.d("comments noteNow","referencia é :"+c.toString());
                 }
-                noteNow.setSelectedText(lista.get(0).getTxtReference());
+                //noteNow.setSelectedText(lista.get(0).getTxtReference());
                 Log.d("comments noteNow","lista:"+lista.get(0).toJSON());
             }
 
