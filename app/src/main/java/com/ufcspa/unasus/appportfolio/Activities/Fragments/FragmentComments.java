@@ -321,6 +321,7 @@ public class FragmentComments extends Frag {
         c.setDateComment(getActualTime());
         c.setIdAuthor(singleton.user.getIdUser());
         c.setTypeComment("G");
+        c.setDateSend(c.getDateComment());
         c.setTxtComment(edtMessage.getText().toString());
         c.setIdActivityStudent(singleton.activity.getIdActivityStudent());
         return c;

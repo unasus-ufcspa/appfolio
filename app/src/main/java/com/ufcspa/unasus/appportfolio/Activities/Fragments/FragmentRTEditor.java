@@ -62,6 +62,7 @@ import com.ufcspa.unasus.appportfolio.Adapter.VersionsAdapter;
 import com.ufcspa.unasus.appportfolio.Model.ActivityStudent;
 import com.ufcspa.unasus.appportfolio.Model.Comentario;
 import com.ufcspa.unasus.appportfolio.Model.Note;
+import com.ufcspa.unasus.appportfolio.Model.Observation;
 import com.ufcspa.unasus.appportfolio.Model.Singleton;
 import com.ufcspa.unasus.appportfolio.Model.Sync;
 import com.ufcspa.unasus.appportfolio.Model.User;
@@ -73,6 +74,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
+import java.util.LinkedList;
 
 
 public class FragmentRTEditor extends Frag {
@@ -793,9 +795,10 @@ public class FragmentRTEditor extends Frag {
      */
     public void getIdNotesFromDB() {
         specificCommentsNotes = new HashMap<>();
-        ArrayList<Integer> ids = (ArrayList<Integer>) source.listNotesSpecificComments(singleton.idCurrentVersionActivity); //source.listSpecificComments(singleton.idActivityStudent);
-        for (int id : ids) {
-            specificCommentsNotes.put(id, new Note(id, "", 0));
+        LinkedList<Observation> obs = (LinkedList<Observation>) source.listNotesSpecificComments(singleton.idCurrentVersionActivity); //source.listSpecificComments(singleton.idActivityStudent);
+        for (int i=0;i<obs.size();i++) {
+            Observation o = obs.get(i);
+            specificCommentsNotes.put(o.getNu_comment_activity(), new Note(o.getNu_comment_activity(),o.getTx_reference(), 0));
         }
         currentSpecificComment = (source.listSpecificComments(singleton.idActivityStudent)).size();//specificCommentsNotes.size();
         Log.d("editor notes", "currentSpecificComment:" + currentSpecificComment);
@@ -969,7 +972,7 @@ public class FragmentRTEditor extends Frag {
 
         singleton.actualObservation.setNu_size(selEnd-selStart);
         singleton.actualObservation.setNu_initial_position(selStart);
-        
+
         Spannable text = (Spannable) mRTMessageField.getText().subSequence(selStart, selEnd);
         RTHtml<RTImage, RTAudio, RTVideo> rtHtml = new ConverterSpannedToHtml().convert(text, RTFormat.HTML);
         String thatsMySelectionInHTML = rtHtml.getText();

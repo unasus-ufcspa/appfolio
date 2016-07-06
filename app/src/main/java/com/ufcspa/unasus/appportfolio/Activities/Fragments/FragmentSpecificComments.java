@@ -179,7 +179,7 @@ public class FragmentSpecificComments extends Frag {
             @Override
             public void onClick(View v) {
                 if (EXPANDED_FLAG == false) {
-                    txNote.getLayoutParams().height = 300;
+                    txNote.getLayoutParams().height = 330;
                     txNote.setMovementMethod(new ScrollingMovementMethod());
                     EXPANDED_FLAG = true;
                     txNote.requestLayout();
@@ -500,16 +500,18 @@ public class FragmentSpecificComments extends Frag {
     private void insertReference(){
         if(spcAdapter!=null) {
             Singleton single = Singleton.getInstance();
-            String r=source.getIdObservationTextByNuCommentActivy(1);
-            if(!r.isEmpty())
+           // if(single.note.getSelectedText().isEmpty()) {
+            String r=source.getIdObservationTextByNuCommentActivy(single.note.getBtId());
+            if (!r.isEmpty())
                 single.note.setSelectedText(r);
+            //}
             noteNow = single.note;
 
             if (lista != null && lista.size() != 0) { // se a lista nao estiver vazia quer dizer que a nota de referencia já existe no banco
                 for (Comentario c:lista) {
                     Log.d("comments noteNow","referencia é :"+c.toString());
                 }
-                noteNow.setSelectedText(lista.get(0).getTxtReference());
+                //noteNow.setSelectedText(lista.get(0).getTxtReference());
                 Log.d("comments noteNow","lista:"+lista.get(0).toJSON());
             }
 

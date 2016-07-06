@@ -1114,19 +1114,22 @@ public class DataBaseAdapter {
         return v;
     }
 
-    public List<Integer> listNotesSpecificComments(int version) {
-        ArrayList<Integer> v = new ArrayList<>();
-        String sql = "SELECT DISTINCT nu_comment_activity from tb_comment_version as tbcv " +
+    public List<Observation> listNotesSpecificComments(int version) {
+        String sql = "SELECT DISTINCT nu_comment_activity,tx_reference from tb_comment_version as tbcv " +
                 "LEFT JOIN tb_version_activity as tbva on tbva.id_version_activity = tbcv.id_version_activity" +
                 " WHERE tbva.id_version_activity =" + version;
         //Log.e(tag, "sql listComments:" + sql);
         Cursor c = db.rawQuery(sql, null);
-        Integer id;
+        LinkedList<Observation> obs= new LinkedList<Observation>();
+
         if (c.moveToFirst()) {
             do {
                 try {
-                    id = c.getInt(0);
-                    v.add(id);
+                    Observation ob = new Observation();
+
+                    ob.setNu_comment_activity(c.getInt(0));
+                    ob.setTx_reference(c.getString(1));
+                    obs.add(ob);
                 } catch (Exception e) {
                 }
             } while (c.moveToNext());
@@ -1134,9 +1137,8 @@ public class DataBaseAdapter {
         } else {
             Log.d(tag + " listSpecific comments", "não retornou nada");
         }
-        return v;
+        return obs;
     }
-
 
 
 
