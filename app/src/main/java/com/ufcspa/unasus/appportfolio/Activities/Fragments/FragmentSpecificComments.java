@@ -438,6 +438,7 @@ public class FragmentSpecificComments extends Frag {
             Log.d("specific","actual obs in single:"+singleton.actualObservation);
             int idObservation;
             if(singleton.isFirstSpecificComment){
+                // empilha observation nas syncs
                 idObservation = source.insertObservationByVersion(singleton.actualObservation);
                 Sync sync = new Sync();
                 sync.setNm_table("tb_comment_version");
@@ -445,7 +446,17 @@ public class FragmentSpecificComments extends Frag {
                 sync.setId_activity_student(singleton.idActivityStudent);
                 sync.setId_device(singleton.device.get_id_device());
                 source.insertIntoTBSync(sync);
+
+                // empilha version nas syncs
+                sync = new Sync();
+                sync.setNm_table("tb_version_activity");
+                sync.setCo_id_table(source.getLastIDVersionActivity(singleton.idActivityStudent));
+                sync.setId_activity_student(Singleton.getInstance().idActivityStudent);
+                sync.setId_device(singleton.device.get_id_device());
+                source.insertIntoTBSync(sync);
+
                 singleton.isFirstSpecificComment=false;
+
 
             }else{
                 idObservation = source.getIdObservationByNuCommentActivy(singleton.actualObservation.getNu_comment_activity());
@@ -530,8 +541,6 @@ public class FragmentSpecificComments extends Frag {
             }else{
                 Log.d("comments","NoteNow is NULL");
             }
-
-
         }
     }
 
