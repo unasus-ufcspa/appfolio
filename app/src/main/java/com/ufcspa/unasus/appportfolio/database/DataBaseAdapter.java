@@ -878,7 +878,7 @@ public class DataBaseAdapter {
             c.close();
 //            db.close();
         } else {
-            Log.d(tag, "não retornoun nada");
+            Log.d(tag, "não retornou nada");
         }
         Log.d(tag, "listou comentarios no banco :" + comentarios.toString());
         return comentarios;
