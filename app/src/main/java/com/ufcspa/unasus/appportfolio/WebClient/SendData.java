@@ -388,7 +388,7 @@ public class SendData {
                             jComment.put("nu_comment_activity", c.getNu_comment_activity());
                             jComment.put("nu_initial_pos", c.getNu_initial_position());
                             jComment.put("nu_size", c.getNu_size());
-                            //jComment.put("id_comment_version_srv",c.getId_comment_version_srv());
+                            jComment.put("id_comment_version_srv",c.getId_comment_version_srv());
 
                             jsonCommentsByVersion.put(jComment);
                         }
