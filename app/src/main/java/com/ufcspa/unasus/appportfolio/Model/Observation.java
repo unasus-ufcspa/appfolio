@@ -10,7 +10,15 @@ public class Observation {
     private int nu_comment_activity;
     private int nu_initial_position;
     private int nu_size;
+    private int id_comment_version_srv;
 
+    public int getId_comment_version_srv() {
+        return id_comment_version_srv;
+    }
+
+    public void setId_comment_version_srv(int id_comment_version_srv) {
+        this.id_comment_version_srv = id_comment_version_srv;
+    }
 
     public int getId_comment_version() {
         return id_comment_version;

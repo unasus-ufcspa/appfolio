@@ -607,11 +607,15 @@ public class DataBaseAdapter {
         if(o.getId_comment_version()>0) {
             cv.put("id_comment_version", o.getId_comment_version());
         }
+
         cv.put("id_version_activity", o.getId_version_activity());
         cv.put("tx_reference", o.getTx_reference());
         cv.put("nu_comment_activity", o.getNu_comment_activity());
         cv.put("nu_initial_pos",o.getNu_initial_position());
         cv.put("nu_size", o.getNu_size());
+        cv.put("id_comment_version_srv",o.getId_comment_version_srv());
+
+
         try {
             db.insert("tb_comment_version", null, cv);
             Log.d(tag + " insert", "inseriu observação no banco");
@@ -673,6 +677,7 @@ public class DataBaseAdapter {
                     o.setNu_comment_activity(c.getInt(3));
                     o.setNu_initial_position(c.getInt(4));
                     o.setNu_size(c.getInt(5));
+                    o.setId_comment_version_srv(6);
                     obs.add(o);
                 } catch (Exception v) {
                     Log.e(tag, "erro ao pegar dados do banco:" + v.getMessage());
@@ -706,6 +711,7 @@ public class DataBaseAdapter {
                     o.setNu_comment_activity(c.getInt(3));
                     o.setNu_initial_position(c.getInt(4));
                     o.setNu_size(c.getInt(5));
+                    o.setId_comment_version_srv(6);
                     obs.add(o);
                 } catch (Exception v) {
                     Log.e(tag, "erro ao pegar dados do banco:" + v.getMessage());
@@ -1038,6 +1044,7 @@ public class DataBaseAdapter {
                     ob.setTx_reference(c.getString(2));
                     ob.setNu_initial_position(c.getInt(3));
                     ob.setNu_size(4);
+                    ob.setId_comment_version_srv(5);
                     Log.d(tag, "obs:"+ob.toString());
 
                     //Log.e(tag, "listSpecificComments idnow:" + id);
@@ -1442,6 +1449,9 @@ public class DataBaseAdapter {
         return -1;
     }
 
+
+
+    // TÁ ERRADO
     public int insertCommentVersion(CommentVersion cVersion) {
         ContentValues cv = new ContentValues();
         cv.put("id_version_activity", getIdVersionFromIdVersionSrv(cVersion.getId_version_activity()));
@@ -1507,6 +1517,11 @@ public class DataBaseAdapter {
 
         return aux;
     }
+
+
+
+
+
     public LinkedHashMap<Integer, LinkedList<Observation>> getObservationByVersions(LinkedList<Integer> ids) {
         LinkedHashMap<Integer, LinkedList<Observation>> aux = new LinkedHashMap<Integer, LinkedList<Observation>>();
         LinkedList obs = new LinkedList<Observation>();
@@ -1531,6 +1546,7 @@ public class DataBaseAdapter {
                         o.setNu_comment_activity(c.getInt(3));
                         o.setNu_initial_position(c.getInt(4));
                         o.setNu_size(c.getInt(5));
+                        o.setId_comment_version_srv(6);
                         //obs.add(o);
                         if (o != null) {
                             if (!aux.containsKey(o.getId_version_activity()))
@@ -1557,7 +1573,7 @@ public class DataBaseAdapter {
 
     }
 
-
+        // TÁ ERRADO
     public LinkedList<Comentario> getCommentVersion(int idVersion) {
         String query = "SELECT " +
                 "\tc.id_comment,\n" +
@@ -1567,6 +1583,7 @@ public class DataBaseAdapter {
                 "\tc.tx_comment,\n" +
                 "\tc.dt_comment,\n" +
                 "\tc.tp_comment,\n" +
+                "\tc.nu_comment_activity,\n" +
                 "\tc.nu_comment_activity\n" +
                 "\tFROM tb_comment_version cv \n" +
                 "\t\t JOIN  tb_comment c on cv.id_comment = c.id_comment\n" +
@@ -2536,7 +2553,7 @@ public class DataBaseAdapter {
 
             try {
                 db.insert("tb_comment", null, cv);
-                Log.d(tag, "inserindo comment no sqlite:"+c);
+                Log.d(tag, "inserindo comment no sqlite:" + c);
             } catch (Exception e) {
                 Log.e(tag, "erro ao inserir na tb_comment:" + e.getMessage());
                 e.printStackTrace();
@@ -2826,6 +2843,21 @@ public class DataBaseAdapter {
             }
         }
     }
+
+    public void updateCommentVersionBySendFullData(LinkedList<HolderIDS> holderIDS) {
+        ContentValues cv = new ContentValues();
+        for (HolderIDS ids : holderIDS) {
+            cv.put("id_comment_version_srv", ids.getIdSrv());
+            try {
+                db.update("tb_comment_version", cv, "id_comment_version=?", new String[]{"" + ids.getId()});
+            } catch (Exception e) {
+                Log.d(tag, e.getMessage());
+            }
+        }
+    }
+
+
+
 
     public void updateVersionsBySendFullData(LinkedList<HolderIDS> holderIDS) {
         ContentValues cv = new ContentValues();

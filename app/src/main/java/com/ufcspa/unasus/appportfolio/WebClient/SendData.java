@@ -131,6 +131,13 @@ public class SendData {
             data.updateVersionsBySendFullData(dadosResponse.get(tbVers));
             Log.d("json send full data ", "conseguiu atualizar com sucesso id server");
         }
+
+        if(dadosResponse.get(tbCommVers)!= null){
+            Log.d("json send full data ", "atualizando tabela " + tbCommVers + "...");
+            data.updateCommentVersionBySendFullData(dadosResponse.get(tbCommVers));
+            Log.d("sendfulldataResponse ", "conseguiu atualizar com sucesso id server da tb_comm_version");
+        }
+
         data.deleteSync(idSync);
         for (Integer id : attachments.keySet()) {
             for (Attachment a : attachments.get(id)) {
@@ -143,7 +150,7 @@ public class SendData {
     }
 
 
-
+/*
     // versão antiga
     public JSONObject GenerateJSONOLD(String idDevice){
         getSyncs();// obtem lista de sincronizações
@@ -320,7 +327,7 @@ public class SendData {
         }
         Log.e("jsonsendfulldata ", jsonFinal.toString().replaceAll("\\{", "\n{"));
         return jsonFinal;
-    }
+    }*/
 
     public JSONObject GenerateJSON(String idDevice){
         getSyncs();// obtem lista de sincronizações
@@ -347,7 +354,8 @@ public class SendData {
                     jsonComment.put("id_comment", comment.getIdComment());
                     jsonComment.put("id_activity_student", comment.getIdActivityStudent());
                     jsonComment.put("id_comment_version", comment.getId_comment_version());
-                    jsonComment.put("id_comment_srv", comment.getIdCommentSrv());
+                    jsonComment.put("id_comment_version_srv",comment.getId_comment_version_srv());
+                    //jsonComment.put("id_comment_srv", comment.getIdCommentSrv());
                     jsonComment.put("id_author", comment.getIdAuthor());
                     jsonComment.put("tx_comment", comment.getTxtComment());
                     jsonComment.put("tp_comment", comment.getTypeComment());
@@ -370,7 +378,7 @@ public class SendData {
                     Log.d("json send data:", jsonVersion.toString());
 
                     JSONArray jsonCommentsByVersion = new JSONArray();
-                    if (commentsByVersions.containsKey(v.getId_version_activity())) {
+                    if (observationByVersions.containsKey(v.getId_version_activity())) {
                         LinkedList<Observation> observationLinkedList = (LinkedList<Observation>) observationByVersions.get(v.getId_version_activity());
                         for (Observation c : observationLinkedList) {
                             JSONObject jComment = new JSONObject();
@@ -380,6 +388,7 @@ public class SendData {
                             jComment.put("nu_comment_activity", c.getNu_comment_activity());
                             jComment.put("nu_initial_pos", c.getNu_initial_position());
                             jComment.put("nu_size", c.getNu_size());
+                            jComment.put("id_comment_version_srv",c.getId_comment_version_srv());
 
                             jsonCommentsByVersion.put(jComment);
                         }
