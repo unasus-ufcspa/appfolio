@@ -354,7 +354,7 @@ public class SendData {
                     jsonComment.put("id_comment", comment.getIdComment());
                     jsonComment.put("id_activity_student", comment.getIdActivityStudent());
                     jsonComment.put("id_comment_version", comment.getId_comment_version());
-                    jsonComment.put("id_comment_version_srv",comment.getId_comment_version_srv());
+                    jsonComment.put("id_comment_version_srv","");
                     //jsonComment.put("id_comment_srv", comment.getIdCommentSrv());
                     jsonComment.put("id_author", comment.getIdAuthor());
                     jsonComment.put("tx_comment", comment.getTxtComment());
