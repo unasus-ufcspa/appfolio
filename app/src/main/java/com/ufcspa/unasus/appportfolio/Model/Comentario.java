@@ -14,6 +14,16 @@ public class Comentario {
     private String dateSend;
     private int idComment;
     private int id_comment_version;
+
+    public int getId_comment_version_srv() {
+        return id_comment_version_srv;
+    }
+
+    public void setId_comment_version_srv(int id_comment_version_srv) {
+        this.id_comment_version_srv = id_comment_version_srv;
+    }
+
+    private int id_comment_version_srv;
     private int idActivityStudent;
     private int idAuthor;
     private int idNote;
