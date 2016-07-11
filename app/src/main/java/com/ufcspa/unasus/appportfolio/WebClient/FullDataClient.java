@@ -186,7 +186,8 @@ public class FullDataClient extends HttpClient {
                                                 int id_comment_version=-1;
                                                 if(temp.get("id_comment_version")!=null && temp.get("id_comment_version")instanceof String){
                                                     if(temp.getString("id_comment_version")!=null && !temp.getString("id_comment_version").isEmpty())
-                                                        id_comment_version=Integer.getInteger(temp.getString("id_comment_version"));
+                                                        //id_comment_version=Integer.getInteger(temp.getString("id_comment_version"));
+                                                        id_comment_version = temp.getInt("id_comment_version");
                                                 }else{
                                                     id_comment_version = temp.getInt("id_comment_version");
                                                 }

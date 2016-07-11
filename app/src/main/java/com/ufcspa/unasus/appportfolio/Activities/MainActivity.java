@@ -335,7 +335,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         switch (id) {
             case 0:
                 downloadFullData(0, id);
-                getBasicData();
+                //getBasicData();//estava executando mais de uma vez.
                 sendFullData();
                 shouldSend = false;
                 break;
