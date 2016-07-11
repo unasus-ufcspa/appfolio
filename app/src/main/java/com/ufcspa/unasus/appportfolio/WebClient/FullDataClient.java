@@ -339,7 +339,10 @@ public class FullDataClient extends HttpClient {
                                             Observation obs = new Observation();
                                             int id_version_activity = temp.getInt("id_version_activity");
                                             int nu_comment_activity = temp.getInt("nu_comment_activity");
-                                            int nu_initial_pos = temp.getInt("nu_initial_pos");
+                                            Integer nu_initial_pos = Integer.getInteger("nu_initial_pos");
+                                            if(nu_initial_pos==null){
+                                                nu_comment_activity=0;
+                                            }
                                             int nu_size = temp.getInt("nu_size");
                                             String  tx_reference = temp.getString("tx_reference");
                                             obs.setNu_initial_position(nu_initial_pos);
