@@ -186,7 +186,8 @@ public class FullDataClient extends HttpClient {
                                                 int id_comment_version=-1;
                                                 if(temp.get("id_comment_version")!=null && temp.get("id_comment_version")instanceof String){
                                                     if(temp.getString("id_comment_version")!=null && !temp.getString("id_comment_version").isEmpty())
-                                                        id_comment_version=Integer.getInteger(temp.getString("id_comment_version"));
+                                                        //id_comment_version=Integer.getInteger(temp.getString("id_comment_version"));
+                                                        id_comment_version = temp.getInt("id_comment_version");
                                                 }else{
                                                     id_comment_version = temp.getInt("id_comment_version");
                                                 }
@@ -338,7 +339,10 @@ public class FullDataClient extends HttpClient {
                                             Observation obs = new Observation();
                                             int id_version_activity = temp.getInt("id_version_activity");
                                             int nu_comment_activity = temp.getInt("nu_comment_activity");
-                                            int nu_initial_pos = temp.getInt("nu_initial_pos");
+                                            Integer nu_initial_pos = Integer.getInteger("nu_initial_pos");
+                                            if(nu_initial_pos==null){
+                                                nu_comment_activity=0;
+                                            }
                                             int nu_size = temp.getInt("nu_size");
                                             String  tx_reference = temp.getString("tx_reference");
                                             obs.setNu_initial_position(nu_initial_pos);
