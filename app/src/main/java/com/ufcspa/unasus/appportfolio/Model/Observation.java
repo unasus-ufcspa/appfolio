@@ -68,7 +68,6 @@ public class Observation {
         this.nu_size = nu_size;
     }
 
-
     @Override
     public String toString() {
         return "Observation{" +
@@ -78,6 +77,7 @@ public class Observation {
                 ", nu_comment_activity=" + nu_comment_activity +
                 ", nu_initial_position=" + nu_initial_position +
                 ", nu_size=" + nu_size +
+                ", id_comment_version_srv=" + id_comment_version_srv +
                 '}';
     }
 }
