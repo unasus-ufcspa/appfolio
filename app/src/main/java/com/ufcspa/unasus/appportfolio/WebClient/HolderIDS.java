@@ -8,7 +8,15 @@ public class HolderIDS {
     protected int id;
     protected int idSrv;
     protected String date;
+    protected int idcvSrv;
 
+    public int getIdcvSrv() {
+        return idcvSrv;
+    }
+
+    public void setIdcvSrv(int idcvSrv) {
+        this.idcvSrv = idcvSrv;
+    }
 
     public HolderIDS(int id, int idSrv) {
         this.id = id;

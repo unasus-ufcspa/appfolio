@@ -154,7 +154,7 @@ public class FragmentSpecificComments extends Frag {
 //        btExpand = (ImageButton) getView().findViewById(R.id.btn_expand_ref);
         lv = (ListView) getView().findViewById(R.id.listView1);
         lv.setAdapter(spcAdapter);
-//        loadCommentsFromDB();
+        loadCommentsFromDB();
         try {
             loadCommentsFromDB.execute();
         } catch (Exception e) {
@@ -230,8 +230,8 @@ public class FragmentSpecificComments extends Frag {
     public void loadCommentsFromDB(){
         try {
             DataBaseAdapter db = DataBaseAdapter.getInstance(getActivity());
-
-            Log.d("observations","list observations:" + db.getObservation(singleton.idCurrentVersionActivity).toString());
+            Log.d("activity","actual version_activity:"+singleton.idCurrentVersionActivity );
+            Log.d("observations","list observations:" + db.getObservation(singleton.idVersionActivity).toString());
             Singleton singleton = Singleton.getInstance();
             lista = (ArrayList<Comentario>) db.listComments(singleton.activity.getIdActivityStudent(), "O", singleton.note.getBtId());//lista comentario gerais filtrando por O
             oneComments= new ArrayList<>(10);
@@ -432,6 +432,7 @@ public class FragmentSpecificComments extends Frag {
             singleton.actualObservation.setNu_comment_activity(noteNow.getBtId());
             singleton.actualObservation.setTx_reference(noteNow.getSelectedText());
             singleton.actualObservation.setId_version_activity(singleton.idVersionActivity);
+            singleton.actualObservation.setId_comment_version_srv(singleton.actualObservation.getId_comment_version());
 
 
 
@@ -591,7 +592,7 @@ public class FragmentSpecificComments extends Frag {
 
         @Override
         protected Object doInBackground(Object[] params) {
-            loadCommentsFromDB();
+            //loadCommentsFromDB(); carregar comentarios de forma assincrona
             return null;
         }
 

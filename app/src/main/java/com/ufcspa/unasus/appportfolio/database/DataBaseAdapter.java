@@ -899,7 +899,7 @@ public class DataBaseAdapter {
                 "\tc.dt_send\n" +
                 "\tFROM tb_comment c \n" +
                 "\t\tLEFT JOIN  tb_attach_comment ac on ac.id_comment = c.id_comment\n" +
-                "\t\tLEFT JOIN  tb_comment_version cv on cv.id_comment_version = c.id_comment_version" +
+                "\t\tLEFT JOIN  tb_comment_version cv on cv.id_comment_version_srv = c.id_comment_version" +
                 "\tWHERE 1=1 AND c.id_activity_student = " + idActStu;
 
         StringBuilder stBuild = new StringBuilder(sql);
@@ -1045,7 +1045,7 @@ public class DataBaseAdapter {
                     ob.setNu_initial_position(c.getInt(3));
                     ob.setNu_size(4);
                     ob.setId_comment_version_srv(5);
-                    Log.d(tag, "obs:"+ob.toString());
+                    Log.d(tag, "obs:" + ob.toString());
 
                     //Log.e(tag, "listSpecificComments idnow:" + id);
                     comentarios.add(ob);
@@ -1141,6 +1141,7 @@ public class DataBaseAdapter {
                 }
             } while (c.moveToNext());
             c.close();
+            Log.d(tag , "list bolinhas:"+obs.toString());
         } else {
             Log.d(tag + " listSpecific comments", "não retornou nada");
         }
@@ -1457,6 +1458,7 @@ public class DataBaseAdapter {
         cv.put("id_version_activity", getIdVersionFromIdVersionSrv(cVersion.getId_version_activity()));
         cv.put("id_comment", getIdCommentFromIdCommentSrv(cVersion.getId_comment()));
         cv.put("fl_active", String.valueOf(cVersion.getFl_active()));
+
 
         int result = -1;
 
@@ -2836,6 +2838,9 @@ public class DataBaseAdapter {
         for (HolderIDS ids : holderIDS) {
             cv.put("id_comment_srv", ids.getIdSrv());
             cv.put("dt_send", ids.getDate());
+            if(ids.getIdcvSrv()>0){
+                cv.put("id_comment_version", ids.getIdcvSrv());
+            }
             try {
                 db.update("tb_comment", cv, "id_comment=?", new String[]{"" + ids.getId()});
             } catch (Exception e) {
@@ -2846,10 +2851,11 @@ public class DataBaseAdapter {
 
     public void updateCommentVersionBySendFullData(LinkedList<HolderIDS> holderIDS) {
         ContentValues cv = new ContentValues();
-        for (HolderIDS ids : holderIDS) {
-            cv.put("id_comment_version_srv", ids.getIdSrv());
+        for (HolderIDS holder : holderIDS) {
+            cv.put("id_comment_version_srv", holder.getIdSrv());
+
             try {
-                db.update("tb_comment_version", cv, "id_comment_version=?", new String[]{"" + ids.getId()});
+                db.update("tb_comment_version", cv, "id_comment_version=?", new String[]{"" + holder.getId()});
             } catch (Exception e) {
                 Log.d(tag, e.getMessage());
             }
