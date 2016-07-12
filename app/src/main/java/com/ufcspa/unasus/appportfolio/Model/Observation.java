@@ -11,6 +11,16 @@ public class Observation {
     private int nu_initial_position;
     private int nu_size;
     private int id_comment_version_srv;
+    private String flSRV;
+
+    public String getFlSRV() {
+
+        return flSRV;
+    }
+
+    public void setFlSRV(String flSRV) {
+        this.flSRV = flSRV;
+    }
 
     public int getId_comment_version_srv() {
         return id_comment_version_srv;
