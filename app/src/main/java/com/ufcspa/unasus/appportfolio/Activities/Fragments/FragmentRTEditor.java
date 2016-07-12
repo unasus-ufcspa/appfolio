@@ -432,7 +432,7 @@ public class FragmentRTEditor extends Frag {
 
                         int id = singleton.note.getBtId();
                         if (specificCommentsOpen && id > 0) {
-                            ArrayList<Comentario> lista = (ArrayList<Comentario>) source.listComments(singleton.activity.getIdActivityStudent(), "O", id);
+                            ArrayList<Comentario> lista = (ArrayList<Comentario>) source.listObsComments(singleton.activity.getIdActivityStudent(), id);
                             if (lista == null || lista.size() == 0) {
                                 //Remove note from hash map
                                 specificCommentsNotes.remove(id);
@@ -1118,7 +1118,7 @@ public class FragmentRTEditor extends Frag {
             TextView student_name = (TextView) anchorView.findViewById(R.id.p_student_name);
             TextView student_cell = (TextView) anchorView.findViewById(R.id.student_phone);
             edtTextPersonal = (EditText) anchorView.findViewById(R.id.edittext_personal_comment);
-            ArrayList<Comentario> cs=(ArrayList)source.listComments(singleton.idActivityStudent, "P", 0);
+            ArrayList<Comentario> cs=(ArrayList)source.listGComments(singleton.idActivityStudent, "P");
             if(cs!=null && cs.size()!=0){
                 if(cs.get(0).getTxtComment()!=null){
                     edtTextPersonal.setText(cs.get(0).getTxtComment());

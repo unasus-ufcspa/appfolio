@@ -154,7 +154,7 @@ public class FragmentSpecificComments extends Frag {
 //        btExpand = (ImageButton) getView().findViewById(R.id.btn_expand_ref);
         lv = (ListView) getView().findViewById(R.id.listView1);
         lv.setAdapter(spcAdapter);
-//        loadCommentsFromDB();
+        loadCommentsFromDB();
         try {
             loadCommentsFromDB.execute();
         } catch (Exception e) {
@@ -230,10 +230,11 @@ public class FragmentSpecificComments extends Frag {
     public void loadCommentsFromDB(){
         try {
             DataBaseAdapter db = DataBaseAdapter.getInstance(getActivity());
-
-            Log.d("observations","list observations:" + db.getObservation(1).toString());
+            Log.d("activity","actual version_activity:"+singleton.idCurrentVersionActivity );
+            Log.d("observations","list observations:" + db.getObservation(singleton.idVersionActivity).toString());
+            Log.d("observations","list ALL observations:" + db.getObservationALL().toString());
             Singleton singleton = Singleton.getInstance();
-            lista = (ArrayList<Comentario>) db.listComments(singleton.activity.getIdActivityStudent(), "O", singleton.note.getBtId());//lista comentario gerais filtrando por O
+            lista = (ArrayList<Comentario>) db.listObsComments(singleton.activity.getIdActivityStudent(), singleton.note.getBtId());//lista comentario gerais filtrando por O
             oneComments= new ArrayList<>(10);
             Log.d("comments","comentarios especificos:"+lista.toString());
 
@@ -432,6 +433,7 @@ public class FragmentSpecificComments extends Frag {
             singleton.actualObservation.setNu_comment_activity(noteNow.getBtId());
             singleton.actualObservation.setTx_reference(noteNow.getSelectedText());
             singleton.actualObservation.setId_version_activity(singleton.idVersionActivity);
+            singleton.actualObservation.setId_comment_version_srv(singleton.actualObservation.getId_comment_version());
 
 
 
@@ -440,6 +442,7 @@ public class FragmentSpecificComments extends Frag {
             if(singleton.isFirstSpecificComment){
                 // empilha observation nas syncs
                 idObservation = source.insertObservationByVersion(singleton.actualObservation);
+                source.updateLastObservation(idObservation);
                 Sync sync = new Sync();
                 sync.setNm_table("tb_comment_version");
                 sync.setCo_id_table(idObservation);
@@ -591,7 +594,7 @@ public class FragmentSpecificComments extends Frag {
 
         @Override
         protected Object doInBackground(Object[] params) {
-            loadCommentsFromDB();
+            //loadCommentsFromDB(); carregar comentarios de forma assincrona
             return null;
         }
 
