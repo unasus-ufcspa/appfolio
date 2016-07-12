@@ -339,14 +339,24 @@ public class FullDataClient extends HttpClient {
                                             Observation obs = new Observation();
                                             int id_version_activity = temp.getInt("id_version_activity");
                                             int nu_comment_activity = temp.getInt("nu_comment_activity");
-                                            int nu_initial_pos = temp.getInt("nu_initial_pos");
+                                            Integer nu_initial_pos = Integer.getInteger("nu_initial_pos");
+                                            if(nu_initial_pos==null){
+                                                nu_initial_pos=0;
+                                            }
                                             int nu_size = temp.getInt("nu_size");
                                             String  tx_reference = temp.getString("tx_reference");
+
+                                            int id_comment_version=temp.getInt("id_comment_version");
+
+                                            if(temp.has("id_comment_version_srv")){
+                                                obs.setId_comment_version_srv(temp.getInt("id_comment_version_srv"));
+                                            }
                                             obs.setNu_initial_position(nu_initial_pos);
                                             obs.setNu_size(nu_size);
-                                            obs.setId_comment_version(nu_comment_activity);
+                                            obs.setId_comment_version(id_comment_version);
                                             obs.setId_version_activity(id_version_activity);
                                             obs.setTx_reference(tx_reference);
+                                            obs.setNu_comment_activity(nu_comment_activity);
                                             fullData.addObservation(obs);
                                         }
                                     }

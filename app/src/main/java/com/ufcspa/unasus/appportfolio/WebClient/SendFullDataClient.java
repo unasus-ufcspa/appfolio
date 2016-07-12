@@ -64,6 +64,10 @@ public class SendFullDataClient extends HttpClient{
                                     int id_comment = temp.getInt("id_comment");
                                     int id_comment_srv = temp.getInt("id_comment_srv");
                                     String dt_comment_srv=null;
+
+                                    if(temp.has("id_comment_version_srv")){
+                                        holder.idcvSrv=(temp.getInt("id_comment_version_srv"));
+                                    }
                                     if(temp.has("dt_comment_srv")){
                                         dt_comment_srv = temp.getString("dt_comment_srv");
                                     }else{
