@@ -341,7 +341,7 @@ public class FullDataClient extends HttpClient {
                                             int nu_comment_activity = temp.getInt("nu_comment_activity");
                                             Integer nu_initial_pos = Integer.getInteger("nu_initial_pos");
                                             if(nu_initial_pos==null){
-                                                nu_comment_activity=0;
+                                                nu_initial_pos=0;
                                             }
                                             int nu_size = temp.getInt("nu_size");
                                             String  tx_reference = temp.getString("tx_reference");

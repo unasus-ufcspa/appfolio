@@ -711,7 +711,7 @@ public class DataBaseAdapter {
                     o.setNu_comment_activity(c.getInt(3));
                     o.setNu_initial_position(c.getInt(4));
                     o.setNu_size(c.getInt(5));
-                    o.setId_comment_version_srv(6);
+                    o.setId_comment_version_srv(c.getInt(6));
                     obs.add(o);
                 } catch (Exception v) {
                     Log.e(tag, "erro ao pegar dados do banco:" + v.getMessage());
