@@ -2568,7 +2568,7 @@ public class DataBaseAdapter {
         Device device = d;
         if (device.get_id_device() == null)
             return -1;
-        if (device.getFl_basic_data().equals("S"))
+        if (device.getFl_basic_data() != null)
             return 1;
         else
             return 0;
