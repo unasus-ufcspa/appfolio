@@ -2568,9 +2568,10 @@ public class DataBaseAdapter {
         Device device = d;
         if (device.get_id_device() == null)
             return -1;
-        if (device.getFl_basic_data() != null)
+        if (device.getFl_basic_data().equals("S"))
             return 1;
-        return 0;
+        else
+            return 0;
     }
 
     public User getUser() {
@@ -3062,7 +3063,7 @@ public class DataBaseAdapter {
     }
 
     public void cleanDataBase() {
-        context.deleteDatabase("folio.sqlite");
+        context.deleteDatabase("db_portfolio_alpha_atual.sqlite");
     }
 
     public LinkedHashMap<Integer, LinkedList<Attachment>> getAttachments(LinkedList<Integer> integers) {

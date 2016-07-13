@@ -41,6 +41,7 @@ public class SplashActivity extends AppCompatActivity {
         singleton.user = adapter.getUser();
 
         int statusApp = adapter.getStatus(device);
+        Log.d("SplashActivity","status device = " + statusApp);
 
         Intent intent = new Intent(this, LoginActivity2.class);
 
