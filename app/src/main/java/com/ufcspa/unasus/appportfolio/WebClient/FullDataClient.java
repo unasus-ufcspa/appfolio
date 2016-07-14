@@ -266,6 +266,7 @@ public class FullDataClient extends HttpClient {
                                             int id_activity_student = temp.getInt("id_activity_student");
                                             String tx_activity = temp.getString("tx_activity");
                                             tx_activity= tx_activity.replaceAll("\'","");
+                                            tx_activity= tx_activity.replaceAll("\\/", "/");
                                             System.out.println("json replace tx activity"+"\nold:"+temp.getString("tx_activity") + " new:"+tx_activity);
                                             String dt_last_access = temp.getString("dt_last_access");
                                             String dt_submission = temp.getString("dt_submission");
