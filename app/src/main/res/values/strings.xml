@@ -20,6 +20,7 @@
     <string name="title_activity_select_portfolio">Select your Portfolios</string>
     <string name="drawer_open">Open navigation drawer</string>
     <string name="drawer_close">Close navigation drawer</string>
+    <string name="checkbox">Li e Aceito</string>
 
     <string name="drawer_portfolio">Portfólios</string>
     <string name="drawer_activities">Atividades</string>

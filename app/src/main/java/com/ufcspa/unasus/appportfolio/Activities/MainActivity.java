@@ -33,7 +33,6 @@ import com.ufcspa.unasus.appportfolio.Activities.Fragments.FragmentAttachment;
 import com.ufcspa.unasus.appportfolio.Activities.Fragments.FragmentConfig;
 import com.ufcspa.unasus.appportfolio.Activities.Fragments.FragmentConfigPassword;
 import com.ufcspa.unasus.appportfolio.Activities.Fragments.FragmentConfigUser;
-import com.ufcspa.unasus.appportfolio.Activities.Fragments.FragmentPrivacyPolicy;
 import com.ufcspa.unasus.appportfolio.Activities.Fragments.FragmentRTEditor;
 import com.ufcspa.unasus.appportfolio.Activities.Fragments.FragmentReference;
 import com.ufcspa.unasus.appportfolio.Activities.Fragments.FragmentSelectPortfolio;
@@ -303,9 +302,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     case "FragmentAttachment":
                         getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new FragmentAttachment()).addToBackStack(lastFragName).commit();
                         break;
-                    case "FragmentPrivacyPolicy":
-                        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new FragmentPrivacyPolicy()).addToBackStack(lastFragName).commit();
-                        break;
                     case "FragmentSelectPortfolio":
                         getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new FragmentSelectPortfolio()).addToBackStack(lastFragName).commit();
                         break;
@@ -358,9 +354,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             case 5:
                 downloadFullData(singleton.idActivityStudent, id);
                 break;
-            case 6:
-                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new FragmentPrivacyPolicy()).addToBackStack("FragmentPrivacyPolicy").commit();
-                lastFragName = "FragmentPrivacyPolicy";
             default:
                 break;
         }
