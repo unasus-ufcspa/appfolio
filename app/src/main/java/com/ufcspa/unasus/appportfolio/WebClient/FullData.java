@@ -53,6 +53,7 @@ public class FullData {
     private LinkedList<User> users;
     private LinkedList<CommentVersion> commentVersions;
     private LinkedList<Observation> observations;
+    private static final String URL="/webfolio/app_dev.php/upload/";
 
 
     private static Context context;
@@ -155,7 +156,7 @@ public class FullData {
                 String filePath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES) + File.separator + a.getNmSystem();
                 Log.d("File Path", filePath);
                 DownloadRequest request = new DownloadRequest()
-                        .setUrl("http://" + new HttpClient(context).ip + "/webfolio/app_dev.php/download/" + a.getNmSystem())
+                        .setUrl("http://" + new HttpClient(context).ip + URL + a.getNmSystem())
                         .setDestFilePath(filePath)
                         .setDownloadCallback(new DownloadCallback() {
                             @Override
@@ -164,11 +165,13 @@ public class FullData {
                                 if (filePath.contains(".mp4")) {
                                     saveSmallImage(filePath);
                                 }
+                                Log.d("anexos","conseguiu baixar anexo com sucesso: "+filePath);
                             }
 
                             @Override
                             public void onFailure(int downloadId, int statusCode, String errMsg) {
                                 super.onFailure(downloadId, statusCode, errMsg);
+                                Log.e("anexos", "erro ao baixar anexo: " + statusCode+"\n "+errMsg);
                             }
                         });
                 manager.add(request);
