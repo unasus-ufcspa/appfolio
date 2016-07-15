@@ -137,11 +137,11 @@ public class SendFullDataClient extends HttpClient{
                                         }
 
                                         if(temp.has("id_comment_version_srv")){
-                                            int id_commnent_version_srv = temp.getInt("id_comment_version_srv");
-                                            holderCV.idSrv=id_commnent_version_srv;
+                                            int id_comment_version_srv = temp.getInt("id_comment_version_srv");
+                                            holderCV.idSrv=id_comment_version_srv;
                                             if(temp.has("id_comment_version_mobile")){
-                                                int id_commnent_version_mobile = temp.getInt("id_comment_version_mobile");
-                                                holderCV.id=id_commnent_version_mobile;
+                                                int id_comment_version_mobile = temp.getInt("id_comment_version_mobile");
+                                                holderCV.id=id_comment_version_mobile;
                                             }
                                             holdersCommentVersion.add(holderCV);
                                         }

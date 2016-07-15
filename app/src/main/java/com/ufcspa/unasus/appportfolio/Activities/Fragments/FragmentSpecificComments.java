@@ -232,8 +232,9 @@ public class FragmentSpecificComments extends Frag {
             DataBaseAdapter db = DataBaseAdapter.getInstance(getActivity());
             Log.d("activity","actual version_activity:"+singleton.idCurrentVersionActivity );
             Log.d("observations","list observations:" + db.getObservation(singleton.idVersionActivity).toString());
+            Log.d("observations","list ALL observations:" + db.getObservationALL().toString());
             Singleton singleton = Singleton.getInstance();
-            lista = (ArrayList<Comentario>) db.listComments(singleton.activity.getIdActivityStudent(), "O", singleton.note.getBtId());//lista comentario gerais filtrando por O
+            lista = (ArrayList<Comentario>) db.listObsComments(singleton.activity.getIdActivityStudent(), singleton.note.getBtId());//lista comentario gerais filtrando por O
             oneComments= new ArrayList<>(10);
             Log.d("comments","comentarios especificos:"+lista.toString());
 
@@ -441,6 +442,7 @@ public class FragmentSpecificComments extends Frag {
             if(singleton.isFirstSpecificComment){
                 // empilha observation nas syncs
                 idObservation = source.insertObservationByVersion(singleton.actualObservation);
+                source.updateLastObservation(idObservation);
                 Sync sync = new Sync();
                 sync.setNm_table("tb_comment_version");
                 sync.setCo_id_table(idObservation);

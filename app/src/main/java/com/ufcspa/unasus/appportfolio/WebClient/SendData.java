@@ -353,13 +353,29 @@ public class SendData {
                     JSONObject jsonComment = new JSONObject();
                     jsonComment.put("id_comment", comment.getIdComment());
                     jsonComment.put("id_activity_student", comment.getIdActivityStudent());
-                    jsonComment.put("id_comment_version", comment.getId_comment_version());
-                    jsonComment.put("id_comment_version_srv","");
+
+                    if(comment.getId_comment_version()<=0){
+                        jsonComment.put("id_comment_version", "");
+                    }else{
+                        jsonComment.put("id_comment_version", comment.getId_comment_version());
+
+                    }
+
+                    if(data.cvIsSyncronized(comment.getId_comment_version())){
+                        jsonComment.put("id_comment_version_srv",comment.getId_comment_version());
+                    }else{
+                        jsonComment.put("id_comment_version_srv","");
+                    }
+
+
                     //jsonComment.put("id_comment_srv", comment.getIdCommentSrv());
                     jsonComment.put("id_author", comment.getIdAuthor());
                     jsonComment.put("tx_comment", comment.getTxtComment());
                     jsonComment.put("tp_comment", comment.getTypeComment());
                     jsonComment.put("dt_comment", comment.getDateComment());
+
+
+                    //jsonComment.put("id_comment_version_srv",comment.getId_comment_version_srv());
                     jsonComments.put(jsonComment);
                 }
             }
@@ -388,7 +404,7 @@ public class SendData {
                             jComment.put("nu_comment_activity", c.getNu_comment_activity());
                             jComment.put("nu_initial_pos", c.getNu_initial_position());
                             jComment.put("nu_size", c.getNu_size());
-                            jComment.put("id_comment_version_srv",c.getId_comment_version_srv());
+                            //jComment.put("id_comment_version_srv",c.getId_comment_version_srv());
 
                             jsonCommentsByVersion.put(jComment);
                         }
