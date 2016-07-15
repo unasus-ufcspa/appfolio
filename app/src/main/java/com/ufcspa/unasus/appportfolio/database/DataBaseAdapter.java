@@ -2921,6 +2921,9 @@ public class DataBaseAdapter {
                 versionActivity.setId_version_activity(c.getInt(0));
                 versionActivity.setId_activity_student(c.getInt(1));
                 versionActivity.setTx_activity(c.getString(2));
+                versionActivity.setTx_activity(versionActivity.getTx_activity().replaceAll("\\/", "/"));
+                versionActivity.setTx_activity(versionActivity.getTx_activity().replaceAll("\n", ""));
+                versionActivity.setTx_activity(versionActivity.getTx_activity().replaceAll("<br\\/>", "<br/>"));
                 if (c.getString(3) != null)
                     versionActivity.setDt_last_access(c.getString(3));
                 else
@@ -3001,6 +3004,19 @@ public class DataBaseAdapter {
             }
         }
     }
+
+    public void updateVersionsBySendFullData(int idVersion) {
+        ContentValues cv = new ContentValues();
+            cv.put("id_version_activity_srv", idVersion);
+            try {
+                db.update("tb_version_activity", cv, "id_version_activity=?", new String[]{"" + idVersion});
+            } catch (Exception e) {
+                Log.d(tag, e.getMessage());
+            }
+
+    }
+
+
 
 
     public void deleteSync(LinkedList<Integer> ids) {

@@ -281,7 +281,9 @@ public class FragmentRTEditor extends Frag {
                                         version.setTx_activity(mRTMessageField.getText(RTFormat.HTML));
                                         version.setId_activity_student(Singleton.getInstance().idActivityStudent);
                                         version.setDt_last_access(getActualTime());
+                                        //version.setId_version_activit_srv(version.getId_version_activity());
                                         int id = data.insertVersionActivity(version);
+                                        data.updateVersionsBySendFullData(id);
                                         singleton.idVersionActivity = id;
                                         singleton.idCurrentVersionActivity = id;
 

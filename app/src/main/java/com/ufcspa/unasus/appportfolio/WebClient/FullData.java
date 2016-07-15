@@ -53,7 +53,7 @@ public class FullData {
     private LinkedList<User> users;
     private LinkedList<CommentVersion> commentVersions;
     private LinkedList<Observation> observations;
-    private static final String URL="/webfolio/app_dev.php/upload/";
+    private static final String URL="/webfolio/app_dev.php/download/";
 
 
     private static Context context;
@@ -154,9 +154,10 @@ public class FullData {
                 data.insertAttachmentActivity(id_activity_student, id_attachment);
                 // BAIXAR OS ATTACHMENTS!!!!!!!!
                 String filePath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES) + File.separator + a.getNmSystem();
-                Log.d("File Path", filePath);
+                //Log.d("File Path", filePath);
+                String url = "http://" + new HttpClient(context).ip + URL + a.getNmSystem();
                 DownloadRequest request = new DownloadRequest()
-                        .setUrl("http://" + new HttpClient(context).ip + URL + a.getNmSystem())
+                        .setUrl(url)
                         .setDestFilePath(filePath)
                         .setDownloadCallback(new DownloadCallback() {
                             @Override
@@ -175,6 +176,7 @@ public class FullData {
                             }
                         });
                 manager.add(request);
+                Log.d("anexos", "url do anexo: " + url);
 //                downloadAttachment("http://stuffpoint.com/stardoll/image/54056-stardoll-sdfs.jpg" + a.getNmSystem(), a.getNmFile());
             }
         }
