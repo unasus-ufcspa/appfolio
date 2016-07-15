@@ -340,6 +340,7 @@ public class FragmentRTEditor extends Frag {
             version.setId_activity_student(Singleton.getInstance().idActivityStudent);
             version.setDt_last_access(getActualTime());
             int id = source.insertVersionActivity(version);
+            source.updateVersionsBySendFullData(id);
             singleton.idVersionActivity = id;
             singleton.idCurrentVersionActivity = id;
         }
@@ -797,7 +798,7 @@ public class FragmentRTEditor extends Frag {
      */
     public void getIdNotesFromDB() {
         specificCommentsNotes = new HashMap<>();
-        LinkedList<Observation> obs = (LinkedList<Observation>) source.listNotesSpecificComments(singleton.idCurrentVersionActivity); //source.listSpecificComments(singleton.idActivityStudent);
+        LinkedList<Observation> obs = (LinkedList<Observation>) source.listNotesSpecificComments(source.getIDVerionSrvByLocalID(singleton.idCurrentVersionActivity)); //source.listSpecificComments(singleton.idActivityStudent);
         for (int i=0;i<obs.size();i++) {
             Observation o = obs.get(i);
             specificCommentsNotes.put(o.getNu_comment_activity(), new Note(o.getNu_comment_activity(),o.getTx_reference(), 0));

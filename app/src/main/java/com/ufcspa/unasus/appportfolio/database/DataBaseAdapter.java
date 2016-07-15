@@ -1223,7 +1223,7 @@ public class DataBaseAdapter {
 
     public List<Observation> listNotesSpecificComments(int version) {
         String sql = "SELECT DISTINCT nu_comment_activity,tx_reference from tb_comment_version as tbcv " +
-                "LEFT JOIN tb_version_activity as tbva on tbva.id_version_activity = tbcv.id_version_activity" +
+                "LEFT JOIN tb_version_activity as tbva on tbva.id_version_activity_srv = tbcv.id_version_activity" +
                 " WHERE tbva.id_version_activity =" + version;
         //Log.e(tag, "sql listComments:" + sql);
         Cursor c = db.rawQuery(sql, null);
@@ -1629,6 +1629,18 @@ public class DataBaseAdapter {
                 return false;
             }
     }
+
+
+    public boolean isSync(String table,int id){
+        String query = "SELECT * FROM tb_sync WHERE nm_table = '" + table +"' AND co_id_table="+id;
+        Cursor c = db.rawQuery(query, null);
+        if(c.moveToFirst()){
+            return false;
+        }else{
+            return true;
+        }
+    }
+
 
 
     public LinkedHashMap<Integer, LinkedList<Observation>> getObservationByVersions(LinkedList<Integer> ids) {
@@ -3014,6 +3026,15 @@ public class DataBaseAdapter {
                 Log.d(tag, e.getMessage());
             }
 
+    }
+    public int getIDVerionSrvByLocalID(int idVersion){
+        StringBuilder sb = new StringBuilder("SELECT id_version_activity_srv FROM tb_version_activity where id_version_activity="+idVersion);
+        Cursor c = db.rawQuery(sb.toString(), null);
+        if (c.moveToFirst()) {
+            return c.getInt(0);
+        }else{
+            return -1;
+        }
     }
 
 

@@ -361,8 +361,8 @@ public class SendData {
 
                     }
 
-                    if(data.cvIsSyncronized(comment.getId_comment_version())){
-                        jsonComment.put("id_comment_version_srv",comment.getId_comment_version());
+                    if(data.isSync("tb_comment_version",comment.getId_comment_version())){
+                        jsonComment.put("id_comment_version_srv",comment.getId_comment_version_srv());
                     }else{
                         jsonComment.put("id_comment_version_srv","");
                     }
@@ -383,7 +383,7 @@ public class SendData {
                 for (VersionActivity v : versions) {
                     JSONObject jsonVersion = new JSONObject();
                     jsonVersion.put("id_version_activity", v.getId_version_activity());
-                    if (v.getId_version_activit_srv() != -1)
+                    if (data.isSync("tb_version_activity",v.getId_version_activit_srv()))
                         jsonVersion.put("id_version_activity_srv", v.getId_version_activit_srv());
                     else
                         jsonVersion.put("id_version_activity_srv", "");
