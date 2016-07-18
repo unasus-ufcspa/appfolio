@@ -499,7 +499,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     public void sendFullData() {
-        if (isOnline()) {
+        if (isOnline() && singleton.portfolioClass!=null) {
             final Thread sendThread = new Thread(new Runnable() {
                 @Override
                 public void run() {

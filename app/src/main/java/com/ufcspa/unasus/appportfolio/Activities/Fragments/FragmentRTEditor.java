@@ -798,7 +798,7 @@ public class FragmentRTEditor extends Frag {
      */
     public void getIdNotesFromDB() {
         specificCommentsNotes = new HashMap<>();
-        LinkedList<Observation> obs = (LinkedList<Observation>) source.listNotesSpecificComments(source.getIDVerionSrvByLocalID(singleton.idCurrentVersionActivity)); //source.listSpecificComments(singleton.idActivityStudent);
+        ArrayList<Observation> obs = (ArrayList<Observation>) source.getObservation(source.getIDVerionSrvByLocalID(singleton.idCurrentVersionActivity)); //source.listSpecificComments(singleton.idActivityStudent);
         for (int i=0;i<obs.size();i++) {
             Observation o = obs.get(i);
             specificCommentsNotes.put(o.getNu_comment_activity(), new Note(o.getNu_comment_activity(),o.getTx_reference(), 0));

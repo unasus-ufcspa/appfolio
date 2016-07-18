@@ -383,10 +383,18 @@ public class SendData {
                 for (VersionActivity v : versions) {
                     JSONObject jsonVersion = new JSONObject();
                     jsonVersion.put("id_version_activity", v.getId_version_activity());
-                    if (data.isSync("tb_version_activity",v.getId_version_activit_srv()))
+                    if (singleton.portfolioClass.getPerfil().equals("T"))
+                    {
                         jsonVersion.put("id_version_activity_srv", v.getId_version_activit_srv());
-                    else
-                        jsonVersion.put("id_version_activity_srv", "");
+                    }else{
+                        if (data.isSync("tb_version_activity",v.getId_version_activit_srv()))
+                            jsonVersion.put("id_version_activity_srv", v.getId_version_activit_srv());
+                        else
+                            jsonVersion.put("id_version_activity_srv", "");
+                    }
+
+
+
                     jsonVersion.put("id_activity_student", v.getId_activity_student());
                     jsonVersion.put("tx_activity", v.getTx_activity());
                     jsonVersion.put("dt_last_access", v.getDt_last_access());

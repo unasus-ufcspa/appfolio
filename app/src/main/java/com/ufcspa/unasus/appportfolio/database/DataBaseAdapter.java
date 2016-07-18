@@ -1105,7 +1105,7 @@ public class DataBaseAdapter {
     public LinkedList<Integer> listSpecificComments(int idActStu) {
         LinkedList<Integer> comentarios = new LinkedList<>();
         String sql = "SELECT DISTINCT cv.nu_comment_activity from tb_comment_version cv " +
-                "   INNER JOIN tb_version_activity va ON cv.id_version_activity = va.id_version_activity WHERE va.id_activity_student =" + idActStu;
+                "   INNER JOIN tb_version_activity va ON cv.id_version_activity = va.id_version_activity_srv WHERE va.id_activity_student =" + idActStu;
         //Log.e(tag, "sql listComments:" + sql);
         Cursor c = db.rawQuery(sql, null);
         Integer id;
