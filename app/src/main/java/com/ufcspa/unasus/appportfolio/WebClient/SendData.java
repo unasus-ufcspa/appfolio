@@ -362,7 +362,8 @@ public class SendData {
                     }
 
                     if(data.isSync("tb_comment_version",comment.getId_comment_version())){
-                        jsonComment.put("id_comment_version_srv",comment.getId_comment_version_srv());
+                        int idServer =data.getIdCommentVersionSrv(comment.getId_comment_version());
+                        jsonComment.put("id_comment_version_srv",idServer);
                     }else{
                         jsonComment.put("id_comment_version_srv","");
                     }
@@ -402,8 +403,8 @@ public class SendData {
                     Log.d("json send data:", jsonVersion.toString());
 
                     JSONArray jsonCommentsByVersion = new JSONArray();
-                    if (observationByVersions.containsKey(v.getId_version_activity())) {
-                        LinkedList<Observation> observationLinkedList = (LinkedList<Observation>) observationByVersions.get(v.getId_version_activity());
+                    if (observationByVersions.containsKey(v.getId_version_activit_srv())) {
+                        LinkedList<Observation> observationLinkedList = (LinkedList<Observation>) observationByVersions.get(v.getId_version_activit_srv());
                         for (Observation c : observationLinkedList) {
                             JSONObject jComment = new JSONObject();
                             jComment.put("id_comment_version", c.getId_comment_version());
@@ -417,7 +418,7 @@ public class SendData {
                             jsonCommentsByVersion.put(jComment);
                         }
                     }
-                    JSONObject jTb_comment = new JSONObject();
+//                    JSONObject jTb_comment = new JSONObject();
 //                    jTb_comment.put("tb_comment", jsonCommentsByVersion);
 //                    jsonVersion.put("comment", jTb_comment);
 

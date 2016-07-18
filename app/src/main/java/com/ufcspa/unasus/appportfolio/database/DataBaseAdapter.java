@@ -1550,6 +1550,17 @@ public class DataBaseAdapter {
         return -1;
     }
 
+    public int getIdCommentVersionSrv(int idCV) {
+        String query = "SELECT id_comment_version_srv FROM tb_comment_version WHERE id_comment_version = " + idCV;
+        Cursor cursor = db.rawQuery(query, null);
+        if (cursor.moveToFirst()) {
+            return cursor.getInt(0);
+        }
+        cursor.close();
+        return -1;
+    }
+
+
 
 
     // TÁ ERRADO
@@ -2194,6 +2205,7 @@ public class DataBaseAdapter {
             do {
                 Sync s = new Sync(c.getInt(0), "-1", c.getInt(1), c.getString(2));
                 syncs.add(s);
+                Log.d("Syncs",s.toString());
             } while (c.moveToNext());
         } else {
 
