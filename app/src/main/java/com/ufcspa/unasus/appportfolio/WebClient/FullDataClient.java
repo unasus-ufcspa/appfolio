@@ -205,31 +205,33 @@ public class FullDataClient extends HttpClient {
                                                     comentario.setId_comment_version(id_comment_version);
                                                     comentario.setIdCommentSrv(id_comment_srv);
 
-                                                    JSONObject attachments = new JSONObject();
-                                                    try {
-                                                        attachments = temp.getJSONObject("attachment");
-                                                    } catch (Exception e) {
-                                                        e.printStackTrace();
-                                                    }
+//                                                    JSONObject attachments = new JSONObject();
+//                                                    try {
+//                                                        attachments = temp.getJSONObject("attachment");
+//                                                    } catch (Exception e) {
+//                                                        e.printStackTrace();
+//                                                    }
+//
+//                                                    if (attachments.has("id_attachment")) {
+//                                                        Attachment attachment = new Attachment();
+//
+//                                                        String tp_attachment = attachments.getString("tp_attachment");
+//                                                        String nm_file = attachments.getString("nm_file");
+//                                                        String nm_system = attachments.getString("nm_system");
+//                                                        int id_attachment_srv = attachments.getInt("id_attachment");
+//
+//                                                        attachment.setTpAttachment(tp_attachment);
+//                                                        attachment.setNmFile(nm_file);
+//                                                        attachment.setNmSystem(nm_system);
+//                                                        attachment.setIdAttachmentSrv(id_attachment_srv);
+//
+//                                                        fullData.addCommentAttachment(new Tuple<Comentario, Attachment>(comentario, attachment));
+//                                                    }
 
-                                                    if (attachments.has("id_attachment")) {
-                                                        Attachment attachment = new Attachment();
-
-                                                        String tp_attachment = attachments.getString("tp_attachment");
-                                                        String nm_file = attachments.getString("nm_file");
-                                                        String nm_system = attachments.getString("nm_system");
-                                                        int id_attachment_srv = attachments.getInt("id_attachment");
-
-                                                        attachment.setTpAttachment(tp_attachment);
-                                                        attachment.setNmFile(nm_file);
-                                                        attachment.setNmSystem(nm_system);
-                                                        attachment.setIdAttachmentSrv(id_attachment_srv);
-
-                                                        fullData.addCommentAttachment(new Tuple<Comentario, Attachment>(comentario, attachment));
-                                                    } else {
+                                                  //  else {
                                                         Log.d(tag, "adding comment:" + comentario);
                                                         fullData.addComments(comentario);
-                                                    }
+                                                   // }
                                                 }
                                             }
                                         }
@@ -289,7 +291,7 @@ public class FullDataClient extends HttpClient {
                                                     map.put(id_act_student, attachments);
                                                 } else {
                                                     ArrayList<Attachment> tmp = map.get(id_act_student);
-                                                    tmp.add(a);
+//                                                    tmp.add(a);
                                                     map.put(id_act_student,tmp);
 
                                                 }

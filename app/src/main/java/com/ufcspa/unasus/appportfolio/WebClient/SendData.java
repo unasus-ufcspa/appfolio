@@ -353,13 +353,30 @@ public class SendData {
                     JSONObject jsonComment = new JSONObject();
                     jsonComment.put("id_comment", comment.getIdComment());
                     jsonComment.put("id_activity_student", comment.getIdActivityStudent());
-                    jsonComment.put("id_comment_version", comment.getId_comment_version());
-                    jsonComment.put("id_comment_version_srv","");
+
+                    if(comment.getId_comment_version()<=0){
+                        jsonComment.put("id_comment_version", "");
+                    }else{
+                        jsonComment.put("id_comment_version", comment.getId_comment_version());
+
+                    }
+
+                    if(data.isSync("tb_comment_version",comment.getId_comment_version())){
+                        int idServer =data.getIdCommentVersionSrv(comment.getId_comment_version());
+                        jsonComment.put("id_comment_version_srv",idServer);
+                    }else{
+                        jsonComment.put("id_comment_version_srv","");
+                    }
+
+
                     //jsonComment.put("id_comment_srv", comment.getIdCommentSrv());
                     jsonComment.put("id_author", comment.getIdAuthor());
                     jsonComment.put("tx_comment", comment.getTxtComment());
                     jsonComment.put("tp_comment", comment.getTypeComment());
                     jsonComment.put("dt_comment", comment.getDateComment());
+
+
+                    //jsonComment.put("id_comment_version_srv",comment.getId_comment_version_srv());
                     jsonComments.put(jsonComment);
                 }
             }
@@ -367,10 +384,18 @@ public class SendData {
                 for (VersionActivity v : versions) {
                     JSONObject jsonVersion = new JSONObject();
                     jsonVersion.put("id_version_activity", v.getId_version_activity());
-                    if (v.getId_version_activit_srv() != -1)
+                    if (singleton.portfolioClass.getPerfil().equals("T"))
+                    {
                         jsonVersion.put("id_version_activity_srv", v.getId_version_activit_srv());
-                    else
-                        jsonVersion.put("id_version_activity_srv", "");
+                    }else{
+                        if (data.isSync("tb_version_activity",v.getId_version_activit_srv()))
+                            jsonVersion.put("id_version_activity_srv", v.getId_version_activit_srv());
+                        else
+                            jsonVersion.put("id_version_activity_srv", "");
+                    }
+
+
+
                     jsonVersion.put("id_activity_student", v.getId_activity_student());
                     jsonVersion.put("tx_activity", v.getTx_activity());
                     jsonVersion.put("dt_last_access", v.getDt_last_access());
@@ -378,8 +403,8 @@ public class SendData {
                     Log.d("json send data:", jsonVersion.toString());
 
                     JSONArray jsonCommentsByVersion = new JSONArray();
-                    if (observationByVersions.containsKey(v.getId_version_activity())) {
-                        LinkedList<Observation> observationLinkedList = (LinkedList<Observation>) observationByVersions.get(v.getId_version_activity());
+                    if (observationByVersions.containsKey(v.getId_version_activit_srv())) {
+                        LinkedList<Observation> observationLinkedList = (LinkedList<Observation>) observationByVersions.get(v.getId_version_activit_srv());
                         for (Observation c : observationLinkedList) {
                             JSONObject jComment = new JSONObject();
                             jComment.put("id_comment_version", c.getId_comment_version());
@@ -388,12 +413,12 @@ public class SendData {
                             jComment.put("nu_comment_activity", c.getNu_comment_activity());
                             jComment.put("nu_initial_pos", c.getNu_initial_position());
                             jComment.put("nu_size", c.getNu_size());
-                            jComment.put("id_comment_version_srv",c.getId_comment_version_srv());
+                            //jComment.put("id_comment_version_srv",c.getId_comment_version_srv());
 
                             jsonCommentsByVersion.put(jComment);
                         }
                     }
-                    JSONObject jTb_comment = new JSONObject();
+//                    JSONObject jTb_comment = new JSONObject();
 //                    jTb_comment.put("tb_comment", jsonCommentsByVersion);
 //                    jsonVersion.put("comment", jTb_comment);
 

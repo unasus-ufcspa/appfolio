@@ -1105,7 +1105,7 @@ public class DataBaseAdapter {
     public LinkedList<Integer> listSpecificComments(int idActStu) {
         LinkedList<Integer> comentarios = new LinkedList<>();
         String sql = "SELECT DISTINCT cv.nu_comment_activity from tb_comment_version cv " +
-                "   INNER JOIN tb_version_activity va ON cv.id_version_activity = va.id_version_activity WHERE va.id_activity_student =" + idActStu;
+                "   INNER JOIN tb_version_activity va ON cv.id_version_activity = va.id_version_activity_srv WHERE va.id_activity_student =" + idActStu;
         //Log.e(tag, "sql listComments:" + sql);
         Cursor c = db.rawQuery(sql, null);
         Integer id;
@@ -1223,7 +1223,7 @@ public class DataBaseAdapter {
 
     public List<Observation> listNotesSpecificComments(int version) {
         String sql = "SELECT DISTINCT nu_comment_activity,tx_reference from tb_comment_version as tbcv " +
-                "LEFT JOIN tb_version_activity as tbva on tbva.id_version_activity = tbcv.id_version_activity" +
+                "LEFT JOIN tb_version_activity as tbva on tbva.id_version_activity_srv = tbcv.id_version_activity" +
                 " WHERE tbva.id_version_activity =" + version;
         //Log.e(tag, "sql listComments:" + sql);
         Cursor c = db.rawQuery(sql, null);
@@ -1550,6 +1550,17 @@ public class DataBaseAdapter {
         return -1;
     }
 
+    public int getIdCommentVersionSrv(int idCV) {
+        String query = "SELECT id_comment_version_srv FROM tb_comment_version WHERE id_comment_version = " + idCV;
+        Cursor cursor = db.rawQuery(query, null);
+        if (cursor.moveToFirst()) {
+            return cursor.getInt(0);
+        }
+        cursor.close();
+        return -1;
+    }
+
+
 
 
     // TÁ ERRADO
@@ -1629,6 +1640,18 @@ public class DataBaseAdapter {
                 return false;
             }
     }
+
+
+    public boolean isSync(String table,int id){
+        String query = "SELECT * FROM tb_sync WHERE nm_table = '" + table +"' AND co_id_table="+id;
+        Cursor c = db.rawQuery(query, null);
+        if(c.moveToFirst()){
+            return false;
+        }else{
+            return true;
+        }
+    }
+
 
 
     public LinkedHashMap<Integer, LinkedList<Observation>> getObservationByVersions(LinkedList<Integer> ids) {
@@ -2182,6 +2205,7 @@ public class DataBaseAdapter {
             do {
                 Sync s = new Sync(c.getInt(0), "-1", c.getInt(1), c.getString(2));
                 syncs.add(s);
+                Log.d("Syncs",s.toString());
             } while (c.moveToNext());
         } else {
 
@@ -2921,6 +2945,9 @@ public class DataBaseAdapter {
                 versionActivity.setId_version_activity(c.getInt(0));
                 versionActivity.setId_activity_student(c.getInt(1));
                 versionActivity.setTx_activity(c.getString(2));
+                versionActivity.setTx_activity(versionActivity.getTx_activity().replaceAll("\\/", "/"));
+                versionActivity.setTx_activity(versionActivity.getTx_activity().replaceAll("\n", ""));
+                versionActivity.setTx_activity(versionActivity.getTx_activity().replaceAll("<br\\/>", "<br/>"));
                 if (c.getString(3) != null)
                     versionActivity.setDt_last_access(c.getString(3));
                 else
@@ -3001,6 +3028,28 @@ public class DataBaseAdapter {
             }
         }
     }
+
+    public void updateVersionsBySendFullData(int idVersion) {
+        ContentValues cv = new ContentValues();
+            cv.put("id_version_activity_srv", idVersion);
+            try {
+                db.update("tb_version_activity", cv, "id_version_activity=?", new String[]{"" + idVersion});
+            } catch (Exception e) {
+                Log.d(tag, e.getMessage());
+            }
+
+    }
+    public int getIDVerionSrvByLocalID(int idVersion){
+        StringBuilder sb = new StringBuilder("SELECT id_version_activity_srv FROM tb_version_activity where id_version_activity="+idVersion);
+        Cursor c = db.rawQuery(sb.toString(), null);
+        if (c.moveToFirst()) {
+            return c.getInt(0);
+        }else{
+            return -1;
+        }
+    }
+
+
 
 
     public void deleteSync(LinkedList<Integer> ids) {

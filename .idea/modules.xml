@@ -8,6 +8,7 @@
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
       <module fileurl="file://$PROJECT_DIR$/app-portfolio.iml" filepath="$PROJECT_DIR$/app-portfolio.iml" />
       <module fileurl="file://$PROJECT_DIR$/folio.iml" filepath="$PROJECT_DIR$/folio.iml" />
+      <module fileurl="file://$PROJECT_DIR$/loucura.iml" filepath="$PROJECT_DIR$/loucura.iml" />
     </modules>
   </component>
 </project>

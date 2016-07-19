@@ -231,7 +231,8 @@ public class FragmentSpecificComments extends Frag {
         try {
             DataBaseAdapter db = DataBaseAdapter.getInstance(getActivity());
             Log.d("activity","actual version_activity:"+singleton.idCurrentVersionActivity );
-            Log.d("observations","list observations:" + db.getObservation(singleton.idVersionActivity).toString());
+
+            Log.d("observations","list observations:" + db.getObservation(db.getIDVerionSrvByLocalID(singleton.idVersionActivity)).toString());
             Log.d("observations","list ALL observations:" + db.getObservationALL().toString());
             Singleton singleton = Singleton.getInstance();
             lista = (ArrayList<Comentario>) db.listObsComments(singleton.activity.getIdActivityStudent(), singleton.note.getBtId());//lista comentario gerais filtrando por O
@@ -432,7 +433,7 @@ public class FragmentSpecificComments extends Frag {
             // recupera n_nota criada
             singleton.actualObservation.setNu_comment_activity(noteNow.getBtId());
             singleton.actualObservation.setTx_reference(noteNow.getSelectedText());
-            singleton.actualObservation.setId_version_activity(singleton.idVersionActivity);
+            singleton.actualObservation.setId_version_activity(source.getIDVerionSrvByLocalID(singleton.idVersionActivity));
             singleton.actualObservation.setId_comment_version_srv(singleton.actualObservation.getId_comment_version());
 
 

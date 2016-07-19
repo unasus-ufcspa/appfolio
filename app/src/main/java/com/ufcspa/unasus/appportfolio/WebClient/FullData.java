@@ -154,7 +154,7 @@ public class FullData {
                 data.insertAttachmentActivity(id_activity_student, id_attachment);
                 // BAIXAR OS ATTACHMENTS!!!!!!!!
                 String filePath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES) + File.separator + a.getNmSystem();
-                Log.d("File Path", filePath);
+                //Log.d("File Path", filePath);
                 String url = "http://" + new HttpClient(context).ip + URL + a.getNmSystem();
                 DownloadRequest request = new DownloadRequest()
                         .setUrl(url)
@@ -175,8 +175,8 @@ public class FullData {
                                 Log.e("anexos", "erro ao baixar anexo: " + statusCode+"\n "+errMsg);
                             }
                         });
-                Log.d("anexos","url:"+url);
                 manager.add(request);
+                Log.d("anexos", "url do anexo: " + url);
 //                downloadAttachment("http://stuffpoint.com/stardoll/image/54056-stardoll-sdfs.jpg" + a.getNmSystem(), a.getNmFile());
             }
         }
@@ -261,7 +261,7 @@ public class FullData {
             InputStream input = new BufferedInputStream(url.openStream());
             OutputStream output = new FileOutputStream(dir + "/" + fileName);
 
-            byte data[] = new byte[2048];
+            byte data[] = new byte[1024];
             long total = 0;
             int count;
             while ((count = input.read(data)) != -1) {
