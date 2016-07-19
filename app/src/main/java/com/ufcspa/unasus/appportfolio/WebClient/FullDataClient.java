@@ -291,7 +291,7 @@ public class FullDataClient extends HttpClient {
                                                     map.put(id_act_student, attachments);
                                                 } else {
                                                     ArrayList<Attachment> tmp = map.get(id_act_student);
-                                                    tmp.add(a);
+//                                                    tmp.add(a);
                                                     map.put(id_act_student,tmp);
 
                                                 }
