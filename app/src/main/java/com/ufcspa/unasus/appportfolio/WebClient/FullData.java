@@ -153,7 +153,7 @@ public class FullData {
                 int id_attachment = data.insertAttachmentDownload(a);
                 data.insertAttachmentActivity(id_activity_student, id_attachment);
                 // BAIXAR OS ATTACHMENTS!!!!!!!!
-                String filePath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES) + File.separator + a.getNmSystem();
+                String filePath = Environment.getExternalStorageDirectory()+"/Android/data/com.ufcspa.unasus.appportfolio/files/images" + File.separator + a.getNmSystem();
                 //Log.d("File Path", filePath);
                 String url = "http://" + new HttpClient(context).ip + URL + a.getNmSystem();
                 DownloadRequest request = new DownloadRequest()

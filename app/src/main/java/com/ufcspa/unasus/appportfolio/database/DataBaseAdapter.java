@@ -1282,7 +1282,7 @@ public class DataBaseAdapter {
         ContentValues cv = new ContentValues();
         cv.put("tp_attachment", attach.getTpAttachment());
         cv.put("nm_file", attach.getNmFile());
-        cv.put("nm_system", Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES) + File.separator + attach.getNmSystem());
+        cv.put("nm_system", Environment.getExternalStorageDirectory()+"/Android/data/com.ufcspa.unasus.appportfolio/files/images" + File.separator + attach.getNmSystem());
         cv.put("id_attachment_srv", attach.getidAttachmentSrv());
 
         try {
