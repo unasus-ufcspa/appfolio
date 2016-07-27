@@ -17,6 +17,8 @@ import com.ufcspa.unasus.appportfolio.Model.CommentVersion;
 import com.ufcspa.unasus.appportfolio.Model.Device;
 import com.ufcspa.unasus.appportfolio.Model.Notification;
 import com.ufcspa.unasus.appportfolio.Model.Observation;
+import com.ufcspa.unasus.appportfolio.Model.Policy;
+import com.ufcspa.unasus.appportfolio.Model.PolicyUser;
 import com.ufcspa.unasus.appportfolio.Model.PortfolioClass;
 import com.ufcspa.unasus.appportfolio.Model.Reference;
 import com.ufcspa.unasus.appportfolio.Model.StudFrPortClass;
@@ -2475,7 +2477,7 @@ public class DataBaseAdapter {
         Device device = new Device();
         Cursor c = db.rawQuery(query, null);
         if (c.moveToFirst()) {
-            device = new Device(c.getString(0), c.getInt(1), c.getInt(2), c.getString(3), c.getString(4));
+            device = new Device(c.getString(0), c.getInt(1), c.getInt(2), c.getString(3), c.getString(4), c.getString(5));
         } else {
             Log.e(tag, "não há registros na tabela tb_device");
         }
@@ -3162,4 +3164,101 @@ public class DataBaseAdapter {
         return aux;
 
     }
+
+    /*
+        ************************* CRUD POLICY ***************************
+    */
+
+    public void insertTBPolicy(List<Policy> policies) {
+        for (Policy p : policies) {
+            ContentValues cv = new ContentValues();
+            cv.put("id_policy", p.getIdPolicy());
+            cv.put("tx_policy", p.getTxPolicy());
+            try {
+                db.insert("tb_policy", null, cv);
+
+            } catch (Exception e) {
+                Log.d(tag, "erro ao inserir tb_sync:" + e.getMessage());
+                e.printStackTrace();
+            }
+
+        }
+    }
+
+    public void insertTBPolicyUser(List<PolicyUser> policyUsers) {
+        for (PolicyUser p : policyUsers) {
+            ContentValues cv = new ContentValues();
+            cv.put("id_policy_user", p.getIdPolicyUser());
+            cv.put("id_policy", p.getIdPolicy());
+            cv.put("id_user", p.getIdUser());
+            cv.put("fl_accept", p.getFlAccept());
+            try {
+                db.insert("tb_policy_user", null, cv);
+
+            } catch (Exception e) {
+                Log.d(tag, "erro ao inserir tb_sync:" + e.getMessage());
+                e.printStackTrace();
+            }
+
+        }
+    }
+
+    public Policy getPolicy() {
+        Policy policy = new Policy(0, null);
+
+        String query = "SELECT id_policy FROM tb_policy";
+        Cursor c = db.rawQuery(query, null);
+
+        if (c.moveToFirst()) {
+            int id_policy = c.getInt(0);
+
+            query = "SELECT tx_policy FROM tb_policy WHERE id_policy = " + id_policy;
+            c = db.rawQuery(query, null);
+
+            if (c.moveToFirst()) {
+                policy = new Policy(id_policy, c.getString(0));
+            }
+        }
+
+        return policy;
+    }
+    public PolicyUser getPolicyUser() {
+        PolicyUser policyUser = new PolicyUser(0, null, 0, 0);
+
+        String query = "SELECT id_policy FROM tb_policy";
+        Cursor c = db.rawQuery(query, null);
+
+        if (c.moveToFirst()) {
+            int id_policy_user = c.getInt(0);
+
+            query = "SELECT * FROM tb_policy_user WHERE id_policy = " + id_policy_user;
+            c = db.rawQuery(query, null);
+
+            if (c.moveToFirst()) {
+                policyUser = new PolicyUser(id_policy_user, c.getString(0), c.getInt(1), c.getInt(2));
+            }
+        }
+
+        return policyUser;
+    }
+    public Policy getPolicyByUserID(int idUser) {//talvez seja melhor fazer lista, pensar nisso
+        Policy policy = new Policy(0, null);
+
+        String query = "SELECT id_policy_user FROM tb_policy_user";
+        Cursor c = db.rawQuery(query, null);
+
+        if (c.moveToFirst()) {
+            int id_policy_user = c.getInt(0);
+
+            query = "SELECT tx_policy FROM tb_policy JOIN tb_policy_user ON tb_policy.id_policy = tb_policy_user.id_policy WHERE tb_policy_user.id_user = " + idUser;
+            c = db.rawQuery(query, null);
+
+            if (c.moveToFirst()) {
+                policy = new Policy(id_policy_user, c.getString(0));
+            }
+        }
+
+        return policy;
+    }
+
 }
