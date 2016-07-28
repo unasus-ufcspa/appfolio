@@ -10,7 +10,7 @@ public class Device {
     private int _tp_device;
     private String fl_first_login;
     private String fl_basic_data;
-    private String fl_first_sync;
+//    private String fl_first_sync;
 
     public Device(){
         this._id_user=-1;
@@ -25,7 +25,7 @@ public class Device {
         this._tp_device = _tp_device;
         this.fl_first_login = fl_first_login;
         this.fl_basic_data = fl_basic_data;
-        this.fl_first_sync = fl_first_sync;
+//        this.fl_first_sync = fl_first_sync;
     }
 
 
@@ -61,13 +61,13 @@ public class Device {
         return fl_basic_data;
     }
 
-    public String getFl_first_sync() {
-        return fl_first_sync;
-    }
-
-    public void setFl_first_sync(String fl_first_sync) {
-        this.fl_first_sync = fl_first_sync;
-    }
+//    public String getFl_first_sync() {
+//        return fl_first_sync;
+//    }
+//
+//    public void setFl_first_sync(String fl_first_sync) {
+//        this.fl_first_sync = fl_first_sync;
+//    }
 
     @Override
     public String toString() {

@@ -54,12 +54,12 @@ public class FirstSyncClient extends HttpClient{
                     if (response.has("error")) {
                         MainActivity.isFullSyncNotSucessful = true;
                         // Log.e(tag, "sincronizacao de dados full falhou");
-                    } else if (response.has("fullDataSrvDev_response")) {
-                        Log.d(tag, "JSON POST existe Full Data response");
+                    } else if (response.has("firstSync_response")) {
+                        Log.d(tag, "JSON POST existe First Sync response");
                         firstSync = new FirstSync(context);
                         JSONObject resp = new JSONObject();
                         try {
-                            resp = response.getJSONObject("fullDataSrvDev_response");
+                            resp = response.getJSONObject("firstSync_response");
 
                             if (resp.has("notice")) {
                                 JSONObject notice = resp.getJSONObject("notice");
