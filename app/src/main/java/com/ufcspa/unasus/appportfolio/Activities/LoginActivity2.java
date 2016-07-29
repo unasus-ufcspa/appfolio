@@ -44,6 +44,8 @@ import com.ufcspa.unasus.appportfolio.R;
 import com.ufcspa.unasus.appportfolio.WebClient.BasicData;
 import com.ufcspa.unasus.appportfolio.WebClient.BasicDataClient;
 import com.ufcspa.unasus.appportfolio.WebClient.FirstLogin;
+import com.ufcspa.unasus.appportfolio.WebClient.FirstSync;
+import com.ufcspa.unasus.appportfolio.WebClient.FirstSyncClient;
 import com.ufcspa.unasus.appportfolio.WebClient.FistLoginClient;
 import com.ufcspa.unasus.appportfolio.database.DataBaseAdapter;
 
@@ -188,8 +190,11 @@ public class LoginActivity2 extends AppCompatActivity implements LoaderCallbacks
                                         public void run() {
                                             dialog.dismiss();
                                             Log.d("tela login", "terminou conexão");
-                                            startActivity(new Intent(getApplicationContext(), MainActivity.class));
-                                            finish();
+//                                            if (PolicyAceita()) {
+                                                startActivity(new Intent(getApplicationContext(), MainActivity.class));
+                                                finish();
+//                                            } else
+//                                                startActivity(new Intent(getApplicationContext(), PrivacyPolicyActivity.class));
                                         }
                                     });
                                 } else {
@@ -291,6 +296,20 @@ public class LoginActivity2 extends AppCompatActivity implements LoaderCallbacks
             });
         }
     }
+    public void getFirstSync() {
+        if (isOnline()) {
+            FirstSyncClient fsclient = new FirstSyncClient(getBaseContext());
+            JSONObject jsonObject = new JSONObject();
+            fsclient.postJson(FirstSync.toJSON(Singleton.getInstance().user.getIdUser(), Singleton.getInstance().device.get_id_device()));// mandando id
+        } else {
+            new Handler(Looper.getMainLooper()).post(new Runnable() {
+                @Override
+                public void run() {
+                    Toast.makeText(getApplicationContext(), "Sem conexão com a internet", Toast.LENGTH_LONG).show();
+                }
+            });
+        }
+    }
 
     public boolean isTablet() {
         TelephonyManager manager = (TelephonyManager) this.getSystemService(Context.TELEPHONY_SERVICE);
@@ -363,6 +382,15 @@ public class LoginActivity2 extends AppCompatActivity implements LoaderCallbacks
 
         return cm.getActiveNetworkInfo() != null &&
                 cm.getActiveNetworkInfo().isConnectedOrConnecting();
+    }
+
+    public boolean PolicyAceita() {
+        DataBaseAdapter bd = DataBaseAdapter.getInstance(this);
+        if (bd.getPolicyUser().getFlAccept() != null){
+            return true;
+        }
+        else
+            return false;
     }
 
     private boolean verificarLogin() {

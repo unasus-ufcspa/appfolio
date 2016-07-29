@@ -74,7 +74,7 @@ public class FirstSync {
         try {
             firstSync.put("ds_hash", idDevice);
             firstSync.put("id_user", idUser);
-            json.put("firstSync_resquest", firstSync);
+            json.put("firstSync_request", firstSync);
         } catch (JSONException e) {
             e.printStackTrace();
         }

@@ -12,6 +12,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.ufcspa.unasus.appportfolio.Activities.LoginActivity2;
+import com.ufcspa.unasus.appportfolio.Model.Activity;
 import com.ufcspa.unasus.appportfolio.Model.Device;
 import com.ufcspa.unasus.appportfolio.Model.Singleton;
 import com.ufcspa.unasus.appportfolio.Model.User;
@@ -84,7 +85,7 @@ public class FistLoginClient extends HttpClient {
 
 
                                 DataBaseAdapter.getInstance(context).insertUser(user);
-                                DataBaseAdapter.getInstance(context).insertIntoTbDevice(new Device(Singleton.getInstance().device.get_id_device(), user.getIdUser(), Singleton.getInstance().device.get_tp_device(), null, null));
+                                DataBaseAdapter.getInstance(context).insertIntoTbDevice(new Device(Singleton.getInstance().device.get_id_device(), user.getIdUser(), Singleton.getInstance().device.get_tp_device(), null, null, null));
 
                                 //Adicionando o usuario no singleton
                                 Singleton.getInstance().user = user;
@@ -92,6 +93,11 @@ public class FistLoginClient extends HttpClient {
 
                                 LoginActivity2.isLoginSucessful=true;
                             }
+//                            if (response.getJSONObject("firstLogin_response").getJSONObject("fl_firstSync").equals("S")){
+                            FirstSyncClient fsclient = new FirstSyncClient(context);
+                            fsclient.postJson(FirstSync.toJSON(Singleton.getInstance().user.getIdUser(), Singleton.getInstance().device.get_id_device()));
+//                            }
+                            Log.d("first sync",user.getIdUser()+Singleton.getInstance().device.get_id_device());
                         }
 
 

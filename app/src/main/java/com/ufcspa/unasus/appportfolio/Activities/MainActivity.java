@@ -573,7 +573,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     public void logout() {
         DataBaseAdapter.getInstance(this).cleanDataBase();
-        startActivity(new Intent(this, LoginActivity2.class));
+        Intent intent = new Intent(this, LoginActivity2.class);
+//        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        startActivity(intent);
         finish();
     }
 
