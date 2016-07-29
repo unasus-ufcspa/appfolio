@@ -190,11 +190,12 @@ public class LoginActivity2 extends AppCompatActivity implements LoaderCallbacks
                                         public void run() {
                                             dialog.dismiss();
                                             Log.d("tela login", "terminou conexão");
-//                                            if (PolicyAceita()) {
+                                            if (PolicyAceita()) {
                                                 startActivity(new Intent(getApplicationContext(), MainActivity.class));
                                                 finish();
-//                                            } else
-//                                                startActivity(new Intent(getApplicationContext(), PrivacyPolicyActivity.class));
+                                            } else
+                                                startActivity(new Intent(getApplicationContext(), PrivacyPolicyActivity.class));
+                                                finish();
                                         }
                                     });
                                 } else {
@@ -386,7 +387,7 @@ public class LoginActivity2 extends AppCompatActivity implements LoaderCallbacks
 
     public boolean PolicyAceita() {
         DataBaseAdapter bd = DataBaseAdapter.getInstance(this);
-        if (bd.getPolicyUser().getFlAccept() != null){
+        if (bd.getPolicyUser().getFlAccept().equals("")){
             return true;
         }
         else

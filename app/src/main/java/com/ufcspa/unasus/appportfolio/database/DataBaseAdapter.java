@@ -2477,7 +2477,7 @@ public class DataBaseAdapter {
         Device device = new Device();
         Cursor c = db.rawQuery(query, null);
         if (c.moveToFirst()) {
-            device = new Device(c.getString(0), c.getInt(1), c.getInt(2), c.getString(3), c.getString(4), c.getString(5));
+            device = new Device(c.getString(0), c.getInt(1), c.getInt(2), c.getString(3), c.getString(4)/*, c.getString(5)*/);
         } else {
             Log.e(tag, "não há registros na tabela tb_device");
         }
@@ -3250,7 +3250,7 @@ public class DataBaseAdapter {
         if (c.moveToFirst()) {
             int id_policy_user = c.getInt(0);
 
-            query = "SELECT tx_policy FROM tb_policy JOIN tb_policy_user ON tb_policy.id_policy = tb_policy_user.id_policy WHERE tb_policy_user.id_user = " + idUser;
+            query = "SELECT tx_policy FROM tb_policy INNER JOIN tb_policy_user ON tb_policy.id_policy = tb_policy_user.id_policy WHERE tb_policy_user.id_user = " + idUser;
             c = db.rawQuery(query, null);
 
             if (c.moveToFirst()) {

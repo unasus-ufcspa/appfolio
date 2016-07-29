@@ -3,6 +3,8 @@ package com.ufcspa.unasus.appportfolio.WebClient;
 import android.content.Context;
 import android.util.Log;
 
+import com.ufcspa.unasus.appportfolio.Model.Policy;
+import com.ufcspa.unasus.appportfolio.Model.PolicyUser;
 import com.ufcspa.unasus.appportfolio.Model.basicData.Activity;
 import com.ufcspa.unasus.appportfolio.Model.basicData.ActivityStudent;
 import com.ufcspa.unasus.appportfolio.Model.basicData.Class;
@@ -33,6 +35,8 @@ public class BasicData {
     private LinkedList<PortfolioClass> portfolioClasses;
     private LinkedList<PortfolioStudent> portfolioStudents;
     private LinkedList<User> users;
+    private LinkedList<Policy> policies;
+    private LinkedList<PolicyUser> policyUsers;
     private Context context;
 
     public BasicData(Context c) {
@@ -45,6 +49,8 @@ public class BasicData {
         portfolioClasses= new LinkedList<PortfolioClass>();
         portfolioStudents= new LinkedList<PortfolioStudent>();
         users= new LinkedList<User>();
+        policies= new LinkedList<Policy>();
+        policyUsers= new LinkedList<PolicyUser>();
         this.context=c;
     }
 
@@ -96,6 +102,12 @@ public class BasicData {
     public void addUsers(User u){
         users.add(u);
     }
+    public void addPolicy(Policy p){
+        policies.add(p);
+    }
+    public void addPolicyUsers(PolicyUser pu){
+        policyUsers.add(pu);
+    }
 
     public LinkedList<Activity> getActivities() {
         return activities;
@@ -133,6 +145,22 @@ public class BasicData {
         return users;
     }
 
+    public LinkedList<PolicyUser> getPolicyUsers() {
+        return policyUsers;
+    }
+
+    public void setPolicyUsers(LinkedList<PolicyUser> policyUsers) {
+        this.policyUsers = policyUsers;
+    }
+
+    public LinkedList<Policy> getPolicies() {
+        return policies;
+    }
+
+    public void setPolicies(LinkedList<Policy> policies) {
+        this.policies = policies;
+    }
+
     public synchronized void insertDataIntoSQLITE() {
 //        Thread t = new Thread(new Runnable() {
 //            @SuppressLint("LongLogTag")
@@ -161,6 +189,10 @@ public class BasicData {
                 data.insertTBActivity(activities);
                 Log.d(log, "inserindo tb_activities student");
                 data.insertTBActivityStudent(activitiesStudent);
+                Log.d(log, "inserindo tb_policy");
+                data.insertTBPolicy(policies);
+                Log.d(log, "inserindo tb_policyUser");
+                data.insertTBPolicyUser(policyUsers);
 
 //            }
 //        });
