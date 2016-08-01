@@ -244,7 +244,7 @@ public class FirstSyncClient extends HttpClient{
                                             int nu_size = temp.getInt("nu_size");
                                             String  tx_reference = temp.getString("tx_reference");
 
-                                            int id_comment_version=temp.getInt("id_comment_version");
+                                            int id_comment_version=temp.getInt("id_comment");
 
                                             if(temp.has("id_comment_version_srv")){
                                                 obs.setId_comment_version_srv(temp.getInt("id_comment_version_srv"));
