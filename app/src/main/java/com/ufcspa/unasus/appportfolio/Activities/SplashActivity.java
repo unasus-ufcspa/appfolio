@@ -31,9 +31,9 @@ public class SplashActivity extends AppCompatActivity {
         DataBaseAdapter adapter = DataBaseAdapter.getInstance(this);
         Singleton singleton = Singleton.getInstance();
 
-        List<Integer> d =adapter.listSpecificComments(13);
+        List<Integer> d = adapter.listSpecificComments(13);
 
-        Log.d("splash","comments:"+d.toString());
+        Log.d("splash", "comments:" + d.toString());
 
         Device device = adapter.getDevice();
 
@@ -41,18 +41,21 @@ public class SplashActivity extends AppCompatActivity {
         singleton.user = adapter.getUser();
 
         int statusApp = adapter.getStatus(device);
-        Log.d("SplashActivity","status device = " + statusApp);
+        Log.d("SplashActivity", "status device = " + statusApp);
 
         Intent intent = new Intent(this, LoginActivity2.class);
+        LoginActivity2 loginActivity2 = new LoginActivity2();
+            if (statusApp == 1) {
+                if (loginActivity2.PolicyAceita()) {
+                intent = new Intent(this, MainActivity.class);
+                } else
+                    intent = new Intent(getApplicationContext(), PrivacyPolicyActivity.class);
+            } else if (statusApp == 0) {
+                intent.putExtra("dont_have_basic_data", true);
+            }
 
-        if (statusApp == 1) {
-           intent = new Intent(this, MainActivity.class);
-        } else if (statusApp == 0) {
-            intent.putExtra("dont_have_basic_data", true);
-        }
-
-        startActivity(intent);
+            startActivity(intent);
 //        startActivity(new Intent(this,TesteDownloadImage.class));
-        finish();
+            finish();
     }
 }
