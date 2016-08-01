@@ -3203,6 +3203,17 @@ public class DataBaseAdapter {
         }
     }
 
+    public void updateFlAccept(int idPolicyUser) {
+        ContentValues cv = new ContentValues();
+        cv.put("fl_accept", "S");
+        try {
+            db.update("tb_policy_user", cv, "id_policy_user = " + idPolicyUser, null);
+            Log.e(tag, "Conseguiu alterar tb_policy_user fl_accept");
+        } catch (Exception e) {
+            Log.e(tag, "Erro ao alterar tb_policy_user fl_accept");
+        }
+    }
+
     public Policy getPolicy() {
         Policy policy = new Policy(0, null);
 
@@ -3222,20 +3233,20 @@ public class DataBaseAdapter {
 
         return policy;
     }
-    public PolicyUser getPolicyUser() {
-        PolicyUser policyUser = new PolicyUser(0, null, 0, 0);
+    public PolicyUser getPolicyUserByUserId(int idUser) {
+        PolicyUser policyUser = new PolicyUser(0, 0, 0, null);
 
-        String query = "SELECT id_policy FROM tb_policy";
+        String query = "SELECT id_policy_user FROM tb_policy_user";
         Cursor c = db.rawQuery(query, null);
 
         if (c.moveToFirst()) {
             int id_policy_user = c.getInt(0);
 
-            query = "SELECT * FROM tb_policy_user WHERE id_policy = " + id_policy_user;
+            query = "SELECT * FROM tb_policy_user WHERE id_user = " + idUser;
             c = db.rawQuery(query, null);
 
             if (c.moveToFirst()) {
-                policyUser = new PolicyUser(id_policy_user, c.getString(0), c.getInt(1), c.getInt(2));
+                policyUser = new PolicyUser(id_policy_user, c.getInt(1), c.getInt(2), c.getString(3));
             }
         }
 

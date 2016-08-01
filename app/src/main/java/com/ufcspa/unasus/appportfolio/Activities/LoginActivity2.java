@@ -387,7 +387,7 @@ public class LoginActivity2 extends AppCompatActivity implements LoaderCallbacks
 
     public boolean PolicyAceita() {
         DataBaseAdapter bd = DataBaseAdapter.getInstance(this);
-        if (bd.getPolicyUser().getFlAccept().equals("")){
+        if (bd.getPolicyUserByUserId(Singleton.getInstance().user.getIdUser()).getFlAccept()!=null){
             return true;
         }
         else

@@ -355,6 +355,7 @@ public class BasicDataClient extends HttpClient {
                                     policyUser.setIdPolicyUser(id_policyUser);
                                     policyUser.setIdPolicy(id_policy);
                                     policyUser.setIdUser(id_user);
+                                    policyUser.setFlAccept(null);
 
                                     //ADD TO LINKEDLIST
                                     basicData.addPolicy(policy);

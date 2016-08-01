@@ -9,12 +9,14 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.ufcspa.unasus.appportfolio.Model.Policy;
 import com.ufcspa.unasus.appportfolio.Model.PolicyUser;
 import com.ufcspa.unasus.appportfolio.Model.Singleton;
 import com.ufcspa.unasus.appportfolio.Model.User;
 import com.ufcspa.unasus.appportfolio.R;
+import com.ufcspa.unasus.appportfolio.WebClient.PolicyUserClient;
 import com.ufcspa.unasus.appportfolio.database.DataBaseAdapter;
 
 /**
@@ -29,6 +31,7 @@ public class PrivacyPolicyActivity extends AppCompatActivity {
     private int idUser;
     private Policy policy;
     private PolicyUser policyUser;
+    private PolicyUserClient policyUserClient;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,10 +55,17 @@ public class PrivacyPolicyActivity extends AppCompatActivity {
         acceptBT.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (checkBox.isChecked()){
+                if (checkBox.isChecked()) {
+                    policyUser = DataBaseAdapter.getInstance(getBaseContext()).getPolicyUserByUserId(idUser);
+                    DataBaseAdapter.getInstance(getBaseContext()).updateFlAccept(policyUser.getIdPolicyUser());
+                    policyUser = DataBaseAdapter.getInstance(getBaseContext()).getPolicyUserByUserId(idUser);
+                    Log.d("policyUser",policyUser.toString());
+                    policyUserClient = new PolicyUserClient(getBaseContext());
+                    policyUserClient.postJson(PolicyUser.toJSON(policyUser.getIdPolicyUser(), policyUser.getIdUser(), policyUser.getFlAccept()));
                     startActivity(intent);
                     finish();
-                }
+                } else
+                    Toast.makeText(getApplicationContext(),"Você deve aceitar os termos para continuar",Toast.LENGTH_LONG);
             }
         });
 
