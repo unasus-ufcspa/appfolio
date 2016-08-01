@@ -19,7 +19,7 @@ public class Device {
 
 
 
-    public Device(String _id_device, int _id_user, int _tp_device, String fl_first_login, String fl_basic_data, String fl_first_sync) {
+    public Device(String _id_device, int _id_user, int _tp_device, String fl_first_login, String fl_basic_data/*, String fl_first_sync*/) {
         this._id_device = _id_device;
         this._id_user = _id_user;
         this._tp_device = _tp_device;

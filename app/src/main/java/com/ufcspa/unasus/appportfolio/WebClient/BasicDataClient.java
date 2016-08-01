@@ -11,6 +11,8 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.ufcspa.unasus.appportfolio.Activities.LoginActivity2;
+import com.ufcspa.unasus.appportfolio.Model.Policy;
+import com.ufcspa.unasus.appportfolio.Model.PolicyUser;
 import com.ufcspa.unasus.appportfolio.Model.basicData.Activity;
 import com.ufcspa.unasus.appportfolio.Model.basicData.ActivityStudent;
 import com.ufcspa.unasus.appportfolio.Model.basicData.Class;
@@ -327,6 +329,37 @@ public class BasicDataClient extends HttpClient {
 
                                     //ADD TO LINKEDLIST
                                     basicData.addUsers(user);
+                                }
+                            }
+                            if (resp.has("policy")) {
+                                // GET OBJECT
+                                Log.d(tag, "recebendo policy via json");
+                                JSONObject objPs = resp.getJSONObject("policy");
+                                JSONArray tb = objPs.getJSONArray("tb_policy");
+                                // POPULATE OBJECT
+                                for (int i = 0; i < tb.length(); i++) {
+                                    JSONObject temp = tb.getJSONObject(i);
+                                    Policy policy = new Policy();
+                                    PolicyUser policyUser = new PolicyUser();
+
+                                    // GET DATA FROM JSON
+                                    int id_policyUser = temp.getInt("idPolicyUser");
+                                    int id_user = temp.getInt("idUser");
+                                    int id_policy = temp.getInt("idPolicy");
+                                    String tx_policy = temp.getString("txPolicy");
+
+
+                                    //POPULATE OBJECT WITH DATA
+                                    policy.setIdPolicy(id_policy);
+                                    policy.setTxPolicy(tx_policy);
+                                    policyUser.setIdPolicyUser(id_policyUser);
+                                    policyUser.setIdPolicy(id_policy);
+                                    policyUser.setIdUser(id_user);
+                                    policyUser.setFlAccept(null);
+
+                                    //ADD TO LINKEDLIST
+                                    basicData.addPolicy(policy);
+                                    basicData.addPolicyUsers(policyUser);
                                 }
                             }
                         } catch (JSONException e) {

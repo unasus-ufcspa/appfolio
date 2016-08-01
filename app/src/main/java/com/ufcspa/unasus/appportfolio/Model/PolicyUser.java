@@ -1,5 +1,8 @@
 package com.ufcspa.unasus.appportfolio.Model;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 /**
  * Created by Steffano on 26/07/2016.
  */
@@ -12,11 +15,25 @@ public class PolicyUser {
     public PolicyUser() {
     }
 
-    public PolicyUser(int idPolicyUser, String flAccept, int idPolicy, int idUser) {
+    public PolicyUser(int idPolicyUser, int idPolicy, int idUser, String flAccept) {
         this.idPolicyUser = idPolicyUser;
-        this.flAccept = flAccept;
         this.idPolicy = idPolicy;
         this.idUser = idUser;
+        this.flAccept = flAccept;
+    }
+
+    public static JSONObject toJSON(int idPolicyUser, int idUser, String flAccept) {
+        JSONObject json = new JSONObject();
+        JSONObject policy = new JSONObject();
+        try {
+            policy.put("id_policy_user", idPolicyUser);
+            policy.put("id_user", idUser);
+            policy.put("fl_accept", flAccept);
+            json.put("policyRequest", policy);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return json;
     }
 
     public int getIdPolicy() {
