@@ -508,7 +508,9 @@ public class SendData {
                         attach.put("nm_system", path);
                         attach.put("id_attachment_srv", a.getidAttachmentSrv());
 
-                        attachment.put(attach);
+                        if (a.getidAttachmentSrv()==0) {
+                            attachment.put(attach);
+                        }
                     }
                     attachAttachment.put("id_activity_student", idActivityStudent).put("attachment", attachment);
 

@@ -3164,6 +3164,16 @@ public class DataBaseAdapter {
         return aux;
 
     }
+    public void updateIdAttachmentSrvById(int idAttachment, int idAttachmentSrv) {
+        ContentValues cv = new ContentValues();
+        cv.put("id_attachment_srv", idAttachmentSrv);
+        try {
+            db.update("tb_attachment", cv, "id_attachment = " + idAttachment, null);
+            Log.e(tag, "Conseguiu alterar tb_attachment id_attachment_srv");
+        } catch (Exception e) {
+            Log.e(tag, "Erro ao alterar tb_attachment id_attachment_srv");
+        }
+    }
 
     /*
         ************************* CRUD POLICY ***************************
