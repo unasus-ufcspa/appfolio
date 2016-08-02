@@ -65,7 +65,7 @@ public class PrivacyPolicyActivity extends AppCompatActivity {
                     startActivity(intent);
                     finish();
                 } else
-                    Toast.makeText(getApplicationContext(),"Você deve aceitar os termos para continuar",Toast.LENGTH_LONG);
+                    Toast.makeText(getApplicationContext(),"Você deve aceitar os termos para continuar",Toast.LENGTH_LONG).show();
             }
         });
 

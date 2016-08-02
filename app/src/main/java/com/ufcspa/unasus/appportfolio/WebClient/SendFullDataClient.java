@@ -11,6 +11,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.ufcspa.unasus.appportfolio.Activities.MainActivity;
+import com.ufcspa.unasus.appportfolio.Model.Attachment;
 import com.ufcspa.unasus.appportfolio.database.DataBaseAdapter;
 
 import org.json.JSONArray;
@@ -156,7 +157,24 @@ public class SendFullDataClient extends HttpClient{
                         }else{
                             Log.d("json","não entrou em version");
                         }
+                        if (resp.has("attachment")) {
+                            JSONObject attach = resp.getJSONObject("attachment");
+                            if (attach.has("tb_attachment")) {
+                                JSONArray tb_attach_temp = attach.getJSONArray("tb_attachment");
+                                JSONArray tb_attach = tb_attach_temp.getJSONArray(0);
+                                for (int i = 0; i < tb_attach.length(); i++) {
+                                    JSONObject temp = tb_attach.getJSONObject(i);
+                                    Attachment a = new Attachment();
+                                    int id_attachment = temp.getInt("id_attachment");
+                                    int id_attachment_srv = temp.getInt("id_attachment_srv");
+                                    a = DataBaseAdapter.getInstance(context).getAttachmentByID(id_attachment);
+                                    DataBaseAdapter.getInstance(context).updateIdAttachmentSrvById(id_attachment,id_attachment_srv);
+                                    Log.d("anexo",a.toString());
+                                }
 
+                            }
+
+                        }
 
                         //atualiza dados recebidos via json no sqlite
                         sendData.insertDataOnResponse();
