@@ -101,6 +101,50 @@ public class FirstSyncClient extends HttpClient{
                                     data = resp.getJSONObject("data");
                                 } catch (Exception e) {
                                 }
+                                if (data.has("attach_activity")) {
+                                    JSONObject attach = data.getJSONObject("attach_activity");
+                                    if (attach.has("tb_attach_activity")) {
+                                        JSONArray tb_attach = attach.getJSONArray("tb_attach_activity");
+                                        ArrayList<Attachment> attachments = new ArrayList<Attachment>();
+                                        HashMap<Integer, ArrayList<Attachment>> map = new HashMap<>();
+                                        for (int i = 0; i < tb_attach.length(); i++) {
+                                            JSONObject temp = tb_attach.getJSONObject(i);
+                                            Attachment a = new Attachment();
+                                            int id_attachment_srv = temp.getInt("id_attachment");
+                                            int id_act_student = temp.getInt("id_activity_student");
+                                            int id_att_activity = temp.getInt("id_attach_activity");
+
+                                            if (temp.has("attachment")) {
+                                                JSONObject att = temp.getJSONObject("attachment");
+                                                String tp_attachment = att.getString("tp_attachment");
+                                                String nm_file = att.getString("nm_file");
+                                                String nm_system = att.getString("nm_system");
+                                                a.setNmFile(nm_file);
+                                                a.setTpAttachment(tp_attachment);
+                                                a.setNmSystem(nm_system);
+                                            }
+
+                                            // popula objeto attach
+
+                                            a.setIdAttachmentSrv(id_attachment_srv);
+
+                                            attachments.add(a);
+                                            if (!map.containsKey(id_act_student)) {
+                                                map.put(id_act_student, attachments);
+                                            } else {
+                                                ArrayList<Attachment> tmp = map.get(id_act_student);
+//                                                    tmp.add(a);
+                                                map.put(id_act_student,tmp);
+
+                                            }
+
+                                            // fullData.();
+                                        }
+
+                                        firstSync.addAttachments(map);
+
+                                    }
+                                }
                                 if (data.has("comment")) {
                                     JSONObject comment = data.getJSONObject("comment");
 
