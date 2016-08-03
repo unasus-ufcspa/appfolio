@@ -1,10 +1,13 @@
 package com.ufcspa.unasus.appportfolio.Activities;
 
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
@@ -39,6 +42,11 @@ public class PrivacyPolicyActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_privacy_policy);
         getSupportActionBar().hide();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            Window window = getWindow();
+            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+            window.setStatusBarColor(getResources().getColor(R.color.base_green));
+        }
         policyTX = (TextView) findViewById(R.id.term_text);
         checkBox = (CheckBox) findViewById(R.id.checkBox);
         acceptBT = (Button) findViewById(R.id.btAgree);
@@ -50,7 +58,7 @@ public class PrivacyPolicyActivity extends AppCompatActivity {
         String txPolicy = DataBaseAdapter.getInstance(getBaseContext()).getPolicyByUserID(idUser).getTxPolicy();
         Log.d("Policy", txPolicy);
 
-        policyTX.setText("TERMOS DE USO \n" + txPolicy);
+        policyTX.setText(/*"TERMOS DE USO \n" + */txPolicy);
 
         acceptBT.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -65,7 +73,7 @@ public class PrivacyPolicyActivity extends AppCompatActivity {
                     startActivity(intent);
                     finish();
                 } else
-                    Toast.makeText(getApplicationContext(),"Você deve aceitar os termos para continuar",Toast.LENGTH_LONG).show();
+                    Toast.makeText(getApplicationContext(),"É necessário aceitar os termos para continuar",Toast.LENGTH_LONG).show();
             }
         });
 
