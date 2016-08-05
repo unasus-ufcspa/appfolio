@@ -19,6 +19,7 @@ public class DataBase extends SQLiteOpenHelper {
      * /data/data/<namespace da aplicacao>/databases/
      */
     private static String DBPATH = "/data/data/com.ufcspa.unasus.appportfolio/databases/";
+    private static DataBase mInstance = null;
 
     // Este é o nome do banco de dados que iremos utilizar
     //private static String DBNAME = "folio.sqlite"; //Classe SplashActivity => LoginActivity2
@@ -31,7 +32,7 @@ public class DataBase extends SQLiteOpenHelper {
     /**
      * O construtor necessita do contexto da aplicação
      */
-    public DataBase(Context context) {
+    private DataBase(Context context) {
     /* O primeiro argumento é o contexto da aplicacao
      * O segundo argumento é o nome do banco de dados
      * O terceiro é um pondeiro para manipulação de dados,
@@ -40,6 +41,16 @@ public class DataBase extends SQLiteOpenHelper {
      */
         super(context, DBNAME, null, 1);
         this.context = context;
+    }
+    public static DataBase getInstance(Context ctx) {
+
+        // Use the application context, which will ensure that you
+        // don't accidentally leak an Activity's context.
+        // See this article for more information: http://bit.ly/6LRzfx
+        if (mInstance == null) {
+            mInstance = new DataBase(ctx.getApplicationContext());
+        }
+        return mInstance;
     }
 
     /**

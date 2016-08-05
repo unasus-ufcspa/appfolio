@@ -47,6 +47,7 @@ import com.ufcspa.unasus.appportfolio.WebClient.FullData;
 import com.ufcspa.unasus.appportfolio.WebClient.FullDataClient;
 import com.ufcspa.unasus.appportfolio.WebClient.SendData;
 import com.ufcspa.unasus.appportfolio.WebClient.SendFullDataClient;
+import com.ufcspa.unasus.appportfolio.database.DataBase;
 import com.ufcspa.unasus.appportfolio.database.DataBaseAdapter;
 
 import org.json.JSONObject;
@@ -572,6 +573,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     public void logout() {
+        DataBase.getInstance(this).getDatabase();
         DataBaseAdapter.getInstance(this).cleanDataBase();
         Intent intent = new Intent(this, LoginActivity2.class);
 //        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);

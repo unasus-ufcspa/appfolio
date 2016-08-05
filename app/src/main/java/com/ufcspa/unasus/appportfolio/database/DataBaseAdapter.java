@@ -49,7 +49,7 @@ public class DataBaseAdapter {
     private Context context;
 
     private DataBaseAdapter(Context ctx) {
-        helper = new DataBase(ctx);
+        helper = DataBase.getInstance(ctx);
         db = helper.getDatabase();
         context = ctx;
     }
