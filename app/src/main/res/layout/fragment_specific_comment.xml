@@ -77,15 +77,15 @@
             android:layout_marginRight="5dp"
             android:background="@drawable/chat_send" />
 
-        <Button
-            android:id="@+id/bt_add_attachment"
-            style="?android:attr/buttonStyleSmall"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
-            android:layout_centerVertical="true"
-            android:layout_marginLeft="5dp"
-            android:layout_toLeftOf="@+id/gen_messag_bt"
-            android:background="@drawable/chat_attachment" />
+        <!--<Button-->
+            <!--android:id="@+id/bt_add_attachment"-->
+            <!--style="?android:attr/buttonStyleSmall"-->
+            <!--android:layout_width="48dp"-->
+            <!--android:layout_height="48dp"-->
+            <!--android:layout_centerVertical="true"-->
+            <!--android:layout_marginLeft="5dp"-->
+            <!--android:layout_toLeftOf="@+id/gen_messag_bt"-->
+            <!--android:background="@drawable/chat_attachment" />-->
 
         <EditText
             android:id="@+id/edtMessage"
@@ -97,15 +97,15 @@
             android:layout_alignParentTop="false"
             android:layout_alignWithParentIfMissing="false"
             android:layout_marginLeft="5dp"
-            android:layout_marginRight="5dp"
-            android:layout_toLeftOf="@+id/bt_add_attachment"
             android:background="@android:color/transparent"
             android:ems="20"
             android:imeOptions="flagNoExtractUi"
             android:inputType="textMultiLine|textLongMessage"
             android:isScrollContainer="true"
             android:maxHeight="150dp"
-            android:minHeight="50dp" />
+            android:minHeight="50dp"
+            android:layout_toLeftOf="@+id/gen_messag_bt"
+            android:layout_toStartOf="@+id/gen_messag_bt" />
     </RelativeLayout>
 
     <TextView

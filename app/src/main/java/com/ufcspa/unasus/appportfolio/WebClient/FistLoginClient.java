@@ -93,10 +93,11 @@ public class FistLoginClient extends HttpClient {
 
                                 LoginActivity2.isLoginSucessful=true;
                             }
-//                            if (response.getJSONObject("firstLogin_response").getJSONObject("fl_firstSync").equals("S")){
-                            FirstSyncClient fsclient = new FirstSyncClient(context);
-                            fsclient.postJson(FirstSync.toJSON(Singleton.getInstance().user.getIdUser(), Singleton.getInstance().device.get_id_device()));
-//                            }
+                            if (response.getJSONObject("firstLogin_response").getString("fl_firstSync").equals("S")){
+                                singleton.firstSync=true;
+                                FirstSyncClient fsclient = new FirstSyncClient(context);
+                                fsclient.postJson(FirstSync.toJSON(Singleton.getInstance().user.getIdUser(), Singleton.getInstance().device.get_id_device()));
+                            }
                             Log.d("first sync",user.getIdUser()+Singleton.getInstance().device.get_id_device());
                         }
 

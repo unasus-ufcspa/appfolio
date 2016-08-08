@@ -137,14 +137,14 @@ public class FragmentComments extends Frag {
         super.onResume();
         edtMessage = (EditText) getView().findViewById(R.id.edtMessage);
         btGenMess = (Button) getView().findViewById(R.id.gen_messag_bt);
-        btAttachment = (Button) getView().findViewById(R.id.bt_add_attachment);
+//        btAttachment = (Button) getView().findViewById(R.id.bt_add_attachment);
         lv = (ListView) getView().findViewById(R.id.listView1);
-        btAttachment.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                addAttachmentToComments();
-            }
-        });
+//        btAttachment.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                addAttachmentToComments();
+//            }
+//        });
         btGenMess.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

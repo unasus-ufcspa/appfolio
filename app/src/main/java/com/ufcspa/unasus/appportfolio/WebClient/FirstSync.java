@@ -19,6 +19,7 @@ import com.ufcspa.unasus.appportfolio.Model.CommentVersion;
 import com.ufcspa.unasus.appportfolio.Model.Notification;
 import com.ufcspa.unasus.appportfolio.Model.Observation;
 import com.ufcspa.unasus.appportfolio.Model.Reference;
+import com.ufcspa.unasus.appportfolio.Model.Singleton;
 import com.ufcspa.unasus.appportfolio.Model.Tuple;
 import com.ufcspa.unasus.appportfolio.Model.VersionActivity;
 import com.ufcspa.unasus.appportfolio.database.DataBaseAdapter;
@@ -140,6 +141,9 @@ public class FirstSync {
         data.insertReference(references);
         data.insertComments(comments);
         data.insertVersionActivity(versionActivities);
+        if (Singleton.getInstance().firstSync)
+            versionActivities.getLast().setId_version_activit_srv(0);
+            data.insertVersionActivity(versionActivities.getLast());
 
         for (CommentVersion cv: commentVersions) {
             data.insertCommentVersion(cv);
