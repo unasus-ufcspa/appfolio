@@ -21,6 +21,7 @@ public class Singleton {
     public boolean isFullscreen = false;
     public boolean wasFullscreen = false;
     public boolean isFirstSpecificComment = false;
+    public boolean firstSync = false;
 
     public Observation actualObservation= new Observation();
 
