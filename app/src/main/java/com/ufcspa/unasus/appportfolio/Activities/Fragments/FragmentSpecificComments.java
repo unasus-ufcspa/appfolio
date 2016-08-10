@@ -463,7 +463,7 @@ public class FragmentSpecificComments extends Frag {
 
 
             }else{
-                idObservation = source.getIdObservationByNuCommentActivy(singleton.actualObservation.getNu_comment_activity());
+                idObservation = source.getIdObservationByNuCommentActivy(singleton.idActivityStudent,singleton.actualObservation.getNu_comment_activity());
             }
             c.setId_comment_version(idObservation);
 
@@ -516,7 +516,7 @@ public class FragmentSpecificComments extends Frag {
         if(spcAdapter!=null) {
             Singleton single = Singleton.getInstance();
            // if(single.note.getSelectedText().isEmpty()) {
-            String r=source.getIdObservationTextByNuCommentActivy(single.note.getBtId());
+            String r=source.getIdObservationTextByNuCommentActivy(singleton.idActivityStudent,single.note.getBtId());
             if (!r.isEmpty())
                 single.note.setSelectedText(r);
             //}
@@ -528,7 +528,7 @@ public class FragmentSpecificComments extends Frag {
                 }
                 //noteNow.setSelectedText(lista.get(0).getTxtReference());
                 Log.d("comments noteNow","lista:"+lista.get(0).toJSON());
-            }
+            }lista.clear();
 
 
             if(noteNow!=null){
@@ -555,7 +555,7 @@ public class FragmentSpecificComments extends Frag {
         return strDate;
     }
 
-    public String convertDateToTime(String atualDate){
+    public String convertDateToTime(String atualDate){// TODO: 09/08/2016 formatos de data
         String shortTimeStr="00:00";
         Log.d("comments","date receiving :"+atualDate);
         try {

@@ -141,9 +141,13 @@ public class FirstSync {
         data.insertReference(references);
         data.insertComments(comments);
         data.insertVersionActivity(versionActivities);
-        if (Singleton.getInstance().firstSync)
-            versionActivities.getLast().setId_version_activit_srv(0);
-            data.insertVersionActivity(versionActivities.getLast());
+        if (Singleton.getInstance().firstSync && data.selectListClassAndUserType(Singleton.getInstance().user.getIdUser()).get(data.selectListClassAndUserType(Singleton.getInstance().user.getIdUser()).size()-1).getPerfil().equalsIgnoreCase("S"))
+            for (VersionActivity versionAct:versionActivities) {
+                if (versionAct.getTx_activity()!=null) {
+                    versionAct.setId_version_activit_srv(0);
+                    data.insertVersionActivity(versionAct);
+                }
+            }
 
         for (CommentVersion cv: commentVersions) {
             data.insertCommentVersion(cv);

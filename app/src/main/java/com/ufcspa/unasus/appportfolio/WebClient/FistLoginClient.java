@@ -98,7 +98,7 @@ public class FistLoginClient extends HttpClient {
                                 FirstSyncClient fsclient = new FirstSyncClient(context);
                                 fsclient.postJson(FirstSync.toJSON(Singleton.getInstance().user.getIdUser(), Singleton.getInstance().device.get_id_device()));
                             }
-                            Log.d("first sync",user.getIdUser()+Singleton.getInstance().device.get_id_device());
+                            Log.d("first sync",user.getIdUser()+" "+Singleton.getInstance().device.get_id_device());
                         }
 
 
