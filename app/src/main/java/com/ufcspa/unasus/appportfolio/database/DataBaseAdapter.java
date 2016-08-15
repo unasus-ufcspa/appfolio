@@ -2637,7 +2637,7 @@ public class DataBaseAdapter {
             cv.put("id_version_activity_srv", va.getId_version_activit_srv());
 
 
-            String query = "SELECT id_version_activity FROM tb_version_activity WHERE id_version_activity_srv=" + va.getId_version_activit_srv();
+            String query = "SELECT * FROM tb_version_activity WHERE id_version_activity_srv=" + va.getId_version_activit_srv();
             Cursor c = db.rawQuery(query, null);
 
             if (c.moveToFirst()) {
@@ -2948,9 +2948,9 @@ public class DataBaseAdapter {
                 versionActivity.setId_version_activity(c.getInt(0));
                 versionActivity.setId_activity_student(c.getInt(1));
                 versionActivity.setTx_activity(c.getString(2));
-                versionActivity.setTx_activity(versionActivity.getTx_activity().replaceAll("\\/", "/"));
-                versionActivity.setTx_activity(versionActivity.getTx_activity().replaceAll("\n", ""));
-                versionActivity.setTx_activity(versionActivity.getTx_activity().replaceAll("<br\\/>", "<br/>"));
+//                versionActivity.setTx_activity(versionActivity.getTx_activity().replaceAll("\\/", "/"));
+//                versionActivity.setTx_activity(versionActivity.getTx_activity().replaceAll("\n", ""));
+//                versionActivity.setTx_activity(versionActivity.getTx_activity().replaceAll("<br\\/>", "<br/>"));
                 if (c.getString(3) != null)
                     versionActivity.setDt_last_access(c.getString(3));
                 else
@@ -3042,7 +3042,7 @@ public class DataBaseAdapter {
             }
 
     }
-    public int getIDVerionSrvByLocalID(int idVersion){
+    public int getIDVersionSrvByLocalID(int idVersion){
         StringBuilder sb = new StringBuilder("SELECT id_version_activity_srv FROM tb_version_activity where id_version_activity="+idVersion);
         Cursor c = db.rawQuery(sb.toString(), null);
         if (c.moveToFirst()) {

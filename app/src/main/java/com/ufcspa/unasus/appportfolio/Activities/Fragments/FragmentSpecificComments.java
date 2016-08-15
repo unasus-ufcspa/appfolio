@@ -31,7 +31,6 @@ import com.ufcspa.unasus.appportfolio.Activities.MainActivity;
 import com.ufcspa.unasus.appportfolio.Adapter.SpecificCommentAdapter;
 import com.ufcspa.unasus.appportfolio.Model.Attachment;
 import com.ufcspa.unasus.appportfolio.Model.Comentario;
-import com.ufcspa.unasus.appportfolio.Model.CommentVersion;
 import com.ufcspa.unasus.appportfolio.Model.Note;
 import com.ufcspa.unasus.appportfolio.Model.OneComment;
 import com.ufcspa.unasus.appportfolio.Model.Singleton;
@@ -230,9 +229,10 @@ public class FragmentSpecificComments extends Frag {
     public void loadCommentsFromDB(){
         try {
             DataBaseAdapter db = DataBaseAdapter.getInstance(getActivity());
+
             Log.d("activity","actual version_activity:"+singleton.idCurrentVersionActivity );
 
-            Log.d("observations","list observations:" + db.getObservation(db.getIDVerionSrvByLocalID(singleton.idVersionActivity)).toString());
+            Log.d("observations","list observations:" + db.getObservation(db.getIDVersionSrvByLocalID(singleton.idCurrentVersionActivity)).toString());
             Log.d("observations","list ALL observations:" + db.getObservationALL().toString());
             Singleton singleton = Singleton.getInstance();
             lista = (ArrayList<Comentario>) db.listObsComments(singleton.activity.getIdActivityStudent(), singleton.note.getBtId());//lista comentario gerais filtrando por O
@@ -433,7 +433,7 @@ public class FragmentSpecificComments extends Frag {
             // recupera n_nota criada
             singleton.actualObservation.setNu_comment_activity(noteNow.getBtId());
             singleton.actualObservation.setTx_reference(noteNow.getSelectedText());
-            singleton.actualObservation.setId_version_activity(source.getIDVerionSrvByLocalID(singleton.idVersionActivity));
+            singleton.actualObservation.setId_version_activity(source.getIDVersionSrvByLocalID(singleton.idVersionActivity));
             singleton.actualObservation.setId_comment_version_srv(singleton.actualObservation.getId_comment_version());
 
 
@@ -515,11 +515,11 @@ public class FragmentSpecificComments extends Frag {
     private void insertReference(){
         if(spcAdapter!=null) {
             Singleton single = Singleton.getInstance();
-           // if(single.note.getSelectedText().isEmpty()) {
+            if(single.note.getSelectedText().isEmpty()) {
             String r=source.getIdObservationTextByNuCommentActivy(singleton.idActivityStudent,single.note.getBtId());
             if (!r.isEmpty())
                 single.note.setSelectedText(r);
-            //}
+            }
             noteNow = single.note;
 
             if (lista != null && lista.size() != 0) { // se a lista nao estiver vazia quer dizer que a nota de referencia já existe no banco
@@ -528,7 +528,7 @@ public class FragmentSpecificComments extends Frag {
                 }
                 //noteNow.setSelectedText(lista.get(0).getTxtReference());
                 Log.d("comments noteNow","lista:"+lista.get(0).toJSON());
-            }lista.clear();
+            }
 
 
             if(noteNow!=null){
