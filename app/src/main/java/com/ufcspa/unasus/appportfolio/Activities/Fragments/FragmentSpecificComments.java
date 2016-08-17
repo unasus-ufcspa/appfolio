@@ -516,9 +516,10 @@ public class FragmentSpecificComments extends Frag {
         if(spcAdapter!=null) {
             Singleton single = Singleton.getInstance();
             if(single.note.getSelectedText().isEmpty()) {
-            String r=source.getIdObservationTextByNuCommentActivy(singleton.idActivityStudent,single.note.getBtId());
-            if (!r.isEmpty())
-                single.note.setSelectedText(r);
+                String r=source.getIdObservationTextByNuCommentActivy(singleton.idActivityStudent,single.note.getBtId());
+                if (!r.isEmpty()) {
+                    single.note.setSelectedText(r);
+                }
             }
             noteNow = single.note;
 

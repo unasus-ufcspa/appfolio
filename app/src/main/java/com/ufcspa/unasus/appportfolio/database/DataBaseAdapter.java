@@ -1392,6 +1392,21 @@ public class DataBaseAdapter {
         return 0;
     }
 
+    public int getLastIDVersionActivitySrv(int idActivityStudent) {
+        String query = "SELECT MAX(id_version_activity_srv) FROM tb_version_activity WHERE id_activity_student=" + idActivityStudent;
+        Cursor c = null;
+        try {
+            c = db.rawQuery(query, null);
+            if (c.moveToFirst())
+                return c.getInt(0);
+            else
+                return 0;
+        } catch (Exception e) {
+            Log.e(tag, "erro ao buscar last id version:" + e.getMessage());
+        }
+        return 0;
+    }
+
     public ActivityStudent listLastVersionActivityStudent(int idActivityStudent) {
         ActivityStudent acStudent = new ActivityStudent();
         String query = "select tx_activity from tb_version_activity WHERE id_version_activity=(SELECT MAX(id_version_activity) FROM tb_version_activity WHERE id_activity_student=" + idActivityStudent + ");";

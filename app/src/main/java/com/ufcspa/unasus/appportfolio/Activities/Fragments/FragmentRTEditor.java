@@ -832,7 +832,11 @@ public class FragmentRTEditor extends Frag {
                     }
 
                     singleton.note.setBtY(yPosition);
-                    singleton.note.setSelectedText(source.getIdObservationTextByNuCommentActivy(singleton.idActivityStudent,singleton.note.getBtId()));
+                    if (source.selectListClassAndUserType(Singleton.getInstance().user.getIdUser()).get(source.selectListClassAndUserType(Singleton.getInstance().user.getIdUser()).size()-1).getPerfil().equalsIgnoreCase("T")) {
+                        singleton.note.setSelectedText(selectedActualText);
+                    }else {
+                        singleton.note.setSelectedText(source.getIdObservationTextByNuCommentActivy(singleton.idActivityStudent,singleton.note.getBtId()));
+                    }
                     singleton.note.setBtId(id);
 
                     getView().findViewById(R.id.general_comment_notice).setVisibility(View.GONE);

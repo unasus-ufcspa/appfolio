@@ -141,12 +141,15 @@ public class FirstSync {
         data.insertReference(references);
         data.insertComments(comments);
         data.insertVersionActivity(versionActivities);
+        ArrayList<VersionActivity> tmp = new ArrayList<VersionActivity>();
         if (Singleton.getInstance().firstSync && data.selectListClassAndUserType(Singleton.getInstance().user.getIdUser()).size()-1 >= 0 && data.selectListClassAndUserType(Singleton.getInstance().user.getIdUser()).get(data.selectListClassAndUserType(Singleton.getInstance().user.getIdUser()).size()-1).getPerfil().equalsIgnoreCase("S")) {
             for (VersionActivity versionAct:versionActivities) {
-                if (versionAct.getTx_activity()!=null) {
+                if (versionAct.getId_version_activit_srv() == data.getLastIDVersionActivitySrv(versionAct.getId_activity_student()))
+                    tmp.add(versionAct);
+            }
+            for (VersionActivity versionAct:tmp) {
                     versionAct.setId_version_activit_srv(0);
                     data.insertVersionActivity(versionAct);
-                }
             }
         }
 
