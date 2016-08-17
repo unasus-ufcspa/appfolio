@@ -74,7 +74,6 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
-import java.util.LinkedList;
 
 
 public class FragmentRTEditor extends Frag {
@@ -798,7 +797,7 @@ public class FragmentRTEditor extends Frag {
      */
     public void getIdNotesFromDB() {
         specificCommentsNotes = new HashMap<>();
-        ArrayList<Observation> obs = (ArrayList<Observation>) source.getObservation(source.getIDVerionSrvByLocalID(singleton.idCurrentVersionActivity)); //source.listSpecificComments(singleton.idActivityStudent);
+        ArrayList<Observation> obs = (ArrayList<Observation>) source.getObservation(source.getIDVersionSrvByLocalID(singleton.idCurrentVersionActivity)); //source.listSpecificComments(singleton.idActivityStudent);
         for (int i=0;i<obs.size();i++) {
             Observation o = obs.get(i);
             specificCommentsNotes.put(o.getNu_comment_activity(), new Note(o.getNu_comment_activity(),o.getTx_reference(), 0));
@@ -833,7 +832,11 @@ public class FragmentRTEditor extends Frag {
                     }
 
                     singleton.note.setBtY(yPosition);
-                    singleton.note.setSelectedText(selectedActualText);
+                    if (source.selectListClassAndUserType(Singleton.getInstance().user.getIdUser()).get(source.selectListClassAndUserType(Singleton.getInstance().user.getIdUser()).size()-1).getPerfil().equalsIgnoreCase("T")) {
+                        singleton.note.setSelectedText(selectedActualText);
+                    }else {
+                        singleton.note.setSelectedText(source.getIdObservationTextByNuCommentActivy(singleton.idActivityStudent,singleton.note.getBtId()));
+                    }
                     singleton.note.setBtId(id);
 
                     getView().findViewById(R.id.general_comment_notice).setVisibility(View.GONE);
