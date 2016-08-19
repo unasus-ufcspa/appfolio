@@ -82,7 +82,7 @@ public class VersionsAdapter extends BaseAdapter {
 
         holder.versionNumber.setText("" + (list.size() - position));
 
-        int notifications = source.getSpecificCommentNotifications(aux.getId_activity_student(), aux.getId_version_activity());
+        int notifications = source.getSpecificCommentNotifications(aux.getId_activity_student(), aux.getId_version_activit_srv());
         if (notifications > 0)
             holder.notificationIcon.setText(String.valueOf(notifications));
         else

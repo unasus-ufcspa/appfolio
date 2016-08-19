@@ -2456,7 +2456,7 @@ public class DataBaseAdapter {
                 String sql = "SELECT COUNT(*) from tb_comment as tbc " +
                         "JOIN tb_comment_version as tbcv on tbcv.id_comment_version = tbc.id_comment_version " +
                         "JOIN tb_version_activity as tbva on tbva.id_version_activity = tbcv.id_version_activity" +
-                        " WHERE tbva.id_version_activity = " + idVersionActivity + " AND tbc.id_comment_srv = " + c.getInt(0) + " AND tbc.tp_comment = 'O'";
+                        " WHERE tbva.id_version_activity_srv = " + idVersionActivity + " AND tbc.id_comment_srv = " + c.getInt(0) + " AND tbc.tp_comment = 'O'";
 
                 Cursor newCursor = db.rawQuery(sql, null);
                 if (newCursor.moveToFirst()) {
