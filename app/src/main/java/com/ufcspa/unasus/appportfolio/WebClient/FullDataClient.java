@@ -321,8 +321,11 @@ public class FullDataClient extends HttpClient {
                                                 String dt_last_access = temp.getString("dt_last_access");
                                                 String dt_submission = temp.getString("dt_submission");
                                                 String dt_verification = temp.getString("dt_verification");
-                                                int id_version_activity_srv = temp.getInt("id_version_activity");
-
+                                                int id_version_activity_srv=0;
+                                                if (temp.has("id_version_activity_srv")) {
+                                                    id_version_activity_srv = temp.getInt("id_version_activity_srv");
+                                                }else
+                                                    id_version_activity_srv = temp.getInt("id_version_activity");
 
                                                 versionActivity.setId_activity_student(id_activity_student);
                                                 versionActivity.setTx_activity(tx_activity);

@@ -1557,6 +1557,15 @@ public class DataBaseAdapter {
         cursor.close();
         return -1;
     }
+    public int getIdVersionSrvFromIdVersion(int id) {
+        String query = "SELECT id_version_activity_srv FROM tb_version_activity WHERE id_version_activity = " + id;
+        Cursor cursor = db.rawQuery(query, null);
+        if (cursor.moveToFirst()) {
+            return cursor.getInt(0);
+        }
+        cursor.close();
+        return -1;
+    }
 
     private int getIdCommentFromIdCommentSrv(int idSrv) {
         String query = "SELECT id_comment FROM tb_comment WHERE id_comment_srv = " + idSrv;
@@ -2400,7 +2409,7 @@ public class DataBaseAdapter {
         return result;
     }
 
-    public ArrayList<Integer> getSpecificCommentsNotificationsID(int idActivityStudent, int idVersionActivity) {
+    public ArrayList<Integer> getSpecificCommentsNotificationsID(int idActivityStudent, int idVersionActivitySrv) {
         String query = "SELECT tbs.co_id_table_srv, tbs.id_notice FROM tb_activity_student as tbas\n" +
                 "JOIN tb_notice tbs on tbs.id_activity_student = tbas.id_activity_student\n" +
                 "WHERE tbs.id_activity_student = " + idActivityStudent + " AND tbs.nm_table = 'tb_comment'";
@@ -2411,8 +2420,8 @@ public class DataBaseAdapter {
             do {
                 String sql = "SELECT COUNT(*) from tb_comment as tbc " +
                         "JOIN tb_comment_version as tbcv on tbcv.id_comment_version = tbc.id_comment_version " +
-                        "JOIN tb_version_activity as tbva on tbva.id_version_activity = tbcv.id_version_activity" +
-                        " WHERE tbva.id_version_activity = " + idVersionActivity + " AND tbc.id_comment_srv = " + c.getInt(0) + " AND tbc.tp_comment = 'O'";
+                        "JOIN tb_version_activity as tbva on tbva.id_version_activity_srv = tbcv.id_version_activity" +
+                        " WHERE tbva.id_version_activity_srv = " + idVersionActivitySrv + " AND tbc.id_comment_srv = " + c.getInt(0) + " AND tbc.tp_comment = 'O'";
 
                 Cursor newCursor = db.rawQuery(sql, null);
                 if (newCursor.moveToFirst()) {
@@ -2455,7 +2464,7 @@ public class DataBaseAdapter {
             do {
                 String sql = "SELECT COUNT(*) from tb_comment as tbc " +
                         "JOIN tb_comment_version as tbcv on tbcv.id_comment_version = tbc.id_comment_version " +
-                        "JOIN tb_version_activity as tbva on tbva.id_version_activity = tbcv.id_version_activity" +
+                        "JOIN tb_version_activity as tbva on tbva.id_version_activity_srv = tbcv.id_version_activity" +
                         " WHERE tbva.id_version_activity_srv = " + idVersionActivity + " AND tbc.id_comment_srv = " + c.getInt(0) + " AND tbc.tp_comment = 'O'";
 
                 Cursor newCursor = db.rawQuery(sql, null);

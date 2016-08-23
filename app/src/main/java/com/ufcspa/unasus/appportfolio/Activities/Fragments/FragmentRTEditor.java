@@ -1243,7 +1243,7 @@ public class FragmentRTEditor extends Frag {
     }
 
     private void removeSpecificCommentsNotifications() {
-        ArrayList<Integer> idsNotification = source.getSpecificCommentsNotificationsID(singleton.idActivityStudent, singleton.idCurrentVersionActivity);
+        ArrayList<Integer> idsNotification = source.getSpecificCommentsNotificationsID(singleton.idActivityStudent, source.getIdVersionSrvFromIdVersion(singleton.idCurrentVersionActivity));
         for (Integer id : idsNotification) {
             Sync sync = new Sync(singleton.device.get_id_device(), "tb_notice", id, singleton.idActivityStudent);
             DataBaseAdapter.getInstance(getContext()).insertIntoTBSync(sync);
