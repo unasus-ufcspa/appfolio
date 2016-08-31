@@ -398,22 +398,22 @@ public class ConverterSpannedToHtml {
             mOut.append("<strike>");
         }
 	    /* Examples for fonts styles:
-	       <font face="verdana" style="font-size:25px;background-color:#00ff00;color:#ff0000">This is heading 1</font>
-		   <font face="DroidSans" style="font-size:50px;background-color:#0000FF;color:#FFFF00">This is heading 2</font>
+	       <span face="verdana" style="span-size:25px;background-color:#00ff00;color:#ff0000">This is heading 1</span>
+		   <span face="DroidSans" style="span-size:50px;background-color:#0000FF;color:#FFFF00">This is heading 2</span>
 		*/
         else if (style instanceof TypefaceSpan) {
-            mOut.append("<font face=\"");
+            mOut.append("<span face=\"");
             String fontName = ((TypefaceSpan)style).getValue().getName();
             mOut.append(StringEscapeUtils.escapeHtml4(fontName));
             mOut.append("\">");
         } else if (style instanceof AbsoluteSizeSpan) {
-            mOut.append("<font style=\"font-size:");
+            mOut.append("<span style=\"span-size:");
             int size = ((AbsoluteSizeSpan) style).getSize();
             size = Helper.convertSpToPx(size);
             mOut.append(size);
             mOut.append("px\">");
         } else if (style instanceof ForegroundColorSpan) {
-            mOut.append("<font style=\"color:#");
+            mOut.append("<span style=\"color:#");
             String color = Integer.toHexString(((ForegroundColorSpan) style).getForegroundColor() + 0x01000000);
             while (color.length() < 6) {
                 color = "0" + color;
@@ -426,7 +426,7 @@ public class ConverterSpannedToHtml {
             else
                 ((BackgroundColorSpan) style).setOpen(true);
             int id = ((BackgroundColorSpan)style).getId();
-            mOut.append("<font id=" + id + " style=\"background-color:#");
+            mOut.append("<span id=" + id + " style=\"background-color:#");
             String color = Integer.toHexString(((BackgroundColorSpan) style).getBackgroundColor() + 0x01000000);
             while (color.length() < 6) {
                 color = "0" + color;
@@ -464,15 +464,15 @@ public class ConverterSpannedToHtml {
         if (style instanceof URLSpan) {
             mOut.append("</a>");
         } else if (style instanceof TypefaceSpan) {
-            mOut.append("</font>");
+            mOut.append("</span>");
         } else if (style instanceof ForegroundColorSpan) {
-            mOut.append("</font>");
+            mOut.append("</span>");
         } else if (style instanceof BackgroundColorSpan) {
             int id = ((BackgroundColorSpan)style).getId();
-           // mOut.append("</font><!--id=" + id + "-->");
-            mOut.append("</font>");
+           // mOut.append("</span><!--id=" + id + "-->");
+            mOut.append("</span>");
         } else if (style instanceof AbsoluteSizeSpan) {
-            mOut.append("</font>");
+            mOut.append("</span>");
         } else if (style instanceof StrikethroughSpan) {
             mOut.append("</strike>");
         } else if (style instanceof SubscriptSpan) {
