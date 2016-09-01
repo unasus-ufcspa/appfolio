@@ -56,7 +56,7 @@ public class PrivacyPolicyActivity extends AppCompatActivity {
         idUser = Singleton.getInstance().user.getIdUser();
 
         String txPolicy = DataBaseAdapter.getInstance(getBaseContext()).getPolicyByUserID(idUser).getTxPolicy();
-        Log.d("Policy", txPolicy);
+//        Log.d("Policy", txPolicy);
 
         policyTX.setText(/*"TERMOS DE USO \n" + */txPolicy);
 
