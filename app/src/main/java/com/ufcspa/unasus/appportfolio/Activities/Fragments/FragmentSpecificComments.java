@@ -515,11 +515,12 @@ public class FragmentSpecificComments extends Frag {
     private void insertReference(){
         if(spcAdapter!=null) {
             Singleton single = Singleton.getInstance();
-            if(single.note.getSelectedText().isEmpty()) {
-                String r=source.getIdObservationTextByNuCommentActivy(singleton.idActivityStudent,single.note.getBtId());
+            if(single.note.getSelectedText().isEmpty()||single.note.getSelectedText().equals("null")) {
+                String r=source.getIdObservationTextByNuCommentActivy(single.idActivityStudent,single.note.getBtId());
                 if (!r.isEmpty()) {
                     single.note.setSelectedText(r);
-                }
+                }else
+                    single.note.setSelectedText(singleton.selectedText);
             }
             noteNow = single.note;
 
