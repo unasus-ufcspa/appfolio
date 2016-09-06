@@ -282,7 +282,7 @@ public class FragmentRTEditor extends Frag {
                                         version.setDt_last_access(getActualTime());
                                         //version.setId_version_activit_srv(version.getId_version_activity());
                                         int id = data.insertVersionActivity(version);
-                                        data.updateVersionsBySendFullData(id);
+                                        data.updateVersionsBySendFullData(0,id);
                                         singleton.idVersionActivity = id;
                                         singleton.idCurrentVersionActivity = id;
 
@@ -339,7 +339,7 @@ public class FragmentRTEditor extends Frag {
             version.setId_activity_student(Singleton.getInstance().idActivityStudent);
             version.setDt_last_access(getActualTime());
             int id = source.insertVersionActivity(version);
-            source.updateVersionsBySendFullData(id);
+            source.updateVersionsBySendFullData(0,id);
             singleton.idVersionActivity = id;
             singleton.idCurrentVersionActivity = id;
         }
