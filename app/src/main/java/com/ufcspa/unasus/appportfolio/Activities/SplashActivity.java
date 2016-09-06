@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 
+import com.facebook.stetho.Stetho;
 import com.ufcspa.unasus.appportfolio.Model.Device;
 import com.ufcspa.unasus.appportfolio.Model.Singleton;
 import com.ufcspa.unasus.appportfolio.database.DataBaseAdapter;
@@ -27,6 +28,8 @@ public class SplashActivity extends AppCompatActivity {
         String id =telephonyManager.getDeviceId();
         Log.d("ANDROID ID", "getting android ID BY IMEI...");
         Log.d("ANDROID ID","Android ID IMEI:"+id);*/
+
+        Stetho.initializeWithDefaults(this);
 
         DataBaseAdapter adapter = DataBaseAdapter.getInstance(this);
         Singleton singleton = Singleton.getInstance();
