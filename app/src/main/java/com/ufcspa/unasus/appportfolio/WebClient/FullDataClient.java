@@ -13,11 +13,9 @@ import com.android.volley.toolbox.Volley;
 import com.ufcspa.unasus.appportfolio.Activities.MainActivity;
 import com.ufcspa.unasus.appportfolio.Model.Attachment;
 import com.ufcspa.unasus.appportfolio.Model.Comentario;
-import com.ufcspa.unasus.appportfolio.Model.CommentVersion;
 import com.ufcspa.unasus.appportfolio.Model.Notification;
 import com.ufcspa.unasus.appportfolio.Model.Observation;
 import com.ufcspa.unasus.appportfolio.Model.Reference;
-import com.ufcspa.unasus.appportfolio.Model.Tuple;
 import com.ufcspa.unasus.appportfolio.Model.VersionActivity;
 
 import org.json.JSONArray;
@@ -324,6 +322,37 @@ public class FullDataClient extends HttpClient {
                                                 int id_version_activity_srv=0;
                                                 if (temp.has("id_version_activity_srv")) {
                                                     id_version_activity_srv = temp.getInt("id_version_activity_srv");
+                                                }else
+                                                    id_version_activity_srv = 0;
+
+                                                versionActivity.setId_activity_student(id_activity_student);
+                                                versionActivity.setTx_activity(tx_activity);
+                                                versionActivity.setDt_last_access(dt_last_access);
+                                                versionActivity.setDt_submission(dt_submission);
+                                                versionActivity.setDt_verification(dt_verification);
+                                                versionActivity.setId_version_activit_srv(id_version_activity_srv);
+
+                                                fullData.addVersion(versionActivity);
+                                            }
+                                        }
+                                    }
+
+                                    if (data.has("version_activity_update")) {
+                                        JSONObject version = data.getJSONObject("version_activity_update");
+                                        if (version.has("tb_version_activity_update")) {
+                                            JSONArray tb_version_activity = version.getJSONArray("tb_version_activity_update");
+                                            for (int i = 0; i < tb_version_activity.length(); i++) {
+                                                JSONObject temp = tb_version_activity.getJSONObject(i);
+                                                VersionActivity versionActivity = new VersionActivity();
+
+                                                int id_activity_student = temp.getInt("id_activity_student");
+                                                String tx_activity = temp.getString("tx_activity");
+                                                String dt_last_access = temp.getString("dt_last_access");
+                                                String dt_submission = temp.getString("dt_submission");
+                                                String dt_verification = temp.getString("dt_verification");
+                                                int id_version_activity_srv;
+                                                if (temp.has("id_version_activity")) {
+                                                    id_version_activity_srv = temp.getInt("id_version_activity");
                                                 }else
                                                     id_version_activity_srv = 0;
 

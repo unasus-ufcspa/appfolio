@@ -645,7 +645,7 @@ public class DataBaseAdapter {
 
 
     public int getIdObservationByNuCommentActivy(int id_activity_student, int nu_comment_activity) {
-        String query = "select id_comment_version from tb_comment_version cv JOIN tb_version_activity va ON va.id_version_activity_srv=cv.id_version_activity WHERE va.id_activity_student=" + id_activity_student + " AND nu_comment_activity= " + nu_comment_activity;
+        String query = "select id_comment_version from tb_comment_version cv JOIN tb_version_activity va ON va.id_version_activity=cv.id_version_activity WHERE va.id_activity_student=" + id_activity_student + " AND nu_comment_activity= " + nu_comment_activity;
         Cursor c = db.rawQuery(query, null);
         int id=-1;
         if (c.moveToFirst()) {
@@ -657,7 +657,7 @@ public class DataBaseAdapter {
     }
 
     public String getIdObservationTextByNuCommentActivy(int id_activity_student, int nu_comment_activity) {
-        String query = "select distinct tx_reference from tb_comment_version cv JOIN tb_version_activity va ON va.id_version_activity_srv=cv.id_version_activity WHERE va.id_activity_student=" + id_activity_student + " AND nu_comment_activity= " + nu_comment_activity;
+        String query = "select distinct tx_reference from tb_comment_version cv JOIN tb_version_activity va ON va.id_version_activity=cv.id_version_activity WHERE va.id_activity_student=" + id_activity_student + " AND nu_comment_activity= " + nu_comment_activity;
         Cursor c = db.rawQuery(query, null);
         String r= new String();
         //Observation obs= new Observation();
