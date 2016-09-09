@@ -645,7 +645,7 @@ public class DataBaseAdapter {
 
 
     public int getIdObservationByNuCommentActivy(int id_activity_student, int nu_comment_activity) {
-        String query = "select id_comment_version from tb_comment_version cv JOIN tb_version_activity va ON va.id_version_activity=cv.id_version_activity WHERE va.id_activity_student=" + id_activity_student + " AND nu_comment_activity= " + nu_comment_activity;
+        String query = "select id_comment_version from tb_comment_version cv JOIN tb_version_activity va ON va.id_version_activity_srv=cv.id_version_activity WHERE va.id_activity_student=" + id_activity_student + " AND nu_comment_activity= " + nu_comment_activity;
         Cursor c = db.rawQuery(query, null);
         int id=-1;
         if (c.moveToFirst()) {
@@ -657,12 +657,12 @@ public class DataBaseAdapter {
     }
 
     public String getIdObservationTextByNuCommentActivy(int id_activity_student, int nu_comment_activity) {
-        String query = "select distinct tx_reference from tb_comment_version cv JOIN tb_version_activity va ON va.id_version_activity=cv.id_version_activity WHERE va.id_activity_student=" + id_activity_student + " AND nu_comment_activity= " + nu_comment_activity;
+        String query = "select distinct tx_reference from tb_comment_version cv JOIN tb_version_activity va ON va.id_version_activity_srv=cv.id_version_activity WHERE va.id_activity_student=" + id_activity_student + " AND nu_comment_activity= " + nu_comment_activity;
         Cursor c = db.rawQuery(query, null);
         String r= new String();
         //Observation obs= new Observation();
         if (c.moveToFirst()) {
-           r  = c.getString(0);
+            r  = c.getString(0);
             Log.d("tx_observation",r);
         }
 
@@ -780,7 +780,7 @@ public class DataBaseAdapter {
 
 
     public int getPersonalComment(int idActSt){
-       int id=-1;
+        int id=-1;
         String sql = "select * from tb_comment WHERE tp_comment ='P' AND id_activity_student=" + idActSt + ";";
         Cursor c = db.rawQuery(sql, null);
         if (c.moveToFirst()) {
@@ -951,7 +951,7 @@ public class DataBaseAdapter {
             stBuild.append(" AND tp_comment='" + typeComment + "' ");
         }
 
-       //stBuild.append(" AND c.id_comment_version = 0 OR c.id_comment_version = null"); // lista comentarios que não estao ligados a uma versao(gerais ou pessoais)
+        //stBuild.append(" AND c.id_comment_version = 0 OR c.id_comment_version = null"); // lista comentarios que não estao ligados a uma versao(gerais ou pessoais)
 
         //sql+=" ORDER BY dt_comment ASC;";
         stBuild.append(" ORDER BY dt_send ASC");
@@ -1659,13 +1659,13 @@ public class DataBaseAdapter {
     }
 
     public boolean cvIsSyncronized(int id_comment_version) {
-            String query = "SELECT * FROM tb_comment_version WHERE id_comment_version_srv = " + id_comment_version +" AND fl_srv='S'";
-            Cursor c = db.rawQuery(query, null);
-            if (c.moveToFirst()) {
-                return true;
-            }else{
-                return false;
-            }
+        String query = "SELECT * FROM tb_comment_version WHERE id_comment_version_srv = " + id_comment_version +" AND fl_srv='S'";
+        Cursor c = db.rawQuery(query, null);
+        if (c.moveToFirst()) {
+            return true;
+        }else{
+            return false;
+        }
     }
 
 
@@ -1738,7 +1738,7 @@ public class DataBaseAdapter {
 
 
 
-        // TÁ ERRADO
+    // TÁ ERRADO
     public LinkedList<Comentario> getCommentVersion(int idVersion) {
         String query = "SELECT " +
                 "\tc.id_comment,\n" +
@@ -2753,17 +2753,17 @@ public class DataBaseAdapter {
     }
 
     public void insertAttachmentActivity(int id_activity_student, int id_attachment) {
-            ContentValues cv = new ContentValues();
+        ContentValues cv = new ContentValues();
         cv.put("id_attachment", id_attachment);
         cv.put("id_activity_student", id_activity_student);
 
-            try {
-                db.insert("tb_attach_activity", null, cv);
+        try {
+            db.insert("tb_attach_activity", null, cv);
 
-            } catch (Exception e) {
-                Log.d(tag, "erro ao inserir na tb_attach_activity:" + e.getMessage());
-                e.printStackTrace();
-            }
+        } catch (Exception e) {
+            Log.d(tag, "erro ao inserir na tb_attach_activity:" + e.getMessage());
+            e.printStackTrace();
+        }
     }
 
     public void insertAttachmentComment(LinkedList<AttachmentComment> anexosComentario) {
@@ -3032,12 +3032,12 @@ public class DataBaseAdapter {
 
     public void updateLastObservation(int id_comment_version) {
         ContentValues cv = new ContentValues();
-            cv.put("id_comment_version_srv", id_comment_version);
-            try {
-                db.update("tb_comment_version", cv, "id_comment_version=?", new String[]{"" +id_comment_version});
-            } catch (Exception e) {
-                Log.d(tag, e.getMessage());
-            }
+        cv.put("id_comment_version_srv", id_comment_version);
+        try {
+            db.update("tb_comment_version", cv, "id_comment_version=?", new String[]{"" +id_comment_version});
+        } catch (Exception e) {
+            Log.d(tag, e.getMessage());
+        }
     }
 
 
@@ -3058,12 +3058,12 @@ public class DataBaseAdapter {
 
     public void updateVersionsBySendFullData(int idVersionSrv, int idVersion) {
         ContentValues cv = new ContentValues();
-            cv.put("id_version_activity_srv", idVersionSrv);
-            try {
-                db.update("tb_version_activity", cv, "id_version_activity=?", new String[]{"" + idVersion});
-            } catch (Exception e) {
-                Log.d(tag, e.getMessage());
-            }
+        cv.put("id_version_activity_srv", idVersionSrv);
+        try {
+            db.update("tb_version_activity", cv, "id_version_activity=?", new String[]{"" + idVersion});
+        } catch (Exception e) {
+            Log.d(tag, e.getMessage());
+        }
 
     }
     public int getIDVersionSrvByLocalID(int idVersion){

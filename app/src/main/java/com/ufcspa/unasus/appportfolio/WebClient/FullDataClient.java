@@ -16,6 +16,7 @@ import com.ufcspa.unasus.appportfolio.Model.Comentario;
 import com.ufcspa.unasus.appportfolio.Model.Notification;
 import com.ufcspa.unasus.appportfolio.Model.Observation;
 import com.ufcspa.unasus.appportfolio.Model.Reference;
+import com.ufcspa.unasus.appportfolio.Model.Singleton;
 import com.ufcspa.unasus.appportfolio.Model.VersionActivity;
 
 import org.json.JSONArray;
@@ -322,8 +323,10 @@ public class FullDataClient extends HttpClient {
                                                 int id_version_activity_srv=0;
                                                 if (temp.has("id_version_activity_srv")) {
                                                     id_version_activity_srv = temp.getInt("id_version_activity_srv");
-                                                }else
+                                                }else if (Singleton.getInstance().portfolioClass.getPerfil().equalsIgnoreCase("S")) {
                                                     id_version_activity_srv = 0;
+                                                }else
+                                                    id_version_activity_srv = temp.getInt("id_version_activity");
 
                                                 versionActivity.setId_activity_student(id_activity_student);
                                                 versionActivity.setTx_activity(tx_activity);
@@ -350,11 +353,13 @@ public class FullDataClient extends HttpClient {
                                                 String dt_last_access = temp.getString("dt_last_access");
                                                 String dt_submission = temp.getString("dt_submission");
                                                 String dt_verification = temp.getString("dt_verification");
-                                                int id_version_activity_srv;
+                                                int id_version_activity_srv = 0;
                                                 if (temp.has("id_version_activity")) {
                                                     id_version_activity_srv = temp.getInt("id_version_activity");
-                                                }else
+                                                }else if (Singleton.getInstance().portfolioClass.getPerfil().equalsIgnoreCase("S")) {
                                                     id_version_activity_srv = 0;
+                                                }else
+                                                    id_version_activity_srv = temp.getInt("id_version_activity");
 
                                                 versionActivity.setId_activity_student(id_activity_student);
                                                 versionActivity.setTx_activity(tx_activity);
