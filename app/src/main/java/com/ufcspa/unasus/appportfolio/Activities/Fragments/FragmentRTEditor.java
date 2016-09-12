@@ -434,7 +434,7 @@ public class FragmentRTEditor extends Frag {
 
                         int id = singleton.note.getBtId();
                         if (specificCommentsOpen && id > 0) {
-                            ArrayList<Comentario> lista = (ArrayList<Comentario>) source.listObsComments(singleton.activity.getIdActivityStudent(), id);
+                            ArrayList<Comentario> lista = (ArrayList<Comentario>) source.listObsComments(singleton.idActivityStudent, id);
                             if (lista == null || lista.size() == 0) {
                                 //Remove note from hash map
                                 specificCommentsNotes.remove(id);

@@ -235,7 +235,7 @@ public class FragmentSpecificComments extends Frag {
             Log.d("observations","list observations:" + db.getObservation(db.getIDVersionSrvByLocalID(singleton.idCurrentVersionActivity)).toString());
             Log.d("observations","list ALL observations:" + db.getObservationALL().toString());
             Singleton singleton = Singleton.getInstance();
-            lista = (ArrayList<Comentario>) db.listObsComments(singleton.activity.getIdActivityStudent(), singleton.note.getBtId());//lista comentario gerais filtrando por O
+            lista = (ArrayList<Comentario>) db.listObsComments(singleton.idActivityStudent, singleton.note.getBtId());//lista comentario gerais filtrando por O
             oneComments= new ArrayList<>(10);
             Log.d("comments","comentarios especificos:"+lista.toString());
 

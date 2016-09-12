@@ -427,9 +427,14 @@ public class FullDataClient extends HttpClient {
                                                 Observation obs = new Observation();
                                                 int id_version_activity = temp.getInt("id_version_activity");
                                                 int nu_comment_activity = temp.getInt("nu_comment_activity");
-                                                Integer nu_initial_pos = temp.getInt("nu_initial_pos");
-                                                if (nu_initial_pos == null) {
-                                                    nu_initial_pos = 0;
+                                                Integer nu_initial_pos = null;
+                                                try {
+                                                    nu_initial_pos = temp.getInt("nu_initial_pos");
+                                                } catch (JSONException e) {
+                                                    e.printStackTrace();
+                                                    if (nu_initial_pos == null) {
+                                                        nu_initial_pos = 0;
+                                                    }
                                                 }
                                                 int nu_size = temp.getInt("nu_size");
                                                 String tx_reference = temp.getString("tx_reference");
