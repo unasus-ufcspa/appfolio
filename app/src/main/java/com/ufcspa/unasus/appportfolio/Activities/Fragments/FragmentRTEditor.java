@@ -210,6 +210,7 @@ public class FragmentRTEditor extends Frag {
                 VersionActivity versionActivity = source.getVersionActivitiesByID(singleton.idCurrentVersionActivity);
                 versionActivity.setId_version_activit_srv(0);
                 source.insertVersionActivity(versionActivity);
+                singleton.firstSync=false;
             }
         }
 
