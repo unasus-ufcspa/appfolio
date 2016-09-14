@@ -206,6 +206,11 @@ public class FragmentRTEditor extends Frag {
         if(singleton.portfolioClass.getPerfil().equals("S")) {  // SE È ALUNO, MOSTRAR INFORMAÇÔES DO TUTOR
             userPerfil = source.getTutorPerfil(singleton.idActivityStudent);
             Log.d("tutorPerfil", "tutor data:" + userPerfil.toString());
+            if (singleton.firstSync){
+                VersionActivity versionActivity = source.getVersionActivitiesByID(singleton.idCurrentVersionActivity);
+                versionActivity.setId_version_activit_srv(0);
+                source.insertVersionActivity(versionActivity);
+            }
         }
 
         specificCommentsOpen = false;
