@@ -376,7 +376,7 @@ public class SendData {
                     jsonComment.put("dt_comment", comment.getDateComment());
 
 
-                    jsonComment.put("id_comment_version_srv",comment.getId_comment_version_srv());
+//                    jsonComment.put("id_comment_version_srv",comment.getId_comment_version_srv());
                     jsonComments.put(jsonComment);
                 }
             }
