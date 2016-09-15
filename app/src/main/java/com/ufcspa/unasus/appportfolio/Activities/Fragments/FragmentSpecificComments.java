@@ -434,7 +434,8 @@ public class FragmentSpecificComments extends Frag {
             singleton.actualObservation.setNu_comment_activity(noteNow.getBtId());
             singleton.actualObservation.setTx_reference(noteNow.getSelectedText());
             singleton.actualObservation.setId_version_activity(source.getIDVersionSrvByLocalID(singleton.idCurrentVersionActivity));
-            singleton.actualObservation.setId_comment_version_srv(singleton.actualObservation.getId_comment_version());
+            singleton.actualObservation.setId_comment_version(source.getIdObservationByNuCommentActivy(singleton.idActivityStudent,singleton.actualObservation.getNu_comment_activity()));
+            singleton.actualObservation.setId_comment_version_srv(source.getIdObservationSrvByNuCommentActivy(singleton.idActivityStudent,singleton.actualObservation.getNu_comment_activity()));
 
 
 

@@ -557,10 +557,10 @@ public class DataBaseAdapter {
 
     public boolean isFirstSpecificComment(int idActSt,int nu_comment_activity) {
         int id = -1;
-        String sql = "select * from tb_comment_version cv JOIN tb_version_activity va ON va.id_version_activity=cv.id_version_activity WHERE va.id_activity_student=" + idActSt + " AND nu_comment_activity= " + nu_comment_activity;
-        Log.e(tag,"is first specific comment sql:"+sql);
+        String sql = "select * from tb_comment_version cv JOIN tb_version_activity va ON va.id_version_activity_srv=cv.id_version_activity WHERE va.id_activity_student=" + idActSt + " AND nu_comment_activity= " + nu_comment_activity;
+        Log.d(tag,"is first specific comment sql:"+sql);
         Cursor c = db.rawQuery(sql, null);
-        if (c.moveToFirst()) {
+        if (c.getCount()>0) {
             return false;
         } else {
             return true;
@@ -646,6 +646,18 @@ public class DataBaseAdapter {
 
     public int getIdObservationByNuCommentActivy(int id_activity_student, int nu_comment_activity) {
         String query = "select id_comment_version from tb_comment_version cv JOIN tb_version_activity va ON va.id_version_activity_srv=cv.id_version_activity WHERE va.id_activity_student=" + id_activity_student + " AND nu_comment_activity= " + nu_comment_activity;
+        Cursor c = db.rawQuery(query, null);
+        int id=-1;
+        if (c.moveToFirst()) {
+            id = c.getInt(0);
+        }else {
+            id = 0;
+        }
+        return id;
+    }
+
+    public int getIdObservationSrvByNuCommentActivy(int id_activity_student, int nu_comment_activity) {
+        String query = "select id_comment_version_srv from tb_comment_version cv JOIN tb_version_activity va ON va.id_version_activity_srv=cv.id_version_activity WHERE va.id_activity_student=" + id_activity_student + " AND nu_comment_activity= " + nu_comment_activity;
         Cursor c = db.rawQuery(query, null);
         int id=-1;
         if (c.moveToFirst()) {

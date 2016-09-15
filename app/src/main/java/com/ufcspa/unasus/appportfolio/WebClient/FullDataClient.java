@@ -323,8 +323,8 @@ public class FullDataClient extends HttpClient {
                                                 int id_version_activity_srv=0;
                                                 if (temp.has("id_version_activity_srv")) {
                                                     id_version_activity_srv = temp.getInt("id_version_activity_srv");
-                                                }else if (Singleton.getInstance().portfolioClass.getPerfil().equalsIgnoreCase("S")) {
-                                                    id_version_activity_srv = 0;
+//                                                }else if (Singleton.getInstance().portfolioClass.getPerfil().equalsIgnoreCase("S")) {
+//                                                    id_version_activity_srv = 0;
                                                 }else
                                                     id_version_activity_srv = temp.getInt("id_version_activity");
 
