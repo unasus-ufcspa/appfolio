@@ -397,7 +397,12 @@ public class SendData {
 
 
                     jsonVersion.put("id_activity_student", v.getId_activity_student());
-                    jsonVersion.put("tx_activity", v.getTx_activity());
+
+                    String tx_activity = v.getTx_activity();
+                    tx_activity = tx_activity.replaceAll("<font id","<span id");
+                    tx_activity = tx_activity.replaceAll("</font>","</span>");
+
+                    jsonVersion.put("tx_activity", tx_activity);
                     jsonVersion.put("dt_last_access", v.getDt_last_access());
 
                     Log.d("json send data:", jsonVersion.toString());
