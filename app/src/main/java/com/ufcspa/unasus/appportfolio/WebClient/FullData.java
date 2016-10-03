@@ -133,7 +133,12 @@ public class FullData {
         DataBaseAdapter data = DataBaseAdapter.getInstance(context);
 
         data.insertNotifications(notifications);
-        data.insertVersionActivity(versionActs);
+        for (VersionActivity versionActivity: versionActs) {
+            if (data.getVersionActivitiesByID(versionActivity.getId_version_activit_srv())==null) {
+                data.insertVersionActivity(versionActs);
+            }else
+                data.updateVersions(versionActivity);
+        }
         data.insertReference(references);
         data.insertComments(comentarios);
         for (CommentVersion cv: commentVersions) {

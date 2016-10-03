@@ -3078,6 +3078,23 @@ public class DataBaseAdapter {
         }
 
     }
+    public void updateVersions(VersionActivity va) {
+        ContentValues cv = new ContentValues();
+//        cv.put("id_activity_student", va.getId_activity_student());
+        cv.put("tx_activity", va.getTx_activity());
+//        cv.put("dt_last_access", va.getDt_last_access());
+//        cv.put("dt_submission", va.getDt_submission());
+//        cv.put("dt_verification", va.getDt_verification());
+//        cv.put("id_version_activity_srv", va.getId_version_activit_srv());
+
+
+        String query = "SELECT * FROM tb_version_activity WHERE id_version_activity_srv=" + va.getId_version_activit_srv();
+        Cursor c = db.rawQuery(query, null);
+
+        if (c.moveToFirst()) {
+            db.update("tb_version_activity", cv, "id_version_activity_srv=" + va.getId_version_activit_srv(), null);
+        }
+    }
     public int getIDVersionSrvByLocalID(int idVersion){
         StringBuilder sb = new StringBuilder("SELECT id_version_activity_srv FROM tb_version_activity where id_version_activity="+idVersion);
         Cursor c = db.rawQuery(sb.toString(), null);
