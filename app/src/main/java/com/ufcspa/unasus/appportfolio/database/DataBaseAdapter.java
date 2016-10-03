@@ -2431,7 +2431,7 @@ public class DataBaseAdapter {
         if (c.moveToFirst()) {
             do {
                 String sql = "SELECT COUNT(*) from tb_comment as tbc " +
-                        "JOIN tb_comment_version as tbcv on tbcv.id_comment_version = tbc.id_comment_version " +
+                        "JOIN tb_comment_version as tbcv on tbcv.id_comment_version_srv = tbc.id_comment_version " +
                         "JOIN tb_version_activity as tbva on tbva.id_version_activity_srv = tbcv.id_version_activity" +
                         " WHERE tbva.id_version_activity_srv = " + idVersionActivitySrv + " AND tbc.id_comment_srv = " + c.getInt(0) + " AND tbc.tp_comment = 'O'";
 
@@ -2475,7 +2475,7 @@ public class DataBaseAdapter {
         if (c.moveToFirst()) {
             do {
                 String sql = "SELECT COUNT(*) from tb_comment as tbc " +
-                        "JOIN tb_comment_version as tbcv on tbcv.id_comment_version = tbc.id_comment_version " +
+                        "JOIN tb_comment_version as tbcv on tbcv.id_comment_version_srv = tbc.id_comment_version " +
                         "JOIN tb_version_activity as tbva on tbva.id_version_activity_srv = tbcv.id_version_activity" +
                         " WHERE tbva.id_version_activity_srv = " + idVersionActivity + " AND tbc.id_comment_srv = " + c.getInt(0) + " AND tbc.tp_comment = 'O'";
 
