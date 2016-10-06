@@ -38,6 +38,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.ufcspa.unasus.appportfolio.Model.Device;
 import com.ufcspa.unasus.appportfolio.Model.Singleton;
 import com.ufcspa.unasus.appportfolio.Model.User;
 import com.ufcspa.unasus.appportfolio.R;
@@ -117,6 +118,9 @@ public class LoginActivity2 extends AppCompatActivity implements LoaderCallbacks
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         getSupportActionBar().hide();
+
+        Singleton.getInstance().user = new User(0,null,null);
+        Singleton.getInstance().device = new Device();
 
         bd = DataBaseAdapter.getInstance(this);
         //SQLiteOnWeb.init(this).start();

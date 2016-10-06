@@ -3204,15 +3204,17 @@ public class DataBaseAdapter {
                 "WHERE tbaa.id_activity_student = " + idActivityStudent;
         Cursor c = db.rawQuery(query, null);
 
-        if (c.moveToFirst()) {
-            String nmSystem = c.getString(0);
-            String key = "";
-            String[] a = nmSystem.split("/");
-            if (a.length > 0)
-                key = a[a.length - 1];
+        if (c.getCount()>0) {
+            while (c.moveToNext()) {
+                String nmSystem = c.getString(0);
+                String key = "";
+                String[] a = nmSystem.split("/");
+                if (a.length > 0)
+                    key = a[a.length - 1];
 
-            if (!aux.containsKey(key))
-                aux.put(key, nmSystem);
+                if (!aux.containsKey(key))
+                    aux.put(key, nmSystem);
+            }
         }
 
         return aux;

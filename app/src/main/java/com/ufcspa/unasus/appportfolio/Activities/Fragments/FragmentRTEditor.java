@@ -288,7 +288,11 @@ public class FragmentRTEditor extends Frag {
                                         version.setDt_last_access(getActualTime());
                                         //version.setId_version_activit_srv(version.getId_version_activity());
                                         int id = data.insertVersionActivity(version);
-                                        data.updateVersionsBySendFullData(0,id);
+                                        try {
+                                            data.updateVersionsBySendFullData(0,id);
+                                        } finally {
+                                            Toast.makeText(getContext(),"Versão Enviada",Toast.LENGTH_LONG).show();
+                                        }
                                         singleton.idVersionActivity = id;
                                         singleton.idCurrentVersionActivity = id;
 
