@@ -210,6 +210,7 @@ public class FragmentRTEditor extends Frag {
                 VersionActivity versionActivity = source.getVersionActivitiesByID(singleton.idCurrentVersionActivity);
                 versionActivity.setId_version_activit_srv(0);
                 source.insertVersionActivity(versionActivity);
+                singleton.idVersionActivity = source.getLastIDVersionActivity(singleton.idActivityStudent);
                 singleton.firstSync=false;
             }
         }
@@ -225,8 +226,11 @@ public class FragmentRTEditor extends Frag {
         scrollview = (ViewGroup) view.findViewById(R.id.comments);
         rightBarSpecificComments = (ViewGroup) view.findViewById(R.id.obs_view);
 
-        if (singleton.portfolioClass.getPerfil().equals("T") || (singleton.idCurrentVersionActivity != singleton.idVersionActivity))
+        if (singleton.portfolioClass.getPerfil().equals("T") || (singleton.idCurrentVersionActivity != singleton.idVersionActivity)) {
             view.findViewById(R.id.rte_toolbar_container).setVisibility(View.INVISIBLE);
+        }else
+            view.findViewById(R.id.rte_toolbar_container).setVisibility(View.VISIBLE);
+
 
         createEditor(view, savedInstanceState);
 

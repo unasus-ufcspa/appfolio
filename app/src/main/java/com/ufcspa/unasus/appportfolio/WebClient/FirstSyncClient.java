@@ -286,6 +286,11 @@ public class FirstSyncClient extends HttpClient{
 
                                             int id_activity_student = temp.getInt("id_activity_student");
                                             String tx_activity = temp.getString("tx_activity");
+                                            tx_activity= tx_activity.replaceAll("\'","");
+
+                                            tx_activity = tx_activity.replaceAll("<span id", "<font id");
+                                            tx_activity = tx_activity.replaceAll("</span>", "</font>");
+
                                             String dt_last_access = temp.getString("dt_last_access");
                                             String dt_submission = temp.getString("dt_submission");
                                             String dt_verification = temp.getString("dt_verification");
