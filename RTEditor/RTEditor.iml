@@ -105,6 +105,7 @@
     <orderEntry type="jdk" jdkName="Android API 23 Platform" jdkType="Android SDK" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="module" module-name="ColorPicker" exported="" />
+    <orderEntry type="library" exported="" name="android-android-23" level="project" />
     <orderEntry type="library" exported="" name="recyclerview-v7-23.2.0" level="project" />
     <orderEntry type="library" exported="" name="core-0.8.5.3" level="project" />
     <orderEntry type="library" exported="" name="eventbus-2.4.1" level="project" />
