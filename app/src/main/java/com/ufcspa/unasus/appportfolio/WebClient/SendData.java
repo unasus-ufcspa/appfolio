@@ -24,6 +24,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
+import java.util.List;
 
 /**
  * Created by icaromsc on 19/04/2016.
@@ -345,6 +346,7 @@ public class SendData {
         JSONArray jsonNotice = new JSONArray();
 
         JSONObject jsonUser = new JSONObject();
+        boolean entrou = false;
 
         try {
             // mount JSON comment
@@ -365,6 +367,7 @@ public class SendData {
                         int idServer =data.getIdCommentVersionSrv(comment.getId_comment_version());
                         jsonComment.put("id_comment_version_srv",idServer);
                     }else{
+                        entrou = true;
                         jsonComment.put("id_comment_version_srv","");
                     }
 
@@ -428,10 +431,11 @@ public class SendData {
 //                    jsonVersion.put("comment", jTb_comment);
 
                     //jTb_comment.put("tb_comment", jsonCommentsByVersion);
-                    jsonVersion.put("tb_comment_version", jsonCommentsByVersion);
+                    if (entrou) {
+                        jsonVersion.put("tb_comment_version", jsonCommentsByVersion);
+                    }
 
                     jsonArrayVersions.put(jsonVersion);
-
                     Log.d("json send data:", jsonVersion.toString());
 
 
