@@ -211,10 +211,12 @@ public class FragmentRTEditor extends Frag {
             userPerfil = source.getTutorPerfil(singleton.idActivityStudent);
             Log.d("tutorPerfil", "tutor data:" + userPerfil.toString());
             if (singleton.firstSync){
-                VersionActivity versionActivity = source.getVersionActivitiesByID(singleton.idCurrentVersionActivity);
-                versionActivity.setId_version_activit_srv(0);
-                source.insertVersionActivity(versionActivity);
-                singleton.idVersionActivity = source.getLastIDVersionActivity(singleton.idActivityStudent);
+                if (source.getVersionActivitiesByID(singleton.idCurrentVersionActivity)!=null) {
+                    VersionActivity versionActivity = source.getVersionActivitiesByID(singleton.idCurrentVersionActivity);
+                    versionActivity.setId_version_activit_srv(0);
+                    source.insertVersionActivity(versionActivity);
+                    singleton.idVersionActivity = source.getLastIDVersionActivity(singleton.idActivityStudent);
+                }
                 singleton.firstSync=false;
             }
         }
