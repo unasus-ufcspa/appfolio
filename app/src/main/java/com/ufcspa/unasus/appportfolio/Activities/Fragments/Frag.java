@@ -1,5 +1,6 @@
 package com.ufcspa.unasus.appportfolio.Activities.Fragments;
 
+import android.Manifest;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -9,6 +10,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -20,8 +22,10 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.provider.DocumentsContract;
 import android.provider.MediaStore;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.text.InputType;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -54,6 +58,7 @@ import java.util.Date;
  * Created by desenvolvimento on 10/12/2015.
  */
 public class Frag extends Fragment {
+    public static final int MY_PERMISSIONS_REQUEST = 0;
     static final int REQUEST_IMAGE_CAPTURE = 1;
     static final int RESULT_LOAD_IMAGE = 2;
     static final int PICKFILE_RESULT_CODE = 3;
@@ -681,9 +686,14 @@ public class Frag extends Fragment {
         img_photos.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                System.out.println("Photos");
-                dispatchTakePictureIntent();
-                dialog.dismiss();
+                if (ContextCompat.checkSelfPermission(getContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_DENIED) {
+                    ActivityCompat.requestPermissions(getActivity(),new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},MY_PERMISSIONS_REQUEST);
+                }
+                else {
+                    System.out.println("Photos");
+                    dispatchTakePictureIntent();
+                    dialog.dismiss();
+                }
             }
         });
 
@@ -716,6 +726,32 @@ public class Frag extends Fragment {
         });
 
         dialog.show();
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
+        final Dialog dialog = new Dialog(getActivity());
+        switch (requestCode) {
+            case MY_PERMISSIONS_REQUEST: {
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+
+                    System.out.println("Photos");
+                    dispatchTakePictureIntent();
+                    dialog.dismiss();
+
+                } else {
+
+                    // permission denied, boo! Disable the
+                    // functionality that depends on this permission.
+                }
+                return;
+            }
+
+            // other 'case' lines to check for other
+            // permissions this app might request
+        }
     }
 
     public void insertFileIntoDataBase(final String path, final String type) {
