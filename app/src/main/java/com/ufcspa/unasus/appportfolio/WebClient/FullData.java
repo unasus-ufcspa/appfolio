@@ -79,6 +79,8 @@ public class FullData {
             Log.d("sendData", "GET FROM DEVICE: "+Singleton.getInstance().device);
 
             json.put("fullDataSrvDev_request", new JSONObject().put("ds_hash", idDevice).put("id_activity_student", 0).put("id_user", Singleton.getInstance().device.get_id_user()));
+
+            Log.d("fullDataSrvDev_request", json.toString());
         } catch (JSONException e) {
             e.printStackTrace();
         }

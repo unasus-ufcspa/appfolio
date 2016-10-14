@@ -32,6 +32,12 @@ public class Singleton {
     }
 
     public static Singleton getInstance() {
+        if (ourInstance == null) ourInstance = new Singleton();
+        return ourInstance;
+    }
+
+    public static Singleton init(){
+        ourInstance = new Singleton();
         return ourInstance;
     }
 }
