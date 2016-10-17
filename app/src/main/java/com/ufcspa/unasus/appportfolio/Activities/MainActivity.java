@@ -574,11 +574,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     public void logout() {
         DataBaseAdapter.getInstance(this).cleanDataBase();
-        singleton = Singleton.init();
+        singleton.user = null;
+        singleton.device = null;
         DataBase.getInstance(this).getDatabase();
         Intent intent = new Intent(this, LoginActivity2.class);
 //        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(intent);
+        Log.d("singleton:",singleton.user.toString());
+        Log.d("singleton:",singleton.team.toString());
+        Log.d("singleton:",singleton.device.toString());
         finish();
     }
 
