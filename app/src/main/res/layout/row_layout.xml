@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/transparent">
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:background="@color/white">
+
+        <ImageView
+            app:srcCompat="@drawable/circle"
+            android:id="@+id/imageView6"
+            android:layout_margin="10dp"
+            android:layout_width="12dp"
+            android:layout_height="12dp" />
+
+        <TextView
+            android:text="Ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa ."
+            android:layout_width="match_parent"
+            android:id="@+id/ref_item_txt_url"
+            android:layout_height="wrap_content"
+            android:background="@android:color/transparent"
+            android:layout_gravity="center"
+            android:fontFamily="sans-serif-light" />
+    </LinearLayout>
+</RelativeLayout>

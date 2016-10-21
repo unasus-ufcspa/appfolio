@@ -58,7 +58,7 @@ public class ReferenceAdapter extends BaseAdapter {
 
     public View getView(int position, View convertView, ViewGroup parent) {
             View rowView;
-            rowView = inflater.inflate(R.layout.reference_item, null);
+            rowView = inflater.inflate(R.layout.row_layout, null);
 
 
         Reference ref = getItem(position);
