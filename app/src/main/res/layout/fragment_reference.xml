@@ -3,38 +3,77 @@
     android:layout_width="fill_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    >
+    android:background="@color/gray_7">
 
-    <LinearLayout
+    <TextView
+        android:text="Referências"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="4"
-        android:background="@android:color/white"
+        android:id="@+id/textView16"
+        android:textAppearance="@android:style/TextAppearance.Material.Large"
+        android:textSize="30sp"
+        android:textColor="@color/gray_1"
+        android:textAllCaps="true"
+        android:fontFamily="sans-serif-light"
+        android:paddingLeft="50dp"
+        android:paddingTop="20dp" />
+
+    <LinearLayout
         android:orientation="vertical"
-        android:weightSum="1">
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
 
         <ListView
             android:id="@+id/frag_ref_listview"
             android:layout_width="match_parent"
-            android:layout_height="274dp"
-            android:layout_weight="0.96" />
+            android:layout_weight="1"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:background="@color/white"
+            android:layout_height="300dp" />
+    </LinearLayout>
 
-        <EditText
-            android:id="@+id/frag_ref_edt"
-            android:layout_width="fill_parent"
-            android:layout_height="150dp"
-            android:autoLink="web"
-            android:hint="enter the reference here"
-            android:imeOptions="flagNoExtractUi"
-            android:inputType="textWebEmailAddress" />
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:background="@color/gray_7">
 
-        <Button
-            android:id="@+id/frag_ref_btSave"
-            style="?android:attr/buttonStyleSmall"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:text="Save changes" />
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_weight="1"
+            android:layout_margin="40dp"
+            android:background="@color/white"
+            android:layout_height="10dp">
+
+            <EditText
+                android:id="@+id/frag_ref_edt"
+                android:layout_width="match_parent"
+                android:autoLink="web"
+                android:imeOptions="flagNoExtractUi"
+                android:inputType="textMultiLine"
+                android:hint="@string/reference_hint"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@android:color/transparent"
+                android:gravity="top"
+                android:layout_gravity="center_vertical"
+                android:layout_margin="15dp"
+                android:fontFamily="sans-serif" />
+
+            <ImageButton
+                android:id="@+id/frag_ref_btSave"
+                style="?android:attr/buttonStyleSmall"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:background="@drawable/bt_send_ref"
+                android:layout_marginRight="30dp" />
+
+        </LinearLayout>
+
     </LinearLayout>
 
 </LinearLayout>

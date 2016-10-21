@@ -1,86 +1,112 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context="com.ufcspa.unasus.appportfolio.Activities.PrivacyPolicyActivity">
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="Termos de Uso"
-        android:id="@+id/textView15"
-        android:layout_alignParentTop="true"
-        android:textStyle="bold"
-        android:textColor="@color/gray_2"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:paddingTop="5dp"
-        android:paddingLeft="10dp" />
-
-    <ScrollView
-        android:id="@+id/scrollView3"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_alignParentLeft="true"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
-        android:layout_above="@+id/linearLayout3"
-        android:background="@drawable/border_popup_rteditor"
-        android:layout_below="@+id/textView15">
-
-        <TextView
-            android:id="@+id/term_text"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/privacy_policy"
-            android:textAppearance="?android:attr/textAppearanceLarge"
-
-            android:textSize="15dp"
-            android:padding="5dp" />
-    </ScrollView>
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center_horizontal"
+    android:orientation="vertical"
+    android:weightSum="1"
+    android:layout_margin="20dp">
 
     <LinearLayout
-        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:gravity="center|bottom"
-        android:orientation="horizontal"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:id="@+id/linearLayout3"
-        android:paddingLeft="5dp">
+        android:orientation="vertical"
+        android:layout_width="750dp"
+        android:background="@drawable/border_popup_rteditor">
 
-        <LinearLayout
-            android:orientation="vertical"
+        <TextView
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:text="@string/policy_title"
+            android:id="@+id/textView15"
+            android:layout_alignParentTop="true"
+            android:textColor="@color/gray_2"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:paddingTop="20dp"
+            android:paddingLeft="40dp"
+            android:textStyle="normal|italic"
+            android:textSize="18sp" />
 
-            <CheckBox
+        <ScrollView
+            android:id="@+id/scrollView2"
+            android:layout_width="match_parent"
+            android:layout_height="300dp"
+            android:layout_alignParentLeft="true"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:layout_above="@+id/linearLayout3"
+            android:layout_below="@+id/textView15"
+            android:layout_marginBottom="20dp"
+            android:background="@color/white">
+
+            <TextView
+                android:id="@+id/term_text"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/checkBox"
-                android:text="@string/checkbox"
-                android:layout_weight="1"
-                android:layout_gravity="center_horizontal"
-                android:textColor="@color/gray_2"
-                android:textStyle="bold"
-                android:textAppearance="?android:attr/textAppearanceSmall" />
+                android:text="@string/privacy_policy"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:textSize="15dp"
+                android:fontFamily="sans-serif-light"
+                android:textColor="@color/gray_1"
+                android:paddingTop="15dp"
+                android:paddingLeft="20dp"
+                android:paddingRight="20dp"
+                android:lineSpacingExtra="5sp" />
+        </ScrollView>
 
-            <Button
-                android:id="@+id/btAgree"
+        <Button
+            android:id="@+id/btn_agree"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_gravity="center_horizontal"
+            android:background="@drawable/btn_login"
+            android:text="@string/policy_agree"
+            android:textColor="#ffffff"
+            android:textStyle="bold"
+            android:layout_marginLeft="2dp"
+            android:layout_marginRight="2dp"
+            android:fontFamily="sans-serif-medium"
+            android:textAllCaps="false"
+            android:textSize="20dp"
+            style="@style/Widget.AppCompat.Button.Borderless" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="2dp"
+            android:layout_marginLeft="2dp"
+            android:layout_marginRight="2dp">
+
+            <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:layout_margin="15dp"
-                android:layout_weight="1"
-                android:paddingLeft="30dp"
-                android:paddingRight="30dp"
-                android:text="OK" />
-        </LinearLayout>
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true"
+                android:background="@color/gray_1" />
 
+            <Button
+                android:id="@+id/btn_not_agree"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_gravity="center_horizontal"
+                android:background="@drawable/btn_not_agree_border"
+                android:text="@string/policy_not_agree"
+                android:textColor="#ffffff"
+                android:textStyle="bold"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:textAllCaps="false"
+                android:textSize="20dp"
+                style="@style/Widget.AppCompat.Button.Borderless" />
+
+        </RelativeLayout>
     </LinearLayout>
 
-</RelativeLayout>
+</LinearLayout>

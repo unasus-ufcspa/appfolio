@@ -85,6 +85,39 @@
     </RelativeLayout>
 
     <RelativeLayout
+        android:id="@+id/attachments"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:gravity="center|left">
+
+        <ImageButton
+            android:id="@+id/btn_attachments"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="16dp"
+            android:layout_weight="1"
+            android:background="@android:color/transparent"
+            android:src="@drawable/drawer_anexos" />
+
+        <TextView
+            android:id="@+id/textView9"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/btn_attachments"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignTop="@+id/btn_attachments"
+            android:layout_marginLeft="50dp"
+            android:layout_toEndOf="@+id/btn_attachments"
+            android:layout_toRightOf="@+id/btn_attachments"
+            android:gravity="center|left"
+            android:text="@string/drawer_files"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:textColor="@color/gray_3" />
+    </RelativeLayout>
+
+    <RelativeLayout
         android:id="@+id/reports"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -146,39 +179,6 @@
             android:layout_toRightOf="@+id/btn_config"
             android:gravity="center|left"
             android:text="@string/drawer_settings"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:textColor="@color/gray_3" />
-    </RelativeLayout>
-
-    <RelativeLayout
-        android:id="@+id/attachments"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:gravity="center|left">
-
-        <ImageButton
-            android:id="@+id/btn_attachments"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="16dp"
-            android:layout_weight="1"
-            android:background="@android:color/transparent"
-            android:src="@drawable/drawer_anexos" />
-
-        <TextView
-            android:id="@+id/textView9"
-            android:layout_width="100dp"
-            android:layout_height="wrap_content"
-            android:layout_alignBottom="@+id/btn_attachments"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentRight="true"
-            android:layout_alignTop="@+id/btn_attachments"
-            android:layout_marginLeft="50dp"
-            android:layout_toEndOf="@+id/btn_attachments"
-            android:layout_toRightOf="@+id/btn_attachments"
-            android:gravity="center|left"
-            android:text="@string/drawer_files"
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:textColor="@color/gray_3" />
     </RelativeLayout>

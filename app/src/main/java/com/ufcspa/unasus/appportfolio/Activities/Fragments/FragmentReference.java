@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -27,7 +28,7 @@ import java.util.ArrayList;
  * Created by Desenvolvimento on 23/12/2015.
  */
 public class FragmentReference extends Frag {
-    private Button btSave;
+    private ImageButton btSave;
     private EditText edtRef;
     private ListView list;
     private ReferenceAdapter adapter;
@@ -74,7 +75,7 @@ public class FragmentReference extends Frag {
     }
 
     private void initComp(){
-        btSave=(Button)getView().findViewById(R.id.frag_ref_btSave);
+        btSave=(ImageButton)getView().findViewById(R.id.frag_ref_btSave);
         edtRef=(EditText)getView().findViewById(R.id.frag_ref_edt);
         list=(ListView)getView().findViewById(R.id.frag_ref_listview);
     }

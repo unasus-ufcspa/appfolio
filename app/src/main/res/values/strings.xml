@@ -36,6 +36,10 @@
     <string name="files_popup_attachment">Anexos</string>
 
     <string name="cancel">Cancelar</string>
+    <string name="reference_hint"><i>escreva aqui</i></string>
+    <string name="policy_title"><i>termos de compromisso:</i></string>
+    <string name="policy_agree">concordo</string>
+    <string name="policy_not_agree">não concordo</string>
     <string name="privacy_policy">
 
 Donec ornare tincidunt ante, eu condimentum magna. Vivamus porttitor odio non ipsum rhoncus blandit. Duis tempor dapibus turpis nec vestibulum. Vivamus id accumsan dolor. Vestibulum cursus erat tempor venenatis porttitor. Sed luctus tincidunt est, ornare lacinia elit egestas eget. Vivamus sapien elit, varius eget nulla eu, scelerisque feugiat lacus.

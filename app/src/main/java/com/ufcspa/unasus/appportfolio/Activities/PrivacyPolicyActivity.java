@@ -30,6 +30,7 @@ public class PrivacyPolicyActivity extends AppCompatActivity {
 
     private CheckBox checkBox;
     private Button acceptBT;
+    private Button notAcceptBT;
     private TextView policyTX;
     private int idUser;
     private Policy policy;
@@ -45,11 +46,10 @@ public class PrivacyPolicyActivity extends AppCompatActivity {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             Window window = getWindow();
             window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-            window.setStatusBarColor(getResources().getColor(R.color.base_green));
         }
         policyTX = (TextView) findViewById(R.id.term_text);
-        checkBox = (CheckBox) findViewById(R.id.checkBox);
-        acceptBT = (Button) findViewById(R.id.btAgree);
+        acceptBT = (Button) findViewById(R.id.btn_agree);
+        notAcceptBT = (Button) findViewById(R.id.btn_not_agree);
 
         final Intent intent = new Intent(this, MainActivity.class);
 
@@ -63,7 +63,6 @@ public class PrivacyPolicyActivity extends AppCompatActivity {
         acceptBT.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (checkBox.isChecked()) {
                     policyUser = DataBaseAdapter.getInstance(getBaseContext()).getPolicyUserByUserId(idUser);
                     DataBaseAdapter.getInstance(getBaseContext()).updateFlAccept(policyUser.getIdPolicyUser());
                     policyUser = DataBaseAdapter.getInstance(getBaseContext()).getPolicyUserByUserId(idUser);
@@ -72,8 +71,12 @@ public class PrivacyPolicyActivity extends AppCompatActivity {
                     policyUserClient.postJson(PolicyUser.toJSON(policyUser.getIdPolicyUser(), policyUser.getIdUser(), policyUser.getFlAccept()));
                     startActivity(intent);
                     finish();
-                } else
-                    Toast.makeText(getApplicationContext(),"É necessário aceitar os termos para continuar",Toast.LENGTH_LONG).show();
+            }
+        });
+        notAcceptBT.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(getApplicationContext(),"É necessário aceitar os termos para continuar",Toast.LENGTH_LONG).show();
             }
         });
 
