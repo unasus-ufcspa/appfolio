@@ -59,6 +59,8 @@ public class FragmentReference extends Frag {
                     //adapter.clearAdapter();
 //                    Reference r=new Reference();
 //                    r.setDsUrl(edtRef.getText().toString());
+                    recuperar();
+                    gerarLista();
                     Toast.makeText(getActivity(),"Referências salvas com sucesso!",Toast.LENGTH_SHORT).show();
                 }else {
                     Toast.makeText(getActivity(),"Erro ao salvar referências",Toast.LENGTH_SHORT).show();

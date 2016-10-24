@@ -412,7 +412,7 @@ public class DataBaseAdapter {
         if (c.moveToFirst()) {
             do {
                 try {
-                    r = new Reference(c.getInt(0), c.getString(1), 0);
+                    r = new Reference(c.getInt(0), c.getString(2), 0);
                     refs.add(r);
                     Log.d(tag, "reference:" + r.toString());
                 } catch (Exception v) {
