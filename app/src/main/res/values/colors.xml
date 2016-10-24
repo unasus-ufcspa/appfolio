@@ -53,5 +53,6 @@
 
     <color name="black_overlay">#66000000</color>
     <color name="gray_7">#f2f3f0</color>
+    <color name="gray_8">#f9fbfa</color>
 
 </resources>

@@ -28,6 +28,7 @@
             android:layout_height="wrap_content"
             android:background="@android:color/transparent"
             android:layout_gravity="center"
-            android:fontFamily="sans-serif-light" />
+            android:fontFamily="sans-serif-light"
+            android:textColor="@android:color/black" />
     </LinearLayout>
 </RelativeLayout>
