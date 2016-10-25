@@ -4,14 +4,16 @@
     android:layout_height="wrap_content"
     android:orientation="vertical"
     android:weightSum="1"
-    android:layout_margin="20dp"
     android:layout_gravity="center">
 
     <LinearLayout
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:orientation="vertical"
-        android:layout_width="750dp"
-        android:background="@drawable/border_popup_rteditor">
+        android:layout_width="match_parent"
+        android:background="@drawable/border_popup_rteditor"
+        android:layout_marginLeft="125dp"
+        android:layout_marginRight="125dp"
+        android:layout_marginBottom="20dp">
 
         <TextView
             android:layout_width="match_parent"
