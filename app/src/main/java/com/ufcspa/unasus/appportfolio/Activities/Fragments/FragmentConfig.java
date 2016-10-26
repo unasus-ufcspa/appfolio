@@ -257,27 +257,30 @@ public class FragmentConfig extends Frag implements View.OnClickListener {
         String newPassword = new_pass.getText().toString();
         String confirmNewPassword = confirm_new_pass.getText().toString();
 
-        if (isOnline()) {
-            if (oldPassword.trim().length() == 0)
-                old_pass.setError("Por favor, preencha a senha antiga.");
-            else if (newPassword.trim().length() == 0)
-                new_pass.setError("Por favor, preencha a sua nova senha.");
-            else if (confirmNewPassword.trim().length() == 0)
-                confirm_new_pass.setError("Por favor, preencha o campo confirme a sua senha.");
-            else if (!(newPassword.equals(confirmNewPassword)))
-                confirm_new_pass.setError("As duas senhas não são iguais.");
-            else {
-                // TODO Enviar nova senha ...
-                String oldPass = sha256(oldPassword);
-                String newPass = sha256(newPassword);
+        if (v.getId() == R.id.btn_update) {
+            if (isOnline()) {
+                if (oldPassword.trim().length() == 0)
+                    old_pass.setError("Por favor, preencha a senha antiga.");
+                else if (newPassword.trim().length() == 0)
+                    new_pass.setError("Por favor, preencha a sua nova senha.");
+                else if (confirmNewPassword.trim().length() == 0)
+                    confirm_new_pass.setError("Por favor, preencha o campo confirme a sua senha.");
+                else if (!(newPassword.equals(confirmNewPassword)))
+                    confirm_new_pass.setError("As duas senhas não são iguais.");
+                else {
+                    // TODO Enviar nova senha ...
+                    String oldPass = sha256(oldPassword);
+                    String newPass = sha256(newPassword);
 
-                if (oldPass != null && newPass != null) {
-                    PasswordClient passwordClient = new PasswordClient(getContext(), getActivity());
-                    passwordClient.postJson(oldPass, newPass);
+                    if (oldPass != null && newPass != null) {
+                        PasswordClient passwordClient = new PasswordClient(getContext(), getActivity());
+                        passwordClient.postJson(oldPass, newPass);
+                        Toast.makeText(getContext(),"Senha alterada",Toast.LENGTH_LONG).show();
+                    }
                 }
+            } else {
+                Toast.makeText(getContext(), "Você deve estar online para trocar a sua senha.", Toast.LENGTH_SHORT).show();
             }
-        } else {
-            Toast.makeText(getContext(), "Você deve estar online para trocar a sua senha.", Toast.LENGTH_SHORT).show();
         }
         if (v.getId() == R.id.btn_alterar) {
             verifyEditText();
