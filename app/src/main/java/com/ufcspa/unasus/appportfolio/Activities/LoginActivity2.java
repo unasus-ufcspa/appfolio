@@ -135,125 +135,62 @@ public class LoginActivity2 extends AppCompatActivity implements LoaderCallbacks
         isBasicDataSyncNotSucessful = false;
 
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_DENIED) {
-            ActivityCompat.requestPermissions(this,new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},MY_PERMISSIONS_REQUEST);
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, MY_PERMISSIONS_REQUEST);
+        }
 
-            // Set up the login form.
-            mEmailView = (EditText) findViewById(R.id.email);
-            populateAutoComplete();
-            mPasswordView = (EditText) findViewById(R.id.password);
+        // Set up the login form.
+        mEmailView = (EditText) findViewById(R.id.email);
+        populateAutoComplete();
+        mPasswordView = (EditText) findViewById(R.id.password);
 //        mLoginFormView = findViewById(R.id.login_form);
-            mProgressView = findViewById(R.id.login_progress);
-            mPasswordView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-                @Override
-                public boolean onEditorAction(TextView textView, int id, KeyEvent keyEvent) {
-                    if (id == R.id.login || id == EditorInfo.IME_NULL) {
-                        //attemptLogin();
-                        return true;
-                    }
-                    return false;
+        mProgressView = findViewById(R.id.login_progress);
+        mPasswordView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView textView, int id, KeyEvent keyEvent) {
+                if (id == R.id.login || id == EditorInfo.IME_NULL) {
+                    //attemptLogin();
+                    return true;
                 }
-            });
+                return false;
+            }
+        });
 
 
-            final DataBaseAdapter data = DataBaseAdapter.getInstance(this);
+        final DataBaseAdapter data = DataBaseAdapter.getInstance(this);
 //        ArrayList<PortfolioClass> lista= (ArrayList<PortfolioClass>) data.selectListClassAndUserType(5);
 //        Log.d("lista","tamanho:"+lista.size());
 //
 //        Log.d("lista","portfolio:"+lista.toString());
-            /*********************************************************/
-            /*********************************************************/
-            /**************************TESTE**************************/
-            mEmailView.setText("");
-            mPasswordView.setText("");
-            /*********************************************************/
-            /*********************************************************/
-            /*********************************************************/
+        /*********************************************************/
+        /*********************************************************/
+        /**************************TESTE**************************/
+        mEmailView.setText("");
+        mPasswordView.setText("");
+        /*********************************************************/
+        /*********************************************************/
+        /*********************************************************/
 
-            Button mEmailSignInButton = (Button) findViewById(R.id.email_sign_in_button);
-            mEmailSignInButton.setOnClickListener(new OnClickListener() {
-                @Override
-                public synchronized void onClick(View view) {
-                    if (isOnline()) {
+        Button mEmailSignInButton = (Button) findViewById(R.id.email_sign_in_button);
+        mEmailSignInButton.setOnClickListener(new OnClickListener() {
+            @Override
+            public synchronized void onClick(View view) {
+                if (isOnline()) {
 //                    showProgress(true);
-                        dialog = ProgressDialog.show(LoginActivity2.this, "Baixando novos dados", "Por favor aguarde...", true);
-                        final Thread myThread =new Thread(new Runnable() {
-                            @Override
-                            public void run() {
-                                if (!isLoginSucessful)
-                                    verificarLogin();
-                                while(!isLoginSucessful){
-                                    if(isDataSyncNotSucessful){
-                                        Log.d("acitivity login", "data sync not sucesseful");
-                                        break;
-                                    }
-
+                    dialog = ProgressDialog.show(LoginActivity2.this, "Baixando novos dados", "Por favor aguarde...", true);
+                    final Thread myThread =new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            if (!isLoginSucessful)
+                                verificarLogin();
+                            while(!isLoginSucessful){
+                                if(isDataSyncNotSucessful){
+                                    Log.d("acitivity login", "data sync not sucesseful");
+                                    break;
                                 }
-                                if(!isDataSyncNotSucessful){
-                                    Log.d("acitivity login", "user get by json:" + Singleton.getInstance().user.toString());
-                                    getBasicData();
 
-                                    while (!isBasicDataSucessful)
-                                        if (isBasicDataSyncNotSucessful)
-                                            break;
-
-                                    if (!isBasicDataSyncNotSucessful) {
-                                        bd.updateDeviceBasicDataSync();
-                                        new Handler(Looper.getMainLooper()).post(new Runnable() {
-                                            @Override
-                                            public void run() {
-                                                dialog.dismiss();
-                                                Log.d("tela login", "terminou conexão");
-                                                if (PolicyAceita()) {
-                                                    startActivity(new Intent(getApplicationContext(), MainActivity.class));
-                                                    finish();
-                                                } else
-                                                    startActivity(new Intent(getApplicationContext(), PrivacyPolicyActivity.class));
-                                                finish();
-                                            }
-                                        });
-                                    } else {
-                                        new Handler(Looper.getMainLooper()).post(new Runnable() {
-                                            @Override
-                                            public void run() {
-                                                Toast.makeText(getApplicationContext(), "Erro interno. Por favor tente novamente", Toast.LENGTH_LONG).show();
-//                                            showProgress(false);
-                                                dialog.dismiss();
-                                                mEmailView.setEnabled(false);
-                                                mPasswordView.setEnabled(false);
-                                            }
-                                        });
-                                    }
-                                }else{
-                                    new Handler(Looper.getMainLooper()).post(new Runnable() {
-                                        @Override
-                                        public void run() {
-//                                        showProgress(false);
-                                            dialog.dismiss();
-                                            Toast.makeText(getApplicationContext(), Singleton.getInstance().erro, Toast.LENGTH_LONG).show();
-                                            findViewById(R.id.scrollView).setVisibility(View.VISIBLE);
-                                            isLoginSucessful = false;
-                                            isDataSyncNotSucessful = false;
-                                        }
-                                    });
-                                }
                             }
-                        });
-                        myThread.start();
-                    } else {
-                        Toast.makeText(getApplicationContext(), "Sem conexão com a internet", Toast.LENGTH_LONG).show();
-                    }
-                }
-            });
-
-            Bundle extras = getIntent().getExtras();
-            if (extras != null) {
-                if (extras.containsKey("dont_have_basic_data")) {
-                    if (isOnline()) {
-//                    showProgress(true);
-                        dialog = ProgressDialog.show(LoginActivity2.this, "Baixando novos dados", "Por favor aguarde...", true);
-                        new Thread(new Runnable() {
-                            @Override
-                            public void run() {
+                            if(!isDataSyncNotSucessful){
+                                Log.d("acitivity login", "user get by json:" + Singleton.getInstance().user.toString());
                                 getBasicData();
 
                                 while (!isBasicDataSucessful)
@@ -267,7 +204,11 @@ public class LoginActivity2 extends AppCompatActivity implements LoaderCallbacks
                                         public void run() {
                                             dialog.dismiss();
                                             Log.d("tela login", "terminou conexão");
-                                            startActivity(new Intent(getApplicationContext(), MainActivity.class));
+                                            if (PolicyAceita()) {
+                                                startActivity(new Intent(getApplicationContext(), MainActivity.class));
+                                                finish();
+                                            } else
+                                                startActivity(new Intent(getApplicationContext(), PrivacyPolicyActivity.class));
                                             finish();
                                         }
                                     });
@@ -276,26 +217,86 @@ public class LoginActivity2 extends AppCompatActivity implements LoaderCallbacks
                                         @Override
                                         public void run() {
                                             Toast.makeText(getApplicationContext(), "Erro interno. Por favor tente novamente", Toast.LENGTH_LONG).show();
-//                                        showProgress(false);
+//                                            showProgress(false);
                                             dialog.dismiss();
                                             mEmailView.setEnabled(false);
                                             mPasswordView.setEnabled(false);
-                                            isLoginSucessful = true;
-                                            isDataSyncNotSucessful = false;
                                         }
                                     });
                                 }
+                            }else{
+                                new Handler(Looper.getMainLooper()).post(new Runnable() {
+                                    @Override
+                                    public void run() {
+//                                        showProgress(false);
+                                        dialog.dismiss();
+                                        Toast.makeText(getApplicationContext(), Singleton.getInstance().erro, Toast.LENGTH_LONG).show();
+                                        findViewById(R.id.scrollView).setVisibility(View.VISIBLE);
+                                        isLoginSucessful = false;
+                                        isDataSyncNotSucessful = false;
+                                    }
+                                });
                             }
-                        }).start();
-                    }
+                        }
+                    });
+                    myThread.start();
                 } else {
                     Toast.makeText(getApplicationContext(), "Sem conexão com a internet", Toast.LENGTH_LONG).show();
-                    mEmailView.setEnabled(false);
-                    mPasswordView.setEnabled(false);
                 }
+            }
+        });
+
+        Bundle extras = getIntent().getExtras();
+        if (extras != null) {
+            if (extras.containsKey("dont_have_basic_data")) {
+                if (isOnline()) {
+//                    showProgress(true);
+                    dialog = ProgressDialog.show(LoginActivity2.this, "Baixando novos dados", "Por favor aguarde...", true);
+                    new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            getBasicData();
+
+                            while (!isBasicDataSucessful)
+                                if (isBasicDataSyncNotSucessful)
+                                    break;
+
+                            if (!isBasicDataSyncNotSucessful) {
+                                bd.updateDeviceBasicDataSync();
+                                new Handler(Looper.getMainLooper()).post(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        dialog.dismiss();
+                                        Log.d("tela login", "terminou conexão");
+                                        startActivity(new Intent(getApplicationContext(), MainActivity.class));
+                                        finish();
+                                    }
+                                });
+                            } else {
+                                new Handler(Looper.getMainLooper()).post(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        Toast.makeText(getApplicationContext(), "Erro interno. Por favor tente novamente", Toast.LENGTH_LONG).show();
+//                                        showProgress(false);
+                                        dialog.dismiss();
+                                        mEmailView.setEnabled(false);
+                                        mPasswordView.setEnabled(false);
+                                        isLoginSucessful = true;
+                                        isDataSyncNotSucessful = false;
+                                    }
+                                });
+                            }
+                        }
+                    }).start();
+                }
+            } else {
+                Toast.makeText(getApplicationContext(), "Sem conexão com a internet", Toast.LENGTH_LONG).show();
+                mEmailView.setEnabled(false);
+                mPasswordView.setEnabled(false);
             }
         }
     }
+
 
     public void getBasicData() {
         if (isOnline()) {
