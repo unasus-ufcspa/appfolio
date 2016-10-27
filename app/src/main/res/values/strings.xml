@@ -56,6 +56,8 @@ Pellentesque finibus vehicula ultrices. Vestibulum efficitur lectus nec pulvinar
     <string name="popup_login_student">Student</string>
     <string name="popup_login_tutor">Tutor</string>
 
+    <string name="popup_logout">Tem certeza que deseja \n desconectar o dispositivo?</string>
+
     <string name="attachment_positive">Utilizar</string>
     <string name="attachment_fechar">Fechar</string>
     <string name="attachment_negative">Cancelar</string>

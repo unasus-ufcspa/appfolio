@@ -56,8 +56,7 @@ public class FragmentConfig extends Frag implements View.OnClickListener {
     private Button update_pass;
 
     private ImageView img_user;
-    private ImageView btn_change_image
-            ;
+    private ImageView btn_change_image;
     private EditText edt_email;
     private EditText edt_telefone;
     private Button btn_alterar;
@@ -296,9 +295,29 @@ public class FragmentConfig extends Frag implements View.OnClickListener {
         }
         if (v.getId() == R.id.btn_logout) {
             if (isOnline()) {
-                dialog = ProgressDialog.show(getContext(), "Saindo", "Por favor aguarde...", true);
-                LogoutClient logoutClient = new LogoutClient(getContext(), getActivity());
-                logoutClient.postJson();
+                final Dialog dialog_logout = new Dialog(getActivity());
+                dialog_logout.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                dialog_logout.setContentView(R.layout.logout_popup);
+                dialog_logout.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+
+                dialog_logout.show();
+                Button btn_logout_ok = (Button) dialog_logout.findViewById(R.id.btn_logout_ok);
+                btn_logout_ok.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        dialog = ProgressDialog.show(getContext(), "Saindo", "Por favor aguarde...", true);
+                        LogoutClient logoutClient = new LogoutClient(getContext(), getActivity());
+                        logoutClient.postJson();
+                        dialog_logout.dismiss();
+                    }
+                });
+                Button btn_logout_cancel = (Button) dialog_logout.findViewById(R.id.btn_logout_cancel);
+                btn_logout_cancel.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        dialog_logout.dismiss();
+                    }
+                });
             }
         }
     }
