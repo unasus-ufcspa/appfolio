@@ -109,7 +109,7 @@
                     android:layout_toLeftOf="@+id/img_user"
                     android:gravity="center"
                     android:lines="1"
-                    android:text="nome"
+                    android:text="e-mail"
                     android:textAppearance="?android:attr/textAppearanceSmall"
                     android:textStyle="normal|italic"
                     android:textAllCaps="true" />

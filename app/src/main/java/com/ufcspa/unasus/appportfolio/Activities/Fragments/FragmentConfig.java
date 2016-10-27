@@ -50,6 +50,18 @@ public class FragmentConfig extends Frag implements View.OnClickListener {
     private Button btn_logout;
     private ImageButton btn_device_info;
 
+    private EditText old_pass;
+    private EditText new_pass;
+    private EditText confirm_new_pass;
+    private Button update_pass;
+
+    private ImageView img_user;
+    private ImageView btn_change_image
+            ;
+    private EditText edt_email;
+    private EditText edt_telefone;
+    private Button btn_alterar;
+
     public FragmentConfig() {
         // Required empty public constructor
     }
@@ -81,7 +93,9 @@ public class FragmentConfig extends Frag implements View.OnClickListener {
         btn_logout.setOnClickListener(this);
 
         btn_change_image = (ImageView) view.findViewById(R.id.btn_change_image);
-        img_user = (ImageView) view.findViewById(R.id.img_user);
+        btn_change_image
+                = (ImageView) view.findViewById(R.id.btn_change_image
+        );
         edt_email = (EditText) view.findViewById(R.id.edt_email);
         edt_telefone = (EditText) view.findViewById(R.id.edt_telefone);
         btn_alterar = (Button) view.findViewById(R.id.btn_alterar);
@@ -90,7 +104,8 @@ public class FragmentConfig extends Frag implements View.OnClickListener {
         btn_device_info.setOnClickListener(this);
 
         if (singleton.user.getPhoto() != null) {
-            img_user.setImageBitmap(singleton.user.getPhotoBitmap());
+            btn_change_image
+                    .setImageBitmap(singleton.user.getPhotoBitmap());
         }
 
         edt_email.setText(singleton.user.getEmail());
@@ -125,12 +140,6 @@ public class FragmentConfig extends Frag implements View.OnClickListener {
             }
         }
     }*/
-
-    private ImageView btn_change_image;
-    private ImageView img_user;
-    private EditText edt_email;
-    private EditText edt_telefone;
-    private Button btn_alterar;
 
     public static Bitmap getRoundedRectBitmap(Bitmap bitmap, int pixels) {
         Bitmap result = null;
@@ -168,11 +177,13 @@ public class FragmentConfig extends Frag implements View.OnClickListener {
     public void onViewStateRestored(Bundle savedInstanceState) {
         super.onViewStateRestored(savedInstanceState);
         if (singleton.user.getPhotoBitmap() != null) {
-            img_user.setImageBitmap(singleton.user.getPhotoBitmap());
+            btn_change_image
+                    .setImageBitmap(singleton.user.getPhotoBitmap());
         } else if (singleton.user.getPhoto() != null) {
             byte[] decodedString = Base64.decode(singleton.user.getPhoto(), Base64.DEFAULT);
             Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
-            img_user.setImageBitmap(decodedByte);
+            btn_change_image
+                    .setImageBitmap(decodedByte);
         }
     }
 
@@ -200,36 +211,6 @@ public class FragmentConfig extends Frag implements View.OnClickListener {
         if (main != null)
             main.sendFullData();
     }
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (resultCode == Activity.RESULT_OK) {
-            if (requestCode == REQUEST_IMAGE_CAPTURE) {
-                Bitmap picture = Bitmap.createScaledBitmap((Bitmap) data.getExtras().get("data"), 180, 180, true);
-
-                Bitmap resized = getRoundedRectBitmap(picture, 100);
-
-                ByteArrayOutputStream baos = new ByteArrayOutputStream();
-                resized.compress(Bitmap.CompressFormat.PNG, 100, baos);
-                byte[] b = baos.toByteArray();
-                String base64Image = Base64.encodeToString(b, Base64.DEFAULT);
-
-                img_user.setImageBitmap(resized);
-                singleton.user.setPhoto(base64Image, resized);
-
-//                System.out.println(base64Image);
-/*
-                byte[] decodedString = Base64.decode(base64Image, Base64.DEFAULT);
-                Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
-*/
-            }
-        }
-    }
-
-    private EditText old_pass;
-    private EditText new_pass;
-    private EditText confirm_new_pass;
-    private Button update_pass;
 
     public String sha256(String base) {
         try {
@@ -302,7 +283,7 @@ public class FragmentConfig extends Frag implements View.OnClickListener {
             dialog.show();
 
             device_id.setText(singleton.device.get_id_device());
-            version_app.setText("1.0");
+            version_app.setText("1.0.0");
             version_os.setText(Build.VERSION.RELEASE);
 
             Button btn_ok = (Button) dialog.findViewById(R.id.btn_info_ok);
@@ -318,6 +299,31 @@ public class FragmentConfig extends Frag implements View.OnClickListener {
                 dialog = ProgressDialog.show(getContext(), "Saindo", "Por favor aguarde...", true);
                 LogoutClient logoutClient = new LogoutClient(getContext(), getActivity());
                 logoutClient.postJson();
+            }
+        }
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (resultCode == Activity.RESULT_OK) {
+            if (requestCode == REQUEST_IMAGE_CAPTURE) {
+                Bitmap picture = Bitmap.createScaledBitmap((Bitmap) data.getExtras().get("data"), 180, 180, true);
+
+                Bitmap resized = getRoundedRectBitmap(picture, 100);
+
+                ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                resized.compress(Bitmap.CompressFormat.PNG, 100, baos);
+                byte[] b = baos.toByteArray();
+                String base64Image = Base64.encodeToString(b, Base64.DEFAULT);
+
+                btn_change_image.setImageBitmap(resized);
+                singleton.user.setPhoto(base64Image, resized);
+
+//                System.out.println(base64Image);
+/*
+                byte[] decodedString = Base64.decode(base64Image, Base64.DEFAULT);
+                Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+*/
             }
         }
     }

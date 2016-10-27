@@ -55,7 +55,8 @@
         <activity android:name="com.onegravity.rteditor.media.crop.CropImageActivity" />
         <activity
             android:name=".Activities.MainActivity"
-            android:windowSoftInputMode="adjustPan" />
+            android:windowSoftInputMode="adjustPan"
+            android:screenOrientation="landscape"/>
         <activity
             android:name=".Dialog.FullVideoDialog"
             android:theme="@android:style/Theme.Dialog" />
