@@ -37,7 +37,7 @@
 
     <string name="cancel">Cancelar</string>
     <string name="reference_hint"><i>escreva aqui</i></string>
-    <string name="policy_title"><i>termos de compromisso:</i></string>
+    <string name="policy_title"><i>termo de uso:</i></string>
     <string name="policy_agree">concordo</string>
     <string name="policy_not_agree">não concordo</string>
     <string name="privacy_policy">

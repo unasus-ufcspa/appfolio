@@ -30,7 +30,8 @@
             android:paddingTop="20dp"
             android:paddingLeft="40dp"
             android:textStyle="normal|italic"
-            android:textSize="18sp" />
+            android:textSize="18sp"
+            android:textAllCaps="true" />
 
         <ScrollView
             android:id="@+id/scrollView2"
