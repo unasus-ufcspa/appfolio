@@ -28,34 +28,38 @@
             android:textSize="18sp"
             android:textAllCaps="true" />
 
-        <ScrollView
-            android:id="@+id/scrollView2"
-            android:layout_height="300dp"
-            android:layout_alignParentLeft="true"
-            android:layout_marginLeft="20dp"
-            android:layout_marginRight="20dp"
-            android:layout_above="@+id/linearLayout3"
-            android:layout_below="@+id/textView15"
-            android:layout_marginBottom="20dp"
-            android:background="@color/white"
-            android:layout_width="600dp"
-            android:layout_marginEnd="20dp"
-            android:layout_marginStart="20dp">
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingRight="20dp">
 
-            <TextView
-                android:id="@+id/term_text"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/privacy_policy"
-                android:textAppearance="?android:attr/textAppearanceLarge"
-                android:textSize="15dp"
-                android:fontFamily="sans-serif-light"
-                android:textColor="@color/gray_1"
-                android:paddingTop="15dp"
-                android:paddingLeft="20dp"
-                android:paddingRight="20dp"
-                android:lineSpacingExtra="5sp" />
-        </ScrollView>
+            <ScrollView
+                android:id="@+id/scrollView2"
+                android:layout_height="300dp"
+                android:layout_alignParentLeft="true"
+                android:layout_marginLeft="20dp"
+                android:layout_above="@+id/linearLayout3"
+                android:layout_below="@+id/textView15"
+                android:layout_marginBottom="20dp"
+                android:background="@color/white"
+                android:layout_width="700dp"
+                android:layout_marginStart="20dp">
+
+                <TextView
+                    android:id="@+id/term_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/privacy_policy"
+                    android:textAppearance="?android:attr/textAppearanceLarge"
+                    android:textSize="15dp"
+                    android:fontFamily="sans-serif-light"
+                    android:textColor="@color/gray_1"
+                    android:paddingTop="15dp"
+                    android:paddingLeft="20dp"
+                    android:paddingRight="20dp"
+                    android:lineSpacingExtra="5sp" />
+            </ScrollView>
+        </RelativeLayout>
 
         <Button
             android:id="@+id/btn_agree"

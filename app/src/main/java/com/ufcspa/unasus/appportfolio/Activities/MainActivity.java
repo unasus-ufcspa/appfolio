@@ -190,6 +190,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
             dialog.setContentView(R.layout.privacy_policy_popup);
             dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+            dialog.setCanceledOnTouchOutside(false);
 
             TextView policyTX = (TextView) dialog.findViewById(R.id.term_text);
             Button acceptBT = (Button) dialog.findViewById(R.id.btn_agree);
