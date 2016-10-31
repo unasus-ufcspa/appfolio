@@ -47,12 +47,8 @@ public class SplashActivity extends AppCompatActivity {
         Log.d("SplashActivity", "status device = " + statusApp);
 
         Intent intent = new Intent(this, LoginActivity2.class);
-        LoginActivity2 loginActivity2 = new LoginActivity2();
             if (statusApp == 1) {
-                if (loginActivity2.PolicyAceita()) {
                 intent = new Intent(this, MainActivity.class);
-                } else
-                    intent = new Intent(getApplicationContext(), PrivacyPolicyActivity.class);
             } else if (statusApp == 0) {
                 intent.putExtra("dont_have_basic_data", true);
             }

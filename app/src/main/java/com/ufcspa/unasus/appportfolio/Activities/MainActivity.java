@@ -1,6 +1,7 @@
 package com.ufcspa.unasus.appportfolio.Activities;
 
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -8,6 +9,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.net.ConnectivityManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -22,11 +24,15 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewConfiguration;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.mikepenz.crossfader.Crossfader;
 import com.ufcspa.unasus.appportfolio.Activities.Fragments.FragmentAttachment;
@@ -39,12 +45,14 @@ import com.ufcspa.unasus.appportfolio.Activities.Fragments.FragmentSelectPortfol
 import com.ufcspa.unasus.appportfolio.Activities.Fragments.FragmentStudentActivities;
 import com.ufcspa.unasus.appportfolio.Model.Attachment;
 import com.ufcspa.unasus.appportfolio.Model.Note;
+import com.ufcspa.unasus.appportfolio.Model.PolicyUser;
 import com.ufcspa.unasus.appportfolio.Model.Singleton;
 import com.ufcspa.unasus.appportfolio.R;
 import com.ufcspa.unasus.appportfolio.WebClient.BasicData;
 import com.ufcspa.unasus.appportfolio.WebClient.BasicDataClient;
 import com.ufcspa.unasus.appportfolio.WebClient.FullData;
 import com.ufcspa.unasus.appportfolio.WebClient.FullDataClient;
+import com.ufcspa.unasus.appportfolio.WebClient.PolicyUserClient;
 import com.ufcspa.unasus.appportfolio.WebClient.SendData;
 import com.ufcspa.unasus.appportfolio.WebClient.SendFullDataClient;
 import com.ufcspa.unasus.appportfolio.database.DataBase;
@@ -71,6 +79,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private Singleton singleton;
     private boolean shouldCreateDrawer;
     private View clicked;
+    private PolicyUser policyUser;
+    private PolicyUserClient policyUserClient;
+    private int idUser;
     private BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -173,6 +184,53 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             newFile.mkdirs();//if not, create it
         }
         */
+
+        if (!PolicyAceita()) {
+            final Dialog dialog = new Dialog(this);
+            dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+            dialog.setContentView(R.layout.privacy_policy_popup);
+            dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+
+            TextView policyTX = (TextView) dialog.findViewById(R.id.term_text);
+            Button acceptBT = (Button) dialog.findViewById(R.id.btn_agree);
+            Button notAcceptBT = (Button) dialog.findViewById(R.id.btn_not_agree);
+
+            dialog.show();
+
+            idUser = Singleton.getInstance().user.getIdUser();
+
+            String txPolicy = DataBaseAdapter.getInstance(getBaseContext()).getPolicyByUserID(idUser).getTxPolicy();
+
+            policyTX.setText(/*"TERMOS DE USO \n" + */txPolicy);
+
+            acceptBT.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    policyUser = DataBaseAdapter.getInstance(getBaseContext()).getPolicyUserByUserId(idUser);
+                    DataBaseAdapter.getInstance(getBaseContext()).updateFlAccept(policyUser.getIdPolicyUser());
+                    policyUser = DataBaseAdapter.getInstance(getBaseContext()).getPolicyUserByUserId(idUser);
+                    Log.d("policyUser",policyUser.toString());
+                    policyUserClient = new PolicyUserClient(getBaseContext());
+                    policyUserClient.postJson(PolicyUser.toJSON(policyUser.getIdPolicyUser(), policyUser.getIdUser(), policyUser.getFlAccept()));
+                    dialog.dismiss();
+                }
+            });
+            notAcceptBT.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Toast.makeText(getApplicationContext(),"É necessário aceitar os termos para continuar",Toast.LENGTH_LONG).show();
+                }
+            });
+        }
+    }
+
+    public boolean PolicyAceita() {
+        DataBaseAdapter bd = DataBaseAdapter.getInstance(this);
+        if (bd.getPolicyUserByUserId(Singleton.getInstance().user.getIdUser()).getFlAccept()!=null){
+            return true;
+        }
+        else
+            return false;
     }
 
     private void initMiniDrawer() {

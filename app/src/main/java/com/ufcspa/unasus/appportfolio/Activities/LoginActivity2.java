@@ -204,12 +204,8 @@ public class LoginActivity2 extends AppCompatActivity implements LoaderCallbacks
                                         public void run() {
                                             dialog.dismiss();
                                             Log.d("tela login", "terminou conexão");
-                                            if (PolicyAceita()) {
                                                 startActivity(new Intent(getApplicationContext(), MainActivity.class));
                                                 finish();
-                                            } else
-                                                startActivity(new Intent(getApplicationContext(), PrivacyPolicyActivity.class));
-                                            finish();
                                         }
                                     });
                                 } else {
