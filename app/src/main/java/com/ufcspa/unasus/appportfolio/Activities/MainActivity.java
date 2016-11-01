@@ -37,8 +37,6 @@ import android.widget.Toast;
 import com.mikepenz.crossfader.Crossfader;
 import com.ufcspa.unasus.appportfolio.Activities.Fragments.FragmentAttachment;
 import com.ufcspa.unasus.appportfolio.Activities.Fragments.FragmentConfig;
-import com.ufcspa.unasus.appportfolio.Activities.Fragments.FragmentConfigPassword;
-import com.ufcspa.unasus.appportfolio.Activities.Fragments.FragmentConfigUser;
 import com.ufcspa.unasus.appportfolio.Activities.Fragments.FragmentRTEditor;
 import com.ufcspa.unasus.appportfolio.Activities.Fragments.FragmentReference;
 import com.ufcspa.unasus.appportfolio.Activities.Fragments.FragmentSelectPortfolio;
@@ -368,12 +366,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     case "FragmentStudentActivities":
                         getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new FragmentStudentActivities()).addToBackStack(lastFragName).commit();
                         break;
-                    case "FragmentConfigPassword":
-                        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new FragmentConfigPassword()).addToBackStack(lastFragName).commit();
-                        break;
-                    case "FragmentConfigUser":
-                        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new FragmentConfigUser()).addToBackStack(lastFragName).commit();
-                        break;
                 }
         }
     }
@@ -619,16 +611,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             }
         } catch (Exception e) {
         }
-    }
-
-    public void initChangePasswordFragment() {
-        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new FragmentConfigPassword()).addToBackStack("FragmentConfigPassword").commit();
-        lastFragName = "FragmentConfigPassword";
-    }
-
-    public void initChangeProfileFragment() {
-        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new FragmentConfigUser()).addToBackStack("FragmentConfigUser").commit();
-        lastFragName = "FragmentConfigUser";
     }
 
     public void logout() {

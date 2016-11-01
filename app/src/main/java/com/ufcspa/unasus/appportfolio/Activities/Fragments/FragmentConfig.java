@@ -45,8 +45,6 @@ import java.security.MessageDigest;
  */
 public class FragmentConfig extends Frag implements View.OnClickListener {
     private static ProgressDialog dialog;
-    private Button btn_profile;
-    private Button btn_password;
     private Button btn_logout;
     private ImageButton btn_device_info;
 
@@ -55,7 +53,6 @@ public class FragmentConfig extends Frag implements View.OnClickListener {
     private EditText confirm_new_pass;
     private Button update_pass;
 
-    private ImageView img_user;
     private ImageView btn_change_image;
     private EditText edt_email;
     private EditText edt_telefone;
@@ -76,7 +73,7 @@ public class FragmentConfig extends Frag implements View.OnClickListener {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_config2, container, false);
+        View view = inflater.inflate(R.layout.fragment_config, container, false);
 
         singleton = Singleton.getInstance();
         source = DataBaseAdapter.getInstance(getContext());
@@ -122,23 +119,6 @@ public class FragmentConfig extends Frag implements View.OnClickListener {
         update_pass = (Button) view.findViewById(R.id.btn_update);
         update_pass.setOnClickListener(this);
     }
-
-  /*  @Override
-    public void onClick(View v) {
-        if (v.getId() == R.id.btn_profile) {
-            ((MainActivity) getActivity()).initChangeProfileFragment();
-        }
-        if (v.getId() == R.id.btn_password) {
-            ((MainActivity) getActivity()).initChangePasswordFragment();
-        }
-        if (v.getId() == R.id.btn_logout) {
-            if (isOnline()) {
-                dialog = ProgressDialog.show(getContext(), "Saindo", "Por favor aguarde...", true);
-                LogoutClient logoutClient = new LogoutClient(getContext(), getActivity());
-                logoutClient.postJson();
-            }
-        }
-    }*/
 
     public static Bitmap getRoundedRectBitmap(Bitmap bitmap, int pixels) {
         Bitmap result = null;

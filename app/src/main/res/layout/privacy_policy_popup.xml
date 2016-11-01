@@ -4,11 +4,11 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_height="wrap_content"
-        android:orientation="vertical"
         android:layout_width="wrap_content"
-        android:background="@drawable/border_popup_rteditor">
+        android:background="@drawable/border_popup_rteditor"
+        android:layout_margin="50dp">
 
         <TextView
             android:layout_width="match_parent"
@@ -28,38 +28,34 @@
             android:textSize="18sp"
             android:textAllCaps="true" />
 
-        <RelativeLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:paddingRight="20dp">
+        <ScrollView
+            android:id="@+id/scrollView2"
+            android:layout_height="match_parent"
+            android:layout_alignParentLeft="true"
+            android:layout_marginLeft="20dp"
+            android:layout_marginBottom="20dp"
+            android:background="@color/white"
+            android:layout_width="match_parent"
+            android:layout_marginStart="20dp"
+            android:layout_above="@+id/btn_agree"
+            android:layout_below="@+id/textView15"
+            android:layout_marginEnd="20dp"
+            android:layout_marginRight="20dp">
 
-            <ScrollView
-                android:id="@+id/scrollView2"
-                android:layout_height="300dp"
-                android:layout_alignParentLeft="true"
-                android:layout_marginLeft="20dp"
-                android:layout_above="@+id/linearLayout3"
-                android:layout_below="@+id/textView15"
-                android:layout_marginBottom="20dp"
-                android:background="@color/white"
-                android:layout_width="700dp"
-                android:layout_marginStart="20dp">
-
-                <TextView
-                    android:id="@+id/term_text"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/privacy_policy"
-                    android:textAppearance="?android:attr/textAppearanceLarge"
-                    android:textSize="15dp"
-                    android:fontFamily="sans-serif-light"
-                    android:textColor="@color/gray_1"
-                    android:paddingTop="15dp"
-                    android:paddingLeft="20dp"
-                    android:paddingRight="20dp"
-                    android:lineSpacingExtra="5sp" />
-            </ScrollView>
-        </RelativeLayout>
+            <TextView
+                android:id="@+id/term_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/privacy_policy"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:textSize="15dp"
+                android:fontFamily="sans-serif-light"
+                android:textColor="@color/gray_1"
+                android:paddingTop="15dp"
+                android:paddingLeft="20dp"
+                android:paddingRight="20dp"
+                android:lineSpacingExtra="5sp" />
+        </ScrollView>
 
         <Button
             android:id="@+id/btn_agree"
@@ -70,19 +66,26 @@
             android:text="@string/policy_agree"
             android:textColor="#ffffff"
             android:textStyle="bold"
-            android:layout_marginLeft="2dp"
-            android:layout_marginRight="2dp"
             android:fontFamily="sans-serif-medium"
             android:textAllCaps="false"
             android:textSize="20dp"
-            style="@style/Widget.AppCompat.Button.Borderless" />
+            style="@style/Widget.AppCompat.Button.Borderless"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_above="@+id/container"
+            android:layout_marginLeft="2dp"
+            android:layout_marginRight="2dp" />
 
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="2dp"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentBottom="true"
+            android:id="@+id/container"
             android:layout_marginLeft="2dp"
-            android:layout_marginRight="2dp">
+            android:layout_marginRight="2dp"
+            android:paddingBottom="2dp">
 
             <TextView
                 android:layout_width="wrap_content"
@@ -111,6 +114,7 @@
                 style="@style/Widget.AppCompat.Button.Borderless" />
 
         </RelativeLayout>
-    </LinearLayout>
+
+    </RelativeLayout>
 
 </RelativeLayout>

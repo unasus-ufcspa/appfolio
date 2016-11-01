@@ -40,17 +40,7 @@
     <string name="policy_title"><i>termo de uso:</i></string>
     <string name="policy_agree">concordo</string>
     <string name="policy_not_agree">não concordo</string>
-    <string name="privacy_policy">
-
-Donec ornare tincidunt ante, eu condimentum magna. Vivamus porttitor odio non ipsum rhoncus blandit. Duis tempor dapibus turpis nec vestibulum. Vivamus id accumsan dolor. Vestibulum cursus erat tempor venenatis porttitor. Sed luctus tincidunt est, ornare lacinia elit egestas eget. Vivamus sapien elit, varius eget nulla eu, scelerisque feugiat lacus.
-
-Proin massa enim, euismod id tellus in, tempor egestas elit. Maecenas ornare, est sit amet ultricies pulvinar, velit tellus pretium enim, sed placerat odio lacus in enim. Donec quis auctor augue. Praesent bibendum magna ex, vitae porta odio venenatis et. Proin nisi turpis, dignissim vel risus quis, imperdiet viverra orci. Donec porttitor felis at massa consectetur elementum. Quisque dictum faucibus felis, sit amet accumsan dui congue eu. Ut vulputate dui est, in varius mauris ultrices id. Mauris vel magna varius, ultricies neque ut, vestibulum risus. Nunc maximus ornare fermentum. Duis nec ornare felis. Donec luctus efficitur leo, eget euismod augue ornare et. Morbi interdum elit non lectus pellentesque lobortis ut vel sapien. In pulvinar accumsan vestibulum. Etiam eget turpis erat. Mauris sit amet eleifend eros.
-
-Sed quis convallis felis. Nunc vitae lectus ut dui volutpat ultricies. Mauris mi quam, posuere eu mollis sed, tempor et nibh. Vestibulum id eros ac justo fringilla ultrices ac in diam. Fusce auctor sapien nec nulla ornare facilisis. Nunc dictum orci ex, sed porttitor turpis consequat id. Duis vitae dictum tellus. Praesent at luctus risus, vel rutrum dui. Vestibulum cursus euismod ipsum, sed imperdiet mi commodo pulvinar. Proin tristique, nisl nec dapibus aliquam, augue nunc imperdiet augue, ac dapibus libero sapien at metus. Fusce dignissim volutpat tellus quis vestibulum. In hac habitasse platea dictumst. Aenean vitae faucibus ligula. Morbi efficitur efficitur odio, id efficitur libero vulputate efficitur. Ut volutpat elit sit amet semper facilisis.
-
-Fusce euismod cursus est. Donec sed elit scelerisque, egestas risus at, malesuada lectus. Nulla placerat odio sapien, in varius purus tristique eu. Sed pretium non magna sed tempus. Integer tincidunt nisl turpis, sit amet vehicula massa varius vitae. Donec commodo bibendum leo, ut porttitor tellus vehicula sodales. Vestibulum justo risus, faucibus eu nisi sed, semper rhoncus nisl. Ut fringilla aliquam eros, pellentesque volutpat arcu mattis in. Sed sagittis et lorem a eleifend. Sed placerat tincidunt fringilla. Mauris efficitur eu elit porttitor bibendum. Aliquam erat volutpat. Aliquam malesuada facilisis varius. Donec ac magna maximus, euismod ipsum nec, rhoncus diam. Quisque et nisi augue.
-
-Pellentesque finibus vehicula ultrices. Vestibulum efficitur lectus nec pulvinar convallis. Donec eu eros a elit venenatis sodales. Integer dolor quam, mollis vel magna ut, maximus condimentum diam. Suspendisse potenti. Vestibulum tempor metus sit amet nisl elementum feugiat. Morbi non enim lacinia, gravida augue vel, vulputate lacus. Maecenas non leo sollicitudin diam pulvinar dictum. Sed malesuada risus tellus, at mattis tellus tincidunt id. </string>
+    <string name="privacy_policy"></string>
 
     <string name="popup_login">Do you want to enter as Student or Tutor?</string>
     <string name="popup_login_student">Student</string>

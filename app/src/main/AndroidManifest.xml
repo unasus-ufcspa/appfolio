@@ -71,7 +71,6 @@
             android:name=".Activities.TesteDownloadImage"
             android:label="@string/title_activity_teste_download_image"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".Activities.PrivacyPolicyActivity"></activity>
     </application>
 
 </manifest>
