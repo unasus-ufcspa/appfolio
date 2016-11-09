@@ -315,7 +315,6 @@ public class FullDataClient extends HttpClient {
                                                 int id_activity_student = temp.getInt("id_activity_student");
                                                 String tx_activity = temp.getString("tx_activity");
                                                 tx_activity = tx_activity.replaceAll("\'", "");
-                                                tx_activity = tx_activity.replaceAll("\\/", "/");
 
                                                 tx_activity = tx_activity.replaceAll("<span id", "<font id");
                                                 tx_activity = tx_activity.replaceAll("</span>", "</font>");
