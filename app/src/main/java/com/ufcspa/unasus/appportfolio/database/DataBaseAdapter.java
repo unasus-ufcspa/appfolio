@@ -1464,7 +1464,6 @@ public class DataBaseAdapter {
         ContentValues cv = new ContentValues();
         cv.put("tx_activity", v.getTx_activity());
         cv.put("dt_last_access", v.getDt_last_access());
-        cv.put("dt_submission", v.getDt_submission());
         cv.put("id_activity_student", v.getId_activity_student());
         cv.put("id_version_activity_srv", v.getId_version_activit_srv());
         int result=-1;
@@ -3069,9 +3068,9 @@ public class DataBaseAdapter {
         }
     }
 
-    public void updateVersionsBySendFullData(String dtSubmission, int idVersion) {
+    public void updateVersionsBySendFullData(int idVersionSrv, int idVersion) {
         ContentValues cv = new ContentValues();
-        cv.put("dt_submission", dtSubmission);
+        cv.put("id_version_activity_srv", idVersionSrv);
         try {
             db.update("tb_version_activity", cv, "id_version_activity=?", new String[]{"" + idVersion});
         } catch (Exception e) {

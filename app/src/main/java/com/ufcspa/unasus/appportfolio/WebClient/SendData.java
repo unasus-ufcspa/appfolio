@@ -391,13 +391,10 @@ public class SendData {
                     {
                         jsonVersion.put("id_version_activity_srv", v.getId_version_activit_srv());
                     }else{
-                        if (v.getId_version_activit_srv()!=-1) {
-                            if (data.isSync("tb_version_activity",v.getId_version_activit_srv()))
-                                jsonVersion.put("id_version_activity_srv", v.getId_version_activit_srv());
-                            else
-                                jsonVersion.put("id_version_activity_srv", "");
-                        }else
-                            jsonVersion.put("id_version_activity_srv", 0);
+                        if (data.isSync("tb_version_activity",v.getId_version_activit_srv()))
+                            jsonVersion.put("id_version_activity_srv", v.getId_version_activit_srv());
+                        else
+                            jsonVersion.put("id_version_activity_srv", "");
                     }
 
 
@@ -410,11 +407,6 @@ public class SendData {
 
                     jsonVersion.put("tx_activity", tx_activity);
                     jsonVersion.put("dt_last_access", v.getDt_last_access());
-                    if (v.getDt_submission().equals("0000-00-00 00:00:00")) {
-                        jsonVersion.put("dt_submission", v.getDt_submission());
-                    } else {
-                        jsonVersion.put("dt_submission", "");
-                    }
 
                     Log.d("json send data:", jsonVersion.toString());
 
