@@ -212,10 +212,12 @@ public class FragmentRTEditor extends Frag {
             Log.d("tutorPerfil", "tutor data:" + userPerfil.toString());
             if (singleton.firstSync){
                 if (source.getVersionActivitiesByID(singleton.idCurrentVersionActivity)!=null) {
-                    VersionActivity versionActivity = source.getVersionActivitiesByID(singleton.idCurrentVersionActivity);
-                    versionActivity.setId_version_activit_srv(0);
-                    source.insertVersionActivity(versionActivity);
-                    singleton.idVersionActivity = source.getLastIDVersionActivity(singleton.idActivityStudent);
+                    if (source.getVersionActivitiesByID(singleton.idCurrentVersionActivity).getDt_submission()!=null) {
+                        VersionActivity versionActivity = source.getVersionActivitiesByID(singleton.idCurrentVersionActivity);
+                        versionActivity.setId_version_activit_srv(0);
+                        source.insertVersionActivity(versionActivity);
+                        singleton.idVersionActivity = source.getLastIDVersionActivity(singleton.idActivityStudent);
+                    }
                 }
                 singleton.firstSync=false;
             }
@@ -284,33 +286,45 @@ public class FragmentRTEditor extends Frag {
                                         //ANEXOS QUE DEVEM SER ENVIADOS
                                         handleSendAttachments();
 
-                                        //POPULA SYNC PARA SINCRONIZAR
-                                        Sync sync = new Sync();
-                                        sync.setNm_table("tb_version_activity");
-                                        sync.setCo_id_table(source.getLastIDVersionActivity(singleton.idActivityStudent));
-                                        sync.setId_activity_student(Singleton.getInstance().idActivityStudent);
-                                        sync.setId_device(singleton.device.get_id_device());
-                                        source.insertIntoTBSync(sync);
+                                        int i = 1;
+                                        int id = 0;
 
-                                        //SALVA NOVA VERSION ACTIVITY
-                                        DataBaseAdapter data = DataBaseAdapter.getInstance(getContext());
-                                        VersionActivity version = new VersionActivity();
-                                        version.setTx_activity(mRTMessageField.getText(RTFormat.HTML));
-                                        version.setId_activity_student(Singleton.getInstance().idActivityStudent);
-                                        version.setDt_last_access(getActualTime());
-                                        //version.setId_version_activit_srv(version.getId_version_activity());
-                                        int id = data.insertVersionActivity(version);
-                                        try {
-                                            data.updateVersionsBySendFullData(0,id);
-                                        } finally {
-                                            Toast.makeText(getContext(),"Versão Enviada",Toast.LENGTH_LONG).show();
-                                        }
-                                        singleton.idVersionActivity = id;
-                                        singleton.idCurrentVersionActivity = id;
+                                        if (source.getAllVersionsFromActivityStudent(singleton.idActivityStudent).size()==1)
+                                            i++;
 
-                                        MainActivity main = ((MainActivity) getActivity());
-                                        if (main != null)
-                                            main.sendFullData();
+                                        do {
+                                            //POPULA SYNC PARA SINCRONIZAR
+                                            Sync sync = new Sync();
+                                            sync.setNm_table("tb_version_activity");
+                                            sync.setCo_id_table(source.getLastIDVersionActivity(singleton.idActivityStudent));
+                                            sync.setId_activity_student(Singleton.getInstance().idActivityStudent);
+                                            sync.setId_device(singleton.device.get_id_device());
+                                            source.insertIntoTBSync(sync);
+
+                                            //SALVA NOVA VERSION ACTIVITY
+                                            DataBaseAdapter data = DataBaseAdapter.getInstance(getContext());
+                                            VersionActivity version = new VersionActivity();
+                                            version.setTx_activity(mRTMessageField.getText(RTFormat.HTML));
+                                            version.setId_activity_student(Singleton.getInstance().idActivityStudent);
+                                            version.setDt_last_access(getActualTime());
+                                            version.setDt_submission("");
+                                            if (i==2) {
+                                                id = data.insertVersionActivity(version);
+                                                try {
+                                                    data.updateVersionsBySendFullData("",id);
+                                                } finally {
+                                                    Toast.makeText(getContext(),"Versão Enviada",Toast.LENGTH_LONG).show();
+                                                }
+                                            }
+                                            singleton.idVersionActivity = id;
+                                            singleton.idCurrentVersionActivity = id;
+
+                                            i--;
+                                        } while (i>0);
+                                            MainActivity main = ((MainActivity) getActivity());
+                                            if (main != null)
+                                                main.sendFullData();
+
 
                                         if (!singleton.isFullscreen) {
                                             singleton.wasFullscreen = true;
@@ -361,7 +375,7 @@ public class FragmentRTEditor extends Frag {
             version.setId_activity_student(Singleton.getInstance().idActivityStudent);
             version.setDt_last_access(getActualTime());
             int id = source.insertVersionActivity(version);
-            source.updateVersionsBySendFullData(0,id);
+            source.updateVersionsBySendFullData("0000-00-00 00:00:00",id);
             singleton.idVersionActivity = id;
             singleton.idCurrentVersionActivity = id;
         }
