@@ -155,6 +155,7 @@
     <orderEntry type="library" exported="" scope="TEST" name="junit-4.12" level="project" />
     <orderEntry type="module" module-name="RTEditor-Toolbar" exported="" />
     <orderEntry type="module" module-name="RTEditor" exported="" />
+    <orderEntry type="library" exported="" name="android-android-23" level="project" />
     <orderEntry type="library" exported="" name="org.apache.http.legacy-android-23" level="project" />
     <orderEntry type="library" exported="" name="core-0.8.5.3" level="project" />
     <orderEntry type="library" exported="" name="eventbus-2.4.1" level="project" />
