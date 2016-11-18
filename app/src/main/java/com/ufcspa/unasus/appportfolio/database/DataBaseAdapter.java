@@ -1390,7 +1390,7 @@ public class DataBaseAdapter {
     }
 
     public int getLastIDVersionActivity(int idActivityStudent) {
-        String query = "SELECT MAX(id_version_activity) FROM tb_version_activity WHERE id_activity_student=" + idActivityStudent;
+        String query = "SELECT MAX(id_version_activity) FROM tb_version_activity WHERE id_activity_student=" + idActivityStudent + " AND NOT dt_submission='0000-00-00 00:00:00'";
         Cursor c = null;
         try {
             c = db.rawQuery(query, null);
@@ -1402,6 +1402,16 @@ public class DataBaseAdapter {
             Log.e(tag, "erro ao buscar last id version:" + e.getMessage());
         }
         return 0;
+    }
+
+    public int getIDVersionAtual(int idActivityStudent) {
+        String query = "SELECT id_version_activity FROM tb_version_activity WHERE id_activity_student=" + idActivityStudent + " AND dt_submission='0000-00-00 00:00:00'";
+        Cursor c = null;
+        c = db.rawQuery(query, null);
+        if (c.moveToFirst())
+            return c.getInt(0);
+        else
+            return 0;
     }
 
     public int getLastIDVersionActivitySrv(int idActivityStudent) {
@@ -1421,7 +1431,7 @@ public class DataBaseAdapter {
 
     public ActivityStudent listLastVersionActivityStudent(int idActivityStudent) {
         ActivityStudent acStudent = new ActivityStudent();
-        String query = "select tx_activity from tb_version_activity WHERE id_version_activity=(SELECT MAX(id_version_activity) FROM tb_version_activity WHERE id_activity_student=" + idActivityStudent + ");";
+        String query = "select tx_activity from tb_version_activity WHERE id_version_activity=(SELECT MAX(id_version_activity) FROM tb_version_activity WHERE id_activity_student=" + idActivityStudent + ") ORDER BY dt_submission;";
         Cursor c = null;
         Log.d(tag, "query lista act Stu:" + query);
         try {
@@ -1464,6 +1474,7 @@ public class DataBaseAdapter {
         ContentValues cv = new ContentValues();
         cv.put("tx_activity", v.getTx_activity());
         cv.put("dt_last_access", v.getDt_last_access());
+        cv.put("dt_submission", v.getDt_submission());
         cv.put("id_activity_student", v.getId_activity_student());
         cv.put("id_version_activity_srv", v.getId_version_activit_srv());
         int result=-1;
@@ -1484,15 +1495,9 @@ public class DataBaseAdapter {
     }
 
     public ArrayList<VersionActivity> getAllVersionsFromActivityStudent(int id_activity_student) {
-        String query = "SELECT id_version_activity, " +
-                "id_activity_student, " +
-                "tx_activity, " +
-                "dt_last_access, " +
-                "dt_submission, " +
-                "dt_verification, " +
-                "id_version_activity_srv " +
+        String query = "SELECT * " +
                 "FROM tb_version_activity " +
-                "WHERE id_activity_student = " + id_activity_student;
+                "WHERE id_activity_student = " + id_activity_student + " ORDER BY dt_submission";
         ArrayList<VersionActivity> versionActivities = new ArrayList<VersionActivity>();
         Cursor c = db.rawQuery(query, null);
         if (c.moveToFirst()) {
@@ -3068,9 +3073,10 @@ public class DataBaseAdapter {
         }
     }
 
-    public void updateVersionsBySendFullData(int idVersionSrv, int idVersion) {
+    public void updateVersionsBySendFullData(int idVersionSrv, String dtSubmission, int idVersion) {
         ContentValues cv = new ContentValues();
         cv.put("id_version_activity_srv", idVersionSrv);
+        cv.put("dt_submission", dtSubmission);
         try {
             db.update("tb_version_activity", cv, "id_version_activity=?", new String[]{"" + idVersion});
         } catch (Exception e) {
@@ -3244,7 +3250,7 @@ public class DataBaseAdapter {
                 db.insert("tb_policy", null, cv);
 
             } catch (Exception e) {
-                Log.d(tag, "erro ao inserir tb_sync:" + e.getMessage());
+                Log.d(tag, "erro ao inserir tb_policy:" + e.getMessage());
                 e.printStackTrace();
             }
 
@@ -3262,7 +3268,7 @@ public class DataBaseAdapter {
                 db.insert("tb_policy_user", null, cv);
 
             } catch (Exception e) {
-                Log.d(tag, "erro ao inserir tb_sync:" + e.getMessage());
+                Log.d(tag, "erro ao inserir tb_policy_user:" + e.getMessage());
                 e.printStackTrace();
             }
 

@@ -407,6 +407,7 @@ public class SendData {
 
                     jsonVersion.put("tx_activity", tx_activity);
                     jsonVersion.put("dt_last_access", v.getDt_last_access());
+                    jsonVersion.put("dt_submission", v.getDt_submission());
 
                     Log.d("json send data:", jsonVersion.toString());
 

@@ -31,7 +31,7 @@ public class VersionsAdapter extends BaseAdapter {
         this.holder = new Holder();
         this.source = DataBaseAdapter.getInstance(context);
 
-        Collections.sort(this.list);
+//        Collections.sort(this.list);
 
         inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
@@ -94,7 +94,7 @@ public class VersionsAdapter extends BaseAdapter {
     public void refresh(ArrayList<VersionActivity> versionActivities) {
         this.list = versionActivities;
 
-        Collections.sort(this.list);
+//        Collections.sort(this.list);
 
         notifyDataSetChanged();
     }
