@@ -10,6 +10,9 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.github.amlcurran.showcaseview.ShowcaseView;
+import com.github.amlcurran.showcaseview.targets.Target;
+import com.github.amlcurran.showcaseview.targets.ViewTarget;
 import com.ufcspa.unasus.appportfolio.Adapter.SelectPortfolioAdapter;
 import com.ufcspa.unasus.appportfolio.Model.PortfolioClass;
 import com.ufcspa.unasus.appportfolio.Model.Singleton;
@@ -44,6 +47,11 @@ public class SelectPortfolioActivity extends AppActivity {
 //        });
         txtCodeTeam = (TextView) findViewById(R.id.select_portfolio_txt_code);
         listview = (ListView) findViewById(R.id.selectPortfolioListView);
+
+        // TODO: 22/11/2016 inserir tutorial
+        Target target = new ViewTarget(R.id.email_sign_in_button,this);
+        MainActivity mainActivity = new MainActivity();
+        mainActivity.ShowCase(target,"Comentario especifico","aqui você cria comentários específicos");
 
         init();
         createDrawer(savedInstanceState);

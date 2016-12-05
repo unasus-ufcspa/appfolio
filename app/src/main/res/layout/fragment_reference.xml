@@ -4,50 +4,55 @@
     android:layout_height="match_parent"
     android:background="@color/gray_7">
 
-    <TextView
-        android:text="Referências"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/textView16"
-        android:textAppearance="@android:style/TextAppearance.Material.Large"
-        android:textSize="30sp"
-        android:textColor="@color/gray_1"
-        android:textAllCaps="true"
-        android:fontFamily="sans-serif-light"
-        android:paddingLeft="50dp"
-        android:paddingTop="20dp"
-        android:layout_marginLeft="20dp"
-        android:layout_marginRight="20dp"
-        android:background="@color/white" />
-
-    <LinearLayout
-        android:orientation="vertical"
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@+id/textView16">
+        android:background="@drawable/rteditor_shadow"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp">
+
+        <TextView
+            android:text="Referências"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/textView16"
+            android:textAppearance="@android:style/TextAppearance.Material.Large"
+            android:textSize="30sp"
+            android:textColor="@color/gray_1"
+            android:textAllCaps="true"
+            android:fontFamily="sans-serif-light"
+            android:paddingLeft="50dp"
+            android:paddingTop="20dp"
+            android:paddingBottom="20dp"
+            android:background="@color/white" />
 
         <LinearLayout
             android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
-            android:layout_below="@+id/textView16"
-            android:layout_above="@+id/linearLayout10"
-            android:layout_weight="1">
+            android:layout_below="@+id/textView16">
 
-            <ListView
-                android:id="@+id/frag_ref_listview"
+            <LinearLayout
+                android:orientation="vertical"
                 android:layout_width="match_parent"
-                android:layout_weight="1"
-                android:layout_marginLeft="20dp"
-                android:layout_marginRight="20dp"
-                android:background="@color/white"
                 android:layout_height="match_parent"
-                android:divider="#00000000"
-                android:paddingLeft="50dp" />
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_below="@+id/textView16"
+                android:layout_above="@+id/linearLayout10"
+                android:layout_weight="1">
+
+                <ListView
+                    android:id="@+id/frag_ref_listview"
+                    android:layout_width="match_parent"
+                    android:layout_weight="1"
+                    android:background="@color/white"
+                    android:layout_height="match_parent"
+                    android:divider="#00000000"
+                    android:paddingLeft="50dp" />
+            </LinearLayout>
         </LinearLayout>
-    </LinearLayout>
+    </RelativeLayout>
 
     <LinearLayout
         android:orientation="vertical"
@@ -62,7 +67,7 @@
             android:orientation="horizontal"
             android:layout_width="match_parent"
             android:layout_weight="1"
-            android:layout_margin="40dp"
+            android:layout_margin="30dp"
             android:background="@color/gray_8"
             android:layout_height="match_parent">
 

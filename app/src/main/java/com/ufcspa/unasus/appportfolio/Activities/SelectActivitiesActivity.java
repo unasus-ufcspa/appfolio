@@ -7,6 +7,9 @@ import android.view.View;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.github.amlcurran.showcaseview.ShowcaseView;
+import com.github.amlcurran.showcaseview.targets.Target;
+import com.github.amlcurran.showcaseview.targets.ViewTarget;
 import com.ufcspa.unasus.appportfolio.Adapter.StudentActivitiesAdapter;
 import com.ufcspa.unasus.appportfolio.Model.Singleton;
 import com.ufcspa.unasus.appportfolio.Model.StudFrPortClass;
@@ -37,6 +40,11 @@ public class SelectActivitiesActivity extends AppActivity //implements AdapterVi
 
         init();
         createDrawer(savedInstanceState);
+
+        // TODO: 22/11/2016 inserir tutorial
+        Target target = new ViewTarget(R.id.email_sign_in_button,this);
+        MainActivity mainActivity = new MainActivity();
+        mainActivity.ShowCase(target,"Comentario especifico","aqui você cria comentários específicos");
     }
 
     private void init()

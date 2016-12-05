@@ -397,8 +397,6 @@ public class SendData {
                             jsonVersion.put("id_version_activity_srv", "");
                     }
 
-
-
                     jsonVersion.put("id_activity_student", v.getId_activity_student());
 
                     String tx_activity = v.getTx_activity();

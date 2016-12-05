@@ -1495,7 +1495,13 @@ public class DataBaseAdapter {
     }
 
     public ArrayList<VersionActivity> getAllVersionsFromActivityStudent(int id_activity_student) {
-        String query = "SELECT * " +
+        String query = "SELECT id_version_activity, " +
+                "id_activity_student, " +
+                "tx_activity, " +
+                "dt_last_access, " +
+                "dt_submission, " +
+                "dt_verification, " +
+                "id_version_activity_srv " +
                 "FROM tb_version_activity " +
                 "WHERE id_activity_student = " + id_activity_student + " ORDER BY dt_submission";
         ArrayList<VersionActivity> versionActivities = new ArrayList<VersionActivity>();
@@ -1967,6 +1973,18 @@ public class DataBaseAdapter {
 
 //        db.close();
         return array_activity;
+    }
+
+    public String getActivityTitleByIdActivityStudent (int idActivityStudent) {
+        String query = "SELECT ds_title FROM tb_activity JOIN tb_activity_student ON tb_activity.id_activity=tb_activity_student.id_activity WHERE id_activity_student="+idActivityStudent;
+        Cursor cursor = db.rawQuery(query,null);
+        String ds_title = null;
+
+        if (cursor.moveToFirst()){
+            ds_title = cursor.getString(0);
+        }
+
+        return ds_title;
     }
 
     /*

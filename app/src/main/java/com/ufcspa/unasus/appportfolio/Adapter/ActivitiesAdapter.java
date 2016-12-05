@@ -107,7 +107,7 @@ public class ActivitiesAdapter extends RecyclerView.Adapter<ActivitiesAdapter.Vi
                 singleton.portfolioClass.setStudentName(studentName);
                 singleton.portfolioClass.setPhoto(studFrPortClass.getPhoto());
                 singleton.portfolioClass.setCellphone(studFrPortClass.getCellphone());
-                LocalBroadcastManager.getInstance(context).sendBroadcast(new Intent("call.fragments.action").putExtra("ID", 5));
+                LocalBroadcastManager.getInstance(context).sendBroadcast(new Intent("call.fragments.action").putExtra("ID", 6));
             }
         });
 

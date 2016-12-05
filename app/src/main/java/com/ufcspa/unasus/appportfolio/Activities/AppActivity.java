@@ -51,7 +51,7 @@ public class AppActivity extends AppCompatActivity implements Drawer.OnDrawerIte
                         new PrimaryDrawerItem().withName(R.string.drawer_portfolio).withIcon(FontAwesome.Icon.faw_photo).withIdentifier(1),
                         new PrimaryDrawerItem().withName(R.string.drawer_activities).withIcon(FontAwesome.Icon.faw_pencil),
                         new PrimaryDrawerItem().withName(R.string.drawer_files).withIcon(FontAwesome.Icon.faw_paste),
-                        new PrimaryDrawerItem().withName(R.string.drawer_reports).withIcon(FontAwesome.Icon.faw_calendar),
+                        new PrimaryDrawerItem().withName(R.string.drawer_references).withIcon(FontAwesome.Icon.faw_calendar),
                         new PrimaryDrawerItem().withName(R.string.drawer_settings).withIcon(FontAwesome.Icon.faw_cog)
                 )
                 .withSavedInstance(savedInstanceState)

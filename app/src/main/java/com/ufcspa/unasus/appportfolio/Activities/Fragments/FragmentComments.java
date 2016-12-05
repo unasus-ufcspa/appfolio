@@ -25,6 +25,9 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 
+import com.github.amlcurran.showcaseview.ShowcaseView;
+import com.github.amlcurran.showcaseview.targets.Target;
+import com.github.amlcurran.showcaseview.targets.ViewTarget;
 import com.onegravity.rteditor.utils.Constants;
 import com.ufcspa.unasus.appportfolio.Activities.MainActivity;
 import com.ufcspa.unasus.appportfolio.Adapter.CommentAdapter;
@@ -97,6 +100,11 @@ public class FragmentComments extends Frag {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_messages, null);
+
+        // TODO: 22/11/2016 inserir tutorial
+        Target target = new ViewTarget(R.id.email_sign_in_button,getActivity());
+        MainActivity mainActivity = new MainActivity();
+        mainActivity.ShowCase(target,"Comentario especifico","aqui você cria comentários específicos");
 
         source = DataBaseAdapter.getInstance(getActivity());
 

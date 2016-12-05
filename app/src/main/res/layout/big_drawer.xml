@@ -118,6 +118,39 @@
     </RelativeLayout>
 
     <RelativeLayout
+        android:id="@+id/references"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:gravity="center|left">
+
+        <ImageButton
+            android:id="@+id/btn_references"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="16dp"
+            android:layout_weight="1"
+            android:background="@android:color/transparent"
+            android:src="@drawable/drawer_atividades" />
+
+        <TextView
+            android:id="@+id/textView10"
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/btn_references"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignTop="@+id/btn_references"
+            android:layout_marginLeft="50dp"
+            android:layout_toEndOf="@+id/btn_references"
+            android:layout_toRightOf="@+id/btn_references"
+            android:gravity="center|left"
+            android:text="@string/drawer_references"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:textColor="@color/gray_3" />
+    </RelativeLayout>
+
+    <RelativeLayout
         android:id="@+id/reports"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -131,7 +164,7 @@
             android:layout_marginLeft="16dp"
             android:layout_weight="1"
             android:background="@android:color/transparent"
-            android:src="@drawable/drawer_atividades" />
+            android:src="@drawable/drawer_referencias" />
 
         <TextView
             android:id="@+id/textView7"

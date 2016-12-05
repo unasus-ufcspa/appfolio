@@ -26,6 +26,9 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.github.amlcurran.showcaseview.ShowcaseView;
+import com.github.amlcurran.showcaseview.targets.Target;
+import com.github.amlcurran.showcaseview.targets.ViewTarget;
 import com.onegravity.rteditor.utils.Constants;
 import com.ufcspa.unasus.appportfolio.Activities.MainActivity;
 import com.ufcspa.unasus.appportfolio.Adapter.SpecificCommentAdapter;
@@ -116,6 +119,11 @@ public class FragmentSpecificComments extends Frag {
         loadCommentsFromDB.execute();
         Log.d("Comments", "On create entrou");
         LocalBroadcastManager.getInstance(getContext()).registerReceiver(broadcastReceiver, new IntentFilter("call.connection.action"));
+
+        // TODO: 22/11/2016 inserir tutorial
+        Target target = new ViewTarget(R.id.email_sign_in_button,getActivity());
+        MainActivity mainActivity = new MainActivity();
+        mainActivity.ShowCase(target,"Comentario especifico","aqui você cria comentários específicos");
     }
 
     private void hide() {

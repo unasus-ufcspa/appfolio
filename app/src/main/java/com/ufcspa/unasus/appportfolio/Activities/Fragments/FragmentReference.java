@@ -95,9 +95,6 @@ public class FragmentReference extends Frag {
 
     }
 
-
-
-
     public boolean salvar(){
         boolean result = false;
         Singleton singleton = Singleton.getInstance();

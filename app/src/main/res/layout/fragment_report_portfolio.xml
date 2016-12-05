@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:id="@+id/crossfade_content"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/portfolio_name"
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:text="Portfólio 1"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:textColor="@color/white"
+            android:paddingLeft="40dp"
+            android:background="@color/gray_6"
+            android:textStyle="normal|bold"
+            android:textSize="18sp"
+            android:gravity="center_vertical" />
+
+        <ListView
+            android:id="@+id/list_report_activities"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:divider="@null"
+            android:dividerHeight="0dp"
+            android:horizontalSpacing="10dp"
+            android:minHeight="170dp"
+            android:verticalSpacing="50dp"
+            android:layout_below="@+id/portfolio_name" />
+
+    </RelativeLayout>
+
+</LinearLayout>

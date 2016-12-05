@@ -9,7 +9,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.net.ConnectivityManager;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -34,11 +33,14 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.github.amlcurran.showcaseview.targets.Target;
 import com.mikepenz.crossfader.Crossfader;
 import com.ufcspa.unasus.appportfolio.Activities.Fragments.FragmentAttachment;
 import com.ufcspa.unasus.appportfolio.Activities.Fragments.FragmentConfig;
 import com.ufcspa.unasus.appportfolio.Activities.Fragments.FragmentRTEditor;
 import com.ufcspa.unasus.appportfolio.Activities.Fragments.FragmentReference;
+import com.ufcspa.unasus.appportfolio.Activities.Fragments.FragmentReport;
+import com.ufcspa.unasus.appportfolio.Activities.Fragments.FragmentReportPortfolio;
 import com.ufcspa.unasus.appportfolio.Activities.Fragments.FragmentSelectPortfolio;
 import com.ufcspa.unasus.appportfolio.Activities.Fragments.FragmentStudentActivities;
 import com.ufcspa.unasus.appportfolio.Model.Attachment;
@@ -189,6 +191,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             dialog.setContentView(R.layout.privacy_policy_popup);
             dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
             dialog.setCanceledOnTouchOutside(false);
+            dialog.setCancelable(false);
 
             TextView policyTX = (TextView) dialog.findViewById(R.id.term_text);
             Button acceptBT = (Button) dialog.findViewById(R.id.btn_agree);
@@ -232,33 +235,50 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             return false;
     }
 
+    //Método para criar show case views dos tutoriais
+    public void ShowCase(Target target, String titulo, String texto){
+       /* if (singleton.tutorial) {
+            new ShowcaseView.Builder(this)
+                    .setTarget(target)
+                    .setStyle(R.style.ShowCaseCustom)
+                    .setContentTitle(titulo)
+                    .setContentText(texto)
+                    .hideOnTouchOutside()
+                    .build();
+        }*/
+    }
+
     private void initMiniDrawer() {
         ImageButton portfolios = (ImageButton) miniDrawer.findViewById(R.id.btn_members);
         ImageButton activities = (ImageButton) miniDrawer.findViewById(R.id.btn_activities);
-        ImageButton reports = (ImageButton) miniDrawer.findViewById(R.id.btn_reports);
+        ImageButton references = (ImageButton) miniDrawer.findViewById(R.id.btn_references);
         ImageButton config = (ImageButton) miniDrawer.findViewById(R.id.btn_config);
         ImageButton attachments = (ImageButton) miniDrawer.findViewById(R.id.btn_attachments);
+        ImageButton reports = (ImageButton) miniDrawer.findViewById(R.id.btn_reports);
 
         portfolios.setOnClickListener(this);
         activities.setOnClickListener(this);
-        reports.setOnClickListener(this);
+        references.setOnClickListener(this);
         config.setOnClickListener(this);
         attachments.setOnClickListener(this);
+        reports.setOnClickListener(this);
     }
 
     private void initBigDrawer() {
         ImageView logo = (ImageView) bigDrawer.findViewById(R.id.img_logo);
         RelativeLayout portfolios = (RelativeLayout) bigDrawer.findViewById(R.id.portfolios);
         RelativeLayout activities = (RelativeLayout) bigDrawer.findViewById(R.id.activities);
-        RelativeLayout reports = (RelativeLayout) bigDrawer.findViewById(R.id.reports);
+        RelativeLayout references = (RelativeLayout) bigDrawer.findViewById(R.id.references);
         RelativeLayout config = (RelativeLayout) bigDrawer.findViewById(R.id.settings);
         RelativeLayout attachments = (RelativeLayout) bigDrawer.findViewById(R.id.attachments);
+        RelativeLayout reports = (RelativeLayout) bigDrawer.findViewById(R.id.reports);
 
         portfolios.setOnClickListener(this);
         activities.setOnClickListener(this);
-        reports.setOnClickListener(this);
+        references.setOnClickListener(this);
         config.setOnClickListener(this);
         attachments.setOnClickListener(this);
+        reports.setOnClickListener(this);
 
         logo.setOnTouchListener(new View.OnTouchListener() {
             @Override
@@ -288,7 +308,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 return !gestureDetector.onTouchEvent(event);
             }
         });
-        reports.setOnTouchListener(new View.OnTouchListener() {
+        references.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(final View view, final MotionEvent event) {
                 clicked = view;
@@ -309,6 +329,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 return !gestureDetector.onTouchEvent(event);
             }
         });
+        reports.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(final View view, final MotionEvent event) {
+                clicked = view;
+                return !gestureDetector.onTouchEvent(event);
+            }
+        });
     }
 
     @Override
@@ -317,12 +344,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             changeFragment(0);
         } else if (v.getId() == R.id.btn_activities || v.getId() == R.id.activities) {
             changeFragment(1);
-        } else if (v.getId() == R.id.btn_reports || v.getId() == R.id.reports) {
+        } else if (v.getId() == R.id.btn_references || v.getId() == R.id.references) {
             changeFragment(2);
         } else if (v.getId() == R.id.btn_config || v.getId() == R.id.settings) {
             changeFragment(3);
         } else if (v.getId() == R.id.btn_attachments || v.getId() == R.id.attachments) {
             changeFragment(4);
+        } else if (v.getId() == R.id.btn_reports || v.getId() == R.id.reports) {
+            changeFragment(5);
         }
     }
 
@@ -366,6 +395,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     case "FragmentStudentActivities":
                         getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new FragmentStudentActivities()).addToBackStack(lastFragName).commit();
                         break;
+                    case "FragmentReport":
+                        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new FragmentReport()).addToBackStack(lastFragName).commit();
+                        break;
+                    case "FragmentReportPortfolio":
+                        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new FragmentReportPortfolio()).addToBackStack(lastFragName).commit();
+                        break;
                 }
         }
     }
@@ -404,6 +439,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 lastFragName = "FragmentAttachment";
                 break;
             case 5:
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new FragmentReport()).addToBackStack("FragmentReport").commit();
+                lastFragName = "FragmentReport";
+                break;
+            case 7:
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new FragmentReportPortfolio()).addToBackStack("FragmentReportPortfolio").commit();
+                lastFragName = "FragmentReportPortfolio";
+                break;
+            case 6:
                 downloadFullData(singleton.idActivityStudent, id);
                 break;
             default:
@@ -602,7 +645,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new FragmentStudentActivities()).addToBackStack("FragmentStudentActivities").commitAllowingStateLoss();
                     lastFragName = "FragmentStudentActivities";
                     break;
-                case 5:
+                case 6:
                     getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new FragmentRTEditor()).addToBackStack("FragmentRTEditor").commit();
                     lastFragName = "FragmentRTEditor";
                     break;
