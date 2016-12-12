@@ -17,6 +17,7 @@ public class Singleton {
     public int idVersionActivity = -1;
     public int idCurrentVersionActivity = -1;
     public int lastIdAttach = -1;
+    public int idStudent = -1;
     public boolean firsttime = false;
     public boolean isFullscreen = false;
     public boolean wasFullscreen = false;

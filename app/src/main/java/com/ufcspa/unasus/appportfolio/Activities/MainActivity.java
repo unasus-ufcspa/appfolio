@@ -41,6 +41,7 @@ import com.ufcspa.unasus.appportfolio.Activities.Fragments.FragmentRTEditor;
 import com.ufcspa.unasus.appportfolio.Activities.Fragments.FragmentReference;
 import com.ufcspa.unasus.appportfolio.Activities.Fragments.FragmentReport;
 import com.ufcspa.unasus.appportfolio.Activities.Fragments.FragmentReportPortfolio;
+import com.ufcspa.unasus.appportfolio.Activities.Fragments.FragmentReportStudents;
 import com.ufcspa.unasus.appportfolio.Activities.Fragments.FragmentSelectPortfolio;
 import com.ufcspa.unasus.appportfolio.Activities.Fragments.FragmentStudentActivities;
 import com.ufcspa.unasus.appportfolio.Model.Attachment;
@@ -445,6 +446,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             case 7:
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new FragmentReportPortfolio()).addToBackStack("FragmentReportPortfolio").commit();
                 lastFragName = "FragmentReportPortfolio";
+                break;
+            case 8:
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new FragmentReportStudents()).addToBackStack("FragmentReportStudents").commit();
+                lastFragName = "FragmentReportStudents";
                 break;
             case 6:
                 downloadFullData(singleton.idActivityStudent, id);

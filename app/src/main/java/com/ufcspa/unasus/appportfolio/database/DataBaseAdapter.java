@@ -331,24 +331,21 @@ public class DataBaseAdapter {
         return user;
     }
 
-
-    public String listarUsers() {
-        String query = "SELECT * FROM tb_user";
-        String r = "";
-        Cursor c = db.rawQuery(query, null);
+    public List<User> getUsersByIdPortfolioClass(int idPortfolioClass) {
+        User user = new User(0, null, null);
+        ArrayList<User> lista = new ArrayList<>();
+        Cursor c = null;
+        String query = "SELECT id_user, nm_user, nu_identification, ds_email, nu_cellphone, im_photo FROM tb_user JOIN tb_portfolio_student ON id_student=id_user WHERE id_portfolio_class ="+idPortfolioClass;
+        c = db.rawQuery(query, null);
         if (c.moveToFirst()) {
-            r += "id:" + c.getString(0) + "\n";
-            r += "nome:" + c.getString(1) + "\n";
-            r += "email:" + c.getString(4) + "\n";
-
-        } else {
-            r = "Não há users!";
+            do {
+                user = new User(c.getInt(0), c.getString(1), c.getString(2), c.getString(3), c.getString(4));
+    //            user.setPhoto(c.getString(5), null);
+                lista.add(user);
+            } while (c.moveToNext());
         }
-//        c.close();
-//        db.close();
-        Log.d(tag, "resultado string:" + r);
-        return r;
 
+        return lista;
     }
 
     public String listarTabelas() {

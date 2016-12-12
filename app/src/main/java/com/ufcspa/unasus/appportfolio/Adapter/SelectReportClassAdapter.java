@@ -96,13 +96,13 @@ public class SelectReportClassAdapter extends BaseAdapter {
             }
         });
 
-        int notifications = dataBaseAdapter.getPortfolioClassNotification(portClass.getIdPortClass());
-        if (notifications == 0)
+//        int notifications = dataBaseAdapter.getPortfolioClassNotification(portClass.getIdPortClass());
+//        if (notifications == 0)
             holder.notificationIcon.setVisibility(View.INVISIBLE);
-        else {
-            holder.notificationIcon.setVisibility(View.VISIBLE);
-            holder.notificationIcon.setText(notifications + "");
-        }
+//        else {
+//            holder.notificationIcon.setVisibility(View.VISIBLE);
+//            holder.notificationIcon.setText(notifications + "");
+//        }
 
         return rowView;
     }
@@ -110,19 +110,22 @@ public class SelectReportClassAdapter extends BaseAdapter {
     private void changeScreen(PortfolioClass portClass) {
         Singleton singleton = Singleton.getInstance();
         singleton.portfolioClass = portClass;
-        LocalBroadcastManager.getInstance(context).sendBroadcast(new Intent("call.fragments.action").putExtra("ID", 7));
+        if (singleton.portfolioClass.getPerfil().equals("T")) {
+            LocalBroadcastManager.getInstance(context).sendBroadcast(new Intent("call.fragments.action").putExtra("ID", 8));
+        } else {
+            singleton.idStudent=singleton.user.getIdUser();
+            LocalBroadcastManager.getInstance(context).sendBroadcast(new Intent("call.fragments.action").putExtra("ID", 7));
+        }
     }
 
     public class Holder
     {
         TextView txt_class_code;
-        TextView txt_port_title;
         TextView txt_port;
         TextView background;
         ImageButton btnInfo;
         TextView notificationIcon;
 
-        RelativeLayout infoView;
         TextView txt_class_code_info;
         ImageButton btnInfoClose;
         TextView txt_finalize_activity;

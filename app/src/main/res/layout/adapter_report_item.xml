@@ -13,7 +13,7 @@
         <LinearLayout
             android:orientation="vertical"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_centerVertical="true"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
@@ -31,11 +31,10 @@
                 android:fontFamily="sans-serif-light"
                 android:textSize="20sp" />
 
-            <TextView
-                android:text="Ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa ."
+            <WebView
                 android:layout_width="match_parent"
-                android:id="@+id/texto_report"
                 android:layout_height="wrap_content"
+                android:id="@+id/texto_report"
                 android:background="@android:color/transparent"
                 android:layout_gravity="center"
                 android:fontFamily="sans-serif-light"

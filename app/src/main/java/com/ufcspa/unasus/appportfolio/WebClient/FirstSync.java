@@ -79,6 +79,7 @@ public class FirstSync {
         } catch (JSONException e) {
             e.printStackTrace();
         }
+        Log.d("firstSync_request",firstSync.toString());
         return json;
     }
 
