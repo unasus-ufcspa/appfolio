@@ -48,6 +48,7 @@
     <string name="popup_login_tutor">Tutor</string>
 
     <string name="popup_logout">Tem certeza que deseja \n desconectar o dispositivo?</string>
+    <string name="popup_notification">Intervalo de notificação</string>
 
     <string name="attachment_positive">Utilizar</string>
     <string name="attachment_fechar">Fechar</string>

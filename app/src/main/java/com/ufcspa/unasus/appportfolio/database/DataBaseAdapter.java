@@ -2343,6 +2343,22 @@ public class DataBaseAdapter {
         return result;
     }
 
+    public int getAllNotifications(){
+        String query = "SELECT COUNT(*) FROM tb_notice";
+
+        int result = 0;
+
+        Cursor c = db.rawQuery(query, null);
+        if (c.moveToFirst()) {
+            int val = c.getInt(0);
+            result = val;
+        }
+
+        c.close();
+
+        return result;
+    }
+
     public void deleteAllNotifications(ArrayList<Integer> ids) {
         if (ids != null && ids.size() != 0) {
             StringBuilder query = new StringBuilder();

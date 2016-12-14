@@ -140,12 +140,12 @@
                 <Button
                     android:id="@+id/btn_alterar"
                     android:layout_width="match_parent"
-                    android:layout_height="75dp"
+                    android:layout_height="50dp"
                     android:layout_below="@+id/linearLayout"
                     android:layout_centerHorizontal="true"
                     android:background="@color/base_green"
                     android:text="salvar"
-                    android:textSize="18sp"
+                    android:textSize="14sp"
                     android:textStyle="normal|bold"
                     android:textColor="@color/gray_1"
                     android:layout_marginTop="25dp" />
@@ -264,12 +264,44 @@
                 android:text="Salvar"
                 android:textColor="@color/gray_1"
                 android:textStyle="normal|bold"
-                android:layout_height="75dp"
-                android:textSize="18sp"
+                android:layout_height="50dp"
+                android:textSize="14sp"
                 android:layout_marginTop="25dp" />
         </LinearLayout>
 
     </LinearLayout>
+
+    <Button
+        android:id="@+id/btn_notifications"
+        android:text="Notificações"
+        android:background="@color/gray_1"
+        android:textColor="@color/base_green"
+        android:textStyle="normal|bold"
+        android:layout_height="50dp"
+        android:layout_width="wrap_content"
+        android:textSize="14sp"
+        android:layout_alignParentBottom="false"
+        android:layout_alignLeft="@+id/user"
+        android:layout_toLeftOf="@+id/btn_device_info"
+        android:layout_marginTop="25dp"
+        android:layout_below="@+id/user"/>
+
+    <Button
+        android:id="@+id/btn_device_info"
+        android:text="Informações sobre o app"
+        android:background="@color/gray_1"
+        android:textColor="@color/base_green"
+        android:textStyle="normal|bold"
+        android:layout_height="50dp"
+        android:layout_width="wrap_content"
+        android:textSize="14sp"
+        android:layout_alignParentBottom="false"
+        android:layout_alignTop="@+id/btn_logout"
+        android:layout_centerInParent="true"
+        android:layout_marginLeft="50dp"
+        android:layout_marginRight="50dp"
+        android:paddingLeft="25dp"
+        android:paddingRight="25dp"/>
 
     <Button
         android:id="@+id/btn_logout"
@@ -277,25 +309,13 @@
         android:background="@color/gray_1"
         android:textColor="@color/base_green"
         android:textStyle="normal|bold"
-        android:layout_height="75dp"
-        android:textSize="18sp"
+        android:layout_height="50dp"
         android:layout_width="wrap_content"
+        android:textSize="14sp"
         android:layout_alignParentBottom="false"
-        android:layout_toLeftOf="@+id/separador"
-        android:layout_alignLeft="@+id/user"
-        android:layout_alignStart="@+id/user"
-        android:layout_marginTop="25dp"
-        android:layout_below="@+id/user" />
-
-    <ImageButton
-        style="?android:attr/buttonStyleSmall"
-        android:id="@+id/btn_device_info"
-        android:background="@drawable/btn_device_info"
-        android:layout_width="75dp"
-        android:layout_height="75dp"
-        android:layout_alignTop="@+id/btn_logout"
-        android:layout_toRightOf="@+id/separador"
-        android:layout_toEndOf="@+id/separador" />
+        android:layout_alignTop="@+id/btn_notifications"
+        android:layout_alignRight="@id/password"
+        android:layout_toRightOf="@+id/btn_device_info"/>
 
 </RelativeLayout>
 </ScrollView>

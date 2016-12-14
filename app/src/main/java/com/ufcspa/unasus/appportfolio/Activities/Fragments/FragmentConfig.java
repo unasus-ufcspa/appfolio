@@ -26,6 +26,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -33,6 +34,7 @@ import com.onegravity.rteditor.utils.io.output.ByteArrayOutputStream;
 import com.ufcspa.unasus.appportfolio.Activities.MainActivity;
 import com.ufcspa.unasus.appportfolio.Model.Singleton;
 import com.ufcspa.unasus.appportfolio.Model.Sync;
+import com.ufcspa.unasus.appportfolio.Notifications.NotificationEventReceiver;
 import com.ufcspa.unasus.appportfolio.R;
 import com.ufcspa.unasus.appportfolio.WebClient.LogoutClient;
 import com.ufcspa.unasus.appportfolio.WebClient.PasswordClient;
@@ -46,7 +48,8 @@ import java.security.MessageDigest;
 public class FragmentConfig extends Frag implements View.OnClickListener {
     private static ProgressDialog dialog;
     private Button btn_logout;
-    private ImageButton btn_device_info;
+    private Button btn_notifications;
+    private Button btn_device_info;
 
     private EditText old_pass;
     private EditText new_pass;
@@ -88,15 +91,16 @@ public class FragmentConfig extends Frag implements View.OnClickListener {
 
         btn_logout.setOnClickListener(this);
 
+        btn_notifications = (Button) view.findViewById(R.id.btn_notifications);
+        btn_notifications.setOnClickListener(this);
+
         btn_change_image = (ImageView) view.findViewById(R.id.btn_change_image);
-        btn_change_image
-                = (ImageView) view.findViewById(R.id.btn_change_image
-        );
+        btn_change_image = (ImageView) view.findViewById(R.id.btn_change_image);
         edt_email = (EditText) view.findViewById(R.id.edt_email);
         edt_telefone = (EditText) view.findViewById(R.id.edt_telefone);
         btn_alterar = (Button) view.findViewById(R.id.btn_alterar);
 
-        btn_device_info = (ImageButton) view.findViewById(R.id.btn_device_info);
+        btn_device_info = (Button) view.findViewById(R.id.btn_device_info);
         btn_device_info.setOnClickListener(this);
 
         if (singleton.user.getPhoto() != null) {
@@ -296,6 +300,63 @@ public class FragmentConfig extends Frag implements View.OnClickListener {
                     @Override
                     public void onClick(View v) {
                         dialog_logout.dismiss();
+                    }
+                });
+            }
+        }
+        if (v.getId() == R.id.btn_notifications) {
+            if (isOnline()) {
+                final Dialog dialog_notification = new Dialog(getActivity());
+                dialog_notification.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                dialog_notification.setContentView(R.layout.notification_popup);
+                dialog_notification.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+                dialog_notification.show();
+
+                final RadioGroup notification_interval = (RadioGroup) dialog_notification.findViewById(R.id.notification_interval);
+                switch (singleton.interval){
+                    case 1:
+                        notification_interval.check(R.id.interval1);
+                        break;
+                    case 6:
+                        notification_interval.check(R.id.interval6);
+                        break;
+                    case 24:
+                        notification_interval.check(R.id.interval24);
+                        break;
+                    case 48:
+                        notification_interval.check(R.id.interval48);
+                        break;
+                }
+                Button btn_notification_ok = (Button) dialog_notification.findViewById(R.id.btn_notification_ok);
+                Button btn_notification_cancel = (Button) dialog_notification.findViewById(R.id.btn_notification_cancel);
+                btn_notification_ok.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        int id = notification_interval.getCheckedRadioButtonId();
+                        int interval = 0;
+                        switch (id){
+                            case R.id.interval1:
+                                interval = 1;
+                                break;
+                            case R.id.interval6:
+                                interval = 6;
+                                break;
+                            case R.id.interval24:
+                                interval = 24;
+                                break;
+                            case R.id.interval48:
+                                interval = 48;
+                                break;
+                        }
+                        singleton.interval = interval;
+                        NotificationEventReceiver.setupAlarm(getContext(),interval);
+                        dialog_notification.dismiss();
+                    }
+                });
+                btn_notification_cancel.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        dialog_notification.dismiss();
                     }
                 });
             }

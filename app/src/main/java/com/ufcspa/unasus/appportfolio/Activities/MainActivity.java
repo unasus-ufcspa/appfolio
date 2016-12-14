@@ -48,6 +48,7 @@ import com.ufcspa.unasus.appportfolio.Model.Attachment;
 import com.ufcspa.unasus.appportfolio.Model.Note;
 import com.ufcspa.unasus.appportfolio.Model.PolicyUser;
 import com.ufcspa.unasus.appportfolio.Model.Singleton;
+import com.ufcspa.unasus.appportfolio.Notifications.NotificationEventReceiver;
 import com.ufcspa.unasus.appportfolio.R;
 import com.ufcspa.unasus.appportfolio.WebClient.BasicData;
 import com.ufcspa.unasus.appportfolio.WebClient.BasicDataClient;
@@ -710,5 +711,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         super.onResume();
         Singleton.getInstance().device=DataBaseAdapter.getInstance(this).getDevice();
         Log.d("main", "GET FROM DEVICE: " + Singleton.getInstance().device);
+        NotificationEventReceiver.setupAlarm(this,singleton.interval);
     }
 }
