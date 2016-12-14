@@ -11,6 +11,7 @@ import android.support.v4.content.WakefulBroadcastReceiver;
 import android.util.Log;
 
 import com.ufcspa.unasus.appportfolio.Activities.MainActivity;
+import com.ufcspa.unasus.appportfolio.Activities.SplashActivity;
 import com.ufcspa.unasus.appportfolio.Model.Singleton;
 import com.ufcspa.unasus.appportfolio.R;
 import com.ufcspa.unasus.appportfolio.WebClient.FullData;
@@ -70,22 +71,24 @@ public class NotificationIntentService extends IntentService {
             getFullData(0);
             int notifications = DataBaseAdapter.getInstance(this).getAllNotifications();
 
-            final NotificationCompat.Builder builder = new NotificationCompat.Builder(this);
-            builder.setContentTitle("Novas notificações")
-                    .setAutoCancel(true)
-                    .setColor(getResources().getColor(R.color.base_green))
-                    .setContentText(notifications+" notificações")
-                    .setSmallIcon(R.drawable.icon);
+            if (notifications>0) {
+                final NotificationCompat.Builder builder = new NotificationCompat.Builder(this);
+                builder.setContentTitle("Novas notificações")
+                        .setAutoCancel(true)
+                        .setColor(getResources().getColor(R.color.base_green))
+                        .setContentText(notifications+" notificações")
+                        .setSmallIcon(R.drawable.icon);
 
-            PendingIntent pendingIntent = PendingIntent.getActivity(this,
-                    NOTIFICATION_ID,
-                    new Intent(this, MainActivity.class),
-                    PendingIntent.FLAG_UPDATE_CURRENT);
-            builder.setContentIntent(pendingIntent);
-            builder.setDeleteIntent(NotificationEventReceiver.getDeleteIntent(this));
+                PendingIntent pendingIntent = PendingIntent.getActivity(this,
+                        NOTIFICATION_ID,
+                        new Intent(this, SplashActivity.class),
+                        PendingIntent.FLAG_UPDATE_CURRENT);
+                builder.setContentIntent(pendingIntent);
+                builder.setDeleteIntent(NotificationEventReceiver.getDeleteIntent(this));
 
-            final NotificationManager manager = (NotificationManager) this.getSystemService(Context.NOTIFICATION_SERVICE);
-            manager.notify(NOTIFICATION_ID, builder.build());
+                final NotificationManager manager = (NotificationManager) this.getSystemService(Context.NOTIFICATION_SERVICE);
+                manager.notify(NOTIFICATION_ID, builder.build());
+            }
         }
     }
 
