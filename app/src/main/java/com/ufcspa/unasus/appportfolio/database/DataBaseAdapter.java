@@ -21,6 +21,7 @@ import com.ufcspa.unasus.appportfolio.Model.Policy;
 import com.ufcspa.unasus.appportfolio.Model.PolicyUser;
 import com.ufcspa.unasus.appportfolio.Model.PortfolioClass;
 import com.ufcspa.unasus.appportfolio.Model.Reference;
+import com.ufcspa.unasus.appportfolio.Model.Singleton;
 import com.ufcspa.unasus.appportfolio.Model.StudFrPortClass;
 import com.ufcspa.unasus.appportfolio.Model.Sync;
 import com.ufcspa.unasus.appportfolio.Model.Team;
@@ -1500,7 +1501,12 @@ public class DataBaseAdapter {
                 "dt_verification, " +
                 "id_version_activity_srv " +
                 "FROM tb_version_activity " +
-                "WHERE id_activity_student = " + id_activity_student + " ORDER BY dt_submission";
+                "WHERE id_activity_student = " + id_activity_student;
+        if (Singleton.getInstance().portfolioClass.getPerfil().equals("T")){
+            query = query + " AND NOT dt_submission='0000-00-00 00:00:00'";
+        }else{
+            query = query + " ORDER BY dt_submission";
+        }
         ArrayList<VersionActivity> versionActivities = new ArrayList<VersionActivity>();
         Cursor c = db.rawQuery(query, null);
         if (c.moveToFirst()) {

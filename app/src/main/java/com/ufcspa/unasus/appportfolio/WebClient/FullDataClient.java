@@ -321,7 +321,13 @@ public class FullDataClient extends HttpClient {
 
                                                 System.out.println("json replace tx activity" + "\nold:" + temp.getString("tx_activity") + " new:" + tx_activity);
                                                 String dt_last_access = temp.getString("dt_last_access");
+                                                if (dt_last_access.equals("null")){
+                                                    dt_last_access="0000-00-00 00:00:00";
+                                                }
                                                 String dt_submission = temp.getString("dt_submission");
+                                                if (dt_submission.equals("null")){
+                                                    dt_submission="0000-00-00 00:00:00";
+                                                }
                                                 String dt_verification = temp.getString("dt_verification");
                                                 int id_version_activity_srv=0;
                                                 if (temp.has("id_version_activity_srv")) {
@@ -358,7 +364,13 @@ public class FullDataClient extends HttpClient {
                                                 tx_activity = tx_activity.replaceAll("</span>", "</font>");
 
                                                 String dt_last_access = temp.getString("dt_last_access");
+                                                if (dt_last_access.equals("null")){
+                                                    dt_last_access="0000-00-00 00:00:00";
+                                                }
                                                 String dt_submission = temp.getString("dt_submission");
+                                                if (dt_submission.equals("null")){
+                                                    dt_submission="0000-00-00 00:00:00";
+                                                }
                                                 String dt_verification = temp.getString("dt_verification");
                                                 int id_version_activity_srv = 0;
                                                 if (temp.has("id_version_activity")) {

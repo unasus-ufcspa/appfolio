@@ -10,7 +10,6 @@ import android.support.v4.app.NotificationCompat;
 import android.support.v4.content.WakefulBroadcastReceiver;
 import android.util.Log;
 
-import com.ufcspa.unasus.appportfolio.Activities.MainActivity;
 import com.ufcspa.unasus.appportfolio.Activities.SplashActivity;
 import com.ufcspa.unasus.appportfolio.Model.Singleton;
 import com.ufcspa.unasus.appportfolio.R;
@@ -72,11 +71,17 @@ public class NotificationIntentService extends IntentService {
             int notifications = DataBaseAdapter.getInstance(this).getAllNotifications();
 
             if (notifications>0) {
+                String text;
+                if(notifications==1){
+                    text="notificação";
+                }else{
+                    text="notificações";
+                }
                 final NotificationCompat.Builder builder = new NotificationCompat.Builder(this);
                 builder.setContentTitle("Novas notificações")
                         .setAutoCancel(true)
                         .setColor(getResources().getColor(R.color.base_green))
-                        .setContentText(notifications+" notificações")
+                        .setContentText(notifications+text)
                         .setSmallIcon(R.drawable.icon);
 
                 PendingIntent pendingIntent = PendingIntent.getActivity(this,
