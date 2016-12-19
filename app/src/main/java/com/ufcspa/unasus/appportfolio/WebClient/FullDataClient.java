@@ -329,6 +329,9 @@ public class FullDataClient extends HttpClient {
                                                     dt_submission="0000-00-00 00:00:00";
                                                 }
                                                 String dt_verification = temp.getString("dt_verification");
+                                                if (dt_verification.equals("null")){
+                                                    dt_verification=null;
+                                                }
                                                 int id_version_activity_srv=0;
                                                 if (temp.has("id_version_activity_srv")) {
                                                     id_version_activity_srv = temp.getInt("id_version_activity_srv");
@@ -372,6 +375,9 @@ public class FullDataClient extends HttpClient {
                                                     dt_submission="0000-00-00 00:00:00";
                                                 }
                                                 String dt_verification = temp.getString("dt_verification");
+                                                if (dt_verification.equals("null")){
+                                                    dt_verification=null;
+                                                }
                                                 int id_version_activity_srv = 0;
                                                 if (temp.has("id_version_activity")) {
                                                     id_version_activity_srv = temp.getInt("id_version_activity");

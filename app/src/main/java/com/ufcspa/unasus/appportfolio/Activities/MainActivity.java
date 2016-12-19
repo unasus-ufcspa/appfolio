@@ -48,7 +48,7 @@ import com.ufcspa.unasus.appportfolio.Activities.Fragments.FragmentReportStudent
 import com.ufcspa.unasus.appportfolio.Activities.Fragments.FragmentSelectPortfolio;
 import com.ufcspa.unasus.appportfolio.Activities.Fragments.FragmentStudentActivities;
 import com.ufcspa.unasus.appportfolio.Model.Attachment;
-import com.ufcspa.unasus.appportfolio.Model.CustomShowcaseView;
+//import com.ufcspa.unasus.appportfolio.Model.CustomShowcaseView;
 import com.ufcspa.unasus.appportfolio.Model.Note;
 import com.ufcspa.unasus.appportfolio.Model.PolicyUser;
 import com.ufcspa.unasus.appportfolio.Model.Singleton;

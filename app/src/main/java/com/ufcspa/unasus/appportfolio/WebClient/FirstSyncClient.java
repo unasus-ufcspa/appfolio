@@ -268,6 +268,9 @@ public class FirstSyncClient extends HttpClient{
                                                 dt_submission="0000-00-00 00:00:00";
                                             }
                                             String dt_verification = temp.getString("dt_verification");
+                                            if (dt_verification.equals("null")){
+                                                dt_verification=null;
+                                            }
                                             int id_version_activity_srv = temp.getInt("id_version_activity");
 
                                             versionActivity.setId_activity_student(id_activity_student);
@@ -306,6 +309,9 @@ public class FirstSyncClient extends HttpClient{
                                                 dt_submission="0000-00-00 00:00:00";
                                             }
                                             String dt_verification = temp.getString("dt_verification");
+                                            if (dt_verification.equals("null")){
+                                                dt_verification=null;
+                                            }
                                             int id_version_activity_srv = temp.getInt("id_version_activity");
 
                                             versionActivity.setId_activity_student(id_activity_student);

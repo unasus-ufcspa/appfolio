@@ -70,6 +70,7 @@
     <!-- Tema do ShowcaseView, atributos sv_... -->
     <style name="ShowCaseCustom" parent="ShowcaseView.Light">
         <item name="sv_backgroundColor">@color/screen_background_light_transparent</item>
+
     </style>
 
 
