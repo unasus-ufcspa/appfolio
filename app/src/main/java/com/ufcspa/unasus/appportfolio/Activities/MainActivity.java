@@ -8,6 +8,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.graphics.Point;
 import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.os.Handler;
@@ -33,7 +34,9 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.github.amlcurran.showcaseview.ShowcaseView;
 import com.github.amlcurran.showcaseview.targets.Target;
+import com.github.amlcurran.showcaseview.targets.ViewTarget;
 import com.mikepenz.crossfader.Crossfader;
 import com.ufcspa.unasus.appportfolio.Activities.Fragments.FragmentAttachment;
 import com.ufcspa.unasus.appportfolio.Activities.Fragments.FragmentConfig;
@@ -45,6 +48,7 @@ import com.ufcspa.unasus.appportfolio.Activities.Fragments.FragmentReportStudent
 import com.ufcspa.unasus.appportfolio.Activities.Fragments.FragmentSelectPortfolio;
 import com.ufcspa.unasus.appportfolio.Activities.Fragments.FragmentStudentActivities;
 import com.ufcspa.unasus.appportfolio.Model.Attachment;
+import com.ufcspa.unasus.appportfolio.Model.CustomShowcaseView;
 import com.ufcspa.unasus.appportfolio.Model.Note;
 import com.ufcspa.unasus.appportfolio.Model.PolicyUser;
 import com.ufcspa.unasus.appportfolio.Model.Singleton;
@@ -158,6 +162,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             miniDrawer = inflater.inflate(R.layout.mini_drawer, null);
             initMiniDrawer();
 
+            Target target = new ViewTarget(R.id.drawer_target,this);
+            ShowCase(target,"Menu Lateral","Expanda o menu deslizando a margem para a direita");
+
             final float scale = getResources().getDisplayMetrics().density;
             int pixelsMini = (int) (80 * scale + 0.5f);
             int pixelsBig = (int) (250 * scale + 0.5f);
@@ -239,13 +246,17 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     //Método para criar show case views dos tutoriais
     public void ShowCase(Target target, String titulo, String texto){
-       /* if (singleton.tutorial) {
+        /*int largura = (int) (250 * getResources().getDisplayMetrics().density + 0.5f);
+        Point point = new Point();
+        getWindowManager().getDefaultDisplay().getSize(point);
+        if (singleton.tutorial) {
             new ShowcaseView.Builder(this)
                     .setTarget(target)
                     .setStyle(R.style.ShowCaseCustom)
                     .setContentTitle(titulo)
                     .setContentText(texto)
                     .hideOnTouchOutside()
+                    .setShowcaseDrawer(new CustomShowcaseView(getResources(),largura,point.y))
                     .build();
         }*/
     }
