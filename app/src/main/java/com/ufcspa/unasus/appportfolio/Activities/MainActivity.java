@@ -246,7 +246,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     //Método para criar show case views dos tutoriais
     public void ShowCase(Target target, String titulo, String texto){
-        /*int largura = (int) (250 * getResources().getDisplayMetrics().density + 0.5f);
+       /* int largura = (int) (250 * getResources().getDisplayMetrics().density + 0.5f);
         Point point = new Point();
         getWindowManager().getDefaultDisplay().getSize(point);
         if (singleton.tutorial) {

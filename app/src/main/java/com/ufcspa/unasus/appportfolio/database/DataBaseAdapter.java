@@ -34,6 +34,7 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
@@ -1493,6 +1494,8 @@ public class DataBaseAdapter {
     }
 
     public ArrayList<VersionActivity> getAllVersionsFromActivityStudent(int id_activity_student) {
+        Cursor c = null;
+        ArrayList<VersionActivity> versionActivities = new ArrayList<VersionActivity>();
         String query = "SELECT id_version_activity, " +
                 "id_activity_student, " +
                 "tx_activity, " +
@@ -1502,13 +1505,18 @@ public class DataBaseAdapter {
                 "id_version_activity_srv " +
                 "FROM tb_version_activity " +
                 "WHERE id_activity_student = " + id_activity_student;
-        if (Singleton.getInstance().portfolioClass.getPerfil().equals("T")){
-            query = query + " AND NOT dt_submission='0000-00-00 00:00:00'";
-        }else{
-            query = query + " ORDER BY dt_submission";
+        if (!Singleton.getInstance().portfolioClass.getPerfil().equals("T")){
+            String temp = query + " AND dt_submission='0000-00-00 00:00:00'";
+            Cursor cursor = db.rawQuery(temp, null);
+            if (cursor.moveToFirst()) {
+                versionActivities.add(cursorToVersionActivity(cursor));
+            }
+            query = query + " AND NOT dt_submission='0000-00-00 00:00:00' ORDER BY dt_submission DESC";
+            cursor.close();
+        } else {
+            query = query + " AND NOT dt_submission='0000-00-00 00:00:00' ORDER BY dt_submission DESC";
         }
-        ArrayList<VersionActivity> versionActivities = new ArrayList<VersionActivity>();
-        Cursor c = db.rawQuery(query, null);
+        c = db.rawQuery(query, null);
         if (c.moveToFirst()) {
             do {
                 versionActivities.add(cursorToVersionActivity(c));

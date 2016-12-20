@@ -31,7 +31,11 @@ public class VersionsAdapter extends BaseAdapter {
         this.holder = new Holder();
         this.source = DataBaseAdapter.getInstance(context);
 
-//        Collections.sort(this.list);
+        if (this.list.size()>1) {
+            Collections.sort(this.list.subList(1,this.list.size()-1));
+        }else{
+            Collections.sort(this.list);
+        }
 
         inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
@@ -94,7 +98,11 @@ public class VersionsAdapter extends BaseAdapter {
     public void refresh(ArrayList<VersionActivity> versionActivities) {
         this.list = versionActivities;
 
-//        Collections.sort(this.list);
+        if (this.list.size()>1) {
+            Collections.sort(this.list.subList(1,this.list.size()-1));
+        }else{
+            Collections.sort(this.list);
+        }
 
         notifyDataSetChanged();
     }
