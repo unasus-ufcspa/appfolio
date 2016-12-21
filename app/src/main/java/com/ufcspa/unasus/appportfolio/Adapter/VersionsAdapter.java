@@ -1,6 +1,7 @@
 package com.ufcspa.unasus.appportfolio.Adapter;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -79,6 +80,7 @@ public class VersionsAdapter extends BaseAdapter {
                 holder.date.setText("Versão Atual");
                 holder.time.setVisibility(View.GONE);
             } else {
+                Log.d("holder datetime: ", dateAndTime[0].toString()+" "+dateAndTime[1].toString());
                 holder.date.setText(dateAndTime[0]);
                 holder.time.setText(dateAndTime[1]);
             }

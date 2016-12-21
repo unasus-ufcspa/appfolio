@@ -281,17 +281,17 @@ public class FragmentRTEditor extends Frag {
                                         version.setTx_activity(mRTMessageField.getText(RTFormat.HTML));
                                         version.setId_activity_student(Singleton.getInstance().idActivityStudent);
                                         version.setDt_last_access(getActualTime());
-                                        version.setDt_submission("");
+                                        version.setDt_submission(null);
                                         //version.setId_version_activit_srv(version.getId_version_activity());
                                         int id = data.insertVersionActivity(version);
 
-                                        singleton.idVersionActivity = id;
-                                        singleton.idCurrentVersionActivity = id;
+//                                        singleton.idVersionActivity = id;
+                                        singleton.idCurrentVersionActivity = source.getIDVersionAtual(singleton.idActivityStudent);
 
                                         //POPULA SYNC PARA SINCRONIZAR
                                         Sync sync = new Sync();
                                         sync.setNm_table("tb_version_activity");
-                                        sync.setCo_id_table(singleton.idCurrentVersionActivity);
+                                        sync.setCo_id_table(id);
                                         sync.setId_activity_student(Singleton.getInstance().idActivityStudent);
                                         sync.setId_device(singleton.device.get_id_device());
                                         source.insertIntoTBSync(sync);
