@@ -80,7 +80,6 @@ public class VersionsAdapter extends BaseAdapter {
                 holder.date.setText("Versão Atual");
                 holder.time.setVisibility(View.GONE);
             } else {
-                Log.d("holder datetime: ", dateAndTime[0].toString()+" "+dateAndTime[1].toString());
                 holder.date.setText(dateAndTime[0]);
                 holder.time.setText(dateAndTime[1]);
             }

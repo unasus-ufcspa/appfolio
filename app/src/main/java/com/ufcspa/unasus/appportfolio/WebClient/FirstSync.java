@@ -171,6 +171,8 @@ public class FirstSync {
                 data.insertAttachmentActivity(id_activity_student, id_attachment);
                 // BAIXAR OS ATTACHMENTS!!!!!!!!
                 String filePath = Environment.getExternalStorageDirectory()+"/Android/data/com.ufcspa.unasus.appportfolio/files/images" + File.separator + a.getNmSystem();
+                File file = new File(filePath);
+                if (!file.exists()) {
                 Log.d("File Path", filePath);
                 DownloadRequest request = new DownloadRequest()
                         .setUrl("http://" + new HttpClient(context).ip + "/webfolio/app_dev.php/download/" + a.getNmSystem())
@@ -190,6 +192,8 @@ public class FirstSync {
                             }
                         });
                 manager.add(request);
+                } else
+                    Log.d("anexos",filePath+" já existe e não baixado");
 //                downloadAttachment("http://stuffpoint.com/stardoll/image/54056-stardoll-sdfs.jpg" + a.getNmSystem(), a.getNmFile());
             }
         }

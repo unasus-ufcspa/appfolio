@@ -197,7 +197,11 @@ public class FragmentRTEditor extends Frag {
         Log.d("editor DB", "salvando texto..");
         if (mRTMessageField != null && mRTMessageField.isMediaFactoryRegister() != null) {
             acStudent.setTxtActivity(mRTMessageField.getText(RTFormat.HTML));
-            source.updateActivityStudent(acStudent, getActualTime(), source.getIDVersionAtual(singleton.idActivityStudent));
+            if (!singleton.portfolioClass.getPerfil().equals("T")){
+                source.updateActivityStudent(acStudent, getActualTime(), source.getIDVersionAtual(singleton.idActivityStudent));
+            } else {
+                source.updateActivityStudent(acStudent, getActualTime(), singleton.idCurrentVersionActivity);
+            }
         }
     }
 
@@ -224,7 +228,7 @@ public class FragmentRTEditor extends Frag {
         scrollview = (ViewGroup) view.findViewById(R.id.comments);
         rightBarSpecificComments = (ViewGroup) view.findViewById(R.id.obs_view);
 
-        if (singleton.portfolioClass.getPerfil().equals("T") || (singleton.idCurrentVersionActivity != singleton.idVersionActivity)) {
+        if (singleton.portfolioClass.getPerfil().equals("T") || (singleton.idCurrentVersionActivity != source.getIDVersionAtual(singleton.idActivityStudent))) {
             view.findViewById(R.id.rte_toolbar_container).setVisibility(View.INVISIBLE);
         }else if (ContextCompat.checkSelfPermission(getContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_DENIED) {
             ActivityCompat.requestPermissions(getActivity(),new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},MY_PERMISSIONS_REQUEST);

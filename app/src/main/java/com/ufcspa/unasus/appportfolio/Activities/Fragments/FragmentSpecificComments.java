@@ -441,7 +441,7 @@ public class FragmentSpecificComments extends Frag {
             // recupera n_nota criada
             singleton.actualObservation.setNu_comment_activity(noteNow.getBtId());
             singleton.actualObservation.setTx_reference(noteNow.getSelectedText());
-            singleton.actualObservation.setId_version_activity(source.getIDVersionSrvByLocalID(singleton.idCurrentVersionActivity));
+            singleton.actualObservation.setId_version_activity(source.getIDVersionSrvByLocalID(singleton.idVersionActivity));
             singleton.actualObservation.setId_comment_version(source.getIdObservationByNuCommentActivy(singleton.idActivityStudent,singleton.actualObservation.getNu_comment_activity()));
             singleton.actualObservation.setId_comment_version_srv(source.getIdObservationSrvByNuCommentActivy(singleton.idActivityStudent,singleton.actualObservation.getNu_comment_activity()));
 
@@ -463,7 +463,7 @@ public class FragmentSpecificComments extends Frag {
                 // empilha version nas syncs
                 sync = new Sync();
                 sync.setNm_table("tb_version_activity");
-                sync.setCo_id_table(singleton.idCurrentVersionActivity);
+                sync.setCo_id_table(singleton.idVersionActivity);
                 sync.setId_activity_student(Singleton.getInstance().idActivityStudent);
                 sync.setId_device(singleton.device.get_id_device());
                 source.insertIntoTBSync(sync);

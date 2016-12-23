@@ -101,7 +101,11 @@ public class ActivitiesAdapter extends RecyclerView.Adapter<ActivitiesAdapter.Vi
             public void onClick(View v) {
                 singleton.activity = list.get(position);
                 singleton.idActivityStudent = singleton.activity.getIdActivityStudent();
-                singleton.idVersionActivity = source.getIDVersionAtual(singleton.idActivityStudent);
+                if (singleton.portfolioClass.getPerfil().equals("S")) {
+                    singleton.idVersionActivity = source.getIDVersionAtual(singleton.idActivityStudent);
+                } else {
+                    singleton.idVersionActivity = source.getLastIDVersionActivity(singleton.idActivityStudent);
+                }
                 singleton.idCurrentVersionActivity = singleton.idVersionActivity;
                 singleton.portfolioClass.setIdPortfolioStudent(list.get(position).getIdPortfolio());
                 singleton.portfolioClass.setStudentName(studentName);

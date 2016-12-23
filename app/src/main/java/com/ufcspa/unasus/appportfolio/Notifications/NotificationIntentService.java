@@ -73,9 +73,9 @@ public class NotificationIntentService extends IntentService {
             if (notifications>0) {
                 String text;
                 if(notifications==1){
-                    text="notificação";
+                    text=" notificação";
                 }else{
-                    text="notificações";
+                    text=" notificações";
                 }
                 final NotificationCompat.Builder builder = new NotificationCompat.Builder(this);
                 builder.setContentTitle("Novas notificações")
