@@ -36,7 +36,7 @@
             android:src="@drawable/drawer_integrantes" />
 
         <TextView
-            android:id="@+id/textView5"
+            android:id="@+id/tx_members"
             android:layout_width="100dp"
             android:layout_height="wrap_content"
             android:layout_alignBottom="@+id/btn_members"
@@ -68,7 +68,7 @@
             android:src="@drawable/drawer_relatorios" />
 
         <TextView
-            android:id="@+id/textView6"
+            android:id="@+id/tx_activities"
             android:layout_width="100dp"
             android:layout_height="wrap_content"
             android:layout_alignBottom="@+id/btn_activities"
@@ -101,7 +101,7 @@
             android:src="@drawable/drawer_anexos" />
 
         <TextView
-            android:id="@+id/textView9"
+            android:id="@+id/tx_attachments"
             android:layout_width="100dp"
             android:layout_height="wrap_content"
             android:layout_alignBottom="@+id/btn_attachments"
@@ -134,7 +134,7 @@
             android:src="@drawable/drawer_atividades" />
 
         <TextView
-            android:id="@+id/textView10"
+            android:id="@+id/tx_references"
             android:layout_width="100dp"
             android:layout_height="wrap_content"
             android:layout_alignBottom="@+id/btn_references"
@@ -167,7 +167,7 @@
             android:src="@drawable/drawer_referencias" />
 
         <TextView
-            android:id="@+id/textView7"
+            android:id="@+id/tx_reports"
             android:layout_width="100dp"
             android:layout_height="wrap_content"
             android:layout_alignBottom="@+id/btn_reports"
@@ -200,7 +200,7 @@
             android:src="@drawable/drawer_congiguracoes" />
 
         <TextView
-            android:id="@+id/textView8"
+            android:id="@+id/tx_config"
             android:layout_width="100dp"
             android:layout_height="wrap_content"
             android:layout_alignBottom="@+id/btn_config"

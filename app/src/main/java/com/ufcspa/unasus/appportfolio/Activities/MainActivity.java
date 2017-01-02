@@ -424,6 +424,53 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         super.onDestroy();
     }
 
+    public void apagarBotoes (int id) {
+        bigDrawer.findViewById(R.id.portfolios).setAlpha((float)0.3);
+        bigDrawer.findViewById(R.id.activities).setAlpha((float)0.3);
+        bigDrawer.findViewById(R.id.attachments).setAlpha((float)0.3);
+        bigDrawer.findViewById(R.id.references).setAlpha((float)0.3);
+        bigDrawer.findViewById(R.id.reports).setAlpha((float)0.3);
+        bigDrawer.findViewById(R.id.settings).setAlpha((float)0.3);
+
+        miniDrawer.findViewById(R.id.btn_members).setAlpha((float)0.3);
+        miniDrawer.findViewById(R.id.btn_activities).setAlpha((float)0.3);
+        miniDrawer.findViewById(R.id.btn_attachments).setAlpha((float)0.3);
+        miniDrawer.findViewById(R.id.btn_references).setAlpha((float)0.3);
+        miniDrawer.findViewById(R.id.btn_reports).setAlpha((float)0.3);
+        miniDrawer.findViewById(R.id.btn_config).setAlpha((float)0.3);
+
+        switch (id) {
+            case 0:
+                bigDrawer.findViewById(R.id.portfolios).setAlpha((float)1);
+                miniDrawer.findViewById(R.id.btn_members).setAlpha((float)1);
+                break;
+            case 1:
+                if (singleton.portfolioClass != null) {
+                    bigDrawer.findViewById(R.id.activities).setAlpha((float) 1);
+                    miniDrawer.findViewById(R.id.btn_activities).setAlpha((float) 1);
+                }
+                break;
+            case 2:
+                bigDrawer.findViewById(R.id.references).setAlpha((float)1);
+                miniDrawer.findViewById(R.id.btn_references).setAlpha((float)1);
+                break;
+            case 3:
+                bigDrawer.findViewById(R.id.settings).setAlpha((float)1);
+                miniDrawer.findViewById(R.id.btn_config).setAlpha((float)1);
+                break;
+            case 4:
+                bigDrawer.findViewById(R.id.attachments).setAlpha((float)1);
+                miniDrawer.findViewById(R.id.btn_attachments).setAlpha((float)1);
+                break;
+            case 5:
+                bigDrawer.findViewById(R.id.reports).setAlpha((float)1);
+                miniDrawer.findViewById(R.id.btn_reports).setAlpha((float)1);
+                break;
+            default:
+                break;
+        }
+    }
+
     private void changeFragment(int id) {
         singleton.firsttime = true;
         singleton.note = new Note(0, "null", 0);
@@ -434,26 +481,33 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 //getBasicData();//estava executando mais de uma vez.
                 sendFullData();
                 shouldSend = false;
+                apagarBotoes(id);
                 break;
             case 1:
-                if (singleton.portfolioClass != null)
+                if (singleton.portfolioClass != null) {
                     downloadFullData(0, id);
+                    apagarBotoes(id);
+                }
                 break;
             case 2:
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new FragmentReference()).addToBackStack("FragmentReference").commit();
                 lastFragName = "FragmentReference";
+                apagarBotoes(id);
                 break;
             case 3:
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new FragmentConfig()).addToBackStack("FragmentConfig").commit();
                 lastFragName = "FragmentConfig";
+                apagarBotoes(id);
                 break;
             case 4:
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new FragmentAttachment()).addToBackStack("FragmentAttachment").commit();
                 lastFragName = "FragmentAttachment";
+                apagarBotoes(id);
                 break;
             case 5:
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new FragmentReport()).addToBackStack("FragmentReport").commit();
                 lastFragName = "FragmentReport";
+                apagarBotoes(id);
                 break;
             case 7:
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new FragmentReportPortfolio()).addToBackStack("FragmentReportPortfolio").commit();
