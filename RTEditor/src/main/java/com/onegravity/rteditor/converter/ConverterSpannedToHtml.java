@@ -407,7 +407,7 @@ public class ConverterSpannedToHtml {
             mOut.append(StringEscapeUtils.escapeHtml4(fontName));
             mOut.append("\">");
         } else if (style instanceof AbsoluteSizeSpan) {
-            mOut.append("<font style=\"span-size:");
+            mOut.append("<font style=\"font-size:");
             int size = ((AbsoluteSizeSpan) style).getSize();
             size = Helper.convertSpToPx(size);
             mOut.append(size);

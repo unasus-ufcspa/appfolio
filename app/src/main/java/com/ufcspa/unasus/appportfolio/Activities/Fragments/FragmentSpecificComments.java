@@ -29,6 +29,7 @@ import android.widget.TextView;
 import com.github.amlcurran.showcaseview.ShowcaseView;
 import com.github.amlcurran.showcaseview.targets.Target;
 import com.github.amlcurran.showcaseview.targets.ViewTarget;
+import com.onegravity.rteditor.converter.ConverterHtmlToText;
 import com.onegravity.rteditor.utils.Constants;
 import com.ufcspa.unasus.appportfolio.Activities.MainActivity;
 import com.ufcspa.unasus.appportfolio.Adapter.SpecificCommentAdapter;
@@ -545,7 +546,7 @@ public class FragmentSpecificComments extends Frag {
             if(noteNow!=null){
                 if (noteNow.getSelectedText()!=null && !noteNow.getSelectedText().toString().equalsIgnoreCase("null")){
                     Log.d("comments","receiving reference...:"+noteNow.getSelectedText());
-                    reference=noteNow.getSelectedText();
+                    reference= ConverterHtmlToText.convert(noteNow.getSelectedText());
                     if(reference.contains("Referência:")){
                         Log.d("comments ","specific comments contais referencia 'Referência:' in reference");
                         txNote.setText(reference);
