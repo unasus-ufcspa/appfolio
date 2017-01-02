@@ -60,7 +60,7 @@ public class FragmentReportPortfolio extends Frag {
         listActivitiesStudent = new ArrayList<ActivityStudent>();
 
 //        try {
-            list = source.selectListActivitiesAndStudents(singleton.portfolioClass.getIdPortClass(), singleton.portfolioClass.getPerfil(), singleton.idStudent);
+            list = source.selectListActivitiesAndStudentsByStudent(singleton.portfolioClass.getIdPortClass(), singleton.portfolioClass.getPerfil(), singleton.idStudent);
             for (int i=0;i<list.size();i++) {
                 listActivities = list.get(i).getListActivities();
                 for (int j=0;j<listActivities.size();j++) {

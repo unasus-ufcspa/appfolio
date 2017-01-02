@@ -52,7 +52,7 @@ public class SelectReportStudentAdapter extends BaseAdapter {
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(final int position, View convertView, ViewGroup parent) {
         final Holder holder = new Holder();
         final View rowView;
         Singleton.getInstance().idStudent=listaUsers.get(position).getIdUser();
@@ -71,6 +71,7 @@ public class SelectReportStudentAdapter extends BaseAdapter {
         holder.student_image.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Singleton.getInstance().idStudent=listaUsers.get(position).getIdUser();
                 changeScreen();
             }
         });

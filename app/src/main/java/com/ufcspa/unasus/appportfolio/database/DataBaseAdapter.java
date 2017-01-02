@@ -2062,6 +2062,65 @@ public class DataBaseAdapter {
         }
         return students;
     }
+    public ArrayList<StudFrPortClass> selectListActivitiesAndStudentsByStudent(int idPortfolioClass, String perfil, int idUsuario) {
+        String query = "select \n" +
+                "tas.id_activity_student,\n" +
+                "u.id_user,\n" +
+                "a.ds_title,\n" +
+                "a.ds_description,\n" +
+                "u.nm_user as nm_student,\n" +
+                "tas.id_portfolio_student,\n" +
+                "tas.id_activity,\n" +
+                "u.im_photo,\n" +
+                "u.nu_cellphone,\n" +
+                "a.nu_order\n" +
+                "FROM\n" +
+                "\ttb_activity_student as tas\n" +
+                "\tjoin tb_activity a on tas.id_activity = a.id_activity\n" +
+                "\tjoin tb_portfolio_student ps on ps.id_portfolio_student = tas.id_portfolio_student\n" +
+                "\tjoin tb_user u on u.id_user = ps.id_student\n" +
+                "WHERE \n" +
+                "\tps.id_portfolio_class=" + idPortfolioClass;
+//        if (perfil.equalsIgnoreCase("S"))
+            query += " AND u.id_user = " + idUsuario;
+        ArrayList<StudFrPortClass> students = new ArrayList<>();
+        Cursor c = db.rawQuery(query, null);
+        if (c.moveToFirst()) {
+            HashMap<Integer, StudFrPortClass> hash = new LinkedHashMap<Integer, StudFrPortClass>();
+            int lastid;
+            int idUser = 0;
+            int cont = -1;
+            do {
+                lastid = idUser;
+                idUser = c.getInt(1);
+
+                String nameStudent = c.getString(4);
+                String photo = c.getString(7);
+                String cellphone = c.getString(8);
+                Activity a = new Activity(c.getInt(0), c.getInt(6), c.getString(2), c.getString(3), c.getInt(9));
+                a.setId_portfolio(c.getInt(5));
+
+                if (lastid == idUser) {
+                    students.get(cont).setNameStudent(nameStudent);
+                    students.get(cont).add(a);
+                } else {
+                    StudFrPortClass student = new StudFrPortClass();
+                    student.setNameStudent(nameStudent);
+                    student.add(a);
+                    student.setPhoto(photo);
+                    student.setCellphone(cellphone);
+                    students.add(student);
+                    cont++;
+                }
+//
+
+            } while (c.moveToNext());
+
+        } else {
+            Log.d(tag, "Nao retornou nada na consulta");
+        }
+        return students;
+    }
 
     /*
 
