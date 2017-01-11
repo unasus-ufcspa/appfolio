@@ -162,6 +162,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             miniDrawer = inflater.inflate(R.layout.mini_drawer, null);
             initMiniDrawer();
 
+            apagarBotoes(0);
+
             Target target = new ViewTarget(R.id.drawer_target,this);
             ShowCase(target,"Menu Lateral","Expanda o menu deslizando a margem para a direita");
 
@@ -184,6 +186,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             lastFragName = "FragmentRTEditor";
         } else if (savedInstanceState == null)
             changeFragment(0);
+
         /*
         File exst = Environment.getExternalStorageDirectory();
         String exstPath = exst.getPath();
@@ -392,6 +395,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 switch (lastFragName) {
                     case "FragmentRTEditor":
                         getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new FragmentRTEditor()).addToBackStack(lastFragName).commit();
+                        apagarBotoes(1);
                         break;
                     case "FragmentReference":
                         getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new FragmentReference()).addToBackStack(lastFragName).commit();
@@ -487,6 +491,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 if (singleton.portfolioClass != null) {
                     downloadFullData(0, id);
                     apagarBotoes(id);
+                } else {
+                    Toast.makeText(this,"É necessário selecionar um portfólio", Toast.LENGTH_SHORT).show();
                 }
                 break;
             case 2:

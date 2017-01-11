@@ -82,6 +82,7 @@ public class SelectReportClassAdapter extends BaseAdapter {
 //            holder.notificationIcon.setVisibility(View.VISIBLE);
 //        }
         holder.txt_class_code.setText(portClass.getClassCode());
+        holder.txt_port.setText(portClass.getPortfolioTitle());
 
         holder.txt_class_code.setOnClickListener(new View.OnClickListener() {
             @Override
