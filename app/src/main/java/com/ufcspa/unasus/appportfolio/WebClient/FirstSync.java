@@ -22,6 +22,7 @@ import com.ufcspa.unasus.appportfolio.Model.Reference;
 import com.ufcspa.unasus.appportfolio.Model.Singleton;
 import com.ufcspa.unasus.appportfolio.Model.Tuple;
 import com.ufcspa.unasus.appportfolio.Model.VersionActivity;
+import com.ufcspa.unasus.appportfolio.Model.basicData.User;
 import com.ufcspa.unasus.appportfolio.database.DataBaseAdapter;
 
 import org.json.JSONException;
@@ -48,6 +49,7 @@ public class FirstSync {
     private LinkedList<Notification> notifications;
     private LinkedList<com.ufcspa.unasus.appportfolio.Model.basicData.Activity> activities;
     private LinkedList<Reference> references;
+    private LinkedList<User> users;
     private LinkedList<Comentario> comments;
     private HashMap<Integer, ArrayList<Attachment>> anexos;
     private LinkedList<Tuple<Comentario, Attachment>> comentarioAttachment;
@@ -60,6 +62,7 @@ public class FirstSync {
         notifications = new LinkedList<Notification>();
         activities = new LinkedList<com.ufcspa.unasus.appportfolio.Model.basicData.Activity>();
         references = new LinkedList<Reference>();
+        users = new LinkedList<>();
         comments = new LinkedList<Comentario>();
         anexos = new HashMap<>();
         comentarioAttachment = new LinkedList<>();
@@ -83,6 +86,9 @@ public class FirstSync {
         return json;
     }
 
+    public void addUser(User u) {
+        users.add(u);
+    }
     public void addNotification(Notification notification){
         notifications.add(notification);
     }
@@ -160,6 +166,7 @@ public class FirstSync {
         for(Observation obs: observations){
             data.insertObservationByVersion(obs);
         }
+        data.updateTBUser(users);
 
         Integer[] keys = anexos.keySet().toArray(new Integer[anexos.keySet().size()]);
         for (int i = 0; i < keys.length; i++) {

@@ -326,6 +326,33 @@ public class FirstSyncClient extends HttpClient{
                                     }
                                 }
 
+                                if (data.has("user")) {
+                                    JSONObject user = data.getJSONObject("user");
+                                    if (user.has("tb_user")) {
+                                        JSONArray tb_user = user.getJSONArray("tb_user");
+                                        for (int i = 0; i < tb_user.length(); i++) {
+                                            JSONObject temp = tb_user.getJSONObject(i);
+                                            com.ufcspa.unasus.appportfolio.Model.basicData.User u = new com.ufcspa.unasus.appportfolio.Model.basicData.User();
+
+                                            int id_user = temp.getInt("id_user");
+                                            String nm_user = temp.getString("nm_user");
+                                            String nu_identification = temp.getString("nu_identification");
+                                            String nu_cellphone = temp.getString("nu_cellphone");
+                                            String ds_email = temp.getString("ds_email");
+                                            String im_photo = temp.getString("im_photo");
+
+                                            u.setIdUser(id_user);
+                                            u.setNm_user(nm_user);
+                                            u.setNu_identification(nu_identification);
+                                            u.setEmail(ds_email);
+                                            u.setCellphone(nu_cellphone);
+                                            u.setPhoto(im_photo);
+
+                                            firstSync.addUser(u);
+                                        }
+                                    }
+                                }
+
 
                                 if (data.has("comment_version")) {
                                     JSONObject comment_version = data.getJSONObject("comment_version");
