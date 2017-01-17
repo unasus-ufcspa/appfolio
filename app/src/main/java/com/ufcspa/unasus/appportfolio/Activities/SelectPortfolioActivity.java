@@ -48,11 +48,6 @@ public class SelectPortfolioActivity extends AppActivity {
         txtCodeTeam = (TextView) findViewById(R.id.select_portfolio_txt_code);
         listview = (ListView) findViewById(R.id.selectPortfolioListView);
 
-        // TODO: 22/11/2016 inserir tutorial
-        Target target = new ViewTarget(R.id.email_sign_in_button,this);
-        MainActivity mainActivity = new MainActivity();
-        mainActivity.ShowCase(target,"Comentario especifico","aqui você cria comentários específicos");
-
         init();
         createDrawer(savedInstanceState);
     }

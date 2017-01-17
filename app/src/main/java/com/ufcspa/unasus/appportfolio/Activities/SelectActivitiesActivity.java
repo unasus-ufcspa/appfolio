@@ -40,11 +40,6 @@ public class SelectActivitiesActivity extends AppActivity //implements AdapterVi
 
         init();
         createDrawer(savedInstanceState);
-
-        // TODO: 22/11/2016 inserir tutorial
-        Target target = new ViewTarget(R.id.email_sign_in_button,this);
-        MainActivity mainActivity = new MainActivity();
-        mainActivity.ShowCase(target,"Comentario especifico","aqui você cria comentários específicos");
     }
 
     private void init()
