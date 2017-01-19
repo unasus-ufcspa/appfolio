@@ -74,8 +74,10 @@ public class FistLoginClient extends HttpClient {
                                 String idCode=resp.getJSONObject("tb_user").getString("nu_identification");
                                 String email=resp.getJSONObject("tb_user").getString("ds_email");
                                 String cellphone=resp.getJSONObject("tb_user").getString("nu_cellphone");
-
-
+                                String photo= null;
+                                if (resp.getJSONObject("tb_user").getString("im_photo") != null) {
+                                    photo = resp.getJSONObject("tb_user").getString("im_photo").replace("\n","");
+                                }
 
 
                                 //INSERINDO USER NO DB SQLITE
@@ -85,6 +87,8 @@ public class FistLoginClient extends HttpClient {
 
 
                                 DataBaseAdapter.getInstance(context).insertUser(user);
+                                user.setPhoto(photo,null);
+                                DataBaseAdapter.getInstance(context).updateTBUser(user);
                                 DataBaseAdapter.getInstance(context).insertIntoTbDevice(new Device(Singleton.getInstance().device.get_id_device(), user.getIdUser(), Singleton.getInstance().device.get_tp_device(), null, null/*, null*/));
 
                                 //Adicionando o usuario no singleton
@@ -93,11 +97,11 @@ public class FistLoginClient extends HttpClient {
 
                                 LoginActivity2.isLoginSucessful=true;
                             }
-                            if (response.getJSONObject("firstLogin_response").getString("fl_firstSync").equals("S")){
+//                            if (response.getJSONObject("firstLogin_response").getString("fl_firstSync").equals("S")){
                                 singleton.firstSync=true;
                                 FirstSyncClient fsclient = new FirstSyncClient(context);
                                 fsclient.postJson(FirstSync.toJSON(Singleton.getInstance().user.getIdUser(), Singleton.getInstance().device.get_id_device()));
-                            }
+//                            }
                             Log.d("first sync",user.getIdUser()+" "+Singleton.getInstance().device.get_id_device());
                         }
 
