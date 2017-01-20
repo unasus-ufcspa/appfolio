@@ -2975,7 +2975,7 @@ public class DataBaseAdapter {
                 user.setIdCode(c.getString(2));
                 user.setEmail(c.getString(3));
                 user.setCellphone(c.getString(4));
-                user.setPhoto(c.getString(5), null);
+                user.setPhoto(c.getString(5).replace("\n",""), null);
                 lista.add(user);
             } while (c.moveToNext());
         } else {

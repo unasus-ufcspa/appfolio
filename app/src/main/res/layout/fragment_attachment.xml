@@ -40,5 +40,7 @@
         android:scrollIndicators="none"
         android:scrollbarAlwaysDrawHorizontalTrack="false"
         android:scrollbarAlwaysDrawVerticalTrack="false"
-        android:scrollbars="none" />
+        android:scrollbars="none"
+        android:verticalSpacing="20dp"
+        android:horizontalSpacing="20dp" />
 </LinearLayout>

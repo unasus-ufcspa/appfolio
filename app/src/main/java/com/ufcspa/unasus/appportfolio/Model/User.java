@@ -4,6 +4,8 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.util.Base64;
 
+import com.ufcspa.unasus.appportfolio.Activities.Fragments.FragmentConfig;
+
 /**
  * Created by Desenvolvimento on 13/11/2015.
  */
@@ -95,6 +97,10 @@ public class User {
             if (photo != null) {
                 byte[] decodedString = Base64.decode(photo, Base64.DEFAULT);
                 this.photoBitmap = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+
+                Bitmap picture = Bitmap.createScaledBitmap(photoBitmap, 180, 180, true);
+                photoBitmap = FragmentConfig.getRoundedRectBitmap(picture, 100);
+
             }
         }
     }
