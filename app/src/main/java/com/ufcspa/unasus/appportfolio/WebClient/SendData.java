@@ -12,6 +12,7 @@ import com.ufcspa.unasus.appportfolio.Model.Singleton;
 import com.ufcspa.unasus.appportfolio.Model.Sync;
 import com.ufcspa.unasus.appportfolio.Model.User;
 import com.ufcspa.unasus.appportfolio.Model.VersionActivity;
+import com.ufcspa.unasus.appportfolio.Model.basicData.ActivityStudent;
 import com.ufcspa.unasus.appportfolio.database.DataBaseAdapter;
 
 import net.gotev.uploadservice.MultipartUploadRequest;
@@ -42,6 +43,7 @@ public class SendData {
     private LinkedList<VersionActivity> versions;
     private LinkedList<Integer> notices;
     private LinkedHashMap<Integer, LinkedList<Attachment>> attachments;
+    private LinkedList<ActivityStudent> activityStudents;
     private DataBaseAdapter data;
     private String tbComm="tb_comment";
     private String tbVers="tb_version_activity";
@@ -49,6 +51,7 @@ public class SendData {
     private String tbCommVers = "tb_comment_version";
     private String tbNotice = "tb_notice";
     private String tbAttachActivity = "tb_attach_activity";
+    private String tbActivityStudent= "tb_activity_student";
     private Singleton singleton;
     //ids to response
     //-2 is default value
@@ -67,6 +70,7 @@ public class SendData {
         notices = new LinkedList<>();
         idSync = new LinkedList<>();
         attachments = new LinkedHashMap<>();
+        activityStudents = new LinkedList<>();
         singleton = Singleton.getInstance();
     }
 
@@ -117,6 +121,9 @@ public class SendData {
         }
         if (dadosAgrupados.get(tbAttachActivity) != null) {
             attachments = data.getAttachments(dadosAgrupados.get(tbAttachActivity));
+        }
+        if (dadosAgrupados.get(tbActivityStudent) != null) {
+            activityStudents = data.getActivitiesStudentByIds(dadosAgrupados.get(tbActivityStudent));
         }
     }
 
@@ -495,6 +502,22 @@ public class SendData {
 
                     jsonNotice.put(jnotice);
                 }
+            }
+
+            if (activityStudents != null && activityStudents.size() > 0) {
+                JSONObject activitiesStudents = new JSONObject();
+
+                JSONArray activitiesStudent = new JSONArray();
+                for (com.ufcspa.unasus.appportfolio.Model.basicData.ActivityStudent activityStudent:activityStudents){
+                    JSONObject temp = new JSONObject();
+                    temp.put("id_activity_student", activityStudent.getIdActivityStudent());
+                    temp.put("dt_conclusion", activityStudent.getDt_conclusion());
+
+                    activitiesStudent.put(temp);
+                }
+
+                activitiesStudents.put("tb_activity_student", activitiesStudent);
+                jsonPseudoFinal.put("activityStudent", activitiesStudents);
             }
 
             if (attachments != null && attachments.size() != 0) {

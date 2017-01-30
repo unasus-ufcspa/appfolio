@@ -283,6 +283,20 @@ public class DataBaseAdapter {
         }
     }
 
+    public void updateTBActivityStudent(com.ufcspa.unasus.appportfolio.Model.basicData.ActivityStudent activity) {
+        ContentValues cv = new ContentValues();
+        String query="UPDATE tb_activity_student SET dt_conclusion="+activity.getDt_conclusion()+" WHERE id_activity_student="+activity.getIdActivityStudent();
+        cv.put("dt_conclusion", activity.getDt_conclusion());
+        try {
+            db.update("tb_activity_student",cv,"id_activity_student="+activity.getIdActivityStudent(),null);
+
+        } catch (Exception e) {
+            Log.d(tag, "erro ao inserir activity Student:" + e.getMessage());
+            e.printStackTrace();
+        }
+
+    }
+
     public void insertTBSync(List<Sync> syncs) {
         for (Sync s : syncs) {
             ContentValues cv = new ContentValues();
@@ -1506,13 +1520,17 @@ public class DataBaseAdapter {
                 "FROM tb_version_activity " +
                 "WHERE id_activity_student = " + id_activity_student;
         if (!Singleton.getInstance().portfolioClass.getPerfil().equals("T")){
-            String temp = query + " AND dt_submission='0000-00-00 00:00:00'";
-            Cursor cursor = db.rawQuery(temp, null);
-            if (cursor.moveToFirst()) {
-                versionActivities.add(cursorToVersionActivity(cursor));
+            if (getActivityStudentById(Singleton.getInstance().idActivityStudent).getDt_conclusion().equals("null") || getActivityStudentById(Singleton.getInstance().idActivityStudent).getDt_conclusion()==null) {
+                String temp = query + " AND dt_submission='0000-00-00 00:00:00'";
+                Cursor cursor = db.rawQuery(temp, null);
+                if (cursor.moveToFirst()) {
+                    versionActivities.add(cursorToVersionActivity(cursor));
+                }
+                query = query + " AND NOT dt_submission='0000-00-00 00:00:00' ORDER BY dt_submission DESC";
+                cursor.close();
+            } else {
+                query = query + " AND NOT dt_submission='0000-00-00 00:00:00' ORDER BY dt_submission DESC";
             }
-            query = query + " AND NOT dt_submission='0000-00-00 00:00:00' ORDER BY dt_submission DESC";
-            cursor.close();
         } else {
             query = query + " AND NOT dt_submission='0000-00-00 00:00:00' ORDER BY dt_submission DESC";
         }
@@ -1985,6 +2003,44 @@ public class DataBaseAdapter {
 //        db.close();
         return array_activity;
     }
+
+    public LinkedList<com.ufcspa.unasus.appportfolio.Model.basicData.ActivityStudent> getActivitiesStudentByIds(LinkedList<Integer> ids){
+        LinkedList<com.ufcspa.unasus.appportfolio.Model.basicData.ActivityStudent> activityStudents = new LinkedList<>();
+        com.ufcspa.unasus.appportfolio.Model.basicData.ActivityStudent activityStudent = new com.ufcspa.unasus.appportfolio.Model.basicData.ActivityStudent();
+        for (Integer id : ids) {
+            String query = "SELECT * FROM tb_activity_student WHERE id_activity_student="+id;
+            Cursor cursor = db.rawQuery(query,null);
+
+            if (cursor.moveToFirst()) {
+                activityStudent.setIdActivityStudent(cursor.getInt(0));
+                activityStudent.setIdPortfolioStudent(cursor.getInt(1));
+                activityStudent.setIdActivity(cursor.getInt(2));
+                activityStudent.setDt_conclusion(cursor.getString(3));
+                activityStudent.setDt_first_sync(cursor.getString(4));
+            }
+
+            activityStudents.add(activityStudent);
+        }
+
+        return activityStudents;
+    }
+
+    public com.ufcspa.unasus.appportfolio.Model.basicData.ActivityStudent getActivityStudentById(Integer id){
+        com.ufcspa.unasus.appportfolio.Model.basicData.ActivityStudent activity = new com.ufcspa.unasus.appportfolio.Model.basicData.ActivityStudent();
+        String query = "SELECT * FROM tb_activity_student WHERE id_activity_student="+id;
+        Cursor cursor = db.rawQuery(query,null);
+
+        if (cursor.moveToFirst()) {
+            activity.setIdActivityStudent(cursor.getInt(0));
+            activity.setIdPortfolioStudent(cursor.getInt(1));
+            activity.setIdActivity(cursor.getInt(2));
+            activity.setDt_conclusion(cursor.getString(3));
+            activity.setDt_first_sync(cursor.getString(4));
+        }
+
+        return activity;
+    }
+
 
     public String getActivityTitleByIdActivityStudent (int idActivityStudent) {
         String query = "SELECT ds_title FROM tb_activity JOIN tb_activity_student ON tb_activity.id_activity=tb_activity_student.id_activity WHERE id_activity_student="+idActivityStudent;

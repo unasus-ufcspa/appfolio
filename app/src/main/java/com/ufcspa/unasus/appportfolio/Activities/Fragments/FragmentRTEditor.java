@@ -2,6 +2,7 @@ package com.ufcspa.unasus.appportfolio.Activities.Fragments;
 
 import android.Manifest;
 import android.app.Activity;
+import android.app.Dialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -97,6 +98,7 @@ public class FragmentRTEditor extends Frag {
     private ViewGroup scrollview;
     private ImageButton fullScreen;
     private Button sendVersion;
+    private Button finalizeActivity;
     private Switch switchNote;
     private RelativeLayout slider;
     private ViewGroup rightBarSpecificComments;
@@ -104,6 +106,8 @@ public class FragmentRTEditor extends Frag {
     private ImageButton personalCommentButton;
     private ImageButton versionsButton;
     private ImageView usrPhoto;
+    private TextView sendVersionText;
+    private TextView finalizeActivityText;
     // Model
     private ActivityStudent acStudent;
     private DataBaseAdapter source;
@@ -228,7 +232,7 @@ public class FragmentRTEditor extends Frag {
         scrollview = (ViewGroup) view.findViewById(R.id.comments);
         rightBarSpecificComments = (ViewGroup) view.findViewById(R.id.obs_view);
 
-        if (singleton.portfolioClass.getPerfil().equals("T") || (singleton.idCurrentVersionActivity != source.getIDVersionAtual(singleton.idActivityStudent))) {
+        if (singleton.portfolioClass.getPerfil().equals("T") || (singleton.idCurrentVersionActivity != source.getIDVersionAtual(singleton.idActivityStudent)) || !source.getActivityStudentById(singleton.idActivityStudent).getDt_conclusion().equals("null")) {
             view.findViewById(R.id.rte_toolbar_container).setVisibility(View.INVISIBLE);
         }else if (ContextCompat.checkSelfPermission(getContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_DENIED) {
             ActivityCompat.requestPermissions(getActivity(),new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},MY_PERMISSIONS_REQUEST);
@@ -265,7 +269,7 @@ public class FragmentRTEditor extends Frag {
             @Override
             public void onClick(View v) {
 //                if (singleton.portfolioClass.getPerfil().equals("S") && (singleton.idCurrentVersionActivity == singleton.idVersionActivity)) {
-                if ((singleton.idCurrentVersionActivity == singleton.idVersionActivity)) {
+                if ((singleton.idCurrentVersionActivity == singleton.idVersionActivity) && source.getActivityStudentById(singleton.idActivityStudent).getDt_conclusion().equals("null")) {
                     new AlertDialog.Builder(getContext())
                             .setTitle("Enviar Versão")
                             .setMessage("Você tem certeza que deseja enviar essa versão da atividade?")
@@ -336,6 +340,56 @@ public class FragmentRTEditor extends Frag {
             }
         });
 
+        finalizeActivity = (Button) view.findViewById(R.id.finalize_activity);
+        finalizeActivity.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (source.getActivityStudentById(singleton.idActivityStudent).getDt_conclusion().equals("null")) {
+                    final Dialog dialog = new Dialog(getContext());
+                    dialog.setContentView(R.layout.logout_popup);
+                    dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+                    TextView title = (TextView) dialog.findViewById(R.id.textView15);
+                    Button accept = (Button) dialog.findViewById(R.id.btn_logout_ok);
+                    Button cancel = (Button) dialog.findViewById(R.id.btn_logout_cancel);
+
+                    title.setText("Tem certeza que deseja\nfinalizar a atividade?");
+                    accept.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            com.ufcspa.unasus.appportfolio.Model.basicData.ActivityStudent activityStudent;
+                            activityStudent = source.getActivityStudentById(Singleton.getInstance().idActivityStudent);
+                            activityStudent.setDt_conclusion(getActualTime());
+                            source.updateTBActivityStudent(activityStudent);
+
+                            Sync sync = new Sync();
+                            sync.setNm_table("tb_activity_student");
+                            sync.setCo_id_table(Singleton.getInstance().idActivityStudent);
+                            sync.setId_activity_student(Singleton.getInstance().idActivityStudent);
+                            sync.setId_device(singleton.device.get_id_device());
+                            source.insertIntoTBSync(sync);
+                            MainActivity main = ((MainActivity) getActivity());
+                            try {
+                                main.sendFullData();
+                            } finally {
+                                Toast.makeText(getContext(),"Atividade finalizada",Toast.LENGTH_LONG).show();
+                                dialog.dismiss();
+                                LocalBroadcastManager.getInstance(getContext()).sendBroadcast(new Intent("call.fragments.action").putExtra("ID", 1));
+                            }
+                        }
+                    });
+                    cancel.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            dialog.dismiss();
+                        }
+                    });
+                    dialog.show();
+                } else {
+                    Toast.makeText(getContext(),"Versão já finalizada!",Toast.LENGTH_LONG).show();
+                }
+            }
+        });
+
         switchNote = (Switch) view.findViewById(R.id.switch_note);
         switchNote.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
@@ -344,9 +398,15 @@ public class FragmentRTEditor extends Frag {
             }
         });
 
+        sendVersionText = (TextView) view.findViewById(R.id.send_version_text);
+        finalizeActivityText = (TextView) view.findViewById(R.id.finalize_activity_text);
+
 //        if (singleton.portfolioClass.getPerfil().equals("T") || (singleton.idCurrentVersionActivity != singleton.idVersionActivity)) {
         if (singleton.portfolioClass.getPerfil().equals("T") || (singleton.idCurrentVersionActivity != singleton.idVersionActivity)) {
             sendVersion.setVisibility(View.GONE);
+            sendVersionText.setVisibility(View.GONE);
+            finalizeActivity.setVisibility(View.GONE);
+            finalizeActivityText.setVisibility(View.GONE);
         }
 
         initCommentsTab(view);
@@ -538,7 +598,7 @@ public class FragmentRTEditor extends Frag {
 
         mRTMessageField.setCanPaste(true);
         mRTManager.setToolbarVisibility(RTManager.ToolbarVisibility.SHOW);
-        if (singleton.portfolioClass.getPerfil().equals("T") || (singleton.idCurrentVersionActivity != singleton.idVersionActivity)) {
+        if (singleton.portfolioClass.getPerfil().equals("T") || (singleton.idCurrentVersionActivity != singleton.idVersionActivity) || !source.getActivityStudentById(singleton.idActivityStudent).getDt_conclusion().equals("null")) {
             mRTMessageField.setKeyListener(null);
             mRTMessageField.setTextIsSelectable(true);
             mRTManager.setToolbarVisibility(RTManager.ToolbarVisibility.HIDE);

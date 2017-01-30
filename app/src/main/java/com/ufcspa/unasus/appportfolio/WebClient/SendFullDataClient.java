@@ -12,6 +12,7 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.ufcspa.unasus.appportfolio.Activities.MainActivity;
 import com.ufcspa.unasus.appportfolio.Model.Attachment;
+import com.ufcspa.unasus.appportfolio.Model.basicData.ActivityStudent;
 import com.ufcspa.unasus.appportfolio.database.DataBaseAdapter;
 
 import org.json.JSONArray;
@@ -157,6 +158,24 @@ public class SendFullDataClient extends HttpClient{
                         }else{
                             Log.d("json","não entrou em version");
                         }
+
+                        if (resp.has("activityStudent")) {
+                            JSONObject activityStudent = resp.getJSONObject("activityStudent");
+                            if (activityStudent.has("tb_activity_student")) {
+                                JSONArray tb_activity_student = activityStudent.getJSONArray("tb_activity_student");
+                                for (int i = 0; i < tb_activity_student.length(); i++) {
+                                    JSONObject temp = tb_activity_student.getJSONObject(i);
+                                    ActivityStudent as = new ActivityStudent();
+                                    int id_activity_student = temp.getInt("id_activity_student");
+                                    String dt_conclusion = temp.getString("dt_conclusion");
+                                    as = DataBaseAdapter.getInstance(context).getActivityStudentById(id_activity_student);
+                                    as.setDt_conclusion(dt_conclusion);
+                                    DataBaseAdapter.getInstance(context).updateTBActivityStudent(as);
+                                    Log.d("activityStudent",as.toString());
+                                }
+                            }
+                        }
+
                         if (resp.has("attachment")) {
                             JSONObject attach = resp.getJSONObject("attachment");
                             if (attach.has("tb_attachment")) {

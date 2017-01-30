@@ -59,7 +59,7 @@ public class SelectReportClassAdapter extends BaseAdapter {
         final Holder holder = new Holder();
         final View rowView;
 
-        rowView = inflater.inflate(R.layout.adapter_item_class_finished, null);
+        rowView = inflater.inflate(R.layout.adapter_item_report, null);
 
         holder.txt_class_code_info = (TextView) rowView.findViewById(R.id.txt_class_code_info);
         holder.btnInfoClose = (ImageButton) rowView.findViewById(R.id.btn_info_close);

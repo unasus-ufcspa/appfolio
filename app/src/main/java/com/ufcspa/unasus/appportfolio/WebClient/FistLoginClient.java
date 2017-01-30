@@ -75,7 +75,7 @@ public class FistLoginClient extends HttpClient {
                                 String email=resp.getJSONObject("tb_user").getString("ds_email");
                                 String cellphone=resp.getJSONObject("tb_user").getString("nu_cellphone");
                                 String photo= null;
-                                if (resp.getJSONObject("tb_user").getString("im_photo") != null) {
+                                if (resp.getJSONObject("tb_user").getString("im_photo") != null && !resp.getJSONObject("tb_user").getString("im_photo").equals("") && !resp.getJSONObject("tb_user").getString("im_photo").equals("null")) {
                                     photo = resp.getJSONObject("tb_user").getString("im_photo").replace("\n","");
                                 }
 
@@ -87,8 +87,10 @@ public class FistLoginClient extends HttpClient {
 
 
                                 DataBaseAdapter.getInstance(context).insertUser(user);
-                                user.setPhoto(photo,null);
-                                DataBaseAdapter.getInstance(context).updateTBUser(user);
+                                if (photo!=null && !photo.equals("") && !photo.equals("null")) {
+                                    user.setPhoto(photo,null);
+                                    DataBaseAdapter.getInstance(context).updateTBUser(user);
+                                }
                                 DataBaseAdapter.getInstance(context).insertIntoTbDevice(new Device(Singleton.getInstance().device.get_id_device(), user.getIdUser(), Singleton.getInstance().device.get_tp_device(), null, null/*, null*/));
 
                                 //Adicionando o usuario no singleton

@@ -47,93 +47,152 @@ public class ActivitiesAdapter extends RecyclerView.Adapter<ActivitiesAdapter.Vi
 
     @Override
     public ActivitiesAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.adapter_item_portfolio_activity, parent, false);
-        ViewHolder vh = new ViewHolder(v);
+        View v;
+        ViewHolder vh;
+        switch (viewType) {
+            case 1:
+                v = LayoutInflater.from(parent.getContext()).inflate(R.layout.adapter_item_class_finished, parent, false);
+                vh = new ViewHolder(v);
 
-        vh.title = (TextView)v.findViewById(R.id.adapter_item_class_txv_ds_title);
-        vh.moreInfo = (ImageButton)v.findViewById(R.id.btn_info);
-        vh.description = "";
-        vh.notificationIcon = (TextView) v.findViewById(R.id.item_class_notification_icon);
+                vh.title = (TextView) v.findViewById(R.id.adapter_item_class_txv_code);
+//                vh.moreInfo = (ImageButton) v.findViewById(R.id.btn_info);
+//                vh.description = "";
+                vh.notificationIcon = (TextView) v.findViewById(R.id.item_class_notification_icon);
 
-        vh.txt_class_code_info = (TextView) v.findViewById(R.id.txt_class_code_info);
-        vh.btnInfoClose = (ImageButton) v.findViewById(R.id.btn_info_close);
-        vh.txt_finalize_activity = (TextView) v.findViewById(R.id.txt_finalize_activity);
-        vh.txt_send_message = (TextView) v.findViewById(R.id.txt_send_message);
-        vh.infoView = (RelativeLayout) v.findViewById(R.id.info);
-        return vh;
+//                vh.txt_class_code_info = (TextView) v.findViewById(R.id.adapter_item_class_txv_ds_port);
+                return vh;
+            default:
+                v = LayoutInflater.from(parent.getContext()).inflate(R.layout.adapter_item_portfolio_activity, parent, false);
+                vh = new ViewHolder(v);
+
+                vh.title = (TextView) v.findViewById(R.id.adapter_item_class_txv_ds_title);
+                vh.moreInfo = (ImageButton) v.findViewById(R.id.btn_info);
+                vh.description = "";
+                vh.notificationIcon = (TextView) v.findViewById(R.id.item_class_notification_icon);
+
+                vh.txt_class_code_info = (TextView) v.findViewById(R.id.txt_class_code_info);
+                vh.btnInfoClose = (ImageButton) v.findViewById(R.id.btn_info_close);
+                vh.txt_finalize_activity = (TextView) v.findViewById(R.id.txt_finalize_activity);
+                vh.txt_send_message = (TextView) v.findViewById(R.id.txt_send_message);
+                vh.infoView = (RelativeLayout) v.findViewById(R.id.info);
+                return vh;
+
+        }
     }
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, final int position) {
         final Activity aux = list.get(position);
+        int r;
 
-        holder.title.setText(aux.getTitle());
-        holder.txt_class_code_info.setText(aux.getTitle());
-        holder.description = aux.getDescription();
-        holder.moreInfo.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        switch (holder.getItemViewType()) {
+            case 1:
+                holder.title.setText(aux.getTitle());
+//                holder.txt_class_code_info.setText(aux.getTitle());
+
+                holder.title.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        singleton.activity = list.get(position);
+                        singleton.idActivityStudent = singleton.activity.getIdActivityStudent();
+                        singleton.idVersionActivity = source.getLastIDVersionActivity(singleton.idActivityStudent);
+                        singleton.idCurrentVersionActivity = singleton.idVersionActivity;
+                        singleton.portfolioClass.setIdPortfolioStudent(list.get(position).getIdPortfolio());
+                        singleton.portfolioClass.setStudentName(studentName);
+                        singleton.portfolioClass.setPhoto(studFrPortClass.getPhoto());
+                        singleton.portfolioClass.setCellphone(studFrPortClass.getCellphone());
+                        LocalBroadcastManager.getInstance(context).sendBroadcast(new Intent("call.fragments.action").putExtra("ID", 6));
+                    }
+                });
+                r = source.getActivityNotification(aux.getIdActivityStudent());
+                if (r == 0) {
+                    holder.notificationIcon.setVisibility(View.INVISIBLE);
+                } else {
+                    holder.notificationIcon.setBackgroundResource(R.drawable.done_notification);
+                    holder.notificationIcon.setVisibility(View.VISIBLE);
+                }
+
+                break;
+            default:
+                holder.title.setText(aux.getTitle());
+                holder.txt_class_code_info.setText(aux.getTitle());
+                holder.description = aux.getDescription();
+                holder.moreInfo.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
 //                holder.infoView.setVisibility(View.VISIBLE);
 //                holder.infoView.startAnimation(AnimationUtils.loadAnimation(context, R.anim.anim_right));
 
-                new AlertDialog.Builder(context)
-                        .setTitle(aux.getTitle())
-                        .setMessage(aux.getDescription())
-                        .setPositiveButton("Fechar", new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int which) {
-                                dialog.dismiss();
-                            }
-                        })
-                        .show();
-            }
-        });
+                        new AlertDialog.Builder(context)
+                                .setTitle(aux.getTitle())
+                                .setMessage(aux.getDescription())
+                                .setPositiveButton("Fechar", new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        dialog.dismiss();
+                                    }
+                                })
+                                .show();
+                    }
+                });
 
-        holder.btnInfoClose.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                holder.infoView.startAnimation(AnimationUtils.loadAnimation(context, R.anim.anim_left));
-                holder.infoView.setVisibility(View.GONE);
-            }
-        });
+                holder.btnInfoClose.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        holder.infoView.startAnimation(AnimationUtils.loadAnimation(context, R.anim.anim_left));
+                        holder.infoView.setVisibility(View.GONE);
+                    }
+                });
 
-        holder.title.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                singleton.activity = list.get(position);
-                singleton.idActivityStudent = singleton.activity.getIdActivityStudent();
-                if (singleton.portfolioClass.getPerfil().equals("S")) {
-                    singleton.idVersionActivity = source.getIDVersionAtual(singleton.idActivityStudent);
+                holder.title.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        singleton.activity = list.get(position);
+                        singleton.idActivityStudent = singleton.activity.getIdActivityStudent();
+                        if (singleton.portfolioClass.getPerfil().equals("S")) {
+                            singleton.idVersionActivity = source.getIDVersionAtual(singleton.idActivityStudent);
+                        } else {
+                            singleton.idVersionActivity = source.getLastIDVersionActivity(singleton.idActivityStudent);
+                        }
+                        singleton.idCurrentVersionActivity = singleton.idVersionActivity;
+                        singleton.portfolioClass.setIdPortfolioStudent(list.get(position).getIdPortfolio());
+                        singleton.portfolioClass.setStudentName(studentName);
+                        singleton.portfolioClass.setPhoto(studFrPortClass.getPhoto());
+                        singleton.portfolioClass.setCellphone(studFrPortClass.getCellphone());
+                        LocalBroadcastManager.getInstance(context).sendBroadcast(new Intent("call.fragments.action").putExtra("ID", 6));
+                    }
+                });
+
+                holder.txt_finalize_activity.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Toast.makeText(context, "Finalizar todas as atividades", Toast.LENGTH_SHORT).show();
+                    }
+                });
+                holder.txt_send_message.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Toast.makeText(context, "Enviar mensagens a todas as atividades", Toast.LENGTH_SHORT).show();
+                    }
+                });
+
+                r = source.getActivityNotification(aux.getIdActivityStudent());
+                if (r == 0) {
+                    holder.notificationIcon.setVisibility(View.INVISIBLE);
                 } else {
-                    singleton.idVersionActivity = source.getLastIDVersionActivity(singleton.idActivityStudent);
+                    holder.notificationIcon.setVisibility(View.VISIBLE);
+                    holder.notificationIcon.setText(r + "");
                 }
-                singleton.idCurrentVersionActivity = singleton.idVersionActivity;
-                singleton.portfolioClass.setIdPortfolioStudent(list.get(position).getIdPortfolio());
-                singleton.portfolioClass.setStudentName(studentName);
-                singleton.portfolioClass.setPhoto(studFrPortClass.getPhoto());
-                singleton.portfolioClass.setCellphone(studFrPortClass.getCellphone());
-                LocalBroadcastManager.getInstance(context).sendBroadcast(new Intent("call.fragments.action").putExtra("ID", 6));
-            }
-        });
+                break;
+        }
+    }
 
-        holder.txt_finalize_activity.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(context, "Finalizar todas as atividades", Toast.LENGTH_SHORT).show();
-            }
-        });
-        holder.txt_send_message.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(context, "Enviar mensagens a todas as atividades", Toast.LENGTH_SHORT).show();
-            }
-        });
-
-        int r = source.getActivityNotification(aux.getIdActivityStudent());
-        if (r == 0) {
-            holder.notificationIcon.setVisibility(View.INVISIBLE);
-        } else {
-            holder.notificationIcon.setVisibility(View.VISIBLE);
-            holder.notificationIcon.setText(r + "");
+    @Override
+    public int getItemViewType(int position) {
+        String dt_conclusion = DataBaseAdapter.getInstance(context).getActivityStudentById(list.get(position).getIdActivityStudent()).getDt_conclusion();
+        if (dt_conclusion.equals("null") || dt_conclusion == null) {
+            return 0;
+        }else {
+            return 1;
         }
     }
 

@@ -95,7 +95,6 @@ public class FragmentConfig extends Frag implements View.OnClickListener {
         btn_notifications.setOnClickListener(this);
 
         btn_change_image = (ImageView) view.findViewById(R.id.btn_change_image);
-        btn_change_image = (ImageView) view.findViewById(R.id.btn_change_image);
         edt_email = (EditText) view.findViewById(R.id.edt_email);
         edt_telefone = (EditText) view.findViewById(R.id.edt_telefone);
         btn_alterar = (Button) view.findViewById(R.id.btn_alterar);

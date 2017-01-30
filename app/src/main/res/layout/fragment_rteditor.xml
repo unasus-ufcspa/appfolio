@@ -21,31 +21,62 @@
 
         </RelativeLayout>
 
+
         <Switch
             android:id="@+id/switch_note"
             android:layout_width="48dp"
             android:layout_height="48dp"
-            android:layout_above="@+id/send_version"
+            android:layout_above="@+id/finalize_activity"
             android:layout_alignParentBottom="false"
             android:layout_alignParentRight="true" />
+        <Button
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_alignParentBottom="false"
+            android:layout_alignParentRight="true"
+            android:layout_above="@+id/finalize_activity_text"
+            android:id="@+id/finalize_activity"
+            android:background="@drawable/btn_finalize"/>
+        <TextView
+            android:id="@+id/finalize_activity_text"
+            android:layout_width="48dp"
+            android:layout_height="wrap_content"
+            android:text="finalizar"
+            android:layout_alignParentBottom="false"
+            android:layout_alignParentRight="true"
+            android:layout_above="@+id/send_version"
+            android:textColor="@color/base_green"
+            android:textSize="10sp"
+            android:gravity="center"/>
 
         <Button
             android:id="@+id/send_version"
             android:layout_width="48dp"
             android:layout_height="48dp"
-            android:layout_above="@+id/fullscreen"
+            android:layout_above="@+id/send_version_text"
             android:layout_alignParentBottom="false"
             android:layout_alignParentRight="true"
             android:background="@drawable/btn_send_activity" />
+        <TextView
+            android:id="@+id/send_version_text"
+            android:layout_width="48dp"
+            android:layout_height="wrap_content"
+            android:text="enviar"
+            android:layout_alignParentBottom="false"
+            android:layout_alignParentRight="true"
+            android:layout_above="@+id/fullscreen"
+            android:textColor="@color/base_green"
+            android:textSize="10sp"
+            android:gravity="center"/>
 
         <ImageButton
             android:id="@+id/fullscreen"
             android:layout_width="48dp"
-            android:layout_height="48dp"
+            android:layout_height="40dp"
             android:layout_alignParentBottom="true"
             android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true"
-            android:layout_marginBottom="5dp"
+            android:layout_marginBottom="10dp"
             android:background="@drawable/fullscreen1" />
 
         <RelativeLayout
