@@ -73,6 +73,8 @@ public class FragmentReport extends Frag {
                         if (i == temp.size())
                             finalList.add(portclass);
                     }
+                    if (portclass.getPerfil().equals("T"))
+                        break;
                 }
             }
             Log.d("lista", "tam portlis:" + portclasses.size());
