@@ -2188,14 +2188,15 @@ public class DataBaseAdapter {
                 "tas.id_activity,\n" +
                 "u.im_photo,\n" +
                 "u.nu_cellphone,\n" +
-                "a.nu_order\n" +
+                "a.nu_order,\n" +
+                "tas.dt_conclusion\n" +
                 "FROM\n" +
                 "\ttb_activity_student as tas\n" +
                 "\tjoin tb_activity a on tas.id_activity = a.id_activity\n" +
                 "\tjoin tb_portfolio_student ps on ps.id_portfolio_student = tas.id_portfolio_student\n" +
                 "\tjoin tb_user u on u.id_user = ps.id_student\n" +
                 "WHERE \n" +
-                "\tps.id_portfolio_class=" + idPortfolioClass + " AND NOT tas.dt_conclusion='null'";
+                "\tps.id_portfolio_class=" + idPortfolioClass;
 //        if (perfil.equalsIgnoreCase("S"))
             query += " AND u.id_user = " + idUsuario;
         ArrayList<StudFrPortClass> students = new ArrayList<>();
@@ -2221,7 +2222,9 @@ public class DataBaseAdapter {
                 } else {
                     StudFrPortClass student = new StudFrPortClass();
                     student.setNameStudent(nameStudent);
-                    student.add(a);
+                    if (!c.getString(10).equals("null")) {
+                        student.add(a);
+                    }
                     student.setPhoto(photo);
                     student.setCellphone(cellphone);
                     students.add(student);

@@ -9,9 +9,11 @@ import android.widget.GridView;
 import android.widget.TextView;
 
 import com.ufcspa.unasus.appportfolio.Adapter.SelectReportClassAdapter;
+import com.ufcspa.unasus.appportfolio.Model.Activity;
 import com.ufcspa.unasus.appportfolio.Model.PortfolioClass;
 import com.ufcspa.unasus.appportfolio.Model.Singleton;
 import com.ufcspa.unasus.appportfolio.Model.StudFrPortClass;
+import com.ufcspa.unasus.appportfolio.Model.User;
 import com.ufcspa.unasus.appportfolio.R;
 import com.ufcspa.unasus.appportfolio.database.DataBaseAdapter;
 
@@ -25,6 +27,7 @@ public class FragmentReport extends Frag {
     private DataBaseAdapter source;
     private Singleton singleton;
     private List<PortfolioClass> portclasses;
+    private ArrayList<User> students;
     private ArrayList<PortfolioClass> finalList;
     private ArrayList<StudFrPortClass> list;
     private ArrayList<StudFrPortClass> listActivities;
@@ -51,15 +54,26 @@ public class FragmentReport extends Frag {
         singleton = Singleton.getInstance();
         source = DataBaseAdapter.getInstance(getActivity());
         finalList = new ArrayList<>();
+        students = new ArrayList<>();
         grid_empty = (TextView) getView().findViewById(R.id.grid_empty);
+        int i=0;
 
         try {
             portclasses = source.selectListClassAndUserType(singleton.user.getIdUser());
             for (PortfolioClass portclass: portclasses){
-                list = source.selectListActivitiesAndStudentsByStudent(portclass.getIdPortClass(), portclass.getPerfil(), singleton.user.getIdUser());
-                listActivities = source.selectFinalizedActivitiesAndStudentsByStudent(portclass.getIdPortClass(), portclass.getPerfil(), singleton.user.getIdUser());
-                if (!list.isEmpty() && !listActivities.isEmpty() && list.size()==listActivities.size())
-                    finalList.add(portclass);
+                students = (ArrayList) source.getUsersByIdPortfolioClass(portclass.getIdPortClass());
+                for (User student:students) {
+                    list = source.selectListActivitiesAndStudentsByStudent(portclass.getIdPortClass(), portclass.getPerfil(), student.getIdUser());
+                    for (StudFrPortClass studFrPortClass:list){
+                     List<Activity> temp = studFrPortClass.getListActivities();
+                        for (Activity activity:temp){
+                            if (!source.getActivityStudentById(activity.getIdActivityStudent()).getDt_conclusion().equals("null") && source.getActivityStudentById(activity.getIdActivityStudent()).getDt_conclusion()!=null)
+                                i++;
+                        }
+                        if (i == temp.size())
+                            finalList.add(portclass);
+                    }
+                }
             }
             Log.d("lista", "tam portlis:" + portclasses.size());
         } catch (Exception e) {
