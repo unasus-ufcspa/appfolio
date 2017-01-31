@@ -255,7 +255,7 @@ public class FirstSyncClient extends HttpClient{
                                             String tx_activity = temp.getString("tx_activity");
                                             tx_activity= tx_activity.replaceAll("\'","");
 
-                                            tx_activity = tx_activity.replaceAll("<span id", "<font id");
+                                            tx_activity = tx_activity.replaceAll("<span", "<font");
                                             tx_activity = tx_activity.replaceAll("</span>", "</font>");
 
                                             System.out.println("json replace tx activity"+"\nold:"+temp.getString("tx_activity") + " new:"+tx_activity);
@@ -297,7 +297,7 @@ public class FirstSyncClient extends HttpClient{
                                             String tx_activity = temp.getString("tx_activity");
                                             tx_activity= tx_activity.replaceAll("\'","");
 
-                                            tx_activity = tx_activity.replaceAll("<span id", "<font id");
+                                            tx_activity = tx_activity.replaceAll("<span", "<font");
                                             tx_activity = tx_activity.replaceAll("</span>", "</font>");
 
                                             String dt_last_access = temp.getString("dt_last_access");

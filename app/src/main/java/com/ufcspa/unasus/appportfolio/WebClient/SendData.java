@@ -407,7 +407,7 @@ public class SendData {
                     jsonVersion.put("id_activity_student", v.getId_activity_student());
 
                     String tx_activity = v.getTx_activity();
-                    tx_activity = tx_activity.replaceAll("<font id","<span id");
+                    tx_activity = tx_activity.replaceAll("<font","<span");
                     tx_activity = tx_activity.replaceAll("</font>","</span>");
 
                     jsonVersion.put("tx_activity", tx_activity);
