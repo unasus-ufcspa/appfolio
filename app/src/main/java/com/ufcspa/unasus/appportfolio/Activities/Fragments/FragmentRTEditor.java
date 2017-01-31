@@ -108,6 +108,7 @@ public class FragmentRTEditor extends Frag {
     private ImageView usrPhoto;
     private TextView sendVersionText;
     private TextView finalizeActivityText;
+    private TextView fullscreenText;
     // Model
     private ActivityStudent acStudent;
     private DataBaseAdapter source;
@@ -242,10 +243,14 @@ public class FragmentRTEditor extends Frag {
         createEditor(view, savedInstanceState);
 
         fullScreen = (ImageButton) view.findViewById(R.id.fullscreen);
-        if (!singleton.isFullscreen)
+        fullscreenText = (TextView) view.findViewById(R.id.fullscreen_text);
+        if (!singleton.isFullscreen) {
+            fullscreenText.setVisibility(View.VISIBLE);
             fullScreen.setBackgroundResource(R.drawable.fullscreen1);
-        else
+        }else {
+            fullscreenText.setVisibility(View.INVISIBLE);
             fullScreen.setBackgroundResource(R.drawable.fullscreen2);
+        }
         fullScreen.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

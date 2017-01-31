@@ -7,7 +7,7 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@drawable/rteditor_shadow"
+        android:background="@drawable/rteditor_shadow_border"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp">
 

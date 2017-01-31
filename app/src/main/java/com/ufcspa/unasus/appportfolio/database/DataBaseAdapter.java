@@ -1940,6 +1940,13 @@ public class DataBaseAdapter {
         return array_team;
     }
 
+    public String getPortfolioDescription (int portfolioClassId){
+        String query = "SELECT ds_description FROM tb_portfolio p JOIN tb_portfolio_class pc ON p.id_portfolio=pc.id_portfolio WHERE pc.id_portfolio_class="+portfolioClassId;
+        Cursor c = db.rawQuery(query,null);
+        c.moveToFirst();
+        return c.getString(0);
+    }
+
     private Team cursorToTeam(Cursor cursor) {
         DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
 

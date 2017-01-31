@@ -1,9 +1,11 @@
 package com.ufcspa.unasus.appportfolio.Adapter;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.support.v4.content.LocalBroadcastManager;
+import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -55,7 +57,7 @@ public class SelectPortfolioClassAdapter extends BaseAdapter {
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(final int position, View convertView, ViewGroup parent) {
         final Holder holder = new Holder();
         final View rowView;
 
@@ -109,6 +111,15 @@ public class SelectPortfolioClassAdapter extends BaseAdapter {
         holder.btnInfo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                new AlertDialog.Builder(context)
+                        .setTitle(portClass.getPortfolioTitle())
+                        .setMessage(dataBaseAdapter.getPortfolioDescription(portClass.getIdPortClass()))
+                        .setPositiveButton("Fechar", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                            }
+                        })
+                        .show();
 //                holder.infoView.setVisibility(View.VISIBLE);
 //                holder.infoView.startAnimation(AnimationUtils.loadAnimation(context, R.anim.anim_right));
             }
