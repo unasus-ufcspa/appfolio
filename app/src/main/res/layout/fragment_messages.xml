@@ -3,7 +3,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:background="@color/base_green"
+    android:background="@color/base_green_dark"
     android:focusable="true"
     android:focusableInTouchMode="true"
     android:orientation="vertical"
@@ -31,7 +31,7 @@
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
         android:layout_marginTop="10dp"
-        android:background="#a9f1e3"
+        android:background="@color/white"
         android:orientation="horizontal"
         >
 
@@ -44,7 +44,7 @@
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
             android:layout_marginRight="5dp"
-            android:background="@drawable/chat_send" />
+            android:background="@drawable/bt_send_ref" />
 
         <!--<Button-->
             <!--android:id="@+id/bt_add_attachment"-->

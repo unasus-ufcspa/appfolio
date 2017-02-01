@@ -2,6 +2,7 @@ package com.ufcspa.unasus.appportfolio.WebClient;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.Environment;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 
@@ -22,6 +23,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
@@ -408,6 +410,7 @@ public class SendData {
 
                     String tx_activity = v.getTx_activity();
                     tx_activity = tx_activity.replaceAll("<font","<span");
+                    tx_activity = tx_activity.replaceAll(Environment.getExternalStorageDirectory()+"/Android/data/com.ufcspa.unasus.appportfolio/files/images" + File.separator,"");
                     tx_activity = tx_activity.replaceAll("</font>","</span>");
 
                     jsonVersion.put("tx_activity", tx_activity);
