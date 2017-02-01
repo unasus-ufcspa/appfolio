@@ -170,7 +170,7 @@ public class FragmentAttachment extends Frag {
                 if (name.isEmpty()) {
                     name = "Anexo";
                 }
-                singleton.lastIdAttach = source.insertAttachment(new Attachment(0, type, name, path, 0));
+                singleton.lastIdAttach = source.insertAttachment(new Attachment(0, type, name, path,0,0));
                 attachments = source.getAttachments();
                 createPlusButton();
                 listAdapter.refresh(attachments);
@@ -181,7 +181,7 @@ public class FragmentAttachment extends Frag {
     }
 
     public void createPlusButton() {
-        attachments.add(new Attachment(-1, "", "", "", 0));
+        attachments.add(new Attachment(-1, "", "", "", 0,0));
     }
 
     private void loadPhoto(final String url, final int position) {

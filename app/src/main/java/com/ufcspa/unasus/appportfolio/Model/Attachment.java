@@ -13,13 +13,24 @@ public class Attachment {
     private String nm_system;
     private int id_attachment_srv;
 
+    public int getId_author() {
+        return id_author;
+    }
 
-    public Attachment(int id_attachment, String tp_attachment, String nm_file, String nm_system, int id_attachment_srv) {
+    public void setId_author(int id_author) {
+        this.id_author = id_author;
+    }
+
+    private int id_author;
+
+
+    public Attachment(int id_attachment, String tp_attachment, String nm_file, String nm_system, int id_attachment_srv, int id_author) {
         this.id_attachment = id_attachment;
         this.tp_attachment = tp_attachment;
         this.nm_file = nm_file;
         this.nm_system = nm_system;
         this.id_attachment_srv = id_attachment_srv;
+        this.id_author = id_author;
     }
 
     public Attachment() {

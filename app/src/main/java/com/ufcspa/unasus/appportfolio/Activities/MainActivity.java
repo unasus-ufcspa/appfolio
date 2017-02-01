@@ -124,7 +124,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 if (name.isEmpty()) {
                     name = "Anexo";
                 }
-                singleton.lastIdAttach = dataBaseAdapter.insertAttachment(new Attachment(0, type, name, path, 0));
+                singleton.lastIdAttach = dataBaseAdapter.insertAttachment(new Attachment(0, type, name, path, 0,0));
                 //dataBaseAdapter.insertAttachActivity(singleton.lastIdAttach, singleton.idActivityStudent);
             }
         });

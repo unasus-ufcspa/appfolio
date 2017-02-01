@@ -120,9 +120,11 @@ public class FirstSyncClient extends HttpClient{
                                                 String tp_attachment = att.getString("tp_attachment");
                                                 String nm_file = att.getString("nm_file");
                                                 String nm_system = att.getString("nm_system");
+                                                int id_attach_author = att.getInt("id_author");
                                                 a.setNmFile(nm_file);
                                                 a.setTpAttachment(tp_attachment);
                                                 a.setNmSystem(nm_system);
+                                                a.setId_author(id_attach_author);
                                             }
 
                                             // popula objeto attach
@@ -205,11 +207,13 @@ public class FirstSyncClient extends HttpClient{
                                                     String nm_file = attachments.getString("nm_file");
                                                     String nm_system = attachments.getString("nm_system");
                                                     int id_attachment_srv = attachments.getInt("id_attachment");
+                                                    int id_attach_author = attachments.getInt("id_author");
 
                                                     attachment.setTpAttachment(tp_attachment);
                                                     attachment.setNmFile(nm_file);
                                                     attachment.setNmSystem(nm_system);
                                                     attachment.setIdAttachmentSrv(id_attachment_srv);
+                                                    attachment.setId_author(id_attach_author);
 
                                                     firstSync.addCommentAttachment(new Tuple<Comentario, Attachment>(comentario, attachment));
                                                 } else {

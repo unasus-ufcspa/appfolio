@@ -1290,6 +1290,7 @@ public class DataBaseAdapter {
         cv.put("nm_file", attach.getNmFile());
         cv.put("nm_system", attach.getNmSystem());
         cv.put("id_attachment_srv", attach.getidAttachmentSrv());
+        cv.put("id_author", attach.getId_author());
 
         try {
             db.insert("tb_attachment", null, cv);
@@ -1312,6 +1313,7 @@ public class DataBaseAdapter {
         cv.put("nm_file", attach.getNmFile());
         cv.put("nm_system", Environment.getExternalStorageDirectory()+"/Android/data/com.ufcspa.unasus.appportfolio/files/images" + File.separator + attach.getNmSystem());
         cv.put("id_attachment_srv", attach.getidAttachmentSrv());
+        cv.put("id_author", attach.getId_author());
 
         try {
             db.insert("tb_attachment", null, cv);
@@ -1340,6 +1342,7 @@ public class DataBaseAdapter {
                 attch.setNmFile(c.getString(2));
                 attch.setNmSystem(c.getString(3));
                 attch.setIdAttachmentSrv(c.getInt(4));
+                attch.setId_author(c.getInt(5));
             } else {
                 Log.e(tag, "não encontrou a id relacionada a este anexo no banco");
             }
@@ -2394,7 +2397,7 @@ public class DataBaseAdapter {
     }
 
     private Attachment cursorToAttachment(Cursor cursor) {
-        Attachment attachment = new Attachment(cursor.getInt(0), cursor.getString(1), cursor.getString(2), cursor.getString(3), cursor.getInt(4));
+        Attachment attachment = new Attachment(cursor.getInt(0), cursor.getString(1), cursor.getString(2), cursor.getString(3), cursor.getInt(4),cursor.getInt(5));
         return attachment;
     }
 

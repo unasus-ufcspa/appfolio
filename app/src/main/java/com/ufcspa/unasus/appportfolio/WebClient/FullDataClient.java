@@ -522,11 +522,13 @@ public class FullDataClient extends HttpClient {
                                                     String nm_file = attachmentTemp.getString("nm_file");
                                                     String nm_system = attachmentTemp.getString("nm_system");
                                                     int id_attachment_srv = attachmentTemp.getInt("id_attachment_srv");
+                                                    int id_author = attachmentTemp.getInt("id_author");
 
                                                     attachment.setTpAttachment(tp_attachment);
                                                     attachment.setNmFile(nm_file);
                                                     attachment.setNmSystem(nm_system);
                                                     attachment.setIdAttachmentSrv(id_attachment_srv);
+                                                    attachment.setId_author(id_author);
 
                                                     attachments.add(attachment);
                                                 }

@@ -298,7 +298,7 @@ public class FragmentSpecificComments extends Frag {
                 if (name.isEmpty()) {
                     name = "Anexo";
                 }
-                single.lastIdAttach = DataBaseAdapter.getInstance(getActivity()).insertAttachment(new Attachment(0, type, name, path, 0));
+                single.lastIdAttach = DataBaseAdapter.getInstance(getActivity()).insertAttachment(new Attachment(0, type, name, path, 0,0));
                 if(lastID!=0 && single.lastIdAttach!=-1 && single.lastIdAttach!=0) {
                     DataBaseAdapter.getInstance(getActivity()).insertAttachComment(lastID, single.lastIdAttach);
                 }
