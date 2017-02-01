@@ -426,7 +426,7 @@ public class ConverterSpannedToHtml {
             else
                 ((BackgroundColorSpan) style).setOpen(true);
             int id = ((BackgroundColorSpan)style).getId();
-            mOut.append("<font class='bolinhaFolio' id=" + id + " style=\"background-color:#");
+            mOut.append("<font id=" + id + " class='bolinhaFolio' style=\"background-color:#");
             String color = Integer.toHexString(((BackgroundColorSpan) style).getBackgroundColor() + 0x01000000);
             while (color.length() < 6) {
                 color = "0" + color;
