@@ -162,7 +162,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             miniDrawer = inflater.inflate(R.layout.mini_drawer, null);
             initMiniDrawer();
 
-            apagarBotoes(0);
+            apagarBotoes(1);
 
             Target target = new ViewTarget(R.id.drawer_target,this);
             ShowCase(target,"Menu Lateral","Expanda o menu deslizando a margem para a direita");

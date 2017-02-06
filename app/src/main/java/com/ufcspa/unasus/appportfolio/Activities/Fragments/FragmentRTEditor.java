@@ -186,7 +186,7 @@ public class FragmentRTEditor extends Frag {
 //            singleton.firsttime = false;
 //        }
         if (singleton.firsttime) {
-            String text = source.getTextFromCurrentVersion(singleton.idCurrentVersionActivity);
+            String text = source.getTextFromCurrentVersion(singleton.idVersionActivity);
 
             HashMap<String, String> aux = source.getAllAttachmentsNames(singleton.idActivityStudent);
 
