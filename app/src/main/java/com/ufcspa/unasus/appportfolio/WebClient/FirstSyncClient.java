@@ -309,7 +309,7 @@ public class FirstSyncClient extends HttpClient{
                                             tx_activity = tx_activity.replaceAll("<span", "<font");
                                             tx_activity = tx_activity.replaceAll("class='bolinhaFolio'", "");
                                             tx_activity = tx_activity.replaceAll("</span>", "</font>");
-                                            tx_activity = tx_activity.replaceAll("\\\"", "\"");
+                                            tx_activity = tx_activity.replaceAll("\\\\\"", "\"");
                                             tx_activity = tx_activity.replaceAll("<img src=\"", "<img src=\""+Environment.getExternalStorageDirectory()+"/Android/data/com.ufcspa.unasus.appportfolio/files/images" + File.separator);
 
                                             String dt_last_access = temp.getString("dt_last_access");
