@@ -389,8 +389,6 @@ public class FragmentRTEditor extends Frag {
                         }
                     });
                     dialog.show();
-                } else {
-                    Toast.makeText(getContext(),"Versão já finalizada!",Toast.LENGTH_LONG).show();
                 }
             }
         });
@@ -407,7 +405,7 @@ public class FragmentRTEditor extends Frag {
         finalizeActivityText = (TextView) view.findViewById(R.id.finalize_activity_text);
 
 //        if (singleton.portfolioClass.getPerfil().equals("T") || (singleton.idCurrentVersionActivity != singleton.idVersionActivity)) {
-        if (singleton.portfolioClass.getPerfil().equals("T") || (singleton.idCurrentVersionActivity != singleton.idVersionActivity)) {
+        if (singleton.portfolioClass.getPerfil().equals("T") || (singleton.idCurrentVersionActivity != singleton.idVersionActivity) || !source.getActivityStudentById(singleton.idActivityStudent).getDt_conclusion().equals("null")) {
             sendVersion.setVisibility(View.GONE);
             sendVersionText.setVisibility(View.GONE);
             finalizeActivity.setVisibility(View.GONE);

@@ -342,6 +342,8 @@ public class FullDataClient extends HttpClient {
                                                 tx_activity = tx_activity.replaceAll("</span>", "</font>");
                                                 tx_activity = tx_activity.replaceAll("\\\\\"", "\"");
                                                 tx_activity = tx_activity.replaceAll("<img src=\"", "<img src=\""+ Environment.getExternalStorageDirectory()+"/Android/data/com.ufcspa.unasus.appportfolio/files/images" + File.separator);
+                                                tx_activity = tx_activity.replaceAll("<video src=\"", "<img src=\""+Environment.getExternalStorageDirectory()+"/Android/data/com.ufcspa.unasus.appportfolio/files/images" + File.separator);
+                                                tx_activity = tx_activity.replaceAll("class=\"mce-object mce-object-video\"","");
 
                                                 System.out.println("json replace tx activity" + "\nold:" + temp.getString("tx_activity") + " new:" + tx_activity);
                                                 String dt_last_access = temp.getString("dt_last_access");
@@ -392,6 +394,8 @@ public class FullDataClient extends HttpClient {
                                                 tx_activity = tx_activity.replaceAll("</span>", "</font>");
                                                 tx_activity = tx_activity.replaceAll("\\\\\"", "\"");
                                                 tx_activity = tx_activity.replaceAll("<img src=\"", "<img src=\""+Environment.getExternalStorageDirectory()+"/Android/data/com.ufcspa.unasus.appportfolio/files/images" + File.separator);
+                                                tx_activity = tx_activity.replaceAll("<video src=\"", "<img src=\""+Environment.getExternalStorageDirectory()+"/Android/data/com.ufcspa.unasus.appportfolio/files/images" + File.separator);
+                                                tx_activity = tx_activity.replaceAll("class=\"mce-object mce-object-video\"","");
 
                                                 String dt_last_access = temp.getString("dt_last_access");
                                                 if (dt_last_access.equals("null")){
