@@ -12,6 +12,7 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.ufcspa.unasus.appportfolio.Activities.Fragments.FragmentConfig;
 import com.ufcspa.unasus.appportfolio.Activities.MainActivity;
 import com.ufcspa.unasus.appportfolio.Model.DividerItemDecoration;
 import com.ufcspa.unasus.appportfolio.Model.StudFrPortClass;
@@ -82,7 +83,7 @@ public class StudentActivitiesAdapter extends BaseAdapter
         holder.studentPhoto = (ImageView) rowView.findViewById(R.id.student_image);
         Bitmap bitmap = aux.getPhoto();
         if (bitmap != null)
-            holder.studentPhoto.setImageBitmap(bitmap);
+            holder.studentPhoto.setImageBitmap(FragmentConfig.getRoundedRectBitmap(bitmap,100));
 
         return rowView;
     }
