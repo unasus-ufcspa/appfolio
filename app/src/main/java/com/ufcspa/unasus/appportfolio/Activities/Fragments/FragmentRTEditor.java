@@ -839,13 +839,13 @@ public class FragmentRTEditor extends Frag {
             studentName.setText(userPerfil.getName());
             Bitmap photo = userPerfil.getPhotoBitmap();
             if (photo != null)
-                usrPhoto.setImageBitmap(photo);
+                usrPhoto.setImageBitmap(FragmentConfig.getRoundedRectBitmap(photo,100));
             activityName.setText("Ativ. " + singleton.activity.getNuOrder() + ": " + singleton.activity.getTitle());
         }else{
             studentName.setText(singleton.portfolioClass.getStudentName());
             Bitmap photo = singleton.portfolioClass.getPhoto();
             if (photo != null)
-                usrPhoto.setImageBitmap(photo);
+                usrPhoto.setImageBitmap(FragmentConfig.getRoundedRectBitmap(photo,100));
             activityName.setText("Ativ. " + singleton.activity.getNuOrder() + ": " + singleton.activity.getTitle());
         }
     }
