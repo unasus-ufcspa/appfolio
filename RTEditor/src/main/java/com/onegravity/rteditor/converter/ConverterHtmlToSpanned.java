@@ -341,6 +341,7 @@ public class ConverterHtmlToSpanned implements ContentHandler {
             // so we can safely omit the line breaks when we handle the close tag.
         } else if (tag.equalsIgnoreCase("p")) {
             handleP();
+            startDiv(attributes);
         } else if (tag.equalsIgnoreCase("div")) {
             startDiv(attributes);
         } else if (tag.equalsIgnoreCase("ul")) {
@@ -405,6 +406,7 @@ public class ConverterHtmlToSpanned implements ContentHandler {
             handleBr();
         } else if (tag.equalsIgnoreCase("p")) {
             handleP();
+            endDiv();
         } else if (tag.equalsIgnoreCase("div")) {
             endDiv();
         } else if (tag.equalsIgnoreCase("ul")) {

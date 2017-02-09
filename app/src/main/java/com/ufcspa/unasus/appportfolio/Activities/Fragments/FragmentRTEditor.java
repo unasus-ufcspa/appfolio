@@ -33,6 +33,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.Button;
@@ -855,8 +856,40 @@ public class FragmentRTEditor extends Frag {
                 personalCommentButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        importPanel.setVisibility(View.GONE);
-                        displayPersonalComment(getView().findViewById(R.id.personal_comment_container));
+//                        importPanel.setVisibility(View.GONE);
+//                        displayPersonalComment(getView().findViewById(R.id.personal_comment_container));
+                        String[] word = mRTMessageField.getText(RTFormat.SPANNED).split("( )|(\n)");
+
+                        final Dialog dialog = new Dialog(getActivity());
+                        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                        dialog.setContentView(R.layout.device_info_dialog);
+                        dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+
+                        TextView dispositivo = (TextView) dialog.findViewById(R.id.dispositivo);
+                        TextView version_app1 = (TextView) dialog.findViewById(R.id.version_app1);
+                        TextView version_os1 = (TextView) dialog.findViewById(R.id.version_os1);
+
+                        TextView device_id = (TextView) dialog.findViewById(R.id.device_id);
+                        TextView version_app = (TextView) dialog.findViewById(R.id.version_app);
+                        TextView version_os = (TextView) dialog.findViewById(R.id.version_os);
+
+                        dispositivo.setText("Caracteres:");
+                        version_app1.setText("Palavras:");
+                        version_os1.setVisibility(View.INVISIBLE);
+                        version_os.setVisibility(View.INVISIBLE);
+
+                        dialog.show();
+
+                        device_id.setText(""+mRTMessageField.length());
+                        version_app.setText(""+word.length);
+
+                        Button btn_ok = (Button) dialog.findViewById(R.id.btn_info_ok);
+                        btn_ok.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                dialog.dismiss();
+                            }
+                        });
                     }
                 });
                 usrPhoto.setOnClickListener(new View.OnClickListener() {
