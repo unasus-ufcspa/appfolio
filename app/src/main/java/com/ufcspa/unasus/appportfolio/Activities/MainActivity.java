@@ -197,48 +197,50 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
         */
 
-        if (PolicyExist() && !PolicyAceita()) {
-            final Dialog dialog = new Dialog(this);
-            dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-            dialog.setContentView(R.layout.privacy_policy_popup);
-            dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
-            dialog.setCanceledOnTouchOutside(false);
-            dialog.setCancelable(false);
+        if (policyExist()){
+            if (!policyAceita()) {
+                final Dialog dialog = new Dialog(this);
+                dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                dialog.setContentView(R.layout.privacy_policy_popup);
+                dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+                dialog.setCanceledOnTouchOutside(false);
+                dialog.setCancelable(false);
 
-            TextView policyTX = (TextView) dialog.findViewById(R.id.term_text);
-            Button acceptBT = (Button) dialog.findViewById(R.id.btn_agree);
-            Button notAcceptBT = (Button) dialog.findViewById(R.id.btn_not_agree);
+                TextView policyTX = (TextView) dialog.findViewById(R.id.term_text);
+                Button acceptBT = (Button) dialog.findViewById(R.id.btn_agree);
+                Button notAcceptBT = (Button) dialog.findViewById(R.id.btn_not_agree);
 
-            dialog.show();
+                dialog.show();
 
-            idUser = Singleton.getInstance().user.getIdUser();
+                idUser = Singleton.getInstance().user.getIdUser();
 
-            String txPolicy = DataBaseAdapter.getInstance(getBaseContext()).getPolicyByUserID(idUser).getTxPolicy();
+                String txPolicy = DataBaseAdapter.getInstance(getBaseContext()).getPolicyByUserID(idUser).getTxPolicy();
 
-            policyTX.setText(/*"TERMOS DE USO \n" + */txPolicy);
+                policyTX.setText(/*"TERMOS DE USO \n" + */txPolicy);
 
-            acceptBT.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    policyUser = DataBaseAdapter.getInstance(getBaseContext()).getPolicyUserByUserId(idUser);
-                    DataBaseAdapter.getInstance(getBaseContext()).updateFlAccept(policyUser.getIdPolicyUser());
-                    policyUser = DataBaseAdapter.getInstance(getBaseContext()).getPolicyUserByUserId(idUser);
-                    Log.d("policyUser",policyUser.toString());
-                    policyUserClient = new PolicyUserClient(getBaseContext());
-                    policyUserClient.postJson(PolicyUser.toJSON(policyUser.getIdPolicyUser(), policyUser.getIdUser(), policyUser.getFlAccept()));
-                    dialog.dismiss();
-                }
-            });
-            notAcceptBT.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Toast.makeText(getApplicationContext(),"É necessário aceitar os termos para continuar",Toast.LENGTH_LONG).show();
-                }
-            });
+                acceptBT.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        policyUser = DataBaseAdapter.getInstance(getBaseContext()).getPolicyUserByUserId(idUser);
+                        DataBaseAdapter.getInstance(getBaseContext()).updateFlAccept(policyUser.getIdPolicyUser());
+                        policyUser = DataBaseAdapter.getInstance(getBaseContext()).getPolicyUserByUserId(idUser);
+                        Log.d("policyUser", policyUser.toString());
+                        policyUserClient = new PolicyUserClient(getBaseContext());
+                        policyUserClient.postJson(PolicyUser.toJSON(policyUser.getIdPolicyUser(), policyUser.getIdUser(), policyUser.getFlAccept()));
+                        dialog.dismiss();
+                    }
+                });
+                notAcceptBT.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Toast.makeText(getApplicationContext(), "É necessário aceitar os termos para continuar", Toast.LENGTH_LONG).show();
+                    }
+                });
+            }
         }
     }
 
-    public boolean PolicyAceita() {
+    public boolean policyAceita() {
         DataBaseAdapter bd = DataBaseAdapter.getInstance(this);
         if (bd.getPolicyUserByUserId(Singleton.getInstance().user.getIdUser()).getFlAccept()!=null){
             return true;
@@ -247,9 +249,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             return false;
     }
 
-    public boolean PolicyExist() {
+    public boolean policyExist() {
         DataBaseAdapter bd = DataBaseAdapter.getInstance(this);
-        if (bd.getPolicyUserByUserId(Singleton.getInstance().user.getIdUser())!=null){
+        if (bd.getPolicyByUserID(Singleton.getInstance().user.getIdUser()).getIdPolicy()!=0){
             return true;
         }
         else

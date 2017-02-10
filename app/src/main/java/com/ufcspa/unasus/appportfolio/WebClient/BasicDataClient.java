@@ -337,30 +337,32 @@ public class BasicDataClient extends HttpClient {
                                 JSONObject objPs = resp.getJSONObject("policy");
                                 if (objPs.has("tb_policy")) {
                                     JSONArray tb = objPs.getJSONArray("tb_policy");
-                                    // POPULATE OBJECT
-                                    for (int i = 0; i < tb.length(); i++) {
-                                        JSONObject temp = tb.getJSONObject(i);
-                                        Policy policy = new Policy();
-                                        PolicyUser policyUser = new PolicyUser();
+                                    if (tb.length()>0) {
+                                        // POPULATE OBJECT
+                                        for (int i = 0; i < tb.length(); i++) {
+                                            JSONObject temp = tb.getJSONObject(i);
+                                            Policy policy = new Policy();
+                                            PolicyUser policyUser = new PolicyUser();
 
-                                        // GET DATA FROM JSON
-                                        int id_policyUser = temp.getInt("idPolicyUser");
-                                        int id_user = temp.getInt("idUser");
-                                        int id_policy = temp.getInt("idPolicy");
-                                        String tx_policy = temp.getString("txPolicy");
+                                            // GET DATA FROM JSON
+                                            int id_policyUser = temp.getInt("idPolicyUser");
+                                            int id_user = temp.getInt("idUser");
+                                            int id_policy = temp.getInt("idPolicy");
+                                            String tx_policy = temp.getString("txPolicy");
 
 
-                                        //POPULATE OBJECT WITH DATA
-                                        policy.setIdPolicy(id_policy);
-                                        policy.setTxPolicy(tx_policy);
-                                        policyUser.setIdPolicyUser(id_policyUser);
-                                        policyUser.setIdPolicy(id_policy);
-                                        policyUser.setIdUser(id_user);
-                                        policyUser.setFlAccept(null);
+                                            //POPULATE OBJECT WITH DATA
+                                            policy.setIdPolicy(id_policy);
+                                            policy.setTxPolicy(tx_policy);
+                                            policyUser.setIdPolicyUser(id_policyUser);
+                                            policyUser.setIdPolicy(id_policy);
+                                            policyUser.setIdUser(id_user);
+                                            policyUser.setFlAccept(null);
 
-                                        //ADD TO LINKEDLIST
-                                        basicData.addPolicy(policy);
-                                        basicData.addPolicyUsers(policyUser);
+                                            //ADD TO LINKEDLIST
+                                            basicData.addPolicy(policy);
+                                            basicData.addPolicyUsers(policyUser);
+                                        }
                                     }
                                 }
                             }
