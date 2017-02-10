@@ -396,15 +396,6 @@ public class LoginActivity2 extends AppCompatActivity implements LoaderCallbacks
                 cm.getActiveNetworkInfo().isConnectedOrConnecting();
     }
 
-    public boolean PolicyAceita() {
-        DataBaseAdapter bd = DataBaseAdapter.getInstance(this);
-        if (bd.getPolicyUserByUserId(Singleton.getInstance().user.getIdUser()).getFlAccept()!=null){
-            return true;
-        }
-        else
-            return false;
-    }
-
     private boolean verificarLogin() {
 
         //  try {

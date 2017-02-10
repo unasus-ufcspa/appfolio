@@ -197,7 +197,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
         */
 
-        if (!PolicyAceita()) {
+        if (PolicyExist() && !PolicyAceita()) {
             final Dialog dialog = new Dialog(this);
             dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
             dialog.setContentView(R.layout.privacy_policy_popup);
@@ -241,6 +241,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public boolean PolicyAceita() {
         DataBaseAdapter bd = DataBaseAdapter.getInstance(this);
         if (bd.getPolicyUserByUserId(Singleton.getInstance().user.getIdUser()).getFlAccept()!=null){
+            return true;
+        }
+        else
+            return false;
+    }
+
+    public boolean PolicyExist() {
+        DataBaseAdapter bd = DataBaseAdapter.getInstance(this);
+        if (bd.getPolicyUserByUserId(Singleton.getInstance().user.getIdUser())!=null){
             return true;
         }
         else

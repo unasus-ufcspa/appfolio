@@ -859,6 +859,12 @@ public class FragmentRTEditor extends Frag {
 //                        importPanel.setVisibility(View.GONE);
 //                        displayPersonalComment(getView().findViewById(R.id.personal_comment_container));
                         String[] word = mRTMessageField.getText(RTFormat.SPANNED).split("( )|(\n)");
+                        ArrayList<String> wordCount = new ArrayList<String>();
+                        for (int i=0;i<word.length;i++){
+                            if (!word[i].equals("")){
+                                wordCount.add(word[i]);
+                            }
+                        }
 
                         final Dialog dialog = new Dialog(getActivity());
                         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -881,7 +887,7 @@ public class FragmentRTEditor extends Frag {
                         dialog.show();
 
                         device_id.setText(""+mRTMessageField.length());
-                        version_app.setText(""+word.length);
+                        version_app.setText(""+wordCount.size());
 
                         Button btn_ok = (Button) dialog.findViewById(R.id.btn_info_ok);
                         btn_ok.setOnClickListener(new View.OnClickListener() {
