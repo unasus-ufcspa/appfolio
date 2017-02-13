@@ -49,9 +49,11 @@ import com.ufcspa.unasus.appportfolio.Activities.Fragments.FragmentSelectPortfol
 import com.ufcspa.unasus.appportfolio.Activities.Fragments.FragmentStudentActivities;
 import com.ufcspa.unasus.appportfolio.Model.Attachment;
 //import com.ufcspa.unasus.appportfolio.Model.CustomShowcaseView;
+import com.ufcspa.unasus.appportfolio.Model.Device;
 import com.ufcspa.unasus.appportfolio.Model.Note;
 import com.ufcspa.unasus.appportfolio.Model.PolicyUser;
 import com.ufcspa.unasus.appportfolio.Model.Singleton;
+import com.ufcspa.unasus.appportfolio.Model.User;
 import com.ufcspa.unasus.appportfolio.Notifications.NotificationEventReceiver;
 import com.ufcspa.unasus.appportfolio.R;
 import com.ufcspa.unasus.appportfolio.WebClient.BasicData;
@@ -746,16 +748,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     public void logout() {
         DataBaseAdapter.getInstance(this).cleanDataBase();
-        singleton.user = null;
-        singleton.device = null;
+        singleton.user = new User(0,null,null);
+        singleton.device = new Device();
         DataBase.getInstance(this).getDatabase();
         Intent intent = new Intent(this, LoginActivity2.class);
-//        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(intent);
-        Log.d("singleton:",singleton.user.toString());
-        Log.d("singleton:",singleton.team.toString());
-        Log.d("singleton:",singleton.device.toString());
-        finish();
+        System.exit(0);
     }
 
     private class GestureListener extends GestureDetector.SimpleOnGestureListener {
