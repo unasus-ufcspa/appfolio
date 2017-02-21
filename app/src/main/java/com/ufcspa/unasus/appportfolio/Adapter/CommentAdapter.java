@@ -94,8 +94,8 @@ public class CommentAdapter extends BaseAdapter {
         }
         if(c.atach==false) {
             holder.message.setBackgroundResource(c.orientation ? R.drawable.final_b_spc_left : R.drawable.final_b_ger_right);
-            holder.wraper.setGravity(c.orientation ? Gravity.LEFT : Gravity.RIGHT);
         }
+        holder.wraper.setGravity(c.orientation ? Gravity.LEFT : Gravity.RIGHT);
         //////////---------------////////////////////
         return rowView;
     }

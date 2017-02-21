@@ -43,18 +43,18 @@
             android:layout_height="48dp"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
-            android:layout_marginRight="5dp"
+            android:layout_margin="5dp"
             android:background="@drawable/bt_send_ref" />
 
-        <!--<Button-->
-            <!--android:id="@+id/bt_add_attachment"-->
-            <!--style="?android:attr/buttonStyleSmall"-->
-            <!--android:layout_width="48dp"-->
-            <!--android:layout_height="48dp"-->
-            <!--android:layout_centerVertical="true"-->
-            <!--android:layout_marginLeft="5dp"-->
-            <!--android:layout_toLeftOf="@+id/gen_messag_bt"-->
-            <!--android:background="@drawable/chat_attachment" />-->
+        <Button
+            android:id="@+id/bt_add_attachment"
+            style="?android:attr/buttonStyleSmall"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_centerVertical="true"
+            android:layout_margin="5dp"
+            android:layout_toLeftOf="@+id/gen_messag_bt"
+            android:background="@drawable/chat_attachment" />
 
         <EditText
             android:id="@+id/edtMessage"

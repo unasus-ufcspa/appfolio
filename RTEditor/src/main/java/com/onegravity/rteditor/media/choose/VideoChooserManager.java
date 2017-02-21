@@ -76,8 +76,8 @@ class VideoChooserManager extends MediaChooserManager implements VideoProcessorL
 
     private boolean captureVideo() {
         try {
-            String path = Environment.getExternalStorageDirectory()+"/Android/data/com.ufcspa.unasus.appportfolio/files/images" + File.separator;
-            File videoPath = /*Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES)*/new File(path);
+//            String path = Environment.getExternalStorageDirectory()+"/Android/data/com.ufcspa.unasus.appportfolio/files/images" + File.separator;
+            File videoPath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
             File videoFile = MediaUtils.createUniqueFile(videoPath, CAPTURED_VIDEO_TEMPLATE, false);
             videoPath.mkdirs();
 

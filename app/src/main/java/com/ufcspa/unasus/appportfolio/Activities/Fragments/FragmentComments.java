@@ -145,22 +145,22 @@ public class FragmentComments extends Frag {
         super.onResume();
         edtMessage = (EditText) getView().findViewById(R.id.edtMessage);
         btGenMess = (Button) getView().findViewById(R.id.gen_messag_bt);
-//        btAttachment = (Button) getView().findViewById(R.id.bt_add_attachment);
+        btAttachment = (Button) getView().findViewById(R.id.bt_add_attachment);
         lv = (ListView) getView().findViewById(R.id.listView1);
-//        btAttachment.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                addAttachmentToComments();
-//            }
-//        });
+        btAttachment.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                addAttachmentToComments();
+            }
+        });
         btGenMess.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Log.d("Comments attach", "inserindo comentario");
                 if (attach) {
                     Log.d("Comments attach", "tentando inserir view anexo");
-//                    loadCom();
-                    loadComments.execute();
+                    loadCom();
+//                    loadComments.execute();
                     addOneComment(true);
                     attach = false;
                     edtMessage.setText("");
@@ -229,24 +229,24 @@ public class FragmentComments extends Frag {
      * */
     public void addAtach() {
         Log.d("comments attach", "add atach selecionado");
-        //adapterComments.refresh(oneComments);
+        adapterComments.refresh(oneComments);
         attach = true;
         edtMessage.setText("anexo");
-        //btGenMess.performClick();
+        btGenMess.performClick();
         insertAtach();
     }
 
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-//        super.onActivityResult(requestCode, resultCode, data);
-//        Log.d("comment attachment ", "entrando no onActivity for Result");
-////
-//        if (resultCode == Activity.RESULT_OK && requestCode != Constants.CROP_IMAGE)
-//            //Log.d("comments","request code:"+requestCode);
-//            addAtach();
-//        else
-//            Log.d("comment attachment ", "attach cancelado");
+        super.onActivityResult(requestCode, resultCode, data);
+        Log.d("comment attachment ", "entrando no onActivity for Result");
+//
+        if (resultCode == Activity.RESULT_OK && requestCode != Constants.CROP_IMAGE)
+            //Log.d("comments","request code:"+requestCode);
+            addAtach();
+        else
+            Log.d("comment attachment ", "attach cancelado");
         if (resultCode == Activity.RESULT_OK) {
             if (requestCode == Constants.CROP_IMAGE) {
                 saveImageOnAppDir();
@@ -312,7 +312,7 @@ public class FragmentComments extends Frag {
     public void insertAtach() {
         Log.d("Comments attach", "tentando inserir view anexo");
 //        loadCom();
-        loadComments.execute();
+//        loadComments.execute();
         addOneComment(true);
         attach = false;
         edtMessage.setText("");

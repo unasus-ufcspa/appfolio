@@ -129,14 +129,14 @@ public class FragmentSpecificComments extends Frag {
 
     private void hide() {
         btGenMess = (Button) getView().findViewById(R.id.gen_messag_bt);
-//        btAttachment = (Button) getView().findViewById(R.id.bt_add_attachment);
+        btAttachment = (Button) getView().findViewById(R.id.bt_add_attachment);
         edtMessage = (EditText) getView().findViewById(R.id.edtMessage);
         txNote = (TextView) getView().findViewById(R.id.txSelectedNote);
 //        btExpand = (ImageButton) getView().findViewById(R.id.btn_expand_ref);
         lv = (ListView) getView().findViewById(R.id.listView1);
 
         btGenMess.setVisibility(View.GONE);
-//        btAttachment.setVisibility(View.GONE);
+        btAttachment.setVisibility(View.GONE);
         edtMessage.setVisibility(View.GONE);
         txNote.setVisibility(View.GONE);
 //        btExpand.setVisibility(View.GONE);
@@ -156,7 +156,7 @@ public class FragmentSpecificComments extends Frag {
         source = DataBaseAdapter.getInstance(getContext());
 
         btGenMess = (Button) getView().findViewById(R.id.gen_messag_bt);
-//        btAttachment = (Button) getView().findViewById(R.id.bt_add_attachment);
+        btAttachment = (Button) getView().findViewById(R.id.bt_add_attachment);
         edtMessage = (EditText) getView().findViewById(R.id.edtMessage);
         txNote = (TextView) getView().findViewById(R.id.txSelectedNote);
 //        btExpand = (ImageButton) getView().findViewById(R.id.btn_expand_ref);
@@ -202,12 +202,12 @@ public class FragmentSpecificComments extends Frag {
             }
         });
 
-//        btAttachment.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                addAttachmentToComments();
-//            }
-//        });
+        btAttachment.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                addAttachmentToComments();
+            }
+        });
         setarListView();
 
         h.postDelayed(myRunnable, 5000);
