@@ -60,7 +60,6 @@ public class FragmentComments extends Frag {
     private ListView lv;
     private Button btGenMess;
     private Button btAttachment;
-    //private LoremIpsum ipsum;
     private EditText edtMessage;
     private LoadComments loadComments;
     private Runnable myRunnable = new Runnable() {
@@ -134,7 +133,7 @@ public class FragmentComments extends Frag {
         adapterComments = new CommentAdapter(getContext(), oneComments);
 //        loadCom();
         loadComments = new LoadComments();
-        loadComments.execute();
+//        loadComments.execute();
         Log.d("Comments", "On create entrou");
         LocalBroadcastManager.getInstance(getContext()).registerReceiver(broadcastReceiver, new IntentFilter("call.connection.action"));
     }
@@ -147,6 +146,8 @@ public class FragmentComments extends Frag {
         btGenMess = (Button) getView().findViewById(R.id.gen_messag_bt);
         btAttachment = (Button) getView().findViewById(R.id.bt_add_attachment);
         lv = (ListView) getView().findViewById(R.id.listView1);
+                    loadCom();
+                    loadComments.execute();
         btAttachment.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -159,13 +160,10 @@ public class FragmentComments extends Frag {
                 Log.d("Comments attach", "inserindo comentario");
                 if (attach) {
                     Log.d("Comments attach", "tentando inserir view anexo");
-                    loadCom();
-//                    loadComments.execute();
                     addOneComment(true);
                     attach = false;
                     edtMessage.setText("");
                 } else {
-
                     if (!edtMessage.getText().toString().isEmpty()) {
                         Log.d("Comments attach", "tentando inserir comentario normal");
                         adapterComments.refresh(new ArrayList<OneComment>());
@@ -233,7 +231,8 @@ public class FragmentComments extends Frag {
         attach = true;
         edtMessage.setText("anexo");
         btGenMess.performClick();
-        insertAtach();
+//        insertAtach();
+
     }
 
 

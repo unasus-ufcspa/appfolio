@@ -24,7 +24,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/date">
         <TextView
-            android:id="@+id/comment"
+            android:id="@+id/comment_icon"
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:layout_centerInParent="@+id/hour"
@@ -35,12 +35,24 @@
             android:text=""
             android:textColor="#000000"
             />
+        <TextView
+            android:id="@+id/comment"
+            android:layout_width="wrap_content"
+            android:layout_margin="5dip"
+            android:layout_marginTop="5dp"
+            android:paddingBottom="10dp"
+            android:gravity="center"
+            android:text="Attachment"
+            android:layout_toRightOf="@+id/comment_icon"
+            android:layout_centerInParent="true"
+            android:textColor="#000000"
+            android:layout_height="wrap_content" />
 
         <TextView
             android:id="@+id/hour"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentLeft="@+id/comment"
+            android:layout_alignRight="@+id/comment"
             android:layout_below="@+id/comment"
             android:layout_marginRight="2dp"
             android:adjustViewBounds="false"
