@@ -80,7 +80,7 @@ public class FragmentComments extends Frag {
     private BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            loadCom();
+//            loadCom();
             adapterComments.refresh(oneComments);
 
             removeGeneralCommentsNotifications();
@@ -99,11 +99,6 @@ public class FragmentComments extends Frag {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_messages, null);
-
-        // TODO: 22/11/2016 inserir tutorial
-        Target target = new ViewTarget(R.id.email_sign_in_button,getActivity());
-        MainActivity mainActivity = new MainActivity();
-        mainActivity.ShowCase(target,"Comentario especifico","aqui você cria comentários específicos");
 
         source = DataBaseAdapter.getInstance(getActivity());
 
@@ -133,7 +128,7 @@ public class FragmentComments extends Frag {
         adapterComments = new CommentAdapter(getContext(), oneComments);
 //        loadCom();
         loadComments = new LoadComments();
-//        loadComments.execute();
+        loadComments.execute();
         Log.d("Comments", "On create entrou");
         LocalBroadcastManager.getInstance(getContext()).registerReceiver(broadcastReceiver, new IntentFilter("call.connection.action"));
     }
@@ -146,8 +141,10 @@ public class FragmentComments extends Frag {
         btGenMess = (Button) getView().findViewById(R.id.gen_messag_bt);
         btAttachment = (Button) getView().findViewById(R.id.bt_add_attachment);
         lv = (ListView) getView().findViewById(R.id.listView1);
-                    loadCom();
-                    loadComments.execute();
+//                    loadCom();
+        if (loadComments.getStatus()!= AsyncTask.Status.RUNNING) {
+            loadComments.execute();
+        }
         btAttachment.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -201,7 +198,7 @@ public class FragmentComments extends Frag {
         if (attachment) {
             insertComment(c);
             Log.d("comment attachment ", "é anexo a ser inserido");
-            oneComment = new OneComment(false, "Anexo", convertDateToTime(c.getDateComment()), convertDateToDate(c.getDateComment()), true);
+            oneComment = new OneComment(false, "", convertDateToTime(c.getDateComment()), convertDateToDate(c.getDateComment()), true);
             oneComment.idAttach= Singleton.getInstance().lastIdAttach;
         } else {
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -229,7 +226,7 @@ public class FragmentComments extends Frag {
         Log.d("comments attach", "add atach selecionado");
         adapterComments.refresh(oneComments);
         attach = true;
-        edtMessage.setText("anexo");
+        edtMessage.setText("");
         btGenMess.performClick();
 //        insertAtach();
 
@@ -241,65 +238,74 @@ public class FragmentComments extends Frag {
         super.onActivityResult(requestCode, resultCode, data);
         Log.d("comment attachment ", "entrando no onActivity for Result");
 //
-        if (resultCode == Activity.RESULT_OK && requestCode != Constants.CROP_IMAGE)
-            //Log.d("comments","request code:"+requestCode);
-            addAtach();
-        else
-            Log.d("comment attachment ", "attach cancelado");
+//        if (resultCode == Activity.RESULT_OK && requestCode != Constants.CROP_IMAGE)
+//            //Log.d("comments","request code:"+requestCode);
+//            addAtach();
+//        else
+//            Log.d("comment attachment ", "attach cancelado");
         if (resultCode == Activity.RESULT_OK) {
-            if (requestCode == Constants.CROP_IMAGE) {
-                saveImageOnAppDir();
-                insertFileIntoDataBase(mCurrentPhotoPath, "I");
-                addAtach();
-            } else if (requestCode == REQUEST_IMAGE_CAPTURE) {
-                galleryAddPic();
-                launchCropImageIntent();
-            } else if (requestCode == RESULT_LOAD_IMAGE) {
-                Uri selectedUri = data.getData();
-                String[] columns = {MediaStore.Images.Media.DATA, MediaStore.Images.Media.MIME_TYPE};
-
-                Cursor cursor = getActivity().getContentResolver().query(selectedUri, columns, null, null, null);
-                cursor.moveToFirst();
-
-                int pathColumnIndex = cursor.getColumnIndex(columns[0]);
-                int mimeTypeColumnIndex = cursor.getColumnIndex(columns[1]);
-
-                String contentPath = cursor.getString(pathColumnIndex);
-                String mimeType = cursor.getString(mimeTypeColumnIndex);
-
-                cursor.close();
-
-                mCurrentPhotoPath = contentPath;
-
-                if (mimeType.startsWith("image")) {
-                    saveImage();
+            switch (requestCode){
+                case Constants.CROP_IMAGE:
+                    saveImageOnAppDir();
+                    insertFileIntoDataBase(mCurrentPhotoPath, "I");
+                    addAtach();
+                    break;
+                case REQUEST_IMAGE_CAPTURE:
+                    galleryAddPic();
                     launchCropImageIntent();
-                } else if (mimeType.startsWith("video")) {
+                    addAtach();
+                    break;
+                case RESULT_LOAD_IMAGE:
+                    Uri selectedUri = data.getData();
+                    String[] columns = {MediaStore.Images.Media.DATA, MediaStore.Images.Media.MIME_TYPE};
+
+                    Cursor cursor = getActivity().getContentResolver().query(selectedUri, columns, null, null, null);
+                    cursor.moveToFirst();
+
+                    int pathColumnIndex = cursor.getColumnIndex(columns[0]);
+                    int mimeTypeColumnIndex = cursor.getColumnIndex(columns[1]);
+
+                    String contentPath = cursor.getString(pathColumnIndex);
+                    String mimeType = cursor.getString(mimeTypeColumnIndex);
+
+                    cursor.close();
+
+                    mCurrentPhotoPath = contentPath;
+
+                    if (mimeType.startsWith("image")) {
+                        saveImage();
+                        launchCropImageIntent();
+                    } else if (mimeType.startsWith("video")) {
+                        saveVideoOnAppDir();
+                        insertFileIntoDataBase(mCurrentPhotoPath, "V");
+                        addAtach();
+                    }
+                    break;
+                case PICKFILE_RESULT_CODE:
+                    mCurrentPhotoPath = getPDFPath(getContext(), data.getData());
+                    savePDFOnAppDir();
+                    insertFileIntoDataBase(mCurrentPhotoPath, "T");
+                    addAtach();
+                    break;
+                case REQUEST_VIDEO_CAPTURE:
+                    galleryAddPic();
                     saveVideoOnAppDir();
                     insertFileIntoDataBase(mCurrentPhotoPath, "V");
                     addAtach();
-                }
-            } else if (requestCode == PICKFILE_RESULT_CODE) {
-                mCurrentPhotoPath = getPDFPath(getContext(), data.getData());
-                savePDFOnAppDir();
-                insertFileIntoDataBase(mCurrentPhotoPath, "T");
-                addAtach();
-            } else if (requestCode == REQUEST_VIDEO_CAPTURE) {
-                galleryAddPic();
-                saveVideoOnAppDir();
-                insertFileIntoDataBase(mCurrentPhotoPath, "V");
-                addAtach();
-            } else if (requestCode == REQUEST_FOLIO_ATTACHMENT) {
-                int idAttachment = data.getIntExtra("idAttachment", -1);
-                Log.d("Comments", "Id Attachment: " + idAttachment);
-                if (idAttachment != -1) {
-                    Singleton.getInstance().lastIdAttach = idAttachment;
-                    addAtach();
-                    if (lastID != 0)
-                        DataBaseAdapter.getInstance(getActivity()).insertAttachComment(lastID, idAttachment);
-                }
+                    break;
+                case REQUEST_FOLIO_ATTACHMENT:
+                    int idAttachment = data.getIntExtra("idAttachment", -1);
+                    Log.d("Comments", "Id Attachment: " + idAttachment);
+                    if (idAttachment != -1) {
+                        Singleton.getInstance().lastIdAttach = idAttachment;
+                        addAtach();
+                        if (lastID != 0)
+                            DataBaseAdapter.getInstance(getActivity()).insertAttachComment(lastID, idAttachment);
+                    }
+                    break;
             }
-        }
+        } else
+            Log.d("comment attachment ", "attach cancelado");
     }
 
 
@@ -403,7 +409,10 @@ public class FragmentComments extends Frag {
             DataBaseAdapter db = DataBaseAdapter.getInstance(getActivity());
             lastID = db.insertComment(c);
             if (attach) {
-                //db.insertAttachComment(lastID, single.lastIdAttach);
+//                db.insertAttachComment(lastID, single.lastIdAttach);
+                String idDevice = Settings.Secure.getString(getActivity().getContentResolver(), Settings.Secure.ANDROID_ID);
+                Sync sync = new Sync(idDevice, "tb_attach_comment", DataBaseAdapter.getInstance(getContext()).getLastIdAttachComment(), singleton.idActivityStudent);
+                DataBaseAdapter.getInstance(getContext()).insertIntoTBSync(sync);
             }
             Log.d("Banco:", "comentario inserido no bd interno com sucesso");
         } catch (Exception e) {

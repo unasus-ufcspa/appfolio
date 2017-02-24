@@ -621,6 +621,7 @@ public class FragmentRTEditor extends Frag {
     @Override
     public void onResume() {
         //saveText();
+        showCommentsTab(false);
         super.onResume();
     }
 

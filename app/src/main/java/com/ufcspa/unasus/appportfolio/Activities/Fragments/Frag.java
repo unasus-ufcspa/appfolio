@@ -53,6 +53,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 
 /**
  * Created by desenvolvimento on 10/12/2015.
@@ -312,6 +313,15 @@ public class Frag extends Fragment {
      */
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
+//        getTargetFragment().onActivityResult(requestCode,resultCode,data);
+        List<Fragment> fragments = getChildFragmentManager().getFragments();
+        if (fragments != null) {
+            for (Fragment fragment : fragments) {
+                if (fragment!=null) {
+                    fragment.onActivityResult(requestCode, resultCode, data);
+                }
+            }
+        }
         if (resultCode == Activity.RESULT_OK) {
             if (requestCode == Constants.CROP_IMAGE) {
                 saveImageOnAppDir();

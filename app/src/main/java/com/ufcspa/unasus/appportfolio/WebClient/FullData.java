@@ -142,7 +142,9 @@ public class FullData {
                 data.updateVersions(versionActivity);
         }
         data.insertReference(references);
-        data.insertComments(comentarios);
+        if (!comentarios.isEmpty()) {
+            data.insertComments(comentarios);
+        }
         for (CommentVersion cv: commentVersions) {
             data.insertCommentVersion(cv);
         }

@@ -73,8 +73,8 @@
             android:isScrollContainer="true"
             android:maxHeight="150dp"
             android:minHeight="50dp"
-            android:layout_toLeftOf="@+id/gen_messag_bt"
-            android:layout_toStartOf="@+id/gen_messag_bt" />
+            android:layout_toLeftOf="@+id/bt_add_attachment"
+            android:layout_toStartOf="@+id/bt_add_attachment" />
     </RelativeLayout>
 
 </RelativeLayout>

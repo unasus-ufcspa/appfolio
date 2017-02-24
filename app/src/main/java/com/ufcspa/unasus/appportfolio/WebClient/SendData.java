@@ -7,6 +7,7 @@ import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 
 import com.ufcspa.unasus.appportfolio.Model.Attachment;
+import com.ufcspa.unasus.appportfolio.Model.AttachmentComment;
 import com.ufcspa.unasus.appportfolio.Model.Comentario;
 import com.ufcspa.unasus.appportfolio.Model.Observation;
 import com.ufcspa.unasus.appportfolio.Model.Singleton;
@@ -41,6 +42,7 @@ public class SendData {
     private LinkedHashMap<Integer, LinkedList<Comentario>> commentsByVersions;
     private LinkedHashMap observationByVersions;
     private LinkedList<Comentario> comentarios;
+    private LinkedList<AttachmentComment> attachmentComments;
     private LinkedList<User> users;
     private LinkedList<VersionActivity> versions;
     private LinkedList<Integer> notices;
@@ -48,6 +50,7 @@ public class SendData {
     private LinkedList<ActivityStudent> activityStudents;
     private DataBaseAdapter data;
     private String tbComm="tb_comment";
+    private String tbAttachComm="tb_attach_comment";
     private String tbVers="tb_version_activity";
     private String tbUser = "tb_user";
     private String tbCommVers = "tb_comment_version";
@@ -67,6 +70,7 @@ public class SendData {
         sincronias= new ArrayList<>();
         versions = new LinkedList<>();
         comentarios = new LinkedList<>();
+        attachmentComments = new LinkedList<>();
         commentsByVersions = new LinkedHashMap<>();
         observationByVersions= new LinkedHashMap<Integer, LinkedList<Observation>>();
         notices = new LinkedList<>();
@@ -103,6 +107,9 @@ public class SendData {
         if (dadosAgrupados.get(tbComm) != null) {
             comentarios = (LinkedList) data.getCommentsByIDs(dadosAgrupados.get(tbComm));
         }
+        if (dadosAgrupados.get(tbAttachComm) != null) {
+            attachmentComments = (LinkedList) data.getAttachCommentsByIDs(dadosAgrupados.get(tbAttachComm));
+        }
         if (dadosAgrupados.get(tbVers) != null) {
             versions = (LinkedList) data.getVersionActivitiesByIDs(dadosAgrupados.get(tbVers));
 //            for (VersionActivity v : versions) {
@@ -136,6 +143,11 @@ public class SendData {
             data.updateCommentBySendFullData(dadosResponse.get(tbComm));
             Log.d("json send full data ", "conseguiu atualizar com sucesso comment to server");
         }
+//        if(dadosResponse.get(tbAttachComm)!=null){
+//            Log.d("json send full data ", "atualizando tabela " + tbAttachComm + "...");
+//            data.updateCommentBySendFullData(dadosResponse.get(tbAttachComm));
+//            Log.d("json send full data ", "conseguiu atualizar com sucesso comment to server");
+//        }
         if (dadosResponse.get(tbVers) != null) {
             Log.d("json send full data ", "atualizando tabela " + tbVers + "...");
             data.updateVersionsBySendFullData(dadosResponse.get(tbVers));
@@ -352,6 +364,7 @@ public class SendData {
 
         JSONArray jsonArrayVersions = new JSONArray();
         JSONArray jsonComments = new JSONArray();
+        JSONArray jsonAttachComments = new JSONArray();
         JSONArray jsonNotice = new JSONArray();
 
         JSONObject jsonUser = new JSONObject();
@@ -392,6 +405,30 @@ public class SendData {
                     jsonComments.put(jsonComment);
                 }
             }
+            if(attachmentComments!=null) {
+                for (AttachmentComment comment : attachmentComments) {
+                    JSONObject jsonComment = new JSONObject();
+                    jsonComment.put("id_attach_comment", comment.getId_attach_comment());
+                    jsonComment.put("id_attachment", comment.getId_attachment());
+
+//                    if(data.isSync("tb_comment_version",comment.getId_comment_version())){
+//                        int idServer =data.getIdCommentVersionSrv(comment.getId_comment_version());
+//                        jsonComment.put("id_comment_version_srv",idServer);
+//                    }else{
+//                        entrou = true;
+//                        jsonComment.put("id_comment_version_srv","");
+//                    }
+
+
+                    //jsonComment.put("id_comment_srv", comment.getIdCommentSrv());
+                    jsonComment.put("id_comment", comment.getId_comment());
+
+
+//                    jsonComment.put("id_comment_version_srv",comment.getId_comment_version_srv());
+                    jsonAttachComments.put(jsonComment);
+                }
+            }
+
             if (versions != null) {
                 for (VersionActivity v : versions) {
                     JSONObject jsonVersion = new JSONObject();
@@ -564,6 +601,7 @@ public class SendData {
             //mount pseudo final
             jsonPseudoFinal.put("device",device);
             jsonPseudoFinal.put("comment", new JSONObject().put("tb_comment", jsonComments));
+            jsonPseudoFinal.put("attach_comment", new JSONObject().put("tb_attach_comment", jsonAttachComments));
             jsonPseudoFinal.put("version", new JSONObject().put("tb_version_activity", jsonArrayVersions));
             jsonPseudoFinal.put("user", new JSONObject().put("tb_user", jsonUser));
             jsonPseudoFinal.put("notice", new JSONObject().put("tb_notice", jsonNotice));

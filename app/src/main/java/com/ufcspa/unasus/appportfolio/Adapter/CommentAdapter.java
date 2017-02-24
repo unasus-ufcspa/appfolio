@@ -12,6 +12,7 @@ import android.widget.TextView;
 
 import com.ufcspa.unasus.appportfolio.Model.OneComment;
 import com.ufcspa.unasus.appportfolio.R;
+import com.ufcspa.unasus.appportfolio.database.DataBaseAdapter;
 
 import java.util.List;
 
@@ -52,7 +53,6 @@ public class CommentAdapter extends BaseAdapter {
         View rowView;
         if(c.atach==true){
             rowView = inflater.inflate(R.layout.atach_item, null);
-            Log.e("comment attach", "atach true:" + position);
         }else {
             rowView = inflater.inflate(R.layout.comment_item, null);
         }
@@ -66,7 +66,10 @@ public class CommentAdapter extends BaseAdapter {
 
 
         //populating
-        holder.message.setText(c.comment);
+        if (c.atach)
+            holder.message.setText(DataBaseAdapter.getInstance(context).getAttachmentByID(c.idAttach).getNmFile());
+        else
+            holder.message.setText(c.comment);
         holder.hour.setText(c.hour);
         holder.date.setText(c.date);
 

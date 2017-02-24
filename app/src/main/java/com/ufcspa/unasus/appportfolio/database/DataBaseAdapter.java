@@ -1385,6 +1385,49 @@ public class DataBaseAdapter {
         }
     }
 
+    public int getLastIdAttachComment(){
+        Cursor cursor = db.rawQuery("select seq from sqlite_sequence where name='tb_attach_comment'", null);
+        int lastID = 0;
+        if (cursor.moveToFirst()) {
+            lastID = cursor.getInt(0);
+            Log.d(tag, "last id_attach_comment id table:" + lastID);
+        }
+        return lastID;
+    }
+
+    public List<AttachmentComment> getAttachCommentsByIDs(LinkedList<Integer> ids) {
+        StringBuilder sb = new StringBuilder("select " +
+                "id_attach_comment," +
+                "id_attachment," +
+                "id_comment" +
+                " from tb_attach_comment where id_attach_comment in ( ");
+        for (int id :ids){
+            if(id==ids.getLast()){
+                sb.append(""+id+" );");
+                break;
+            }else{
+                sb.append(""+id+" , ");
+            }
+        }
+        Log.d(tag+" get attach comments by ids"," query:"+sb.toString());
+        String query = sb.toString();
+        Cursor c = db.rawQuery(query, null);
+        LinkedList lista = new LinkedList<Comentario>();
+        if (c.moveToFirst()) {
+            do {
+                AttachmentComment attachmentComment = new AttachmentComment();
+                attachmentComment.setId_attach_comment(c.getInt(0));
+                attachmentComment.setId_attachment(c.getInt(1));
+                attachmentComment.setId_comment(c.getInt(2));
+                attachmentComment.setId_srv(0);
+                lista.add(attachmentComment);
+            } while (c.moveToNext());
+        } else {
+            Log.d(tag, "Nao retornou nada na consulta");
+        }
+        return lista;
+    }
+
 
 
     /*
