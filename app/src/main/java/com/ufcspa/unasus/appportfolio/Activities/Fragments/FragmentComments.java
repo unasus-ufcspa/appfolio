@@ -142,9 +142,9 @@ public class FragmentComments extends Frag {
         btAttachment = (Button) getView().findViewById(R.id.bt_add_attachment);
         lv = (ListView) getView().findViewById(R.id.listView1);
 //                    loadCom();
-        if (loadComments.getStatus()!= AsyncTask.Status.RUNNING) {
-            loadComments.execute();
-        }
+//        if (loadComments.getStatus()!= AsyncTask.Status.RUNNING) {
+//            loadComments.execute();
+//        }
         btAttachment.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -212,7 +212,7 @@ public class FragmentComments extends Frag {
         //oneComments.clear();
         oneComments.add(oneComment);
         adapterComments.refresh(oneComments);
-        //adapterComments.notifyDataSetChanged();
+        adapterComments.notifyDataSetChanged();
     }
 
 
@@ -225,6 +225,7 @@ public class FragmentComments extends Frag {
     public void addAtach() {
         Log.d("comments attach", "add atach selecionado");
         adapterComments.refresh(oneComments);
+        adapterComments.notifyDataSetChanged();
         attach = true;
         edtMessage.setText("");
         btGenMess.performClick();
@@ -235,7 +236,7 @@ public class FragmentComments extends Frag {
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
+//        super.onActivityResult(requestCode, resultCode, data);
         Log.d("comment attachment ", "entrando no onActivity for Result");
 //
 //        if (resultCode == Activity.RESULT_OK && requestCode != Constants.CROP_IMAGE)
@@ -275,6 +276,8 @@ public class FragmentComments extends Frag {
                     if (mimeType.startsWith("image")) {
                         saveImage();
                         launchCropImageIntent();
+                        insertFileIntoDataBase(mCurrentPhotoPath, "I");
+                        addAtach();
                     } else if (mimeType.startsWith("video")) {
                         saveVideoOnAppDir();
                         insertFileIntoDataBase(mCurrentPhotoPath, "V");
@@ -299,8 +302,6 @@ public class FragmentComments extends Frag {
                     if (idAttachment != -1) {
                         Singleton.getInstance().lastIdAttach = idAttachment;
                         addAtach();
-                        if (lastID != 0)
-                            DataBaseAdapter.getInstance(getActivity()).insertAttachComment(lastID, idAttachment);
                     }
                     break;
             }
@@ -409,7 +410,7 @@ public class FragmentComments extends Frag {
             DataBaseAdapter db = DataBaseAdapter.getInstance(getActivity());
             lastID = db.insertComment(c);
             if (attach) {
-//                db.insertAttachComment(lastID, single.lastIdAttach);
+                db.insertAttachComment(lastID, single.lastIdAttach);
                 String idDevice = Settings.Secure.getString(getActivity().getContentResolver(), Settings.Secure.ANDROID_ID);
                 Sync sync = new Sync(idDevice, "tb_attach_comment", DataBaseAdapter.getInstance(getContext()).getLastIdAttachComment(), singleton.idActivityStudent);
                 DataBaseAdapter.getInstance(getContext()).insertIntoTBSync(sync);
@@ -475,7 +476,7 @@ public class FragmentComments extends Frag {
                 }
                 single.lastIdAttach = source.insertAttachment(new Attachment(0, type, name, path, 0,0));
                 if (lastID != 0 && single.lastIdAttach != -1 && single.lastIdAttach != 0) {
-                    DataBaseAdapter.getInstance(getActivity()).insertAttachComment(lastID, single.lastIdAttach);
+//                    source.insertAttachComment(lastID, single.lastIdAttach);
                 }
             }
         });

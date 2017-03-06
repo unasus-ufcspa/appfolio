@@ -62,13 +62,30 @@ public class CommentAdapter extends BaseAdapter {
         holder.message=(TextView)rowView.findViewById(R.id.comment);
         holder.hour=(TextView)rowView.findViewById(R.id.hour);
         holder.date=(TextView)rowView.findViewById(R.id.date);
+        holder.icon=(TextView)rowView.findViewById(R.id.comment_icon);
         holder.wraper=(RelativeLayout)rowView.findViewById(R.id.wrapper);
 
 
         //populating
-        if (c.atach)
+        if (c.atach) {
             holder.message.setText(DataBaseAdapter.getInstance(context).getAttachmentByID(c.idAttach).getNmFile());
-        else
+            String tipo = DataBaseAdapter.getInstance(context).getAttachmentByID(c.idAttach).getTpAttachment();
+            if (tipo!=null) {
+                switch (tipo){
+                    case "I":
+                        holder.icon.setBackgroundResource(R.drawable.attachment_image);
+                        break;
+                    case "V":
+                        holder.icon.setBackgroundResource(R.drawable.attachment_video);
+                        break;
+                    case "T":
+                        holder.icon.setBackgroundResource(R.drawable.attachment_file);
+                        break;
+                }
+            } else {
+                holder.icon.setBackgroundResource(R.drawable.attachment_file);
+            }
+        } else
             holder.message.setText(c.comment);
         holder.hour.setText(c.hour);
         holder.date.setText(c.date);
@@ -118,6 +135,7 @@ public class CommentAdapter extends BaseAdapter {
         TextView message;
         TextView hour;
         TextView date;
+        TextView icon;
         RelativeLayout wraper;
     }
 }

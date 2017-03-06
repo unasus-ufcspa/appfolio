@@ -313,7 +313,7 @@ public class Frag extends Fragment {
      */
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-//        getTargetFragment().onActivityResult(requestCode,resultCode,data);
+        getTargetFragment().onActivityResult(requestCode,resultCode,data);
         List<Fragment> fragments = getChildFragmentManager().getFragments();
         if (fragments != null) {
             for (Fragment fragment : fragments) {

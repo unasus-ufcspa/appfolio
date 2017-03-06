@@ -364,7 +364,6 @@ public class SendData {
 
         JSONArray jsonArrayVersions = new JSONArray();
         JSONArray jsonComments = new JSONArray();
-        JSONArray jsonAttachComments = new JSONArray();
         JSONArray jsonNotice = new JSONArray();
 
         JSONObject jsonUser = new JSONObject();
@@ -400,32 +399,28 @@ public class SendData {
                     jsonComment.put("tp_comment", comment.getTypeComment());
                     jsonComment.put("dt_comment", comment.getDateComment());
 
-
-//                    jsonComment.put("id_comment_version_srv",comment.getId_comment_version_srv());
+                    if(attachmentComments!=null) {
+                        for (AttachmentComment attachmentComment : attachmentComments) {
+                            if (attachmentComment.getId_comment() == comment.getIdComment()) {
+                                JSONObject jsonAttachComment = new JSONObject();
+                                Attachment attachment = data.getAttachmentByID(attachmentComment.getId_attachment());
+                                jsonAttachComment.put("id_attachment", attachment.getIdAttachment());
+                                jsonAttachComment.put("tp_attachment",attachment.getTpAttachment());
+                                jsonAttachComment.put("nm_file",attachment.getNmFile());
+                                String path = null;
+                                if (attachment.getNmSystem()!=null) {
+                                    String[] aux = attachment.getNmSystem().split("/");
+                                    path = attachment.getNmSystem();
+                                    if (aux.length > 0)
+                                        path = aux[aux.length - 1];
+                                }
+                                jsonAttachComment.put("nm_system",path);
+                                jsonAttachComment.put("id_attachment_srv", attachmentComment.getId_srv());
+                                jsonComment.put("attachment",jsonAttachComment);
+                            }
+                        }
+                    }
                     jsonComments.put(jsonComment);
-                }
-            }
-            if(attachmentComments!=null) {
-                for (AttachmentComment comment : attachmentComments) {
-                    JSONObject jsonComment = new JSONObject();
-                    jsonComment.put("id_attach_comment", comment.getId_attach_comment());
-                    jsonComment.put("id_attachment", comment.getId_attachment());
-
-//                    if(data.isSync("tb_comment_version",comment.getId_comment_version())){
-//                        int idServer =data.getIdCommentVersionSrv(comment.getId_comment_version());
-//                        jsonComment.put("id_comment_version_srv",idServer);
-//                    }else{
-//                        entrou = true;
-//                        jsonComment.put("id_comment_version_srv","");
-//                    }
-
-
-                    //jsonComment.put("id_comment_srv", comment.getIdCommentSrv());
-                    jsonComment.put("id_comment", comment.getId_comment());
-
-
-//                    jsonComment.put("id_comment_version_srv",comment.getId_comment_version_srv());
-                    jsonAttachComments.put(jsonComment);
                 }
             }
 
@@ -601,7 +596,6 @@ public class SendData {
             //mount pseudo final
             jsonPseudoFinal.put("device",device);
             jsonPseudoFinal.put("comment", new JSONObject().put("tb_comment", jsonComments));
-            jsonPseudoFinal.put("attach_comment", new JSONObject().put("tb_attach_comment", jsonAttachComments));
             jsonPseudoFinal.put("version", new JSONObject().put("tb_version_activity", jsonArrayVersions));
             jsonPseudoFinal.put("user", new JSONObject().put("tb_user", jsonUser));
             jsonPseudoFinal.put("notice", new JSONObject().put("tb_notice", jsonNotice));
