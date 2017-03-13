@@ -209,7 +209,10 @@ public class FirstSyncClient extends HttpClient{
                                                     String nm_file = attachments.getString("nm_file");
                                                     String nm_system = attachments.getString("nm_system");
                                                     int id_attachment_srv = attachments.getInt("id_attachment");
-                                                    int id_attach_author = attachments.getInt("id_author");
+                                                    int id_attach_author = 0;
+                                                    if (attachments.has("id_author")) {
+                                                        id_attach_author = attachments.getInt("id_author");
+                                                    }
 
                                                     attachment.setTpAttachment(tp_attachment);
                                                     attachment.setNmFile(nm_file);

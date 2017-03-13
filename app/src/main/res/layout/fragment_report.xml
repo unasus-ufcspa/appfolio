@@ -27,7 +27,7 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:layout_marginLeft="50dp"
-        android:layout_marginRight="500dp" />
+        android:layout_marginRight="50dp" />
 
     <RelativeLayout
         android:id="@+id/crossfade_content"

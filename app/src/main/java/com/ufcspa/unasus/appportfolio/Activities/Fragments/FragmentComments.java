@@ -248,7 +248,7 @@ public class FragmentComments extends Frag {
             switch (requestCode){
                 case Constants.CROP_IMAGE:
                     saveImageOnAppDir();
-                    insertFileIntoDataBase(mCurrentPhotoPath, "I");
+                    insertFileIntoDataBase(mCurrentPhotoPath+".jpg", "I");
                     addAtach();
                     break;
                 case REQUEST_IMAGE_CAPTURE:
@@ -276,24 +276,24 @@ public class FragmentComments extends Frag {
                     if (mimeType.startsWith("image")) {
                         saveImage();
                         launchCropImageIntent();
-                        insertFileIntoDataBase(mCurrentPhotoPath, "I");
+                        insertFileIntoDataBase(mCurrentPhotoPath+".jpg", "I");
                         addAtach();
                     } else if (mimeType.startsWith("video")) {
                         saveVideoOnAppDir();
-                        insertFileIntoDataBase(mCurrentPhotoPath, "V");
+                        insertFileIntoDataBase(mCurrentPhotoPath+".mp4", "V");
                         addAtach();
                     }
                     break;
                 case PICKFILE_RESULT_CODE:
                     mCurrentPhotoPath = getPDFPath(getContext(), data.getData());
                     savePDFOnAppDir();
-                    insertFileIntoDataBase(mCurrentPhotoPath, "T");
+                    insertFileIntoDataBase(mCurrentPhotoPath+".pdf", "T");
                     addAtach();
                     break;
                 case REQUEST_VIDEO_CAPTURE:
                     galleryAddPic();
                     saveVideoOnAppDir();
-                    insertFileIntoDataBase(mCurrentPhotoPath, "V");
+                    insertFileIntoDataBase(mCurrentPhotoPath+".mp4", "V");
                     addAtach();
                     break;
                 case REQUEST_FOLIO_ATTACHMENT:

@@ -11,6 +11,7 @@ import android.content.IntentFilter;
 import android.graphics.Point;
 import android.net.ConnectivityManager;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Handler;
 import android.os.Looper;
 import android.provider.Settings;
@@ -26,6 +27,7 @@ import android.view.ViewConfiguration;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.inputmethod.InputMethodManager;
+import android.webkit.WebView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -208,7 +210,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 dialog.setCanceledOnTouchOutside(false);
                 dialog.setCancelable(false);
 
-                TextView policyTX = (TextView) dialog.findViewById(R.id.term_text);
+                WebView policyTX = (WebView) dialog.findViewById(R.id.term_text);
                 Button acceptBT = (Button) dialog.findViewById(R.id.btn_agree);
                 Button notAcceptBT = (Button) dialog.findViewById(R.id.btn_not_agree);
 
@@ -218,7 +220,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
                 String txPolicy = DataBaseAdapter.getInstance(getBaseContext()).getPolicyByUserID(idUser).getTxPolicy();
 
-                policyTX.setText(/*"TERMOS DE USO \n" + */txPolicy);
+                policyTX.loadDataWithBaseURL("file:"+ Environment.getExternalStorageDirectory()+"/Android/data/com.ufcspa.unasus.appportfolio/files/images",txPolicy,"text/html","UTF-8","about:blank");
 
                 acceptBT.setOnClickListener(new View.OnClickListener() {
                     @Override

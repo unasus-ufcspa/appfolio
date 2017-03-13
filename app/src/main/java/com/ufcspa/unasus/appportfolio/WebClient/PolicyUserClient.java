@@ -39,7 +39,7 @@ public class PolicyUserClient extends HttpClient{
                 Log.d(tag, "Retornou do request");
                 try {
                     Log.d(tag, "JSON RESPONSE: " + response.toString().replaceAll("\\{", "\n{"));
-                    JSONObject resp = response.getJSONObject("policyResponse");
+                    JSONObject resp = response.getJSONObject("policyRequest");
                     Log.d(tag, "JSON POST existe policyResponse");
                     if (resp.has("success")) {
                         Log.d("json policyUser","sucesso");
