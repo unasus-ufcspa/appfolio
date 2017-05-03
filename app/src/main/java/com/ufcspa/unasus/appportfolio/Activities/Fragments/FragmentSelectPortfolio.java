@@ -16,6 +16,10 @@ import com.ufcspa.unasus.appportfolio.Adapter.SelectPortfolioClassAdapter;
 import com.ufcspa.unasus.appportfolio.Model.PortfolioClass;
 import com.ufcspa.unasus.appportfolio.Model.Singleton;
 import com.ufcspa.unasus.appportfolio.R;
+import com.ufcspa.unasus.appportfolio.WebClient.BasicData;
+import com.ufcspa.unasus.appportfolio.WebClient.BasicDataClient;
+import com.ufcspa.unasus.appportfolio.WebClient.FullData;
+import com.ufcspa.unasus.appportfolio.WebClient.FullDataClient;
 import com.ufcspa.unasus.appportfolio.database.DataBaseAdapter;
 
 import java.util.Collections;
@@ -47,9 +51,10 @@ public class FragmentSelectPortfolio extends Frag {
             public void onClick(View v) {
                 btSync.startAnimation(rotate);
 
-//                MainActivity mainActivity = new MainActivity();
-//                mainActivity.getBasicData();
-//                mainActivity.getFullData();
+                BasicDataClient basicDataClient = new BasicDataClient(getContext());
+                basicDataClient.postJson(BasicData.toJSON(Singleton.getInstance().user.getIdUser(), Singleton.getInstance().device.get_id_device()));
+                FullDataClient fullDataClient = new FullDataClient(getContext());
+                fullDataClient.postJson(FullData.toJSON(singleton.device.get_id_device(), 0));
             }
         });
         return view;

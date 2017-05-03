@@ -53,9 +53,9 @@
             android:minHeight="170dp"
             android:verticalSpacing="50dp" />
 
-        <EditText
+        <SearchView
             android:id="@+id/edt_search"
-            android:layout_width="500dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true"
@@ -63,16 +63,6 @@
             android:ems="10"
             android:hint="Busca"
             android:inputType="textPersonName" />
-
-        <ImageView
-            android:id="@+id/imageView7"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentRight="true"
-            android:layout_alignTop="@+id/edt_search"
-            app:srcCompat="?android:attr/actionModeWebSearchDrawable"
-            android:layout_alignBottom="@+id/edt_search" />
 
     </RelativeLayout>
 </LinearLayout>

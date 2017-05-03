@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.SearchView;
 import android.widget.TextView;
 
 import com.ufcspa.unasus.appportfolio.Activities.MainActivity;
@@ -31,7 +32,7 @@ public class FragmentStudentActivities extends Frag {
     private Singleton singleton;
     private TextView className;
     private TextView portfolioName;
-    private EditText edtSearch;
+    private SearchView edtSearch;
     private StudentActivitiesAdapter gridAdapter;
 
 
@@ -58,7 +59,7 @@ public class FragmentStudentActivities extends Frag {
             Log.e("BANCO", "falha em pegar atividades (SelectActivitiesAactivity):" + e.getMessage());
         }
 
-        edtSearch = (EditText) getView().findViewById(R.id.edt_search);
+        edtSearch = (SearchView) getView().findViewById(R.id.edt_search);
 
         className = (TextView) getView().findViewById(R.id.class_name);
         portfolioName = (TextView) getView().findViewById(R.id.portfolio_name);
@@ -80,20 +81,16 @@ public class FragmentStudentActivities extends Frag {
             }
         });
 
-        edtSearch.addTextChangedListener(new TextWatcher() {
+        edtSearch.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
+            public boolean onQueryTextSubmit(String query) {
+                return false;
             }
 
             @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                FragmentStudentActivities.this.gridAdapter.getFilter().filter(s);
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-
+            public boolean onQueryTextChange(String newText) {
+                FragmentStudentActivities.this.gridAdapter.getFilter().filter(newText);
+                return false;
             }
         });
     }
