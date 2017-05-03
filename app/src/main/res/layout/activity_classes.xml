@@ -76,17 +76,19 @@
             android:layout_alignParentRight="true"
             android:layout_alignParentTop="true"
             android:layout_margin="5dp"
-            android:background="@drawable/bt_sync" />
+            android:background="@drawable/bt_sync"
+            android:visibility="invisible"/>
 
         <TextView
-            android:id="@+id/textView5"
+            android:id="@+id/tx_sync"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignBaseline="@+id/bt_sync"
             android:layout_alignBottom="@+id/bt_sync"
             android:layout_toLeftOf="@+id/bt_sync"
             android:layout_toStartOf="@+id/bt_sync"
-            android:text="Sincronizar" />
+            android:text="Sincronizar"
+            android:visibility="invisible" />
 
     </RelativeLayout>
 

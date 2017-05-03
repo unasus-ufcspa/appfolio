@@ -10,6 +10,7 @@ import android.view.animation.LinearInterpolator;
 import android.view.animation.RotateAnimation;
 import android.widget.Button;
 import android.widget.GridView;
+import android.widget.TextView;
 
 import com.ufcspa.unasus.appportfolio.Activities.MainActivity;
 import com.ufcspa.unasus.appportfolio.Adapter.SelectPortfolioClassAdapter;
@@ -46,17 +47,24 @@ public class FragmentSelectPortfolio extends Frag {
                 Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF,
                 0.5f);
         rotate.setDuration(500);
-        btSync.setOnClickListener(new View.OnClickListener() {// TODO: 02/05/2017 finish sync button
-            @Override
-            public void onClick(View v) {
-                btSync.startAnimation(rotate);
 
-                BasicDataClient basicDataClient = new BasicDataClient(getContext());
-                basicDataClient.postJson(BasicData.toJSON(Singleton.getInstance().user.getIdUser(), Singleton.getInstance().device.get_id_device()));
-                FullDataClient fullDataClient = new FullDataClient(getContext());
-                fullDataClient.postJson(FullData.toJSON(singleton.device.get_id_device(), 0));
-            }
-        });
+        singleton = Singleton.getInstance();
+
+        if (singleton.guestUser) {
+            btSync.setVisibility(View.VISIBLE);
+            view.findViewById(R.id.tx_sync).setVisibility(View.VISIBLE);
+            btSync.setOnClickListener(new View.OnClickListener() {// TODO: 02/05/2017 finish sync button
+                @Override
+                public void onClick(View v) {
+                    btSync.startAnimation(rotate);
+
+                    BasicDataClient basicDataClient = new BasicDataClient(getContext());
+                    basicDataClient.postJson(BasicData.toJSON(Singleton.getInstance().user.getIdUser(), Singleton.getInstance().device.get_id_device()));
+                    FullDataClient fullDataClient = new FullDataClient(getContext());
+                    fullDataClient.postJson(FullData.toJSON(singleton.device.get_id_device(), 0));
+                }
+            });
+        }
         return view;
     }
 
@@ -67,7 +75,6 @@ public class FragmentSelectPortfolio extends Frag {
     }
 
     private void init() {
-        singleton = Singleton.getInstance();
         source = DataBaseAdapter.getInstance(getActivity());
 
         try {
