@@ -99,6 +99,22 @@ public class FistLoginClient extends HttpClient {
 
                                 LoginActivity2.isLoginSucessful=true;
                             }
+                            if (response.getJSONObject("firstLogin_response").has("tb_guest")){
+                                JSONObject resp = new JSONObject();
+                                try {
+                                    resp=response.getJSONObject("firstLogin_response");
+                                    Log.wtf(tag,"JSon response::"+resp.toString());
+                                } catch (JSONException e) {
+                                    e.printStackTrace();
+                                } catch (Exception v){
+                                    v.printStackTrace();
+                                }
+                                JSONObject tbGuest = resp.getJSONObject("tb_guest");
+                                if (tbGuest.getString("fl_comments").equals("N")){
+                                    singleton.guestUserComments = false;
+                                }
+                                singleton.guestUser = DataBaseAdapter.getInstance(context).insertIntoTbGuest(tbGuest.getInt("id_class"),tbGuest.getInt("id_user"),tbGuest.getString("fl_comments"));
+                            }
 //                            if (response.getJSONObject("firstLogin_response").getString("fl_firstSync").equals("S")){
                                 singleton.firstSync=true;
                                 FirstSyncClient fsclient = new FirstSyncClient(context);

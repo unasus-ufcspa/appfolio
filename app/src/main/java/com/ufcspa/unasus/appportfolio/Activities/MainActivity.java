@@ -511,9 +511,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 }
                 break;
             case 2:
-                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new FragmentReference()).addToBackStack("FragmentReference").commit();
-                lastFragName = "FragmentReference";
-                apagarBotoes(id);
+                if (!singleton.guestUser) {
+                    getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new FragmentReference()).addToBackStack("FragmentReference").commit();
+                    lastFragName = "FragmentReference";
+                    apagarBotoes(id);
+                } else {
+                    Toast.makeText(this,"Acesso restrito a usuários convidados",Toast.LENGTH_LONG).show();
+                }
                 break;
             case 3:
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new FragmentConfig()).addToBackStack("FragmentConfig").commit();
@@ -521,9 +525,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 apagarBotoes(id);
                 break;
             case 4:
-                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new FragmentAttachment()).addToBackStack("FragmentAttachment").commit();
-                lastFragName = "FragmentAttachment";
-                apagarBotoes(id);
+                if (!singleton.guestUser) {
+                    getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new FragmentAttachment()).addToBackStack("FragmentAttachment").commit();
+                    lastFragName = "FragmentAttachment";
+                    apagarBotoes(id);
+                } else {
+                    Toast.makeText(this,"Acesso restrito a usuários convidados",Toast.LENGTH_LONG).show();
+                }
                 break;
             case 5:
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new FragmentReport()).addToBackStack("FragmentReport").commit();

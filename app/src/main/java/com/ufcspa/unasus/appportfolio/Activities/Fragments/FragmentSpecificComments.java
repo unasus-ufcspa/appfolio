@@ -24,7 +24,9 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.github.amlcurran.showcaseview.ShowcaseView;
 import com.github.amlcurran.showcaseview.targets.Target;
@@ -172,42 +174,62 @@ public class FragmentSpecificComments extends Frag {
 //        ((InputMethodManager)getActivity().getSystemService(Context.INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(getView().getWindowToken(), 0);
 //        InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(getActivity().INPUT_METHOD_SERVICE);
 //        imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY);
-        btGenMess.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (!edtMessage.getText().toString().isEmpty()) {
-                    Comentario c = getCommentFromText();
-                    oneComments.add(new OneComment(false, edtMessage.getText().toString(), convertDateToTime(c.getDateComment()), convertDateToDate(c.getDateComment())));
-                    edtMessage.setText("");
-                    insertComment(c);
+        if (singleton.guestUserComments) {
+            btGenMess.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (!edtMessage.getText().toString().isEmpty()) {
+                        Comentario c = getCommentFromText();
+                        oneComments.add(new OneComment(false, edtMessage.getText().toString(), convertDateToTime(c.getDateComment()), convertDateToDate(c.getDateComment())));
+                        edtMessage.setText("");
+                        insertComment(c);
+                    }
                 }
-            }
-        });
-        txNote.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (EXPANDED_FLAG == false) {
-                    txNote.getLayoutParams().height = 330;
-                    txNote.setMovementMethod(new ScrollingMovementMethod());
-                    EXPANDED_FLAG = true;
-                    txNote.requestLayout();
-                    Log.d("editor", "layout reference expanded true");
-                } else {
-                    txNote.getLayoutParams().height = 70;
-                    //txNote.setMovementMethod(null);
-                    EXPANDED_FLAG = false;
-                    txNote.requestLayout();
-                    Log.d("editor", "layout reference expanded false");
+            });
+            txNote.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (EXPANDED_FLAG == false) {
+                        txNote.getLayoutParams().height = 330;
+                        txNote.setMovementMethod(new ScrollingMovementMethod());
+                        EXPANDED_FLAG = true;
+                        txNote.requestLayout();
+                        Log.d("editor", "layout reference expanded true");
+                    } else {
+                        txNote.getLayoutParams().height = 70;
+                        //txNote.setMovementMethod(null);
+                        EXPANDED_FLAG = false;
+                        txNote.requestLayout();
+                        Log.d("editor", "layout reference expanded false");
+                    }
                 }
-            }
-        });
+            });
 
-        btAttachment.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                addAttachmentToComments();
-            }
-        });
+            btAttachment.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    addAttachmentToComments();
+                }
+            });
+        } else {
+            RelativeLayout form = (RelativeLayout) getView().findViewById(R.id.form);
+            form.setBackgroundResource(R.color.gray_4);
+            btGenMess.setAlpha((float)0.5);
+            btAttachment.setAlpha((float)0.5);
+            edtMessage.setEnabled(false);
+            btGenMess.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Toast.makeText(getContext(),"Acesso restrito a usuários convidados",Toast.LENGTH_LONG).show();
+                }
+            });
+            btAttachment.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Toast.makeText(getContext(),"Acesso restrito a usuários convidados",Toast.LENGTH_LONG).show();
+                }
+            });
+        }
         setarListView();
 
         h.postDelayed(myRunnable, 5000);

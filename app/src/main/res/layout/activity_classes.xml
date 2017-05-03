@@ -32,7 +32,8 @@
             android:layout_alignStart="@+id/grid_classes"
             android:layout_marginBottom="10dp"
             android:layout_marginLeft="25dp"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:id="@+id/linearLayout4">
 
             <TextView
                 android:id="@+id/textView11"
@@ -66,6 +67,26 @@
                 android:text="aluno"
                 android:textStyle="italic" />
         </LinearLayout>
+
+        <Button
+            android:id="@+id/bt_sync"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentTop="true"
+            android:layout_margin="5dp"
+            android:background="@drawable/bt_sync" />
+
+        <TextView
+            android:id="@+id/textView5"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBaseline="@+id/bt_sync"
+            android:layout_alignBottom="@+id/bt_sync"
+            android:layout_toLeftOf="@+id/bt_sync"
+            android:layout_toStartOf="@+id/bt_sync"
+            android:text="Sincronizar" />
 
     </RelativeLayout>
 

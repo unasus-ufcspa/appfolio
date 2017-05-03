@@ -1,11 +1,14 @@
 package com.ufcspa.unasus.appportfolio.Activities.Fragments;
 
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -28,11 +31,14 @@ public class FragmentStudentActivities extends Frag {
     private Singleton singleton;
     private TextView className;
     private TextView portfolioName;
+    private EditText edtSearch;
+    private StudentActivitiesAdapter gridAdapter;
 
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.activity_portfolio_activity, null);
+
         return view;
     }
     @Override
@@ -52,13 +58,15 @@ public class FragmentStudentActivities extends Frag {
             Log.e("BANCO", "falha em pegar atividades (SelectActivitiesAactivity):" + e.getMessage());
         }
 
+        edtSearch = (EditText) getView().findViewById(R.id.edt_search);
+
         className = (TextView) getView().findViewById(R.id.class_name);
         portfolioName = (TextView) getView().findViewById(R.id.portfolio_name);
 
         className.setText(singleton.portfolioClass.getClassCode());
         portfolioName.setText(singleton.portfolioClass.getPortfolioTitle());
 
-        StudentActivitiesAdapter gridAdapter = new StudentActivitiesAdapter((MainActivity) getActivity(), list);
+        gridAdapter = new StudentActivitiesAdapter((MainActivity) getActivity(), list);
 
         list_activities = (ListView) getView().findViewById(R.id.list_activities);
         list_activities.setAdapter(gridAdapter);
@@ -69,6 +77,23 @@ public class FragmentStudentActivities extends Frag {
                 getView().findViewById(R.id.activities_list).getParent()
                         .requestDisallowInterceptTouchEvent(false);
                 return false;
+            }
+        });
+
+        edtSearch.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                FragmentStudentActivities.this.gridAdapter.getFilter().filter(s);
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
             }
         });
     }

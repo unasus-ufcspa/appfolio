@@ -9,6 +9,8 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -18,33 +20,39 @@ import com.ufcspa.unasus.appportfolio.Model.DividerItemDecoration;
 import com.ufcspa.unasus.appportfolio.Model.StudFrPortClass;
 import com.ufcspa.unasus.appportfolio.R;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Created by UNASUS on 10/11/2015.
  */
-public class StudentActivitiesAdapter extends BaseAdapter
+public class StudentActivitiesAdapter extends BaseAdapter implements Filterable
 {
     private static LayoutInflater inflater = null;
     private MainActivity context;
-    private List<StudFrPortClass> list;
+    private List<StudFrPortClass> originalList;
+    private List<StudFrPortClass> filteredList;
+    private ItemFilter itemFilter;
 
-    public StudentActivitiesAdapter(MainActivity context, List<StudFrPortClass> list)
+    public StudentActivitiesAdapter(MainActivity context, List<StudFrPortClass> originalList)
     {
         this.context = context;
-        this.list = list;
+        this.originalList = originalList;
+        this.filteredList = originalList;
+
+        itemFilter = new ItemFilter();
 
         inflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
 
     @Override
     public int getCount() {
-        return list.size();
+        return filteredList.size();
     }
 
     @Override
     public StudFrPortClass getItem(int position) {
-        return list.get(position);
+        return filteredList.get(position);
     }
 
     @Override
@@ -58,7 +66,7 @@ public class StudentActivitiesAdapter extends BaseAdapter
         View rowView;
         rowView = inflater.inflate(R.layout.adapter_portfolio_activity, null);
 
-        StudFrPortClass aux = list.get(position);
+        StudFrPortClass aux = filteredList.get(position);
 
         holder.recyclerView = (RecyclerView) rowView.findViewById(R.id.activities_list);
         holder.recyclerView.setOnTouchListener(new View.OnTouchListener() {
@@ -88,10 +96,52 @@ public class StudentActivitiesAdapter extends BaseAdapter
         return rowView;
     }
 
+    @Override
+    public Filter getFilter() {
+        return itemFilter;
+    }
+
     public class Holder
     {
         RecyclerView recyclerView;
         TextView studentName;
         ImageView studentPhoto;
+    }
+
+    private class ItemFilter extends Filter {
+        @Override
+        protected FilterResults performFiltering(CharSequence constraint) {
+
+            String filterString = constraint.toString().toLowerCase();
+
+            FilterResults results = new FilterResults();
+
+            final List<StudFrPortClass> list = originalList;
+
+            int count = list.size();
+            final ArrayList<StudFrPortClass> nlist = new ArrayList<StudFrPortClass>(count);
+
+            String filterableString ;
+
+            for (int i = 0; i < count; i++) {
+                filterableString = list.get(i).getNameStudent();
+                if (filterableString.toLowerCase().contains(filterString)) {
+                    nlist.add(list.get(i));
+                }
+            }
+
+            results.values = nlist;
+            results.count = nlist.size();
+
+            return results;
+        }
+
+        @SuppressWarnings("unchecked")
+        @Override
+        protected void publishResults(CharSequence constraint, FilterResults results) {
+            filteredList = (ArrayList<StudFrPortClass>) results.values;
+            notifyDataSetChanged();
+        }
+
     }
 }

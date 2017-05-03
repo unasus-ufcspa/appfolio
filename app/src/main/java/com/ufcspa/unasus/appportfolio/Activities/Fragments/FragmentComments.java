@@ -18,12 +18,15 @@ import android.support.v4.content.LocalBroadcastManager;
 import android.text.InputType;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
+import android.widget.Toast;
 
 import com.github.amlcurran.showcaseview.ShowcaseView;
 import com.github.amlcurran.showcaseview.targets.Target;
@@ -145,33 +148,60 @@ public class FragmentComments extends Frag {
 //        if (loadComments.getStatus()!= AsyncTask.Status.RUNNING) {
 //            loadComments.execute();
 //        }
-        btAttachment.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                addAttachmentToComments();
-            }
-        });
-        btGenMess.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Log.d("Comments attach", "inserindo comentario");
-                if (attach) {
-                    Log.d("Comments attach", "tentando inserir view anexo");
-                    addOneComment(true);
-                    attach = false;
-                    edtMessage.setText("");
-                } else {
-                    if (!edtMessage.getText().toString().isEmpty()) {
-                        Log.d("Comments attach", "tentando inserir comentario normal");
-                        adapterComments.refresh(new ArrayList<OneComment>());
-                        addOneComment(false);
+        if (singleton.guestUserComments) {
+            btAttachment.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    addAttachmentToComments();
+                }
+            });
+            btGenMess.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Log.d("Comments attach", "inserindo comentario");
+                    if (attach) {
+                        Log.d("Comments attach", "tentando inserir view anexo");
+                        addOneComment(true);
+                        attach = false;
                         edtMessage.setText("");
                     } else {
-                        Log.e("comment", "tentou inserir comentario vazio");
+                        if (!edtMessage.getText().toString().isEmpty()) {
+                            Log.d("Comments attach", "tentando inserir comentario normal");
+                            adapterComments.refresh(new ArrayList<OneComment>());
+                            addOneComment(false);
+                            edtMessage.setText("");
+                        } else {
+                            Log.e("comment", "tentou inserir comentario vazio");
+                        }
                     }
                 }
-            }
-        });
+            });
+        } else {
+            RelativeLayout form = (RelativeLayout) getView().findViewById(R.id.form);
+            form.setBackgroundResource(R.color.gray_4);
+            btGenMess.setAlpha((float)0.5);
+            btAttachment.setAlpha((float)0.5);
+            edtMessage.setEnabled(false);
+            btAttachment.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Toast.makeText(getContext(),"Acesso restrito a usuários convidados",Toast.LENGTH_LONG).show();
+                }
+            });
+            btGenMess.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Toast.makeText(getContext(),"Acesso restrito a usuários convidados",Toast.LENGTH_LONG).show();
+                }
+            });
+            edtMessage.setOnTouchListener(new View.OnTouchListener() {
+                @Override
+                public boolean onTouch(View v, MotionEvent event) {
+                    Toast.makeText(getContext(),"Acesso restrito a usuários convidados",Toast.LENGTH_LONG).show();
+                    return false;
+                }
+            });
+        }
         //addItems();
         setarListView();
 

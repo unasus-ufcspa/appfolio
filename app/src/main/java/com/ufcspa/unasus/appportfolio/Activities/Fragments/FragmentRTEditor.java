@@ -1451,7 +1451,7 @@ public class FragmentRTEditor extends Frag {
                 }
             }
 //            createAddSpecificCommentButton(getCaretYPosition(mRTMessageField.getSelectionStart())); //Criando mesmo se usuário for aluno?
-            if (singleton.portfolioClass.getPerfil().equals("T")) {
+            if (singleton.portfolioClass.getPerfil().equals("T") && !singleton.guestUser) {
                 createAddSpecificCommentButton(getCaretYPosition(mRTMessageField.getSelectionStart()));
                 menu.removeItem(android.R.id.paste);
                 menu.removeItem(android.R.id.cut);

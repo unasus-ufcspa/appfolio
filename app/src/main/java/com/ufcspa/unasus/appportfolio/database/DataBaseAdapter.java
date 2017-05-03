@@ -1921,6 +1921,21 @@ public class DataBaseAdapter {
     *************************MÉTODO DESCOBRIR PERFIL DO USUÀRIO***********************************
     */
 
+    public boolean insertIntoTbGuest(int idClass,int idUser,String flComments){
+        ContentValues contentValues = new ContentValues();
+        contentValues.put("id_class",idClass);
+        contentValues.put("id_user",idUser);
+        contentValues.put("fl_comments",flComments);
+        try {
+            db.insert("tb_guest",null,contentValues);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        } finally {
+            return true;
+        }
+    }
+
     public char verifyUserType(int idUser) {
         String query = "select \n" +
                 "\tcase \n" +
