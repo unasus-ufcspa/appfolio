@@ -13,6 +13,7 @@ import com.coolerfall.download.DownloadCallback;
 import com.coolerfall.download.DownloadManager;
 import com.coolerfall.download.DownloadRequest;
 import com.ufcspa.unasus.appportfolio.Model.Activity;
+import com.ufcspa.unasus.appportfolio.Model.Annotation;
 import com.ufcspa.unasus.appportfolio.Model.Attachment;
 import com.ufcspa.unasus.appportfolio.Model.Comentario;
 import com.ufcspa.unasus.appportfolio.Model.CommentVersion;
@@ -49,6 +50,7 @@ public class FirstSync {
     private LinkedList<Notification> notifications;
     private LinkedList<com.ufcspa.unasus.appportfolio.Model.basicData.Activity> activities;
     private LinkedList<Reference> references;
+    private LinkedList<Annotation> annotations;
     private LinkedList<User> users;
     private LinkedList<Comentario> comments;
     private HashMap<Integer, ArrayList<Attachment>> anexos;
@@ -62,6 +64,7 @@ public class FirstSync {
         notifications = new LinkedList<Notification>();
         activities = new LinkedList<com.ufcspa.unasus.appportfolio.Model.basicData.Activity>();
         references = new LinkedList<Reference>();
+        annotations = new LinkedList<Annotation>();
         users = new LinkedList<>();
         comments = new LinkedList<Comentario>();
         anexos = new HashMap<>();
@@ -104,6 +107,9 @@ public class FirstSync {
     public void addReference(Reference reference){
         references.add(reference);
     }
+    public void addAnnotation(Annotation annotation){
+        annotations.add(annotation);
+    }
     public void addComments(Comentario comment){
         comments.add(comment);
     }
@@ -132,6 +138,9 @@ public class FirstSync {
     public LinkedList<Reference> getReferences() {
         return references;
     }
+    public LinkedList<Annotation> getAnnotations() {
+        return annotations;
+    }
     public LinkedList<Comentario> getComments() {
         return comments;
     }
@@ -146,6 +155,7 @@ public class FirstSync {
         data.insertNotifications(notifications);
         data.insertTBActivity(activities);
         data.insertReference(references);
+        data.insertAnnotation(annotations);
         data.insertComments(comments);
         data.insertVersionActivity(versionActivities);
         ArrayList<VersionActivity> tmp = new ArrayList<VersionActivity>();

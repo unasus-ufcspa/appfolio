@@ -16,7 +16,9 @@ import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.ufcspa.unasus.appportfolio.Adapter.AnnotationAdapter;
 import com.ufcspa.unasus.appportfolio.Adapter.ReferenceAdapter;
+import com.ufcspa.unasus.appportfolio.Model.Annotation;
 import com.ufcspa.unasus.appportfolio.Model.Reference;
 import com.ufcspa.unasus.appportfolio.Model.Singleton;
 import com.ufcspa.unasus.appportfolio.R;
@@ -31,9 +33,12 @@ public class FragmentReference extends Frag {
     private ImageButton btSave;
     private EditText edtRef;
     private ListView list;
-    private ReferenceAdapter adapter;
+//    private ReferenceAdapter adapter;
+    private AnnotationAdapter adapter;
     private Reference refSelected;
+    private Annotation annotation;
     private ArrayList<Reference> references;
+    private ArrayList<Annotation> annotations;
 
 
     @Override
@@ -83,12 +88,13 @@ public class FragmentReference extends Frag {
     }
 
     private void gerarLista(){
-        adapter= new ReferenceAdapter(getContext(),references);
+//        adapter= new ReferenceAdapter(getContext(),references);
+        adapter = new AnnotationAdapter(getContext(),annotations);
         list.setAdapter(adapter);
         list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                refSelected = adapter.getItem(position);
+                annotation = adapter.getItem(position);
                 registerForContextMenu(list);
             }
         });
@@ -99,12 +105,13 @@ public class FragmentReference extends Frag {
         boolean result = false;
         Singleton singleton = Singleton.getInstance();
         DataBaseAdapter data = DataBaseAdapter.getInstance(getActivity());
-        Reference refer=new Reference();
-        refer.setDsUrl(edtRef.getText().toString());
-        refer.setIdActStudent(singleton.idActivityStudent);
-        result=data.insertReference(refer);
+//        Reference refer=new Reference();
+        Annotation ann = new Annotation();
+        ann.setDsAnnotation(edtRef.getText().toString());
+        ann.setIdUser(singleton.user.getIdUser());
+        result=data.insertAnnotation(ann);
         if(result==true){
-            adapter.add(refer);
+            adapter.add(ann);
         }
         return result;
     }
@@ -114,10 +121,11 @@ public class FragmentReference extends Frag {
 //        edtRef.setText(tx);
         Singleton singleton = Singleton.getInstance();
         DataBaseAdapter data = DataBaseAdapter.getInstance(getActivity());
-        references = (ArrayList)data.getReferences(singleton.idActivityStudent);
+//        references = (ArrayList)data.getReferences(singleton.idActivityStudent);
+        annotations = (ArrayList)data.getAnnotations(singleton.user.getIdUser());
         //adapter.refresh(references);
-        for (Reference ref:references) {
-            Log.d("Frag Reference", "ref:"+ref.toString());
+        for (Annotation annotation:annotations) {
+            Log.d("Frag Reference", "ref:"+annotation.toString());
         }
     }
 

@@ -10,6 +10,7 @@ import android.util.Log;
 
 import com.ufcspa.unasus.appportfolio.Model.Activity;
 import com.ufcspa.unasus.appportfolio.Model.ActivityStudent;
+import com.ufcspa.unasus.appportfolio.Model.Annotation;
 import com.ufcspa.unasus.appportfolio.Model.Attachment;
 import com.ufcspa.unasus.appportfolio.Model.AttachmentComment;
 import com.ufcspa.unasus.appportfolio.Model.Comentario;
@@ -356,7 +357,7 @@ public class DataBaseAdapter {
         if (c.moveToFirst()) {
             do {
                 user = new User(c.getInt(0), c.getString(1), c.getString(2), c.getString(3), c.getString(4));
-    //            user.setPhoto(c.getString(5), null);
+                //            user.setPhoto(c.getString(5), null);
                 lista.add(user);
             } while (c.moveToNext());
         }
@@ -394,11 +395,11 @@ public class DataBaseAdapter {
 
     public boolean insertReference(Reference ref) {
         ContentValues cv = new ContentValues();
-        //cv.put("id_annotation",ref.getIdRef());
+        //cv.put("id_reference",ref.getIdRef());
         cv.put("ds_url", ref.getDsUrl());
         cv.put("id_activity_student", ref.getIdActStudent());
         try {
-            db.insert("tb_annotation", null, cv);
+            db.insert("tb_reference", null, cv);
 //            db.close();
             Log.d(tag, "inseriu referencia no banco");
             return true;
@@ -407,10 +408,25 @@ public class DataBaseAdapter {
             return false;
         }
     }
+    public boolean insertAnnotation(Annotation annotation) {
+        ContentValues cv = new ContentValues();
+        cv.put("id_user", annotation.getIdUser());
+        cv.put("ds_annotation", annotation.getDsAnnotation());
+        cv.put("id_annotation_srv", annotation.getIdAnnotationSrv());
+        try {
+            db.insert("tb_annotation", null, cv);
+//            db.close();
+            Log.d(tag, "inseriu annotation no banco");
+            return true;
+        } catch (Exception e) {
+            Log.e(tag, "erro ao inserir annotation:" + e.getMessage());
+            return false;
+        }
+    }
 
     public void deleteReference(int idReference) {
         try {
-            db.delete("tb_annotation", "id_annotation=?", new String[]{"" + idReference});
+            db.delete("tb_reference", "id_reference=?", new String[]{"" + idReference});
             Log.d(tag, "removeu ref do banco");
         } catch (Exception e) {
             Log.e(tag, "erro ao delete ref:" + e.getMessage());
@@ -419,7 +435,7 @@ public class DataBaseAdapter {
 
     public List getReferences(int idActivity) {
         List refs = new ArrayList<Reference>(5);
-        String sql = "SELECT * FROM tb_annotation WHERE id_activity_student =" + idActivity + ";";
+        String sql = "SELECT * FROM tb_reference WHERE id_activity_student =" + idActivity + ";";
         Cursor c = db.rawQuery(sql, null);
         Reference r;
         if (c.moveToFirst()) {
@@ -439,6 +455,47 @@ public class DataBaseAdapter {
             Log.d(tag, "não retornoun nada");
         }
         return refs;
+    }
+
+    public void insertAnnotation(LinkedList<Annotation> annotations) {
+        for (Annotation a : annotations) {
+            ContentValues cv = new ContentValues();
+            cv.put("id_user", a.getIdUser());
+            cv.put("ds_annotation", a.getDsAnnotation());
+            cv.put("id_annotation_srv", a.getIdAnnotationSrv());
+
+            try {
+                db.insert("tb_annotation", null, cv);
+            } catch (Exception e) {
+                Log.d(tag, "erro ao inserir na tb_annotation:" + e.getMessage());
+                e.printStackTrace();
+            }
+
+        }
+    }
+
+    public List getAnnotations(int idUser) {
+        List annotations = new ArrayList<Annotation>(5);
+        String sql = "SELECT * FROM tb_annotation WHERE id_user =" + idUser + ";";
+        Cursor c = db.rawQuery(sql, null);
+        Annotation a;
+        if (c.moveToFirst()) {
+            do {
+                try {
+                    a = new Annotation(c.getInt(0), c.getInt(1), c.getString(2), c.getInt(3));
+                    annotations.add(a);
+                    Log.d(tag, "annotation:" + a.toString());
+                } catch (Exception v) {
+                    Log.e(tag, "erro ao pegar dados do banco:" + v.getMessage());
+                }
+                //add references
+            } while (c.moveToNext());
+//            c.close();
+//            db.close();
+        } else {
+            Log.d(tag, "não retornoun nada");
+        }
+        return annotations;
     }
 
     /*
@@ -2206,7 +2263,7 @@ public class DataBaseAdapter {
                 "WHERE \n" +
                 "\tps.id_portfolio_class=" + idPortfolioClass;
 //        if (perfil.equalsIgnoreCase("S"))
-            query += " AND u.id_user = " + idUsuario;
+        query += " AND u.id_user = " + idUsuario;
         ArrayList<StudFrPortClass> students = new ArrayList<>();
         Cursor c = db.rawQuery(query, null);
         if (c.moveToFirst()) {
@@ -2266,7 +2323,7 @@ public class DataBaseAdapter {
                 "WHERE \n" +
                 "\tps.id_portfolio_class=" + idPortfolioClass;
 //        if (perfil.equalsIgnoreCase("S"))
-            query += " AND u.id_user = " + idUsuario;
+        query += " AND u.id_user = " + idUsuario;
         ArrayList<StudFrPortClass> students = new ArrayList<>();
         Cursor c = db.rawQuery(query, null);
         if (c.moveToFirst()) {
@@ -3094,12 +3151,12 @@ public class DataBaseAdapter {
             ContentValues cv = new ContentValues();
             cv.put("id_activity_student", r.getIdActStudent());
             cv.put("ds_url", r.getDsUrl());
-            cv.put("id_annotation_srv", r.getIdRefSrv());
+            cv.put("id_reference_srv", r.getIdRefSrv());
 
             try {
-                db.insert("tb_annotation", null, cv);
+                db.insert("tb_reference", null, cv);
             } catch (Exception e) {
-                Log.d(tag, "erro ao inserir na tb_annotation:" + e.getMessage());
+                Log.d(tag, "erro ao inserir na tb_reference:" + e.getMessage());
                 e.printStackTrace();
             }
 

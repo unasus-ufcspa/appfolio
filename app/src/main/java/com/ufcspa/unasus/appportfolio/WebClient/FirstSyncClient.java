@@ -13,6 +13,7 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.ufcspa.unasus.appportfolio.Activities.LoginActivity2;
 import com.ufcspa.unasus.appportfolio.Activities.MainActivity;
+import com.ufcspa.unasus.appportfolio.Model.Annotation;
 import com.ufcspa.unasus.appportfolio.Model.Attachment;
 import com.ufcspa.unasus.appportfolio.Model.Comentario;
 import com.ufcspa.unasus.appportfolio.Model.Notification;
@@ -233,21 +234,42 @@ public class FirstSyncClient extends HttpClient{
 
                                 if (data.has("reference")) {
                                     JSONObject references = data.getJSONObject("reference");
-                                    if (references.has("tb_annotation")) {
-                                        JSONArray tb_annotation = references.getJSONArray("tb_annotation");
-                                        for (int i = 0; i < tb_annotation.length(); i++) {
-                                            JSONObject temp = tb_annotation.getJSONObject(i);
+                                    if (references.has("tb_reference")) {
+                                        JSONArray tb_reference = references.getJSONArray("tb_reference");
+                                        for (int i = 0; i < tb_reference.length(); i++) {
+                                            JSONObject temp = tb_reference.getJSONObject(i);
                                             Reference reference = new Reference();
 
                                             int id_activity_student = temp.getInt("id_activity_student");
-                                            int id_annotation_srv = temp.getInt("id_annotation");
+                                            int id_reference_srv = temp.getInt("id_reference");
                                             String ds_url = temp.getString("ds_url");
 
                                             reference.setIdActStudent(id_activity_student);
-                                            reference.setIdRefSrv(id_annotation_srv);
+                                            reference.setIdRefSrv(id_reference_srv);
                                             reference.setDsUrl(ds_url);
 
                                             firstSync.addReference(reference);
+                                        }
+                                    }
+                                }
+
+                                if (data.has("annotation")) {
+                                    JSONObject annotations = data.getJSONObject("annotation");
+                                    if (annotations.has("tb_annotation")) {
+                                        JSONArray tb_annotation = annotations.getJSONArray("tb_annotation");
+                                        for (int i = 0; i < tb_annotation.length(); i++) {
+                                            JSONObject temp = tb_annotation.getJSONObject(i);
+                                            Annotation annotation = new Annotation();
+
+                                            int id_user = temp.getInt("id_user");
+                                            String ds_annotation = temp.getString("ds_annotation");
+                                            int id_annotation_srv = temp.getInt("id_annotation_srv");
+
+                                            annotation.setIdUser(id_user);
+                                            annotation.setDsAnnotation(ds_annotation);
+                                            annotation.setIdAnnotationSrv(id_annotation_srv);
+
+                                            firstSync.addAnnotation(annotation);
                                         }
                                     }
                                 }

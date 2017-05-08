@@ -12,6 +12,7 @@ import android.util.Log;
 import com.coolerfall.download.DownloadCallback;
 import com.coolerfall.download.DownloadManager;
 import com.coolerfall.download.DownloadRequest;
+import com.ufcspa.unasus.appportfolio.Model.Annotation;
 import com.ufcspa.unasus.appportfolio.Model.Attachment;
 import com.ufcspa.unasus.appportfolio.Model.Comentario;
 import com.ufcspa.unasus.appportfolio.Model.CommentVersion;
@@ -49,6 +50,7 @@ public class FullData {
     private HashMap<Integer, ArrayList<Attachment>> anexos;
     private LinkedList<Tuple<Comentario, Attachment>> comentarioAttachment;
     private LinkedList<Reference> references;
+    private LinkedList<Annotation> annotations;
     private LinkedList<Notification> notifications;
     private LinkedList<User> users;
     private LinkedList<CommentVersion> commentVersions;
@@ -64,6 +66,7 @@ public class FullData {
         this.anexos = new HashMap<>();
         this.comentarioAttachment = new LinkedList<>();
         this.references = new LinkedList<>();
+        this.annotations = new LinkedList<Annotation>();
         this.notifications = new LinkedList<>();
         this.users = new LinkedList<>();
         this.commentVersions = new LinkedList<CommentVersion>();
@@ -123,6 +126,9 @@ public class FullData {
         references.add(reference);
     }
 
+    public void addAnnotation(Annotation annotation){
+        annotations.add(annotation);
+    }
     public void addNotification(Notification notification) {
         notifications.add(notification);
     }
@@ -142,6 +148,7 @@ public class FullData {
                 data.updateVersions(versionActivity);
         }
         data.insertReference(references);
+        data.insertAnnotation(annotations);
         if (!comentarios.isEmpty()) {
             data.insertComments(comentarios);
         }
