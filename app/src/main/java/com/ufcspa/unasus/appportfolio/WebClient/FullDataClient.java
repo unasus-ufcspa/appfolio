@@ -243,18 +243,18 @@ public class FullDataClient extends HttpClient {
 
                                     if (data.has("reference")) {
                                         JSONObject references = data.getJSONObject("reference");
-                                        if (references.has("tb_reference")) {
-                                            JSONArray tb_reference = references.getJSONArray("tb_reference");
-                                            for (int i = 0; i < tb_reference.length(); i++) {
-                                                JSONObject temp = tb_reference.getJSONObject(i);
+                                        if (references.has("tb_annotation")) {
+                                            JSONArray tb_annotation = references.getJSONArray("tb_annotation");
+                                            for (int i = 0; i < tb_annotation.length(); i++) {
+                                                JSONObject temp = tb_annotation.getJSONObject(i);
                                                 Reference reference = new Reference();
 
                                                 int id_activity_student = temp.getInt("id_activity_student");
-                                                int id_reference_srv = temp.getInt("id_reference");
+                                                int id_annotation_srv = temp.getInt("id_annotation");
                                                 String ds_url = temp.getString("ds_url");
 
                                                 reference.setIdActStudent(id_activity_student);
-                                                reference.setIdRefSrv(id_reference_srv);
+                                                reference.setIdRefSrv(id_annotation_srv);
                                                 reference.setDsUrl(ds_url);
 
                                                 fullData.addReference(reference);

@@ -394,11 +394,11 @@ public class DataBaseAdapter {
 
     public boolean insertReference(Reference ref) {
         ContentValues cv = new ContentValues();
-        //cv.put("id_reference",ref.getIdRef());
+        //cv.put("id_annotation",ref.getIdRef());
         cv.put("ds_url", ref.getDsUrl());
         cv.put("id_activity_student", ref.getIdActStudent());
         try {
-            db.insert("tb_reference", null, cv);
+            db.insert("tb_annotation", null, cv);
 //            db.close();
             Log.d(tag, "inseriu referencia no banco");
             return true;
@@ -410,7 +410,7 @@ public class DataBaseAdapter {
 
     public void deleteReference(int idReference) {
         try {
-            db.delete("tb_reference", "id_reference=?", new String[]{"" + idReference});
+            db.delete("tb_annotation", "id_annotation=?", new String[]{"" + idReference});
             Log.d(tag, "removeu ref do banco");
         } catch (Exception e) {
             Log.e(tag, "erro ao delete ref:" + e.getMessage());
@@ -419,7 +419,7 @@ public class DataBaseAdapter {
 
     public List getReferences(int idActivity) {
         List refs = new ArrayList<Reference>(5);
-        String sql = "SELECT * FROM tb_reference WHERE id_activity_student =" + idActivity + ";";
+        String sql = "SELECT * FROM tb_annotation WHERE id_activity_student =" + idActivity + ";";
         Cursor c = db.rawQuery(sql, null);
         Reference r;
         if (c.moveToFirst()) {
@@ -3094,12 +3094,12 @@ public class DataBaseAdapter {
             ContentValues cv = new ContentValues();
             cv.put("id_activity_student", r.getIdActStudent());
             cv.put("ds_url", r.getDsUrl());
-            cv.put("id_reference_srv", r.getIdRefSrv());
+            cv.put("id_annotation_srv", r.getIdRefSrv());
 
             try {
-                db.insert("tb_reference", null, cv);
+                db.insert("tb_annotation", null, cv);
             } catch (Exception e) {
-                Log.d(tag, "erro ao inserir na tb_reference:" + e.getMessage());
+                Log.d(tag, "erro ao inserir na tb_annotation:" + e.getMessage());
                 e.printStackTrace();
             }
 
