@@ -18,6 +18,7 @@ import com.ufcspa.unasus.appportfolio.Model.Singleton;
 import com.ufcspa.unasus.appportfolio.Model.User;
 import com.ufcspa.unasus.appportfolio.database.DataBaseAdapter;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -98,7 +99,7 @@ public class FistLoginClient extends HttpClient {
                                 Log.d(tag, "user get by singleton:" + Singleton.getInstance().user.toString());
 
                                 LoginActivity2.isLoginSucessful=true;
-                            }
+                            }// TODO: 09/05/2017 array, id_guest
                             if (response.getJSONObject("firstLogin_response").has("tb_guest")){
                                 JSONObject resp = new JSONObject();
                                 try {
@@ -109,11 +110,11 @@ public class FistLoginClient extends HttpClient {
                                 } catch (Exception v){
                                     v.printStackTrace();
                                 }
-                                JSONObject tbGuest = resp.getJSONObject("tb_guest");
-                                if (tbGuest.getString("fl_comments").equals("N")){
-                                    singleton.guestUserComments = false;
+                                JSONArray tbGuest = resp.getJSONArray("tb_guest");
+                                for (int i = 0; i < tbGuest.length(); i++) {
+                                    JSONObject guest = tbGuest.getJSONObject(i);
+                                    singleton.guestUser = DataBaseAdapter.getInstance(context).insertIntoTbGuest(singleton.user.getIdUser(),guest.getInt("id_class"),guest.getInt("id_guest"),guest.getString("fl_comments"));
                                 }
-                                singleton.guestUser = DataBaseAdapter.getInstance(context).insertIntoTbGuest(tbGuest.getInt("id_class"),tbGuest.getInt("id_user"),tbGuest.getString("fl_comments"));
                             }
 //                            if (response.getJSONObject("firstLogin_response").getString("fl_firstSync").equals("S")){
                                 singleton.firstSync=true;

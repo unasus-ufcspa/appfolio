@@ -525,13 +525,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 apagarBotoes(id);
                 break;
             case 4:
-                if (!singleton.guestUser) {
-                    getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new FragmentAttachment()).addToBackStack("FragmentAttachment").commit();
-                    lastFragName = "FragmentAttachment";
-                    apagarBotoes(id);
-                } else {
-                    Toast.makeText(this,"Acesso restrito a usuários convidados",Toast.LENGTH_LONG).show();
-                }
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new FragmentAttachment()).addToBackStack("FragmentAttachment").commit();
+                lastFragName = "FragmentAttachment";
+                apagarBotoes(id);
                 break;
             case 5:
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new FragmentReport()).addToBackStack("FragmentReport").commit();

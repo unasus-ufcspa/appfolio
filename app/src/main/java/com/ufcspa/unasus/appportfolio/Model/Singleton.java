@@ -24,8 +24,8 @@ public class Singleton {
     public boolean wasFullscreen = false;
     public boolean isFirstSpecificComment = false;
     public boolean firstSync = false;
-    public boolean guestUser = true;
-    public boolean guestUserComments = false;
+    public boolean guestUser = false;
+    public boolean guestUserComments = true;
     public boolean tutorial = true;
 
     public Observation actualObservation= new Observation();

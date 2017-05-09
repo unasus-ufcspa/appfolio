@@ -1978,10 +1978,11 @@ public class DataBaseAdapter {
     *************************MÉTODO DESCOBRIR PERFIL DO USUÀRIO***********************************
     */
 
-    public boolean insertIntoTbGuest(int idClass,int idUser,String flComments){
+    public boolean insertIntoTbGuest(int idUser, int idClass,int idGuest,String flComments){
         ContentValues contentValues = new ContentValues();
-        contentValues.put("id_class",idClass);
         contentValues.put("id_user",idUser);
+        contentValues.put("id_class",idClass);
+        contentValues.put("id_guest",idGuest);
         contentValues.put("fl_comments",flComments);
         try {
             db.insert("tb_guest",null,contentValues);
@@ -1989,6 +1990,20 @@ public class DataBaseAdapter {
             e.printStackTrace();
             return false;
         } finally {
+            return true;
+        }
+    }
+    public boolean getFlGuest(int idPortfolioClass){
+        String query = "SELECT fl_comments FROM tb_guest p JOIN tb_portfolio_class pc ON p.id_class=pc.id_class WHERE pc.id_portfolio_class="+idPortfolioClass;
+        Cursor cursor = db.rawQuery(query,null);
+
+        if (cursor.moveToFirst()) {
+            if (cursor.getString(0).equals("N")){
+                return false;
+            } else {
+                return true;
+            }
+        } else {
             return true;
         }
     }

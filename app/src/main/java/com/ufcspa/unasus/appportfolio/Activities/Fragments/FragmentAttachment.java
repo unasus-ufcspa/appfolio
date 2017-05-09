@@ -181,7 +181,9 @@ public class FragmentAttachment extends Frag {
     }
 
     public void createPlusButton() {
-        attachments.add(new Attachment(-1, "", "", "", 0,0));
+        if (!singleton.guestUser) {
+            attachments.add(new Attachment(-1, "", "", "", 0,0));
+        }
     }
 
     private void loadPhoto(final String url, final int position) {

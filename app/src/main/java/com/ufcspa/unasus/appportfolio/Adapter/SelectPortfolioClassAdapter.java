@@ -160,6 +160,7 @@ public class SelectPortfolioClassAdapter extends BaseAdapter {
     private void changeScreen(PortfolioClass portClass) {
         Singleton singleton = Singleton.getInstance();
         singleton.portfolioClass = portClass;
+        singleton.guestUserComments = dataBaseAdapter.getFlGuest(portClass.getIdPortClass());
         LocalBroadcastManager.getInstance(context).sendBroadcast(new Intent("call.fragments.action").putExtra("ID", 1));
     }
 
