@@ -165,40 +165,42 @@ public class FullData {
             Integer id_activity_student = keys[i];
             ArrayList<Attachment> attachments = anexos.get(id_activity_student);
             DownloadManager manager = new DownloadManager();
-            for (Attachment a : attachments) {
-                int id_attachment = data.insertAttachmentDownload(a);
-                data.insertAttachmentActivity(id_activity_student, id_attachment);
-                // BAIXAR OS ATTACHMENTS!!!!!!!!
-                String filePath = Environment.getExternalStorageDirectory()+"/Android/data/com.ufcspa.unasus.appportfolio/files/images" + File.separator + a.getNmSystem();
-                File file = new File(filePath);
-                if (!file.exists()) { //verifica se arquivo já existe antes de baixar
-                    //Log.d("File Path", filePath);
-                    String url = "http://" + new HttpClient(context).ip + URL + a.getNmSystem();
-                    DownloadRequest request = new DownloadRequest()
-                            .setUrl(url)
-                            .setDestFilePath(filePath)
-                            .setDownloadCallback(new DownloadCallback() {
-                                @Override
-                                public void onSuccess(int downloadId, String filePath) {
-                                    super.onSuccess(downloadId, filePath);
-                                    if (filePath.contains(".mp4")) {
-                                        saveSmallImage(filePath);
-                                    }
-                                    Log.d("anexos","conseguiu baixar anexo com sucesso: "+filePath);
-                                }
+                for (Attachment a : attachments) {
+                    int id_attachment = data.insertAttachmentDownload(a);
+                    data.insertAttachmentActivity(id_activity_student, id_attachment);
+                    // BAIXAR OS ATTACHMENTS!!!!!!!!
+                    if (!Singleton.getInstance().guestUser) {
+                        String filePath = Environment.getExternalStorageDirectory()+"/Android/data/com.ufcspa.unasus.appportfolio/files/images" + File.separator + a.getNmSystem();
+                        File file = new File(filePath);
+                        if (!file.exists()) { //verifica se arquivo já existe antes de baixar
+                            //Log.d("File Path", filePath);
+                            String url = "http://" + new HttpClient(context).ip + URL + a.getNmSystem();
+                            DownloadRequest request = new DownloadRequest()
+                                    .setUrl(url)
+                                    .setDestFilePath(filePath)
+                                    .setDownloadCallback(new DownloadCallback() {
+                                        @Override
+                                        public void onSuccess(int downloadId, String filePath) {
+                                            super.onSuccess(downloadId, filePath);
+                                            if (filePath.contains(".mp4")) {
+                                                saveSmallImage(filePath);
+                                            }
+                                            Log.d("anexos","conseguiu baixar anexo com sucesso: "+filePath);
+                                        }
 
-                                @Override
-                                public void onFailure(int downloadId, int statusCode, String errMsg) {
-                                    super.onFailure(downloadId, statusCode, errMsg);
-                                    Log.e("anexos", "erro ao baixar anexo: " + statusCode+"\n "+errMsg);
-                                }
-                            });
-                    manager.add(request);
-                    Log.d("anexos", "url do anexo: " + url);
-                } else
-                    Log.d("anexos",filePath+" já existe e não baixado");
-//                downloadAttachment("http://stuffpoint.com/stardoll/image/54056-stardoll-sdfs.jpg" + a.getNmSystem(), a.getNmFile());
-            }
+                                        @Override
+                                        public void onFailure(int downloadId, int statusCode, String errMsg) {
+                                            super.onFailure(downloadId, statusCode, errMsg);
+                                            Log.e("anexos", "erro ao baixar anexo: " + statusCode+"\n "+errMsg);
+                                        }
+                                    });
+                            manager.add(request);
+                            Log.d("anexos", "url do anexo: " + url);
+                        } else
+                            Log.d("anexos",filePath+" já existe e não baixado");
+                        //                downloadAttachment("http://stuffpoint.com/stardoll/image/54056-stardoll-sdfs.jpg" + a.getNmSystem(), a.getNmFile());
+                    }
+                }
         }
 
         for (Tuple<Comentario, Attachment> tupla : comentarioAttachment) {

@@ -66,9 +66,9 @@ public class FragmentReference extends Frag {
 //                    r.setDsUrl(edtRef.getText().toString());
                     recuperar();
                     gerarLista();
-                    Toast.makeText(getActivity(),"Referências salvas com sucesso!",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(),"Anotações salvas com sucesso!",Toast.LENGTH_SHORT).show();
                 }else {
-                    Toast.makeText(getActivity(),"Erro ao salvar referências",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(),"Erro ao salvar anotações",Toast.LENGTH_SHORT).show();
                 }
 
             }

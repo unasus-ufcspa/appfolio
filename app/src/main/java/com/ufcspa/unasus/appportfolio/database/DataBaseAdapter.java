@@ -2481,7 +2481,7 @@ public class DataBaseAdapter {
     }
 
     public ArrayList<Attachment> getAttachmentsFromActivityStudent(int idActivityStudent) {
-        String query = "SELECT * FROM tb_attachment WHERE id_activity_student = " + idActivityStudent + ";";
+        String query = "SELECT * FROM tb_attachment AS a JOIN tb_attach_activity ac ON ac.id_attachment=a.id_attachment WHERE ac.id_activity_student= " + idActivityStudent + ";";
 
         ArrayList<Attachment> array_attachment = new ArrayList<>();
 

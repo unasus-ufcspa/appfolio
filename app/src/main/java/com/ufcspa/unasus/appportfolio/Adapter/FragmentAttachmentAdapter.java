@@ -14,6 +14,7 @@ import android.widget.TextView;
 import com.ufcspa.unasus.appportfolio.Activities.Fragments.FragmentAttachment;
 import com.ufcspa.unasus.appportfolio.Activities.MainActivity;
 import com.ufcspa.unasus.appportfolio.Model.Attachment;
+import com.ufcspa.unasus.appportfolio.Model.Singleton;
 import com.ufcspa.unasus.appportfolio.R;
 
 import java.util.HashSet;
@@ -128,7 +129,9 @@ public class FragmentAttachmentAdapter extends BaseAdapter {
                 @Override
                 public boolean onLongClick(View v) {
                     canDelete = true;
-                    context.deleteOneMedia(attachments.size() - 1);
+                    if (!Singleton.getInstance().guestUser) {
+                        context.deleteOneMedia(attachments.size() - 1);
+                    }
                     context.getActivity().startActionMode(new ActionBarCallBack());
                     return true;
                 }
