@@ -148,7 +148,7 @@ public class FragmentComments extends Frag {
 //        if (loadComments.getStatus()!= AsyncTask.Status.RUNNING) {
 //            loadComments.execute();
 //        }
-        if (singleton.guestUserComments) {
+        if (!singleton.guestUser) {
             btAttachment.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

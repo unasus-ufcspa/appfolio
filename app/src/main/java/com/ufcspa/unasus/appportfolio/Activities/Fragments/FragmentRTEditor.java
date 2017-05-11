@@ -33,6 +33,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewManager;
 import android.view.Window;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
@@ -447,6 +448,11 @@ public class FragmentRTEditor extends Frag {
 
         verifyNotifications(view);
         removeOthersNotifications();
+
+        if (!singleton.guestUserComments){
+            ((ViewManager)slider.getParent()).removeView(slider);
+            switchNote.setVisibility(View.INVISIBLE);
+        }
 
         return view;
     }
@@ -971,7 +977,7 @@ public class FragmentRTEditor extends Frag {
 
     private Button createButton(final int id, final String value, final float yPosition) {
         Context context = getContext();
-        if (context != null) {
+        if (context != null && singleton.guestUserComments) {
             final LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             Button note = (Button) inflater.inflate(R.layout.btn_specific_comment, scrollview, false);
 
@@ -1180,25 +1186,27 @@ public class FragmentRTEditor extends Frag {
     }
 
     public void showCommentsTab(Boolean isSpecificComment) {
-        specificCommentsOpen = isSpecificComment;
-        if (isSpecificComment) {
-            if (singleton.note.getBtId() != 0)
-                slider.findViewById(R.id.rightbar_green).setVisibility(View.VISIBLE);
-            int childs = rightBarSpecificComments.getChildCount();
-            for (int i = childs - 1; i >= 0; i--)
-                rightBarSpecificComments.getChildAt(i).setVisibility(View.VISIBLE);
-            getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.comments_container, new FragmentSpecificComments(), "S").commit();
-            SlidingPaneLayout layout = (SlidingPaneLayout) getView().findViewById(R.id.rteditor_fragment);
-            layout.closePane();
-        } else {
-            removeGeneralCommentsNotifications();
-            getView().findViewById(R.id.general_comment_notice).setVisibility(View.GONE);
+        if (singleton.guestUserComments) {
+            specificCommentsOpen = isSpecificComment;
+            if (isSpecificComment) {
+                if (singleton.note.getBtId() != 0)
+                    slider.findViewById(R.id.rightbar_green).setVisibility(View.VISIBLE);
+                int childs = rightBarSpecificComments.getChildCount();
+                for (int i = childs - 1; i >= 0; i--)
+                    rightBarSpecificComments.getChildAt(i).setVisibility(View.VISIBLE);
+                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.comments_container, new FragmentSpecificComments(), "S").commit();
+                SlidingPaneLayout layout = (SlidingPaneLayout) getView().findViewById(R.id.rteditor_fragment);
+                layout.closePane();
+            } else {
+                removeGeneralCommentsNotifications();
+                getView().findViewById(R.id.general_comment_notice).setVisibility(View.GONE);
 
-            int childs = rightBarSpecificComments.getChildCount();
-            for (int i = childs - 1; i >= 0; i--)
-                rightBarSpecificComments.getChildAt(i).setVisibility(View.GONE);
-            slider.findViewById(R.id.rightbar_green).setVisibility(View.INVISIBLE);
-            getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.comments_container, new FragmentComments(), "G").commit();
+                int childs = rightBarSpecificComments.getChildCount();
+                for (int i = childs - 1; i >= 0; i--)
+                    rightBarSpecificComments.getChildAt(i).setVisibility(View.GONE);
+                slider.findViewById(R.id.rightbar_green).setVisibility(View.INVISIBLE);
+                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.comments_container, new FragmentComments(), "G").commit();
+            }
         }
     }
 

@@ -174,7 +174,7 @@ public class FragmentSpecificComments extends Frag {
 //        ((InputMethodManager)getActivity().getSystemService(Context.INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(getView().getWindowToken(), 0);
 //        InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(getActivity().INPUT_METHOD_SERVICE);
 //        imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY);
-        if (singleton.guestUserComments) {
+        if (!singleton.guestUser) {
             btGenMess.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
