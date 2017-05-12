@@ -61,19 +61,19 @@ public class SelectActivitiesActivity extends AppActivity //implements AdapterVi
         className.setText(singleton.portfolioClass.getClassCode());
         portfolioName.setText(singleton.portfolioClass.getPortfolioTitle());
 
-        StudentActivitiesAdapter gridAdapter = new StudentActivitiesAdapter((MainActivity) getParent(), list);
-        list_activities = (ListView) findViewById(R.id.list_activities);
-        list_activities.setAdapter(gridAdapter);
-        list_activities.setOnTouchListener(new View.OnTouchListener() {
-
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-
-                findViewById(R.id.activities_list).getParent()
-                        .requestDisallowInterceptTouchEvent(false);
-                return false;
-            }
-        });
+//        StudentActivitiesAdapter gridAdapter = new StudentActivitiesAdapter((MainActivity) getParent(), list);
+//        list_activities = (ListView) findViewById(R.id.list_activities);
+//        list_activities.setAdapter(gridAdapter);
+//        list_activities.setOnTouchListener(new View.OnTouchListener() {
+//
+//            @Override
+//            public boolean onTouch(View v, MotionEvent event) {
+//
+//                findViewById(R.id.activities_list).getParent()
+//                        .requestDisallowInterceptTouchEvent(false);
+//                return false;
+//            }
+//        });
     }
 
 

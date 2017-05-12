@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AlertDialog;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -31,6 +32,16 @@ public class SelectPortfolioClassAdapter extends BaseAdapter {
     private Context context;
     private List<PortfolioClass> portclasses;
     private DataBaseAdapter dataBaseAdapter;
+
+    public interface OnInfoButtonClick{
+        void openInfo(View v,PortfolioClass portfolioClass);
+    }
+
+    private OnInfoButtonClick callback;
+
+    public void setOnInfoButtonClickListener(OnInfoButtonClick listener){
+        this.callback = listener;
+    }
 
     public SelectPortfolioClassAdapter(Context context, List<PortfolioClass> classes)
     {
@@ -111,7 +122,10 @@ public class SelectPortfolioClassAdapter extends BaseAdapter {
         holder.btnInfo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                new AlertDialog.Builder(context)
+                if (callback != null){
+                    callback.openInfo(v,portClass);
+                }
+               /* new AlertDialog.Builder(context)
                         .setTitle(portClass.getPortfolioTitle())
                         .setMessage(dataBaseAdapter.getPortfolioDescription(portClass.getIdPortClass()))
                         .setPositiveButton("Fechar", new DialogInterface.OnClickListener() {
@@ -119,7 +133,7 @@ public class SelectPortfolioClassAdapter extends BaseAdapter {
                                 dialog.dismiss();
                             }
                         })
-                        .show();
+                        .show();*/
 //                holder.infoView.setVisibility(View.VISIBLE);
 //                holder.infoView.startAnimation(AnimationUtils.loadAnimation(context, R.anim.anim_right));
             }

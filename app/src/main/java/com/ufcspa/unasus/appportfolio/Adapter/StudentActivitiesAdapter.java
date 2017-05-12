@@ -15,6 +15,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.ufcspa.unasus.appportfolio.Activities.Fragments.FragmentConfig;
+import com.ufcspa.unasus.appportfolio.Activities.Fragments.FragmentStudentActivities;
 import com.ufcspa.unasus.appportfolio.Activities.MainActivity;
 import com.ufcspa.unasus.appportfolio.Model.DividerItemDecoration;
 import com.ufcspa.unasus.appportfolio.Model.StudFrPortClass;
@@ -33,12 +34,14 @@ public class StudentActivitiesAdapter extends BaseAdapter implements Filterable
     private List<StudFrPortClass> originalList;
     private List<StudFrPortClass> filteredList;
     private ItemFilter itemFilter;
+    private ActivitiesAdapter.OnInfoButtonClick onInfoButtonClick;
 
-    public StudentActivitiesAdapter(MainActivity context, List<StudFrPortClass> originalList)
+    public StudentActivitiesAdapter(MainActivity context, List<StudFrPortClass> originalList, ActivitiesAdapter.OnInfoButtonClick onInfoButtonClick)
     {
         this.context = context;
         this.originalList = originalList;
         this.filteredList = originalList;
+        this.onInfoButtonClick = onInfoButtonClick;
 
         itemFilter = new ItemFilter();
 
@@ -83,7 +86,9 @@ public class StudentActivitiesAdapter extends BaseAdapter implements Filterable
         holder.recyclerView.setLayoutManager(layoutManager);
         holder.recyclerView.addItemDecoration(new DividerItemDecoration(context, DividerItemDecoration.HORIZONTAL_LIST, 100));
 
-        holder.recyclerView.setAdapter(new ActivitiesAdapter(context, aux.getListActivities(), aux.getNameStudent(), aux));
+        ActivitiesAdapter activitiesAdapter = new ActivitiesAdapter(context, aux.getListActivities(), aux.getNameStudent(), aux);
+        activitiesAdapter.setOnInfoButtonClickListener(onInfoButtonClick);
+        holder.recyclerView.setAdapter(activitiesAdapter);
 
         holder.studentName = (TextView) rowView.findViewById(R.id.p_student_name);
         holder.studentName.setText(aux.getNameStudent());

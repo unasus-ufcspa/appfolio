@@ -99,7 +99,7 @@ public class FistLoginClient extends HttpClient {
                                 Log.d(tag, "user get by singleton:" + Singleton.getInstance().user.toString());
 
                                 LoginActivity2.isLoginSucessful=true;
-                            }// TODO: 09/05/2017 array, id_guest
+                            }
                             if (response.getJSONObject("firstLogin_response").has("tb_guest")){
                                 JSONObject resp = new JSONObject();
                                 try {

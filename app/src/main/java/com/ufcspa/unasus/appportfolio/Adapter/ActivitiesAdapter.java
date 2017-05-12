@@ -52,6 +52,16 @@ public class ActivitiesAdapter extends RecyclerView.Adapter<ActivitiesAdapter.Vi
     private StudFrPortClass studFrPortClass;
     private static final String URL="/webfolio/app_dev.php/download/";
 
+    public interface OnInfoButtonClick{
+        void openInfo(View v,Activity activity);
+    }
+
+    private OnInfoButtonClick callback;
+
+    public void setOnInfoButtonClickListener(OnInfoButtonClick listener){
+        this.callback = listener;
+    }
+
     public ActivitiesAdapter(MainActivity context, List<Activity> list, String studName, StudFrPortClass aux) {
         this.list = list;
         this.context = context;
@@ -137,10 +147,13 @@ public class ActivitiesAdapter extends RecyclerView.Adapter<ActivitiesAdapter.Vi
                 holder.moreInfo.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+                        if (callback != null){
+                            callback.openInfo(v,aux);
+                        }
 //                holder.infoView.setVisibility(View.VISIBLE);
 //                holder.infoView.startAnimation(AnimationUtils.loadAnimation(context, R.anim.anim_right));
 
-                        new AlertDialog.Builder(context)
+                        /*new AlertDialog.Builder(context)
                                 .setTitle(aux.getTitle())
                                 .setMessage(aux.getDescription())
                                 .setPositiveButton("Fechar", new DialogInterface.OnClickListener() {
@@ -148,7 +161,7 @@ public class ActivitiesAdapter extends RecyclerView.Adapter<ActivitiesAdapter.Vi
                                         dialog.dismiss();
                                     }
                                 })
-                                .show();
+                                .show();*/
                     }
                 });
 
