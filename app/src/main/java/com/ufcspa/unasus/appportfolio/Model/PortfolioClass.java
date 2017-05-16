@@ -18,6 +18,8 @@ public class PortfolioClass implements Comparable<PortfolioClass> {
     public PortfolioClass() {
     }
 
+
+
     public PortfolioClass(String classCode, int idPortClass, String perfil, String portfolioTitle) {
         this.classCode = classCode;
         this.idPortClass = idPortClass;
