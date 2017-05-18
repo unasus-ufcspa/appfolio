@@ -117,9 +117,15 @@ public class FistLoginClient extends HttpClient {
                                 }
                             }
 //                            if (response.getJSONObject("firstLogin_response").getString("fl_firstSync").equals("S")){
+                            if (!singleton.guestUser) {
                                 singleton.firstSync=true;
                                 FirstSyncClient fsclient = new FirstSyncClient(context);
                                 fsclient.postJson(FirstSync.toJSON(Singleton.getInstance().user.getIdUser(), Singleton.getInstance().device.get_id_device()));
+                            } else {
+                                singleton.firstSync=true;
+                                SyncVisitanteClient svClient = new SyncVisitanteClient(context);
+                                svClient.postJson(SyncVisitante.toJSON(Singleton.getInstance().user.getIdUser(), Singleton.getInstance().device.get_id_device()));
+                            }
 //                            }
                             Log.d("first sync",user.getIdUser()+" "+Singleton.getInstance().device.get_id_device());
                         }
