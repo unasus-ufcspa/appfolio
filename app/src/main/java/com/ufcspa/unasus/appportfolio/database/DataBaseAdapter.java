@@ -1387,6 +1387,15 @@ public class DataBaseAdapter {
         return lastID;
     }
 
+    public void updateAttachmentFlDownload(int id_attachment){
+        String query = "UPDATE tb_attachment SET fl_download='S' WHERE id_attachment="+id_attachment;
+        try {
+            db.rawQuery(query,null);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     public Attachment getAttachmentByID(int id_attachment) {
         Attachment attch = new Attachment();
         String sql = "SELECT * FROM tb_attachment WHERE id_attachment =" + id_attachment;
@@ -2497,8 +2506,13 @@ public class DataBaseAdapter {
         return db.delete("tb_attachment", query, null) > 0;
     }
 
-    public ArrayList<Attachment> getAttachments() {
-        String query = "SELECT * FROM tb_attachment;";
+    public ArrayList<Attachment> getAttachments(boolean guest) {
+        String query = "SELECT * FROM tb_attachment ";
+
+        if(guest){
+            query=query+"WHERE fl_download='S';";
+        }else
+            query=query+";";
 
         ArrayList<Attachment> array_attachment = new ArrayList<>();
 

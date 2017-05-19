@@ -69,7 +69,7 @@ public class FragmentAttachment extends Frag {
 
         attachmentGrid = (GridView) getView().findViewById(R.id.attachment_gridview);
 
-        attachments = source.getAttachments();
+        attachments = source.getAttachments(singleton.guestUser);
         createPlusButton();
 
         listAdapter = new FragmentAttachmentAdapter(this, attachments);
@@ -171,7 +171,7 @@ public class FragmentAttachment extends Frag {
                     name = "Anexo";
                 }
                 singleton.lastIdAttach = source.insertAttachment(new Attachment(0, type, name, path,0,0));
-                attachments = source.getAttachments();
+                attachments = source.getAttachments(singleton.guestUser);
                 createPlusButton();
                 listAdapter.refresh(attachments);
             }

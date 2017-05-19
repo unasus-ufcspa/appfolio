@@ -444,21 +444,23 @@ public class FirstSyncClient extends HttpClient{
                                             int id_activity_student = temp.getInt("id_activity_student");
                                             JSONArray attachmentsArray = temp.getJSONArray("attachment");
 
-                                            for (int j = 0; j < attachmentsArray.length(); j++) {
-                                                JSONObject attachmentTemp = attachmentsArray.getJSONObject(j);
-                                                Attachment attachment = new Attachment();
+                                            if (temp.has("attachment")) {
+                                                for (int j = 0; j < attachmentsArray.length(); j++) {
+                                                    JSONObject attachmentTemp = attachmentsArray.getJSONObject(j);
+                                                    Attachment attachment = new Attachment();
 
-                                                String tp_attachment = attachmentTemp.getString("tp_attachment").replaceAll("\\s+", "");
-                                                String nm_file = attachmentTemp.getString("nm_file");
-                                                String nm_system = attachmentTemp.getString("nm_system");
-                                                int id_attachment_srv = attachmentTemp.getInt("id_attachment_srv");
+                                                    String tp_attachment = attachmentTemp.getString("tp_attachment").replaceAll("\\s+", "");
+                                                    String nm_file = attachmentTemp.getString("nm_file");
+                                                    String nm_system = attachmentTemp.getString("nm_system");
+                                                    int id_attachment_srv = attachmentTemp.getInt("id_attachment_srv");
 
-                                                attachment.setTpAttachment(tp_attachment);
-                                                attachment.setNmFile(nm_file);
-                                                attachment.setNmSystem(nm_system);
-                                                attachment.setIdAttachmentSrv(id_attachment_srv);
+                                                    attachment.setTpAttachment(tp_attachment);
+                                                    attachment.setNmFile(nm_file);
+                                                    attachment.setNmSystem(nm_system);
+                                                    attachment.setIdAttachmentSrv(id_attachment_srv);
 
-                                                attachments.add(attachment);
+                                                    attachments.add(attachment);
+                                                }
                                             }
 
                                             list.put(id_activity_student, attachments);

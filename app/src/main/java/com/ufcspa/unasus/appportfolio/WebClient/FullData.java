@@ -138,7 +138,7 @@ public class FullData {
     }
 
     public synchronized void insertDataIntoSQLITE() {
-        DataBaseAdapter data = DataBaseAdapter.getInstance(context);
+        final DataBaseAdapter data = DataBaseAdapter.getInstance(context);
 
         data.insertNotifications(notifications);
         for (VersionActivity versionActivity: versionActs) {
@@ -166,7 +166,7 @@ public class FullData {
             ArrayList<Attachment> attachments = anexos.get(id_activity_student);
             DownloadManager manager = new DownloadManager();
                 for (Attachment a : attachments) {
-                    int id_attachment = data.insertAttachmentDownload(a);
+                    final int id_attachment = data.insertAttachmentDownload(a);
                     data.insertAttachmentActivity(id_activity_student, id_attachment);
                     // BAIXAR OS ATTACHMENTS!!!!!!!!
                     if (!Singleton.getInstance().guestUser) {
@@ -183,6 +183,7 @@ public class FullData {
                                         public void onSuccess(int downloadId, String filePath) {
                                             super.onSuccess(downloadId, filePath);
                                             if (filePath.contains(".mp4")) {
+                                                data.updateAttachmentFlDownload(id_attachment);
                                                 saveSmallImage(filePath);
                                             }
                                             Log.d("anexos","conseguiu baixar anexo com sucesso: "+filePath);

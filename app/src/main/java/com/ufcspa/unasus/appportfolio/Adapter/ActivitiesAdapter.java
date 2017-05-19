@@ -128,7 +128,9 @@ public class ActivitiesAdapter extends RecyclerView.Adapter<ActivitiesAdapter.Vi
                         singleton.portfolioClass.setStudentName(studentName);
                         singleton.portfolioClass.setPhoto(studFrPortClass.getPhoto());
                         singleton.portfolioClass.setCellphone(studFrPortClass.getCellphone());
-                        LocalBroadcastManager.getInstance(context).sendBroadcast(new Intent("call.fragments.action").putExtra("ID", 6));
+                        if (!singleton.guestUser) {
+                            LocalBroadcastManager.getInstance(context).sendBroadcast(new Intent("call.fragments.action").putExtra("ID", 6));
+                        }
                     }
                 });
                 r = source.getActivityNotification(aux.getIdActivityStudent());
@@ -176,12 +178,6 @@ public class ActivitiesAdapter extends RecyclerView.Adapter<ActivitiesAdapter.Vi
                 holder.title.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        if (singleton.guestUser) {
-                            attachments = source.getAttachmentsFromActivityStudent(aux.getIdActivityStudent());
-                            if (attachments.size()>0) {
-                                downloadAttachments(attachments);
-                            }
-                        }
                         singleton.activity = list.get(position);
                         singleton.idActivityStudent = singleton.activity.getIdActivityStudent();
                         if (singleton.portfolioClass.getPerfil().equals("S")) {
@@ -194,6 +190,12 @@ public class ActivitiesAdapter extends RecyclerView.Adapter<ActivitiesAdapter.Vi
                         singleton.portfolioClass.setStudentName(studentName);
                         singleton.portfolioClass.setPhoto(studFrPortClass.getPhoto());
                         singleton.portfolioClass.setCellphone(studFrPortClass.getCellphone());
+                        if (singleton.guestUser) {
+                            attachments = source.getAttachmentsFromActivityStudent(aux.getIdActivityStudent());
+                            if (attachments.size()>0) {
+                                downloadAttachments(attachments);
+                            }
+                        }
                         if (!singleton.guestUser || attachments.size()==0) {
                             LocalBroadcastManager.getInstance(context).sendBroadcast(new Intent("call.fragments.action").putExtra("ID", 6));
                         }
@@ -258,18 +260,19 @@ public class ActivitiesAdapter extends RecyclerView.Adapter<ActivitiesAdapter.Vi
         }
     }
 
-    public void downloadAttachments(List<Attachment> attachments){
+    public void downloadAttachments(final List<Attachment> attachments){
         DownloadManager manager = new DownloadManager();
-        for (Attachment a : attachments) {
+        final int[] cont = {attachments.size()};
+        for (final Attachment a : attachments) {
             // BAIXAR OS ATTACHMENTS!!!!!!!!
-            String path=null;
-            if (a.getNmSystem()!=null) {
+            String path = null;
+            if (a.getNmSystem() != null) {
                 String[] aux = a.getNmSystem().split("/");
                 path = a.getNmSystem();
                 if (aux.length > 0)
                     path = aux[aux.length - 1];
             }
-            String filePath = Environment.getExternalStorageDirectory()+"/Android/data/com.ufcspa.unasus.appportfolio/files/images" + File.separator + path;
+            String filePath = Environment.getExternalStorageDirectory() + "/Android/data/com.ufcspa.unasus.appportfolio/files/images" + File.separator + path;
             File file = new File(filePath);
             if (!file.exists()) { //verifica se arquivo já existe antes de baixar
                 //Log.d("File Path", filePath);
@@ -281,26 +284,31 @@ public class ActivitiesAdapter extends RecyclerView.Adapter<ActivitiesAdapter.Vi
                             @Override
                             public void onSuccess(int downloadId, String filePath) {
                                 super.onSuccess(downloadId, filePath);
-                                LocalBroadcastManager.getInstance(context).sendBroadcast(new Intent("call.fragments.action").putExtra("ID", 6));
+                                cont[0]--;
+                                source.updateAttachmentFlDownload(a.getIdAttachment());
                                 if (filePath.contains(".mp4")) {
                                     saveSmallImage(filePath);
                                 }
-                                Log.d("atividade - anexos","conseguiu baixar anexo com sucesso: "+filePath);
-                                Toast.makeText(context,"Conseguiu baixar anexo com sucesso",Toast.LENGTH_LONG).show();
+                                Log.d("atividade - anexos", "conseguiu baixar anexo com sucesso: " + filePath);
+                                Toast.makeText(context, "Conseguiu baixar anexo com sucesso", Toast.LENGTH_LONG).show();
                             }
 
                             @Override
                             public void onFailure(int downloadId, int statusCode, String errMsg) {
                                 super.onFailure(downloadId, statusCode, errMsg);
-                                Toast.makeText(context,"Erro ao baixar anexos",Toast.LENGTH_LONG).show();
+                                Toast.makeText(context, "Erro ao baixar anexos", Toast.LENGTH_LONG).show();
                             }
                         });
                 manager.add(request);
                 Log.d("atividade - anexos", "url do anexo: " + url);
-            } else
-                LocalBroadcastManager.getInstance(context).sendBroadcast(new Intent("call.fragments.action").putExtra("ID", 6));
-                Log.d("atividade - anexos",filePath+" já existe e não baixado");
+            } else{
+                cont[0]--;
+                Log.d("atividade - anexos", filePath + " já existe e não baixado");
+            }
 //                downloadAttachment("http://stuffpoint.com/stardoll/image/54056-stardoll-sdfs.jpg" + a.getNmSystem(), a.getNmFile());
+        }
+        if (cont[0]==0) {
+            LocalBroadcastManager.getInstance(context).sendBroadcast(new Intent("call.fragments.action").putExtra("ID", 6));
         }
     }
 

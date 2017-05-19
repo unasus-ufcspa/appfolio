@@ -85,7 +85,7 @@ public class FragmentAttachmentDialog extends DialogFragment {
 
         attachmentGrid = (GridView) getView().findViewById(R.id.attachment_gridview);
 
-        attachments = source.getAttachments();
+        attachments = source.getAttachments(singleton.guestUser);
 
         listAdapter = new FragmentAttachmentDialogAdapter(this, attachments);
         attachmentGrid.setAdapter(listAdapter);

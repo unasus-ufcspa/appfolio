@@ -150,7 +150,7 @@ public class FirstSync {
     }
 
     public synchronized void insertDataIntoSQLITE() {
-        DataBaseAdapter data = DataBaseAdapter.getInstance(context);
+        final DataBaseAdapter data = DataBaseAdapter.getInstance(context);
 
         data.insertNotifications(notifications);
         data.insertTBActivity(activities);
@@ -184,7 +184,7 @@ public class FirstSync {
             ArrayList<Attachment> attachments = anexos.get(id_activity_student);
             DownloadManager manager = new DownloadManager();
                 for (Attachment a : attachments) {
-                    int id_attachment = data.insertAttachmentDownload(a);
+                    final int id_attachment = data.insertAttachmentDownload(a);
                     data.insertAttachmentActivity(id_activity_student, id_attachment);
                     // BAIXAR OS ATTACHMENTS!!!!!!!!
                     if (!Singleton.getInstance().guestUser) {
@@ -199,6 +199,7 @@ public class FirstSync {
                                         @Override
                                         public void onSuccess(int downloadId, String filePath) {
                                             super.onSuccess(downloadId, filePath);
+                                            data.updateAttachmentFlDownload(id_attachment);
                                             if (filePath.contains(".mp4")) {
                                                 saveSmallImage(filePath);
                                             }
