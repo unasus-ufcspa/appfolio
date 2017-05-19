@@ -408,20 +408,20 @@ public class DataBaseAdapter {
             return false;
         }
     }
-    public boolean insertAnnotation(Annotation annotation) {
+    public int insertAnnotation(Annotation annotation) {
+        int id = -1;
         ContentValues cv = new ContentValues();
         cv.put("id_user", annotation.getIdUser());
         cv.put("ds_annotation", annotation.getDsAnnotation());
         cv.put("id_annotation_srv", annotation.getIdAnnotationSrv());
         try {
-            db.insert("tb_annotation", null, cv);
+            id = (int) db.insert("tb_annotation", null, cv);
 //            db.close();
             Log.d(tag, "inseriu annotation no banco");
-            return true;
         } catch (Exception e) {
             Log.e(tag, "erro ao inserir annotation:" + e.getMessage());
-            return false;
         }
+        return id;
     }
 
     public void deleteReference(int idReference) {
@@ -496,6 +496,36 @@ public class DataBaseAdapter {
             Log.d(tag, "não retornoun nada");
         }
         return annotations;
+    }
+    public LinkedList<Annotation> getAnnotationsById(LinkedList<Integer> ids){
+        LinkedList<Annotation> annotations = new LinkedList<>();
+        Annotation annotation = new Annotation();
+        for (Integer id : ids) {
+            String query = "SELECT * FROM tb_annotation WHERE id_annotation="+id;
+            Cursor cursor = db.rawQuery(query,null);
+
+            if (cursor.moveToFirst()) {
+                annotation.setIdAnnotation(cursor.getInt(0));
+                annotation.setIdUser(cursor.getInt(1));
+                annotation.setDsAnnotation(cursor.getString(2));
+                annotation.setIdAnnotationSrv(cursor.getInt(3));
+            }
+
+            annotations.add(annotation);
+        }
+
+        return annotations;
+    }
+    public void updateAnnotationsBySendFullData(LinkedList<HolderIDS> holderIDS) {
+        ContentValues cv = new ContentValues();
+        for (HolderIDS holder : holderIDS) {
+            cv.put("id_annotation_srv", holder.getIdSrv());
+            try {
+                db.update("tb_annotation", cv, "id_annotation=?", new String[]{"" + holder.getId()});
+            } catch (Exception e) {
+                Log.d(tag, e.getMessage());
+            }
+        }
     }
 
     /*

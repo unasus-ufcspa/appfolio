@@ -6,6 +6,7 @@ import android.os.Environment;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 
+import com.ufcspa.unasus.appportfolio.Model.Annotation;
 import com.ufcspa.unasus.appportfolio.Model.Attachment;
 import com.ufcspa.unasus.appportfolio.Model.AttachmentComment;
 import com.ufcspa.unasus.appportfolio.Model.Comentario;
@@ -48,6 +49,7 @@ public class SendData {
     private LinkedList<Integer> notices;
     private LinkedHashMap<Integer, LinkedList<Attachment>> attachments;
     private LinkedList<ActivityStudent> activityStudents;
+    private LinkedList<Annotation> annotations;
     private DataBaseAdapter data;
     private String tbComm="tb_comment";
     private String tbAttachComm="tb_attach_comment";
@@ -57,6 +59,7 @@ public class SendData {
     private String tbNotice = "tb_notice";
     private String tbAttachActivity = "tb_attach_activity";
     private String tbActivityStudent= "tb_activity_student";
+    private String tbAnnotation= "tb_annotation";
     private Singleton singleton;
     //ids to response
     //-2 is default value
@@ -77,6 +80,7 @@ public class SendData {
         idSync = new LinkedList<>();
         attachments = new LinkedHashMap<>();
         activityStudents = new LinkedList<>();
+        annotations = new LinkedList<>();
         singleton = Singleton.getInstance();
     }
 
@@ -134,6 +138,9 @@ public class SendData {
         if (dadosAgrupados.get(tbActivityStudent) != null) {
             activityStudents = data.getActivitiesStudentByIds(dadosAgrupados.get(tbActivityStudent));
         }
+        if (dadosAgrupados.get(tbAnnotation) != null) {
+            annotations = data.getAnnotationsById(dadosAgrupados.get(tbAnnotation));
+        }
     }
 
     public void insertDataOnResponse(){
@@ -158,6 +165,12 @@ public class SendData {
             Log.d("json send full data ", "atualizando tabela " + tbCommVers + "...");
             data.updateCommentVersionBySendFullData(dadosResponse.get(tbCommVers));
             Log.d("sendfulldataResponse ", "conseguiu atualizar com sucesso id server da tb_comm_version");
+        }
+
+        if(dadosResponse.get(tbAnnotation)!= null){
+            Log.d("json send full data ", "atualizando tabela " + tbAnnotation + "...");
+            data.updateAnnotationsBySendFullData(dadosResponse.get(tbAnnotation));
+            Log.d("sendfulldataResponse ", "conseguiu atualizar com sucesso id server da tb_annotation");
         }
 
         data.deleteSync(idSync);
@@ -365,6 +378,7 @@ public class SendData {
         JSONArray jsonArrayVersions = new JSONArray();
         JSONArray jsonComments = new JSONArray();
         JSONArray jsonNotice = new JSONArray();
+        JSONArray jsonAnnotations = new JSONArray();
 
         JSONObject jsonUser = new JSONObject();
         boolean entrou = false;
@@ -480,6 +494,20 @@ public class SendData {
                     Log.d("json send data:", jsonVersion.toString());
 
 
+                }
+            }
+            if (annotations != null) {
+                for (Annotation a : annotations) {
+                    JSONObject jsonAnnotation = new JSONObject();
+                    jsonAnnotation.put("id_annotation", a.getIdAnnotation());
+
+                    jsonAnnotation.put("id_user", a.getIdUser());
+                    jsonAnnotation.put("ds_annotation", a.getDsAnnotation());
+
+                    Log.d("json send data:", jsonAnnotation.toString());
+
+                    jsonAnnotations.put(jsonAnnotation);
+                    Log.d("json send data:", jsonAnnotation.toString());
                 }
             }
 
@@ -599,6 +627,7 @@ public class SendData {
             jsonPseudoFinal.put("version", new JSONObject().put("tb_version_activity", jsonArrayVersions));
             jsonPseudoFinal.put("user", new JSONObject().put("tb_user", jsonUser));
             jsonPseudoFinal.put("notice", new JSONObject().put("tb_notice", jsonNotice));
+            jsonPseudoFinal.put("annotation", new JSONObject().put("tb_annotation", jsonAnnotations));
 
             jsonFinal.put("fullDataDevSrv_request", jsonPseudoFinal);
 

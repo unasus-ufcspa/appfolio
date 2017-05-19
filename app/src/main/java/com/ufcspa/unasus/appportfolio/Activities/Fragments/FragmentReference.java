@@ -16,11 +16,13 @@ import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.ufcspa.unasus.appportfolio.Activities.MainActivity;
 import com.ufcspa.unasus.appportfolio.Adapter.AnnotationAdapter;
 import com.ufcspa.unasus.appportfolio.Adapter.ReferenceAdapter;
 import com.ufcspa.unasus.appportfolio.Model.Annotation;
 import com.ufcspa.unasus.appportfolio.Model.Reference;
 import com.ufcspa.unasus.appportfolio.Model.Singleton;
+import com.ufcspa.unasus.appportfolio.Model.Sync;
 import com.ufcspa.unasus.appportfolio.R;
 import com.ufcspa.unasus.appportfolio.database.DataBaseAdapter;
 
@@ -66,6 +68,18 @@ public class FragmentReference extends Frag {
 //                    r.setDsUrl(edtRef.getText().toString());
                     recuperar();
                     gerarLista();
+
+                    if (isOnline()) {
+                        MainActivity main = ((MainActivity) getActivity());
+                        if (main != null) {
+                            try {
+                                main.sendFullData();
+                            } finally {
+                                Log.d("annotation","saved successfully");
+                            }
+                        }
+                    }
+
                     Toast.makeText(getActivity(),"Anotações salvas com sucesso!",Toast.LENGTH_SHORT).show();
                 }else {
                     Toast.makeText(getActivity(),"Erro ao salvar anotações",Toast.LENGTH_SHORT).show();
@@ -102,7 +116,7 @@ public class FragmentReference extends Frag {
     }
 
     public boolean salvar(){
-        boolean result = false;
+        int result = -1;
         Singleton singleton = Singleton.getInstance();
         DataBaseAdapter data = DataBaseAdapter.getInstance(getActivity());
 //        Reference refer=new Reference();
@@ -110,10 +124,19 @@ public class FragmentReference extends Frag {
         ann.setDsAnnotation(edtRef.getText().toString());
         ann.setIdUser(singleton.user.getIdUser());
         result=data.insertAnnotation(ann);
-        if(result==true){
+
+        if(result>0){
             adapter.add(ann);
-        }
-        return result;
+
+            Sync sync = new Sync();
+            sync.setNm_table("tb_annotation");
+            sync.setCo_id_table(result);
+            sync.setId_device(singleton.device.get_id_device());
+            data.insertIntoTBSync(sync);
+
+            return true;
+        }else
+            return false;
     }
     public void recuperar(){
      //get tx_reference from database
