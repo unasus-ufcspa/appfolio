@@ -2,6 +2,7 @@ package com.ufcspa.unasus.appportfolio.Activities.Fragments;
 
 import android.content.Context;
 import android.content.res.Configuration;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SlidingPaneLayout;
@@ -14,6 +15,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
+import android.webkit.WebView;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
@@ -52,12 +54,13 @@ public class FragmentStudentActivities extends Frag implements ActivitiesAdapter
     public void openInfo(View v, Activity activity){
         SlidingPaneLayout layout = (SlidingPaneLayout) getView().findViewById(R.id.activity_portfolio_activity);
         TextView info_container_title = (TextView) getView().findViewById(R.id.info_container_title);
-        TextView info_container_description = (TextView) getView().findViewById(R.id.info_container_description);
+        WebView info_container_description = (WebView) getView().findViewById(R.id.info_container_description);
 
         slider.setVisibility(View.VISIBLE);
 
         info_container_title.setText(activity.getTitle());
-        info_container_description.setText(activity.getDescription());
+        info_container_description.loadDataWithBaseURL("",activity.getDescription(),"text/html","UTF-8","about:blank");
+        info_container_description.setBackgroundColor(Color.parseColor("#F3F4F2"));
 
         if (layout.isOpen()) {
             layout.closePane();

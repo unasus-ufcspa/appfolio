@@ -2,6 +2,7 @@ package com.ufcspa.unasus.appportfolio.Activities.Fragments;
 
 import android.content.Context;
 import android.content.res.Configuration;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SlidingPaneLayout;
@@ -14,6 +15,7 @@ import android.view.animation.Animation;
 import android.view.animation.LinearInterpolator;
 import android.view.animation.RotateAnimation;
 import android.view.inputmethod.InputMethodManager;
+import android.webkit.WebView;
 import android.widget.Button;
 import android.widget.GridView;
 import android.widget.RelativeLayout;
@@ -50,12 +52,13 @@ public class FragmentSelectPortfolio extends Frag implements SelectPortfolioClas
     public void openInfo(View v, PortfolioClass portfolioClass){
         SlidingPaneLayout layout = (SlidingPaneLayout) getView().findViewById(R.id.activity_classes);
         TextView info_container_title = (TextView) getView().findViewById(R.id.info_container_title);
-        TextView info_container_description = (TextView) getView().findViewById(R.id.info_container_description);
+        WebView info_container_description = (WebView) getView().findViewById(R.id.info_container_description);
 
         slider.setVisibility(View.VISIBLE);
 
         info_container_title.setText(portfolioClass.getPortfolioTitle());
-        info_container_description.setText(source.getPortfolioDescription(portfolioClass.getIdPortClass()));
+        info_container_description.loadDataWithBaseURL("",source.getPortfolioDescription(portfolioClass.getIdPortClass()),"text/html","UTF-8","about:blank");
+        info_container_description.setBackgroundColor(Color.parseColor("#F3F4F2"));
 
         if (layout.isOpen()) {
             layout.closePane();
