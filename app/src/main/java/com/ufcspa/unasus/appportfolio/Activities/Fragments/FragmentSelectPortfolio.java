@@ -12,7 +12,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
-import android.view.animation.LinearInterpolator;
 import android.view.animation.RotateAnimation;
 import android.view.inputmethod.InputMethodManager;
 import android.webkit.WebView;
@@ -21,15 +20,12 @@ import android.widget.GridView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.ufcspa.unasus.appportfolio.Activities.MainActivity;
 import com.ufcspa.unasus.appportfolio.Adapter.SelectPortfolioClassAdapter;
 import com.ufcspa.unasus.appportfolio.Model.PortfolioClass;
 import com.ufcspa.unasus.appportfolio.Model.Singleton;
 import com.ufcspa.unasus.appportfolio.R;
-import com.ufcspa.unasus.appportfolio.WebClient.BasicData;
-import com.ufcspa.unasus.appportfolio.WebClient.BasicDataClient;
-import com.ufcspa.unasus.appportfolio.WebClient.FullData;
-import com.ufcspa.unasus.appportfolio.WebClient.FullDataClient;
+import com.ufcspa.unasus.appportfolio.WebClient.SyncVisitante;
+import com.ufcspa.unasus.appportfolio.WebClient.SyncVisitanteClient;
 import com.ufcspa.unasus.appportfolio.database.DataBaseAdapter;
 
 import java.util.Collections;
@@ -85,11 +81,8 @@ public class FragmentSelectPortfolio extends Frag implements SelectPortfolioClas
                 @Override
                 public void onClick(View v) {
                     btSync.startAnimation(rotate);
-
-                    BasicDataClient basicDataClient = new BasicDataClient(getContext());
-                    basicDataClient.postJson(BasicData.toJSON(Singleton.getInstance().user.getIdUser(), Singleton.getInstance().device.get_id_device()));
-                    FullDataClient fullDataClient = new FullDataClient(getContext());
-                    fullDataClient.postJson(FullData.toJSON(singleton.device.get_id_device(), 0));
+                    SyncVisitanteClient svClient = new SyncVisitanteClient(getContext());
+                    svClient.postJson(SyncVisitante.toJSON(Singleton.getInstance().user.getIdUser(), Singleton.getInstance().device.get_id_device()));
                 }
             });
         }
