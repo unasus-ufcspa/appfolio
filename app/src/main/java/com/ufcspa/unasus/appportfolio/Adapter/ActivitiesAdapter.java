@@ -128,7 +128,13 @@ public class ActivitiesAdapter extends RecyclerView.Adapter<ActivitiesAdapter.Vi
                         singleton.portfolioClass.setStudentName(studentName);
                         singleton.portfolioClass.setPhoto(studFrPortClass.getPhoto());
                         singleton.portfolioClass.setCellphone(studFrPortClass.getCellphone());
-                        if (!singleton.guestUser) {
+                        if (singleton.guestUser) {
+                            attachments = source.getAttachmentsFromActivityStudent(aux.getIdActivityStudent());
+                            if (attachments.size()>0) {
+                                downloadAttachments(attachments);
+                            }
+                        }
+                        if (!singleton.guestUser || attachments.size()==0) {
                             LocalBroadcastManager.getInstance(context).sendBroadcast(new Intent("call.fragments.action").putExtra("ID", 6));
                         }
                     }
@@ -303,6 +309,7 @@ public class ActivitiesAdapter extends RecyclerView.Adapter<ActivitiesAdapter.Vi
                 Log.d("atividade - anexos", "url do anexo: " + url);
             } else{
                 cont[0]--;
+                source.updateAttachmentFlDownload(a.getIdAttachment());
                 Log.d("atividade - anexos", filePath + " já existe e não baixado");
             }
 //                downloadAttachment("http://stuffpoint.com/stardoll/image/54056-stardoll-sdfs.jpg" + a.getNmSystem(), a.getNmFile());

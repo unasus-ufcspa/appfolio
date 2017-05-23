@@ -1418,9 +1418,10 @@ public class DataBaseAdapter {
     }
 
     public void updateAttachmentFlDownload(int id_attachment){
-        String query = "UPDATE tb_attachment SET fl_download='S' WHERE id_attachment="+id_attachment;
+        ContentValues cv = new ContentValues();
+        cv.put("fl_download","S");
         try {
-            db.rawQuery(query,null);
+            db.update("tb_attachment",cv,"id_attachment=?", new String[]{String.valueOf(id_attachment)});
         } catch (Exception e) {
             e.printStackTrace();
         }
