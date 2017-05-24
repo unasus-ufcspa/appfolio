@@ -2574,6 +2574,21 @@ public class DataBaseAdapter {
         return array_attachment;
     }
 
+    public ArrayList<Attachment> getAttachmentFromStudentId(int idStudent) {
+        String query = "SELECT a.id_attachment,a.id_author,a.tp_attachment,a.nm_file,a.nm_system,a.id_attachment_srv FROM tb_attachment a JOIN tb_attach_activity aa ON a.id_attachment=aa.id_attachment JOIN tb_activity_student ast ON ast.id_activity_student=aa.id_activity_student JOIN tb_portfolio_student ps ON ps.id_portfolio_student=ast.id_portfolio_student WHERE ps.id_student="+idStudent;
+        ArrayList<Attachment> array_attachment = new ArrayList<>();
+
+        Cursor cursor = db.rawQuery(query, null);
+        cursor.moveToFirst();
+
+        do {
+            if (cursor.getCount() != 0)
+                array_attachment.add(cursorToAttachment(cursor));
+        } while (cursor.moveToNext());
+
+        return array_attachment;
+    }
+
     public ArrayList<Attachment> getAttachmentsFromActivityStudent(int idActivityStudent, String type) {
         String query = "SELECT * FROM tb_attachment WHERE id_activity_student = " + idActivityStudent + " and ds_type = '" + type + "';";
 
