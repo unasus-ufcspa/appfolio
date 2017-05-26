@@ -11,6 +11,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.ufcspa.unasus.appportfolio.Activities.MainActivity;
+import com.ufcspa.unasus.appportfolio.Model.Annotation;
 import com.ufcspa.unasus.appportfolio.Model.Attachment;
 import com.ufcspa.unasus.appportfolio.Model.basicData.ActivityStudent;
 import com.ufcspa.unasus.appportfolio.database.DataBaseAdapter;
@@ -193,6 +194,24 @@ public class SendFullDataClient extends HttpClient{
 
                             }
 
+                        }
+
+                        if (resp.has("annotation")) {
+                            JSONObject annotations = resp.getJSONObject("annotation");
+                            if (annotations.has("tb_annotation")) {
+                                JSONArray tb_annotation = annotations.getJSONArray("tb_annotation");
+                                LinkedList<HolderIDS> holdersAnnotation = new LinkedList<>();
+                                for (int i = 0; i < tb_annotation.length(); i++) {
+                                    HolderIDS holderA = new HolderIDS();
+                                    JSONObject temp = tb_annotation.getJSONObject(i);
+
+                                    holderA.setId(temp.getInt("id_annotation"));
+                                    holderA.setIdSrv(temp.getInt("id_annotation_srv"));
+
+                                    holdersAnnotation.add(holderA);
+                                }
+                                DataBaseAdapter.getInstance(context).updateAnnotationsBySendFullData(holdersAnnotation);
+                            }
                         }
 
                         //atualiza dados recebidos via json no sqlite

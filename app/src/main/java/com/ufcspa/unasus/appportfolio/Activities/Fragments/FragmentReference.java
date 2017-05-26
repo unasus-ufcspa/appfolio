@@ -105,13 +105,14 @@ public class FragmentReference extends Frag {
 //        adapter= new ReferenceAdapter(getContext(),references);
         adapter = new AnnotationAdapter(getContext(),annotations);
         list.setAdapter(adapter);
-        list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        //para referências apenas
+        /*list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 annotation = adapter.getItem(position);
                 registerForContextMenu(list);
             }
-        });
+        });*/
 
     }
 
@@ -145,7 +146,7 @@ public class FragmentReference extends Frag {
         Singleton singleton = Singleton.getInstance();
         DataBaseAdapter data = DataBaseAdapter.getInstance(getActivity());
 //        references = (ArrayList)data.getReferences(singleton.idActivityStudent);
-        annotations = (ArrayList)data.getAnnotations(singleton.user.getIdUser());
+        annotations = (ArrayList)data.getAnnotations();
         //adapter.refresh(references);
         for (Annotation annotation:annotations) {
             Log.d("Frag Reference", "ref:"+annotation.toString());
@@ -167,6 +168,7 @@ public class FragmentReference extends Frag {
             //verify option
             case 0:
                 Toast.makeText(getContext(),"Delete",Toast.LENGTH_SHORT).show();
+//                source.deleteAnnotation(annotation.getIdAnnotation());
                 break;
 
             case 1:

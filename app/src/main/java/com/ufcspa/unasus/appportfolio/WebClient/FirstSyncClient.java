@@ -261,11 +261,9 @@ public class FirstSyncClient extends HttpClient{
                                             JSONObject temp = tb_annotation.getJSONObject(i);
                                             Annotation annotation = new Annotation();
 
-                                            int id_user = temp.getInt("id_user");
                                             String ds_annotation = temp.getString("ds_annotation");
                                             int id_annotation_srv = temp.getInt("id_annotation_srv");
 
-                                            annotation.setIdUser(id_user);
                                             annotation.setDsAnnotation(ds_annotation);
                                             annotation.setIdAnnotationSrv(id_annotation_srv);
 
@@ -442,9 +440,9 @@ public class FirstSyncClient extends HttpClient{
                                             ArrayList<Attachment> attachments = new ArrayList<>();
 
                                             int id_activity_student = temp.getInt("id_activity_student");
-                                            JSONArray attachmentsArray = temp.getJSONArray("attachment");
 
                                             if (temp.has("attachment")) {
+                                                JSONArray attachmentsArray = temp.getJSONArray("attachment");
                                                 for (int j = 0; j < attachmentsArray.length(); j++) {
                                                     JSONObject attachmentTemp = attachmentsArray.getJSONObject(j);
                                                     Attachment attachment = new Attachment();

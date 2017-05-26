@@ -474,9 +474,9 @@ public class DataBaseAdapter {
         }
     }
 
-    public List getAnnotations(int idUser) {
+    public List getAnnotations() {
         List annotations = new ArrayList<Annotation>(5);
-        String sql = "SELECT * FROM tb_annotation WHERE id_user =" + idUser + ";";
+        String sql = "SELECT * FROM tb_annotation;";
         Cursor c = db.rawQuery(sql, null);
         Annotation a;
         if (c.moveToFirst()) {
@@ -526,6 +526,9 @@ public class DataBaseAdapter {
                 Log.d(tag, e.getMessage());
             }
         }
+    }
+    public void deleteAnnotation(int idAnnotation){
+        db.delete("tb_annotation","id_annotation=?", new String[]{String.valueOf(idAnnotation)});
     }
 
     /*
