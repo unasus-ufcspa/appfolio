@@ -1379,7 +1379,11 @@ public class DataBaseAdapter {
         cv.put("tp_attachment", attach.getTpAttachment());
         cv.put("nm_file", attach.getNmFile());
         cv.put("nm_system", attach.getNmSystem());
-        cv.put("id_attachment_srv", attach.getidAttachmentSrv());
+        if (attach.getidAttachmentSrv()==0) {
+            cv.put("id_attachment_srv", (byte[]) null);
+        } else {
+            cv.put("id_attachment_srv", attach.getidAttachmentSrv());
+        }
         cv.put("id_author", attach.getId_author());
 
         try {
