@@ -2497,7 +2497,16 @@ public class DataBaseAdapter {
     }
 
     public boolean userIsGuest(){
-        String query="SELECT * FROM tb_guest;";
+        String query="SELECT * FROM tb_guest g JOIN tb_portfolio_student AS ps ON ps.id_tutor=g.id_user;";
+        Cursor c = db.rawQuery(query,null);
+        if (c.moveToFirst()){
+            return true;
+        } else {
+            return false;
+        }
+    }
+    public boolean userIsGuest(int idPortfolioStudent){
+        String query="SELECT * FROM tb_guest g JOIN tb_portfolio_student AS ps ON ps.id_tutor=g.id_user WHERE ps.id_portfolio_student="+idPortfolioStudent;
         Cursor c = db.rawQuery(query,null);
         if (c.moveToFirst()){
             return true;

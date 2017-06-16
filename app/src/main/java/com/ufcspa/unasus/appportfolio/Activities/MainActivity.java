@@ -65,6 +65,8 @@ import com.ufcspa.unasus.appportfolio.WebClient.FullDataClient;
 import com.ufcspa.unasus.appportfolio.WebClient.PolicyUserClient;
 import com.ufcspa.unasus.appportfolio.WebClient.SendData;
 import com.ufcspa.unasus.appportfolio.WebClient.SendFullDataClient;
+import com.ufcspa.unasus.appportfolio.WebClient.SyncVisitante;
+import com.ufcspa.unasus.appportfolio.WebClient.SyncVisitanteClient;
 import com.ufcspa.unasus.appportfolio.database.DataBase;
 import com.ufcspa.unasus.appportfolio.database.DataBaseAdapter;
 
@@ -612,6 +614,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void getFullData(int id_activity_student) {
         FullDataClient client = new FullDataClient(this);
         client.postJson(FullData.toJSON(singleton.device.get_id_device(), id_activity_student));
+
+        if (singleton.guestUser){
+            SyncVisitanteClient svClient = new SyncVisitanteClient(this);
+            svClient.postJson(SyncVisitante.toJSON(Singleton.getInstance().user.getIdUser(), Singleton.getInstance().device.get_id_device()));
+        }
     }
 
     public boolean isOnline() {

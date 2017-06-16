@@ -61,6 +61,7 @@ public class BasicData {
             basic.put("id_user", idUser);
             basic.put("ds_hash", idDevice);
             json.put("basicData_request", basic);
+            Log.d("basicData_request: ", json.toString());
         } catch (JSONException e) {
             e.printStackTrace();
         }

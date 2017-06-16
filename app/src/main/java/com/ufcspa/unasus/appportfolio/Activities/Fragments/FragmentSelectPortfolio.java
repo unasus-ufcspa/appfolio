@@ -74,10 +74,10 @@ public class FragmentSelectPortfolio extends Frag implements SelectPortfolioClas
 
         singleton = Singleton.getInstance();
 
-        if (singleton.guestUser) {
+        /*if (singleton.guestUser) {
             btSync.setVisibility(View.VISIBLE);
             view.findViewById(R.id.tx_sync).setVisibility(View.VISIBLE);
-            btSync.setOnClickListener(new View.OnClickListener() {// TODO: 02/05/2017 finish sync button
+            btSync.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     btSync.startAnimation(rotate);
@@ -85,7 +85,8 @@ public class FragmentSelectPortfolio extends Frag implements SelectPortfolioClas
                     svClient.postJson(SyncVisitante.toJSON(Singleton.getInstance().user.getIdUser(), Singleton.getInstance().device.get_id_device()));
                 }
             });
-        }
+        }*/
+
         initCommentsTab(view);
 
         return view;
