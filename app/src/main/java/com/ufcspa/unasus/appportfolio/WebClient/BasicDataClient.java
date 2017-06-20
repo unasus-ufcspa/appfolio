@@ -13,6 +13,7 @@ import com.android.volley.toolbox.Volley;
 import com.ufcspa.unasus.appportfolio.Activities.LoginActivity2;
 import com.ufcspa.unasus.appportfolio.Model.Policy;
 import com.ufcspa.unasus.appportfolio.Model.PolicyUser;
+import com.ufcspa.unasus.appportfolio.Model.TutorPortfolio;
 import com.ufcspa.unasus.appportfolio.Model.basicData.Activity;
 import com.ufcspa.unasus.appportfolio.Model.basicData.ActivityStudent;
 import com.ufcspa.unasus.appportfolio.Model.basicData.Class;
@@ -84,7 +85,7 @@ public class BasicDataClient extends HttpClient {
                                     // GET DATA FROM JSON
                                     int idPortfolioStudent=temp.getInt("id_portifolio_student");
                                     int idStudent=temp.getInt("id_student");
-                                    int idTutor=temp.getInt("id_tutor");
+//                                    int idTutor=temp.getInt("id_tutor");
                                     int idPortfolioClass = temp.getInt("id_portfolio_class");
                                     String dtFirstSync=temp.getString("dt_first_sync");
                                     String nuPortVersion=temp.getString("nu_portfolio_version");
@@ -92,7 +93,7 @@ public class BasicDataClient extends HttpClient {
                                     //POPULATE OBJECT WITH DATA
                                     ps.setId_portfolio_student(idPortfolioStudent);
                                     ps.setId_student(idStudent);
-                                    ps.setId_tutor(idTutor);
+//                                    ps.setId_tutor(idTutor);
                                     ps.setDt_first_sync(dtFirstSync);
                                     ps.setNu_portfolio_version(nuPortVersion);
                                     ps.setId_portfolio_class(idPortfolioClass);
@@ -104,6 +105,22 @@ public class BasicDataClient extends HttpClient {
 
                                 }
                             }
+
+                            if (resp.has("tutorPortfolio")) {
+                                JSONObject tutorPortfolio = resp.getJSONObject("tutorPortfolio");
+                                JSONArray tb_tutor_portfolio = tutorPortfolio.getJSONArray("tb_tutor_portfolio");
+                                for (int i=0;i<tb_tutor_portfolio.length();i++){
+                                    JSONObject temp = tb_tutor_portfolio.getJSONObject(i);
+                                    TutorPortfolio tutor = new TutorPortfolio();
+
+                                    tutor.setId_tutor_portfolio(temp.getInt("id_tutor_portfolio"));
+                                    tutor.setId_tutor(temp.getInt("id_tutor"));
+                                    tutor.setId_portfolio_student(temp.getInt("id_portfolio_student"));
+
+                                    basicData.addTutorPortfolio(tutor);
+                                }
+                            }
+
                             if(resp.has("portfolio_class")) {
                                 // GET PORTFOLIO STUDENT
                                 JSONObject objPs = resp.getJSONObject("portfolio_class");

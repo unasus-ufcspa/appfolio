@@ -5,6 +5,7 @@ import android.util.Log;
 
 import com.ufcspa.unasus.appportfolio.Model.Policy;
 import com.ufcspa.unasus.appportfolio.Model.PolicyUser;
+import com.ufcspa.unasus.appportfolio.Model.TutorPortfolio;
 import com.ufcspa.unasus.appportfolio.Model.basicData.Activity;
 import com.ufcspa.unasus.appportfolio.Model.basicData.ActivityStudent;
 import com.ufcspa.unasus.appportfolio.Model.basicData.Class;
@@ -37,6 +38,7 @@ public class BasicData {
     private LinkedList<User> users;
     private LinkedList<Policy> policies;
     private LinkedList<PolicyUser> policyUsers;
+    private LinkedList<TutorPortfolio> tutorPortfolios;
     private Context context;
 
     public BasicData(Context c) {
@@ -51,6 +53,7 @@ public class BasicData {
         users= new LinkedList<User>();
         policies= new LinkedList<Policy>();
         policyUsers= new LinkedList<PolicyUser>();
+        tutorPortfolios = new LinkedList<TutorPortfolio>();
         this.context=c;
     }
 
@@ -98,6 +101,10 @@ public class BasicData {
 
     public void addPortfolioStudent(PortfolioStudent ps){
         portfolioStudents.add(ps);
+    }
+
+    public void addTutorPortfolio(TutorPortfolio tp){
+        tutorPortfolios.add(tp);
     }
 
     public void addUsers(User u){
@@ -194,6 +201,8 @@ public class BasicData {
                 data.insertTBPolicy(policies);
                 Log.d(log, "inserindo tb_policyUser");
                 data.insertTBPolicyUser(policyUsers);
+                Log.d(log, "inserindo tb_tutor_portfolio");
+                data.inserTbTutorPortfolio(tutorPortfolios);
 
 //            }
 //        });

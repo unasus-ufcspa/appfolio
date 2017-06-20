@@ -159,7 +159,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         singleton = Singleton.getInstance();
         singleton.note = new Note(0, "null", 0);
 
-        singleton.guestUser = DataBaseAdapter.getInstance(this).userIsGuest();
+//        singleton.guestUser = DataBaseAdapter.getInstance(this).userIsGuest();
 
         fragmentContainer = findViewById(R.id.fragment_container);
         if (shouldCreateDrawer) {

@@ -1,5 +1,9 @@
 package com.ufcspa.unasus.appportfolio.Model.basicData;
 
+import com.ufcspa.unasus.appportfolio.Model.TutorPortfolio;
+
+import java.util.List;
+
 /**
  * Created by icaromsc on 04/04/2016.
  */
@@ -7,7 +11,7 @@ public class PortfolioStudent {
     private int id_portfolio_student;
     private int id_portfolio_class;
     private int id_student;
-    private int id_tutor;
+    private List<TutorPortfolio> id_tutor;
     private String dt_first_sync;
     private String nu_portfolio_version;
 
@@ -35,11 +39,11 @@ public class PortfolioStudent {
         this.id_student = id_student;
     }
 
-    public int getId_tutor() {
+    public List<TutorPortfolio> getId_tutor() {
         return id_tutor;
     }
 
-    public void setId_tutor(int id_tutor) {
+    public void setId_tutor(List<TutorPortfolio> id_tutor) {
         this.id_tutor = id_tutor;
     }
 

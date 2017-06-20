@@ -26,6 +26,7 @@ import com.ufcspa.unasus.appportfolio.Model.Singleton;
 import com.ufcspa.unasus.appportfolio.Model.StudFrPortClass;
 import com.ufcspa.unasus.appportfolio.Model.Sync;
 import com.ufcspa.unasus.appportfolio.Model.Team;
+import com.ufcspa.unasus.appportfolio.Model.TutorPortfolio;
 import com.ufcspa.unasus.appportfolio.Model.User;
 import com.ufcspa.unasus.appportfolio.Model.VersionActivity;
 import com.ufcspa.unasus.appportfolio.WebClient.HolderIDS;
@@ -232,7 +233,6 @@ public class DataBaseAdapter {
             cv.put("id_portfolio_student", ac.getId_portfolio_student());
             cv.put("id_portfolio_class", ac.getId_portfolio_class());
             cv.put("id_student", ac.getId_student());
-            cv.put("id_tutor", ac.getId_tutor());
             cv.put("dt_first_sync", ac.getDt_first_sync());
             cv.put("nu_portfolio_version", ac.getNu_portfolio_version());
             try {
@@ -244,6 +244,53 @@ public class DataBaseAdapter {
             }
 
         }
+    }
+
+    public void inserTbTutorPortfolio(List<TutorPortfolio> port) {
+        for (TutorPortfolio ac : port) {
+            ContentValues cv = new ContentValues();
+            cv.put("id_tutor_portfolio", ac.getId_tutor_portfolio());
+            cv.put("id_portfolio_student", ac.getId_portfolio_student());
+            cv.put("id_tutor", ac.getId_tutor());
+            try {
+                db.insert("tb_tutor_portfolio", null, cv);
+
+            } catch (Exception e) {
+                Log.d(tag, "erro ao inserir na tb_tutor_portfolio:" + e.getMessage());
+                e.printStackTrace();
+            }
+
+        }
+    }
+
+    public List<TutorPortfolio> getTbTutorByPortfolioStudent(int idPortfolioStudent){
+        List<TutorPortfolio> tutorPortfolios = new LinkedList<>();
+        String query = "SELECT * FROM tb_tutor_portfolio WHERE id_portfolio_student="+idPortfolioStudent;
+        Cursor c = db.rawQuery(query,null);
+        if (c.moveToFirst()) {
+            do{
+                TutorPortfolio tutorPortfolio = new TutorPortfolio();
+                tutorPortfolio.setId_portfolio_student(c.getInt(0));
+                tutorPortfolio.setId_tutor(c.getInt(1));
+                tutorPortfolio.setId_tutor_portfolio(c.getInt(2));
+
+                tutorPortfolios.add(tutorPortfolio);
+            }while (c.moveToNext());
+        }
+
+        return tutorPortfolios;
+    }
+
+    public String getPerfilByPortfolioStudent(int idPortfolioStudent, int idUser){
+        String perfil;
+        String query = "SELECT * FROM tb_tutor_portfolio WHERE id_portfolio_student="+idPortfolioStudent+" AND id_tutor="+idUser;
+        Cursor c = db.rawQuery(query,null);
+        if (c.moveToFirst()){
+            perfil = "T";
+        }else {
+            perfil = "S";
+        }
+        return perfil;
     }
 
     public void insertTBActivity(List<com.ufcspa.unasus.appportfolio.Model.basicData.Activity> activities) {
@@ -2443,17 +2490,14 @@ public class DataBaseAdapter {
                 "\tc.ds_description,\n" +
                 "\tp.ds_title,\n" +
                 "\tp.ds_description,\n" +
-                "\tcase \n" +
-                "\t\twhen id_student = " + idUser + " then 'S'\n" +
-                "\t\twhen id_tutor = " + idUser + " then 'T' \n" +
-                "\tend as perfil\n" +
+                "\tps.id_portfolio_student\n" +
                 "from \n" +
                 "\ttb_portfolio_student as ps \n" +
                 "\tjoin tb_portfolio_class pc on pc.id_portfolio_class = ps.id_portfolio_class\n" +
                 "\tjoin tb_class c on c.id_class = pc.id_class \n" +
-                "\tjoin tb_portfolio p on p.id_portfolio = pc.id_portfolio\n" +
+                "\tjoin tb_portfolio p on p.id_portfolio = pc.id_portfolio\n"/* +
                 "WHERE\n" +
-                "\t( id_tutor = " + idUser + " OR id_student = " + idUser + " )";
+                "\t( id_student = " + idUser + " )"*/;
         Cursor c = db.rawQuery(query, null);
         ArrayList lista = new ArrayList<PortfolioClass>();
         if (c.moveToFirst()) {
@@ -2461,7 +2505,7 @@ public class DataBaseAdapter {
                 int idPortClass = c.getInt(0);
                 String classCode = c.getString(1);
                 String portTitle = c.getString(3);
-                String perfil = c.getString(5);
+                String perfil = getPerfilByPortfolioStudent(c.getInt(5),idUser);
                 PortfolioClass p = new PortfolioClass(classCode, idPortClass, perfil, portTitle);
                 lista.add(p);
                 Log.d(tag, "port class:" + p.toString());
@@ -2496,7 +2540,7 @@ public class DataBaseAdapter {
         return lista;
     }
 
-    public boolean userIsGuest(){
+    /*public boolean userIsGuest(){
         String query="SELECT * FROM tb_guest g JOIN tb_portfolio_student AS ps ON ps.id_tutor=g.id_user;";
         Cursor c = db.rawQuery(query,null);
         if (c.moveToFirst()){
@@ -2504,7 +2548,7 @@ public class DataBaseAdapter {
         } else {
             return false;
         }
-    }
+    }*/
     public boolean userIsGuest(int idPortfolioStudent){
         String query="SELECT * FROM tb_guest g JOIN tb_portfolio_student AS ps ON ps.id_tutor=g.id_user WHERE ps.id_portfolio_student="+idPortfolioStudent;
         Cursor c = db.rawQuery(query,null);

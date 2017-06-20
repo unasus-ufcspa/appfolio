@@ -128,13 +128,13 @@ public class FirstSyncClient extends HttpClient{
                                                 a.setTpAttachment(tp_attachment);
                                                 a.setNmSystem(nm_system);
                                                 a.setId_author(id_attach_author);
+                                                a.setIdAttachmentSrv(id_attachment_srv);
+                                                attachments.add(a);
                                             }
 
                                             // popula objeto attach
 
-                                            a.setIdAttachmentSrv(id_attachment_srv);
 
-                                            attachments.add(a);
                                             if (!map.containsKey(id_act_student)) {
                                                 map.put(id_act_student, attachments);
                                             } else {
