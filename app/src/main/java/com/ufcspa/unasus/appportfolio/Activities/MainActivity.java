@@ -615,7 +615,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         FullDataClient client = new FullDataClient(this);
         client.postJson(FullData.toJSON(singleton.device.get_id_device(), id_activity_student));
 
-        if (singleton.guestUser){
+        if (DataBaseAdapter.getInstance(this).userIsGuest()){
             SyncVisitanteClient svClient = new SyncVisitanteClient(this);
             svClient.postJson(SyncVisitante.toJSON(Singleton.getInstance().user.getIdUser(), Singleton.getInstance().device.get_id_device()));
         }

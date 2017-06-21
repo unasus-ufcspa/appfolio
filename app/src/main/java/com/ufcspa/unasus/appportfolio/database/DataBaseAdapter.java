@@ -2498,9 +2498,9 @@ public class DataBaseAdapter {
                 "\tjoin tb_portfolio p on p.id_portfolio = pc.id_portfolio\n"/* +
                 "WHERE\n" +
                 "\t( id_student = " + idUser + " )"*/;
-        Cursor c = db.rawQuery(query, null);
+//        Cursor c = db.rawQuery(query, null);
         ArrayList lista = new ArrayList<PortfolioClass>();
-        if (c.moveToFirst()) {
+        /*if (c.moveToFirst()) {
             do {
                 int idPortClass = c.getInt(0);
                 String classCode = c.getString(1);
@@ -2510,7 +2510,7 @@ public class DataBaseAdapter {
                 lista.add(p);
                 Log.d(tag, "port class:" + p.toString());
             } while (c.moveToNext());
-        } else {
+        } else {*/
             Log.d(tag, "Nao retornou nada na consulta");
             query = "select distinct \n" +
                     "\tps.id_portfolio_class,\n" +
@@ -2523,32 +2523,34 @@ public class DataBaseAdapter {
                     "\tjoin tb_portfolio_class pc on pc.id_portfolio_class = ps.id_portfolio_class\n" +
                     "\tjoin tb_class c on c.id_class = pc.id_class \n" +
                     "\tjoin tb_portfolio p on p.id_portfolio = pc.id_portfolio\n";
-            c = db.rawQuery(query, null);
+            Cursor c = db.rawQuery(query, null);
             lista = new ArrayList<PortfolioClass>();
             if (c.moveToFirst()) {
                 do {
                     int idPortClass = c.getInt(0);
                     String classCode = c.getString(1);
                     String portTitle = c.getString(3);
-                    String perfil = "T";
+//                    String perfil = "T";
+
+                    String perfil = getPerfilByPortfolioStudent(c.getInt(5),idUser);
                     PortfolioClass p = new PortfolioClass(classCode, idPortClass, perfil, portTitle);
                     lista.add(p);
                     Log.d(tag, "port class:" + p.toString());
                 } while (c.moveToNext());
             }
-        }
+//        }
         return lista;
     }
 
-    /*public boolean userIsGuest(){
-        String query="SELECT * FROM tb_guest g JOIN tb_portfolio_student AS ps ON ps.id_tutor=g.id_user;";
+    public boolean userIsGuest(){
+        String query="SELECT * FROM tb_guest;";
         Cursor c = db.rawQuery(query,null);
         if (c.moveToFirst()){
             return true;
         } else {
             return false;
         }
-    }*/
+    }
     public boolean userIsGuest(int idPortfolioStudent){
         String query="SELECT * FROM tb_guest g JOIN tb_portfolio_student AS ps ON ps.id_tutor=g.id_user WHERE ps.id_portfolio_student="+idPortfolioStudent;
         Cursor c = db.rawQuery(query,null);
