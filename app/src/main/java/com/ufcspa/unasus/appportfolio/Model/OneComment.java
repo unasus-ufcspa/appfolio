@@ -8,6 +8,7 @@ public class OneComment {
     public boolean atach;
     public String  path;
     public int idAttach;
+    public int idAuthor;
 
 
     public OneComment(boolean orientation, String comment) {
@@ -38,13 +39,23 @@ public class OneComment {
         this.atach=attach;
     }
 
+    public OneComment(boolean orientation, String comment, String hour, String date, int idAttach, int idAuthor) {
+        this.orientation = orientation;
+        this.comment = comment;
+        this.hour = hour;
+        this.date = date;
+        this.idAttach = idAttach;
+        this.idAuthor = idAuthor;
+    }
+
     @Override
     public String toString() {
         return "OneComment{" +
                 "comment='" + comment + '\'' +
                 ", hour='" + hour + '\'' +
                 ", date='" + date + '\'' +
-                ", atach=" + atach +
+                ", atach='" + atach + '\'' +
+                ", author'" + idAuthor +
                 '}';
     }
 }

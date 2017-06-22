@@ -230,6 +230,7 @@ public class FragmentComments extends Frag {
             Log.d("comment attachment ", "é anexo a ser inserido");
             oneComment = new OneComment(false, "", convertDateToTime(c.getDateComment()), convertDateToDate(c.getDateComment()), true);
             oneComment.idAttach= Singleton.getInstance().lastIdAttach;
+            oneComment.idAuthor=c.getIdAuthor();
         } else {
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             String currentDateandTime = sdf.format(new Date());
@@ -238,6 +239,7 @@ public class FragmentComments extends Frag {
             c.setTxtReference("");
             insertComment(c);
             oneComment = new OneComment(false, edtMessage.getText().toString(), convertDateToTime(c.getDateComment()), convertDateToDate(c.getDateComment()));
+            oneComment.idAuthor=c.getIdAuthor();
         }
         //oneComments.clear();
         oneComments.add(oneComment);
@@ -387,6 +389,7 @@ public class FragmentComments extends Frag {
                     one.idAttach = c.getIdAttach();
                     Log.d("comments", "id attach:" + one.idAttach);
                 }
+                one.idAuthor=c.getIdAuthor();
                 oneComments.add(one);
             }
 

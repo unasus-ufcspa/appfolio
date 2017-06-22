@@ -37,6 +37,7 @@
         android:layout_alignParentStart="true"
         android:layout_below="@+id/relativeLayout2"
         android:gravity="left">
+
         <TextView
             android:id="@+id/comment"
             android:layout_width="wrap_content"
@@ -47,8 +48,26 @@
             android:gravity="center_horizontal"
             android:paddingBottom="7dp"
             android:text="auheuaheuhauehuaeh"
-            android:textColor="#000000"
-            />
+            android:textColor="#000000" />
+
+        <TextView
+            android:id="@+id/userName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignEnd="@+id/comment"
+            android:layout_alignLeft="@+id/comment"
+            android:layout_alignRight="@+id/comment"
+            android:layout_alignStart="@+id/comment"
+            android:layout_alignTop="@+id/comment"
+            android:adjustViewBounds="true"
+            android:gravity="bottom"
+            android:maxLines="1"
+            android:paddingLeft="10dp"
+            android:paddingRight="50dp"
+            android:scaleType="fitCenter"
+            android:text="Usuário:"
+            android:textColor="@color/gray_2"
+            android:textSize="10dp" />
 
         <TextView
             android:id="@+id/hour"

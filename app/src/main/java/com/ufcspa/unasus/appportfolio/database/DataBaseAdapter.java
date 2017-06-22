@@ -1089,6 +1089,16 @@ public class DataBaseAdapter {
         return comentarios;
     }
 
+    public String getNameByUserId(int idUser){
+        String userName=null;
+        String query="SELECT nm_user FROM tb_user WHERE id_user="+idUser;
+        Cursor c = db.rawQuery(query,null);
+        if (c.moveToFirst()){
+            userName = c.getString(0);
+        }
+        return userName;
+    }
+
     //Atualizado para nova versão banco 07/06/2016
     //LISTA COMENTARIOS GERAIS E PESSOAIS
     public List<Comentario> listGComments(int idActStu,String typeComment) {
@@ -2532,7 +2542,9 @@ public class DataBaseAdapter {
         String query="SELECT * FROM tb_guest g JOIN tb_portfolio_class AS pc ON pc.id_class=g.id_class JOIN tb_portfolio_student AS ps ON ps.id_portfolio_class=pc.id_portfolio_class WHERE ps.id_portfolio_student="+idPortfolioStudent;
         Cursor c = db.rawQuery(query,null);
 
-        return c.moveToFirst();
+        boolean isGuest = c.moveToFirst();
+
+        return isGuest;
     }
     public boolean guestCanComment(int idPortfolioStudent){
         String query="SELECT fl_comments FROM tb_guest g JOIN tb_portfolio_class AS pc ON pc.id_class=g.id_class JOIN tb_portfolio_student AS ps ON ps.id_portfolio_class=pc.id_portfolio_class WHERE ps.id_portfolio_student="+idPortfolioStudent;

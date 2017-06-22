@@ -63,6 +63,7 @@ public class CommentAdapter extends BaseAdapter {
         holder.hour=(TextView)rowView.findViewById(R.id.hour);
         holder.date=(TextView)rowView.findViewById(R.id.date);
         holder.icon=(TextView)rowView.findViewById(R.id.comment_icon);
+        holder.userName=(TextView) rowView.findViewById(R.id.userName);
         holder.wraper=(RelativeLayout)rowView.findViewById(R.id.wrapper);
 
 
@@ -89,6 +90,8 @@ public class CommentAdapter extends BaseAdapter {
             holder.message.setText(c.comment);
         holder.hour.setText(c.hour);
         holder.date.setText(c.date);
+        String name[] = DataBaseAdapter.getInstance(parent.getContext()).getNameByUserId(c.idAuthor).split(" ");
+        holder.userName.setText(name[0]+":");
 
 
         ///////////change visibility////////////////
@@ -113,7 +116,7 @@ public class CommentAdapter extends BaseAdapter {
             }
         }
         if(c.atach==false) {
-            holder.message.setBackgroundResource(c.orientation ? R.drawable.final_b_spc_left : R.drawable.final_b_ger_right);
+            holder.message.setBackgroundResource(c.orientation ? R.drawable.final_b_ger_left : R.drawable.final_b_ger_right);
         }
         holder.wraper.setGravity(c.orientation ? Gravity.LEFT : Gravity.RIGHT);
         //////////---------------////////////////////
@@ -136,6 +139,7 @@ public class CommentAdapter extends BaseAdapter {
         TextView hour;
         TextView date;
         TextView icon;
+        TextView userName;
         RelativeLayout wraper;
     }
 }

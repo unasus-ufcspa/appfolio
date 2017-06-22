@@ -625,7 +625,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             if (DataBaseAdapter.getInstance(this).userIsGuest(singleton.portfolioClass.getIdPortfolioStudent())){
                 SyncVisitanteClient svClient = new SyncVisitanteClient(this);
                 svClient.postJson(SyncVisitante.toJSON(Singleton.getInstance().user.getIdUser(), Singleton.getInstance().device.get_id_device()));
-                singleton.guestUser=false;
             }
         }
     }
