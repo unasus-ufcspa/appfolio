@@ -113,7 +113,7 @@ public class FistLoginClient extends HttpClient {
                                 JSONArray tbGuest = resp.getJSONArray("tb_guest");
                                 for (int i = 0; i < tbGuest.length(); i++) {
                                     JSONObject guest = tbGuest.getJSONObject(i);
-                                    singleton.guestUser = DataBaseAdapter.getInstance(context).insertIntoTbGuest(singleton.user.getIdUser(),guest.getInt("id_class"),guest.getInt("id_guest"),guest.getString("fl_comments"));
+                                   /* singleton.guestUser =*/ DataBaseAdapter.getInstance(context).insertIntoTbGuest(singleton.user.getIdUser(),guest.getInt("id_class"),guest.getInt("id_guest"),guest.getString("fl_comments"));
                                 }
                             }
 //                            if (response.getJSONObject("firstLogin_response").getString("fl_firstSync").equals("S")){

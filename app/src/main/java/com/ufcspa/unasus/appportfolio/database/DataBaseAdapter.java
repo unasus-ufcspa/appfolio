@@ -1783,7 +1783,7 @@ public class DataBaseAdapter {
                 "\t\tu.im_photo\n" +
                 "\t\t\n" +
                 "\tFROM tb_activity_student as acs\n" +
-                "\tINNER JOIN tb_portfolio_student as ps ON  ps.id_portfolio_student = acs.id_portfolio_student\n" +
+                "\tINNER JOIN tb_tutor_portfolio as ps ON  ps.id_portfolio_student = acs.id_portfolio_student\n" +
                 "\tINNER JOIN tb_user as u ON u.id_user = ps.id_tutor\n" +
                 "\tWHERE acs.id_activity_student = "+idActStudent;
         Cursor cursor = db.rawQuery(query, null);
@@ -2484,33 +2484,39 @@ public class DataBaseAdapter {
     public List<PortfolioClass> selectListClassAndUserType(int idUser) {
         //retorna uma lista com as turmas que o usuário esta cadastro e seu papel nela(tutor ou aluno);
         // perfil S- Student T-tutor
-        String query = "select distinct \n" +
-                "\tps.id_portfolio_class,\n" +
-                "\tc.ds_code,\n" +
-                "\tc.ds_description,\n" +
-                "\tp.ds_title,\n" +
-                "\tp.ds_description,\n" +
-                "\tps.id_portfolio_student\n" +
-                "from \n" +
-                "\ttb_portfolio_student as ps \n" +
-                "\tjoin tb_portfolio_class pc on pc.id_portfolio_class = ps.id_portfolio_class\n" +
-                "\tjoin tb_class c on c.id_class = pc.id_class \n" +
-                "\tjoin tb_portfolio p on p.id_portfolio = pc.id_portfolio\n"/* +
-                "WHERE\n" +
-                "\t( id_student = " + idUser + " )"*/;
-//        Cursor c = db.rawQuery(query, null);
+        String query =  ""
+                + "SELECT DISTINCT ps.id_portfolio_class, "
+                + "                c.ds_code, "
+                + "                c.ds_description, "
+                + "                p.ds_title, "
+                + "                p.ds_description, "
+                + "                CASE "
+                + "                    WHEN ps.id_student = 3 THEN 'S' "
+                + "                    WHEN tp.id_tutor = 3 THEN 'T' "
+                + "                    END AS perfil "
+                + "                FROM   tb_portfolio_student AS ps "
+                + "                JOIN tb_portfolio_class pc "
+                + "                ON pc.id_portfolio_class = ps.id_portfolio_class "
+                + "                JOIN tb_class c "
+                + "                ON c.id_class = pc.id_class "
+                + "                JOIN tb_portfolio p "
+                + "                ON p.id_portfolio = pc.id_portfolio "
+                + "                JOIN tb_tutor_portfolio tp "
+                + "                ON tp.id_portfolio_student = ps.id_portfolio_student "
+                + "                WHERE  ( id_tutor = 3 OR id_student = 3 )";
+        Cursor c = db.rawQuery(query, null);
         ArrayList lista = new ArrayList<PortfolioClass>();
-        /*if (c.moveToFirst()) {
+        if (c.moveToFirst()) {
             do {
                 int idPortClass = c.getInt(0);
                 String classCode = c.getString(1);
                 String portTitle = c.getString(3);
-                String perfil = getPerfilByPortfolioStudent(c.getInt(5),idUser);
+                String perfil = c.getString(5);
                 PortfolioClass p = new PortfolioClass(classCode, idPortClass, perfil, portTitle);
                 lista.add(p);
                 Log.d(tag, "port class:" + p.toString());
             } while (c.moveToNext());
-        } else {*/
+        } /*else {
             Log.d(tag, "Nao retornou nada na consulta");
             query = "select distinct \n" +
                     "\tps.id_portfolio_class,\n" +
@@ -2523,42 +2529,45 @@ public class DataBaseAdapter {
                     "\tjoin tb_portfolio_class pc on pc.id_portfolio_class = ps.id_portfolio_class\n" +
                     "\tjoin tb_class c on c.id_class = pc.id_class \n" +
                     "\tjoin tb_portfolio p on p.id_portfolio = pc.id_portfolio\n";
-            Cursor c = db.rawQuery(query, null);
+            c = db.rawQuery(query, null);
             lista = new ArrayList<PortfolioClass>();
             if (c.moveToFirst()) {
                 do {
                     int idPortClass = c.getInt(0);
                     String classCode = c.getString(1);
                     String portTitle = c.getString(3);
-//                    String perfil = "T";
-
-                    String perfil = getPerfilByPortfolioStudent(c.getInt(5),idUser);
+                    String perfil = "T";
                     PortfolioClass p = new PortfolioClass(classCode, idPortClass, perfil, portTitle);
                     lista.add(p);
                     Log.d(tag, "port class:" + p.toString());
                 } while (c.moveToNext());
             }
-//        }
+        }*/
         return lista;
     }
 
     public boolean userIsGuest(){
         String query="SELECT * FROM tb_guest;";
         Cursor c = db.rawQuery(query,null);
-        if (c.moveToFirst()){
-            return true;
-        } else {
-            return false;
-        }
+
+        return c.moveToFirst();
     }
     public boolean userIsGuest(int idPortfolioStudent){
-        String query="SELECT * FROM tb_guest g JOIN tb_portfolio_student AS ps ON ps.id_tutor=g.id_user WHERE ps.id_portfolio_student="+idPortfolioStudent;
+        String query="SELECT * FROM tb_guest g JOIN tb_portfolio_class AS pc ON pc.id_class=g.id_class JOIN tb_portfolio_student AS ps ON ps.id_portfolio_class=pc.id_portfolio_class WHERE ps.id_portfolio_student="+idPortfolioStudent;
         Cursor c = db.rawQuery(query,null);
-        if (c.moveToFirst()){
+
+        return c.moveToFirst();
+    }
+    public boolean guestCanComment(int idPortfolioStudent){
+        String query="SELECT fl_comments FROM tb_guest g JOIN tb_portfolio_class AS pc ON pc.id_class=g.id_class JOIN tb_portfolio_student AS ps ON ps.id_portfolio_class=pc.id_portfolio_class WHERE ps.id_portfolio_student="+idPortfolioStudent;
+        Cursor c = db.rawQuery(query,null);
+        if (userIsGuest(idPortfolioStudent)) {
+            if (c.moveToFirst())
+                return c.getString(0).equals("S");
+            else
+                return false;
+        } else
             return true;
-        } else {
-            return false;
-        }
     }
 
     private Activity cursorToActivity(Cursor cursor) {

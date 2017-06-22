@@ -121,6 +121,7 @@ public class ActivitiesAdapter extends RecyclerView.Adapter<ActivitiesAdapter.Vi
                     @Override
                     public void onClick(View v) {
                         singleton.guestUser = DataBaseAdapter.getInstance(context).userIsGuest(list.get(position).getIdPortfolio());
+                        singleton.guestUserComments = DataBaseAdapter.getInstance(context).guestCanComment(list.get(position).getIdPortfolio());
                         singleton.activity = list.get(position);
                         singleton.idActivityStudent = singleton.activity.getIdActivityStudent();
                         singleton.idVersionActivity = source.getLastIDVersionActivity(singleton.idActivityStudent);
@@ -186,6 +187,7 @@ public class ActivitiesAdapter extends RecyclerView.Adapter<ActivitiesAdapter.Vi
                     @Override
                     public void onClick(View v) {
                         singleton.guestUser = DataBaseAdapter.getInstance(context).userIsGuest(list.get(position).getIdPortfolio());
+                        singleton.guestUserComments = DataBaseAdapter.getInstance(context).guestCanComment(list.get(position).getIdPortfolio());
                         singleton.activity = list.get(position);
                         singleton.idActivityStudent = singleton.activity.getIdActivityStudent();
                         if (singleton.portfolioClass.getPerfil().equals("S")) {
