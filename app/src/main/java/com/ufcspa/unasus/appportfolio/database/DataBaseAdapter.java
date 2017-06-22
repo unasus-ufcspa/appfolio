@@ -2491,8 +2491,8 @@ public class DataBaseAdapter {
                 + "                p.ds_title, "
                 + "                p.ds_description, "
                 + "                CASE "
-                + "                    WHEN ps.id_student = 3 THEN 'S' "
-                + "                    WHEN tp.id_tutor = 3 THEN 'T' "
+                + "                    WHEN ps.id_student = "+idUser+" THEN 'S' "
+                + "                    WHEN tp.id_tutor = "+idUser+" THEN 'T' "
                 + "                    END AS perfil "
                 + "                FROM   tb_portfolio_student AS ps "
                 + "                JOIN tb_portfolio_class pc "
@@ -2503,7 +2503,7 @@ public class DataBaseAdapter {
                 + "                ON p.id_portfolio = pc.id_portfolio "
                 + "                JOIN tb_tutor_portfolio tp "
                 + "                ON tp.id_portfolio_student = ps.id_portfolio_student "
-                + "                WHERE  ( id_tutor = 3 OR id_student = 3 )";
+                + "                WHERE  ( tp.id_tutor = "+idUser+" OR ps.id_student = "+idUser+" )";
         Cursor c = db.rawQuery(query, null);
         ArrayList lista = new ArrayList<PortfolioClass>();
         if (c.moveToFirst()) {
@@ -2516,33 +2516,9 @@ public class DataBaseAdapter {
                 lista.add(p);
                 Log.d(tag, "port class:" + p.toString());
             } while (c.moveToNext());
-        } /*else {
+        } else {
             Log.d(tag, "Nao retornou nada na consulta");
-            query = "select distinct \n" +
-                    "\tps.id_portfolio_class,\n" +
-                    "\tc.ds_code,\n" +
-                    "\tc.ds_description,\n" +
-                    "\tp.ds_title,\n" +
-                    "\tp.ds_description\n" +
-                    "from \n" +
-                    "\ttb_portfolio_student as ps \n" +
-                    "\tjoin tb_portfolio_class pc on pc.id_portfolio_class = ps.id_portfolio_class\n" +
-                    "\tjoin tb_class c on c.id_class = pc.id_class \n" +
-                    "\tjoin tb_portfolio p on p.id_portfolio = pc.id_portfolio\n";
-            c = db.rawQuery(query, null);
-            lista = new ArrayList<PortfolioClass>();
-            if (c.moveToFirst()) {
-                do {
-                    int idPortClass = c.getInt(0);
-                    String classCode = c.getString(1);
-                    String portTitle = c.getString(3);
-                    String perfil = "T";
-                    PortfolioClass p = new PortfolioClass(classCode, idPortClass, perfil, portTitle);
-                    lista.add(p);
-                    Log.d(tag, "port class:" + p.toString());
-                } while (c.moveToNext());
-            }
-        }*/
+        }
         return lista;
     }
 
