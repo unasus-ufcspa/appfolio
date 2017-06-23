@@ -2514,7 +2514,7 @@ public class DataBaseAdapter {
                 + "                                 ON p.id_portfolio = pc.id_portfolio "
                 + "                                 JOIN tb_tutor_portfolio tp "
                 + "                                 ON tp.id_portfolio_student = ps.id_portfolio_student "
-                + "                                 JOIN tb_guest g "
+                + "                                 LEFT JOIN tb_guest g "
                 + "                                 ON g.id_class = c.id_class "
                 + "                                 WHERE  ( tp.id_tutor = "+idUser+" OR ps.id_student = "+idUser+" OR g.id_user = "+idUser+")";
         Cursor c = db.rawQuery(query, null);
