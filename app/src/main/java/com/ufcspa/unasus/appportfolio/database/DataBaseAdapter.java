@@ -2496,24 +2496,27 @@ public class DataBaseAdapter {
         // perfil S- Student T-tutor
         String query =  ""
                 + "SELECT DISTINCT ps.id_portfolio_class, "
-                + "                c.ds_code, "
-                + "                c.ds_description, "
-                + "                p.ds_title, "
-                + "                p.ds_description, "
-                + "                CASE "
-                + "                    WHEN ps.id_student = "+idUser+" THEN 'S' "
-                + "                    WHEN tp.id_tutor = "+idUser+" THEN 'T' "
-                + "                    END AS perfil "
-                + "                FROM   tb_portfolio_student AS ps "
-                + "                JOIN tb_portfolio_class pc "
-                + "                ON pc.id_portfolio_class = ps.id_portfolio_class "
-                + "                JOIN tb_class c "
-                + "                ON c.id_class = pc.id_class "
-                + "                JOIN tb_portfolio p "
-                + "                ON p.id_portfolio = pc.id_portfolio "
-                + "                JOIN tb_tutor_portfolio tp "
-                + "                ON tp.id_portfolio_student = ps.id_portfolio_student "
-                + "                WHERE  ( tp.id_tutor = "+idUser+" OR ps.id_student = "+idUser+" )";
+                + "                                 c.ds_code, "
+                + "                                 c.ds_description, "
+                + "                                 p.ds_title, "
+                + "                                 p.ds_description, "
+                + "                                 CASE "
+                + "                                     WHEN ps.id_student = "+idUser+" THEN 'S' "
+                + "                                     WHEN tp.id_tutor = "+idUser+" THEN 'T' "
+                + "                                     WHEN g.id_user = "+idUser+" THEN 'C' "
+                + "                                     END AS perfil "
+                + "                                 FROM   tb_portfolio_student AS ps "
+                + "                                 JOIN tb_portfolio_class pc "
+                + "                                 ON pc.id_portfolio_class = ps.id_portfolio_class "
+                + "                                 JOIN tb_class c "
+                + "                                 ON c.id_class = pc.id_class "
+                + "                                 JOIN tb_portfolio p "
+                + "                                 ON p.id_portfolio = pc.id_portfolio "
+                + "                                 JOIN tb_tutor_portfolio tp "
+                + "                                 ON tp.id_portfolio_student = ps.id_portfolio_student "
+                + "                                 JOIN tb_guest g "
+                + "                                 ON g.id_class = c.id_class "
+                + "                                 WHERE  ( tp.id_tutor = "+idUser+" OR ps.id_student = "+idUser+" OR g.id_user = "+idUser+")";
         Cursor c = db.rawQuery(query, null);
         ArrayList lista = new ArrayList<PortfolioClass>();
         if (c.moveToFirst()) {
@@ -2526,21 +2529,30 @@ public class DataBaseAdapter {
                 lista.add(p);
                 Log.d(tag, "port class:" + p.toString());
             } while (c.moveToNext());
+            for (int i=lista.size()-1;i>=0;i--){
+                for (int u=lista.size()-1;u>=0;u--) {
+                    if (((PortfolioClass) lista.get(u)).getIdPortClass()==((PortfolioClass) lista.get(i)).getIdPortClass() && ((PortfolioClass) lista.get(u)).getPerfil().equals("C") &&  ((PortfolioClass) lista.get(i)).getPerfil().equals("T")){
+                        lista.remove(u);
+                    }
+                }
+            }
         } else {
             Log.d(tag, "Nao retornou nada na consulta");
             query =  ""
                     + "SELECT DISTINCT ps.id_portfolio_class, "
-                    + "                c.ds_code, "
-                    + "                c.ds_description, "
-                    + "                p.ds_title, "
-                    + "                p.ds_description "
-                    + "                FROM   tb_portfolio_student AS ps "
-                    + "                JOIN tb_portfolio_class pc "
-                    + "                ON pc.id_portfolio_class = ps.id_portfolio_class "
-                    + "                JOIN tb_class c "
-                    + "                ON c.id_class = pc.id_class "
-                    + "                JOIN tb_portfolio p "
-                    + "                ON p.id_portfolio = pc.id_portfolio ";
+                    + "                                 c.ds_code, "
+                    + "                                 c.ds_description, "
+                    + "                                 p.ds_title, "
+                    + "                                 p.ds_description "
+                    + "                                 FROM   tb_portfolio_student AS ps "
+                    + "                                 JOIN tb_portfolio_class pc "
+                    + "                                 ON pc.id_portfolio_class = ps.id_portfolio_class "
+                    + "                                 JOIN tb_class c "
+                    + "                                 ON c.id_class = pc.id_class "
+                    + "                                 JOIN tb_portfolio p "
+                    + "                                 ON p.id_portfolio = pc.id_portfolio "
+                    + "                                 JOIN tb_tutor_portfolio tp "
+                    + "                                 ON tp.id_portfolio_student = ps.id_portfolio_student ";
             c = db.rawQuery(query, null);
             if (c.moveToFirst()) {
                 do {
@@ -2564,7 +2576,7 @@ public class DataBaseAdapter {
         return c.moveToFirst();
     }
     public boolean userIsGuest(int idPortfolioStudent){
-        String query="SELECT * FROM tb_guest g JOIN tb_portfolio_class AS pc ON pc.id_class=g.id_class JOIN tb_portfolio_student AS ps ON ps.id_portfolio_class=pc.id_portfolio_class WHERE ps.id_portfolio_student="+idPortfolioStudent;
+        String query="SELECT * FROM tb_guest g JOIN tb_portfolio_class AS pc ON pc.id_class=g.id_class JOIN tb_portfolio_student AS ps ON ps.id_portfolio_class=pc.id_portfolio_class JOIN tb_tutor_portfolio AS tp ON tp.id_portfolio_student=ps.id_portfolio_student WHERE ps.id_portfolio_student="+idPortfolioStudent+" AND NOT tp.id_portfolio_student="+idPortfolioStudent;
         Cursor c = db.rawQuery(query,null);
 
         boolean isGuest = c.moveToFirst();
