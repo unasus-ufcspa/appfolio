@@ -2528,6 +2528,31 @@ public class DataBaseAdapter {
             } while (c.moveToNext());
         } else {
             Log.d(tag, "Nao retornou nada na consulta");
+            query =  ""
+                    + "SELECT DISTINCT ps.id_portfolio_class, "
+                    + "                c.ds_code, "
+                    + "                c.ds_description, "
+                    + "                p.ds_title, "
+                    + "                p.ds_description "
+                    + "                FROM   tb_portfolio_student AS ps "
+                    + "                JOIN tb_portfolio_class pc "
+                    + "                ON pc.id_portfolio_class = ps.id_portfolio_class "
+                    + "                JOIN tb_class c "
+                    + "                ON c.id_class = pc.id_class "
+                    + "                JOIN tb_portfolio p "
+                    + "                ON p.id_portfolio = pc.id_portfolio ";
+            c = db.rawQuery(query, null);
+            if (c.moveToFirst()) {
+                do {
+                    int idPortClass = c.getInt(0);
+                    String classCode = c.getString(1);
+                    String portTitle = c.getString(3);
+                    String perfil = "T";
+                    PortfolioClass p = new PortfolioClass(classCode, idPortClass, perfil, portTitle);
+                    lista.add(p);
+                    Log.d(tag, "port class:" + p.toString());
+                } while (c.moveToNext());
+            }
         }
         return lista;
     }
