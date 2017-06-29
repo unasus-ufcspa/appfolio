@@ -12,88 +12,101 @@
         android:id="@+id/rteditor"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:visibility="visible">
+        android:visibility="visible"
+        android:background="@color/gray_4">
 
         <RelativeLayout
-            android:layout_width="match_parent"
+            android:id="@+id/sidebar"
+            android:layout_width="54dp"
             android:layout_height="match_parent"
-            android:background="@color/gray_4">
+            android:layout_below="@+id/info_rteditor_container"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="10dp"
+            android:visibility="visible">
 
+            <ListView
+                android:id="@+id/editor_user_list"
+                android:layout_width="48dp"
+                android:layout_height="match_parent"
+                android:layout_marginTop="40dp"
+                android:layout_above="@+id/switch_note"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentBottom="false"
+                android:divider="@null"/>
+
+            <Switch
+                android:id="@+id/switch_note"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_above="@+id/send_version"
+                android:layout_alignParentBottom="false"
+                android:layout_alignParentRight="true" />
+
+            <Button
+                android:id="@+id/send_version"
+                android:layout_width="42dp"
+                android:layout_height="42dp"
+                android:layout_alignLeft="@id/switch_note"
+                android:layout_above="@+id/send_version_text"
+                android:layout_alignParentBottom="false"
+                android:background="@drawable/btn_send_activity" />
+
+            <TextView
+                android:id="@+id/send_version_text"
+                android:layout_width="54dp"
+                android:layout_height="wrap_content"
+                android:text="enviar"
+                android:layout_alignParentBottom="false"
+                android:layout_alignParentRight="true"
+                android:layout_above="@+id/finalize_activity"
+                android:textColor="@color/base_green"
+                android:textSize="10sp"
+                android:gravity="center" />
+
+            <Button
+                android:layout_width="48dp"
+                android:layout_height="42dp"
+                android:layout_alignParentBottom="false"
+                android:layout_alignParentRight="true"
+                android:layout_above="@+id/finalize_activity_text"
+                android:id="@+id/finalize_activity"
+                android:background="@drawable/btn_finalize" />
+
+            <TextView
+                android:id="@+id/finalize_activity_text"
+                android:layout_width="54dp"
+                android:layout_height="wrap_content"
+                android:text="finalizar"
+                android:layout_alignParentBottom="false"
+                android:layout_alignParentRight="true"
+                android:layout_above="@+id/fullscreen"
+                android:textColor="@color/base_green"
+                android:textSize="10sp"
+                android:gravity="center" />
+
+            <ImageButton
+                android:id="@+id/fullscreen"
+                android:layout_width="42dp"
+                android:layout_height="34dp"
+                android:layout_alignParentBottom="false"
+                android:layout_alignLeft="@id/send_version"
+                android:layout_alignParentRight="true"
+                android:background="@drawable/fullscreen1"
+                android:layout_above="@+id/fullscreen_text" />
+
+            <TextView
+                android:id="@+id/fullscreen_text"
+                android:layout_width="54dp"
+                android:layout_height="wrap_content"
+                android:text="ampliar"
+                android:layout_alignParentBottom="true"
+                android:layout_alignLeft="@+id/fullscreen"
+                android:textColor="@color/base_green"
+                android:textSize="10sp"
+                android:layout_marginBottom="10dp"
+                android:gravity="center" />
         </RelativeLayout>
 
-        <ListView
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:id="@+id/list_tutors"></ListView>
-
-        <Switch
-            android:id="@+id/switch_note"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
-            android:layout_above="@+id/send_version"
-            android:layout_alignParentBottom="false"
-            android:layout_alignParentRight="true" />
-
-        <Button
-            android:id="@+id/send_version"
-            android:layout_width="42dp"
-            android:layout_height="42dp"
-            android:layout_alignLeft="@id/switch_note"
-            android:layout_above="@+id/send_version_text"
-            android:layout_alignParentBottom="false"
-            android:background="@drawable/btn_send_activity" />
-        <TextView
-            android:id="@+id/send_version_text"
-            android:layout_width="54dp"
-            android:layout_height="wrap_content"
-            android:text="enviar"
-            android:layout_alignParentBottom="false"
-            android:layout_alignParentRight="true"
-            android:layout_above="@+id/finalize_activity"
-            android:textColor="@color/base_green"
-            android:textSize="10sp"
-            android:gravity="center"/>
-
-        <Button
-            android:layout_width="48dp"
-            android:layout_height="42dp"
-            android:layout_alignParentBottom="false"
-            android:layout_alignParentRight="true"
-            android:layout_above="@+id/finalize_activity_text"
-            android:id="@+id/finalize_activity"
-            android:background="@drawable/btn_finalize"/>
-        <TextView
-            android:id="@+id/finalize_activity_text"
-            android:layout_width="54dp"
-            android:layout_height="wrap_content"
-            android:text="finalizar"
-            android:layout_alignParentBottom="false"
-            android:layout_alignParentRight="true"
-            android:layout_above="@+id/fullscreen"
-            android:textColor="@color/base_green"
-            android:textSize="10sp"
-            android:gravity="center"/>
-
-        <ImageButton
-            android:id="@+id/fullscreen"
-            android:layout_width="42dp"
-            android:layout_height="34dp"
-            android:layout_alignParentBottom="false"
-            android:layout_alignLeft="@id/send_version"
-            android:layout_alignParentRight="true"
-            android:background="@drawable/fullscreen1"
-            android:layout_above="@+id/fullscreen_text" />
-        <TextView
-            android:id="@+id/fullscreen_text"
-            android:layout_width="54dp"
-            android:layout_height="wrap_content"
-            android:text="ampliar"
-            android:layout_alignParentBottom="true"
-            android:layout_alignLeft="@+id/fullscreen"
-            android:textColor="@color/base_green"
-            android:textSize="10sp"
-            android:layout_marginBottom="10dp"
-            android:gravity="center"/>
 
         <RelativeLayout
             android:id="@+id/edittext_container"
@@ -101,8 +114,8 @@
             android:layout_height="match_parent"
             android:layout_alignParentBottom="true"
             android:layout_below="@+id/info_rteditor_container"
-            android:layout_toLeftOf="@+id/fullscreen"
-            android:layout_toStartOf="@+id/fullscreen"
+            android:layout_toLeftOf="@+id/sidebar"
+            android:layout_toStartOf="@+id/sidebar"
             android:background="@drawable/rteditor_shadow"
             android:visibility="visible">
 
@@ -173,14 +186,17 @@
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:textColor="@color/gray_2"
             android:textSize="20dp"
-            android:textStyle="bold" />
+            android:textStyle="bold"
+            android:visibility="gone"/>
+
+        <!--Removed personal comment from here-->
 
         <RelativeLayout
             android:id="@+id/personal_comment_container"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_alignTop="@id/p_student_name"
             android:layout_marginRight="60dp"
-            android:layout_marginTop="50dp"
             android:gravity="right"
             android:visibility="gone">
 
@@ -295,7 +311,7 @@
             android:layout_marginTop="10dp"
             android:background="@drawable/rounded_corner"
             android:src="@drawable/default_profile_picture"
-            android:visibility="visible" />
+            android:visibility="gone" />
 
         <!--<RelativeLayout-->
         <!--android:id="@+id/versions_container"-->
@@ -384,6 +400,7 @@
                 android:layout_width="10dp"
                 android:layout_height="50dp"
                 android:background="@color/gray_1"></RelativeLayout>
+
             <RelativeLayout
                 android:layout_width="10dp"
                 android:layout_height="match_parent"
@@ -393,7 +410,7 @@
             <Space
                 android:id="@+id/space1"
                 android:layout_width="match_parent"
-                android:layout_height="50dp"/>
+                android:layout_height="50dp" />
 
             <RelativeLayout
                 android:id="@+id/rightbar_green"
@@ -416,10 +433,10 @@
         <RelativeLayout
             android:id="@+id/leftbar_white"
             android:layout_width="15dp"
-            android:layout_marginRight="10dp"
             android:layout_height="35dp"
             android:layout_alignParentBottom="true"
             android:layout_alignParentTop="true"
+            android:layout_marginRight="10dp"
             android:background="@color/gray_4"
             android:visibility="visible">
 

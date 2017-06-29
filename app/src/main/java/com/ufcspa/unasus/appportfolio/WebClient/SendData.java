@@ -438,7 +438,7 @@ public class SendData {
                 }
             }
 
-            if (versions != null) {
+            if (versions != null && singleton.portfolioClass!=null) {
                 for (VersionActivity v : versions) {
                     JSONObject jsonVersion = new JSONObject();
                     jsonVersion.put("id_version_activity", v.getId_version_activity());

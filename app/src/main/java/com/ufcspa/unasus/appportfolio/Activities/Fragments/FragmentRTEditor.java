@@ -44,6 +44,7 @@ import android.widget.GridView;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.Switch;
 import android.widget.TextView;
@@ -65,6 +66,7 @@ import com.onegravity.rteditor.effects.Effects;
 import com.onegravity.rteditor.spans.BackgroundColorSpan;
 import com.onegravity.rteditor.spans.MediaSpan;
 import com.ufcspa.unasus.appportfolio.Activities.MainActivity;
+import com.ufcspa.unasus.appportfolio.Adapter.UserListadapter;
 import com.ufcspa.unasus.appportfolio.Adapter.VersionsAdapter;
 import com.ufcspa.unasus.appportfolio.Model.ActivityStudent;
 import com.ufcspa.unasus.appportfolio.Model.Comentario;
@@ -111,6 +113,8 @@ public class FragmentRTEditor extends Frag {
     private TextView sendVersionText;
     private TextView finalizeActivityText;
     private TextView fullscreenText;
+    private ListView editorUserList;
+    private UserListadapter userListadapter;
     // Model
     private ActivityStudent acStudent;
     private DataBaseAdapter source;
@@ -122,6 +126,7 @@ public class FragmentRTEditor extends Frag {
     // Versoes
     private VersionsAdapter versionAdapter;
     private ArrayList<VersionActivity> versions;
+    private ArrayList<User> users;
     // Personal Comment
     private boolean personalCommentChanged;
     private String txtPersonal;
@@ -810,6 +815,13 @@ public class FragmentRTEditor extends Frag {
         usrPhoto = (ImageView) view.findViewById(R.id.usr_photo);
         personalCommentButton = (ImageButton) view.findViewById(R.id.personal_comment);
         versionsButton = (ImageButton) view.findViewById(R.id.btn_versions);
+
+        editorUserList = (ListView) view.findViewById(R.id.editor_user_list);
+
+        users = source.getActivityUsers(singleton.idActivityStudent);
+        userListadapter = new UserListadapter(getActivity(),users);
+        editorUserList.setAdapter(userListadapter);
+        userListadapter.notifyDataSetChanged();
 
         onClickTopBar(true);
 

@@ -19,6 +19,7 @@ import com.ufcspa.unasus.appportfolio.Model.Comentario;
 import com.ufcspa.unasus.appportfolio.Model.Notification;
 import com.ufcspa.unasus.appportfolio.Model.Observation;
 import com.ufcspa.unasus.appportfolio.Model.Reference;
+import com.ufcspa.unasus.appportfolio.Model.Singleton;
 import com.ufcspa.unasus.appportfolio.Model.Tuple;
 import com.ufcspa.unasus.appportfolio.Model.VersionActivity;
 
@@ -225,7 +226,7 @@ public class SyncVisitanteClient extends HttpClient{
                                             JSONObject temp = tb_annotation.getJSONObject(i);
                                             Annotation annotation = new Annotation();
 
-                                            int id_user = temp.getInt("id_user");
+                                            int id_user = Singleton.getInstance().user.getIdUser();
                                             String ds_annotation = temp.getString("ds_annotation");
                                             int id_annotation_srv = temp.getInt("id_annotation_srv");
 

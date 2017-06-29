@@ -264,6 +264,7 @@ public class FirstSyncClient extends HttpClient{
                                             String ds_annotation = temp.getString("ds_annotation");
                                             int id_annotation_srv = temp.getInt("id_annotation_srv");
 
+                                            annotation.setIdUser(Singleton.getInstance().user.getIdUser());
                                             annotation.setDsAnnotation(ds_annotation);
                                             annotation.setIdAnnotationSrv(id_annotation_srv);
 

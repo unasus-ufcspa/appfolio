@@ -2569,6 +2569,47 @@ public class DataBaseAdapter {
         return lista;
     }
 
+    public ArrayList<User> getActivityUsers(int idActivityStudent){
+        ArrayList<User> users = new ArrayList<>();
+        String query = ""
+                + "SELECT DISTINCT "
+                + "u.id_user, "
+                + "u.nm_user, "
+                + "u.im_photo, "
+                + "u.nu_cellphone, "
+                + "CASE "
+                + "WHEN ps.id_student = u.id_user THEN 'S' "
+                + "WHEN tp.id_tutor = u.id_user THEN 'T' "
+                + "END AS perfil "
+                + " FROM "
+                + " tb_user u, "
+                + " tb_activity_student ac "
+                + " JOIN tb_portfolio_student ps "
+                + " ON ps.id_portfolio_student=ac.id_portfolio_student "
+                + " JOIN tb_tutor_portfolio tp "
+                + " ON tp.id_portfolio_student=ac.id_portfolio_student "
+                + " WHERE "
+                + " ac.id_activity_student= "+idActivityStudent
+                + " AND ( "
+                + " ps.id_student=u.id_user "
+                + " OR "
+                + " tp.id_tutor=u.id_user);";
+
+        Cursor c = db.rawQuery(query,null);
+        if (c.moveToFirst()){
+            do{
+                User u = new User(c.getInt(0),c.getString(4).toCharArray()[0],c.getString(1));
+                u.setPhoto(c.getString(2),null);
+                if (c.getString(3)!=null && !c.getString(3).equals("null")) {
+                    u.setCellphone(c.getString(3));
+                }
+                users.add(u);
+            }while (c.moveToNext());
+        }
+
+        return users;
+    }
+
     public boolean userIsGuest(){
         String query="SELECT * FROM tb_guest;";
         Cursor c = db.rawQuery(query,null);
