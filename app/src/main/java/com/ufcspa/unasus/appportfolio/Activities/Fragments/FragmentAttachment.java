@@ -106,7 +106,7 @@ public class FragmentAttachment extends Frag {
         if (resultCode == Activity.RESULT_OK) {
             if (requestCode == Constants.CROP_IMAGE) {
                 saveImageOnAppDir();
-                insertFileIntoDataBase(mCurrentPhotoPath+".jpg", "I");
+                insertFileIntoDataBase(mCurrentPhotoPath, "I");
             } else if (requestCode == REQUEST_IMAGE_CAPTURE) {
                 galleryAddPic();
                 launchCropImageIntent();
@@ -132,17 +132,17 @@ public class FragmentAttachment extends Frag {
                     launchCropImageIntent();
                 } else if (mimeType.startsWith("video")) {
                     saveVideoOnAppDir();
-                    insertFileIntoDataBase(mCurrentPhotoPath+".mp4", "V");
+                    insertFileIntoDataBase(mCurrentPhotoPath, "V");
                 }
 
             } else if (requestCode == PICKFILE_RESULT_CODE) {
                 mCurrentPhotoPath = getPDFPath(getContext(), data.getData());
                 savePDFOnAppDir();
-                insertFileIntoDataBase(mCurrentPhotoPath+".pdf", "T");
+                insertFileIntoDataBase(mCurrentPhotoPath, "T");
             } else if (requestCode == REQUEST_VIDEO_CAPTURE) {
                 galleryAddPic();
                 saveVideoOnAppDir();
-                insertFileIntoDataBase(mCurrentPhotoPath+".mp4", "V");
+                insertFileIntoDataBase(mCurrentPhotoPath, "V");
             }
         }
     }
@@ -181,9 +181,7 @@ public class FragmentAttachment extends Frag {
     }
 
     public void createPlusButton() {
-        if (!singleton.guestUser) {
-            attachments.add(new Attachment(-1, "", "", "", 0,0));
-        }
+        attachments.add(new Attachment(-1, "", "", "", 0,0));
     }
 
     private void loadPhoto(final String url, final int position) {
