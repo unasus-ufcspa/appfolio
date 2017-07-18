@@ -53,7 +53,6 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.List;
 
 /**
  * Created by desenvolvimento on 10/12/2015.
@@ -313,15 +312,6 @@ public class Frag extends Fragment {
      */
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        getTargetFragment().onActivityResult(requestCode,resultCode,data);
-        List<Fragment> fragments = getChildFragmentManager().getFragments();
-        if (fragments != null) {
-            for (Fragment fragment : fragments) {
-                if (fragment!=null) {
-                    fragment.onActivityResult(requestCode, resultCode, data);
-                }
-            }
-        }
         if (resultCode == Activity.RESULT_OK) {
             if (requestCode == Constants.CROP_IMAGE) {
                 saveImageOnAppDir();
@@ -425,14 +415,7 @@ public class Frag extends Fragment {
 
     public void galleryAddPic() {
         Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
-
-        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-        String docFileName =  "_" + timeStamp;
-
-        String[] path = mCurrentPhotoPath.split("/");
-        path[path.length-1] = docFileName;
-
-        File f = new File(path.toString().replaceAll(",",""));
+        File f = new File(mCurrentPhotoPath);
         Uri contentUri = Uri.fromFile(f);
         mediaScanIntent.setData(contentUri);
         getActivity().sendBroadcast(mediaScanIntent);
@@ -440,7 +423,7 @@ public class Frag extends Fragment {
 
     private File createImageFile() throws IOException {
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-        String imageFileName =  "_" + timeStamp;
+        String imageFileName = "JPEG_" + timeStamp + "_";
 
         File storageDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);//getContext().getExternalFilesDir(null);
 
@@ -448,12 +431,11 @@ public class Frag extends Fragment {
         Log.d("attach","dir attach:"+storageDir.getAbsolutePath());
 
 
-        File image = new File(storageDir, imageFileName+".jpg");
-//        File image = File.createTempFile(
-//                imageFileName,  /* prefix */
-//                ".jpg",         /* suffix */
-//                storageDir      /* directory */
-//        );
+        File image = File.createTempFile(
+                imageFileName,  /* prefix */
+                ".jpg",         /* suffix */
+                storageDir      /* directory */
+        );
 
         mCurrentPhotoPath = image.getAbsolutePath();
         return image;
@@ -528,11 +510,11 @@ public class Frag extends Fragment {
                 .putExtra(CropImageActivity.IMAGE_SOURCE_FILE, filePath)
                 .putExtra(CropImageActivity.IMAGE_DESTINATION_FILE, filePath)
 
-                        // allow CropImage activity to re-scale image
+                // allow CropImage activity to re-scale image
                 .putExtra(CropImageActivity.SCALE, true)
                 .putExtra(CropImageActivity.SCALE_UP_IF_NEEDED, false)
 
-                        // no fixed aspect ratio
+                // no fixed aspect ratio
                 .putExtra(CropImageActivity.ASPECT_X, 0)
                 .putExtra(CropImageActivity.ASPECT_Y, 0);
 
@@ -567,16 +549,15 @@ public class Frag extends Fragment {
 
     private File createVideoFile() throws IOException {
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-        String videoFileName =  "_" + timeStamp;
+        String videoFileName = "MP4_" + timeStamp + "_";
 
         File storageDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
 
-        File video = new File(storageDir, videoFileName+".mp4");
-//        File video = File.createTempFile(
-//                videoFileName,  /* prefix */
-//                ".mp4",         /* suffix */
-//                storageDir      /* directory */
-//        );
+        File video = File.createTempFile(
+                videoFileName,  /* prefix */
+                ".mp4",         /* suffix */
+                storageDir      /* directory */
+        );
 
         mCurrentPhotoPath = video.getAbsolutePath();
         return video;
@@ -808,10 +789,7 @@ public class Frag extends Fragment {
     public void savePDFOnAppDir() {
         String[] path = mCurrentPhotoPath.split("/");
 
-        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-        String docFileName =  "_" + timeStamp;
-
-        File file = new File(getContext().getExternalFilesDir(null) + "/" + docFileName);
+        File file = new File(getContext().getExternalFilesDir(null) + "/" + path[path.length - 1]);
         if (!file.exists()) {
             try {
                 file.createNewFile();
@@ -849,11 +827,8 @@ public class Frag extends Fragment {
     public void saveImageOnAppDir() {
         String[] path = mCurrentPhotoPath.split("/");
 
-        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-        String imageFileName =  "_" + timeStamp;
-
         OutputStream fOutputStream = null;
-        File file = new File(getContext().getExternalFilesDir(null) + "/" + imageFileName);
+        File file = new File(getContext().getExternalFilesDir(null) + "/" + path[path.length - 1]);
         if (!file.exists()) {
             try {
                 file.createNewFile();
@@ -886,10 +861,7 @@ public class Frag extends Fragment {
     public void saveVideoOnAppDir() {
         String[] path = mCurrentPhotoPath.split("/");
 
-        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-        String videoFileName =  "_" + timeStamp;
-
-        File file = new File(getContext().getExternalFilesDir(null) + "/" + videoFileName);
+        File file = new File(getContext().getExternalFilesDir(null) + "/" + path[path.length - 1]);
         if (!file.exists()) {
             try {
                 file.createNewFile();
@@ -938,16 +910,6 @@ public class Frag extends Fragment {
 
         OutputStream fOutputStream = null;
         File file = new File(newPath);
-
-        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-        String imageFileName =  "_" + timeStamp;
-
-        String[] temp = newPath.split("/");
-        temp[temp.length-1] = imageFileName;
-
-        File f = new File(temp.toString().replaceAll(",",""));
-
-        file.renameTo(f);
         if (!file.exists()) {
             try {
                 file.createNewFile();

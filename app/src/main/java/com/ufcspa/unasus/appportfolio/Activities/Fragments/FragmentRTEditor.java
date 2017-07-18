@@ -209,7 +209,7 @@ public class FragmentRTEditor extends Frag {
         Log.d("editor DB", "salvando texto..");
         if (mRTMessageField != null && mRTMessageField.isMediaFactoryRegister() != null) {
             acStudent.setTxtActivity(mRTMessageField.getText(RTFormat.HTML));
-            if (!singleton.portfolioClass.getPerfil().equals("T")){
+            if (!singleton.portfolioClass.getPerfil().equals("T") || !singleton.guestUser){
                 source.updateActivityStudent(acStudent, getActualTime(), source.getIDVersionAtual(singleton.idActivityStudent));
             } else {
                 source.updateActivityStudent(acStudent, getActualTime(), singleton.idCurrentVersionActivity);
@@ -240,7 +240,7 @@ public class FragmentRTEditor extends Frag {
         scrollview = (ViewGroup) view.findViewById(R.id.comments);
         rightBarSpecificComments = (ViewGroup) view.findViewById(R.id.obs_view);
 
-        if (singleton.portfolioClass.getPerfil().equals("T") || (singleton.idCurrentVersionActivity != source.getIDVersionAtual(singleton.idActivityStudent)) || !source.getActivityStudentById(singleton.idActivityStudent).getDt_conclusion().equals("null")) {
+        if (singleton.portfolioClass.getPerfil().equals("T") || singleton.guestUser || (singleton.idCurrentVersionActivity != source.getIDVersionAtual(singleton.idActivityStudent)) || !source.getActivityStudentById(singleton.idActivityStudent).getDt_conclusion().equals("null")) {
             view.findViewById(R.id.rte_toolbar_container).setVisibility(View.INVISIBLE);
         }else if (ContextCompat.checkSelfPermission(getContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_DENIED) {
             ActivityCompat.requestPermissions(getActivity(),new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},MY_PERMISSIONS_REQUEST);
@@ -613,7 +613,7 @@ public class FragmentRTEditor extends Frag {
 
         mRTMessageField.setCanPaste(true);
         mRTManager.setToolbarVisibility(RTManager.ToolbarVisibility.SHOW);
-        if (singleton.portfolioClass.getPerfil().equals("T") || (singleton.idCurrentVersionActivity != singleton.idVersionActivity) || !source.getActivityStudentById(singleton.idActivityStudent).getDt_conclusion().equals("null")) {
+        if (singleton.portfolioClass.getPerfil().equals("T") || singleton.guestUser || (singleton.idCurrentVersionActivity != singleton.idVersionActivity) || !source.getActivityStudentById(singleton.idActivityStudent).getDt_conclusion().equals("null")) {
             mRTMessageField.setKeyListener(null);
             mRTMessageField.setTextIsSelectable(true);
             mRTManager.setToolbarVisibility(RTManager.ToolbarVisibility.HIDE);
@@ -818,7 +818,7 @@ public class FragmentRTEditor extends Frag {
 
         editorUserList = (ListView) view.findViewById(R.id.editor_user_list);
 
-        users = source.getActivityUsers(singleton.idActivityStudent);
+        users = source.getActivityUsers(singleton.idActivityStudent,singleton.user.getIdUser());
         userListadapter = new UserListadapter(getActivity(),users);
         editorUserList.setAdapter(userListadapter);
         userListadapter.notifyDataSetChanged();
@@ -1471,7 +1471,7 @@ public class FragmentRTEditor extends Frag {
                 }
             }
 //            createAddSpecificCommentButton(getCaretYPosition(mRTMessageField.getSelectionStart())); //Criando mesmo se usuário for aluno?
-            if (singleton.portfolioClass.getPerfil().equals("T") && !singleton.guestUser) {
+            if (singleton.portfolioClass.getPerfil().equals("T") && !singleton.guestUserComments) {
                 createAddSpecificCommentButton(getCaretYPosition(mRTMessageField.getSelectionStart()));
                 menu.removeItem(android.R.id.paste);
                 menu.removeItem(android.R.id.cut);

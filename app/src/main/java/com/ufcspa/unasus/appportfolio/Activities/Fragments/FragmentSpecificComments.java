@@ -280,6 +280,7 @@ public class FragmentSpecificComments extends Frag {
                         one.idAttach=c.getIdAttach();
                         Log.d("comments", "id attach:" + one.idAttach);
                     }
+                    one.idAuthor=c.getIdAuthor();
                     oneComments.add(one);
                 }
                 Log.d("comments", "one Comments exist, size:" + oneComments.size());

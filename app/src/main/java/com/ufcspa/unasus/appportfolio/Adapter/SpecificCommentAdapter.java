@@ -11,6 +11,7 @@ import android.widget.TextView;
 
 import com.ufcspa.unasus.appportfolio.Model.OneComment;
 import com.ufcspa.unasus.appportfolio.R;
+import com.ufcspa.unasus.appportfolio.database.DataBaseAdapter;
 
 import java.util.List;
 
@@ -62,12 +63,15 @@ public class SpecificCommentAdapter extends BaseAdapter {
         holder.message=(TextView)rowView.findViewById(R.id.comment);
         holder.hour=(TextView)rowView.findViewById(R.id.hour);
         holder.date=(TextView)rowView.findViewById(R.id.date);
+        holder.userName=(TextView) rowView.findViewById(R.id.userName);
         holder.wraper=(RelativeLayout)rowView.findViewById(R.id.wrapper);
 
         //populating
         holder.message.setText(c.comment);
         holder.hour.setText(c.hour);
         holder.date.setText(c.date);
+        String name[] = DataBaseAdapter.getInstance(parent.getContext()).getNameByUserId(c.idAuthor).split(" ");
+        holder.userName.setText(name[0]+":");
         //Log.d("comment specific","message in holder"+holder.message.getText().toString());
 
         ///////////change visibility////////////////
@@ -114,6 +118,7 @@ public class SpecificCommentAdapter extends BaseAdapter {
         TextView message;
         TextView hour;
         TextView date;
+        TextView userName;
         RelativeLayout wraper;
     }
 

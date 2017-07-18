@@ -2569,7 +2569,7 @@ public class DataBaseAdapter {
         return lista;
     }
 
-    public ArrayList<User> getActivityUsers(int idActivityStudent){
+    public ArrayList<User> getActivityUsers(int idActivityStudent, int idUser){
         ArrayList<User> users = new ArrayList<>();
         String query = ""
                 + "SELECT DISTINCT "
@@ -2593,7 +2593,8 @@ public class DataBaseAdapter {
                 + " AND ( "
                 + " ps.id_student=u.id_user "
                 + " OR "
-                + " tp.id_tutor=u.id_user);";
+                + " tp.id_tutor=u.id_user)"
+                + " AND NOT u.id_user="+idUser+";";
 
         Cursor c = db.rawQuery(query,null);
         if (c.moveToFirst()){
@@ -2617,7 +2618,7 @@ public class DataBaseAdapter {
         return c.moveToFirst();
     }
     public boolean userIsGuest(int idPortfolioStudent){
-        String query="SELECT * FROM tb_guest g JOIN tb_portfolio_class AS pc ON pc.id_class=g.id_class JOIN tb_portfolio_student AS ps ON ps.id_portfolio_class=pc.id_portfolio_class JOIN tb_tutor_portfolio AS tp ON tp.id_portfolio_student=ps.id_portfolio_student WHERE ps.id_portfolio_student="+idPortfolioStudent+" AND NOT tp.id_portfolio_student="+idPortfolioStudent;
+        String query="SELECT * FROM tb_guest g JOIN tb_portfolio_class AS pc ON pc.id_class=g.id_class JOIN tb_portfolio_student AS ps ON ps.id_portfolio_class=pc.id_portfolio_class JOIN tb_tutor_portfolio AS tp ON tp.id_portfolio_student=ps.id_portfolio_student WHERE ps.id_portfolio_student="+idPortfolioStudent+" AND NOT tp.id_tutor="+Singleton.getInstance().user.getIdUser();
         Cursor c = db.rawQuery(query,null);
 
         boolean isGuest = c.moveToFirst();
