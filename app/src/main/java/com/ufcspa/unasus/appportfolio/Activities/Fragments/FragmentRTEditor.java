@@ -209,7 +209,7 @@ public class FragmentRTEditor extends Frag {
         Log.d("editor DB", "salvando texto..");
         if (mRTMessageField != null && mRTMessageField.isMediaFactoryRegister() != null) {
             acStudent.setTxtActivity(mRTMessageField.getText(RTFormat.HTML));
-            if (!singleton.portfolioClass.getPerfil().equals("T") || !singleton.guestUser){
+            if (!singleton.portfolioClass.getPerfil().equals("T") && !singleton.guestUser){
                 source.updateActivityStudent(acStudent, getActualTime(), source.getIDVersionAtual(singleton.idActivityStudent));
             } else {
                 source.updateActivityStudent(acStudent, getActualTime(), singleton.idCurrentVersionActivity);
