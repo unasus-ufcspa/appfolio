@@ -73,8 +73,8 @@ public class FragmentComments extends Frag {
             if (main != null)
                 main.downloadFullDataComments(Singleton.getInstance().idActivityStudent);
 
-//            loadCom();
-//            adapterComments.refresh(oneComments);
+            loadCom();
+            adapterComments.refresh(oneComments);
 
             h.postDelayed(this, 5000);
         }

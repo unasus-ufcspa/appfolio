@@ -1211,7 +1211,7 @@ public class FragmentRTEditor extends Frag {
                 layout.closePane();
             } else {
                 removeGeneralCommentsNotifications();
-                getView().findViewById(R.id.general_comment_notice).setVisibility(View.GONE);
+//                getView().findViewById(R.id.general_comment_notice).setVisibility(View.GONE);
 
                 int childs = rightBarSpecificComments.getChildCount();
                 for (int i = childs - 1; i >= 0; i--)
@@ -1471,7 +1471,7 @@ public class FragmentRTEditor extends Frag {
                 }
             }
 //            createAddSpecificCommentButton(getCaretYPosition(mRTMessageField.getSelectionStart())); //Criando mesmo se usuário for aluno?
-            if (singleton.portfolioClass.getPerfil().equals("T") && !singleton.guestUserComments) {
+            if (singleton.portfolioClass.getPerfil().equals("T") && singleton.guestUserComments) {
                 createAddSpecificCommentButton(getCaretYPosition(mRTMessageField.getSelectionStart()));
                 menu.removeItem(android.R.id.paste);
                 menu.removeItem(android.R.id.cut);
