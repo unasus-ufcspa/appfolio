@@ -2383,6 +2383,7 @@ public class DataBaseAdapter {
                 "\tps.id_portfolio_class=" + idPortfolioClass;
 //        if (perfil.equalsIgnoreCase("S"))
         query += " AND u.id_user = " + idUsuario;
+        query += " ORDER BY a.nu_order";
         ArrayList<StudFrPortClass> students = new ArrayList<>();
         Cursor c = db.rawQuery(query, null);
         if (c.moveToFirst()) {

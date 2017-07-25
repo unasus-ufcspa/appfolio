@@ -72,8 +72,9 @@ public class FragmentReport extends Frag {
                         }
                         if (i == temp.size())
                             finalList.add(portclass);
+                        i=0;
                     }
-                    if (portclass.getPerfil().equals("T"))
+                    if (portclass.getPerfil().equals("T") && finalList.size()==1)
                         break;
                 }
             }
