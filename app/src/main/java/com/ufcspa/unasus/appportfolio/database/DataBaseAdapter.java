@@ -1751,15 +1751,9 @@ public class DataBaseAdapter {
     }
 
     public VersionActivity getVersionActivitiesByID(int id) {
-        String query = "SELECT id_version_activity, " +
-                "id_activity_student, " +
-                "tx_activity, " +
-                "dt_last_access, " +
-                "dt_submission, " +
-                "dt_verification, " +
-                "id_version_activity_srv " +
+        String query = "SELECT * "+
                 "FROM tb_version_activity " +
-                "WHERE id_version_activity = " + id;
+                "WHERE id_version_activity_srv = " + id;
         Cursor c = db.rawQuery(query, null);
         if (c.moveToFirst()) {
             return cursorToVersionActivity(c);

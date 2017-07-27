@@ -142,8 +142,8 @@ public class FullData {
 
         data.insertNotifications(notifications);
         for (VersionActivity versionActivity: versionActs) {
-            if (versionActivity.getId_version_activit_srv()==0) {
-                data.insertOneVersionActivity(versionActivity);
+            if (data.getVersionActivitiesByID(versionActivity.getId_version_activit_srv())==null) {
+                data.insertVersionActivity(versionActs);
             }else
                 data.updateVersions(versionActivity);
         }
