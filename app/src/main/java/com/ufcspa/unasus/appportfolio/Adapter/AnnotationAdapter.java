@@ -1,22 +1,16 @@
 package com.ufcspa.unasus.appportfolio.Adapter;
 
 import android.content.Context;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.ufcspa.unasus.appportfolio.Model.Annotation;
-import com.ufcspa.unasus.appportfolio.Model.Reference;
 import com.ufcspa.unasus.appportfolio.R;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 /**
  * Created by Desenvolvimento on 04/01/2016.
@@ -59,7 +53,7 @@ public class AnnotationAdapter extends BaseAdapter {
 
     public View getView(int position, View convertView, ViewGroup parent) {
         View rowView;
-        rowView = inflater.inflate(R.layout.row_layout, null);
+        rowView = inflater.inflate(R.layout.item_reference, null);
 
 
         Annotation a = getItem(position);

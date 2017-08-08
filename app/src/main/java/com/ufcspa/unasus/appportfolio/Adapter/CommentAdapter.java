@@ -1,7 +1,6 @@
 package com.ufcspa.unasus.appportfolio.Adapter;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -52,9 +51,9 @@ public class CommentAdapter extends BaseAdapter {
         OneComment c = comments.get(position);
         View rowView;
         if(c.atach==true){
-            rowView = inflater.inflate(R.layout.atach_item, null);
+            rowView = inflater.inflate(R.layout.item_attachment, null);
         }else {
-            rowView = inflater.inflate(R.layout.comment_item, null);
+            rowView = inflater.inflate(R.layout.item_comment, null);
         }
         Holder holder = new Holder();
 
@@ -74,17 +73,17 @@ public class CommentAdapter extends BaseAdapter {
             if (tipo!=null) {
                 switch (tipo){
                     case "I":
-                        holder.icon.setBackgroundResource(R.drawable.attachment_image);
+                        holder.icon.setBackgroundResource(R.drawable.ic_attachment_image);
                         break;
                     case "V":
-                        holder.icon.setBackgroundResource(R.drawable.attachment_video);
+                        holder.icon.setBackgroundResource(R.drawable.ic_attachment_video);
                         break;
                     case "T":
-                        holder.icon.setBackgroundResource(R.drawable.attachment_file);
+                        holder.icon.setBackgroundResource(R.drawable.ic_attachment_file);
                         break;
                 }
             } else {
-                holder.icon.setBackgroundResource(R.drawable.attachment_file);
+                holder.icon.setBackgroundResource(R.drawable.ic_attachment_file);
             }
         } else
             holder.message.setText(c.comment);
@@ -116,7 +115,7 @@ public class CommentAdapter extends BaseAdapter {
             }
         }
         if(c.atach==false) {
-            holder.message.setBackgroundResource(c.orientation ? R.drawable.final_b_ger_left : R.drawable.final_b_ger_right);
+            holder.message.setBackgroundResource(c.orientation ? R.drawable.bg_balloon_left : R.drawable.bg_balloon_right);
         }
         holder.wraper.setGravity(c.orientation ? Gravity.LEFT : Gravity.RIGHT);
         //////////---------------////////////////////

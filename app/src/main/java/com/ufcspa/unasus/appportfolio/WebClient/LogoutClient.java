@@ -11,7 +11,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
-import com.ufcspa.unasus.appportfolio.Activities.Fragments.FragmentConfig;
+import com.ufcspa.unasus.appportfolio.Activities.Fragments.ConfigFragment;
 import com.ufcspa.unasus.appportfolio.Model.Singleton;
 
 import org.json.JSONException;
@@ -42,7 +42,7 @@ public class LogoutClient extends HttpClient {
         try {
             logoutJson = new JSONObject().put("logout_request", new JSONObject().put("id_user", singleton.user.getIdUser()).put("ds_hash", singleton.device.get_id_device()));
         } catch (JSONException e) {
-            FragmentConfig.couldNotLogout();
+            ConfigFragment.couldNotLogout();
             return;
         }
 
@@ -54,13 +54,13 @@ public class LogoutClient extends HttpClient {
 
                     if (response.has("logout_response"))
                         if (response.getJSONObject("logout_response").has("success")) {
-                            FragmentConfig.logout(activity);
+                            ConfigFragment.logout(activity);
 
                             return;
                         }
 
                 } catch (JSONException e) {
-                    FragmentConfig.couldNotLogout();
+                    ConfigFragment.couldNotLogout();
                 }
             }
         }, new Response.ErrorListener() {
@@ -68,7 +68,7 @@ public class LogoutClient extends HttpClient {
             public void onErrorResponse(VolleyError volleyError) {
                 Log.e(tag, "Erro  na request");
                 volleyError.printStackTrace();
-                FragmentConfig.couldNotLogout();
+                ConfigFragment.couldNotLogout();
             }
         });
 

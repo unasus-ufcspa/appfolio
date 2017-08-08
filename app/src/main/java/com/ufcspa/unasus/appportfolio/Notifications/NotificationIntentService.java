@@ -82,7 +82,7 @@ public class NotificationIntentService extends IntentService {
                         .setAutoCancel(true)
                         .setColor(getResources().getColor(R.color.base_green))
                         .setContentText(notifications+text)
-                        .setSmallIcon(R.drawable.icon);
+                        .setSmallIcon(R.mipmap.ic_folio);
 
                 PendingIntent pendingIntent = PendingIntent.getActivity(this,
                         NOTIFICATION_ID,

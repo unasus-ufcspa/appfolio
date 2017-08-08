@@ -1,8 +1,6 @@
 <resources>
     <string name="app_name">Fólio</string>
-    <string name="db_name">folio.sqlite</string>
     <string name="title_edit_activity">Edit your activity</string>
-    <string name="title_activity_login">PROTOTIFOLIOS</string>
     <string name="title_activity_select_class">Select your class</string>
     <string name="title_activity_select_activity">Select your Activities</string>
     <!-- Strings related to login -->
@@ -18,13 +16,9 @@
         completions."
     </string>
     <string name="title_activity_select_portfolio">Select your Portfolios</string>
-    <string name="drawer_open">Open navigation drawer</string>
-    <string name="drawer_close">Close navigation drawer</string>
-    <string name="checkbox">Li e Aceito</string>
 
     <string name="drawer_portfolio">Portfólios</string>
     <string name="drawer_activities">Atividades</string>
-    <string name="drawer_general">Geral</string>
     <string name="drawer_files">Anexos</string>
     <string name="drawer_references">Anotações</string>
     <string name="drawer_reports">Relatórios</string>
@@ -34,7 +28,6 @@
     <string name="files_popup_gallery">Galeria</string>
     <string name="files_popup_videos">Videos</string>
     <string name="files_popup_text">Texto</string>
-    <string name="files_popup_attachment">Anexos</string>
 
     <string name="cancel">Cancelar</string>
     <string name="reference_hint"><i>escreva aqui</i></string>
@@ -55,13 +48,7 @@
     <string name="attachment_negative">Cancelar</string>
     <string name="attachment_delete">Deletar</string>
     <string name="title_activity_login2">Sign in</string>
-    <string name="title_activity_teste_download_image">TesteDownloadImage</string>
-
-    <string name="title_activity_privacy_policy">PrivacyPolicyActivity</string>
-    <string name="dummy_button">Dummy Button</string>
-    <string name="dummy_content">DUMMY\nCONTENT</string>
 
     <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
 
 </resources>

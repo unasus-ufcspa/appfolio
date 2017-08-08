@@ -9,7 +9,7 @@
         android:layout_width="100dp"
         android:layout_height="100dp"
         android:layout_gravity="center_horizontal"
-        android:src="@drawable/attachment_plus" />
+        android:src="@drawable/ic_attachment_plus" />
 
     <ImageView
         android:id="@+id/img_delete"
@@ -19,7 +19,7 @@
         android:layout_alignEnd="@+id/img_attachment"
         android:layout_alignRight="@+id/img_attachment"
         android:layout_gravity="center_horizontal"
-        android:src="@drawable/delete_x"
+        android:src="@drawable/ic_x"
         android:visibility="gone" />
 
     <TextView

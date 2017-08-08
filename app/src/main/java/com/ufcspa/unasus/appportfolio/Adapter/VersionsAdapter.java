@@ -1,7 +1,6 @@
 package com.ufcspa.unasus.appportfolio.Adapter;
 
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -59,7 +58,7 @@ public class VersionsAdapter extends BaseAdapter {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         if (convertView == null)
-            convertView = inflater.inflate(R.layout.adapter_versions, null);
+            convertView = inflater.inflate(R.layout.item_version, null);
 
         VersionActivity aux = list.get(position);
 

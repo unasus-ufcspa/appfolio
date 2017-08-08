@@ -11,7 +11,7 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.ufcspa.unasus.appportfolio.Activities.Fragments.FragmentAttachment;
+import com.ufcspa.unasus.appportfolio.Activities.Fragments.AttachmentFragment;
 import com.ufcspa.unasus.appportfolio.Activities.MainActivity;
 import com.ufcspa.unasus.appportfolio.Model.Attachment;
 import com.ufcspa.unasus.appportfolio.Model.Singleton;
@@ -26,13 +26,13 @@ import java.util.Set;
  */
 public class FragmentAttachmentAdapter extends BaseAdapter {
     private static LayoutInflater inflater = null;
-    private FragmentAttachment context;
+    private AttachmentFragment context;
     private List<Attachment> attachments;
     private boolean canDelete;
     private Set<Attachment> shouldDelete;
 
 
-    public FragmentAttachmentAdapter(FragmentAttachment context, List<Attachment> attachment) {
+    public FragmentAttachmentAdapter(AttachmentFragment context, List<Attachment> attachment) {
         this.context = context;
         this.attachments = attachment;
         this.shouldDelete = new HashSet<>();
@@ -80,7 +80,7 @@ public class FragmentAttachmentAdapter extends BaseAdapter {
                             context.imageClicked(position);
                     }
                 });
-                components.imgAttachment.setImageResource(R.drawable.attachment_image);
+                components.imgAttachment.setImageResource(R.drawable.ic_attachment_image);
                 components.descAttachment.setText(aux.getNmFile());
                 break;
             case "V":
@@ -93,7 +93,7 @@ public class FragmentAttachmentAdapter extends BaseAdapter {
                             context.videoClicked(position);
                     }
                 });
-                components.imgAttachment.setImageResource(R.drawable.attachment_video);
+                components.imgAttachment.setImageResource(R.drawable.ic_attachment_video);
                 components.descAttachment.setText(aux.getNmFile());
                 break;
             case "T":
@@ -106,7 +106,7 @@ public class FragmentAttachmentAdapter extends BaseAdapter {
                             context.textClicked(position);
                     }
                 });
-                components.imgAttachment.setImageResource(R.drawable.attachment_file);
+                components.imgAttachment.setImageResource(R.drawable.ic_attachment_file);
                 components.descAttachment.setText(aux.getNmFile());
                 break;
             default:
@@ -117,7 +117,7 @@ public class FragmentAttachmentAdapter extends BaseAdapter {
                             context.plusClicked();
                         }
                     });
-                    components.imgAttachment.setImageResource(R.drawable.attachment_plus);
+                    components.imgAttachment.setImageResource(R.drawable.ic_attachment_plus);
                     components.descAttachment.setText("Adicionar novo");
                     components.imgDelete.setVisibility(View.GONE);
                 }
@@ -172,7 +172,7 @@ public class FragmentAttachmentAdapter extends BaseAdapter {
 
         @Override
         public boolean onCreateActionMode(ActionMode mode, Menu menu) {
-            mode.getMenuInflater().inflate(R.menu.menu_attachment, menu);
+            mode.getMenuInflater().inflate(R.menu.attachment, menu);
             ((MainActivity) context.getActivity()).hideDrawer();
             return true;
         }

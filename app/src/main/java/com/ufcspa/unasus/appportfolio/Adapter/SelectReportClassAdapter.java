@@ -2,17 +2,13 @@ package com.ufcspa.unasus.appportfolio.Adapter;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
 import android.support.v4.content.LocalBroadcastManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.AnimationUtils;
 import android.widget.BaseAdapter;
 import android.widget.ImageButton;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.ufcspa.unasus.appportfolio.Model.PortfolioClass;
 import com.ufcspa.unasus.appportfolio.Model.Singleton;
@@ -59,7 +55,7 @@ public class SelectReportClassAdapter extends BaseAdapter {
         final Holder holder = new Holder();
         final View rowView;
 
-        rowView = inflater.inflate(R.layout.adapter_item_report, null);
+        rowView = inflater.inflate(R.layout.item_class_finalized, null);
 
         holder.txt_class_code_info = (TextView) rowView.findViewById(R.id.txt_class_code_info);
         holder.btnInfoClose = (ImageButton) rowView.findViewById(R.id.btn_info_close);
@@ -77,8 +73,8 @@ public class SelectReportClassAdapter extends BaseAdapter {
 //            holder.txt_class_code.setTextColor(Color.GRAY);
 //            holder.txt_port_title.setTextColor(Color.GRAY);
 //            holder.txt_port.setTextColor(Color.GRAY);
-//            holder.btnInfo.setImageResource(R.drawable.btn_open_white);
-//            holder.notificationIcon.setBackgroundResource(R.drawable.rounded_student);
+//            holder.btnInfo.setImageResource(R.drawable.ic_hamburger_white);
+//            holder.notificationIcon.setBackgroundResource(R.drawable.bg_green_rounded);
 //            holder.notificationIcon.setVisibility(View.VISIBLE);
 //        }
         holder.txt_class_code.setText(portClass.getClassCode());

@@ -3,14 +3,12 @@ package com.ufcspa.unasus.appportfolio.Dialog;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.BitmapFactory;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.content.LocalBroadcastManager;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.VideoView;
 
 import com.ufcspa.unasus.appportfolio.R;
 
@@ -26,7 +24,7 @@ public class FullImageDialog extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
-        setContentView(R.layout.custom_fullimage_dialog);
+        setContentView(R.layout.dialog_image);
 
         if (savedInstanceState == null) {
             Bundle extras = getIntent().getExtras();

@@ -23,7 +23,7 @@
 
     <application
         android:allowBackup="true"
-        android:icon="@mipmap/ic_portfolio"
+        android:icon="@mipmap/ic_folio"
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
@@ -46,9 +46,6 @@
             android:name=".Activities.SelectClassActivity"
             android:label="@string/title_activity_select_class" />
         <activity
-            android:name=".Activities.LoginActivity"
-            android:label="@string/title_activity_login" />
-        <activity
             android:name=".Activities.SelectPortfolioActivity"
             android:label="@string/title_activity_select_portfolio"
             android:theme="@style/AppTheme.NoActionBar" />
@@ -65,13 +62,9 @@
             android:name=".Dialog.FullImageDialog"
             android:theme="@android:style/Theme.Dialog" />
         <activity
-            android:name=".Activities.LoginActivity2"
+            android:name=".Activities.LoginActivity"
             android:label="@string/title_activity_login2"
             android:windowSoftInputMode="adjustPan" />
-        <activity
-            android:name=".Activities.TesteDownloadImage"
-            android:label="@string/title_activity_teste_download_image"
-            android:theme="@style/AppTheme.NoActionBar" />
 
         <service
         android:name=".Notifications.NotificationIntentService"

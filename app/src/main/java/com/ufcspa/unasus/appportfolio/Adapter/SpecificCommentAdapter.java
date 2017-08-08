@@ -53,9 +53,9 @@ public class SpecificCommentAdapter extends BaseAdapter {
         View rowView;
         OneComment c = comments.get(position);
         if(c.atach)
-            rowView = inflater.inflate(R.layout.atach_item, null);
+            rowView = inflater.inflate(R.layout.item_attachment, null);
         else
-            rowView = inflater.inflate(R.layout.specific_comment_item, null);
+            rowView = inflater.inflate(R.layout.item_specific_comment, null);
 
         Holder holder = new Holder();
 
@@ -96,7 +96,7 @@ public class SpecificCommentAdapter extends BaseAdapter {
             }
         }
         if(c.atach==false) {
-            holder.message.setBackgroundResource(c.orientation ? R.drawable.final_b_ger_right : R.drawable.final_b_ger_left);
+            holder.message.setBackgroundResource(c.orientation ? R.drawable.bg_balloon_right : R.drawable.bg_balloon_left);
             holder.wraper.setGravity(c.orientation ? Gravity.RIGHT : Gravity.LEFT);
         }
         //////////---------------////////////////////

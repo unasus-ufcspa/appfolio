@@ -1,13 +1,11 @@
 package com.ufcspa.unasus.appportfolio.Adapter;
 
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.media.ThumbnailUtils;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v4.content.LocalBroadcastManager;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -78,7 +76,7 @@ public class ActivitiesAdapter extends RecyclerView.Adapter<ActivitiesAdapter.Vi
         ViewHolder vh;
         switch (viewType) {
             case 1:
-                v = LayoutInflater.from(parent.getContext()).inflate(R.layout.adapter_item_class_finished, parent, false);
+                v = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_class_finished, parent, false);
                 vh = new ViewHolder(v);
 
                 vh.title = (TextView) v.findViewById(R.id.adapter_item_class_txv_code);
@@ -89,7 +87,7 @@ public class ActivitiesAdapter extends RecyclerView.Adapter<ActivitiesAdapter.Vi
 //                vh.txt_class_code_info = (TextView) v.findViewById(R.id.adapter_item_class_txv_ds_port);
                 return vh;
             default:
-                v = LayoutInflater.from(parent.getContext()).inflate(R.layout.adapter_item_portfolio_activity, parent, false);
+                v = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_portfolio_activity, parent, false);
                 vh = new ViewHolder(v);
 
                 vh.title = (TextView) v.findViewById(R.id.adapter_item_class_txv_ds_title);
@@ -145,7 +143,7 @@ public class ActivitiesAdapter extends RecyclerView.Adapter<ActivitiesAdapter.Vi
                 if (r == 0) {
                     holder.notificationIcon.setVisibility(View.INVISIBLE);
                 } else {
-                    holder.notificationIcon.setBackgroundResource(R.drawable.done_notification);
+                    holder.notificationIcon.setBackgroundResource(R.drawable.ic_done_notification);
                     holder.notificationIcon.setVisibility(View.VISIBLE);
                 }
 

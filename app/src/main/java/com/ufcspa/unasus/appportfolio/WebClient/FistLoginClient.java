@@ -11,8 +11,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
-import com.ufcspa.unasus.appportfolio.Activities.LoginActivity2;
-import com.ufcspa.unasus.appportfolio.Model.Activity;
+import com.ufcspa.unasus.appportfolio.Activities.LoginActivity;
 import com.ufcspa.unasus.appportfolio.Model.Device;
 import com.ufcspa.unasus.appportfolio.Model.Singleton;
 import com.ufcspa.unasus.appportfolio.Model.User;
@@ -54,7 +53,7 @@ public class FistLoginClient extends HttpClient {
                         if (response.getJSONObject("firstLogin_response").has("error")) {
                             Log.e(tag, "JSON usuario ou senha invalidos");
                             singleton.erro = "Erro interno. Por favor tente novamente";
-                            LoginActivity2.isBasicDataSyncNotSucessful = true;
+                            LoginActivity.isBasicDataSyncNotSucessful = true;
                             Log.d(tag, "JSon response receiving:" + response.getJSONObject("firstLogin_response").get("erro"));
                         }else {
                             if(response.getJSONObject("firstLogin_response").has("tb_user")){
@@ -98,7 +97,7 @@ public class FistLoginClient extends HttpClient {
                                 Singleton.getInstance().user = user;
                                 Log.d(tag, "user get by singleton:" + Singleton.getInstance().user.toString());
 
-                                LoginActivity2.isLoginSucessful=true;
+                                LoginActivity.isLoginSucessful=true;
                             }
                             if (response.getJSONObject("firstLogin_response").has("tb_guest")){
                                 JSONObject resp = new JSONObject();
@@ -131,12 +130,12 @@ public class FistLoginClient extends HttpClient {
 
                     }else {
                         Log.e(tag,"não encontrou firstLogin_response no json");
-                        LoginActivity2.isDataSyncNotSucessful = true;
+                        LoginActivity.isDataSyncNotSucessful = true;
                         singleton.erro = "Erro ao fazer login, verifique seu usuário e senha";
                     }
                 } catch (JSONException e) {
                     Log.e(tag,"JSON exception on response:"+e.getMessage());
-                    LoginActivity2.isDataSyncNotSucessful = true;
+                    LoginActivity.isDataSyncNotSucessful = true;
                     singleton.erro = "Erro interno. Por favor tente novamente";
                 }finally {
 
@@ -152,7 +151,7 @@ public class FistLoginClient extends HttpClient {
                     singleton.erro = "Erro ao fazer login, verifique seu usuário e senha";
                 //Log.wtf(tag,"Network response:"+volleyError.networkResponse.statusCode);
                 Log.e(tag,"erro="+volleyError.getMessage());
-                LoginActivity2.isDataSyncNotSucessful=true;
+                LoginActivity.isDataSyncNotSucessful=true;
             }
         });
 

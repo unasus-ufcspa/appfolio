@@ -10,7 +10,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
-import com.ufcspa.unasus.appportfolio.Activities.LoginActivity2;
+import com.ufcspa.unasus.appportfolio.Activities.LoginActivity;
 import com.ufcspa.unasus.appportfolio.Model.Policy;
 import com.ufcspa.unasus.appportfolio.Model.PolicyUser;
 import com.ufcspa.unasus.appportfolio.Model.TutorPortfolio;
@@ -37,7 +37,7 @@ public class BasicDataClient extends HttpClient {
     private String method="basicData";
     private Context context;
     private BasicData basicData;
-    private LoginActivity2 loginActivity;
+    private LoginActivity loginActivity;
     private String jsonStringName="basicData_response";
 
 
@@ -63,7 +63,7 @@ public class BasicDataClient extends HttpClient {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError volleyError) {
-                LoginActivity2.isBasicDataSyncNotSucessful = true;
+                LoginActivity.isBasicDataSyncNotSucessful = true;
                 Log.e(tag, "Erro  na request");
                 volleyError.printStackTrace();
                 //Log.wtf(tag,"Network response:"+volleyError.networkResponse.statusCode);
@@ -86,7 +86,7 @@ public class BasicDataClient extends HttpClient {
             System.out.print(response.toString().replaceAll("\\{","\n{"));
             if (response.has("error")) {
                 Log.e(tag, "sincronizacao de dados iniciais falhou");
-                LoginActivity2.isBasicDataSyncNotSucessful = true;
+                LoginActivity.isBasicDataSyncNotSucessful = true;
                 Log.d(tag, "JSon response receiving:" + response.toString());
             }else if(response.has(jsonStringName)){
                 Log.d(tag,"JSON POST existe basic Data response");
@@ -412,16 +412,16 @@ public class BasicDataClient extends HttpClient {
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
-                    LoginActivity2.isBasicDataSyncNotSucessful = true;
+                    LoginActivity.isBasicDataSyncNotSucessful = true;
                 } catch (Exception v){
                     v.printStackTrace();
-                    LoginActivity2.isBasicDataSyncNotSucessful = true;
+                    LoginActivity.isBasicDataSyncNotSucessful = true;
                 }
 
                 Log.d(tag, "Fim  da request");
                 //EXECUTE INSERTS IN SQLITE
                 basicData.insertDataIntoSQLITE();
-                LoginActivity2.isBasicDataSucessful = true;
+                LoginActivity.isBasicDataSucessful = true;
             }
         } finally {
 

@@ -8,7 +8,7 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.ufcspa.unasus.appportfolio.Activities.Fragments.FragmentAttachmentDialog;
+import com.ufcspa.unasus.appportfolio.Activities.Fragments.AttachmentDialogFragment;
 import com.ufcspa.unasus.appportfolio.Model.Attachment;
 import com.ufcspa.unasus.appportfolio.R;
 
@@ -19,11 +19,11 @@ import java.util.List;
  */
 public class FragmentAttachmentDialogAdapter extends BaseAdapter {
     private static LayoutInflater inflater = null;
-    private FragmentAttachmentDialog context;
+    private AttachmentDialogFragment context;
     private List<Attachment> attachments;
 
 
-    public FragmentAttachmentDialogAdapter(FragmentAttachmentDialog context, List<Attachment> attachment) {
+    public FragmentAttachmentDialogAdapter(AttachmentDialogFragment context, List<Attachment> attachment) {
         this.context = context;
         this.attachments = attachment;
         inflater = (LayoutInflater) context.getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -64,7 +64,7 @@ public class FragmentAttachmentDialogAdapter extends BaseAdapter {
                         context.imageClicked(position);
                     }
                 });
-                components.imgAttachment.setImageResource(R.drawable.attachment_image);
+                components.imgAttachment.setImageResource(R.drawable.ic_attachment_image);
                 components.descAttachment.setText(aux.getNmFile());
                 break;
             case "V":
@@ -74,7 +74,7 @@ public class FragmentAttachmentDialogAdapter extends BaseAdapter {
                         context.videoClicked(position);
                     }
                 });
-                components.imgAttachment.setImageResource(R.drawable.attachment_video);
+                components.imgAttachment.setImageResource(R.drawable.ic_attachment_video);
                 components.descAttachment.setText(aux.getNmFile());
                 break;
             case "T":
@@ -84,7 +84,7 @@ public class FragmentAttachmentDialogAdapter extends BaseAdapter {
                         context.textClicked(position);
                     }
                 });
-                components.imgAttachment.setImageResource(R.drawable.attachment_file);
+                components.imgAttachment.setImageResource(R.drawable.ic_attachment_file);
                 components.descAttachment.setText(aux.getNmFile());
                 break;
             default:

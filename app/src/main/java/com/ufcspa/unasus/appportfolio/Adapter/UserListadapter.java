@@ -11,11 +11,10 @@ import android.widget.BaseAdapter;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.ufcspa.unasus.appportfolio.Activities.Fragments.FragmentConfig;
+import com.ufcspa.unasus.appportfolio.Activities.Fragments.ConfigFragment;
 import com.ufcspa.unasus.appportfolio.Model.Comentario;
 import com.ufcspa.unasus.appportfolio.Model.Singleton;
 import com.ufcspa.unasus.appportfolio.Model.User;
@@ -64,7 +63,7 @@ public class UserListadapter extends BaseAdapter {
     public View getView(int position, View convertView, ViewGroup parent) {
         final User aux = userList.get(position);
 
-        convertView = inflater.inflate(R.layout.student_report_item,null);
+        convertView = inflater.inflate(R.layout.item_student_report,null);
 
         TextView studentName=(TextView)convertView.findViewById(R.id.p_student_name);
 //        studentName.setText(aux.getName());
@@ -73,9 +72,9 @@ public class UserListadapter extends BaseAdapter {
 
         Bitmap photo = aux.getPhotoBitmap();
         if (photo != null)
-            studentPhoto.setImageBitmap(FragmentConfig.getRoundedRectBitmap(photo,100));
+            studentPhoto.setImageBitmap(ConfigFragment.getRoundedRectBitmap(photo,100));
         else
-            studentPhoto.setImageResource(R.drawable.default_profile_picture);
+            studentPhoto.setImageResource(R.drawable.ic_default_picture);
 
         studentPhoto.setLayoutParams(new LinearLayout.LayoutParams(48,48));
 

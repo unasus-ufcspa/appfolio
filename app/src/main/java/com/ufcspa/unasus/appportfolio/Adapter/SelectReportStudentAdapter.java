@@ -12,7 +12,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -75,7 +74,7 @@ public class SelectReportStudentAdapter extends BaseAdapter {
         final View rowView;
         Singleton.getInstance().idStudent=listaUsers.get(position).getIdUser();
 
-        rowView = inflater.inflate(R.layout.student_report_item, null);
+        rowView = inflater.inflate(R.layout.item_student_report, null);
 
         holder.p_student_name=(TextView)rowView.findViewById(R.id.p_student_name);
         holder.p_student_name.setText(listaUsers.get(position).getName());
@@ -83,7 +82,7 @@ public class SelectReportStudentAdapter extends BaseAdapter {
         if (listaUsers.get(position).getPhotoBitmap()!=null) {
             holder.student_image.setImageBitmap(listaUsers.get(position).getPhotoBitmap());
         } else {
-            holder.student_image.setImageResource(R.drawable.default_profile_picture);
+            holder.student_image.setImageResource(R.drawable.ic_default_picture);
         }
 
         holder.student_image.setOnClickListener(new View.OnClickListener() {

@@ -11,7 +11,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
-import com.ufcspa.unasus.appportfolio.Activities.Fragments.FragmentComments;
+import com.ufcspa.unasus.appportfolio.Activities.Fragments.CommentsFragment;
 import com.ufcspa.unasus.appportfolio.Model.Comentario;
 import com.ufcspa.unasus.appportfolio.database.DataBaseAdapter;
 
@@ -84,7 +84,7 @@ public class CommentClient extends HttpClient{
 
 
 
-    public void getJsonList( final FragmentComments fComm){
+    public void getJsonList( final CommentsFragment fComm){
 
         JsonArrayRequest jsonArtRequest = new JsonArrayRequest(URL+method,new Response.Listener<JSONArray>() {
             @Override
@@ -122,7 +122,7 @@ public class CommentClient extends HttpClient{
 
 
 
-    public void getMessage(final FragmentComments fComm){
+    public void getMessage(final CommentsFragment fComm){
         JsonObjectRequest jsObjReq = new JsonObjectRequest(Request.Method.GET, URL+method, null, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject json) {

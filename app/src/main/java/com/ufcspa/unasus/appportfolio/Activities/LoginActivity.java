@@ -1,10 +1,13 @@
+
 package com.ufcspa.unasus.appportfolio.Activities;
 
+import android.Manifest;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
 import android.app.AlertDialog;
 import android.app.LoaderManager.LoaderCallbacks;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.CursorLoader;
 import android.content.DialogInterface;
@@ -17,9 +20,14 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.provider.ContactsContract;
+import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.telephony.TelephonyManager;
 import android.text.TextUtils;
@@ -28,22 +36,32 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.inputmethod.EditorInfo;
-import android.widget.ArrayAdapter;
-import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.ufcspa.unasus.appportfolio.Model.Device;
 import com.ufcspa.unasus.appportfolio.Model.Singleton;
 import com.ufcspa.unasus.appportfolio.Model.User;
 import com.ufcspa.unasus.appportfolio.R;
+import com.ufcspa.unasus.appportfolio.WebClient.BasicData;
+import com.ufcspa.unasus.appportfolio.WebClient.BasicDataClient;
+import com.ufcspa.unasus.appportfolio.WebClient.FirstLogin;
+import com.ufcspa.unasus.appportfolio.WebClient.FirstSync;
+import com.ufcspa.unasus.appportfolio.WebClient.FirstSyncClient;
+import com.ufcspa.unasus.appportfolio.WebClient.FistLoginClient;
 import com.ufcspa.unasus.appportfolio.database.DataBaseAdapter;
 
+import org.json.JSONObject;
+
+import java.security.MessageDigest;
 import java.util.ArrayList;
 import java.util.List;
 
 import static android.Manifest.permission.READ_CONTACTS;
+
+//import io.github.skyhacker2.sqliteonweb.SQLiteOnWeb;
 
 /**
  * A login screen that offers login via email/password.
@@ -60,22 +78,46 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     private static final String[] DUMMY_CREDENTIALS = new String[]{
             "foo@example.com:hello", "bar@example.com:world"
     };
+
+    public static final int MY_PERMISSIONS_REQUEST = 1;
+
     public static boolean isLoginSucessful;
+    public static boolean isDataSyncNotSucessful;
+    public static boolean isBasicDataSucessful;
+    public static boolean isBasicDataSyncNotSucessful;
+    LoginActivity l = this;
+    ProgressDialog dialog;
     /**
      * Keep track of the login task to ensure we can cancel it if requested.
      */
     private UserLoginTask mAuthTask = null;
-
     // UI references.
-    private AutoCompleteTextView mEmailView;
+    private EditText mEmailView;
     private EditText mPasswordView;
     private View mProgressView;
     //    private View mLoginFormView;
     private DataBaseAdapter bd;
     private User user;
-
     // Singleton
     private Singleton session;
+
+    public static String sha256(String base) {
+        try {
+            MessageDigest digest = MessageDigest.getInstance("SHA-256");
+            byte[] hash = digest.digest(base.getBytes("UTF-8"));
+            StringBuffer hexString = new StringBuffer();
+
+            for (int i = 0; i < hash.length; i++) {
+                String hex = Integer.toHexString(0xff & hash[i]);
+                if (hex.length() == 1) hexString.append('0');
+                hexString.append(hex);
+            }
+
+            return hexString.toString();
+        } catch (Exception ex) {
+            throw new RuntimeException(ex);
+        }
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -83,8 +125,21 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         setContentView(R.layout.activity_login);
         getSupportActionBar().hide();
 
+        Singleton.getInstance().user = new User(0,null,null);
+        Singleton.getInstance().device = new Device();
+
+        bd = DataBaseAdapter.getInstance(this);
+        //SQLiteOnWeb.init(this).start();
+
+        isBasicDataSucessful = false;
+        isBasicDataSyncNotSucessful = false;
+
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_DENIED) {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, MY_PERMISSIONS_REQUEST);
+        }
+
         // Set up the login form.
-        mEmailView = (AutoCompleteTextView) findViewById(R.id.email);
+        mEmailView = (EditText) findViewById(R.id.email);
         populateAutoComplete();
         mPasswordView = (EditText) findViewById(R.id.password);
 //        mLoginFormView = findViewById(R.id.login_form);
@@ -92,11 +147,16 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         mPasswordView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView textView, int id, KeyEvent keyEvent) {
-                return id == R.id.login || id == EditorInfo.IME_NULL;
+                if (id == R.id.login || id == EditorInfo.IME_NULL) {
+                    //attemptLogin();
+                    return true;
+                }
+                return false;
             }
         });
 
-        DataBaseAdapter data = DataBaseAdapter.getInstance(this);
+
+        final DataBaseAdapter data = DataBaseAdapter.getInstance(this);
 //        ArrayList<PortfolioClass> lista= (ArrayList<PortfolioClass>) data.selectListClassAndUserType(5);
 //        Log.d("lista","tamanho:"+lista.size());
 //
@@ -113,35 +173,166 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         Button mEmailSignInButton = (Button) findViewById(R.id.email_sign_in_button);
         mEmailSignInButton.setOnClickListener(new OnClickListener() {
             @Override
-            public void onClick(View view) {
-                //attemptLogin();
-                if (verificarLogin()) {
-                    session = Singleton.getInstance();
-                    session.user = user;
-//                    loginSuccess();
+            public synchronized void onClick(View view) {
+                if (isOnline()) {
+//                    showProgress(true);
+                    dialog = ProgressDialog.show(LoginActivity.this, "Baixando novos dados", "Por favor aguarde...", true);
+                    final Thread myThread =new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            if (!isLoginSucessful)
+                                verificarLogin();
+                            while(!isLoginSucessful){
+                                if(isDataSyncNotSucessful){
+                                    Log.d("acitivity login", "data sync not sucesseful");
+                                    break;
+                                }
 
-                    char userType = checkUserType(user.getIdUser());
-                    if (userType == 'W') {
-                        //showChooseTutorOrStudentPopup();
-                    } else {
-                        session.user.setUserType(userType);
-                        loginSuccess();
-                    }
+                            }
+                            if(!isDataSyncNotSucessful){
+                                Log.d("acitivity login", "user get by json:" + Singleton.getInstance().user.toString());
+                                getBasicData();
+
+                                while (!isBasicDataSucessful)
+                                    if (isBasicDataSyncNotSucessful)
+                                        break;
+
+                                if (!isBasicDataSyncNotSucessful) {
+                                    bd.updateDeviceBasicDataSync();
+                                    new Handler(Looper.getMainLooper()).post(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            dialog.dismiss();
+                                            Log.d("tela login", "terminou conexão");
+                                                startActivity(new Intent(getApplicationContext(), MainActivity.class));
+                                                finish();
+                                        }
+                                    });
+                                } else {
+                                    new Handler(Looper.getMainLooper()).post(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            Toast.makeText(getApplicationContext(), "Erro interno. Por favor tente novamente", Toast.LENGTH_LONG).show();
+//                                            showProgress(false);
+                                            dialog.dismiss();
+                                            mEmailView.setEnabled(false);
+                                            mPasswordView.setEnabled(false);
+                                        }
+                                    });
+                                }
+                            }else{
+                                new Handler(Looper.getMainLooper()).post(new Runnable() {
+                                    @Override
+                                    public void run() {
+//                                        showProgress(false);
+                                        dialog.dismiss();
+                                        Toast.makeText(getApplicationContext(), Singleton.getInstance().erro, Toast.LENGTH_LONG).show();
+                                        findViewById(R.id.scrollView).setVisibility(View.VISIBLE);
+                                        isLoginSucessful = false;
+                                        isDataSyncNotSucessful = false;
+                                    }
+                                });
+                            }
+                        }
+                    });
+                    myThread.start();
                 } else {
-                    Toast.makeText(getApplicationContext(), "Erro ao logar, favor verifique email e senha", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getApplicationContext(), "Sem conexão com a internet", Toast.LENGTH_LONG).show();
                 }
             }
         });
+
+        Bundle extras = getIntent().getExtras();
+        if (extras != null) {
+            if (extras.containsKey("dont_have_basic_data")) {
+                if (isOnline()) {
+//                    showProgress(true);
+                    dialog = ProgressDialog.show(LoginActivity.this, "Baixando novos dados", "Por favor aguarde...", true);
+                    new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            getBasicData();
+
+                            while (!isBasicDataSucessful)
+                                if (isBasicDataSyncNotSucessful)
+                                    break;
+
+                            if (!isBasicDataSyncNotSucessful) {
+                                bd.updateDeviceBasicDataSync();
+                                new Handler(Looper.getMainLooper()).post(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        dialog.dismiss();
+                                        Log.d("tela login", "terminou conexão");
+                                        startActivity(new Intent(getApplicationContext(), MainActivity.class));
+                                        finish();
+                                    }
+                                });
+                            } else {
+                                new Handler(Looper.getMainLooper()).post(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        Toast.makeText(getApplicationContext(), "Erro interno. Por favor tente novamente", Toast.LENGTH_LONG).show();
+//                                        showProgress(false);
+                                        dialog.dismiss();
+                                        mEmailView.setEnabled(false);
+                                        mPasswordView.setEnabled(false);
+                                        isLoginSucessful = true;
+                                        isDataSyncNotSucessful = false;
+                                    }
+                                });
+                            }
+                        }
+                    }).start();
+                }
+            } else {
+                Toast.makeText(getApplicationContext(), "Sem conexão com a internet", Toast.LENGTH_LONG).show();
+                mEmailView.setEnabled(false);
+                mPasswordView.setEnabled(false);
+            }
+        }
+    }
+
+
+    public void getBasicData() {
+        if (isOnline()) {
+            BasicDataClient client = new BasicDataClient(getBaseContext());
+            JSONObject jsonObject = new JSONObject();
+            client.postJson(BasicData.toJSON(Singleton.getInstance().user.getIdUser(), Singleton.getInstance().device.get_id_device()));// mandando id
+        } else {
+            new Handler(Looper.getMainLooper()).post(new Runnable() {
+                @Override
+                public void run() {
+                    Toast.makeText(getApplicationContext(), "Sem conexão com a internet", Toast.LENGTH_LONG).show();
+                }
+            });
+        }
+    }
+    public void getFirstSync() {
+        if (isOnline()) {
+            FirstSyncClient fsclient = new FirstSyncClient(getBaseContext());
+            JSONObject jsonObject = new JSONObject();
+            fsclient.postJson(FirstSync.toJSON(Singleton.getInstance().user.getIdUser(), Singleton.getInstance().device.get_id_device()));// mandando id
+        } else {
+            new Handler(Looper.getMainLooper()).post(new Runnable() {
+                @Override
+                public void run() {
+                    Toast.makeText(getApplicationContext(), "Sem conexão com a internet", Toast.LENGTH_LONG).show();
+                }
+            });
+        }
     }
 
     public boolean isTablet() {
         TelephonyManager manager = (TelephonyManager) this.getSystemService(Context.TELEPHONY_SERVICE);
-        return manager.getPhoneType() == TelephonyManager.PHONE_TYPE_NONE;
+        if (manager.getPhoneType() == TelephonyManager.PHONE_TYPE_NONE) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
-
-    private void showChooseTutorOrStudentPopup()
-    {
+    private void showChooseTutorOrStudentPopup() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setMessage(R.string.popup_login)
                 .setCancelable(false)
@@ -163,20 +354,22 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         alert.show();
     }
 
-    private void loginSuccess()
-    {
-        showProgress(true);
+    private void loginSuccess() {
+
         //  Log.d("singletonn", "id:" + session.user.getIdUser() + " uT:" + session.user.getUserType());
+        while (!isDataSyncNotSucessful) {
+
+        }
+        showProgress(false);
+        Log.d("Act Login", "Finishing activity");
         startActivity(new Intent(getApplicationContext(), MainActivity.class));
         finish();
     }
 
-    private char checkUserType(int idUser)
-    {
+    private char checkUserType(int idUser) {
         DataBaseAdapter bd = DataBaseAdapter.getInstance(this);
         return bd.verifyUserType(idUser);
     }
-
 
     @Override
     protected void onResume() {
@@ -192,13 +385,12 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         getLoaderManager().initLoader(0, null, this);
     }
 
-    private void criarBD(){
+    private void criarBD() {
         bd = DataBaseAdapter.getInstance(this);
     }
 
     public boolean isOnline() {
-        ConnectivityManager cm =
-                (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
 
         return cm.getActiveNetworkInfo() != null &&
                 cm.getActiveNetworkInfo().isConnectedOrConnecting();
@@ -206,35 +398,42 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 
     private boolean verificarLogin() {
 
-        try {
-            DataBaseAdapter bd = DataBaseAdapter.getInstance(this);
-            user = bd.verifyPass(mEmailView.getText().toString(), mPasswordView.getText().toString());
-            //result=user.getIdUser();
-            //Log.d("BANCO", " pass:" + result);
-//        if(isOnline()) {
-//            FirstLogin first = new FirstLogin();
-//
-//            String android_id = Settings.Secure.getString(this.getContentResolver(), Settings.Secure.ANDROID_ID);
-//            Log.d("ANDROID ID", "Android ID:" + android_id);
-//            String tpDevice=(isTablet()) ? "T" : "M";
-//            first.setIdDevice(android_id);
-//            first.setTpDevice(tpDevice);
-//            first.setEmail(mEmailView.getText().toString());
-//            first.setPasswd(mPasswordView.getText().toString());
-//            FistLoginClient client = new FistLoginClient(getBaseContext());
-//            client.postJson(first.toJSON());
-        } catch (Exception e) {
-            Log.d("BANCO", "verificando pass:" + e.getMessage());
-        } finally {
+        //  try {
+//            DataBaseAdapter bd = DataBaseAdapter.getInstance(this);
+//            user = bd.verifyPass(mEmailView.getText().toString(), mPasswordView.getText().toString());
+        //result=user.getIdUser();
+        //Log.d("BANCO", " pass:" + result);
+//        if (isOnline()) {
+        FirstLogin first = new FirstLogin();
 
-        }
+        String android_id = Settings.Secure.getString(this.getContentResolver(), Settings.Secure.ANDROID_ID);
+        Log.d("ANDROID ID", "Android ID:" + android_id);
+        String tpDevice = (isTablet()) ? "T" : "C";
+        first.setIdDevice(android_id);
+        first.setTpDevice(tpDevice);
+        first.setEmail(mEmailView.getText().toString());
+        // TODO SHA-256 -> (sha256(mPasswordView.getText().toString()));
+        // http://stackoverflow.com/questions/3103652/hash-string-via-sha-256-in-java
+        first.setPasswd(sha256(mPasswordView.getText().toString()));//(sha256(mPasswordView.getText().toString()));//(mPasswordView.getText().toString());
+
+        //ADD TO SINGLETON
+        Singleton.getInstance().device.set_id_device(android_id);
+        Singleton.getInstance().device.set_tp_device(tpDevice.charAt(0));
+
+        FistLoginClient client = new FistLoginClient(getBaseContext());
+        client.postJson(first.toJSON());
+
+//               } catch (Exception e) {
+//                 Log.d("BANCO", "verificando pass:" + e.getMessage());
+//               } finally {
+//
+//              }
 //        }else{
 //            Toast.makeText(getApplicationContext(), "Erro ao logar, favor verifique sua conexão com a internet", Toast.LENGTH_LONG).show();
 //        }
-        return true;//isLoginSucessful;
+        //showProgress(true);
+        return isLoginSucessful;
     }
-
-
 
     private boolean mayRequestContacts() {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
@@ -269,6 +468,11 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                 populateAutoComplete();
             }
         }
+        if (requestCode == MY_PERMISSIONS_REQUEST) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+            }
+        }
+
     }
 
 
@@ -334,6 +538,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         return password.length() > 4;
     }
 
+
     /**
      * Shows the progress UI and hides the login form.
      */
@@ -356,7 +561,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 //            });
 
             mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
-            findViewById(R.id.scrollView).setVisibility(View.GONE);
+            findViewById(R.id.scrollView).setVisibility(show ? View.GONE : View.VISIBLE);
             mProgressView.animate().setDuration(shortAnimTime).alpha(
                     show ? 1 : 0).setListener(new AnimatorListenerAdapter() {
                 @Override
@@ -368,7 +573,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             // The ViewPropertyAnimator APIs are not available, so simply show
             // and hide the relevant UI components.
             mProgressView.setVisibility(show ? View.VISIBLE : View.GONE);
-            findViewById(R.id.scrollView).setVisibility(View.GONE);
+            findViewById(R.id.scrollView).setVisibility(show ? View.GONE : View.VISIBLE);
 //            mLoginFormView.setVisibility(show ? View.GONE : View.VISIBLE);
         }
     }
@@ -399,22 +604,22 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
             cursor.moveToNext();
         }
 
-        addEmailsToAutoComplete(emails);
+//        addEmailsToAutoComplete(emails);
     }
 
     @Override
     public void onLoaderReset(Loader<Cursor> cursorLoader) {
 
     }
-
-    private void addEmailsToAutoComplete(List<String> emailAddressCollection) {
-        //Create adapter to tell the AutoCompleteTextView what to show in its dropdown list.
-        ArrayAdapter<String> adapter =
-                new ArrayAdapter<>(LoginActivity.this,
-                        android.R.layout.simple_dropdown_item_1line, emailAddressCollection);
-
-        mEmailView.setAdapter(adapter);
-    }
+//
+//    private void addEmailsToAutoComplete(List<String> emailAddressCollection) {
+//        //Create adapter to tell the AutoCompleteTextView what to show in its dropdown list.
+//        ArrayAdapter<String> adapter =
+//                new ArrayAdapter<>(LoginActivity.this,
+//                        android.R.layout.simple_dropdown_item_1line, emailAddressCollection);
+//
+//        mEmailView.setAdapter(adapter);
+//    }
 
 
     private interface ProfileQuery {

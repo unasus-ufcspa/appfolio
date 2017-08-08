@@ -11,12 +11,11 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
-import com.ufcspa.unasus.appportfolio.Activities.LoginActivity2;
+import com.ufcspa.unasus.appportfolio.Activities.LoginActivity;
 import com.ufcspa.unasus.appportfolio.Activities.MainActivity;
 import com.ufcspa.unasus.appportfolio.Model.Annotation;
 import com.ufcspa.unasus.appportfolio.Model.Attachment;
 import com.ufcspa.unasus.appportfolio.Model.Comentario;
-import com.ufcspa.unasus.appportfolio.Model.Notification;
 import com.ufcspa.unasus.appportfolio.Model.Observation;
 import com.ufcspa.unasus.appportfolio.Model.Reference;
 import com.ufcspa.unasus.appportfolio.Model.Singleton;
@@ -39,7 +38,7 @@ public class SyncVisitanteClient extends HttpClient{
     private String method="syncVisitante";
     private Context context;
     private SyncVisitante firstSync;
-    private LoginActivity2 loginActivity;
+    private LoginActivity loginActivity;
 
     public SyncVisitanteClient(Context context) {
         super(context);

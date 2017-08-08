@@ -10,7 +10,6 @@ import com.ufcspa.unasus.appportfolio.Model.Device;
 import com.ufcspa.unasus.appportfolio.Model.Singleton;
 import com.ufcspa.unasus.appportfolio.database.DataBaseAdapter;
 
-import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -46,7 +45,7 @@ public class SplashActivity extends AppCompatActivity {
         int statusApp = adapter.getStatus(device);
         Log.d("SplashActivity", "status device = " + statusApp);
 
-        Intent intent = new Intent(this, LoginActivity2.class);
+        Intent intent = new Intent(this, LoginActivity.class);
             if (statusApp == 1) {
                 intent = new Intent(this, MainActivity.class);
             } else if (statusApp == 0) {
@@ -54,7 +53,6 @@ public class SplashActivity extends AppCompatActivity {
             }
 
             startActivity(intent);
-//        startActivity(new Intent(this,TesteDownloadImage.class));
             finish();
     }
 }

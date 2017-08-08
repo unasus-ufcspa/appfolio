@@ -15,7 +15,6 @@ import com.ufcspa.unasus.appportfolio.Model.Singleton;
 import com.ufcspa.unasus.appportfolio.R;
 import com.ufcspa.unasus.appportfolio.database.DataBaseAdapter;
 
-import java.io.File;
 import java.util.HashMap;
 import java.util.List;
 
@@ -55,7 +54,7 @@ public class ReportPortfolioAdapter extends BaseAdapter {
     public View getView(int position, View convertView, ViewGroup parent) {
         ReportPortfolioAdapter.Holder holder = new ReportPortfolioAdapter.Holder();
         View rowView;
-        rowView = inflater.inflate(R.layout.adapter_report_item, null);
+        rowView = inflater.inflate(R.layout.item_report, null);
 
         ActivityStudent aux = list.get(position);
 

@@ -44,7 +44,7 @@
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
             android:layout_margin="5dp"
-            android:background="@drawable/bt_send_ref" />
+            android:background="@drawable/btn_send_ref" />
 
         <Button
             android:id="@+id/bt_add_attachment"
@@ -54,7 +54,7 @@
             android:layout_centerVertical="true"
             android:layout_margin="5dp"
             android:layout_toLeftOf="@+id/gen_messag_bt"
-            android:background="@drawable/chat_attachment" />
+            android:background="@drawable/btn_chat_attachment" />
 
         <EditText
             android:id="@+id/edtMessage"

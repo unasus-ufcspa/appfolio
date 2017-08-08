@@ -2,7 +2,6 @@
 <resources>
     <color name="colorPrimary">#70E7D0</color>
     <color name="colorPrimaryDark">#70E7D0</color>
-    <color name="colorPrimaryLight">#70E7D0</color>
     <color name="colorAccent">#FF4081</color>
     <color name="white">#FFFFFf</color>
 
@@ -49,12 +48,10 @@
     <color name="base_green">#70E7D0</color>
     <color name="base_green_dark">#61C6B7</color>
     <color name="base_green_light">#d9fce6</color>
-    <color name="screen_background_light_transparent">#80ffffff</color>
 
     <color name="black_overlay">#66000000</color>
     <color name="gray_7">#f2f3f0</color>
     <color name="gray_8">#f9fbfa</color>
 
 
-    <color name="custom_showcase_bg">#b9002153</color>
 </resources>

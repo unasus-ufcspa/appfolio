@@ -8,7 +8,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.graphics.Point;
 import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.os.Environment;
@@ -33,22 +32,20 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
-import android.widget.TextView;
 import android.widget.Toast;
 
-import com.github.amlcurran.showcaseview.ShowcaseView;
 import com.github.amlcurran.showcaseview.targets.Target;
 import com.github.amlcurran.showcaseview.targets.ViewTarget;
 import com.mikepenz.crossfader.Crossfader;
-import com.ufcspa.unasus.appportfolio.Activities.Fragments.FragmentAttachment;
-import com.ufcspa.unasus.appportfolio.Activities.Fragments.FragmentConfig;
-import com.ufcspa.unasus.appportfolio.Activities.Fragments.FragmentRTEditor;
-import com.ufcspa.unasus.appportfolio.Activities.Fragments.FragmentReference;
-import com.ufcspa.unasus.appportfolio.Activities.Fragments.FragmentReport;
-import com.ufcspa.unasus.appportfolio.Activities.Fragments.FragmentReportPortfolio;
-import com.ufcspa.unasus.appportfolio.Activities.Fragments.FragmentReportStudents;
-import com.ufcspa.unasus.appportfolio.Activities.Fragments.FragmentSelectPortfolio;
-import com.ufcspa.unasus.appportfolio.Activities.Fragments.FragmentStudentActivities;
+import com.ufcspa.unasus.appportfolio.Activities.Fragments.ActivitiesFragment;
+import com.ufcspa.unasus.appportfolio.Activities.Fragments.AttachmentFragment;
+import com.ufcspa.unasus.appportfolio.Activities.Fragments.ConfigFragment;
+import com.ufcspa.unasus.appportfolio.Activities.Fragments.RTEditorFragment;
+import com.ufcspa.unasus.appportfolio.Activities.Fragments.ReferenceFragment;
+import com.ufcspa.unasus.appportfolio.Activities.Fragments.ReportFragment;
+import com.ufcspa.unasus.appportfolio.Activities.Fragments.ReportPortfolioFragment;
+import com.ufcspa.unasus.appportfolio.Activities.Fragments.ReportStudentsFragment;
+import com.ufcspa.unasus.appportfolio.Activities.Fragments.PortfoliosFragment;
 import com.ufcspa.unasus.appportfolio.Model.Attachment;
 //import com.ufcspa.unasus.appportfolio.Model.CustomShowcaseView;
 import com.ufcspa.unasus.appportfolio.Model.Device;
@@ -165,9 +162,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         if (shouldCreateDrawer) {
             LayoutInflater inflater = (LayoutInflater) getApplicationContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
-            bigDrawer = inflater.inflate(R.layout.big_drawer, null);
+            bigDrawer = inflater.inflate(R.layout.menu_expanded, null);
             initBigDrawer();
-            miniDrawer = inflater.inflate(R.layout.mini_drawer, null);
+            miniDrawer = inflater.inflate(R.layout.menu_retracted, null);
             initMiniDrawer();
 
             apagarBotoes(1);
@@ -190,8 +187,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         LocalBroadcastManager.getInstance(this).registerReceiver(broadcastReceiver, new IntentFilter("call.fragments.action"));
 
         if (!shouldCreateDrawer || singleton.wasFullscreen) {
-            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new FragmentRTEditor()).addToBackStack("FragmentRTEditor").commit();
-            lastFragName = "FragmentRTEditor";
+            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new RTEditorFragment()).addToBackStack("RTEditorFragment").commit();
+            lastFragName = "RTEditorFragment";
         } else if (savedInstanceState == null)
             changeFragment(0);
 
@@ -209,7 +206,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             if (!policyAceita()) {
                 final Dialog dialog = new Dialog(this);
                 dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-                dialog.setContentView(R.layout.privacy_policy_popup);
+                dialog.setContentView(R.layout.dialog_privacy_policy);
                 dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
                 dialog.setCanceledOnTouchOutside(false);
                 dialog.setCancelable(false);
@@ -412,30 +409,30 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
             if (lastFragName != null)
                 switch (lastFragName) {
-                    case "FragmentRTEditor":
-                        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new FragmentRTEditor()).addToBackStack(lastFragName).commit();
+                    case "RTEditorFragment":
+                        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new RTEditorFragment()).addToBackStack(lastFragName).commit();
                         apagarBotoes(1);
                         break;
-                    case "FragmentReference":
-                        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new FragmentReference()).addToBackStack(lastFragName).commit();
+                    case "ReferenceFragment":
+                        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new ReferenceFragment()).addToBackStack(lastFragName).commit();
                         break;
-                    case "FragmentConfig":
-                        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new FragmentConfig()).addToBackStack(lastFragName).commit();
+                    case "ConfigFragment":
+                        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new ConfigFragment()).addToBackStack(lastFragName).commit();
                         break;
-                    case "FragmentAttachment":
-                        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new FragmentAttachment()).addToBackStack(lastFragName).commit();
+                    case "AttachmentFragment":
+                        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new AttachmentFragment()).addToBackStack(lastFragName).commit();
                         break;
-                    case "FragmentSelectPortfolio":
-                        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new FragmentSelectPortfolio()).addToBackStack(lastFragName).commit();
+                    case "PortfoliosFragment":
+                        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new PortfoliosFragment()).addToBackStack(lastFragName).commit();
                         break;
-                    case "FragmentStudentActivities":
-                        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new FragmentStudentActivities()).addToBackStack(lastFragName).commit();
+                    case "ActivitiesFragment":
+                        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new ActivitiesFragment()).addToBackStack(lastFragName).commit();
                         break;
-                    case "FragmentReport":
-                        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new FragmentReport()).addToBackStack(lastFragName).commit();
+                    case "ReportFragment":
+                        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new ReportFragment()).addToBackStack(lastFragName).commit();
                         break;
-                    case "FragmentReportPortfolio":
-                        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new FragmentReportPortfolio()).addToBackStack(lastFragName).commit();
+                    case "ReportPortfolioFragment":
+                        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new ReportPortfolioFragment()).addToBackStack(lastFragName).commit();
                         break;
                 }
         }
@@ -515,32 +512,32 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 }
                 break;
             case 2:
-                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new FragmentReference()).addToBackStack("FragmentReference").commit();
-                lastFragName = "FragmentReference";
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new ReferenceFragment()).addToBackStack("ReferenceFragment").commit();
+                lastFragName = "ReferenceFragment";
                 apagarBotoes(id);
                 break;
             case 3:
-                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new FragmentConfig()).addToBackStack("FragmentConfig").commit();
-                lastFragName = "FragmentConfig";
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new ConfigFragment()).addToBackStack("ConfigFragment").commit();
+                lastFragName = "ConfigFragment";
                 apagarBotoes(id);
                 break;
             case 4:
-                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new FragmentAttachment()).addToBackStack("FragmentAttachment").commit();
-                lastFragName = "FragmentAttachment";
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new AttachmentFragment()).addToBackStack("AttachmentFragment").commit();
+                lastFragName = "AttachmentFragment";
                 apagarBotoes(id);
                 break;
             case 5:
-                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new FragmentReport()).addToBackStack("FragmentReport").commit();
-                lastFragName = "FragmentReport";
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new ReportFragment()).addToBackStack("ReportFragment").commit();
+                lastFragName = "ReportFragment";
                 apagarBotoes(id);
                 break;
             case 7:
-                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new FragmentReportPortfolio()).addToBackStack("FragmentReportPortfolio").commit();
-                lastFragName = "FragmentReportPortfolio";
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new ReportPortfolioFragment()).addToBackStack("ReportPortfolioFragment").commit();
+                lastFragName = "ReportPortfolioFragment";
                 break;
             case 8:
-                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new FragmentReportStudents()).addToBackStack("FragmentReportStudents").commit();
-                lastFragName = "FragmentReportStudents";
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new ReportStudentsFragment()).addToBackStack("ReportStudentsFragment").commit();
+                lastFragName = "ReportStudentsFragment";
                 break;
             case 6:
                 downloadFullData(singleton.idActivityStudent, id);
@@ -747,16 +744,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
             switch (change_fragment) {
                 case 0:
-                    getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new FragmentSelectPortfolio()).addToBackStack("FragmentSelectPortfolio").commitAllowingStateLoss();//FragmentSelectPortfolio
-                    lastFragName = "FragmentSelectPortfolio";
+                    getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new PortfoliosFragment()).addToBackStack("PortfoliosFragment").commitAllowingStateLoss();//PortfoliosFragment
+                    lastFragName = "PortfoliosFragment";
                     break;
                 case 1:
-                    getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new FragmentStudentActivities()).addToBackStack("FragmentStudentActivities").commitAllowingStateLoss();
-                    lastFragName = "FragmentStudentActivities";
+                    getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new ActivitiesFragment()).addToBackStack("ActivitiesFragment").commitAllowingStateLoss();
+                    lastFragName = "ActivitiesFragment";
                     break;
                 case 6:
-                    getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new FragmentRTEditor()).addToBackStack("FragmentRTEditor").commit();
-                    lastFragName = "FragmentRTEditor";
+                    getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new RTEditorFragment()).addToBackStack("RTEditorFragment").commit();
+                    lastFragName = "RTEditorFragment";
                     break;
                 default:
                     break;
@@ -770,7 +767,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         singleton.user = new User(0,null,null);
         singleton.device = new Device();
         DataBase.getInstance(this).getDatabase();
-        Intent intent = new Intent(this, LoginActivity2.class);
+        Intent intent = new Intent(this, LoginActivity.class);
         startActivity(intent);
         System.exit(0);
     }

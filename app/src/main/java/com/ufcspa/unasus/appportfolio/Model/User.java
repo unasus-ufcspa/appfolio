@@ -4,7 +4,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.util.Base64;
 
-import com.ufcspa.unasus.appportfolio.Activities.Fragments.FragmentConfig;
+import com.ufcspa.unasus.appportfolio.Activities.Fragments.ConfigFragment;
 
 /**
  * Created by Desenvolvimento on 13/11/2015.
@@ -99,7 +99,7 @@ public class User {
                 this.photoBitmap = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
 
                 Bitmap picture = Bitmap.createScaledBitmap(photoBitmap, 180, 180, true);
-                photoBitmap = FragmentConfig.getRoundedRectBitmap(picture, 100);
+                photoBitmap = ConfigFragment.getRoundedRectBitmap(picture, 100);
 
             }
         }

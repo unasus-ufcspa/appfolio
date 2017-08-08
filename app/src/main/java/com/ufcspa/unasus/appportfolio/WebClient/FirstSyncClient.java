@@ -11,7 +11,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
-import com.ufcspa.unasus.appportfolio.Activities.LoginActivity2;
+import com.ufcspa.unasus.appportfolio.Activities.LoginActivity;
 import com.ufcspa.unasus.appportfolio.Activities.MainActivity;
 import com.ufcspa.unasus.appportfolio.Model.Annotation;
 import com.ufcspa.unasus.appportfolio.Model.Attachment;
@@ -39,7 +39,7 @@ public class FirstSyncClient extends HttpClient{
     private String method="firstSync";
     private Context context;
     private FirstSync firstSync;
-    private LoginActivity2 loginActivity;
+    private LoginActivity loginActivity;
 
     public FirstSyncClient(Context context) {
         super(context);

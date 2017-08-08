@@ -220,8 +220,8 @@ public class SendData {
                     jsonComments.put(jsonComment);
                 }
             }
-            if (versions != null) {
-                for (VersionActivity v : versions) {
+            if (btn_versions != null) {
+                for (VersionActivity v : btn_versions) {
                     JSONObject jsonVersion = new JSONObject();
                     jsonVersion.put("id_version_activity", v.getId_version_activity());
                     if (v.getId_version_activit_srv() != -1)

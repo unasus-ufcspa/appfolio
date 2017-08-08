@@ -91,7 +91,7 @@
                 android:layout_alignParentBottom="false"
                 android:layout_alignLeft="@id/send_version"
                 android:layout_alignParentRight="true"
-                android:background="@drawable/fullscreen1"
+                android:background="@drawable/ic_maximize"
                 android:layout_above="@+id/fullscreen_text" />
 
             <TextView
@@ -116,7 +116,7 @@
             android:layout_below="@+id/info_rteditor_container"
             android:layout_toLeftOf="@+id/sidebar"
             android:layout_toStartOf="@+id/sidebar"
-            android:background="@drawable/rteditor_shadow"
+            android:background="@drawable/bg_shadow"
             android:visibility="visible">
 
             <RelativeLayout
@@ -201,7 +201,7 @@
             android:visibility="gone">
 
             <include
-                layout="@layout/personal_comment_dialog"
+                layout="@layout/dialog_personal_comment"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true" />
@@ -219,12 +219,12 @@
             android:layout_marginTop="50dp"
             android:gravity="right"
             android:inflatedId="@+id/panel_import"
-            android:layout="@layout/versions_dialog"
+            android:layout="@layout/dialog_versions"
             android:visibility="invisible">
 
             <include
                 android:id="@+id/versions"
-                layout="@layout/versions_dialog" />
+                layout="@layout/dialog_versions" />
 
         </RelativeLayout>
 
@@ -269,7 +269,7 @@
                     android:layout_centerVertical="true"
                     android:background="@android:color/transparent"
                     android:scaleType="fitXY"
-                    android:src="@drawable/versions" />
+                    android:src="@drawable/btn_versions" />
 
                 <ImageView
                     android:id="@+id/specific_comment_notice"
@@ -279,7 +279,7 @@
                     android:layout_alignParentRight="true"
                     android:layout_alignParentTop="true"
                     android:gravity="center"
-                    android:src="@drawable/specific_comment_ballon"
+                    android:src="@drawable/ic_speech_green"
                     android:text="1"
                     android:textAppearance="?android:attr/textAppearanceSmall"
                     android:textStyle="bold" />
@@ -296,7 +296,7 @@
                 android:layout_marginRight="99dp"
                 android:background="@android:color/transparent"
                 android:scaleType="fitXY"
-                android:src="@drawable/personal_comment" />
+                android:src="@drawable/ic_info" />
 
         </LinearLayout>
 
@@ -309,8 +309,8 @@
             android:layout_alignParentTop="true"
             android:layout_marginRight="24dp"
             android:layout_marginTop="10dp"
-            android:background="@drawable/rounded_corner"
-            android:src="@drawable/default_profile_picture"
+            android:background="@drawable/bg_rounded_corner"
+            android:src="@drawable/ic_default_picture"
             android:visibility="gone" />
 
         <!--<RelativeLayout-->
@@ -353,7 +353,7 @@
                 android:layout_height="45dp"
                 android:layout_weight="1"
                 android:adjustViewBounds="false"
-                android:background="@drawable/geral_comment_right_tab"
+                android:background="@drawable/tab_green"
                 android:gravity="center"
                 android:scaleType="fitEnd"
                 android:singleLine="true"
@@ -368,7 +368,7 @@
                 android:layout_height="45dp"
                 android:layout_weight="1"
                 android:adjustViewBounds="false"
-                android:background="@drawable/specific_comment_right_tab"
+                android:background="@drawable/tab_gray"
                 android:gravity="center"
                 android:scaleType="fitEnd"
                 android:singleLine="true"
@@ -456,7 +456,7 @@
             android:layout_height="30dp"
             android:layout_alignParentLeft="false"
             android:layout_marginTop="80dp"
-            android:background="@drawable/general_comment_ballon"
+            android:background="@drawable/ic_speech"
             android:gravity="center"
             android:paddingBottom="5dp"
             android:paddingLeft="2dp"

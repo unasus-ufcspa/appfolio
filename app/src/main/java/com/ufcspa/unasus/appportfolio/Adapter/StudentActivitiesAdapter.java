@@ -14,8 +14,7 @@ import android.widget.Filterable;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.ufcspa.unasus.appportfolio.Activities.Fragments.FragmentConfig;
-import com.ufcspa.unasus.appportfolio.Activities.Fragments.FragmentStudentActivities;
+import com.ufcspa.unasus.appportfolio.Activities.Fragments.ConfigFragment;
 import com.ufcspa.unasus.appportfolio.Activities.MainActivity;
 import com.ufcspa.unasus.appportfolio.Model.DividerItemDecoration;
 import com.ufcspa.unasus.appportfolio.Model.StudFrPortClass;
@@ -67,7 +66,7 @@ public class StudentActivitiesAdapter extends BaseAdapter implements Filterable
     public View getView(int position, View convertView, ViewGroup parent) {
         Holder holder = new Holder();
         View rowView;
-        rowView = inflater.inflate(R.layout.adapter_portfolio_activity, null);
+        rowView = inflater.inflate(R.layout.item_portfolio_activity_list, null);
 
         StudFrPortClass aux = filteredList.get(position);
 
@@ -96,7 +95,7 @@ public class StudentActivitiesAdapter extends BaseAdapter implements Filterable
         holder.studentPhoto = (ImageView) rowView.findViewById(R.id.student_image);
         Bitmap bitmap = aux.getPhoto();
         if (bitmap != null)
-            holder.studentPhoto.setImageBitmap(FragmentConfig.getRoundedRectBitmap(bitmap,100));
+            holder.studentPhoto.setImageBitmap(ConfigFragment.getRoundedRectBitmap(bitmap,100));
 
         return rowView;
     }
