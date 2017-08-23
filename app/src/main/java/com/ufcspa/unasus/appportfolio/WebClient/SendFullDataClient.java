@@ -11,10 +11,9 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.ufcspa.unasus.appportfolio.Activities.MainActivity;
-import com.ufcspa.unasus.appportfolio.Model.Annotation;
+import com.ufcspa.unasus.appportfolio.Database.DataBase;
 import com.ufcspa.unasus.appportfolio.Model.Attachment;
 import com.ufcspa.unasus.appportfolio.Model.basicData.ActivityStudent;
-import com.ufcspa.unasus.appportfolio.database.DataBaseAdapter;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -169,9 +168,9 @@ public class SendFullDataClient extends HttpClient{
                                     ActivityStudent as = new ActivityStudent();
                                     int id_activity_student = temp.getInt("id_activity_student");
                                     String dt_conclusion = temp.getString("dt_conclusion");
-                                    as = DataBaseAdapter.getInstance(context).getActivityStudentById(id_activity_student);
+                                    as = DataBase.getInstance(context).getActivityStudentById(id_activity_student);
                                     as.setDt_conclusion(dt_conclusion);
-                                    DataBaseAdapter.getInstance(context).updateTBActivityStudent(as);
+                                    DataBase.getInstance(context).updateTBActivityStudent(as);
                                     Log.d("activityStudent",as.toString());
                                 }
                             }
@@ -187,8 +186,8 @@ public class SendFullDataClient extends HttpClient{
                                     Attachment a = new Attachment();
                                     int id_attachment = temp.getInt("id_attachment");
                                     int id_attachment_srv = temp.getInt("id_attachment_srv");
-                                    a = DataBaseAdapter.getInstance(context).getAttachmentByID(id_attachment);
-                                    DataBaseAdapter.getInstance(context).updateIdAttachmentSrvById(id_attachment,id_attachment_srv);
+                                    a = DataBase.getInstance(context).getAttachmentByID(id_attachment);
+                                    DataBase.getInstance(context).updateIdAttachmentSrvById(id_attachment,id_attachment_srv);
                                     Log.d("anexo",a.toString());
                                 }
 
@@ -210,7 +209,7 @@ public class SendFullDataClient extends HttpClient{
 
                                     holdersAnnotation.add(holderA);
                                 }
-                                DataBaseAdapter.getInstance(context).updateAnnotationsBySendFullData(holdersAnnotation);
+                                DataBase.getInstance(context).updateAnnotationsBySendFullData(holdersAnnotation);
                             }
                         }
 
@@ -218,9 +217,9 @@ public class SendFullDataClient extends HttpClient{
                         sendData.insertDataOnResponse();
                         MainActivity.shouldSend = false;
                     } else {
-                        DataBaseAdapter.getInstance(context).deleteTBUserFromSync();
+                        DataBase.getInstance(context).deleteTBUserFromSync();
                     }
-                    DataBaseAdapter.getInstance(context).deleteAllNotificationsFromSync();
+                    DataBase.getInstance(context).deleteAllNotificationsFromSync();
                 } catch (Exception v) {
                     //MainActivity.isFullSyncNotSucessful = true;
                     v.printStackTrace();

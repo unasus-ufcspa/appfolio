@@ -10,10 +10,10 @@ import android.widget.BaseAdapter;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
+import com.ufcspa.unasus.appportfolio.Database.DataBase;
 import com.ufcspa.unasus.appportfolio.Model.PortfolioClass;
 import com.ufcspa.unasus.appportfolio.Model.Singleton;
 import com.ufcspa.unasus.appportfolio.R;
-import com.ufcspa.unasus.appportfolio.database.DataBaseAdapter;
 
 import java.util.List;
 
@@ -24,13 +24,13 @@ public class SelectReportClassAdapter extends BaseAdapter {
     private static LayoutInflater inflater = null;
     private Context context;
     private List<PortfolioClass> portclasses;
-    private DataBaseAdapter dataBaseAdapter;
+    private DataBase dataBase;
 
     public SelectReportClassAdapter(Context context, List<PortfolioClass> classes)
     {
         this.context = context;
         this.portclasses = classes;
-        this.dataBaseAdapter = DataBaseAdapter.getInstance(context);
+        this.dataBase = DataBase.getInstance(context);
 
         inflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
@@ -93,7 +93,7 @@ public class SelectReportClassAdapter extends BaseAdapter {
             }
         });
 
-//        int notifications = dataBaseAdapter.getPortfolioClassNotification(portClass.getIdPortClass());
+//        int notifications = dataBase.getPortfolioClassNotification(portClass.getIdPortClass());
 //        if (notifications == 0)
             holder.notificationIcon.setVisibility(View.INVISIBLE);
 //        else {

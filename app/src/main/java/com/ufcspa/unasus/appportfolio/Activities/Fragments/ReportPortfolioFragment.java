@@ -16,7 +16,7 @@ import com.ufcspa.unasus.appportfolio.Model.ActivityStudent;
 import com.ufcspa.unasus.appportfolio.Model.Singleton;
 import com.ufcspa.unasus.appportfolio.Model.StudFrPortClass;
 import com.ufcspa.unasus.appportfolio.R;
-import com.ufcspa.unasus.appportfolio.database.DataBaseAdapter;
+import com.ufcspa.unasus.appportfolio.Database.DataBase;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,7 +29,7 @@ public class ReportPortfolioFragment extends HelperFragment {
     private ArrayList<StudFrPortClass> list;
     private List<Activity> listActivities;
     private ArrayList<ActivityStudent> listActivitiesStudent;
-    private DataBaseAdapter source;
+    private DataBase source;
     private Singleton singleton;
 //    private TextView className;
     private TextView portfolioName;
@@ -55,7 +55,7 @@ public class ReportPortfolioFragment extends HelperFragment {
 
     public void init() {
         singleton = Singleton.getInstance();
-        source = DataBaseAdapter.getInstance(getActivity());
+        source = DataBase.getInstance(getActivity());
         listActivitiesStudent = new ArrayList<ActivityStudent>();
 
 //        try {

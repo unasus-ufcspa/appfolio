@@ -22,11 +22,11 @@ import android.widget.TextView;
 import com.ufcspa.unasus.appportfolio.Activities.MainActivity;
 import com.ufcspa.unasus.appportfolio.Adapter.ActivitiesAdapter;
 import com.ufcspa.unasus.appportfolio.Adapter.StudentActivitiesAdapter;
+import com.ufcspa.unasus.appportfolio.Database.DataBase;
 import com.ufcspa.unasus.appportfolio.Model.Activity;
 import com.ufcspa.unasus.appportfolio.Model.Singleton;
 import com.ufcspa.unasus.appportfolio.Model.StudFrPortClass;
 import com.ufcspa.unasus.appportfolio.R;
-import com.ufcspa.unasus.appportfolio.database.DataBaseAdapter;
 
 import java.util.ArrayList;
 
@@ -36,13 +36,14 @@ import java.util.ArrayList;
 public class ActivitiesFragment extends HelperFragment implements ActivitiesAdapter.OnInfoButtonClick{
     private ListView list_activities;
     private ArrayList<StudFrPortClass> list;
-    private DataBaseAdapter source;
+    private DataBase source;
     private Singleton singleton;
     private TextView className;
     private TextView portfolioName;
     private SearchView edtSearch;
     private StudentActivitiesAdapter gridAdapter;
     private RelativeLayout slider;
+    private RelativeLayout content;
 
     public ActivitiesFragment() {
     }
@@ -70,6 +71,9 @@ public class ActivitiesFragment extends HelperFragment implements ActivitiesAdap
         View view = inflater.inflate(R.layout.fragment_activities, null);
 
         initCommentsTab(view);
+
+        content = (RelativeLayout) container.findViewById(R.id.content_layout);
+        SlidingPaneLayout.LayoutParams layoutParams = new SlidingPaneLayout.LayoutParams(SlidingPaneLayout.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
 
         return view;
     }
@@ -131,7 +135,7 @@ public class ActivitiesFragment extends HelperFragment implements ActivitiesAdap
 
     public void init() {
         singleton = Singleton.getInstance();
-        source = DataBaseAdapter.getInstance(getActivity());
+        source = DataBase.getInstance(getActivity());
 
         try {
             list = source.selectListActivitiesAndStudents(singleton.portfolioClass.getIdPortClass(), singleton.portfolioClass.getPerfil(), singleton.user.getIdUser());

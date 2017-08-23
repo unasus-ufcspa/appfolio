@@ -66,8 +66,9 @@ import com.onegravity.rteditor.effects.Effects;
 import com.onegravity.rteditor.spans.BackgroundColorSpan;
 import com.onegravity.rteditor.spans.MediaSpan;
 import com.ufcspa.unasus.appportfolio.Activities.MainActivity;
-import com.ufcspa.unasus.appportfolio.Adapter.UserListadapter;
+import com.ufcspa.unasus.appportfolio.Adapter.UserListAdapter;
 import com.ufcspa.unasus.appportfolio.Adapter.VersionsAdapter;
+import com.ufcspa.unasus.appportfolio.Database.DataBase;
 import com.ufcspa.unasus.appportfolio.Model.ActivityStudent;
 import com.ufcspa.unasus.appportfolio.Model.Comentario;
 import com.ufcspa.unasus.appportfolio.Model.Note;
@@ -77,7 +78,6 @@ import com.ufcspa.unasus.appportfolio.Model.Sync;
 import com.ufcspa.unasus.appportfolio.Model.User;
 import com.ufcspa.unasus.appportfolio.Model.VersionActivity;
 import com.ufcspa.unasus.appportfolio.R;
-import com.ufcspa.unasus.appportfolio.database.DataBaseAdapter;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -114,10 +114,10 @@ public class RTEditorFragment extends HelperFragment {
     private TextView finalizeActivityText;
     private TextView fullscreenText;
     private ListView editorUserList;
-    private UserListadapter userListadapter;
+    private UserListAdapter userListAdapter;
     // Model
     private ActivityStudent acStudent;
-    private DataBaseAdapter source;
+    private DataBase source;
     private Singleton singleton;
     // Cores
     private int trasnparent;
@@ -222,7 +222,7 @@ public class RTEditorFragment extends HelperFragment {
         View view = inflater.inflate(R.layout.fragment_rteditor, null);
 
         singleton = Singleton.getInstance();
-        source = DataBaseAdapter.getInstance(getActivity());
+        source = DataBase.getInstance(getActivity());
         if(singleton.portfolioClass.getPerfil().equals("S")) {  // SE È ALUNO, MOSTRAR INFORMAÇÔES DO TUTOR
             userPerfil = source.getTutorPerfil(singleton.idActivityStudent);
             Log.d("tutorPerfil", "tutor data:" + userPerfil.toString());
@@ -296,7 +296,7 @@ public class RTEditorFragment extends HelperFragment {
                                         handleSendAttachments();
 
                                         //SALVA NOVA VERSION ACTIVITY
-                                        DataBaseAdapter data = DataBaseAdapter.getInstance(getContext());
+                                        DataBase data = DataBase.getInstance(getContext());
                                         VersionActivity version = new VersionActivity();
                                         version.setTx_activity(mRTMessageField.getText(RTFormat.HTML));
                                         version.setId_activity_student(Singleton.getInstance().idActivityStudent);
@@ -669,7 +669,7 @@ public class RTEditorFragment extends HelperFragment {
             int idPersonalComment = source.getPersonalComment(singleton.idActivityStudent);
             String idDevice = Settings.Secure.getString(getActivity().getContentResolver(), Settings.Secure.ANDROID_ID);
             Sync sync = new Sync(idDevice, "tb_comment", idPersonalComment, singleton.idActivityStudent);
-            DataBaseAdapter.getInstance(getContext()).insertIntoTBSync(sync);
+            DataBase.getInstance(getContext()).insertIntoTBSync(sync);
             personalCommentChanged=false;
         }
         if (mRTManager != null) {
@@ -819,9 +819,9 @@ public class RTEditorFragment extends HelperFragment {
         editorUserList = (ListView) view.findViewById(R.id.editor_user_list);
 
         users = source.getActivityUsers(singleton.idActivityStudent,singleton.user.getIdUser());
-        userListadapter = new UserListadapter(getActivity(),users);
-        editorUserList.setAdapter(userListadapter);
-        userListadapter.notifyDataSetChanged();
+        userListAdapter = new UserListAdapter(getActivity(),users);
+        editorUserList.setAdapter(userListAdapter);
+        userListAdapter.notifyDataSetChanged();
 
         onClickTopBar(true);
 
@@ -1410,7 +1410,7 @@ public class RTEditorFragment extends HelperFragment {
         ArrayList<Integer> idsNotification = source.getNonCommentsNotifications(singleton.idActivityStudent);
         for (Integer id : idsNotification) {
             Sync sync = new Sync(singleton.device.get_id_device(), "tb_notice", id, singleton.idActivityStudent);
-            DataBaseAdapter.getInstance(getContext()).insertIntoTBSync(sync);
+            DataBase.getInstance(getContext()).insertIntoTBSync(sync);
         }
 
         source.deleteAllNotifications(idsNotification);
@@ -1420,7 +1420,7 @@ public class RTEditorFragment extends HelperFragment {
         ArrayList<Integer> idsNotification = source.getGeneralCommentsNotifications(singleton.idActivityStudent);
         for (Integer id : idsNotification) {
             Sync sync = new Sync(singleton.device.get_id_device(), "tb_notice", id, singleton.idActivityStudent);
-            DataBaseAdapter.getInstance(getContext()).insertIntoTBSync(sync);
+            DataBase.getInstance(getContext()).insertIntoTBSync(sync);
         }
         source.deleteAllNotifications(idsNotification);
     }
@@ -1429,7 +1429,7 @@ public class RTEditorFragment extends HelperFragment {
         ArrayList<Integer> idsNotification = source.getSpecificCommentsNotificationsID(singleton.idActivityStudent, source.getIdVersionSrvFromIdVersion(singleton.idCurrentVersionActivity));
         for (Integer id : idsNotification) {
             Sync sync = new Sync(singleton.device.get_id_device(), "tb_notice", id, singleton.idActivityStudent);
-            DataBaseAdapter.getInstance(getContext()).insertIntoTBSync(sync);
+            DataBase.getInstance(getContext()).insertIntoTBSync(sync);
         }
         source.deleteAllNotifications(idsNotification);
     }

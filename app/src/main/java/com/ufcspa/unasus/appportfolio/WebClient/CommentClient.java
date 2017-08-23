@@ -12,8 +12,8 @@ import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.ufcspa.unasus.appportfolio.Activities.Fragments.CommentsFragment;
+import com.ufcspa.unasus.appportfolio.Database.DataBase;
 import com.ufcspa.unasus.appportfolio.Model.Comentario;
-import com.ufcspa.unasus.appportfolio.database.DataBaseAdapter;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -97,7 +97,7 @@ public class CommentClient extends HttpClient{
                         c.setIdComment(json.getInt("id_comment"));
                         c.setDateComment(json.getString("tx_comment"));
                         c.setTxtComment(json.getString(""));
-                        DataBaseAdapter dao = DataBaseAdapter.getInstance(context);
+                        DataBase dao = DataBase.getInstance(context);
                         if (dao.getCommentById(c.getIdComment()) != null) {
                             dao.updateComment(c);
                         } else {
@@ -136,7 +136,7 @@ public class CommentClient extends HttpClient{
                     e.printStackTrace();
                     Log.e(tag,"erro ao pegar na request:"+e.getMessage());
                 }
-                DataBaseAdapter dao = DataBaseAdapter.getInstance(context);
+                DataBase dao = DataBase.getInstance(context);
                 if (dao.getCommentById(c.getIdComment()) != null) {
                     dao.updateComment(c);
                 } else {

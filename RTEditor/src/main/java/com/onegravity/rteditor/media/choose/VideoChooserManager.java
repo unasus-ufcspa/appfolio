@@ -35,6 +35,8 @@ import com.onegravity.rteditor.media.choose.processor.VideoProcessor.VideoProces
 import com.onegravity.rteditor.utils.Constants.MediaAction;
 
 import java.io.File;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 class VideoChooserManager extends MediaChooserManager implements VideoProcessorListener {
 
@@ -76,15 +78,26 @@ class VideoChooserManager extends MediaChooserManager implements VideoProcessorL
 
     private boolean captureVideo() {
         try {
+            String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+            String videoFileName = "MP4_" + timeStamp+".mp4";
+
+            File storageDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
+
+            File video = new File(storageDir,videoFileName);/*File.createTempFile(
+                    videoFileName,  *//* prefix *//*
+                    ".mp4",         *//* suffix *//*
+                    storageDir      *//* directory *//*
+            );*/
+            video.createNewFile();
 //            String path = Environment.getExternalStorageDirectory()+"/Android/data/com.ufcspa.unasus.appportfolio/files/images" + File.separator;
-            File videoPath = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
-            File videoFile = MediaUtils.createUniqueFile(videoPath, CAPTURED_VIDEO_TEMPLATE, false);
-            videoPath.mkdirs();
+//            File videoPath = new File(Environment.getExternalStorageDirectory()+"/Android/data/com.ufcspa.unasus.appportfolio/files/images" + File.separator);
+//            File videoFile = MediaUtils.createUniqueFile(videoPath, CAPTURED_VIDEO_TEMPLATE, false);
+            video.getParentFile().mkdirs();
 
 //            if (videoPath.exists() && videoPath.createNewFile()) {
-                setOriginalFile(videoFile.getAbsolutePath());
+                setOriginalFile(video.getAbsolutePath());
                 Intent intent = new Intent(MediaStore.ACTION_VIDEO_CAPTURE)
-                        .putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(new File(getOriginalFile())));
+                        .putExtra(MediaStore.EXTRA_OUTPUT, storageDir);
                 startActivity(intent);
 //            } else {
 //                Toast.makeText(mActivity, "Can't capture  without an sdcard", Toast.LENGTH_SHORT).show();

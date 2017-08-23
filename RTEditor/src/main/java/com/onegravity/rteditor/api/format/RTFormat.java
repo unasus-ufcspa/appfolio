@@ -29,8 +29,8 @@ package com.onegravity.rteditor.api.format;
  * <p>
  * We could e.g. return cid:picture.jpg for a html link to an image (<a
  * href="cid:picture.jpg">) if the output format is a mime message and the image
- * will be sent in an email. We could return database://picture.jpg if the
- * output is stored in a database (database://<db_id>/picture.jpg if we use
+ * will be sent in an email. We could return Database://picture.jpg if the
+ * output is stored in a Database (Database://<db_id>/picture.jpg if we use
  * multiple databases) or content://picture.jpg if the image is served by a
  * content provider. We can basically add any information needed to retrieve the
  * image (or rather its file path) when converting it back to rich text (Spanned

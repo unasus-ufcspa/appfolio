@@ -21,10 +21,10 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.ufcspa.unasus.appportfolio.Adapter.SelectPortfolioClassAdapter;
+import com.ufcspa.unasus.appportfolio.Database.DataBase;
 import com.ufcspa.unasus.appportfolio.Model.PortfolioClass;
 import com.ufcspa.unasus.appportfolio.Model.Singleton;
 import com.ufcspa.unasus.appportfolio.R;
-import com.ufcspa.unasus.appportfolio.database.DataBaseAdapter;
 
 import java.util.Collections;
 import java.util.List;
@@ -34,7 +34,7 @@ import java.util.List;
  */
 public class PortfoliosFragment extends HelperFragment implements SelectPortfolioClassAdapter.OnInfoButtonClick{
     private GridView grid_classes;
-    private DataBaseAdapter source;
+    private DataBase source;
     private Singleton singleton;
     private List<PortfolioClass> portclasses;
     private Button btSync;
@@ -146,7 +146,7 @@ public class PortfoliosFragment extends HelperFragment implements SelectPortfoli
     }
 
     private void init() {
-        source = DataBaseAdapter.getInstance(getActivity());
+        source = DataBase.getInstance(getActivity());
 
         try {
             portclasses = source.selectListClassAndUserType(singleton.user.getIdUser());

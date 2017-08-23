@@ -15,7 +15,7 @@ import com.ufcspa.unasus.appportfolio.Model.Singleton;
 import com.ufcspa.unasus.appportfolio.Model.StudFrPortClass;
 import com.ufcspa.unasus.appportfolio.Model.User;
 import com.ufcspa.unasus.appportfolio.R;
-import com.ufcspa.unasus.appportfolio.database.DataBaseAdapter;
+import com.ufcspa.unasus.appportfolio.Database.DataBase;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -24,7 +24,7 @@ import java.util.List;
 public class ReportFragment extends HelperFragment {
     private GridView grid_reports;
     private TextView grid_empty;
-    private DataBaseAdapter source;
+    private DataBase source;
     private Singleton singleton;
     private List<PortfolioClass> portclasses;
     private ArrayList<User> students;
@@ -52,7 +52,7 @@ public class ReportFragment extends HelperFragment {
 
     private void init() {
         singleton = Singleton.getInstance();
-        source = DataBaseAdapter.getInstance(getActivity());
+        source = DataBase.getInstance(getActivity());
         finalList = new ArrayList<>();
         students = new ArrayList<>();
         grid_empty = (TextView) getView().findViewById(R.id.grid_empty);

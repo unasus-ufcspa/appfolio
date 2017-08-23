@@ -35,7 +35,6 @@ import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.github.amlcurran.showcaseview.targets.Target;
-import com.github.amlcurran.showcaseview.targets.ViewTarget;
 import com.mikepenz.crossfader.Crossfader;
 import com.ufcspa.unasus.appportfolio.Activities.Fragments.ActivitiesFragment;
 import com.ufcspa.unasus.appportfolio.Activities.Fragments.AttachmentFragment;
@@ -46,6 +45,7 @@ import com.ufcspa.unasus.appportfolio.Activities.Fragments.ReportFragment;
 import com.ufcspa.unasus.appportfolio.Activities.Fragments.ReportPortfolioFragment;
 import com.ufcspa.unasus.appportfolio.Activities.Fragments.ReportStudentsFragment;
 import com.ufcspa.unasus.appportfolio.Activities.Fragments.PortfoliosFragment;
+import com.ufcspa.unasus.appportfolio.Database.DataBase;
 import com.ufcspa.unasus.appportfolio.Model.Attachment;
 //import com.ufcspa.unasus.appportfolio.Model.CustomShowcaseView;
 import com.ufcspa.unasus.appportfolio.Model.Device;
@@ -64,8 +64,7 @@ import com.ufcspa.unasus.appportfolio.WebClient.SendData;
 import com.ufcspa.unasus.appportfolio.WebClient.SendFullDataClient;
 import com.ufcspa.unasus.appportfolio.WebClient.SyncVisitante;
 import com.ufcspa.unasus.appportfolio.WebClient.SyncVisitanteClient;
-import com.ufcspa.unasus.appportfolio.database.DataBase;
-import com.ufcspa.unasus.appportfolio.database.DataBaseAdapter;
+import com.ufcspa.unasus.appportfolio.Database.DataBaseHelper;
 
 import org.json.JSONObject;
 
@@ -122,13 +121,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                DataBaseAdapter dataBaseAdapter = DataBaseAdapter.getInstance(getApplicationContext());
+                DataBase dataBase = DataBase.getInstance(getApplicationContext());
                 String name = input.getText().toString();
                 if (name.isEmpty()) {
                     name = "Anexo";
                 }
-                singleton.lastIdAttach = dataBaseAdapter.insertAttachment(new Attachment(0, type, name, path, 0,0));
-                //dataBaseAdapter.insertAttachActivity(singleton.lastIdAttach, singleton.idActivityStudent);
+                singleton.lastIdAttach = dataBase.insertAttachment(new Attachment(0, type, name, path, 0,0));
+                //dataBase.insertAttachActivity(singleton.lastIdAttach, singleton.idActivityStudent);
             }
         });
 
@@ -156,7 +155,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         singleton = Singleton.getInstance();
         singleton.note = new Note(0, "null", 0);
 
-//        singleton.guestUser = DataBaseAdapter.getInstance(this).userIsGuest();
+//        singleton.guestUser = DataBase.getInstance(this).userIsGuest();
 
         fragmentContainer = findViewById(R.id.fragment_container);
         if (shouldCreateDrawer) {
@@ -168,9 +167,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             initMiniDrawer();
 
             apagarBotoes(1);
-
-            Target target = new ViewTarget(R.id.drawer_target,this);
-            ShowCase(target,"Menu Lateral","Expanda o menu deslizando a margem para a direita");
 
             final float scale = getResources().getDisplayMetrics().density;
             int pixelsMini = (int) (80 * scale + 0.5f);
@@ -219,16 +215,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
                 idUser = Singleton.getInstance().user.getIdUser();
 
-                String txPolicy = DataBaseAdapter.getInstance(getBaseContext()).getPolicyByUserID(idUser).getTxPolicy();
+                String txPolicy = DataBase.getInstance(getBaseContext()).getPolicyByUserID(idUser).getTxPolicy();
 
                 policyTX.loadDataWithBaseURL("file:"+ Environment.getExternalStorageDirectory()+"/Android/data/com.ufcspa.unasus.appportfolio/files/images",txPolicy,"text/html","UTF-8","about:blank");
 
                 acceptBT.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        policyUser = DataBaseAdapter.getInstance(getBaseContext()).getPolicyUserByUserId(idUser);
-                        DataBaseAdapter.getInstance(getBaseContext()).updateFlAccept(policyUser.getIdPolicyUser());
-                        policyUser = DataBaseAdapter.getInstance(getBaseContext()).getPolicyUserByUserId(idUser);
+                        policyUser = DataBase.getInstance(getBaseContext()).getPolicyUserByUserId(idUser);
+                        DataBase.getInstance(getBaseContext()).updateFlAccept(policyUser.getIdPolicyUser());
+                        policyUser = DataBase.getInstance(getBaseContext()).getPolicyUserByUserId(idUser);
                         Log.d("policyUser", policyUser.toString());
                         policyUserClient = new PolicyUserClient(getBaseContext());
                         policyUserClient.postJson(PolicyUser.toJSON(policyUser.getIdPolicyUser(), policyUser.getIdUser(), policyUser.getFlAccept()));
@@ -246,7 +242,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     public boolean policyAceita() {
-        DataBaseAdapter bd = DataBaseAdapter.getInstance(this);
+        DataBase bd = DataBase.getInstance(this);
         if (bd.getPolicyUserByUserId(Singleton.getInstance().user.getIdUser()).getFlAccept()!=null){
             return true;
         }
@@ -255,7 +251,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     public boolean policyExist() {
-        DataBaseAdapter bd = DataBaseAdapter.getInstance(this);
+        DataBase bd = DataBase.getInstance(this);
         if (bd.getPolicyByUserID(Singleton.getInstance().user.getIdUser()).getIdPolicy()!=0){
             return true;
         }
@@ -613,13 +609,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         client.postJson(FullData.toJSON(singleton.device.get_id_device(), id_activity_student));
 
         if (singleton.portfolioClass==null) {
-            if (DataBaseAdapter.getInstance(this).userIsGuest()){
+            if (DataBase.getInstance(this).userIsGuest()){
                 SyncVisitanteClient svClient = new SyncVisitanteClient(this);
                 svClient.postJson(SyncVisitante.toJSON(Singleton.getInstance().user.getIdUser(), Singleton.getInstance().device.get_id_device()));
                 singleton.guestUser=false;
             }
         }else{
-            if (DataBaseAdapter.getInstance(this).userIsGuest(singleton.portfolioClass.getIdPortfolioStudent())){
+            if (DataBase.getInstance(this).userIsGuest(singleton.portfolioClass.getIdPortfolioStudent())){
                 SyncVisitanteClient svClient = new SyncVisitanteClient(this);
                 svClient.postJson(SyncVisitante.toJSON(Singleton.getInstance().user.getIdUser(), Singleton.getInstance().device.get_id_device()));
             }
@@ -763,10 +759,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     public void logout() {
-        DataBaseAdapter.getInstance(this).cleanDataBase();
+        DataBase.getInstance(this).cleanDataBase();
         singleton.user = new User(0,null,null);
         singleton.device = new Device();
-        DataBase.getInstance(this).getDatabase();
+        DataBaseHelper.getInstance(this).getDatabase();
         Intent intent = new Intent(this, LoginActivity.class);
         startActivity(intent);
         System.exit(0);
@@ -805,7 +801,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     protected void onResume() {
         super.onResume();
-        Singleton.getInstance().device=DataBaseAdapter.getInstance(this).getDevice();
+        Singleton.getInstance().device= DataBase.getInstance(this).getDevice();
         Log.d("main", "GET FROM DEVICE: " + Singleton.getInstance().device);
         NotificationEventReceiver.setupAlarm(this,singleton.interval);
     }

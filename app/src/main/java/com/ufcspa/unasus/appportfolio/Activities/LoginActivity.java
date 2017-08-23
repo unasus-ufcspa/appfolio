@@ -41,6 +41,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.ufcspa.unasus.appportfolio.Database.DataBase;
 import com.ufcspa.unasus.appportfolio.Model.Device;
 import com.ufcspa.unasus.appportfolio.Model.Singleton;
 import com.ufcspa.unasus.appportfolio.Model.User;
@@ -51,7 +52,6 @@ import com.ufcspa.unasus.appportfolio.WebClient.FirstLogin;
 import com.ufcspa.unasus.appportfolio.WebClient.FirstSync;
 import com.ufcspa.unasus.appportfolio.WebClient.FirstSyncClient;
 import com.ufcspa.unasus.appportfolio.WebClient.FistLoginClient;
-import com.ufcspa.unasus.appportfolio.database.DataBaseAdapter;
 
 import org.json.JSONObject;
 
@@ -96,7 +96,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     private EditText mPasswordView;
     private View mProgressView;
     //    private View mLoginFormView;
-    private DataBaseAdapter bd;
+    private DataBase bd;
     private User user;
     // Singleton
     private Singleton session;
@@ -128,7 +128,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         Singleton.getInstance().user = new User(0,null,null);
         Singleton.getInstance().device = new Device();
 
-        bd = DataBaseAdapter.getInstance(this);
+        bd = DataBase.getInstance(this);
         //SQLiteOnWeb.init(this).start();
 
         isBasicDataSucessful = false;
@@ -156,7 +156,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         });
 
 
-        final DataBaseAdapter data = DataBaseAdapter.getInstance(this);
+        final DataBase data = DataBase.getInstance(this);
 //        ArrayList<PortfolioClass> lista= (ArrayList<PortfolioClass>) data.selectListClassAndUserType(5);
 //        Log.d("lista","tamanho:"+lista.size());
 //
@@ -367,7 +367,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     }
 
     private char checkUserType(int idUser) {
-        DataBaseAdapter bd = DataBaseAdapter.getInstance(this);
+        DataBase bd = DataBase.getInstance(this);
         return bd.verifyUserType(idUser);
     }
 
@@ -386,7 +386,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     }
 
     private void criarBD() {
-        bd = DataBaseAdapter.getInstance(this);
+        bd = DataBase.getInstance(this);
     }
 
     public boolean isOnline() {
@@ -399,7 +399,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
     private boolean verificarLogin() {
 
         //  try {
-//            DataBaseAdapter bd = DataBaseAdapter.getInstance(this);
+//            DataBase bd = DataBase.getInstance(this);
 //            user = bd.verifyPass(mEmailView.getText().toString(), mPasswordView.getText().toString());
         //result=user.getIdUser();
         //Log.d("BANCO", " pass:" + result);

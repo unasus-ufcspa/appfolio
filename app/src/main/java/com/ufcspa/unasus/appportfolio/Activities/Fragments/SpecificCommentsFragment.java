@@ -34,6 +34,7 @@ import com.onegravity.rteditor.converter.ConverterHtmlToText;
 import com.onegravity.rteditor.utils.Constants;
 import com.ufcspa.unasus.appportfolio.Activities.MainActivity;
 import com.ufcspa.unasus.appportfolio.Adapter.SpecificCommentAdapter;
+import com.ufcspa.unasus.appportfolio.Database.DataBase;
 import com.ufcspa.unasus.appportfolio.Model.Attachment;
 import com.ufcspa.unasus.appportfolio.Model.Comentario;
 import com.ufcspa.unasus.appportfolio.Model.Note;
@@ -41,7 +42,6 @@ import com.ufcspa.unasus.appportfolio.Model.OneComment;
 import com.ufcspa.unasus.appportfolio.Model.Singleton;
 import com.ufcspa.unasus.appportfolio.Model.Sync;
 import com.ufcspa.unasus.appportfolio.R;
-import com.ufcspa.unasus.appportfolio.database.DataBaseAdapter;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -100,7 +100,7 @@ public class SpecificCommentsFragment extends HelperFragment {
         ArrayList<Integer> idsNotification = source.getSpecificCommentsNotificationsID(singleton.idActivityStudent, singleton.idCurrentVersionActivity);
         for (Integer id : idsNotification) {
             Sync sync = new Sync(singleton.device.get_id_device(), "tb_notice", id, singleton.idActivityStudent);
-            DataBaseAdapter.getInstance(getContext()).insertIntoTBSync(sync);
+            DataBase.getInstance(getContext()).insertIntoTBSync(sync);
         }
         source.deleteAllNotifications(idsNotification);
     }
@@ -154,7 +154,7 @@ public class SpecificCommentsFragment extends HelperFragment {
             hide();
 
         singleton = Singleton.getInstance();
-        source = DataBaseAdapter.getInstance(getContext());
+        source = DataBase.getInstance(getContext());
 
         btGenMess = (Button) getView().findViewById(R.id.gen_messag_bt);
         btAttachment = (Button) getView().findViewById(R.id.bt_add_attachment);
@@ -258,7 +258,7 @@ public class SpecificCommentsFragment extends HelperFragment {
 
     public void loadCommentsFromDB(){
         try {
-            DataBaseAdapter db = DataBaseAdapter.getInstance(getActivity());
+            DataBase db = DataBase.getInstance(getActivity());
 
             Log.d("activity","actual version_activity:"+singleton.idCurrentVersionActivity );
 
@@ -320,9 +320,9 @@ public class SpecificCommentsFragment extends HelperFragment {
                 if (name.isEmpty()) {
                     name = "Anexo";
                 }
-                single.lastIdAttach = DataBaseAdapter.getInstance(getActivity()).insertAttachment(new Attachment(0, type, name, path, 0,0));
+                single.lastIdAttach = DataBase.getInstance(getActivity()).insertAttachment(new Attachment(0, type, name, path, 0,0));
                 if(lastID!=0 && single.lastIdAttach!=-1 && single.lastIdAttach!=0) {
-                    DataBaseAdapter.getInstance(getActivity()).insertAttachComment(lastID, single.lastIdAttach);
+                    DataBase.getInstance(getActivity()).insertAttachComment(lastID, single.lastIdAttach);
                 }
             }
         });
@@ -391,7 +391,7 @@ public class SpecificCommentsFragment extends HelperFragment {
                     Singleton.getInstance().lastIdAttach = idAttachment;
                     addAtach();
                     if (lastID != 0)
-                        DataBaseAdapter.getInstance(getActivity()).insertAttachComment(lastID, idAttachment);
+                        DataBase.getInstance(getActivity()).insertAttachComment(lastID, idAttachment);
                 }
             }
         }
@@ -429,7 +429,7 @@ public class SpecificCommentsFragment extends HelperFragment {
                 Log.d("comments", "clicou no item na position:" + position + " conteudo:" + oneComments.get(position));
                 if (oneComments.get(position).idAttach != 0) {
                     Log.d("comments", "selecionou um anexo");
-                    Attachment att = DataBaseAdapter.getInstance(getActivity()).getAttachmentByID(oneComments.get(position).idAttach);
+                    Attachment att = DataBase.getInstance(getActivity()).getAttachmentByID(oneComments.get(position).idAttach);
                     if (att.getTpAttachment() != null) {
                         Log.d("comments", "localpath attach:" + att.getNmSystem());
                         if (att.getTpAttachment().equals(Attachment.TYPE_TEXT)) {
@@ -452,7 +452,7 @@ public class SpecificCommentsFragment extends HelperFragment {
 
     private void insertComment(Comentario c){
         try {
-            //DataBaseAdapter db = DataBaseAdapter.getInstance(getActivity());
+            //DataBase db = DataBase.getInstance(getActivity());
 //            if (singleton.portfolioClass.getPerfil().equals("T") && source.isFirstSpecificComment(singleton.idActivityStudent, noteNow.getBtId()))
 //                singleton.isFirstSpecificComment = true;
 
@@ -527,7 +527,7 @@ public class SpecificCommentsFragment extends HelperFragment {
                 EMPILHA COMENTARIO ESPECIFICO NA SYNC(ANTIGO)
 
             Sync sync = new Sync(singleton.device.get_id_device(), "tb_comment", lastID, singleton.idActivityStudent);
-            DataBaseAdapter.getInstance(getContext()).insertIntoTBSync(sync);
+            DataBase.getInstance(getContext()).insertIntoTBSync(sync);
 
             MainActivity main = ((MainActivity) getActivity());
             if (main != null)

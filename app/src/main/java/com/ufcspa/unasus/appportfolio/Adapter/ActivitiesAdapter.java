@@ -21,13 +21,13 @@ import com.coolerfall.download.DownloadCallback;
 import com.coolerfall.download.DownloadManager;
 import com.coolerfall.download.DownloadRequest;
 import com.ufcspa.unasus.appportfolio.Activities.MainActivity;
+import com.ufcspa.unasus.appportfolio.Database.DataBase;
 import com.ufcspa.unasus.appportfolio.Model.Activity;
 import com.ufcspa.unasus.appportfolio.Model.Attachment;
 import com.ufcspa.unasus.appportfolio.Model.Singleton;
 import com.ufcspa.unasus.appportfolio.Model.StudFrPortClass;
 import com.ufcspa.unasus.appportfolio.R;
 import com.ufcspa.unasus.appportfolio.WebClient.HttpClient;
-import com.ufcspa.unasus.appportfolio.database.DataBaseAdapter;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -46,7 +46,7 @@ public class ActivitiesAdapter extends RecyclerView.Adapter<ActivitiesAdapter.Vi
     private Singleton singleton;
     private String studentName;
     private List<Attachment> attachments;
-    private DataBaseAdapter source;
+    private DataBase source;
     private StudFrPortClass studFrPortClass;
     private static final String URL="/webfolio/app_dev.php/download/";
 
@@ -67,7 +67,7 @@ public class ActivitiesAdapter extends RecyclerView.Adapter<ActivitiesAdapter.Vi
         Collections.sort(this.list);
         this.studentName = studName;
         this.studFrPortClass = aux;
-        source = DataBaseAdapter.getInstance(context);
+        source = DataBase.getInstance(context);
     }
 
     @Override
@@ -118,8 +118,8 @@ public class ActivitiesAdapter extends RecyclerView.Adapter<ActivitiesAdapter.Vi
                 holder.title.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        singleton.guestUser = DataBaseAdapter.getInstance(context).userIsGuest(list.get(position).getIdPortfolio());
-                        singleton.guestUserComments = DataBaseAdapter.getInstance(context).guestCanComment(list.get(position).getIdPortfolio());
+                        singleton.guestUser = DataBase.getInstance(context).userIsGuest(list.get(position).getIdPortfolio());
+                        singleton.guestUserComments = DataBase.getInstance(context).guestCanComment(list.get(position).getIdPortfolio());
                         singleton.activity = list.get(position);
                         singleton.idActivityStudent = singleton.activity.getIdActivityStudent();
                         singleton.idVersionActivity = source.getLastIDVersionActivity(singleton.idActivityStudent);
@@ -184,8 +184,8 @@ public class ActivitiesAdapter extends RecyclerView.Adapter<ActivitiesAdapter.Vi
                 holder.title.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        singleton.guestUser = DataBaseAdapter.getInstance(context).userIsGuest(list.get(position).getIdPortfolio());
-                        singleton.guestUserComments = DataBaseAdapter.getInstance(context).guestCanComment(list.get(position).getIdPortfolio());
+                        singleton.guestUser = DataBase.getInstance(context).userIsGuest(list.get(position).getIdPortfolio());
+                        singleton.guestUserComments = DataBase.getInstance(context).guestCanComment(list.get(position).getIdPortfolio());
                         singleton.activity = list.get(position);
                         singleton.idActivityStudent = singleton.activity.getIdActivityStudent();
                         if (singleton.portfolioClass.getPerfil().equals("S")) {
@@ -236,7 +236,7 @@ public class ActivitiesAdapter extends RecyclerView.Adapter<ActivitiesAdapter.Vi
 
     @Override
     public int getItemViewType(int position) {
-        String dt_conclusion = DataBaseAdapter.getInstance(context).getActivityStudentById(list.get(position).getIdActivityStudent()).getDt_conclusion();
+        String dt_conclusion = DataBase.getInstance(context).getActivityStudentById(list.get(position).getIdActivityStudent()).getDt_conclusion();
         if (dt_conclusion.equals("null") || dt_conclusion == null) {
             return 0;
         }else {

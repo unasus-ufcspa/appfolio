@@ -1,4 +1,4 @@
-package com.ufcspa.unasus.appportfolio.database;
+package com.ufcspa.unasus.appportfolio.Database;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
@@ -12,14 +12,14 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
-public class DataBase extends SQLiteOpenHelper {
+public class DataBaseHelper extends SQLiteOpenHelper {
 
     /**
      * Este é o endereço onde o android salva os bancos de dados criado pela aplicação,
      * /data/data/<namespace da aplicacao>/databases/
      */
     private static String DBPATH = "/data/data/com.ufcspa.unasus.appportfolio/databases/";
-    private static DataBase mInstance = null;
+    private static DataBaseHelper mInstance = null;
 
     // Este é o nome do banco de dados que iremos utilizar
     //private static String DBNAME = "folio.sqlite"; //Classe SplashActivity => LoginActivity2
@@ -32,7 +32,7 @@ public class DataBase extends SQLiteOpenHelper {
     /**
      * O construtor necessita do contexto da aplicação
      */
-    private DataBase(Context context) {
+    private DataBaseHelper(Context context) {
     /* O primeiro argumento é o contexto da aplicacao
      * O segundo argumento é o nome do banco de dados
      * O terceiro é um pondeiro para manipulação de dados,
@@ -42,13 +42,13 @@ public class DataBase extends SQLiteOpenHelper {
         super(context, DBNAME, null, 1);
         this.context = context;
     }
-    public static DataBase getInstance(Context ctx) {
+    public static DataBaseHelper getInstance(Context ctx) {
 
         // Use the application context, which will ensure that you
         // don't accidentally leak an Activity's context.
         // See this article for more information: http://bit.ly/6LRzfx
         if (mInstance == null) {
-            mInstance = new DataBase(ctx/*.getApplicationContext()*/);
+            mInstance = new DataBaseHelper(ctx/*.getApplicationContext()*/);
         }
         return mInstance;
     }
@@ -162,7 +162,7 @@ public class DataBase extends SQLiteOpenHelper {
             // mesmo é criado.
             createDataBase();
 
-            // Abrindo database
+            // Abrindo Database
             String path = DBPATH + DBNAME;
 
             return SQLiteDatabase.openDatabase(path, null, SQLiteDatabase.OPEN_READWRITE);

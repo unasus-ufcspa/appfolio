@@ -1,4 +1,4 @@
-package com.ufcspa.unasus.appportfolio.database;
+package com.ufcspa.unasus.appportfolio.Database;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -36,7 +36,6 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
@@ -45,22 +44,22 @@ import java.util.List;
 /**
  * Created by UNASUS on 11/11/2015.
  */
-public class DataBaseAdapter {
-    private static DataBaseAdapter mInstance = null;
+public class DataBase {
+    private static DataBase mInstance = null;
     private SQLiteDatabase db;
-    private DataBase helper;
+    private DataBaseHelper helper;
     private String tag = "BANCO DE DADOS ";
     private Context context;
 
-    private DataBaseAdapter(Context ctx) {
-        helper = DataBase.getInstance(ctx);
+    private DataBase(Context ctx) {
+        helper = DataBaseHelper.getInstance(ctx);
         db = helper.getDatabase();
         context = ctx;
     }
 
-    public static DataBaseAdapter getInstance(Context ctx) {
+    public static DataBase getInstance(Context ctx) {
         if (mInstance == null) {
-            mInstance = new DataBaseAdapter(ctx);
+            mInstance = new DataBase(ctx);
         }
         return mInstance;
     }
@@ -1751,9 +1750,15 @@ public class DataBaseAdapter {
     }
 
     public VersionActivity getVersionActivitiesByID(int id) {
-        String query = "SELECT * "+
+        String query = "SELECT id_version_activity, " +
+                "id_activity_student, " +
+                "tx_activity, " +
+                "dt_last_access, " +
+                "dt_submission, " +
+                "dt_verification, " +
+                "id_version_activity_srv " +
                 "FROM tb_version_activity " +
-                "WHERE id_version_activity_srv = " + id;
+                "WHERE id_version_activity = " + id;
         Cursor c = db.rawQuery(query, null);
         if (c.moveToFirst()) {
             return cursorToVersionActivity(c);

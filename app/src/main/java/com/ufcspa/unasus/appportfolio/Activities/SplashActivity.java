@@ -6,9 +6,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 
 import com.facebook.stetho.Stetho;
+import com.ufcspa.unasus.appportfolio.Database.DataBase;
 import com.ufcspa.unasus.appportfolio.Model.Device;
 import com.ufcspa.unasus.appportfolio.Model.Singleton;
-import com.ufcspa.unasus.appportfolio.database.DataBaseAdapter;
 
 import java.util.List;
 
@@ -30,7 +30,7 @@ public class SplashActivity extends AppCompatActivity {
 
         Stetho.initializeWithDefaults(this);
 
-        DataBaseAdapter adapter = DataBaseAdapter.getInstance(this);
+        DataBase adapter = DataBase.getInstance(this);
         Singleton singleton = Singleton.getInstance();
 
         List<Integer> d = adapter.listSpecificComments(13);

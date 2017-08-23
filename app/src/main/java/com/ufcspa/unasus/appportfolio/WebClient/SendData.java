@@ -6,6 +6,7 @@ import android.os.Environment;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 
+import com.ufcspa.unasus.appportfolio.Database.DataBase;
 import com.ufcspa.unasus.appportfolio.Model.Annotation;
 import com.ufcspa.unasus.appportfolio.Model.Attachment;
 import com.ufcspa.unasus.appportfolio.Model.AttachmentComment;
@@ -16,7 +17,6 @@ import com.ufcspa.unasus.appportfolio.Model.Sync;
 import com.ufcspa.unasus.appportfolio.Model.User;
 import com.ufcspa.unasus.appportfolio.Model.VersionActivity;
 import com.ufcspa.unasus.appportfolio.Model.basicData.ActivityStudent;
-import com.ufcspa.unasus.appportfolio.database.DataBaseAdapter;
 
 import net.gotev.uploadservice.MultipartUploadRequest;
 import net.gotev.uploadservice.UploadNotificationConfig;
@@ -29,7 +29,6 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
-import java.util.List;
 
 /**
  * Created by icaromsc on 19/04/2016.
@@ -50,7 +49,7 @@ public class SendData {
     private LinkedHashMap<Integer, LinkedList<Attachment>> attachments;
     private LinkedList<ActivityStudent> activityStudents;
     private LinkedList<Annotation> annotations;
-    private DataBaseAdapter data;
+    private DataBase data;
     private String tbComm="tb_comment";
     private String tbAttachComm="tb_attach_comment";
     private String tbVers="tb_version_activity";
@@ -69,7 +68,7 @@ public class SendData {
 
     public SendData(Context context) {
         this.context = context;
-        data = DataBaseAdapter.getInstance(context);
+        data = DataBase.getInstance(context);
         sincronias= new ArrayList<>();
         versions = new LinkedList<>();
         comentarios = new LinkedList<>();
@@ -614,7 +613,7 @@ public class SendData {
                 attachActivityStudent.put("tb_activity_student", attachTb_activity_student);
                 jsonPseudoFinal.put("activityStudent", attachActivityStudent);
             }
-            Singleton.getInstance().device=DataBaseAdapter.getInstance(context).getDevice();
+            Singleton.getInstance().device= DataBase.getInstance(context).getDevice();
             Log.d("sendData", "GET FROM DEVICE: "+Singleton.getInstance().device);
 
             //mount device

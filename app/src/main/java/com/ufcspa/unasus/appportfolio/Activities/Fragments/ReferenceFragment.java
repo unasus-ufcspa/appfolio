@@ -16,12 +16,12 @@ import android.widget.Toast;
 
 import com.ufcspa.unasus.appportfolio.Activities.MainActivity;
 import com.ufcspa.unasus.appportfolio.Adapter.AnnotationAdapter;
+import com.ufcspa.unasus.appportfolio.Database.DataBase;
 import com.ufcspa.unasus.appportfolio.Model.Annotation;
 import com.ufcspa.unasus.appportfolio.Model.Reference;
 import com.ufcspa.unasus.appportfolio.Model.Singleton;
 import com.ufcspa.unasus.appportfolio.Model.Sync;
 import com.ufcspa.unasus.appportfolio.R;
-import com.ufcspa.unasus.appportfolio.database.DataBaseAdapter;
 
 import java.util.ArrayList;
 
@@ -116,7 +116,7 @@ public class ReferenceFragment extends HelperFragment {
     public boolean salvar(){
         int result = -1;
         Singleton singleton = Singleton.getInstance();
-        DataBaseAdapter data = DataBaseAdapter.getInstance(getActivity());
+        DataBase data = DataBase.getInstance(getActivity());
 //        Reference refer=new Reference();
         Annotation ann = new Annotation();
         ann.setDsAnnotation(edtRef.getText().toString());
@@ -137,11 +137,11 @@ public class ReferenceFragment extends HelperFragment {
             return false;
     }
     public void recuperar(){
-     //get tx_reference from database
+     //get tx_reference from Database
 //        String tx="http://port.com";
 //        edtRef.setText(tx);
         Singleton singleton = Singleton.getInstance();
-        DataBaseAdapter data = DataBaseAdapter.getInstance(getActivity());
+        DataBase data = DataBase.getInstance(getActivity());
 //        references = (ArrayList)data.getReferences(singleton.idActivityStudent);
         annotations = (ArrayList)data.getAnnotations();
         //adapter.refresh(references);

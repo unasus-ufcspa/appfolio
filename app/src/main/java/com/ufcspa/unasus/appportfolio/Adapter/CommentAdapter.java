@@ -9,9 +9,9 @@ import android.widget.BaseAdapter;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.ufcspa.unasus.appportfolio.Database.DataBase;
 import com.ufcspa.unasus.appportfolio.Model.OneComment;
 import com.ufcspa.unasus.appportfolio.R;
-import com.ufcspa.unasus.appportfolio.database.DataBaseAdapter;
 
 import java.util.List;
 
@@ -68,8 +68,8 @@ public class CommentAdapter extends BaseAdapter {
 
         //populating
         if (c.atach) {
-            holder.message.setText(DataBaseAdapter.getInstance(context).getAttachmentByID(c.idAttach).getNmFile());
-            String tipo = DataBaseAdapter.getInstance(context).getAttachmentByID(c.idAttach).getTpAttachment();
+            holder.message.setText(DataBase.getInstance(context).getAttachmentByID(c.idAttach).getNmFile());
+            String tipo = DataBase.getInstance(context).getAttachmentByID(c.idAttach).getTpAttachment();
             if (tipo!=null) {
                 switch (tipo){
                     case "I":
@@ -89,7 +89,7 @@ public class CommentAdapter extends BaseAdapter {
             holder.message.setText(c.comment);
         holder.hour.setText(c.hour);
         holder.date.setText(c.date);
-        String name[] = DataBaseAdapter.getInstance(parent.getContext()).getNameByUserId(c.idAuthor).split(" ");
+        String name[] = DataBase.getInstance(parent.getContext()).getNameByUserId(c.idAuthor).split(" ");
         holder.userName.setText(name[0]+":");
 
 

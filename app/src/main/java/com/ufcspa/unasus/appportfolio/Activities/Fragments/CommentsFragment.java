@@ -31,13 +31,13 @@ import android.widget.Toast;
 import com.onegravity.rteditor.utils.Constants;
 import com.ufcspa.unasus.appportfolio.Activities.MainActivity;
 import com.ufcspa.unasus.appportfolio.Adapter.CommentAdapter;
+import com.ufcspa.unasus.appportfolio.Database.DataBase;
 import com.ufcspa.unasus.appportfolio.Model.Attachment;
 import com.ufcspa.unasus.appportfolio.Model.Comentario;
 import com.ufcspa.unasus.appportfolio.Model.OneComment;
 import com.ufcspa.unasus.appportfolio.Model.Singleton;
 import com.ufcspa.unasus.appportfolio.Model.Sync;
 import com.ufcspa.unasus.appportfolio.R;
-import com.ufcspa.unasus.appportfolio.database.DataBaseAdapter;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -91,7 +91,7 @@ public class CommentsFragment extends HelperFragment {
         ArrayList<Integer> idsNotification = source.getGeneralCommentsNotifications(singleton.idActivityStudent);
         for (Integer id : idsNotification) {
             Sync sync = new Sync(singleton.device.get_id_device(), "tb_notice", id, singleton.idActivityStudent);
-            DataBaseAdapter.getInstance(getContext()).insertIntoTBSync(sync);
+            DataBase.getInstance(getContext()).insertIntoTBSync(sync);
         }
         source.deleteAllNotifications(idsNotification);
     }
@@ -100,7 +100,7 @@ public class CommentsFragment extends HelperFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_messages, null);
 
-        source = DataBaseAdapter.getInstance(getActivity());
+        source = DataBase.getInstance(getActivity());
 
         singleton = Singleton.getInstance();
 //        singleton.idActivityStudent = source.getActivityStudentID(singleton.activity.getIdAtivity(), singleton.portfolioClass.getIdPortfolioStudent());
@@ -371,7 +371,7 @@ public class CommentsFragment extends HelperFragment {
     }
 
     public void loadCom() {
-        DataBaseAdapter db = DataBaseAdapter.getInstance(getActivity());
+        DataBase db = DataBase.getInstance(getActivity());
         Singleton singleton = Singleton.getInstance();
         lista = (ArrayList<Comentario>) db.listGComments(singleton.activity.getIdActivityStudent(),"G");//lista comentario gerais
         //lista = (ArrayList<Comentario>) db.listCommentsTESTE();
@@ -408,7 +408,7 @@ public class CommentsFragment extends HelperFragment {
                 Log.d("comments", "clicou no item na position:" + position + " conteudo:" + oneComments.get(position));
                 if (oneComments.get(position).idAttach != 0) {
                     Log.d("comments", "selecionou um anexo");
-                    Attachment att = DataBaseAdapter.getInstance(getActivity()).getAttachmentByID(oneComments.get(position).idAttach);
+                    Attachment att = DataBase.getInstance(getActivity()).getAttachmentByID(oneComments.get(position).idAttach);
                     if (att.getTpAttachment() != null) {
                         Log.d("comments", "localpath attach:" + att.getNmSystem());
                         if (att.getTpAttachment().equals(Attachment.TYPE_TEXT)) {
@@ -437,13 +437,13 @@ public class CommentsFragment extends HelperFragment {
     private void insertComment(Comentario c) {
         try {
             Singleton single = Singleton.getInstance();
-            DataBaseAdapter db = DataBaseAdapter.getInstance(getActivity());
+            DataBase db = DataBase.getInstance(getActivity());
             lastID = db.insertComment(c);
             if (attach) {
                 db.insertAttachComment(lastID, single.lastIdAttach);
                 String idDevice = Settings.Secure.getString(getActivity().getContentResolver(), Settings.Secure.ANDROID_ID);
-                Sync sync = new Sync(idDevice, "tb_attach_comment", DataBaseAdapter.getInstance(getContext()).getLastIdAttachComment(), singleton.idActivityStudent);
-                DataBaseAdapter.getInstance(getContext()).insertIntoTBSync(sync);
+                Sync sync = new Sync(idDevice, "tb_attach_comment", DataBase.getInstance(getContext()).getLastIdAttachComment(), singleton.idActivityStudent);
+                DataBase.getInstance(getContext()).insertIntoTBSync(sync);
             }
             Log.d("Banco:", "comentario inserido no bd interno com sucesso");
         } catch (Exception e) {
@@ -464,7 +464,7 @@ public class CommentsFragment extends HelperFragment {
 //        }else{
             // add in sync queue
         Sync sync = new Sync(idDevice, "tb_comment", lastID, singleton.idActivityStudent);
-        DataBaseAdapter.getInstance(getContext()).insertIntoTBSync(sync);
+        DataBase.getInstance(getContext()).insertIntoTBSync(sync);
 
         MainActivity main = ((MainActivity) getActivity());
         if (main != null)

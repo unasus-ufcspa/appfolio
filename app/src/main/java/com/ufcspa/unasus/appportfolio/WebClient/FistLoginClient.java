@@ -12,10 +12,10 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.ufcspa.unasus.appportfolio.Activities.LoginActivity;
+import com.ufcspa.unasus.appportfolio.Database.DataBase;
 import com.ufcspa.unasus.appportfolio.Model.Device;
 import com.ufcspa.unasus.appportfolio.Model.Singleton;
 import com.ufcspa.unasus.appportfolio.Model.User;
-import com.ufcspa.unasus.appportfolio.database.DataBaseAdapter;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -86,12 +86,12 @@ public class FistLoginClient extends HttpClient {
                                 Log.d(tag, "user this user in sqlite...");
 
 
-                                DataBaseAdapter.getInstance(context).insertUser(user);
+                                DataBase.getInstance(context).insertUser(user);
                                 if (photo!=null && !photo.equals("") && !photo.equals("null")) {
                                     user.setPhoto(photo,null);
-                                    DataBaseAdapter.getInstance(context).updateTBUser(user);
+                                    DataBase.getInstance(context).updateTBUser(user);
                                 }
-                                DataBaseAdapter.getInstance(context).insertIntoTbDevice(new Device(Singleton.getInstance().device.get_id_device(), user.getIdUser(), Singleton.getInstance().device.get_tp_device(), null, null/*, null*/));
+                                DataBase.getInstance(context).insertIntoTbDevice(new Device(Singleton.getInstance().device.get_id_device(), user.getIdUser(), Singleton.getInstance().device.get_tp_device(), null, null/*, null*/));
 
                                 //Adicionando o usuario no singleton
                                 Singleton.getInstance().user = user;
@@ -112,7 +112,7 @@ public class FistLoginClient extends HttpClient {
                                 JSONArray tbGuest = resp.getJSONArray("tb_guest");
                                 for (int i = 0; i < tbGuest.length(); i++) {
                                     JSONObject guest = tbGuest.getJSONObject(i);
-                                   /* singleton.guestUser =*/ DataBaseAdapter.getInstance(context).insertIntoTbGuest(singleton.user.getIdUser(),guest.getInt("id_class"),guest.getInt("id_guest"),guest.getString("fl_comments"));
+                                   /* singleton.guestUser =*/ DataBase.getInstance(context).insertIntoTbGuest(singleton.user.getIdUser(),guest.getInt("id_class"),guest.getInt("id_guest"),guest.getString("fl_comments"));
                                 }
                             }
 //                            if (response.getJSONObject("firstLogin_response").getString("fl_firstSync").equals("S")){

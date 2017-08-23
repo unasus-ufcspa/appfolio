@@ -17,7 +17,7 @@ import android.widget.Toast;
 import com.ufcspa.unasus.appportfolio.Model.PortfolioClass;
 import com.ufcspa.unasus.appportfolio.Model.Singleton;
 import com.ufcspa.unasus.appportfolio.R;
-import com.ufcspa.unasus.appportfolio.database.DataBaseAdapter;
+import com.ufcspa.unasus.appportfolio.Database.DataBase;
 
 import java.util.List;
 
@@ -28,7 +28,7 @@ public class SelectPortfolioClassAdapter extends BaseAdapter {
     private static LayoutInflater inflater = null;
     private Context context;
     private List<PortfolioClass> portclasses;
-    private DataBaseAdapter dataBaseAdapter;
+    private DataBase dataBase;
 
     public interface OnInfoButtonClick{
         void openInfo(View v,PortfolioClass portfolioClass);
@@ -44,7 +44,7 @@ public class SelectPortfolioClassAdapter extends BaseAdapter {
     {
         this.context = context;
         this.portclasses = classes;
-        this.dataBaseAdapter = DataBaseAdapter.getInstance(context);
+        this.dataBase = DataBase.getInstance(context);
 
         inflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
@@ -124,7 +124,7 @@ public class SelectPortfolioClassAdapter extends BaseAdapter {
                 }
                /* new AlertDialog.Builder(context)
                         .setTitle(portClass.getPortfolioTitle())
-                        .setMessage(dataBaseAdapter.getPortfolioDescription(portClass.getIdPortClass()))
+                        .setMessage(dataBase.getPortfolioDescription(portClass.getIdPortClass()))
                         .setPositiveButton("Fechar", new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int which) {
                                 dialog.dismiss();
@@ -157,7 +157,7 @@ public class SelectPortfolioClassAdapter extends BaseAdapter {
             }
         });
 
-        int notifications = dataBaseAdapter.getPortfolioClassNotification(portClass.getIdPortClass());
+        int notifications = dataBase.getPortfolioClassNotification(portClass.getIdPortClass());
         if (notifications == 0)
             holder.notificationIcon.setVisibility(View.INVISIBLE);
         else {
@@ -171,7 +171,7 @@ public class SelectPortfolioClassAdapter extends BaseAdapter {
     private void changeScreen(PortfolioClass portClass) {
         Singleton singleton = Singleton.getInstance();
         singleton.portfolioClass = portClass;
-        singleton.guestUserComments = dataBaseAdapter.getFlGuest(portClass.getIdPortClass());
+        singleton.guestUserComments = dataBase.getFlGuest(portClass.getIdPortClass());
         LocalBroadcastManager.getInstance(context).sendBroadcast(new Intent("call.fragments.action").putExtra("ID", 1));
     }
 

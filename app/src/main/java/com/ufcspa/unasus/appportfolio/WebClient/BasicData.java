@@ -15,7 +15,7 @@ import com.ufcspa.unasus.appportfolio.Model.basicData.Portfolio;
 import com.ufcspa.unasus.appportfolio.Model.basicData.PortfolioClass;
 import com.ufcspa.unasus.appportfolio.Model.basicData.PortfolioStudent;
 import com.ufcspa.unasus.appportfolio.Model.basicData.User;
-import com.ufcspa.unasus.appportfolio.database.DataBaseAdapter;
+import com.ufcspa.unasus.appportfolio.Database.DataBase;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -175,7 +175,7 @@ public class BasicData {
 //            @Override
 //            public void run() {
                 //INSERT DATA IN DATABASE
-                DataBaseAdapter data = DataBaseAdapter.getInstance(context);
+                DataBase data = DataBase.getInstance(context);
                 String log="BD Insert SQLite";
 //                if(users.size()!=0){
         Log.d(log, "inserindo users");

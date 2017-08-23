@@ -37,7 +37,7 @@ import com.ufcspa.unasus.appportfolio.Notifications.NotificationEventReceiver;
 import com.ufcspa.unasus.appportfolio.R;
 import com.ufcspa.unasus.appportfolio.WebClient.LogoutClient;
 import com.ufcspa.unasus.appportfolio.WebClient.PasswordClient;
-import com.ufcspa.unasus.appportfolio.database.DataBaseAdapter;
+import com.ufcspa.unasus.appportfolio.Database.DataBase;
 
 import java.security.MessageDigest;
 
@@ -78,7 +78,7 @@ public class ConfigFragment extends HelperFragment implements View.OnClickListen
         View view = inflater.inflate(R.layout.fragment_config, container, false);
 
         singleton = Singleton.getInstance();
-        source = DataBaseAdapter.getInstance(getContext());
+        source = DataBase.getInstance(getContext());
 
         init(view);
 

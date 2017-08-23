@@ -7,10 +7,10 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
+import com.ufcspa.unasus.appportfolio.Database.DataBase;
 import com.ufcspa.unasus.appportfolio.Model.Singleton;
 import com.ufcspa.unasus.appportfolio.Model.VersionActivity;
 import com.ufcspa.unasus.appportfolio.R;
-import com.ufcspa.unasus.appportfolio.database.DataBaseAdapter;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -23,13 +23,13 @@ public class VersionsAdapter extends BaseAdapter {
     private Context context;
     private ArrayList<VersionActivity> list;
     private Holder holder;
-    private DataBaseAdapter source;
+    private DataBase source;
 
     public VersionsAdapter(Context context, ArrayList<VersionActivity> list) {
         this.context = context;
         this.list = list;
         this.holder = new Holder();
-        this.source = DataBaseAdapter.getInstance(context);
+        this.source = DataBase.getInstance(context);
 
         if (this.list.size()>1) {
             Collections.sort(this.list.subList(1,this.list.size()-1));

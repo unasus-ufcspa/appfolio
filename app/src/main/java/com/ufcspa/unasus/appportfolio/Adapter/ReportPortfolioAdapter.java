@@ -13,7 +13,7 @@ import com.ufcspa.unasus.appportfolio.Activities.MainActivity;
 import com.ufcspa.unasus.appportfolio.Model.ActivityStudent;
 import com.ufcspa.unasus.appportfolio.Model.Singleton;
 import com.ufcspa.unasus.appportfolio.R;
-import com.ufcspa.unasus.appportfolio.database.DataBaseAdapter;
+import com.ufcspa.unasus.appportfolio.Database.DataBase;
 
 import java.util.HashMap;
 import java.util.List;
@@ -59,10 +59,10 @@ public class ReportPortfolioAdapter extends BaseAdapter {
         ActivityStudent aux = list.get(position);
 
         holder.titulo_report = (TextView) rowView.findViewById(R.id.titulo_report);
-        holder.titulo_report.setText(DataBaseAdapter.getInstance(rowView.getContext()).getActivityTitleByIdActivityStudent(aux.getIdActivityStudent()));
+        holder.titulo_report.setText(DataBase.getInstance(rowView.getContext()).getActivityTitleByIdActivityStudent(aux.getIdActivityStudent()));
         holder.texto_report = (WebView) rowView.findViewById(R.id.texto_report);
 
-        HashMap<String, String> attachment = DataBaseAdapter.getInstance(rowView.getContext()).getAllAttachmentsNames(Singleton.getInstance().idActivityStudent);
+        HashMap<String, String> attachment = DataBase.getInstance(rowView.getContext()).getAllAttachmentsNames(Singleton.getInstance().idActivityStudent);
 
         holder.texto_report.loadDataWithBaseURL("file:"+Environment.getExternalStorageDirectory()+"/Android/data/com.ufcspa.unasus.appportfolio/files/images",aux.getTxtActivity(),"text/html","UTF-8","about:blank");
 

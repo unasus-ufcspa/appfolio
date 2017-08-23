@@ -19,12 +19,12 @@ import android.widget.Toast;
 import com.coolerfall.download.DownloadCallback;
 import com.coolerfall.download.DownloadManager;
 import com.coolerfall.download.DownloadRequest;
+import com.ufcspa.unasus.appportfolio.Database.DataBase;
 import com.ufcspa.unasus.appportfolio.Model.Attachment;
 import com.ufcspa.unasus.appportfolio.Model.User;
 import com.ufcspa.unasus.appportfolio.Model.Singleton;
 import com.ufcspa.unasus.appportfolio.R;
 import com.ufcspa.unasus.appportfolio.WebClient.HttpClient;
-import com.ufcspa.unasus.appportfolio.database.DataBaseAdapter;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -40,7 +40,7 @@ public class SelectReportStudentAdapter extends BaseAdapter {
     private static LayoutInflater inflater = null;
     private Context context;
     private List<User> listaUsers;
-    private DataBaseAdapter dataBaseAdapter;
+    private DataBase dataBase;
     private List<Attachment> attachments;
     private static final String URL="/webfolio/app_dev.php/download/";
 
@@ -48,7 +48,7 @@ public class SelectReportStudentAdapter extends BaseAdapter {
     {
         this.context = context;
         this.listaUsers = classes;
-        this.dataBaseAdapter = DataBaseAdapter.getInstance(context);
+        this.dataBase = DataBase.getInstance(context);
 
         inflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
@@ -89,7 +89,7 @@ public class SelectReportStudentAdapter extends BaseAdapter {
             @Override
             public void onClick(View v) {
                 if (Singleton.getInstance().guestUser) {
-                    attachments = dataBaseAdapter.getAttachmentFromStudentId(listaUsers.get(position).getIdUser());
+                    attachments = dataBase.getAttachmentFromStudentId(listaUsers.get(position).getIdUser());
                     if (attachments.size() > 0) {
                         downloadAttachments(attachments);
                     }
@@ -139,7 +139,7 @@ public class SelectReportStudentAdapter extends BaseAdapter {
                             public void onSuccess(int downloadId, String filePath) {
                                 super.onSuccess(downloadId, filePath);
                                 cont[0]--;
-                                dataBaseAdapter.updateAttachmentFlDownload(a.getIdAttachment());
+                                dataBase.updateAttachmentFlDownload(a.getIdAttachment());
                                 if (filePath.contains(".mp4")) {
                                     saveSmallImage(filePath);
                                 }
@@ -157,7 +157,7 @@ public class SelectReportStudentAdapter extends BaseAdapter {
                 Log.d("atividade - anexos", "url do anexo: " + url);
             } else{
                 cont[0]--;
-                dataBaseAdapter.updateAttachmentFlDownload(a.getIdAttachment());
+                dataBase.updateAttachmentFlDownload(a.getIdAttachment());
                 Log.d("atividade - anexos", filePath + " já existe e não baixado");
             }
 //                downloadAttachment("http://stuffpoint.com/stardoll/image/54056-stardoll-sdfs.jpg" + a.getNmSystem(), a.getNmFile());

@@ -19,7 +19,7 @@ import com.ufcspa.unasus.appportfolio.Model.Comentario;
 import com.ufcspa.unasus.appportfolio.Model.Singleton;
 import com.ufcspa.unasus.appportfolio.Model.User;
 import com.ufcspa.unasus.appportfolio.R;
-import com.ufcspa.unasus.appportfolio.database.DataBaseAdapter;
+import com.ufcspa.unasus.appportfolio.Database.DataBase;
 
 import java.util.ArrayList;
 
@@ -27,19 +27,19 @@ import java.util.ArrayList;
  * Created by Steffano on 26/06/2017.
  */
 
-public class UserListadapter extends BaseAdapter {
+public class UserListAdapter extends BaseAdapter {
     private ArrayList<User> userList;
-    private DataBaseAdapter source;
+    private DataBase source;
     private Context context;
     private static LayoutInflater inflater = null;
     private Singleton singleton;
 
-    public UserListadapter(Context context, ArrayList<User> userList) {
+    public UserListAdapter(Context context, ArrayList<User> userList) {
         this.userList = userList;
         this.context = context;
 
         singleton = Singleton.getInstance();
-        source = DataBaseAdapter.getInstance(context);
+        source = DataBase.getInstance(context);
         inflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
     }

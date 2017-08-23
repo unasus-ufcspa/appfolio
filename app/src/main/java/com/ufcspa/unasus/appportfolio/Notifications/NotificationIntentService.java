@@ -11,11 +11,11 @@ import android.support.v4.content.WakefulBroadcastReceiver;
 import android.util.Log;
 
 import com.ufcspa.unasus.appportfolio.Activities.SplashActivity;
+import com.ufcspa.unasus.appportfolio.Database.DataBase;
 import com.ufcspa.unasus.appportfolio.Model.Singleton;
 import com.ufcspa.unasus.appportfolio.R;
 import com.ufcspa.unasus.appportfolio.WebClient.FullData;
 import com.ufcspa.unasus.appportfolio.WebClient.FullDataClient;
-import com.ufcspa.unasus.appportfolio.database.DataBaseAdapter;
 
 /**
  * Created by Steffano on 14/12/2016.
@@ -68,7 +68,7 @@ public class NotificationIntentService extends IntentService {
         if (isOnline()) {
 
             getFullData(0);
-            int notifications = DataBaseAdapter.getInstance(this).getAllNotifications();
+            int notifications = DataBase.getInstance(this).getAllNotifications();
 
             if (notifications>0) {
                 String text;

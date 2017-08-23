@@ -26,10 +26,10 @@ import android.widget.VideoView;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 import com.ufcspa.unasus.appportfolio.Adapter.FragmentAttachmentDialogAdapter;
+import com.ufcspa.unasus.appportfolio.Database.DataBase;
 import com.ufcspa.unasus.appportfolio.Model.Attachment;
 import com.ufcspa.unasus.appportfolio.Model.Singleton;
 import com.ufcspa.unasus.appportfolio.R;
-import com.ufcspa.unasus.appportfolio.database.DataBaseAdapter;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -46,7 +46,7 @@ public class AttachmentDialogFragment extends DialogFragment {
     private FragmentAttachmentDialogAdapter listAdapter;
     private ArrayList<Attachment> attachments;
     private Singleton singleton;
-    private DataBaseAdapter source;
+    private DataBase source;
 
     public AttachmentDialogFragment() {
     }
@@ -62,7 +62,7 @@ public class AttachmentDialogFragment extends DialogFragment {
         View view = inflater.inflate(R.layout.fragment_attachment_dialog, null);
 
         singleton = Singleton.getInstance();
-        source = DataBaseAdapter.getInstance(getContext());
+        source = DataBase.getInstance(getContext());
 
         ((InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(view.getWindowToken(), 0);
 
@@ -81,7 +81,7 @@ public class AttachmentDialogFragment extends DialogFragment {
     }
 
     private void init() {
-        source = DataBaseAdapter.getInstance(getActivity());
+        source = DataBase.getInstance(getActivity());
 
         attachmentGrid = (GridView) getView().findViewById(R.id.attachment_gridview);
 

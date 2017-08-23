@@ -9,12 +9,12 @@ import android.widget.GridView;
 import android.widget.TextView;
 
 import com.ufcspa.unasus.appportfolio.Adapter.SelectReportStudentAdapter;
+import com.ufcspa.unasus.appportfolio.Database.DataBase;
 import com.ufcspa.unasus.appportfolio.Model.Activity;
 import com.ufcspa.unasus.appportfolio.Model.Singleton;
 import com.ufcspa.unasus.appportfolio.Model.StudFrPortClass;
 import com.ufcspa.unasus.appportfolio.Model.User;
 import com.ufcspa.unasus.appportfolio.R;
-import com.ufcspa.unasus.appportfolio.database.DataBaseAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,7 +23,7 @@ public class ReportStudentsFragment extends HelperFragment {
     private GridView grid_reports;
     private TextView portfolio_name;
     private TextView class_name;
-    private DataBaseAdapter source;
+    private DataBase source;
     private Singleton singleton;
     private List<User> students;
     private ArrayList<StudFrPortClass> list;
@@ -49,7 +49,7 @@ public class ReportStudentsFragment extends HelperFragment {
 
     private void init() {
         singleton = Singleton.getInstance();
-        source = DataBaseAdapter.getInstance(getActivity());
+        source = DataBase.getInstance(getActivity());
         portfolio_name = (TextView)getView().findViewById(R.id.portfolio_name);
         portfolio_name.setText(singleton.portfolioClass.getPortfolioTitle());
         class_name = (TextView)getView().findViewById(R.id.class_name);

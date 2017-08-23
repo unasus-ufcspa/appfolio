@@ -12,6 +12,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.ufcspa.unasus.appportfolio.Activities.MainActivity;
+import com.ufcspa.unasus.appportfolio.Database.DataBase;
 import com.ufcspa.unasus.appportfolio.Model.Annotation;
 import com.ufcspa.unasus.appportfolio.Model.Attachment;
 import com.ufcspa.unasus.appportfolio.Model.Comentario;
@@ -21,7 +22,6 @@ import com.ufcspa.unasus.appportfolio.Model.Reference;
 import com.ufcspa.unasus.appportfolio.Model.Singleton;
 import com.ufcspa.unasus.appportfolio.Model.VersionActivity;
 import com.ufcspa.unasus.appportfolio.Model.basicData.ActivityStudent;
-import com.ufcspa.unasus.appportfolio.database.DataBaseAdapter;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -338,9 +338,9 @@ public class FullDataClient extends HttpClient {
                                                 ActivityStudent as = new ActivityStudent();
                                                 int id_activity_student = temp.getInt("id_activity_student");
                                                 String dt_conclusion = temp.getString("dt_conclusion");
-                                                as = DataBaseAdapter.getInstance(context).getActivityStudentById(id_activity_student);
+                                                as = DataBase.getInstance(context).getActivityStudentById(id_activity_student);
                                                 as.setDt_conclusion(dt_conclusion);
-                                                DataBaseAdapter.getInstance(context).updateTBActivityStudent(as);
+                                                DataBase.getInstance(context).updateTBActivityStudent(as);
                                                 Log.d("activityStudent",as.toString());
                                             }
                                         }

@@ -20,10 +20,10 @@ import android.widget.Toast;
 
 import com.onegravity.rteditor.utils.Constants;
 import com.ufcspa.unasus.appportfolio.Adapter.FragmentAttachmentAdapter;
+import com.ufcspa.unasus.appportfolio.Database.DataBase;
 import com.ufcspa.unasus.appportfolio.Model.Attachment;
 import com.ufcspa.unasus.appportfolio.Model.Singleton;
 import com.ufcspa.unasus.appportfolio.R;
-import com.ufcspa.unasus.appportfolio.database.DataBaseAdapter;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -46,7 +46,7 @@ public class AttachmentFragment extends HelperFragment {
         View view = inflater.inflate(R.layout.fragment_attachment, null);
 
         singleton = Singleton.getInstance();
-        source = DataBaseAdapter.getInstance(getContext());
+        source = DataBase.getInstance(getContext());
 
         ((InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(view.getWindowToken(), 0);
 
@@ -65,7 +65,7 @@ public class AttachmentFragment extends HelperFragment {
     }
 
     private void init() {
-        source = DataBaseAdapter.getInstance(getActivity());
+        source = DataBase.getInstance(getActivity());
 
         attachmentGrid = (GridView) getView().findViewById(R.id.attachment_gridview);
 

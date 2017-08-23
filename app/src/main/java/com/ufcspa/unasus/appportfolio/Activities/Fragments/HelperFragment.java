@@ -40,10 +40,10 @@ import android.widget.Toast;
 
 import com.onegravity.rteditor.media.crop.CropImageActivity;
 import com.onegravity.rteditor.utils.Constants;
+import com.ufcspa.unasus.appportfolio.Database.DataBase;
 import com.ufcspa.unasus.appportfolio.Model.Attachment;
 import com.ufcspa.unasus.appportfolio.Model.Singleton;
 import com.ufcspa.unasus.appportfolio.R;
-import com.ufcspa.unasus.appportfolio.database.DataBaseAdapter;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -67,7 +67,7 @@ public class HelperFragment extends Fragment {
     public static String[] thumbColumns = {MediaStore.Video.Thumbnails.DATA};
     public static String[] mediaColumns = {MediaStore.Video.Media._ID};
     protected String mCurrentPhotoPath;
-    protected DataBaseAdapter source;
+    protected DataBase source;
     protected Singleton singleton;
 
     public HelperFragment() {
@@ -294,7 +294,7 @@ public class HelperFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_attachment_dialog, null);
-        source = DataBaseAdapter.getInstance(getActivity());
+        source = DataBase.getInstance(getActivity());
 
         singleton = Singleton.getInstance();
 

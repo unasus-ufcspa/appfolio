@@ -12,7 +12,6 @@ import android.util.Log;
 import com.coolerfall.download.DownloadCallback;
 import com.coolerfall.download.DownloadManager;
 import com.coolerfall.download.DownloadRequest;
-import com.ufcspa.unasus.appportfolio.Model.Activity;
 import com.ufcspa.unasus.appportfolio.Model.Annotation;
 import com.ufcspa.unasus.appportfolio.Model.Attachment;
 import com.ufcspa.unasus.appportfolio.Model.Comentario;
@@ -20,11 +19,10 @@ import com.ufcspa.unasus.appportfolio.Model.CommentVersion;
 import com.ufcspa.unasus.appportfolio.Model.Notification;
 import com.ufcspa.unasus.appportfolio.Model.Observation;
 import com.ufcspa.unasus.appportfolio.Model.Reference;
-import com.ufcspa.unasus.appportfolio.Model.Singleton;
 import com.ufcspa.unasus.appportfolio.Model.Tuple;
 import com.ufcspa.unasus.appportfolio.Model.VersionActivity;
 import com.ufcspa.unasus.appportfolio.Model.basicData.User;
-import com.ufcspa.unasus.appportfolio.database.DataBaseAdapter;
+import com.ufcspa.unasus.appportfolio.Database.DataBase;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -151,7 +149,7 @@ public class FirstSync {
     }
 
     public synchronized void insertDataIntoSQLITE() {
-        final DataBaseAdapter data = DataBaseAdapter.getInstance(context);
+        final DataBase data = DataBase.getInstance(context);
 
         data.insertNotifications(notifications);
         data.insertTBActivity(activities);

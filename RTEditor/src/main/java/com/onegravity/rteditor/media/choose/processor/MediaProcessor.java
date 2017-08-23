@@ -98,7 +98,7 @@ public abstract class MediaProcessor implements Runnable {
     private InputStream copyFileToDir(String sourceFile) {
         InputStream in = null;
         try {
-            File fileFrom = new File(Uri.parse(sourceFile).getPath());
+            File fileFrom = new File(sourceFile);
             in = new FileInputStream(fileFrom);
         } catch (IOException e) {
             Log.e(getClass().getSimpleName(), e.getMessage(), e);

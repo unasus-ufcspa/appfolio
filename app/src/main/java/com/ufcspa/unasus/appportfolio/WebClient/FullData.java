@@ -23,7 +23,7 @@ import com.ufcspa.unasus.appportfolio.Model.Singleton;
 import com.ufcspa.unasus.appportfolio.Model.Tuple;
 import com.ufcspa.unasus.appportfolio.Model.VersionActivity;
 import com.ufcspa.unasus.appportfolio.Model.basicData.User;
-import com.ufcspa.unasus.appportfolio.database.DataBaseAdapter;
+import com.ufcspa.unasus.appportfolio.Database.DataBase;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -78,7 +78,7 @@ public class FullData {
     public static JSONObject toJSON(String idDevice, int idActivityStudent) {
         JSONObject json = new JSONObject();
         try {
-            Singleton.getInstance().device=DataBaseAdapter.getInstance(context).getDevice();
+            Singleton.getInstance().device= DataBase.getInstance(context).getDevice();
             Log.d("sendData", "GET FROM DEVICE: "+Singleton.getInstance().device);
 
             json.put("fullDataSrvDev_request", new JSONObject().put("ds_hash", idDevice).put("id_activity_student", 0).put("id_user", Singleton.getInstance().device.get_id_user()));
@@ -138,7 +138,7 @@ public class FullData {
     }
 
     public synchronized void insertDataIntoSQLITE() {
-        final DataBaseAdapter data = DataBaseAdapter.getInstance(context);
+        final DataBase data = DataBase.getInstance(context);
 
         data.insertNotifications(notifications);
         for (VersionActivity versionActivity: versionActs) {
