@@ -179,7 +179,7 @@ public class RTApi implements RTProxy, RTMediaFactory<RTImage, RTAudio, RTVideo>
     @Override
 	/* @inheritDoc */
     public RTVideo createVideo(RTMediaSource mediaSource) {
-        return mMediaFactory.createVideo(mediaSource);
+        return mMediaFactory.createVideo(mediaSource);// TODO: 28/08/2017 aqui ocorre o erra de gravação
     }
 
     @Override

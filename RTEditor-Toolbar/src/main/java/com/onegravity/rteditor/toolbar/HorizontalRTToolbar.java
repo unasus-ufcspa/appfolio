@@ -228,15 +228,15 @@ public class HorizontalRTToolbar extends LinearLayout implements RTToolbar, View
         // enable/disable capture picture depending on whether the device
         // has a camera or not
         PackageManager packageMgr = getContext().getPackageManager();
-        if (packageMgr.hasSystemFeature(PackageManager.FEATURE_CAMERA)) {
+        /*if (packageMgr.hasSystemFeature(PackageManager.FEATURE_CAMERA)) {
             initImageButton(R.id.toolbar_image_capture);
             initImageButton(R.id.toolbar_video_capture);
-        } else {
+        } else {*/
             View imageCapture = findViewById(R.id.toolbar_image_capture);
             if (imageCapture != null) imageCapture.setVisibility(View.GONE);
             View videoCapture = findViewById(R.id.toolbar_video_capture);
             if (videoCapture != null) videoCapture.setVisibility(View.GONE);
-        }
+//        }
 
         // configure font button
         mFont = (Spinner) findViewById(R.id.toolbar_font);
