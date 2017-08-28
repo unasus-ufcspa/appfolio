@@ -405,6 +405,10 @@ public class RTEditorFragment extends HelperFragment {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 hideNotes(isChecked);
+                if (isChecked)
+                    Toast.makeText(getContext(),"Observações ocultas",Toast.LENGTH_SHORT).show();
+                else
+                    Toast.makeText(getContext(),"Observações visíveis",Toast.LENGTH_SHORT).show();
             }
         });
 
