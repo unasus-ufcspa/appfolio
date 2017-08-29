@@ -13,6 +13,8 @@ public class Singleton {
     public String selectedText = "null";
     public String activityText = "";
     public Note note = new Note(0,"null",0);
+    public Observation actualObservation= new Observation();
+    public String erro = "Erro interno. Por favor tente novamente";
     public int idActivityStudent = -1;
     public int idVersionActivity = -1;
     public int idCurrentVersionActivity = -1;
@@ -27,11 +29,6 @@ public class Singleton {
     public boolean guestUser = false;
     public boolean guestUserComments = true;
     public boolean tutorial = true;
-
-    public Observation actualObservation= new Observation();
-
-    public String erro = "Erro interno. Por favor tente novamente";
-
 
     private Singleton() {
     }

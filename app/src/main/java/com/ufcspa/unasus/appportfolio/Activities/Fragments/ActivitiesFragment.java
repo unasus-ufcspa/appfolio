@@ -1,18 +1,12 @@
 package com.ufcspa.unasus.appportfolio.Activities.Fragments;
 
-import android.content.Context;
-import android.content.res.Configuration;
-import android.graphics.Color;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.support.v4.widget.SlidingPaneLayout;
-import android.util.DisplayMetrics;
+import android.support.v4.widget.DrawerLayout;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.inputmethod.InputMethodManager;
 import android.webkit.WebView;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
@@ -34,97 +28,59 @@ import java.util.ArrayList;
  * Created by Desenvolvimento on 12/01/2016.
  */
 public class ActivitiesFragment extends HelperFragment implements ActivitiesAdapter.OnInfoButtonClick{
-    private ListView list_activities;
-    private ArrayList<StudFrPortClass> list;
-    private DataBase source;
-    private Singleton singleton;
-    private TextView className;
-    private TextView portfolioName;
-    private SearchView edtSearch;
-    private StudentActivitiesAdapter gridAdapter;
-    private RelativeLayout slider;
-    private RelativeLayout content;
+    private ListView mListActivities;
+    private ArrayList<StudFrPortClass> mList;
+    private DataBase mDatabase;
+    private static Singleton sSingleton;
+    private TextView mClassName;
+    private TextView mPortfolioName;
+    private SearchView mSearchView;
+    private StudentActivitiesAdapter mGridAdapter;
+    private RelativeLayout mDrawer;
+    private DrawerLayout mDrawerLayout;
+    private TextView mDrawerTitle;
+    private WebView mDrawerDescription;
 
     public ActivitiesFragment() {
     }
 
     public void openInfo(View v, Activity activity){
-        SlidingPaneLayout layout = (SlidingPaneLayout) getView().findViewById(R.id.activity_portfolio_activity);
-        TextView info_container_title = (TextView) getView().findViewById(R.id.info_container_title);
-        WebView info_container_description = (WebView) getView().findViewById(R.id.info_container_description);
+        mDrawerTitle = (TextView) getView().findViewById(R.id.info_container_title);
+        mDrawerDescription = (WebView) getView().findViewById(R.id.info_container_description);
 
-        slider.setVisibility(View.VISIBLE);
+        mDrawer.setVisibility(View.VISIBLE);
 
-        info_container_title.setText(activity.getTitle());
-        info_container_description.loadDataWithBaseURL("",activity.getDescription(),"text/html","UTF-8","about:blank");
-        info_container_description.setBackgroundColor(Color.parseColor("#F3F4F2"));
+        mDrawerLayout.setScrimColor(getResources().getColor(android.R.color.transparent));
 
-        if (layout.isOpen()) {
-            layout.closePane();
+        mDrawerTitle.setText(activity.getTitle());
+        mDrawerDescription.loadDataWithBaseURL("",activity.getDescription(),"text/html","UTF-8","about:blank");
+        mDrawerDescription.setBackgroundColor(getResources().getColor(R.color.gray_4));
+
+        if (mDrawerLayout.isDrawerOpen(mDrawer)) {
+            mDrawerLayout.closeDrawer(mDrawer);
         } else {
-            layout.openPane();
+            mDrawerLayout.openDrawer(mDrawer);
         }
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_activities, null);
+        mDrawerLayout = (DrawerLayout) view.findViewById(R.id.activity_portfolio_activity);
+        mDrawer = (RelativeLayout) view.findViewById(R.id.slider);
 
         initCommentsTab(view);
-
-        content = (RelativeLayout) container.findViewById(R.id.content_layout);
-        SlidingPaneLayout.LayoutParams layoutParams = new SlidingPaneLayout.LayoutParams(SlidingPaneLayout.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
 
         return view;
     }
 
     private void initCommentsTab(final View view) {
+        mDrawer.setVisibility(View.INVISIBLE);
 
-        slider = (RelativeLayout) view.findViewById(R.id.slider);
-        slider.setVisibility(View.INVISIBLE);
+        mDrawer.requestLayout();
+        mDrawer.bringToFront();
 
-        DisplayMetrics dm = new DisplayMetrics();
-        getActivity().getWindowManager().getDefaultDisplay().getMetrics(dm);
-
-        int width = getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT ? dm.widthPixels / 4 : dm.widthPixels / 3;
-
-        SlidingPaneLayout.LayoutParams relativeParams = new SlidingPaneLayout.LayoutParams(new SlidingPaneLayout.LayoutParams(SlidingPaneLayout.LayoutParams.MATCH_PARENT, SlidingPaneLayout.LayoutParams.MATCH_PARENT));
-        relativeParams.setMargins(width*2, 0, 0, 0);
-        slider.setLayoutParams(relativeParams);
-
-        slider.requestLayout();
-        slider.bringToFront();
-
-        final SlidingPaneLayout layout = (SlidingPaneLayout) view.findViewById(R.id.activity_portfolio_activity);
-
-        layout.setPanelSlideListener(new SlidingPaneLayout.PanelSlideListener() {
-            @Override
-            public void onPanelSlide(View panel, float slideOffset) {
-                ((InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(getView().getWindowToken(), 0);
-            }
-
-            @Override
-            public void onPanelOpened(View panel) {
-                if (panel != null) {
-                    Fragment frag = getActivity().getSupportFragmentManager().findFragmentById(R.id.info_container);
-                    if (frag != null) {
-                        getActivity().getSupportFragmentManager().beginTransaction().remove(frag).commit();
-                    }
-                    slider.setVisibility(View.GONE);
-                }
-            }
-
-            @Override
-            public void onPanelClosed(View panel) {
-                if (panel != null) {
-                }
-            }
-        });
-
-        layout.setSliderFadeColor(getResources().getColor(android.R.color.transparent));
-        layout.setBackgroundColor(getResources().getColor(android.R.color.transparent));
-
-        layout.openPane();
+        mDrawerLayout.setBackgroundColor(getResources().getColor(android.R.color.transparent));
     }
 
     @Override
@@ -134,29 +90,29 @@ public class ActivitiesFragment extends HelperFragment implements ActivitiesAdap
     }
 
     public void init() {
-        singleton = Singleton.getInstance();
-        source = DataBase.getInstance(getActivity());
+        sSingleton = Singleton.getInstance();
+        mDatabase = DataBase.getInstance(getActivity());
 
         try {
-            list = source.selectListActivitiesAndStudents(singleton.portfolioClass.getIdPortClass(), singleton.portfolioClass.getPerfil(), singleton.user.getIdUser());
-            Log.e("BANCO", "atividades (SelectActivitiesAactivity):"+ list.toString());
+            mList = mDatabase.selectListActivitiesAndStudents(sSingleton.portfolioClass.getIdPortClass(), sSingleton.portfolioClass.getPerfil(), sSingleton.user.getIdUser());
+            Log.e("BANCO", "atividades (SelectActivitiesAactivity):"+ mList.toString());
         } catch (Exception e) {
             Log.e("BANCO", "falha em pegar atividades (SelectActivitiesAactivity):" + e.getMessage());
         }
 
-        edtSearch = (SearchView) getView().findViewById(R.id.edt_search);
+        mSearchView = (SearchView) getView().findViewById(R.id.edt_search);
 
-        className = (TextView) getView().findViewById(R.id.class_name);
-        portfolioName = (TextView) getView().findViewById(R.id.portfolio_name);
+        mClassName = (TextView) getView().findViewById(R.id.class_name);
+        mPortfolioName = (TextView) getView().findViewById(R.id.portfolio_name);
 
-        className.setText(singleton.portfolioClass.getClassCode());
-        portfolioName.setText(singleton.portfolioClass.getPortfolioTitle());
+        mClassName.setText(sSingleton.portfolioClass.getClassCode());
+        mPortfolioName.setText(sSingleton.portfolioClass.getPortfolioTitle());
 
-        gridAdapter = new StudentActivitiesAdapter((MainActivity) getActivity(), list, this);
+        mGridAdapter = new StudentActivitiesAdapter((MainActivity) getActivity(), mList, this);
 
-        list_activities = (ListView) getView().findViewById(R.id.list_activities);
-        list_activities.setAdapter(gridAdapter);
-        list_activities.setOnTouchListener(new View.OnTouchListener() {
+        mListActivities = (ListView) getView().findViewById(R.id.list_activities);
+        mListActivities.setAdapter(mGridAdapter);
+        mListActivities.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 //Log.d("tela atividades","clicou na caixa");
@@ -166,11 +122,11 @@ public class ActivitiesFragment extends HelperFragment implements ActivitiesAdap
             }
         });
 
-        if (singleton.portfolioClass.getPerfil().equals("S")){
-            edtSearch.setVisibility(View.INVISIBLE);
+        if (sSingleton.portfolioClass.getPerfil().equals("S")){
+            mSearchView.setVisibility(View.INVISIBLE);
         }
 
-        edtSearch.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+        mSearchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
                 return false;
@@ -178,7 +134,7 @@ public class ActivitiesFragment extends HelperFragment implements ActivitiesAdap
 
             @Override
             public boolean onQueryTextChange(String newText) {
-                ActivitiesFragment.this.gridAdapter.getFilter().filter(newText);
+                ActivitiesFragment.this.mGridAdapter.getFilter().filter(newText);
                 return false;
             }
         });

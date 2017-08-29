@@ -1,19 +1,13 @@
 package com.ufcspa.unasus.appportfolio.Activities.Fragments;
 
-import android.content.Context;
-import android.content.res.Configuration;
-import android.graphics.Color;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.support.v4.widget.SlidingPaneLayout;
-import android.util.DisplayMetrics;
+import android.support.v4.widget.DrawerLayout;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.RotateAnimation;
-import android.view.inputmethod.InputMethodManager;
 import android.webkit.WebView;
 import android.widget.Button;
 import android.widget.GridView;
@@ -38,32 +32,38 @@ public class PortfoliosFragment extends HelperFragment implements SelectPortfoli
     private Singleton singleton;
     private List<PortfolioClass> portclasses;
     private Button btSync;
-    private RelativeLayout slider;
+    private RelativeLayout mDrawer;
+    private DrawerLayout mDrawerLayout;
+    private TextView mDrawerTitle;
+    private WebView mDrawerDescription;
 
     void FragmentSelectPortfolio() {
     }
 
     public void openInfo(View v, PortfolioClass portfolioClass){
-        SlidingPaneLayout layout = (SlidingPaneLayout) getView().findViewById(R.id.activity_classes);
-        TextView info_container_title = (TextView) getView().findViewById(R.id.info_container_title);
-        WebView info_container_description = (WebView) getView().findViewById(R.id.info_container_description);
+        mDrawerTitle = (TextView) getView().findViewById(R.id.info_container_title);
+        mDrawerDescription = (WebView) getView().findViewById(R.id.info_container_description);
 
-        slider.setVisibility(View.VISIBLE);
+        mDrawer.setVisibility(View.VISIBLE);
 
-        info_container_title.setText(portfolioClass.getPortfolioTitle());
-        info_container_description.loadDataWithBaseURL("",source.getPortfolioDescription(portfolioClass.getIdPortClass()),"text/html","UTF-8","about:blank");
-        info_container_description.setBackgroundColor(Color.parseColor("#F3F4F2"));
+        mDrawerLayout.setScrimColor(getResources().getColor(android.R.color.transparent));
 
-        if (layout.isOpen()) {
-            layout.closePane();
+        mDrawerTitle.setText(portfolioClass.getPortfolioTitle());
+        mDrawerDescription.loadDataWithBaseURL("",source.getPortfolioDescription(portfolioClass.getIdPortClass()),"text/html","UTF-8","about:blank");
+        mDrawerDescription.setBackgroundColor(getResources().getColor(R.color.gray_4));
+
+        if (mDrawerLayout.isDrawerOpen(mDrawer)) {
+            mDrawerLayout.closeDrawer(mDrawer);
         } else {
-            layout.openPane();
+            mDrawerLayout.openDrawer(mDrawer);
         }
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_portfolios, null);
+        mDrawerLayout = (DrawerLayout) view.findViewById(R.id.activity_classes);
+        mDrawer = (RelativeLayout) view.findViewById(R.id.slider);
         btSync = (Button) view.findViewById(R.id.bt_sync);
         final RotateAnimation rotate = new RotateAnimation(0, -360,
                 Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF,
@@ -91,52 +91,12 @@ public class PortfoliosFragment extends HelperFragment implements SelectPortfoli
     }
 
     private void initCommentsTab(final View view) {
+        mDrawer.setVisibility(View.INVISIBLE);
 
-        slider = (RelativeLayout) view.findViewById(R.id.slider);
-        slider.setVisibility(View.INVISIBLE);
+        mDrawer.requestLayout();
+        mDrawer.bringToFront();
 
-        DisplayMetrics dm = new DisplayMetrics();
-        getActivity().getWindowManager().getDefaultDisplay().getMetrics(dm);
-
-        int width = getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT ? dm.widthPixels / 4 : dm.widthPixels / 3;
-
-        SlidingPaneLayout.LayoutParams relativeParams = new SlidingPaneLayout.LayoutParams(new SlidingPaneLayout.LayoutParams(SlidingPaneLayout.LayoutParams.MATCH_PARENT, SlidingPaneLayout.LayoutParams.MATCH_PARENT));
-        relativeParams.setMargins(width*2, 0, 0, 0);
-        slider.setLayoutParams(relativeParams);
-
-        slider.requestLayout();
-        slider.bringToFront();
-
-        final SlidingPaneLayout layout = (SlidingPaneLayout) view.findViewById(R.id.activity_classes);
-
-        layout.setPanelSlideListener(new SlidingPaneLayout.PanelSlideListener() {
-            @Override
-            public void onPanelSlide(View panel, float slideOffset) {
-                ((InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(getView().getWindowToken(), 0);
-            }
-
-            @Override
-            public void onPanelOpened(View panel) {
-                if (panel != null) {
-                    Fragment frag = getActivity().getSupportFragmentManager().findFragmentById(R.id.info_container);
-                    if (frag != null) {
-                        getActivity().getSupportFragmentManager().beginTransaction().remove(frag).commit();
-                    }
-                    slider.setVisibility(View.INVISIBLE);
-                }
-            }
-
-            @Override
-            public void onPanelClosed(View panel) {
-                if (panel != null) {
-                }
-            }
-        });
-
-        layout.setSliderFadeColor(getResources().getColor(android.R.color.transparent));
-        layout.setBackgroundColor(getResources().getColor(android.R.color.transparent));
-
-        layout.openPane();
+        mDrawerLayout.setBackgroundColor(getResources().getColor(android.R.color.transparent));
     }
 
     @Override

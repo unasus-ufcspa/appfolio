@@ -1,5 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Fólio</string>
+    <string name="app_name" translatable="false">Fólio</string>
     <string name="title_edit_activity">Edit your activity</string>
     <string name="title_activity_select_class">Select your class</string>
     <string name="title_activity_select_activity">Select your Activities</string>
@@ -34,7 +35,6 @@
     <string name="policy_title"><i>termo de uso:</i></string>
     <string name="policy_agree">concordo</string>
     <string name="policy_not_agree">não concordo</string>
-    <string name="privacy_policy"></string>
     <string name="no_version">sem versões para esta atividade</string>
 
     <string name="popup_login">Do you want to enter as Student or Tutor?</string>
