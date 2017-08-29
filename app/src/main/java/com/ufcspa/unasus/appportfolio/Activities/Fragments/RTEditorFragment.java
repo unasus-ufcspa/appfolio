@@ -115,6 +115,7 @@ public class RTEditorFragment extends HelperFragment {
     private TextView fullscreenText;
     private ListView editorUserList;
     private UserListAdapter userListAdapter;
+    private TextView noVersion;
     // Model
     private ActivityStudent acStudent;
     private DataBase source;
@@ -188,6 +189,9 @@ public class RTEditorFragment extends HelperFragment {
      */
     public void loadLastText() {
         acStudent = source.listLastVersionActivityStudent(singleton.idActivityStudent);
+        if (acStudent.getTxtActivity().equals("")){
+            noVersion.setVisibility(View.VISIBLE);
+        }
 //        if (singleton.firsttime) {
 //            mRTMessageField.setRichTextEditing(true, acStudent.getTxtActivity());
 //            singleton.firsttime = false;
@@ -220,6 +224,8 @@ public class RTEditorFragment extends HelperFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_rteditor, null);
+
+        noVersion = (TextView) view.findViewById(R.id.no_version_tv);
 
         singleton = Singleton.getInstance();
         source = DataBase.getInstance(getActivity());

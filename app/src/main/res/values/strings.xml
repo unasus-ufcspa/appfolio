@@ -35,6 +35,7 @@
     <string name="policy_agree">concordo</string>
     <string name="policy_not_agree">não concordo</string>
     <string name="privacy_policy"></string>
+    <string name="no_version">sem versões para esta atividade</string>
 
     <string name="popup_login">Do you want to enter as Student or Tutor?</string>
     <string name="popup_login_student">Student</string>

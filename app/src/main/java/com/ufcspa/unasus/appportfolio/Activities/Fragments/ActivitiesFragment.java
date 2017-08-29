@@ -110,7 +110,7 @@ public class ActivitiesFragment extends HelperFragment implements ActivitiesAdap
                     if (frag != null) {
                         getActivity().getSupportFragmentManager().beginTransaction().remove(frag).commit();
                     }
-                    slider.setVisibility(View.INVISIBLE);
+                    slider.setVisibility(View.GONE);
                 }
             }
 
