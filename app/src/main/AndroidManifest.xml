@@ -28,7 +28,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".Activities.SplashActivity"
+            android:name=".activities.SplashActivity"
             android:theme="@style/SplashTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -39,27 +39,27 @@
         <activity android:name="com.onegravity.rteditor.media.choose.MediaChooserActivity" />
         <activity android:name="com.onegravity.rteditor.media.crop.CropImageActivity" />
         <activity
-            android:name=".Activities.MainActivity"
+            android:name=".activities.MainActivity"
             android:windowSoftInputMode="adjustPan"
             android:screenOrientation="sensorLandscape"/>
         <activity
-            android:name=".Dialog.FullVideoDialog"
+            android:name=".dialog.FullVideoDialog"
             android:theme="@android:style/Theme.Dialog" />
         <activity
-            android:name=".Dialog.FullImageDialog"
+            android:name=".dialog.FullImageDialog"
             android:theme="@android:style/Theme.Dialog" />
         <activity
-            android:name=".Activities.LoginActivity"
+            android:name=".activities.LoginActivity"
             android:label="@string/title_activity_login2"
             android:windowSoftInputMode="adjustPan" />
 
         <service
-        android:name=".Notifications.NotificationIntentService"
+        android:name=".notifications.NotificationIntentService"
         android:enabled="true"
         android:exported="false" />
 
-        <receiver android:name=".Notifications.NotificationEventReceiver" />
-        <receiver android:name=".Notifications.NotificationServiceStarterReceiver">
+        <receiver android:name=".notifications.NotificationEventReceiver" />
+        <receiver android:name=".notifications.NotificationServiceStarterReceiver">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
                 <action android:name="android.intent.action.TIMEZONE_CHANGED" />

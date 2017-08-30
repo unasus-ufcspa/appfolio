@@ -12,7 +12,7 @@
 // of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 // 
 // 
-// Model of document
+// model of document
 
 package com.onegravity.rteditor.converter.tagsoup;
 

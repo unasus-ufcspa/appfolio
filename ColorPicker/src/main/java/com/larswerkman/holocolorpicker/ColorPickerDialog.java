@@ -100,7 +100,7 @@ public class ColorPickerDialog implements OnColorChangedListener, OnTabChangeLis
         createTabs();
 
         /*
-         * Create Dialog
+         * Create dialog
          */
         String ok = mContext.getString(android.R.string.ok);
         String cancel = mContext.getString(android.R.string.cancel);

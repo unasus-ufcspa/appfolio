@@ -4,41 +4,6 @@
     <color name="colorPrimaryDark">#70E7D0</color>
     <color name="colorAccent">#FF4081</color>
     <color name="white">#FFFFFf</color>
-
-    <!--&lt;!&ndash; Material DEFAULT colors &ndash;&gt;-->
-    <!--<color name="material_drawer_primary">#666666</color>-->
-    <!--<color name="material_drawer_primary_dark">#666666</color>-->
-    <!--<color name="material_drawer_primary_light">#666666</color>-->
-    <!--<color name="material_drawer_accent">#666666</color>-->
-
-    <!--&lt;!&ndash; OVERWRITE THESE COLORS FOR A LIGHT THEME #70E7D0 &ndash;&gt;-->
-    <!--&lt;!&ndash; MaterialDrawer DEFAULT colors &ndash;&gt;-->
-    <!--<color name="material_drawer_background">#666666</color>-->
-    <!--&lt;!&ndash; Material DEFAULT text / items colors &ndash;&gt;-->
-    <!--<color name="material_drawer_primary_text">#CCCCCC</color>-->
-    <!--<color name="material_drawer_primary_icon">#CCCCCC</color>-->
-    <!--<color name="material_drawer_secondary_text">#CCCCCC</color>-->
-    <!--<color name="material_drawer_hint_text">#CCCCCC</color>-->
-    <!--<color name="material_drawer_divider">#CCCCCC</color>-->
-    <!--&lt;!&ndash; Material DEFAULT drawer colors &ndash;&gt;-->
-    <!--<color name="material_drawer_selected">#DEFFFFFF</color>-->
-    <!--<color name="material_drawer_selected_text">#DEFFFFFF</color>-->
-    <!--<color name="material_drawer_header_selection_text">#666666</color>-->
-
-    <!--&lt;!&ndash; OVERWRITE THESE COLORS FOR A DARK THEME &ndash;&gt;-->
-    <!--&lt;!&ndash; MaterialDrawer DEFAULT DARK colors &ndash;&gt;-->
-    <!--<color name="material_drawer_dark_background">#666666</color>-->
-    <!--&lt;!&ndash; MaterialDrawer DEFAULT DARK text / items colors &ndash;&gt;-->
-    <!--<color name="material_drawer_dark_primary_text">#DEFFFFFF</color>-->
-    <!--<color name="material_drawer_dark_primary_icon">#8AFFFFFF</color>-->
-    <!--<color name="material_drawer_dark_secondary_text">#8AFFFFFF</color>-->
-    <!--<color name="material_drawer_dark_hint_text">#42FFFFFF</color>-->
-    <!--<color name="material_drawer_dark_divider">#1FFFFFFF</color>-->
-    <!--&lt;!&ndash; MaterialDrawer DEFAULT DARK drawer colors &ndash;&gt;-->
-    <!--<color name="material_drawer_dark_selected">#666666</color>-->
-    <!--<color name="material_drawer_dark_selected_text">@color/material_drawer_primary</color>-->
-    <!--<color name="material_drawer_dark_header_selection_text">#FFF</color>-->
-
     <color name="gray_1">#666666</color>
     <color name="gray_6">#757575</color>
     <color name="gray_2">#808080</color>
@@ -48,10 +13,44 @@
     <color name="base_green">#70E7D0</color>
     <color name="base_green_dark">#61C6B7</color>
     <color name="base_green_light">#d9fce6</color>
-
+    <color name="white_transparent">#80FFFFFF</color>
     <color name="black_overlay">#66000000</color>
     <color name="gray_7">#f2f3f0</color>
     <color name="gray_8">#f9fbfa</color>
-
-
 </resources>
+<!--
+Android uses hexadecimal ARGB values, which are formatted as #AARRGGBB. That first pair of letters, the AA, represent the alpha channel. You must convert your decimal opacity values to a hexadecimal value. Here are the steps:
+
+Alpha Hex Value Process
+
+    1.Take your opacity as a decimal value and multiply it by 255. So, if you have a block that is 50% opaque the decimal value would be .5. For example: .5 x 255 = 127.5
+    2.The fraction won't convert to hexadecimal, so you must round your number up or down to the nearest whole number. For example: 127.5 rounds up to 128; 55.25 rounds down to 55.
+    3.Enter your decimal value in a decimal-to-hexadecimal converter, like http://www.binaryhexconverter.com/decimal-to-hex-converter, and convert your values.
+    4.If you only get back a single value, prefix it with a zero. For example, if you're trying to get 5% opacity and you're going through this process, you'll end up with the hexadecimal value of D. Add a zero in front of it so it appears as 0D.
+
+That's how you find the alpha channel value. I've taken the liberty to put together a list of values for you. Enjoy!
+
+Hex Opacity Values
+    100% — FF
+    95% — F2
+    90% — E6
+    85% — D9
+    80% — CC
+    75% — BF
+    70% — B3
+    65% — A6
+    60% — 99
+    55% — 8C
+    50% — 80
+    45% — 73
+    40% — 66
+    35% — 59
+    30% — 4D
+    25% — 40
+    20% — 33
+    15% — 26
+    10% — 1A
+    5% — 0D
+    0% — 00
+    https://stackoverflow.com/questions/5445085/understanding-colors-on-android-six-characters/11019879#11019879
+-->

@@ -64,7 +64,7 @@ public interface RTMediaFactory<I extends RTImage, A extends RTAudio, V extends 
      * This allows us to save text in a storage independent format e.g. if we
      * want to switch between internal or external storage (copying the media
      * files) or if we want to use more than one storage area depending on the
-     * use case (e.g. ContentProvider vs. SQLite Database).
+     * use case (e.g. ContentProvider vs. SQLite database).
      */
     I createImage(String path);
 
