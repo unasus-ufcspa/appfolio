@@ -36,13 +36,20 @@ public class PortfoliosFragment extends HelperFragment implements SelectPortfoli
     private DrawerLayout mDrawerLayout;
     private TextView mDrawerTitle;
     private WebView mDrawerDescription;
+    private TextView mNotificationView;
+    private RelativeLayout mRightBarGreen;
+    private int mNotifications;
 
     public PortfoliosFragment() {
     }
 
     public void openInfo(View v, PortfolioClass portfolioClass) {
         mDrawerTitle = (TextView) getView().findViewById(R.id.info_container_title);
+        mNotificationView = (TextView) getView().findViewById(R.id.notification_icon);
         mDrawerDescription = (WebView) getView().findViewById(R.id.info_container_description);
+        mRightBarGreen = (RelativeLayout) getView().findViewById(R.id.rightbar_green);
+
+        mNotifications = mDataBase.getPortfolioClassNotification(portfolioClass.getIdPortClass());
 
         mDrawer.setVisibility(View.VISIBLE);
 
@@ -51,6 +58,11 @@ public class PortfoliosFragment extends HelperFragment implements SelectPortfoli
         mDrawerTitle.setText(portfolioClass.getPortfolioTitle());
         mDrawerDescription.loadDataWithBaseURL("", mDataBase.getPortfolioDescription(portfolioClass.getIdPortClass()), "text/html", "UTF-8", "about:blank");
         mDrawerDescription.setBackgroundColor(getResources().getColor(R.color.gray_4));
+        if (mNotifications != 0) {
+            mRightBarGreen.setVisibility(View.VISIBLE);
+            mNotificationView.setVisibility(View.VISIBLE);
+            mNotificationView.setText(Integer.toString(mNotifications));
+        }
 
         if (mDrawerLayout.isDrawerOpen(mDrawer)) {
             mDrawerLayout.closeDrawer(mDrawer);
@@ -92,11 +104,10 @@ public class PortfoliosFragment extends HelperFragment implements SelectPortfoli
 
     private void initCommentsTab(final View view) {
         mDrawer.setVisibility(View.INVISIBLE);
-
         mDrawer.requestLayout();
         mDrawer.bringToFront();
-
         mDrawerLayout.setBackgroundColor(getResources().getColor(android.R.color.transparent));
+        mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
     }
 
     @Override

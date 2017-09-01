@@ -90,9 +90,10 @@
             android:visibility="invisible" />
 
     </RelativeLayout>
+
     <RelativeLayout
         android:id="@+id/slider"
-        android:layout_width="250dp"
+        android:layout_width="270dp"
         android:layout_height="match_parent"
         android:layout_gravity="right"
         android:visibility="visible">
@@ -102,18 +103,10 @@
             android:layout_width="250dp"
             android:layout_height="match_parent"
             android:layout_below="@+id/button_container"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
             android:background="@color/gray_4"
             android:visibility="visible">
-
-            <!--<RelativeLayout
-                android:id="@+id/rightbar_green"
-                android:layout_width="5dp"
-                android:layout_height="match_parent"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true"
-                android:layout_alignParentTop="true"
-                android:background="@color/base_green"
-                android:visibility="visible"></RelativeLayout>-->
 
             <TextView
                 android:id="@+id/info_container_title"
@@ -152,6 +145,29 @@
                 android:text="lorem ipsum"
                 android:textStyle="italic" />
         </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/rightbar_green"
+            android:layout_width="5dp"
+            android:layout_height="match_parent"
+            android:layout_alignParentTop="true"
+            android:layout_marginLeft="15dp"
+            android:background="@color/base_green"
+            android:visibility="invisible"></RelativeLayout>
+
+        <TextView
+            android:id="@+id/notification_icon"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginTop="50dp"
+            android:autoText="false"
+            android:background="@drawable/bg_rounded_corner"
+            android:gravity="center"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:textColor="#ffffff"
+            android:visibility="invisible"
+            android:textSize="20dp" />
+
     </RelativeLayout>
 
 </android.support.v4.widget.DrawerLayout>

@@ -30,7 +30,7 @@ import java.util.ArrayList;
 public class ActivitiesFragment extends HelperFragment implements ActivitiesAdapter.OnInfoButtonClick {
     private ListView mListActivities;
     private ArrayList<StudFrPortClass> mList;
-    private DataBase mDatabase;
+    private DataBase mDataBase;
     private static Singleton sSingleton;
     private TextView mClassName;
     private TextView mPortfolioName;
@@ -39,14 +39,21 @@ public class ActivitiesFragment extends HelperFragment implements ActivitiesAdap
     private RelativeLayout mDrawer;
     private DrawerLayout mDrawerLayout;
     private TextView mDrawerTitle;
+    private TextView mNotificationView;
     private WebView mDrawerDescription;
+    private RelativeLayout mRightBarGreen;
+    private int mNotifications;
 
     public ActivitiesFragment() {
     }
 
     public void openInfo(View v, Activity activity) {
         mDrawerTitle = (TextView) getView().findViewById(R.id.info_container_title);
+        mNotificationView = (TextView) getView().findViewById(R.id.notification_icon);
         mDrawerDescription = (WebView) getView().findViewById(R.id.info_container_description);
+        mRightBarGreen = (RelativeLayout) getView().findViewById(R.id.rightbar_green);
+
+        mNotifications = mDataBase.getActivityNotification(activity.getIdActivityStudent());
 
         mDrawer.setVisibility(View.VISIBLE);
 
@@ -55,6 +62,11 @@ public class ActivitiesFragment extends HelperFragment implements ActivitiesAdap
         mDrawerTitle.setText(activity.getTitle());
         mDrawerDescription.loadDataWithBaseURL("", activity.getDescription(), "text/html", "UTF-8", "about:blank");
         mDrawerDescription.setBackgroundColor(getResources().getColor(R.color.gray_4));
+        if (mNotifications != 0) {
+            mRightBarGreen.setVisibility(View.VISIBLE);
+            mNotificationView.setVisibility(View.VISIBLE);
+            mNotificationView.setText(Integer.toString(mNotifications));
+        }
 
         if (mDrawerLayout.isDrawerOpen(mDrawer)) {
             mDrawerLayout.closeDrawer(mDrawer);
@@ -76,11 +88,10 @@ public class ActivitiesFragment extends HelperFragment implements ActivitiesAdap
 
     private void initCommentsTab(final View view) {
         mDrawer.setVisibility(View.INVISIBLE);
-
         mDrawer.requestLayout();
         mDrawer.bringToFront();
-
         mDrawerLayout.setBackgroundColor(getResources().getColor(android.R.color.transparent));
+        mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
     }
 
     @Override
@@ -91,10 +102,10 @@ public class ActivitiesFragment extends HelperFragment implements ActivitiesAdap
 
     public void init() {
         sSingleton = Singleton.getInstance();
-        mDatabase = DataBase.getInstance(getActivity());
+        mDataBase = DataBase.getInstance(getActivity());
 
         try {
-            mList = mDatabase.selectListActivitiesAndStudents(sSingleton.portfolioClass.getIdPortClass(), sSingleton.portfolioClass.getPerfil(), sSingleton.user.getIdUser());
+            mList = mDataBase.selectListActivitiesAndStudents(sSingleton.portfolioClass.getIdPortClass(), sSingleton.portfolioClass.getPerfil(), sSingleton.user.getIdUser());
             Log.e("BANCO", "atividades (SelectActivitiesAactivity):" + mList.toString());
         } catch (Exception e) {
             Log.e("BANCO", "falha em pegar atividades (SelectActivitiesAactivity):" + e.getMessage());
