@@ -506,7 +506,7 @@ public class CommentsFragment extends HelperFragment {
                 }
                 single.lastIdAttach = source.insertAttachment(new Attachment(0, type, name, path, 0, 0));
                 if (lastID != 0 && single.lastIdAttach != -1 && single.lastIdAttach != 0) {
-//                    source.insertAttachComment(lastID, single.lastIdAttach);
+//                    source.insertAttachComment(lastId, single.lastIdAttach);
                 }
             }
         });

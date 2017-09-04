@@ -16,59 +16,59 @@ import java.util.List;
  * Created by Desenvolvimento on 04/01/2016.
  */
 public class AnnotationAdapter extends BaseAdapter {
-    private TextView annotation;
-    private List<Annotation> annotations;
-    private Context context;
-    private static LayoutInflater inflater = null;
+    private TextView mTvAnnotation;
+    private List<Annotation> mAnnotationList;
+    private Context mContext;
+    private static LayoutInflater sInflater = null;
 
 
 
-    public AnnotationAdapter(Context ctxt,List annotations){
-        this.context=ctxt;
-        this.annotations=annotations;
-        inflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+    public AnnotationAdapter(Context ctxt, List mAnnotationList) {
+        this.mContext = ctxt;
+        this.mAnnotationList = mAnnotationList;
+        sInflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
 
 
     public void add(Annotation obj) {
-        annotations.add(obj);
+        mAnnotationList.add(obj);
     }
-    public void delete(int position){
-        annotations.remove(position);
+    public void delete(int position) {
+        mAnnotationList.remove(position);
     }
 
 
     public int getCount() {
-        return this.annotations.size();
+        return this.mAnnotationList.size();
     }
 
     public Annotation getItem(int index) {
-        return this.annotations.get(index);
+        return this.mAnnotationList.get(index);
     }
 
     @Override
     public long getItemId(int position) {
-        return (long)annotations.get(position).getIdAnnotation();
+        return (long) mAnnotationList.get(position).getIdAnnotation();
     }
 
     public View getView(int position, View convertView, ViewGroup parent) {
         View rowView;
-        rowView = inflater.inflate(R.layout.item_reference, null);
+        rowView = sInflater.inflate(R.layout.item_reference, null);
 
 
         Annotation a = getItem(position);
 
-        annotation = (TextView) rowView.findViewById(R.id.ref_item_txt_url);
-        annotation.setText(a.getDsAnnotation());
+        mTvAnnotation = (TextView) rowView.findViewById(R.id.ref_item_txt_url);
+        mTvAnnotation.setText(a.getDsAnnotation());
         return rowView;
     }
 
-    public void clearAdapter(){
-        annotations.clear();
+    public void clearAdapter() {
+        mAnnotationList.clear();
         notifyDataSetChanged();
     }
 
-    public void refresh(List a){
-        this.annotations=a;
+    public void refresh(List a) {
+        this.mAnnotationList = a;
     }
 }

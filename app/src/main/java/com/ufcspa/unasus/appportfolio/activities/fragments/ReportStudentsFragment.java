@@ -20,14 +20,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ReportStudentsFragment extends HelperFragment {
-    private GridView grid_reports;
-    private TextView portfolio_name;
-    private TextView class_name;
-    private DataBase source;
-    private Singleton singleton;
-    private List<User> students;
-    private ArrayList<StudFrPortClass> list;
-    private ArrayList<User> finalList;
+    private GridView mGridReports;
+    private TextView mPortfolioName;
+    private TextView mClassName;
+    private DataBase mDataBase;
+    private static Singleton sSingleton;
+    private List<User> mStudentList;
+    private ArrayList<StudFrPortClass> mStudFrPortClassList;
+    private ArrayList<User> mFinalList;
 
     public ReportStudentsFragment() {
         // Required empty public constructor
@@ -48,43 +48,43 @@ public class ReportStudentsFragment extends HelperFragment {
     }
 
     private void init() {
-        singleton = Singleton.getInstance();
-        source = DataBase.getInstance(getActivity());
-        portfolio_name = (TextView)getView().findViewById(R.id.portfolio_name);
-        portfolio_name.setText(singleton.portfolioClass.getPortfolioTitle());
-        class_name = (TextView)getView().findViewById(R.id.class_name);
-        class_name.setText(singleton.portfolioClass.getClassCode());
-        list = new ArrayList<>();
-        students = new ArrayList<>();
-        finalList = new ArrayList<>();
+        sSingleton = Singleton.getInstance();
+        mDataBase = DataBase.getInstance(getActivity());
+        mPortfolioName = (TextView) getView().findViewById(R.id.portfolio_name);
+        mPortfolioName.setText(sSingleton.portfolioClass.getPortfolioTitle());
+        mClassName = (TextView) getView().findViewById(R.id.class_name);
+        mClassName.setText(sSingleton.portfolioClass.getClassCode());
+        mStudFrPortClassList = new ArrayList<>();
+        mStudentList = new ArrayList<>();
+        mFinalList = new ArrayList<>();
 
-        int i=0;
+        int i = 0;
 
         try {
-            students = source.getUsersByIdPortfolioClass(singleton.portfolioClass.getIdPortClass());
-            for (User student:students) {
-                list = source.selectListActivitiesAndStudentsByStudent(singleton.portfolioClass.getIdPortClass(), singleton.portfolioClass.getPerfil(), student.getIdUser());
-                for (StudFrPortClass studFrPortClass:list){
+            mStudentList = mDataBase.getUsersByIdPortfolioClass(sSingleton.portfolioClass.getIdPortClass());
+            for (User student: mStudentList) {
+                mStudFrPortClassList = mDataBase.selectListActivitiesAndStudentsByStudent(sSingleton.portfolioClass.getIdPortClass(), sSingleton.portfolioClass.getPerfil(), student.getIdUser());
+                for (StudFrPortClass studFrPortClass : mStudFrPortClassList) {
                     List<Activity> temp = studFrPortClass.getListActivities();
-                    for (Activity activity:temp){
-                        if (!source.getActivityStudentById(activity.getIdActivityStudent()).getDt_conclusion().equals("null") && source.getActivityStudentById(activity.getIdActivityStudent()).getDt_conclusion()!=null)
+                    for (Activity activity : temp) {
+                        if (!mDataBase.getActivityStudentById(activity.getIdActivityStudent()).getDt_conclusion().equals("null") && mDataBase.getActivityStudentById(activity.getIdActivityStudent()).getDt_conclusion() != null)
                             i++;
                     }
                     if (i == temp.size()) {
-                        finalList.add(student);
-                        i=0;
+                        mFinalList.add(student);
+                        i = 0;
                     }
                 }
             }
-            Log.d("lista", "tam portlis:" + students.size());
+            Log.d("lista", "tam portlis:" + mStudentList.size());
         } catch (Exception e) {
             Log.wtf("ERRO", e.getMessage());
         }
 
-//        Collections.sort(students);
+//        Collections.sort(mStudentList);
 
-        SelectReportStudentAdapter gridAdapter = new SelectReportStudentAdapter(getActivity(), finalList);
-        grid_reports = (GridView) getView().findViewById(R.id.grid_students);
-        grid_reports.setAdapter(gridAdapter);
+        SelectReportStudentAdapter gridAdapter = new SelectReportStudentAdapter(getActivity(), mFinalList);
+        mGridReports = (GridView) getView().findViewById(R.id.grid_students);
+        mGridReports.setAdapter(gridAdapter);
     }
 }

@@ -25,38 +25,37 @@ import java.util.List;
  * Created by Desenvolvimento on 08/01/2016.
  */
 public class SelectPortfolioClassAdapter extends BaseAdapter {
-    private static LayoutInflater inflater = null;
-    private Context context;
-    private List<PortfolioClass> portclasses;
-    private DataBase dataBase;
+    private static LayoutInflater sInflater = null;
+    private Context mContext;
+    private List<PortfolioClass> mPortClasses;
+    private DataBase mDataBase;
 
-    public interface OnInfoButtonClick{
-        void openInfo(View v,PortfolioClass portfolioClass);
+    public interface OnInfoButtonClick {
+        void openInfo(View v, PortfolioClass portfolioClass);
     }
 
-    private OnInfoButtonClick callback;
+    private OnInfoButtonClick mCallBack;
 
-    public void setOnInfoButtonClickListener(OnInfoButtonClick listener){
-        this.callback = listener;
+    public void setOnInfoButtonClickListener(OnInfoButtonClick listener) {
+        this.mCallBack = listener;
     }
 
-    public SelectPortfolioClassAdapter(Context context, List<PortfolioClass> classes)
-    {
-        this.context = context;
-        this.portclasses = classes;
-        this.dataBase = DataBase.getInstance(context);
+    public SelectPortfolioClassAdapter(Context mContext, List<PortfolioClass> classes) {
+        this.mContext = mContext;
+        this.mPortClasses = classes;
+        this.mDataBase = DataBase.getInstance(mContext);
 
-        inflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        sInflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
 
     @Override
     public int getCount() {
-        return portclasses.size();
+        return mPortClasses.size();
     }
 
     @Override
     public PortfolioClass getItem(int position) {
-        return portclasses.get(position);
+        return mPortClasses.get(position);
     }
 
     @Override
@@ -69,7 +68,7 @@ public class SelectPortfolioClassAdapter extends BaseAdapter {
         final Holder holder = new Holder();
         final View rowView;
 
-        rowView = inflater.inflate(R.layout.item_class, null);
+        rowView = sInflater.inflate(R.layout.item_class, null);
 
         holder.txt_class_code_info = (TextView) rowView.findViewById(R.id.txt_class_code_info);
         holder.btnInfoClose = (ImageButton) rowView.findViewById(R.id.btn_info_close);
@@ -77,14 +76,14 @@ public class SelectPortfolioClassAdapter extends BaseAdapter {
         holder.txt_send_message = (TextView) rowView.findViewById(R.id.txt_send_message);
         holder.infoView = (RelativeLayout) rowView.findViewById(R.id.info);
         holder.txt_port = (TextView) rowView.findViewById(R.id.adapter_item_class_txv_ds_port);
-        holder.txt_class_code=(TextView) rowView.findViewById(R.id.adapter_item_class_txv_code);
-        holder.txt_port_title=(TextView) rowView.findViewById(R.id.adapter_item_class_txv_ds_title);
-        holder.background=(TextView) rowView.findViewById(R.id.item_color_background);
-        holder.btnInfo=(ImageButton) rowView.findViewById(R.id.btn_info);
+        holder.txt_class_code = (TextView) rowView.findViewById(R.id.adapter_item_class_txv_code);
+        holder.txt_port_title = (TextView) rowView.findViewById(R.id.adapter_item_class_txv_ds_title);
+        holder.background = (TextView) rowView.findViewById(R.id.item_color_background);
+        holder.btnInfo = (ImageButton) rowView.findViewById(R.id.btn_info);
         holder.notificationIcon = (TextView) rowView.findViewById(R.id.item_class_notification_icon);
-        final PortfolioClass portClass=portclasses.get(position);
+        final PortfolioClass portClass = mPortClasses.get(position);
 
-        if(portClass.getPerfil().equals("S")){
+        if (portClass.getPerfil().equals("S")) {
             holder.background.setBackgroundResource(R.color.base_green);
             holder.txt_class_code.setTextColor(Color.GRAY);
             holder.txt_port_title.setTextColor(Color.GRAY);
@@ -119,12 +118,12 @@ public class SelectPortfolioClassAdapter extends BaseAdapter {
         holder.btnInfo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (callback != null){
-                    callback.openInfo(v,portClass);
+                if (mCallBack != null) {
+                    mCallBack.openInfo(v, portClass);
                 }
-               /* new AlertDialog.Builder(context)
+               /* new AlertDialog.Builder(mContext)
                         .setTitle(portClass.getPortfolioTitle())
-                        .setMessage(dataBase.getPortfolioDescription(portClass.getIdPortClass()))
+                        .setMessage(mDataBase.getPortfolioDescription(portClass.getIdPortClass()))
                         .setPositiveButton("Fechar", new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int which) {
                                 dialog.dismiss();
@@ -132,14 +131,14 @@ public class SelectPortfolioClassAdapter extends BaseAdapter {
                         })
                         .show();*/
 //                holder.infoView.setVisibility(View.VISIBLE);
-//                holder.infoView.startAnimation(AnimationUtils.loadAnimation(context, R.anim.anim_right));
+//                holder.infoView.startAnimation(AnimationUtils.loadAnimation(mContext, R.anim.anim_right));
             }
         });
 
         holder.btnInfoClose.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                holder.infoView.startAnimation(AnimationUtils.loadAnimation(context, R.anim.anim_left));
+                holder.infoView.startAnimation(AnimationUtils.loadAnimation(mContext, R.anim.anim_left));
                 holder.infoView.setVisibility(View.GONE);
             }
         });
@@ -147,17 +146,17 @@ public class SelectPortfolioClassAdapter extends BaseAdapter {
         holder.txt_finalize_activity.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(context, "Finalizar todas as atividades", Toast.LENGTH_SHORT).show();
+                Toast.makeText(mContext, "Finalizar todas as atividades", Toast.LENGTH_SHORT).show();
             }
         });
         holder.txt_send_message.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(context, "Enviar mensagens a todas as atividades", Toast.LENGTH_SHORT).show();
+                Toast.makeText(mContext, "Enviar mensagens a todas as atividades", Toast.LENGTH_SHORT).show();
             }
         });
 
-        int notifications = dataBase.getPortfolioClassNotification(portClass.getIdPortClass());
+        int notifications = mDataBase.getPortfolioClassNotification(portClass.getIdPortClass());
         if (notifications == 0)
             holder.notificationIcon.setVisibility(View.INVISIBLE);
         else {
@@ -171,12 +170,11 @@ public class SelectPortfolioClassAdapter extends BaseAdapter {
     private void changeScreen(PortfolioClass portClass) {
         Singleton singleton = Singleton.getInstance();
         singleton.portfolioClass = portClass;
-        singleton.guestUserComments = dataBase.getFlGuest(portClass.getIdPortClass());
-        LocalBroadcastManager.getInstance(context).sendBroadcast(new Intent("call.fragments.action").putExtra("ID", 1));
+        singleton.guestUserComments = mDataBase.getFlGuest(portClass.getIdPortClass());
+        LocalBroadcastManager.getInstance(mContext).sendBroadcast(new Intent("call.fragments.action").putExtra("ID", 1));
     }
 
-    public class Holder
-    {
+    public class Holder {
         TextView txt_class_code;
         TextView txt_port_title;
         TextView txt_port;

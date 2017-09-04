@@ -189,7 +189,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                                 }
 
                             }
-                            if( !isDataSyncNotSucessful) {
+                            if (!isDataSyncNotSucessful) {
                                 Log.d("acitivity login", "mUser get by json:" + Singleton.getInstance().user.toString());
                                 getBasicData();
 

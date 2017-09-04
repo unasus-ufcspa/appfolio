@@ -26,35 +26,33 @@ import java.util.List;
 /**
  * Created by UNASUS on 10/11/2015.
  */
-public class StudentActivitiesAdapter extends BaseAdapter implements Filterable
-{
-    private static LayoutInflater inflater = null;
-    private MainActivity context;
-    private List<StudFrPortClass> originalList;
-    private List<StudFrPortClass> filteredList;
-    private ItemFilter itemFilter;
-    private ActivitiesAdapter.OnInfoButtonClick onInfoButtonClick;
+public class StudentActivitiesAdapter extends BaseAdapter implements Filterable {
+    private static LayoutInflater sInflater = null;
+    private MainActivity mMainActivity;
+    private List<StudFrPortClass> mOriginalList;
+    private List<StudFrPortClass> mFilteredList;
+    private ItemFilter mItemFilter;
+    private ActivitiesAdapter.OnInfoButtonClick mOnInfoButtonClick;
 
-    public StudentActivitiesAdapter(MainActivity context, List<StudFrPortClass> originalList, ActivitiesAdapter.OnInfoButtonClick onInfoButtonClick)
-    {
-        this.context = context;
-        this.originalList = originalList;
-        this.filteredList = originalList;
-        this.onInfoButtonClick = onInfoButtonClick;
+    public StudentActivitiesAdapter(MainActivity mMainActivity, List<StudFrPortClass> mOriginalList, ActivitiesAdapter.OnInfoButtonClick mOnInfoButtonClick) {
+        this.mMainActivity = mMainActivity;
+        this.mOriginalList = mOriginalList;
+        this.mFilteredList = mOriginalList;
+        this.mOnInfoButtonClick = mOnInfoButtonClick;
 
-        itemFilter = new ItemFilter();
+        mItemFilter = new ItemFilter();
 
-        inflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        sInflater = (LayoutInflater) mMainActivity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
 
     @Override
     public int getCount() {
-        return filteredList.size();
+        return mFilteredList.size();
     }
 
     @Override
     public StudFrPortClass getItem(int position) {
-        return filteredList.get(position);
+        return mFilteredList.get(position);
     }
 
     @Override
@@ -66,9 +64,9 @@ public class StudentActivitiesAdapter extends BaseAdapter implements Filterable
     public View getView(int position, View convertView, ViewGroup parent) {
         Holder holder = new Holder();
         View rowView;
-        rowView = inflater.inflate(R.layout.item_portfolio_activity_list, null);
+        rowView = sInflater.inflate(R.layout.item_portfolio_activity_list, null);
 
-        StudFrPortClass aux = filteredList.get(position);
+        StudFrPortClass aux = mFilteredList.get(position);
 
         holder.recyclerView = (RecyclerView) rowView.findViewById(R.id.activities_list);
         holder.recyclerView.setOnTouchListener(new View.OnTouchListener() {
@@ -81,12 +79,12 @@ public class StudentActivitiesAdapter extends BaseAdapter implements Filterable
             }
         });
 
-        LinearLayoutManager layoutManager = new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(mMainActivity, LinearLayoutManager.HORIZONTAL, false);
         holder.recyclerView.setLayoutManager(layoutManager);
-        holder.recyclerView.addItemDecoration(new DividerItemDecoration(context, DividerItemDecoration.HORIZONTAL_LIST, 100));
+        holder.recyclerView.addItemDecoration(new DividerItemDecoration(mMainActivity, DividerItemDecoration.HORIZONTAL_LIST, 100));
 
-        ActivitiesAdapter activitiesAdapter = new ActivitiesAdapter(context, aux.getListActivities(), aux.getNameStudent(), aux);
-        activitiesAdapter.setOnInfoButtonClickListener(onInfoButtonClick);
+        ActivitiesAdapter activitiesAdapter = new ActivitiesAdapter(mMainActivity, aux.getListActivities(), aux.getNameStudent(), aux);
+        activitiesAdapter.setOnInfoButtonClickListener(mOnInfoButtonClick);
         holder.recyclerView.setAdapter(activitiesAdapter);
 
         holder.studentName = (TextView) rowView.findViewById(R.id.p_student_name);
@@ -95,18 +93,17 @@ public class StudentActivitiesAdapter extends BaseAdapter implements Filterable
         holder.studentPhoto = (ImageView) rowView.findViewById(R.id.student_image);
         Bitmap bitmap = aux.getPhoto();
         if (bitmap != null)
-            holder.studentPhoto.setImageBitmap(ConfigFragment.getRoundedRectBitmap(bitmap,100));
+            holder.studentPhoto.setImageBitmap(ConfigFragment.getRoundedRectBitmap(bitmap, 100));
 
         return rowView;
     }
 
     @Override
     public Filter getFilter() {
-        return itemFilter;
+        return mItemFilter;
     }
 
-    public class Holder
-    {
+    public class Holder {
         RecyclerView recyclerView;
         TextView studentName;
         ImageView studentPhoto;
@@ -120,12 +117,12 @@ public class StudentActivitiesAdapter extends BaseAdapter implements Filterable
 
             FilterResults results = new FilterResults();
 
-            final List<StudFrPortClass> list = originalList;
+            final List<StudFrPortClass> list = mOriginalList;
 
             int count = list.size();
             final ArrayList<StudFrPortClass> nlist = new ArrayList<StudFrPortClass>(count);
 
-            String filterableString ;
+            String filterableString;
 
             for (int i = 0; i < count; i++) {
                 filterableString = list.get(i).getNameStudent();
@@ -143,7 +140,7 @@ public class StudentActivitiesAdapter extends BaseAdapter implements Filterable
         @SuppressWarnings("unchecked")
         @Override
         protected void publishResults(CharSequence constraint, FilterResults results) {
-            filteredList = (ArrayList<StudFrPortClass>) results.values;
+            mFilteredList = (ArrayList<StudFrPortClass>) results.values;
             notifyDataSetChanged();
         }
 

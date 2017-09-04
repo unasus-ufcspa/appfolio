@@ -22,15 +22,15 @@ import java.util.Collections;
 import java.util.List;
 
 public class ReportFragment extends HelperFragment {
-    private GridView grid_reports;
-    private TextView grid_empty;
-    private DataBase source;
-    private Singleton singleton;
-    private List<PortfolioClass> portclasses;
-    private ArrayList<User> students;
-    private ArrayList<PortfolioClass> finalList;
-    private ArrayList<StudFrPortClass> list;
-    private ArrayList<StudFrPortClass> listActivities;
+    private GridView mGridView;
+    private TextView mTvGridEmpty;
+    private DataBase mDataBase;
+    private static Singleton sSingleton;
+    private List<PortfolioClass> mPortClassList;
+    private ArrayList<User> mUserList;
+    private ArrayList<PortfolioClass> mFinalList;
+    private ArrayList<StudFrPortClass> mList;
+    private ArrayList<StudFrPortClass> mListActivities;
 
     public ReportFragment() {
         // Required empty public constructor
@@ -51,45 +51,45 @@ public class ReportFragment extends HelperFragment {
     }
 
     private void init() {
-        singleton = Singleton.getInstance();
-        source = DataBase.getInstance(getActivity());
-        finalList = new ArrayList<>();
-        students = new ArrayList<>();
-        grid_empty = (TextView) getView().findViewById(R.id.grid_empty);
-        int i=0;
+        sSingleton = Singleton.getInstance();
+        mDataBase = DataBase.getInstance(getActivity());
+        mFinalList = new ArrayList<>();
+        mUserList = new ArrayList<>();
+        mTvGridEmpty = (TextView) getView().findViewById(R.id.grid_empty);
+        int i = 0;
 
         try {
-            portclasses = source.selectListClassAndUserType(singleton.user.getIdUser());
-            for (PortfolioClass portclass: portclasses){
-                students = (ArrayList) source.getUsersByIdPortfolioClass(portclass.getIdPortClass());
-                for (User student:students) {
-                    list = source.selectListActivitiesAndStudentsByStudent(portclass.getIdPortClass(), portclass.getPerfil(), student.getIdUser());
-                    for (StudFrPortClass studFrPortClass:list){
-                     List<Activity> temp = studFrPortClass.getListActivities();
-                        for (Activity activity:temp){
-                            if (!source.getActivityStudentById(activity.getIdActivityStudent()).getDt_conclusion().equals("null") && source.getActivityStudentById(activity.getIdActivityStudent()).getDt_conclusion()!=null)
+            mPortClassList = mDataBase.selectListClassAndUserType(sSingleton.user.getIdUser());
+            for (PortfolioClass portclass : mPortClassList) {
+                mUserList = (ArrayList) mDataBase.getUsersByIdPortfolioClass(portclass.getIdPortClass());
+                for (User student: mUserList) {
+                    mList = mDataBase.selectListActivitiesAndStudentsByStudent(portclass.getIdPortClass(), portclass.getPerfil(), student.getIdUser());
+                    for (StudFrPortClass studFrPortClass : mList) {
+                        List<Activity> temp = studFrPortClass.getListActivities();
+                        for (Activity activity : temp) {
+                            if (!mDataBase.getActivityStudentById(activity.getIdActivityStudent()).getDt_conclusion().equals("null") && mDataBase.getActivityStudentById(activity.getIdActivityStudent()).getDt_conclusion() != null)
                                 i++;
                         }
                         if (i == temp.size())
-                            finalList.add(portclass);
-                        i=0;
+                            mFinalList.add(portclass);
+                        i = 0;
                     }
-                    if (portclass.getPerfil().equals("T") && finalList.size()==1)
+                    if (portclass.getPerfil().equals("T") && mFinalList.size() == 1)
                         break;
                 }
             }
-            Log.d("lista", "tam portlis:" + portclasses.size());
+            Log.d("lista", "tam portlis:" + mPortClassList.size());
         } catch (Exception e) {
             Log.wtf("ERRO", e.getMessage());
         }
 
         SelectReportClassAdapter gridAdapter = null;
-        if (!finalList.isEmpty()) {
-            grid_empty.setVisibility(View.INVISIBLE);
-            Collections.sort(finalList);
-            gridAdapter = new SelectReportClassAdapter(getActivity(), finalList);
+        if (!mFinalList.isEmpty()) {
+            mTvGridEmpty.setVisibility(View.INVISIBLE);
+            Collections.sort(mFinalList);
+            gridAdapter = new SelectReportClassAdapter(getActivity(), mFinalList);
         }
-        grid_reports = (GridView) getView().findViewById(R.id.grid_reports);
-        grid_reports.setAdapter(gridAdapter);
+        mGridView = (GridView) getView().findViewById(R.id.grid_reports);
+        mGridView.setAdapter(gridAdapter);
     }
 }

@@ -55,23 +55,23 @@ import java.util.Date;
 public class SpecificCommentsFragment extends HelperFragment {
 
     private static boolean EXPANDED_FLAG = false;
-    private final Handler h = new Handler();
-    int lastID;
-    private SpecificCommentAdapter spcAdapter;
-    private ListView lv;
-    private boolean attach;
-    private Button btGenMess;
-    private Button btAttachment;
+    private final Handler mHandler = new Handler();
+    int lastId;
+    private SpecificCommentAdapter mSpcAdapter;
+    private ListView mListView;
+    private boolean mAttach;
+    private Button mBtGenMess;
+    private Button mBtAttachment;
     //private LoremIpsum ipsum;
-    private TextView txNote;
-    private EditText edtMessage;
-    private String reference;
-    private Note noteNow;
-    private ArrayList<Comentario> lista;
-    private ArrayList<OneComment> oneComments;
+    private TextView mTvNote;
+    private EditText mEdtMessage;
+    private String mReference;
+    private Note mNoteNow;
+    private ArrayList<Comentario> mCommentList;
+    private ArrayList<OneComment> mOneCommentsList;
     //    private ImageButton btExpand;
-    private LoadCommentsFromDB loadCommentsFromDB;
-    private Runnable myRunnable = new Runnable() {
+    private LoadCommentsFromDB mLoadCommentsFromDB;
+    private Runnable mRunnable = new Runnable() {
         @Override
         public void run() {
 //            Log.d("Handler", "Handler is running...");
@@ -79,18 +79,18 @@ public class SpecificCommentsFragment extends HelperFragment {
 //            if (main != null)
 //                main.downloadFullDataComments(Singleton.getInstance().idActivityStudent);
 //
-////            loadCommentsFromDB();
-////            spcAdapter.refresh(oneComments);
+////            mLoadCommentsFromDB();
+////            mSpcAdapter.refresh(mOneCommentsList);
 //
-//            h.postDelayed(this, 5000);
+//            mHandler.postDelayed(this, 5000);
         }
     };
 
-    private BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
+    private BroadcastReceiver mBroadcastReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
             loadCommentsFromDB();
-            spcAdapter.refresh(oneComments);
+            mSpcAdapter.refresh(mOneCommentsList);
 
             removeSpecificCommentsNotifications();
         }
@@ -114,35 +114,35 @@ public class SpecificCommentsFragment extends HelperFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        oneComments = new ArrayList<>(70);
-        spcAdapter = new SpecificCommentAdapter(getContext(),oneComments);
-//        loadCommentsFromDB();
-        loadCommentsFromDB = new LoadCommentsFromDB();
-        loadCommentsFromDB.execute();
+        mOneCommentsList = new ArrayList<>(70);
+        mSpcAdapter = new SpecificCommentAdapter(getContext(), mOneCommentsList);
+//        mLoadCommentsFromDB();
+        mLoadCommentsFromDB = new LoadCommentsFromDB();
+        mLoadCommentsFromDB.execute();
         Log.d("Comments", "On create entrou");
-        LocalBroadcastManager.getInstance(getContext()).registerReceiver(broadcastReceiver, new IntentFilter("call.connection.action"));
+        LocalBroadcastManager.getInstance(getContext()).registerReceiver(mBroadcastReceiver, new IntentFilter("call.connection.action"));
 
         // TODO: 22/11/2016 inserir tutorial
-        Target target = new ViewTarget(R.id.email_sign_in_button,getActivity());
+        Target target = new ViewTarget(R.id.email_sign_in_button, getActivity());
         MainActivity mainActivity = new MainActivity();
-        mainActivity.showCase(target,"Comentario especifico","aqui você cria comentários específicos");
+        mainActivity.showCase(target, "Comentario especifico", "aqui você cria comentários específicos");
     }
 
     private void hide() {
-        btGenMess = (Button) getView().findViewById(R.id.gen_messag_bt);
-        btAttachment = (Button) getView().findViewById(R.id.bt_add_attachment);
-        edtMessage = (EditText) getView().findViewById(R.id.edtMessage);
-        txNote = (TextView) getView().findViewById(R.id.txSelectedNote);
+        mBtGenMess = (Button) getView().findViewById(R.id.gen_messag_bt);
+        mBtAttachment = (Button) getView().findViewById(R.id.bt_add_attachment);
+        mEdtMessage = (EditText) getView().findViewById(R.id.edtMessage);
+        mTvNote = (TextView) getView().findViewById(R.id.txSelectedNote);
 //        btExpand = (ImageButton) getView().findViewById(R.id.btn_expand_ref);
-        lv = (ListView) getView().findViewById(R.id.listView1);
+        mListView = (ListView) getView().findViewById(R.id.listView1);
 
-        btGenMess.setVisibility(View.GONE);
-        btAttachment.setVisibility(View.GONE);
-        edtMessage.setVisibility(View.GONE);
-        txNote.setVisibility(View.GONE);
+        mBtGenMess.setVisibility(View.GONE);
+        mBtAttachment.setVisibility(View.GONE);
+        mEdtMessage.setVisibility(View.GONE);
+        mTvNote.setVisibility(View.GONE);
 //        btExpand.setVisibility(View.GONE);
-        lv.setVisibility(View.GONE);
-        TextView txMsgHide= (TextView) getView().findViewById(R.id.txtWhenHiDE);
+        mListView.setVisibility(View.GONE);
+        TextView txMsgHide = (TextView) getView().findViewById(R.id.txtWhenHiDE);
         txMsgHide.setVisibility(View.VISIBLE);
 
     }
@@ -156,16 +156,16 @@ public class SpecificCommentsFragment extends HelperFragment {
         singleton = Singleton.getInstance();
         source = DataBase.getInstance(getContext());
 
-        btGenMess = (Button) getView().findViewById(R.id.gen_messag_bt);
-        btAttachment = (Button) getView().findViewById(R.id.bt_add_attachment);
-        edtMessage = (EditText) getView().findViewById(R.id.edtMessage);
-        txNote = (TextView) getView().findViewById(R.id.txSelectedNote);
+        mBtGenMess = (Button) getView().findViewById(R.id.gen_messag_bt);
+        mBtAttachment = (Button) getView().findViewById(R.id.bt_add_attachment);
+        mEdtMessage = (EditText) getView().findViewById(R.id.edtMessage);
+        mTvNote = (TextView) getView().findViewById(R.id.txSelectedNote);
 //        btExpand = (ImageButton) getView().findViewById(R.id.btn_expand_ref);
-        lv = (ListView) getView().findViewById(R.id.listView1);
-        lv.setAdapter(spcAdapter);
+        mListView = (ListView) getView().findViewById(R.id.listView1);
+        mListView.setAdapter(mSpcAdapter);
         loadCommentsFromDB();
         try {
-            loadCommentsFromDB.execute();
+            mLoadCommentsFromDB.execute();
         } catch (Exception e) {
         }
 
@@ -174,37 +174,37 @@ public class SpecificCommentsFragment extends HelperFragment {
 //        InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(getActivity().INPUT_METHOD_SERVICE);
 //        imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY);
         if (!singleton.guestUser) {
-            btGenMess.setOnClickListener(new View.OnClickListener() {
+            mBtGenMess.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if (!edtMessage.getText().toString().isEmpty()) {
+                    if (!mEdtMessage.getText().toString().isEmpty()) {
                         Comentario c = getCommentFromText();
-                        oneComments.add(new OneComment(false, edtMessage.getText().toString(), convertDateToTime(c.getDateComment()), convertDateToDate(c.getDateComment())));
-                        edtMessage.setText("");
+                        mOneCommentsList.add(new OneComment(false, mEdtMessage.getText().toString(), convertDateToTime(c.getDateComment()), convertDateToDate(c.getDateComment())));
+                        mEdtMessage.setText("");
                         insertComment(c);
                     }
                 }
             });
-            txNote.setOnClickListener(new View.OnClickListener() {
+            mTvNote.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     if (EXPANDED_FLAG == false) {
-                        txNote.getLayoutParams().height = 330;
-                        txNote.setMovementMethod(new ScrollingMovementMethod());
+                        mTvNote.getLayoutParams().height = 330;
+                        mTvNote.setMovementMethod(new ScrollingMovementMethod());
                         EXPANDED_FLAG = true;
-                        txNote.requestLayout();
-                        Log.d("editor", "layout reference expanded true");
+                        mTvNote.requestLayout();
+                        Log.d("editor", "layout mReference expanded true");
                     } else {
-                        txNote.getLayoutParams().height = 70;
-                        //txNote.setMovementMethod(null);
+                        mTvNote.getLayoutParams().height = 70;
+                        //mTvNote.setMovementMethod(null);
                         EXPANDED_FLAG = false;
-                        txNote.requestLayout();
-                        Log.d("editor", "layout reference expanded false");
+                        mTvNote.requestLayout();
+                        Log.d("editor", "layout mReference expanded false");
                     }
                 }
             });
 
-            btAttachment.setOnClickListener(new View.OnClickListener() {
+            mBtAttachment.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     addAttachmentToComments();
@@ -213,85 +213,85 @@ public class SpecificCommentsFragment extends HelperFragment {
         } else {
             RelativeLayout form = (RelativeLayout) getView().findViewById(R.id.form);
             form.setBackgroundResource(R.color.gray_4);
-            btGenMess.setAlpha((float)0.5);
-            btAttachment.setAlpha((float)0.5);
-            edtMessage.setEnabled(false);
-            btGenMess.setOnClickListener(new View.OnClickListener() {
+            mBtGenMess.setAlpha((float) 0.5);
+            mBtAttachment.setAlpha((float) 0.5);
+            mEdtMessage.setEnabled(false);
+            mBtGenMess.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Toast.makeText(getContext(),"Acesso restrito a usuários convidados",Toast.LENGTH_LONG).show();
+                    Toast.makeText(getContext(), "Acesso restrito a usuários convidados", Toast.LENGTH_LONG).show();
                 }
             });
-            btAttachment.setOnClickListener(new View.OnClickListener() {
+            mBtAttachment.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Toast.makeText(getContext(),"Acesso restrito a usuários convidados",Toast.LENGTH_LONG).show();
+                    Toast.makeText(getContext(), "Acesso restrito a usuários convidados", Toast.LENGTH_LONG).show();
                 }
             });
         }
         setarListView();
 
-        h.postDelayed(myRunnable, 5000);
+        mHandler.postDelayed(mRunnable, 5000);
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
-        h.removeCallbacks(myRunnable);
+        mHandler.removeCallbacks(mRunnable);
         MainActivity.shouldSend = false;
-        LocalBroadcastManager.getInstance(getContext()).unregisterReceiver(broadcastReceiver);
+        LocalBroadcastManager.getInstance(getContext()).unregisterReceiver(mBroadcastReceiver);
     }
 
-    public Comentario getCommentFromText(){
+    public Comentario getCommentFromText() {
         Singleton singleton = Singleton.getInstance();
         Comentario c = new Comentario();
         c.setDateComment(getActualTime());
         c.setDateSend(c.getDateComment());
         c.setIdAuthor(singleton.user.getIdUser());
         c.setTypeComment("O");
-        //Log.d("comments", "reference setting in C spcific comment:" + txNote.getText().toString());
-        c.setTxtReference(txNote.getText().toString());
-        c.setTxtComment(edtMessage.getText().toString());
+        //Log.d("comments", "mReference setting in C spcific comment:" + mTvNote.getText().toString());
+        c.setTxtReference(mTvNote.getText().toString());
+        c.setTxtComment(mEdtMessage.getText().toString());
         c.setIdActivityStudent(singleton.activity.getIdActivityStudent());
         return c;
     }
 
-    public void loadCommentsFromDB(){
+    public void loadCommentsFromDB() {
         try {
             DataBase db = DataBase.getInstance(getActivity());
 
-            Log.d("activity","actual version_activity:"+singleton.idCurrentVersionActivity );
+            Log.d("activity", "actual version_activity:" + singleton.idCurrentVersionActivity);
 
-            Log.d("observations","list observations:" + db.getObservation(db.getIDVersionSrvByLocalID(singleton.idCurrentVersionActivity)).toString());
-            Log.d("observations","list ALL observations:" + db.getObservationALL().toString());
+            Log.d("observations", "list observations:" + db.getObservation(db.getIDVersionSrvByLocalID(singleton.idCurrentVersionActivity)).toString());
+            Log.d("observations", "list ALL observations:" + db.getObservationALL().toString());
             Singleton singleton = Singleton.getInstance();
-            lista = (ArrayList<Comentario>) db.listObsComments(singleton.idActivityStudent, singleton.note.getBtId());//lista comentario gerais filtrando por O
-            oneComments= new ArrayList<>(10);
-            Log.d("comments","comentarios especificos:"+lista.toString());
+            mCommentList = (ArrayList<Comentario>) db.listObsComments(singleton.idActivityStudent, singleton.note.getBtId()); //mCommentList comentario gerais filtrando por O
+            mOneCommentsList = new ArrayList<>(10);
+            Log.d("comments", "comentarios especificos:" + mCommentList.toString());
 
-            if (lista.size() != 0) {
+            if (mCommentList.size() != 0) {
 
-                for(Comentario c : lista){
+                for (Comentario c : mCommentList) {
                     OneComment one = new OneComment(c.getIdAuthor() == singleton.user.getIdUser(),
                             c.getTxtComment(), convertDateToTime(c.getDateSend()), convertDateToDate(c.getDateSend()));
-                    if(c.getIdAttach()!=0) {
+                    if (c.getIdAttach() != 0) {
                         one.atach = true;
-                        one.idAttach=c.getIdAttach();
-                        Log.d("comments", "id attach:" + one.idAttach);
+                        one.idAttach = c.getIdAttach();
+                        Log.d("comments", "id mAttach:" + one.idAttach);
                     }
-                    one.idAuthor=c.getIdAuthor();
-                    oneComments.add(one);
+                    one.idAuthor = c.getIdAuthor();
+                    mOneCommentsList.add(one);
                 }
-                Log.d("comments", "one Comments exist, size:" + oneComments.size());
-//            spcAdapter.refresh(oneComments);
-                Log.d("comments", "adapter itens:" + spcAdapter.getCount());
+                Log.d("comments", "one Comments exist, size:" + mOneCommentsList.size());
+//            mSpcAdapter.refresh(mOneCommentsList);
+                Log.d("comments", "adapter itens:" + mSpcAdapter.getCount());
             } else {
                 Log.d("Banco", "Lista retornou vazia!");
             }
 
         } catch (Exception e) {
             e.printStackTrace();
-            Log.wtf("comments","erro doido em popular specific comments:"+e.getMessage());
+            Log.wtf("comments", "erro doido em popular specific comments:" + e.getMessage());
         }
     }
 
@@ -320,9 +320,9 @@ public class SpecificCommentsFragment extends HelperFragment {
                 if (name.isEmpty()) {
                     name = "Anexo";
                 }
-                single.lastIdAttach = DataBase.getInstance(getActivity()).insertAttachment(new Attachment(0, type, name, path, 0,0));
-                if(lastID!=0 && single.lastIdAttach!=-1 && single.lastIdAttach!=0) {
-                    DataBase.getInstance(getActivity()).insertAttachComment(lastID, single.lastIdAttach);
+                single.lastIdAttach = DataBase.getInstance(getActivity()).insertAttachment(new Attachment(0, type, name, path, 0, 0));
+                if (lastId != 0 && single.lastIdAttach != -1 && single.lastIdAttach != 0) {
+                    DataBase.getInstance(getActivity()).insertAttachComment(lastId, single.lastIdAttach);
                 }
             }
         });
@@ -339,7 +339,7 @@ public class SpecificCommentsFragment extends HelperFragment {
 //            //Log.d("comments","request code:"+requestCode);
 //            addAtach();
 //        else
-//            Log.d("comment attachment ", "attach cancelado");
+//            Log.d("comment attachment ", "mAttach cancelado");
         if (resultCode == Activity.RESULT_OK) {
             if (requestCode == Constants.CROP_IMAGE) {
                 saveImageOnAppDir();
@@ -390,48 +390,48 @@ public class SpecificCommentsFragment extends HelperFragment {
                 if (idAttachment != -1) {
                     Singleton.getInstance().lastIdAttach = idAttachment;
                     addAtach();
-                    if (lastID != 0)
-                        DataBase.getInstance(getActivity()).insertAttachComment(lastID, idAttachment);
+                    if (lastId != 0)
+                        DataBase.getInstance(getActivity()).insertAttachComment(lastId, idAttachment);
                 }
             }
         }
     }
 
-    public void addAtach(){
-        Log.d("comments attach", "add atach selecionado");
-        //adapterComments.refresh(oneComments);
-        attach=true;
-        edtMessage.setText("anexo");
+    public void addAtach() {
+        Log.d("comments mAttach", "add atach selecionado");
+        //adapterComments.refresh(mOneCommentsList);
+        mAttach = true;
+        mEdtMessage.setText("anexo");
         insertAtach();
     }
 
-    public void insertAtach(){
-        Log.d("comment attachment ", "entrando no insertAtach");
+    public void insertAtach() {
+        Log.d("comment attachment", "entrando no insertAtach");
         Comentario c = getCommentFromText();
-//        loadCommentsFromDB();
-        loadCommentsFromDB.execute();
+//        mLoadCommentsFromDB();
+        mLoadCommentsFromDB.execute();
         insertComment(c);
-        OneComment oneComment = new OneComment(false, "Anexo", convertDateToTime(c.getDateComment()), convertDateToDate(c.getDateComment()),true);
+        OneComment oneComment = new OneComment(false, "Anexo", convertDateToTime(c.getDateComment()), convertDateToDate(c.getDateComment()), true);
         oneComment.idAttach = Singleton.getInstance().lastIdAttach;
-        Log.d("comment attachment ", "itens size:" + oneComments.size());
-        oneComments.add(oneComment);
-        Log.d("comment attachment ", "itens size is now:" + oneComments.size());
-        spcAdapter.refresh(oneComments);
-        attach = false;
-        edtMessage.setText("");
+        Log.d("comment attachment", "itens size:" + mOneCommentsList.size());
+        mOneCommentsList.add(oneComment);
+        Log.d("comment attachment", "itens size is now:" + mOneCommentsList.size());
+        mSpcAdapter.refresh(mOneCommentsList);
+        mAttach = false;
+        mEdtMessage.setText("");
     }
 
-    public void setarListView(){
-        lv.setAdapter(spcAdapter);
-        lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+    public void setarListView() {
+        mListView.setAdapter(mSpcAdapter);
+        mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Log.d("comments", "clicou no item na position:" + position + " conteudo:" + oneComments.get(position));
-                if (oneComments.get(position).idAttach != 0) {
+                Log.d("comments", "clicou no item na position:" + position + " conteudo:" + mOneCommentsList.get(position));
+                if (mOneCommentsList.get(position).idAttach != 0) {
                     Log.d("comments", "selecionou um anexo");
-                    Attachment att = DataBase.getInstance(getActivity()).getAttachmentByID(oneComments.get(position).idAttach);
+                    Attachment att = DataBase.getInstance(getActivity()).getAttachmentByID(mOneCommentsList.get(position).idAttach);
                     if (att.getTpAttachment() != null) {
-                        Log.d("comments", "localpath attach:" + att.getNmSystem());
+                        Log.d("comments", "localpath mAttach:" + att.getNmSystem());
                         if (att.getTpAttachment().equals(Attachment.TYPE_TEXT)) {
                             Log.d("comments", "anexo do tipo texto");
                             //showPDFDialog(att.getLocalPath());
@@ -450,29 +450,29 @@ public class SpecificCommentsFragment extends HelperFragment {
         });
     }
 
-    private void insertComment(Comentario c){
+    private void insertComment(Comentario c) {
         try {
             //DataBase db = DataBase.getInstance(getActivity());
-//            if (singleton.portfolioClass.getPerfil().equals("T") && source.isFirstSpecificComment(singleton.idActivityStudent, noteNow.getBtId()))
+//            if (singleton.portfolioClass.getPerfil().equals("T") && source.isFirstSpecificComment(singleton.idActivityStudent, mNoteNow.getBtId()))
 //                singleton.isFirstSpecificComment = true;
 
 
 
-            if(source.isFirstSpecificComment(singleton.idActivityStudent, noteNow.getBtId()))
+            if (source.isFirstSpecificComment(singleton.idActivityStudent, mNoteNow.getBtId()))
                 singleton.isFirstSpecificComment = true;
 
             // recupera n_nota criada
-            singleton.actualObservation.setNu_comment_activity(noteNow.getBtId());
-            singleton.actualObservation.setTx_reference(noteNow.getSelectedText());
+            singleton.actualObservation.setNu_comment_activity(mNoteNow.getBtId());
+            singleton.actualObservation.setTx_reference(mNoteNow.getSelectedText());
             singleton.actualObservation.setId_version_activity(source.getIDVersionSrvByLocalID(singleton.idVersionActivity));
-            singleton.actualObservation.setId_comment_version(source.getIdObservationByNuCommentActivy(singleton.idActivityStudent,singleton.actualObservation.getNu_comment_activity()));
-            singleton.actualObservation.setId_comment_version_srv(source.getIdObservationSrvByNuCommentActivy(singleton.idActivityStudent,singleton.actualObservation.getNu_comment_activity()));
+            singleton.actualObservation.setId_comment_version(source.getIdObservationByNuCommentActivy(singleton.idActivityStudent, singleton.actualObservation.getNu_comment_activity()));
+            singleton.actualObservation.setId_comment_version_srv(source.getIdObservationSrvByNuCommentActivy(singleton.idActivityStudent, singleton.actualObservation.getNu_comment_activity()));
 
 
 
-            Log.d("specific","actual obs in single:"+singleton.actualObservation);
+            Log.d("specific", "actual obs in single:" + singleton.actualObservation);
             int idObservation;
-            if(singleton.isFirstSpecificComment){
+            if (singleton.isFirstSpecificComment) {
                 // empilha observation nas syncs
                 idObservation = source.insertObservationByVersion(singleton.actualObservation);
                 source.updateLastObservation(idObservation);
@@ -491,20 +491,18 @@ public class SpecificCommentsFragment extends HelperFragment {
                 sync.setId_device(singleton.device.get_id_device());
                 source.insertIntoTBSync(sync);
 
-                singleton.isFirstSpecificComment=false;
+                singleton.isFirstSpecificComment = false;
 
-
-            }else{
-                idObservation = source.getIdObservationByNuCommentActivy(singleton.idActivityStudent,singleton.actualObservation.getNu_comment_activity());
+            } else {
+                idObservation = source.getIdObservationByNuCommentActivy(singleton.idActivityStudent, singleton.actualObservation.getNu_comment_activity());
             }
             c.setId_comment_version(idObservation);
 
-            lastID = source.insertSpecificComment(c);
-
+            lastId = source.insertSpecificComment(c);
 
             Sync sync = new Sync();
             sync.setNm_table("tb_comment");
-            sync.setCo_id_table(lastID);
+            sync.setCo_id_table(lastId);
             sync.setId_activity_student(singleton.idActivityStudent);
             sync.setId_device(singleton.device.get_id_device());
             source.insertIntoTBSync(sync);
@@ -513,7 +511,7 @@ public class SpecificCommentsFragment extends HelperFragment {
             /*//NECESSITA ATUALIZAR -- comentado em 13/06/2016
 
             CommentVersion cv = new CommentVersion();
-            cv.setId_comment(lastID);
+            cv.setId_comment(lastId);
             cv.setId_version_activity(singleton.idCurrentVersionActivity);
             int idCommentVersion = source.insertCommentVersionWhenUserComment(cv);
 
@@ -526,7 +524,7 @@ public class SpecificCommentsFragment extends HelperFragment {
            /*
                 EMPILHA COMENTARIO ESPECIFICO NA SYNC(ANTIGO)
 
-            Sync sync = new Sync(singleton.device.get_id_device(), "tb_comment", lastID, singleton.idActivityStudent);
+            Sync sync = new Sync(singleton.device.get_id_device(), "tb_comment", lastId, singleton.idActivityStudent);
             DataBase.getInstance(getContext()).insertIntoTBSync(sync);
 
             MainActivity main = ((MainActivity) getActivity());
@@ -536,48 +534,47 @@ public class SpecificCommentsFragment extends HelperFragment {
             MainActivity main = ((MainActivity) getActivity());
             if (main != null)
                 main.sendFullData();
-        }
-        catch (Exception e) {
-            Log.e("Banco", "Erro:"+e.getMessage());
+        } catch (Exception e) {
+            Log.e("Banco", "Erro:" + e.getMessage());
         }
         loadCommentsFromDB();
-        spcAdapter.refresh(oneComments);
+        mSpcAdapter.refresh(mOneCommentsList);
     }
 
-    private void insertReference(){
-        if(spcAdapter!=null) {
+    private void insertReference() {
+        if (mSpcAdapter != null) {
             Singleton single = Singleton.getInstance();
-            if(single.note.getSelectedText().isEmpty()||single.note.getSelectedText().equals("null")) {
-                String r=source.getIdObservationTextByNuCommentActivy(single.idActivityStudent,single.note.getBtId());
+            if (single.note.getSelectedText().isEmpty() || single.note.getSelectedText().equals("null")) {
+                String r = source.getIdObservationTextByNuCommentActivy(single.idActivityStudent, single.note.getBtId());
                 if (!r.isEmpty()) {
                     single.note.setSelectedText(r);
-                }else
+                } else
                     single.note.setSelectedText(singleton.selectedText);
             }
-            noteNow = single.note;
+            mNoteNow = single.note;
 
-            if (lista != null && lista.size() != 0) { // se a lista nao estiver vazia quer dizer que a nota de referencia já existe no banco
-                for (Comentario c:lista) {
-                    Log.d("comments noteNow","referencia é :"+c.toString());
+            if (mCommentList != null && mCommentList.size() != 0) { // se a mCommentList nao estiver vazia quer dizer que a nota de referencia já existe no banco
+                for (Comentario c: mCommentList) {
+                    Log.d("comments mNoteNow", "referencia é :" + c.toString());
                 }
-                //noteNow.setSelectedText(lista.get(0).getTxtReference());
-                Log.d("comments noteNow","lista:"+lista.get(0).toJSON());
+                //mNoteNow.setSelectedText(mCommentList.get(0).getTxtReference());
+                Log.d("comments mNoteNow", "mCommentList:" + mCommentList.get(0).toJSON());
             }
 
 
-            if(noteNow!=null){
-                if (noteNow.getSelectedText()!=null && !noteNow.getSelectedText().toString().equalsIgnoreCase("null")){
-                    Log.d("comments","receiving reference...:"+noteNow.getSelectedText());
-                    reference= ConverterHtmlToText.convert(noteNow.getSelectedText());
-                    if(reference.contains("Referência:")){
-                        Log.d("comments ","specific comments contais referencia 'Referência:' in reference");
-                        txNote.setText(reference);
-                    }else {
-                        txNote.setText("Referência: \n" + "\"" + reference + "\"");
+            if (mNoteNow != null) {
+                if (mNoteNow.getSelectedText() != null && !mNoteNow.getSelectedText().toString().equalsIgnoreCase("null")) {
+                    Log.d("comments", "receiving mReference...:" + mNoteNow.getSelectedText());
+                    mReference = ConverterHtmlToText.convert(mNoteNow.getSelectedText());
+                    if (mReference.contains("Referência:")) {
+                        Log.d("comments", "specific comments contais referencia 'Referência:' in mReference");
+                        mTvNote.setText(mReference);
+                    } else {
+                        mTvNote.setText("Referência: \n" + "\"" + mReference + "\"");
                     }
                 }
-            }else{
-                Log.d("comments","NoteNow is NULL");
+            } else {
+                Log.d("comments", "NoteNow is NULL");
             }
         }
     }
@@ -589,16 +586,16 @@ public class SpecificCommentsFragment extends HelperFragment {
         return strDate;
     }
 
-    public String convertDateToTime(String atualDate){// TODO: 09/08/2016 formatos de data
-        String shortTimeStr="00:00";
-        Log.d("comments","date receiving :"+atualDate);
+    public String convertDateToTime(String atualDate) {
+        String shortTimeStr = "00:00";
+        Log.d("comments", "date receiving :" + atualDate);
         try {
             SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             Date date = null;
             date = df.parse(atualDate);
             SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
             shortTimeStr = sdf.format(date);
-            Log.d("comments","date to hour :"+shortTimeStr);
+            Log.d("comments", "date to hour :" + shortTimeStr);
         } catch (ParseException e) {
             // To change body of catch statement use File | Settings | File Templates.
             e.printStackTrace();
@@ -606,13 +603,13 @@ public class SpecificCommentsFragment extends HelperFragment {
         return shortTimeStr;
     }
 
-    public String convertDateToDate(String atualDate){
-        String shortTimeStr="12/12/2012";
-        Log.d("comments","date receiving :"+atualDate);
+    public String convertDateToDate(String atualDate) {
+        String shortTimeStr = "12/12/2012";
+        Log.d("comments", "date receiving :" + atualDate);
         try {
             SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             Date date = null;
-            if(df!=null) {
+            if (df != null) {
                 date = df.parse(atualDate);
                 SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
                 shortTimeStr = sdf.format(date);
@@ -629,14 +626,14 @@ public class SpecificCommentsFragment extends HelperFragment {
 
         @Override
         protected Object doInBackground(Object[] params) {
-            //loadCommentsFromDB(); carregar comentarios de forma assincrona
+            //mLoadCommentsFromDB(); carregar comentarios de forma assincrona
             return null;
         }
 
         @Override
         protected void onPostExecute(Object o) {
             super.onPostExecute(o);
-            spcAdapter.refresh(oneComments);
+            mSpcAdapter.refresh(mOneCommentsList);
         }
     }
 

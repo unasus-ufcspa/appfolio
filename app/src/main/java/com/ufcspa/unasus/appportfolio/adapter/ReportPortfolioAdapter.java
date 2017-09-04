@@ -23,26 +23,26 @@ import java.util.List;
  */
 
 public class ReportPortfolioAdapter extends BaseAdapter {
-    private static LayoutInflater inflater = null;
-    private MainActivity context;
-    private List<ActivityStudent> list;
+    private static LayoutInflater sInflater = null;
+    private MainActivity mMainActivity;
+    private List<ActivityStudent> mActivityStudentList;
 
-    public ReportPortfolioAdapter(MainActivity context, List<ActivityStudent> list)
+    public ReportPortfolioAdapter(MainActivity mMainActivity, List<ActivityStudent> mActivityStudentList)
     {
-        this.context = context;
-        this.list = list;
+        this.mMainActivity = mMainActivity;
+        this.mActivityStudentList = mActivityStudentList;
 
-        inflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        sInflater = (LayoutInflater) mMainActivity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
 
     @Override
     public int getCount() {
-        return list.size();
+        return mActivityStudentList.size();
     }
 
     @Override
     public ActivityStudent getItem(int position) {
-        return list.get(position);
+        return mActivityStudentList.get(position);
     }
 
     @Override
@@ -54,24 +54,23 @@ public class ReportPortfolioAdapter extends BaseAdapter {
     public View getView(int position, View convertView, ViewGroup parent) {
         ReportPortfolioAdapter.Holder holder = new ReportPortfolioAdapter.Holder();
         View rowView;
-        rowView = inflater.inflate(R.layout.item_report, null);
+        rowView = sInflater.inflate(R.layout.item_report, null);
 
-        ActivityStudent aux = list.get(position);
+        ActivityStudent aux = mActivityStudentList.get(position);
 
-        holder.titulo_report = (TextView) rowView.findViewById(R.id.titulo_report);
-        holder.titulo_report.setText(DataBase.getInstance(rowView.getContext()).getActivityTitleByIdActivityStudent(aux.getIdActivityStudent()));
-        holder.texto_report = (WebView) rowView.findViewById(R.id.texto_report);
+        holder.tituloReport = (TextView) rowView.findViewById(R.id.titulo_report);
+        holder.tituloReport.setText(DataBase.getInstance(rowView.getContext()).getActivityTitleByIdActivityStudent(aux.getIdActivityStudent()));
+        holder.textoReport = (WebView) rowView.findViewById(R.id.texto_report);
 
         HashMap<String, String> attachment = DataBase.getInstance(rowView.getContext()).getAllAttachmentsNames(Singleton.getInstance().idActivityStudent);
 
-        holder.texto_report.loadDataWithBaseURL("file:"+Environment.getExternalStorageDirectory()+"/Android/data/com.ufcspa.unasus.appportfolio/files/images",aux.getTxtActivity(),"text/html","UTF-8","about:blank");
+        holder.textoReport.loadDataWithBaseURL("file:" + Environment.getExternalStorageDirectory() + "/Android/data/com.ufcspa.unasus.appportfolio/files/images", aux.getTxtActivity(), "text/html", "UTF-8", "about:blank");
 
         return rowView;
     }
 
-    public class Holder
-    {
-        TextView titulo_report;
-        WebView texto_report;
+    public class Holder {
+        TextView tituloReport;
+        WebView textoReport;
     }
 }

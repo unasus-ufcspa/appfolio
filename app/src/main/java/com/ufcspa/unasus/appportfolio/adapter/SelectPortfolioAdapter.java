@@ -16,31 +16,31 @@ import java.util.List;
  * Created by Desenvolvimento on 17/11/2015.
  */
 public class SelectPortfolioAdapter extends BaseAdapter {
-    private Context context;
-    private List<PortfolioClass> portfolios;
-    private static LayoutInflater inflater = null;
+    private Context mContext;
+    private List<PortfolioClass> mPortfoliolist;
+    private static LayoutInflater sInflater = null;
 
 
-    public SelectPortfolioAdapter(Context context, List<PortfolioClass> port) {
-        this.context = context;
-        this.portfolios = port;
-        inflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+    public SelectPortfolioAdapter(Context mContext, List<PortfolioClass> port) {
+        this.mContext = mContext;
+        this.mPortfoliolist = port;
+        sInflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
 
-    private class Components{
-        TextView txt_class_code;
-        TextView txt_name_student;
+    private class Components {
+        TextView txtClassCode;
+        TextView txtNameStudent;
     }
 
 
     @Override
     public int getCount() {
-        return portfolios.size();
+        return mPortfoliolist.size();
     }
 
     @Override
     public Object getItem(int position) {
-        return portfolios.get(position);
+        return mPortfoliolist.get(position);
     }
 
     @Override
@@ -50,14 +50,14 @@ public class SelectPortfolioAdapter extends BaseAdapter {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        Components  components= new Components();
+        Components components = new Components();
         View rowView;
-        rowView = inflater.inflate(R.layout.celladapter_acitivity_portfolios, null);
-        PortfolioClass aux=portfolios.get(position);
-       // components.txt_class_code=(TextView)rowView.findViewById(R.id.adapater_txt_portfolio_classCode);
-        components.txt_name_student=(TextView)rowView.findViewById(R.id.adapater_txt_portfolio_nameStudent);
-        components.txt_name_student.setText(aux.getStudentName());
-       // components.txt_class_code.setText("");
+        rowView = sInflater.inflate(R.layout.celladapter_acitivity_portfolios, null);
+        PortfolioClass aux = mPortfoliolist.get(position);
+        // components.txtClassCode=(TextView)rowView.findViewById(R.id.adapater_txt_portfolio_classCode);
+        components.txtNameStudent = (TextView) rowView.findViewById(R.id.adapater_txt_portfolio_nameStudent);
+        components.txtNameStudent.setText(aux.getStudentName());
+        // components.txtClassCode.setText("");
         return rowView;
     }
 }

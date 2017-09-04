@@ -21,28 +21,27 @@ import java.util.List;
  * Created by Desenvolvimento on 08/01/2016.
  */
 public class SelectReportClassAdapter extends BaseAdapter {
-    private static LayoutInflater inflater = null;
-    private Context context;
-    private List<PortfolioClass> portclasses;
-    private DataBase dataBase;
+    private static LayoutInflater sInflater = null;
+    private Context mContext;
+    private List<PortfolioClass> mPortClassList;
+    private DataBase mDataBase;
 
-    public SelectReportClassAdapter(Context context, List<PortfolioClass> classes)
-    {
-        this.context = context;
-        this.portclasses = classes;
-        this.dataBase = DataBase.getInstance(context);
+    public SelectReportClassAdapter(Context mContext, List<PortfolioClass> classes) {
+        this.mContext = mContext;
+        this.mPortClassList = classes;
+        this.mDataBase = DataBase.getInstance(mContext);
 
-        inflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        sInflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
 
     @Override
     public int getCount() {
-        return portclasses.size();
+        return mPortClassList.size();
     }
 
     @Override
     public PortfolioClass getItem(int position) {
-        return portclasses.get(position);
+        return mPortClassList.get(position);
     }
 
     @Override
@@ -55,47 +54,47 @@ public class SelectReportClassAdapter extends BaseAdapter {
         final Holder holder = new Holder();
         final View rowView;
 
-        rowView = inflater.inflate(R.layout.item_class_finalized, null);
+        rowView = sInflater.inflate(R.layout.item_class_finalized, null);
 
-        holder.txt_class_code_info = (TextView) rowView.findViewById(R.id.txt_class_code_info);
+        holder.txtClassCodeInfo = (TextView) rowView.findViewById(R.id.txt_class_code_info);
         holder.btnInfoClose = (ImageButton) rowView.findViewById(R.id.btn_info_close);
-        holder.txt_finalize_activity = (TextView) rowView.findViewById(R.id.txt_finalize_activity);
-        holder.txt_send_message = (TextView) rowView.findViewById(R.id.txt_send_message);
-        holder.txt_port = (TextView) rowView.findViewById(R.id.adapter_item_class_txv_ds_port);
-        holder.txt_class_code=(TextView) rowView.findViewById(R.id.adapter_item_class_txv_code);
-        holder.background=(TextView) rowView.findViewById(R.id.item_color_background);
-        holder.btnInfo=(ImageButton) rowView.findViewById(R.id.btn_info);
+        holder.txtFinalizeActivity = (TextView) rowView.findViewById(R.id.txt_finalize_activity);
+        holder.txtSendMessage = (TextView) rowView.findViewById(R.id.txt_send_message);
+        holder.txtPort = (TextView) rowView.findViewById(R.id.adapter_item_class_txv_ds_port);
+        holder.txtClassCode = (TextView) rowView.findViewById(R.id.adapter_item_class_txv_code);
+        holder.background = (TextView) rowView.findViewById(R.id.item_color_background);
+        holder.btnInfo = (ImageButton) rowView.findViewById(R.id.btn_info);
         holder.notificationIcon = (TextView) rowView.findViewById(R.id.item_class_notification_icon);
-        final PortfolioClass portClass=portclasses.get(position);
+        final PortfolioClass portClass = mPortClassList.get(position);
 
 //        if(portClass.getPerfil().equals("S")){
 //            holder.background.setBackgroundResource(R.color.base_green);
-//            holder.txt_class_code.setTextColor(Color.GRAY);
+//            holder.txtClassCode.setTextColor(Color.GRAY);
 //            holder.txt_port_title.setTextColor(Color.GRAY);
-//            holder.txt_port.setTextColor(Color.GRAY);
+//            holder.txtPort.setTextColor(Color.GRAY);
 //            holder.btnInfo.setImageResource(R.drawable.ic_hamburger_white);
 //            holder.notificationIcon.setBackgroundResource(R.drawable.bg_green_rounded);
 //            holder.notificationIcon.setVisibility(View.VISIBLE);
 //        }
-        holder.txt_class_code.setText(portClass.getClassCode());
-        holder.txt_port.setText(portClass.getPortfolioTitle());
+        holder.txtClassCode.setText(portClass.getClassCode());
+        holder.txtPort.setText(portClass.getPortfolioTitle());
 
-        holder.txt_class_code.setOnClickListener(new View.OnClickListener() {
+        holder.txtClassCode.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 changeScreen(portClass);
             }
         });
-        holder.txt_port.setOnClickListener(new View.OnClickListener() {
+        holder.txtPort.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 changeScreen(portClass);
             }
         });
 
-//        int notifications = dataBase.getPortfolioClassNotification(portClass.getIdPortClass());
+//        int notifications = mDataBase.getPortfolioClassNotification(portClass.getIdPortClass());
 //        if (notifications == 0)
-            holder.notificationIcon.setVisibility(View.INVISIBLE);
+        holder.notificationIcon.setVisibility(View.INVISIBLE);
 //        else {
 //            holder.notificationIcon.setVisibility(View.VISIBLE);
 //            holder.notificationIcon.setText(notifications + "");
@@ -108,25 +107,24 @@ public class SelectReportClassAdapter extends BaseAdapter {
         Singleton singleton = Singleton.getInstance();
         singleton.portfolioClass = portClass;
         if (singleton.portfolioClass.getPerfil().equals("T")) {
-            LocalBroadcastManager.getInstance(context).sendBroadcast(new Intent("call.fragments.action").putExtra("ID", 8));
+            LocalBroadcastManager.getInstance(mContext).sendBroadcast(new Intent("call.fragments.action").putExtra("ID", 8));
         } else {
-            singleton.idStudent=singleton.user.getIdUser();
-            LocalBroadcastManager.getInstance(context).sendBroadcast(new Intent("call.fragments.action").putExtra("ID", 7));
+            singleton.idStudent = singleton.user.getIdUser();
+            LocalBroadcastManager.getInstance(mContext).sendBroadcast(new Intent("call.fragments.action").putExtra("ID", 7));
         }
     }
 
-    public class Holder
-    {
-        TextView txt_class_code;
-        TextView txt_port;
+    public class Holder {
+        TextView txtClassCode;
+        TextView txtPort;
         TextView background;
         ImageButton btnInfo;
         TextView notificationIcon;
 
-        TextView txt_class_code_info;
+        TextView txtClassCodeInfo;
         ImageButton btnInfoClose;
-        TextView txt_finalize_activity;
-        TextView txt_send_message;
+        TextView txtFinalizeActivity;
+        TextView txtSendMessage;
     }
 }
 

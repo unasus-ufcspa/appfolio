@@ -25,14 +25,14 @@ import java.util.List;
  * A simple {@link Fragment} subclass.
  */
 public class ReportPortfolioFragment extends HelperFragment {
-    private ListView list_report_activities;
-    private ArrayList<StudFrPortClass> list;
-    private List<Activity> listActivities;
-    private ArrayList<ActivityStudent> listActivitiesStudent;
-    private DataBase source;
-    private Singleton singleton;
+    private ListView mListReportActivities;
+    private ArrayList<StudFrPortClass> mStudFrPortClassList;
+    private List<Activity> mListActivities;
+    private ArrayList<ActivityStudent> mListActivitiesStudent;
+    private DataBase mDataBase;
+    private static Singleton sSingleton;
 //    private TextView className;
-    private TextView portfolioName;
+    private TextView mPortfolioName;
 
 
     public ReportPortfolioFragment() {
@@ -54,29 +54,27 @@ public class ReportPortfolioFragment extends HelperFragment {
     }
 
     public void init() {
-        singleton = Singleton.getInstance();
-        source = DataBase.getInstance(getActivity());
-        listActivitiesStudent = new ArrayList<ActivityStudent>();
-
-//        try {
-            list = source.selectListActivitiesAndStudentsByStudent(singleton.portfolioClass.getIdPortClass(), singleton.portfolioClass.getPerfil(), singleton.idStudent);
-            for (int i=0;i<list.size();i++) {
-                listActivities = list.get(i).getListActivities();
-                for (int j=0;j<listActivities.size();j++) {
-                    listActivitiesStudent.add(j,source.listLastVersionActivityStudent(listActivities.get(j).getIdActivityStudent()));
-                }
+        sSingleton = Singleton.getInstance();
+        mDataBase = DataBase.getInstance(getActivity());
+        mListActivitiesStudent = new ArrayList<ActivityStudent>();
+        mStudFrPortClassList = mDataBase.selectListActivitiesAndStudentsByStudent(sSingleton.portfolioClass.getIdPortClass(), sSingleton.portfolioClass.getPerfil(), sSingleton.idStudent);
+        for (int i = 0; i < mStudFrPortClassList.size(); i++) {
+            mListActivities = mStudFrPortClassList.get(i).getListActivities();
+            for (int j = 0; j < mListActivities.size(); j++) {
+                mListActivitiesStudent.add(j, mDataBase.listLastVersionActivityStudent(mListActivities.get(j).getIdActivityStudent()));
             }
+        }
 
 //        className = (TextView) getView().findViewById(R.id.class_name);
-        portfolioName = (TextView) getView().findViewById(R.id.portfolio_name);
-        list_report_activities = (ListView) getView().findViewById(R.id.list_report_activities);
+        mPortfolioName = (TextView) getView().findViewById(R.id.portfolio_name);
+        mListReportActivities = (ListView) getView().findViewById(R.id.list_report_activities);
 
-//        className.setText(singleton.portfolioClass.getClassCode());
-        portfolioName.setText(singleton.portfolioClass.getPortfolioTitle());
+//        className.setText(sSingleton.portfolioClass.getClassCode());
+        mPortfolioName.setText(sSingleton.portfolioClass.getPortfolioTitle());
 
-        ReportPortfolioAdapter listAdapter = new ReportPortfolioAdapter((MainActivity) getActivity(), listActivitiesStudent);
+        ReportPortfolioAdapter listAdapter = new ReportPortfolioAdapter((MainActivity) getActivity(), mListActivitiesStudent);
 
-        list_report_activities.setAdapter(listAdapter);
+        mListReportActivities.setAdapter(listAdapter);
     }
 
 }

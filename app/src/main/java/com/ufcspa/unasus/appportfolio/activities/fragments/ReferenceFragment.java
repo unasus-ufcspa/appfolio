@@ -29,15 +29,15 @@ import java.util.ArrayList;
  * Created by Desenvolvimento on 23/12/2015.
  */
 public class ReferenceFragment extends HelperFragment {
-    private ImageButton btSave;
-    private EditText edtRef;
-    private ListView list;
-//    private ReferenceAdapter adapter;
-    private AnnotationAdapter adapter;
-    private Reference refSelected;
-    private Annotation annotation;
-    private ArrayList<Reference> references;
-    private ArrayList<Annotation> annotations;
+    private ImageButton mBtSave;
+    private EditText mEdtRef;
+    private ListView mListView;
+//    private ReferenceAdapter mAnnotationAdapter;
+    private AnnotationAdapter mAnnotationAdapter;
+    private Reference mRefSelected;
+    private Annotation mAnnotation;
+    private ArrayList<Reference> mReferenceList;
+    private ArrayList<Annotation> mAnnotationList;
 
 
     @Override
@@ -56,13 +56,13 @@ public class ReferenceFragment extends HelperFragment {
         gerarLista();
 
 
-        btSave.setOnClickListener(new View.OnClickListener() {
+        mBtSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(salvar()){
-                    //adapter.clearAdapter();
+                if (salvar()) {
+                    //mAnnotationAdapter.clearAdapter();
 //                    Reference r=new Reference();
-//                    r.setDsUrl(edtRef.getText().toString());
+//                    r.setDsUrl(mEdtRef.getText().toString());
                     recuperar();
                     gerarLista();
 
@@ -72,14 +72,14 @@ public class ReferenceFragment extends HelperFragment {
                             try {
                                 main.sendFullData();
                             } finally {
-                                Log.d("annotation","saved successfully");
+                                Log.d("mAnnotation", "saved successfully");
                             }
                         }
                     }
 
-                    Toast.makeText(getActivity(),"Anotações salvas com sucesso!",Toast.LENGTH_SHORT).show();
-                }else {
-                    Toast.makeText(getActivity(),"Erro ao salvar anotações",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(), "Anotações salvas com sucesso!", Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(getActivity(), "Erro ao salvar anotações", Toast.LENGTH_SHORT).show();
                 }
 
             }
@@ -92,39 +92,39 @@ public class ReferenceFragment extends HelperFragment {
         super.onStart();
     }
 
-    private void initComp(){
-        btSave=(ImageButton)getView().findViewById(R.id.frag_ref_btSave);
-        edtRef=(EditText)getView().findViewById(R.id.frag_ref_edt);
-        list=(ListView)getView().findViewById(R.id.frag_ref_listview);
+    private void initComp() {
+        mBtSave = (ImageButton) getView().findViewById(R.id.frag_ref_btSave);
+        mEdtRef = (EditText) getView().findViewById(R.id.frag_ref_edt);
+        mListView = (ListView) getView().findViewById(R.id.frag_ref_listview);
     }
 
-    private void gerarLista(){
-//        adapter= new ReferenceAdapter(getContext(),references);
-        adapter = new AnnotationAdapter(getContext(),annotations);
-        list.setAdapter(adapter);
+    private void gerarLista() {
+//        mAnnotationAdapter= new ReferenceAdapter(getContext(),mReferenceList);
+        mAnnotationAdapter = new AnnotationAdapter(getContext(), mAnnotationList);
+        mListView.setAdapter(mAnnotationAdapter);
         //para referências apenas
-        /*list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        /*mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                annotation = adapter.getItem(position);
-                registerForContextMenu(list);
+                mAnnotation = mAnnotationAdapter.getItem(position);
+                registerForContextMenu(mListView);
             }
         });*/
 
     }
 
-    public boolean salvar(){
+    public boolean salvar() {
         int result = -1;
         Singleton singleton = Singleton.getInstance();
         DataBase data = DataBase.getInstance(getActivity());
 //        Reference refer=new Reference();
         Annotation ann = new Annotation();
-        ann.setDsAnnotation(edtRef.getText().toString());
+        ann.setDsAnnotation(mEdtRef.getText().toString());
         ann.setIdUser(singleton.user.getIdUser());
-        result=data.insertAnnotation(ann);
+        result = data.insertAnnotation(ann);
 
-        if(result>0){
-            adapter.add(ann);
+        if (result > 0) {
+            mAnnotationAdapter.add(ann);
 
             Sync sync = new Sync();
             sync.setNm_table("tb_annotation");
@@ -133,20 +133,20 @@ public class ReferenceFragment extends HelperFragment {
             data.insertIntoTBSync(sync);
 
             return true;
-        }else
+        } else
             return false;
     }
-    public void recuperar(){
+    public void recuperar() {
      //get tx_reference from database
 //        String tx="http://port.com";
-//        edtRef.setText(tx);
+//        mEdtRef.setText(tx);
         Singleton singleton = Singleton.getInstance();
         DataBase data = DataBase.getInstance(getActivity());
-//        references = (ArrayList)data.getReferences(singleton.idActivityStudent);
-        annotations = (ArrayList)data.getAnnotations();
-        //adapter.refresh(references);
-        for (Annotation annotation:annotations) {
-            Log.d("HelperFragment Reference", "ref:"+annotation.toString());
+//        mReferenceList = (ArrayList)data.getReferences(singleton.idActivityStudent);
+        mAnnotationList = (ArrayList) data.getAnnotations();
+        //mAnnotationAdapter.refresh(mReferenceList);
+        for (Annotation annotation: mAnnotationList) {
+            Log.d("ReferenceFragment", "ref:" + annotation.toString());
         }
     }
 
@@ -164,17 +164,17 @@ public class ReferenceFragment extends HelperFragment {
         switch (item.getItemId()) {
             //verify option
             case 0:
-                Toast.makeText(getContext(),"Delete",Toast.LENGTH_SHORT).show();
-//                source.deleteAnnotation(annotation.getIdAnnotation());
+                Toast.makeText(getContext(), "Delete", Toast.LENGTH_SHORT).show();
+//                source.deleteAnnotation(mAnnotation.getIdAnnotation());
                 break;
 
             case 1:
-                Toast.makeText(getContext(),"Refact",Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), "Refact", Toast.LENGTH_SHORT).show();
                 break;
             case 2:
-                Toast.makeText(getContext(),"go url",Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), "go url", Toast.LENGTH_SHORT).show();
                 Intent i = new Intent(Intent.ACTION_VIEW);
-                i.setData(Uri.parse(edtRef.getText().toString()));
+                i.setData(Uri.parse(mEdtRef.getText().toString()));
                 startActivity(i);
                 break;
         }

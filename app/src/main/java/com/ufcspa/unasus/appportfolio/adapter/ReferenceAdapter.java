@@ -16,59 +16,58 @@ import java.util.List;
  * Created by Desenvolvimento on 04/01/2016.
  */
 public class ReferenceAdapter extends BaseAdapter {
-    private TextView reference;
-    private List<Reference> refs;
-    private Context context;
-    private static LayoutInflater inflater = null;
+    private TextView mReference;
+    private List<Reference> mRefList;
+    private Context mContext;
+    private static LayoutInflater sInflater = null;
 
 
-
-    public ReferenceAdapter(Context ctxt,List refeList){
-        this.context=ctxt;
-        this.refs=refeList;
-        inflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+    public ReferenceAdapter(Context ctxt, List refeList) {
+        this.mContext = ctxt;
+        this.mRefList = refeList;
+        sInflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
 
 
     public void add(Reference obj) {
-        refs.add(obj);
+        mRefList.add(obj);
     }
-    public void delete(int position){
-        refs.remove(position);
+
+    public void delete(int position) {
+        mRefList.remove(position);
     }
 
 
     public int getCount() {
-        return this.refs.size();
+        return this.mRefList.size();
     }
 
     public Reference getItem(int index) {
-        return this.refs.get(index);
+        return this.mRefList.get(index);
     }
 
     @Override
     public long getItemId(int position) {
-        return (long)refs.get(position).getIdRef();
+        return (long) mRefList.get(position).getIdRef();
     }
 
     public View getView(int position, View convertView, ViewGroup parent) {
-            View rowView;
-            rowView = inflater.inflate(R.layout.item_reference, null);
-
+        View rowView;
+        rowView = sInflater.inflate(R.layout.item_reference, null);
 
         Reference ref = getItem(position);
 
-        reference = (TextView) rowView.findViewById(R.id.ref_item_txt_url);
-        reference.setText(ref.getDsUrl());
+        mReference = (TextView) rowView.findViewById(R.id.ref_item_txt_url);
+        mReference.setText(ref.getDsUrl());
         return rowView;
     }
 
-    public void clearAdapter(){
-        refs.clear();
+    public void clearAdapter() {
+        mRefList.clear();
         notifyDataSetChanged();
     }
 
-    public void refresh(List r){
-        this.refs=r;
+    public void refresh(List r) {
+        this.mRefList = r;
     }
 }

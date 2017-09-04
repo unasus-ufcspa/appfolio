@@ -19,28 +19,27 @@ import java.util.List;
  * Created by icaromsc on 26/02/2016.
  */
 public class SpecificCommentAdapter extends BaseAdapter {
-    private static LayoutInflater inflater = null;
-    private Context context;
-    private List<OneComment> comments;
-    private String lastDate;
+    private static LayoutInflater sInflater = null;
+    private Context mContext;
+    private List<OneComment> mCommentList;
+    private String mLastDate;
 
-    public SpecificCommentAdapter(Context context, List<OneComment> comments) {
-        this.context = context;
-        this.comments = comments;
-        inflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        lastDate="01/01/2001";
+    public SpecificCommentAdapter(Context mContext, List<OneComment> mCommentList) {
+        this.mContext = mContext;
+        this.mCommentList = mCommentList;
+        sInflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        mLastDate = "01/01/2001";
     }
-
 
 
     @Override
     public int getCount() {
-        return comments.size();
+        return mCommentList.size();
     }
 
     @Override
     public Object getItem(int position) {
-        return comments.get(position);
+        return mCommentList.get(position);
     }
 
     @Override
@@ -51,27 +50,27 @@ public class SpecificCommentAdapter extends BaseAdapter {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         View rowView;
-        OneComment c = comments.get(position);
-        if(c.atach)
-            rowView = inflater.inflate(R.layout.item_attachment, null);
+        OneComment c = mCommentList.get(position);
+        if (c.atach)
+            rowView = sInflater.inflate(R.layout.item_attachment, null);
         else
-            rowView = inflater.inflate(R.layout.item_specific_comment, null);
+            rowView = sInflater.inflate(R.layout.item_specific_comment, null);
 
         Holder holder = new Holder();
 
         //getting from xml
-        holder.message=(TextView)rowView.findViewById(R.id.comment);
-        holder.hour=(TextView)rowView.findViewById(R.id.hour);
-        holder.date=(TextView)rowView.findViewById(R.id.date);
-        holder.userName=(TextView) rowView.findViewById(R.id.userName);
-        holder.wraper=(RelativeLayout)rowView.findViewById(R.id.wrapper);
+        holder.message = (TextView) rowView.findViewById(R.id.comment);
+        holder.hour = (TextView) rowView.findViewById(R.id.hour);
+        holder.date = (TextView) rowView.findViewById(R.id.date);
+        holder.userName = (TextView) rowView.findViewById(R.id.userName);
+        holder.wraper = (RelativeLayout) rowView.findViewById(R.id.wrapper);
 
         //populating
         holder.message.setText(c.comment);
         holder.hour.setText(c.hour);
         holder.date.setText(c.date);
-        String name[] = DataBase.getInstance(parent.getContext()).getNameByUserId(c.idAuthor).split(" ");
-        holder.userName.setText(name[0]+":");
+        String[] name = DataBase.getInstance(parent.getContext()).getNameByUserId(c.idAuthor).split(" ");
+        holder.userName.setText(name[0] + ":");
         //Log.d("comment specific","message in holder"+holder.message.getText().toString());
 
         ///////////change visibility////////////////
@@ -79,23 +78,23 @@ public class SpecificCommentAdapter extends BaseAdapter {
         //Log.d("comment", "item position:" + position);
 
         if (position == 0) {
-           // Log.d("comments","first position");
-            lastDate = c.date;
+            // Log.d("mCommentList","first position");
+            mLastDate = c.date;
             holder.date.setText(c.date);
-           // Log.d("comments", "datenow get:" + lastDate);
+            // Log.d("mCommentList", "datenow get:" + mLastDate);
             holder.date.setVisibility(View.VISIBLE);
-        }else {
-            if (!lastDate.equals(c.date)) {
-                //Log.d("comments", "dateNow:" + c.date + "is diferent to lastDate:" + lastDate);
-                lastDate = c.date;
+        } else {
+            if (!mLastDate.equals(c.date)) {
+                //Log.d("mCommentList", "dateNow:" + c.date + "is diferent to mLastDate:" + mLastDate);
+                mLastDate = c.date;
                 holder.date.setText(c.date);
-               // Log.d("comments", "dateNow in component:" + holder.date.getText().toString());
+                // Log.d("mCommentList", "dateNow in component:" + holder.date.getText().toString());
             } else {
-                //Log.d("comments", "dateNow:" + c.date + "is equal to lastDate:" + lastDate);
+                //Log.d("mCommentList", "dateNow:" + c.date + "is equal to mLastDate:" + mLastDate);
                 holder.date.setVisibility(View.GONE);
             }
         }
-        if(c.atach==false) {
+        if (c.atach == false) {
             holder.message.setBackgroundResource(c.orientation ? R.drawable.bg_balloon_right : R.drawable.bg_balloon_left);
             holder.wraper.setGravity(c.orientation ? Gravity.RIGHT : Gravity.LEFT);
         }
@@ -103,18 +102,17 @@ public class SpecificCommentAdapter extends BaseAdapter {
         return rowView;
     }
 
-    public void clearAdapter(){
-        comments.clear();
+    public void clearAdapter() {
+        mCommentList.clear();
         notifyDataSetChanged();
     }
 
     public void refresh(List<OneComment> comnts) {
-        this.comments = comnts;
+        this.mCommentList = comnts;
         notifyDataSetChanged();
     }
 
-    public class Holder
-    {
+    public class Holder {
         TextView message;
         TextView hour;
         TextView date;

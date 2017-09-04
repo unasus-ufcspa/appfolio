@@ -45,16 +45,16 @@ import java.util.List;
  * Created by UNASUS on 11/11/2015.
  */
 public class DataBase {
+    private static final String TAG = "BANCO DE DADOS ";
     private static DataBase mInstance = null;
-    private SQLiteDatabase db;
-    private DataBaseHelper helper;
-    private String tag = "BANCO DE DADOS ";
-    private Context context;
+    private SQLiteDatabase mSqliteDataBase;
+    private DataBaseHelper mDataBaseHelper;
+    private Context mContext;
 
     private DataBase(Context ctx) {
-        helper = DataBaseHelper.getInstance(ctx);
-        db = helper.getDatabase();
-        context = ctx;
+        mDataBaseHelper = DataBaseHelper.getInstance(ctx);
+        mSqliteDataBase = mDataBaseHelper.getDatabase();
+        mContext = ctx;
     }
 
     public static DataBase getInstance(Context ctx) {
@@ -73,20 +73,20 @@ public class DataBase {
             if (email != "" && pass != "") {
 
                 String query = "select id_user , nm_user , tp_user from tb_user where ds_email ='" + email + "' " + "AND ds_password ='" + pass + "' ;";
-                Cursor c = db.rawQuery(query, null);
+                Cursor c = mSqliteDataBase.rawQuery(query, null);
                 if (c.moveToFirst()) {
-                    Log.d(tag, "password correto");
+                    Log.d(TAG, "password correto");
                     id = Integer.parseInt(c.getString(0));
                     name = c.getString(1);
                     type = c.getString(2).charAt(0);
                     user = new User(id, type, name);
-                    Log.d(tag, "dados: id:" + id + " type:" + type + " name:" + name);
+                    Log.d(TAG, "dados: id:" + id + " type:" + type + " name:" + name);
                 }
             }
         } catch (Exception e) {
-            Log.d(tag, "erro query:" + e.getMessage());
+            Log.d(TAG, "erro query:" + e.getMessage());
         } finally {
-//            db.close();
+//            mSqliteDataBase.close();
             return user;
         }
     }
@@ -96,16 +96,16 @@ public class DataBase {
         String query = "select id_user from tb_user ;";
 
         try {
-            Cursor c = db.rawQuery(query, null);
+            Cursor c = mSqliteDataBase.rawQuery(query, null);
             if (c.moveToFirst()) {
-                Log.d(tag, "recuperou user");
+                Log.d(TAG, "recuperou user");
                 id = c.getInt(0);
             }
         } catch (Exception e) {
-            Log.d(tag, "nao achou user");
+            Log.d(TAG, "nao achou user");
         }
 
-//            db.close();
+//            mSqliteDataBase.close();
         return id;
 
     }
@@ -121,14 +121,13 @@ public class DataBase {
             cv.put("ds_email", u.getEmail());
             cv.put("nu_cellphone", u.getCellphone());
             try {
-                db.insert("tb_user", null, cv);
+                mSqliteDataBase.insert("tb_user", null, cv);
 
-            }catch (SQLiteConstraintException v){
-                Log.e(tag, "errro, usuario já existe no banco");
+            } catch (SQLiteConstraintException v) {
+                Log.e(TAG, "errro, usuario já existe no banco");
                 v.printStackTrace();
-            }
-            catch (Exception e) {
-                Log.e(tag, "erro ao inserir tb_user:" + e.getMessage());
+            } catch (Exception e) {
+                Log.e(TAG, "erro ao inserir tb_user:" + e.getMessage());
                 e.printStackTrace();
             }
 
@@ -143,10 +142,10 @@ public class DataBase {
             cv.put("ds_code", ac.getDs_code());
             cv.put("ds_description", ac.getDs_description());
             try {
-                db.insert("tb_class", null, cv);
+                mSqliteDataBase.insert("tb_class", null, cv);
 
             } catch (Exception e) {
-                Log.d(tag, "erro ao inserir na tb_class:" + e.getMessage());
+                Log.d(TAG, "erro ao inserir na tb_class:" + e.getMessage());
                 e.printStackTrace();
             }
 
@@ -160,10 +159,10 @@ public class DataBase {
             cv.put("id_class", ac.getId_Class());
             cv.put("id_student", ac.getId_Student());
             try {
-                db.insert("tb_class_student", null, cv);
+                mSqliteDataBase.insert("tb_class_student", null, cv);
 
             } catch (Exception e) {
-                Log.d(tag, "erro ao inserir na tb_class_student:" + e.getMessage());
+                Log.d(TAG, "erro ao inserir na tb_class_student:" + e.getMessage());
                 e.printStackTrace();
             }
 
@@ -177,10 +176,10 @@ public class DataBase {
             cv.put("id_class", ac.getId_Class());
             cv.put("id_tutort", ac.getId_Tutor());
             try {
-                db.insert("tb_class_tutor", null, cv);
+                mSqliteDataBase.insert("tb_class_tutor", null, cv);
 
             } catch (Exception e) {
-                Log.d(tag, "erro ao inserir na tb_class_tutor:" + e.getMessage());
+                Log.d(TAG, "erro ao inserir na tb_class_tutor:" + e.getMessage());
                 e.printStackTrace();
             }
 
@@ -198,10 +197,10 @@ public class DataBase {
             }
 
             try {
-                db.insert("tb_portfolio", null, cv);
+                mSqliteDataBase.insert("tb_portfolio", null, cv);
 
             } catch (Exception e) {
-                Log.d(tag, "erro ao inserir na tb_portfolio:" + e.getMessage());
+                Log.d(TAG, "erro ao inserir na tb_portfolio:" + e.getMessage());
                 e.printStackTrace();
             }
 
@@ -216,10 +215,10 @@ public class DataBase {
             cv.put("id_class", ac.getId_class());
             cv.put("id_portfolio", ac.getId_portfolio());
             try {
-                db.insert("tb_portfolio_class", null, cv);
+                mSqliteDataBase.insert("tb_portfolio_class", null, cv);
 
             } catch (Exception e) {
-                Log.d(tag, "erro ao inserir na tb_portfolio_class:" + e.getMessage());
+                Log.d(TAG, "erro ao inserir na tb_portfolio_class:" + e.getMessage());
                 e.printStackTrace();
             }
 
@@ -235,10 +234,10 @@ public class DataBase {
             cv.put("dt_first_sync", ac.getDt_first_sync());
             cv.put("nu_portfolio_version", ac.getNu_portfolio_version());
             try {
-                db.insert("tb_portfolio_student", null, cv);
+                mSqliteDataBase.insert("tb_portfolio_student", null, cv);
 
             } catch (Exception e) {
-                Log.d(tag, "erro ao inserir na tb_portfolio_student:" + e.getMessage());
+                Log.d(TAG, "erro ao inserir na tb_portfolio_student:" + e.getMessage());
                 e.printStackTrace();
             }
 
@@ -252,41 +251,41 @@ public class DataBase {
             cv.put("id_portfolio_student", ac.getId_portfolio_student());
             cv.put("id_tutor", ac.getId_tutor());
             try {
-                db.insert("tb_tutor_portfolio", null, cv);
+                mSqliteDataBase.insert("tb_tutor_portfolio", null, cv);
 
             } catch (Exception e) {
-                Log.d(tag, "erro ao inserir na tb_tutor_portfolio:" + e.getMessage());
+                Log.d(TAG, "erro ao inserir na tb_tutor_portfolio:" + e.getMessage());
                 e.printStackTrace();
             }
 
         }
     }
 
-    public List<TutorPortfolio> getTbTutorByPortfolioStudent(int idPortfolioStudent){
+    public List<TutorPortfolio> getTbTutorByPortfolioStudent(int idPortfolioStudent) {
         List<TutorPortfolio> tutorPortfolios = new LinkedList<>();
-        String query = "SELECT * FROM tb_tutor_portfolio WHERE id_portfolio_student="+idPortfolioStudent;
-        Cursor c = db.rawQuery(query,null);
+        String query = "SELECT * FROM tb_tutor_portfolio WHERE id_portfolio_student=" + idPortfolioStudent;
+        Cursor c = mSqliteDataBase.rawQuery(query, null);
         if (c.moveToFirst()) {
-            do{
+            do {
                 TutorPortfolio tutorPortfolio = new TutorPortfolio();
                 tutorPortfolio.setId_portfolio_student(c.getInt(0));
                 tutorPortfolio.setId_tutor(c.getInt(1));
                 tutorPortfolio.setId_tutor_portfolio(c.getInt(2));
 
                 tutorPortfolios.add(tutorPortfolio);
-            }while (c.moveToNext());
+            } while (c.moveToNext());
         }
 
         return tutorPortfolios;
     }
 
-    public String getPerfilByPortfolioStudent(int idPortfolioStudent, int idUser){
+    public String getPerfilByPortfolioStudent(int idPortfolioStudent, int idUser) {
         String perfil;
-        String query = "SELECT * FROM tb_tutor_portfolio WHERE id_portfolio_student="+idPortfolioStudent+" AND id_tutor="+idUser;
-        Cursor c = db.rawQuery(query,null);
-        if (c.moveToFirst()){
+        String query = "SELECT * FROM tb_tutor_portfolio WHERE id_portfolio_student=" + idPortfolioStudent + " AND id_tutor=" + idUser;
+        Cursor c = mSqliteDataBase.rawQuery(query, null);
+        if (c.moveToFirst()) {
             perfil = "T";
-        }else {
+        } else {
             perfil = "S";
         }
         return perfil;
@@ -301,10 +300,10 @@ public class DataBase {
             cv.put("nu_order", ac.getNu_order());
             cv.put("ds_title", ac.getDs_title());
             try {
-                db.insert("tb_activity", null, cv);
+                mSqliteDataBase.insert("tb_activity", null, cv);
 
             } catch (Exception e) {
-                Log.d(tag, "erro ao inserir activity:" + e.getMessage());
+                Log.d(TAG, "erro ao inserir activity:" + e.getMessage());
                 e.printStackTrace();
             }
 
@@ -320,10 +319,10 @@ public class DataBase {
             cv.put("dt_conclusion", ac.getDt_conclusion());
             //cv.put("dt_fisrt_sync", ac.getDt_first_sync());
             try {
-                db.insert("tb_activity_student", null, cv);
+                mSqliteDataBase.insert("tb_activity_student", null, cv);
 
             } catch (Exception e) {
-                Log.d(tag, "erro ao inserir activity Student:" + e.getMessage());
+                Log.d(TAG, "erro ao inserir activity Student:" + e.getMessage());
                 e.printStackTrace();
             }
 
@@ -332,13 +331,13 @@ public class DataBase {
 
     public void updateTBActivityStudent(com.ufcspa.unasus.appportfolio.model.basicData.ActivityStudent activity) {
         ContentValues cv = new ContentValues();
-        String query="UPDATE tb_activity_student SET dt_conclusion="+activity.getDt_conclusion()+" WHERE id_activity_student="+activity.getIdActivityStudent();
+        String query = "UPDATE tb_activity_student SET dt_conclusion=" + activity.getDt_conclusion() + " WHERE id_activity_student=" + activity.getIdActivityStudent();
         cv.put("dt_conclusion", activity.getDt_conclusion());
         try {
-            db.update("tb_activity_student",cv,"id_activity_student="+activity.getIdActivityStudent(),null);
+            mSqliteDataBase.update("tb_activity_student", cv, "id_activity_student=" + activity.getIdActivityStudent(), null);
 
         } catch (Exception e) {
-            Log.d(tag, "erro ao inserir activity Student:" + e.getMessage());
+            Log.d(TAG, "erro ao inserir activity Student:" + e.getMessage());
             e.printStackTrace();
         }
 
@@ -355,10 +354,10 @@ public class DataBase {
             cv.put("dt_sync", s.getDt_sync());
             cv.put("dt_read", s.getDt_read());
             try {
-                db.insert("tb_sync", null, cv);
+                mSqliteDataBase.insert("tb_sync", null, cv);
 
             } catch (Exception e) {
-                Log.d(tag, "erro ao inserir tb_sync:" + e.getMessage());
+                Log.d(TAG, "erro ao inserir tb_sync:" + e.getMessage());
                 e.printStackTrace();
             }
 
@@ -375,20 +374,20 @@ public class DataBase {
         int lastID = 0;
         User user = new User(0, 'U', "NULO");
         try {
-            db.insert("tb_user", null, cv);
-            Log.d(tag, "inseriu no banco user " + u.getName() + "  no banco");
-            Cursor cursor = db.rawQuery("select seq from sqlite_sequence where name='tb_user'", null);
+            mSqliteDataBase.insert("tb_user", null, cv);
+            Log.d(TAG, "inseriu no banco user " + u.getName() + "  no banco");
+            Cursor cursor = mSqliteDataBase.rawQuery("select seq from sqlite_sequence where name='tb_user'", null);
 
             if (cursor.moveToFirst()) {
                 lastID = cursor.getInt(0);
-                Log.d(tag, "last id_attachment in table:" + lastID);
-                Cursor c = db.rawQuery("SELECT nm_user FROM tb_user where id_user=" + lastID, null);
+                Log.d(TAG, "last id_attachment in table:" + lastID);
+                Cursor c = mSqliteDataBase.rawQuery("SELECT nm_user FROM tb_user where id_user=" + lastID, null);
                 if (c.moveToFirst()) {
                     user = new User(lastID, 'U', c.getString(0));
                 }
             }
         } catch (Exception e) {
-            Log.e(tag, "erro ao inserir user:" + e.getMessage() + "\n");
+            Log.e(TAG, "erro ao inserir user:" + e.getMessage() + "\n");
             e.printStackTrace();
         }
         return user;
@@ -398,8 +397,8 @@ public class DataBase {
         User user = new User(0, null, null);
         ArrayList<User> lista = new ArrayList<>();
         Cursor c = null;
-        String query = "SELECT id_user, nm_user, nu_identification, ds_email, nu_cellphone, im_photo FROM tb_user JOIN tb_portfolio_student ON id_student=id_user WHERE id_portfolio_class ="+idPortfolioClass;
-        c = db.rawQuery(query, null);
+        String query = "SELECT id_user, nm_user, nu_identification, ds_email, nu_cellphone, im_photo FROM tb_user JOIN tb_portfolio_student ON id_student=id_user WHERE id_portfolio_class =" + idPortfolioClass;
+        c = mSqliteDataBase.rawQuery(query, null);
         if (c.moveToFirst()) {
             do {
                 user = new User(c.getInt(0), c.getString(1), c.getString(2), c.getString(3), c.getString(4));
@@ -414,7 +413,7 @@ public class DataBase {
     public String listarTabelas() {
         String query = "SELECT name from sqlite_master where type='table'";
         String r = "";
-        Cursor c = db.rawQuery(query, null);
+        Cursor c = mSqliteDataBase.rawQuery(query, null);
         if (c.moveToFirst()) {
             do {
                 r += c.getString(0) + "\n";
@@ -424,7 +423,7 @@ public class DataBase {
             r = "não há tabelas";
         }
 
-//        db.close();
+//        mSqliteDataBase.close();
 
         return r;
     }
@@ -445,15 +444,16 @@ public class DataBase {
         cv.put("ds_url", ref.getDsUrl());
         cv.put("id_activity_student", ref.getIdActStudent());
         try {
-            db.insert("tb_reference", null, cv);
-//            db.close();
-            Log.d(tag, "inseriu referencia no banco");
+            mSqliteDataBase.insert("tb_reference", null, cv);
+//            mSqliteDataBase.close();
+            Log.d(TAG, "inseriu referencia no banco");
             return true;
         } catch (Exception e) {
-            Log.e(tag, "erro ao inserir ref:" + e.getMessage());
+            Log.e(TAG, "erro ao inserir ref:" + e.getMessage());
             return false;
         }
     }
+
     public int insertAnnotation(Annotation annotation) {
         int id = -1;
         ContentValues cv = new ContentValues();
@@ -461,44 +461,44 @@ public class DataBase {
         cv.put("ds_annotation", annotation.getDsAnnotation());
         cv.put("id_annotation_srv", annotation.getIdAnnotationSrv());
         try {
-            id = (int) db.insert("tb_annotation", null, cv);
-//            db.close();
-            Log.d(tag, "inseriu annotation no banco");
+            id = (int) mSqliteDataBase.insert("tb_annotation", null, cv);
+//            mSqliteDataBase.close();
+            Log.d(TAG, "inseriu annotation no banco");
         } catch (Exception e) {
-            Log.e(tag, "erro ao inserir annotation:" + e.getMessage());
+            Log.e(TAG, "erro ao inserir annotation:" + e.getMessage());
         }
         return id;
     }
 
     public void deleteReference(int idReference) {
         try {
-            db.delete("tb_reference", "id_reference=?", new String[]{"" + idReference});
-            Log.d(tag, "removeu ref do banco");
+            mSqliteDataBase.delete("tb_reference", "id_reference=?", new String[]{"" + idReference});
+            Log.d(TAG, "removeu ref do banco");
         } catch (Exception e) {
-            Log.e(tag, "erro ao delete ref:" + e.getMessage());
+            Log.e(TAG, "erro ao delete ref:" + e.getMessage());
         }
     }
 
     public List getReferences(int idActivity) {
         List refs = new ArrayList<Reference>(5);
         String sql = "SELECT * FROM tb_reference WHERE id_activity_student =" + idActivity + ";";
-        Cursor c = db.rawQuery(sql, null);
+        Cursor c = mSqliteDataBase.rawQuery(sql, null);
         Reference r;
         if (c.moveToFirst()) {
             do {
                 try {
                     r = new Reference(c.getInt(0), c.getString(2), 0);
                     refs.add(r);
-                    Log.d(tag, "reference:" + r.toString());
+                    Log.d(TAG, "reference:" + r.toString());
                 } catch (Exception v) {
-                    Log.e(tag, "erro ao pegar dados do banco:" + v.getMessage());
+                    Log.e(TAG, "erro ao pegar dados do banco:" + v.getMessage());
                 }
                 //add references
             } while (c.moveToNext());
 //            c.close();
-//            db.close();
+//            mSqliteDataBase.close();
         } else {
-            Log.d(tag, "não retornoun nada");
+            Log.d(TAG, "não retornoun nada");
         }
         return refs;
     }
@@ -511,9 +511,9 @@ public class DataBase {
             cv.put("id_annotation_srv", a.getIdAnnotationSrv());
 
             try {
-                db.insert("tb_annotation", null, cv);
+                mSqliteDataBase.insert("tb_annotation", null, cv);
             } catch (Exception e) {
-                Log.d(tag, "erro ao inserir na tb_annotation:" + e.getMessage());
+                Log.d(TAG, "erro ao inserir na tb_annotation:" + e.getMessage());
                 e.printStackTrace();
             }
 
@@ -523,32 +523,33 @@ public class DataBase {
     public List getAnnotations() {
         List annotations = new ArrayList<Annotation>(5);
         String sql = "SELECT * FROM tb_annotation;";
-        Cursor c = db.rawQuery(sql, null);
+        Cursor c = mSqliteDataBase.rawQuery(sql, null);
         Annotation a;
         if (c.moveToFirst()) {
             do {
                 try {
                     a = new Annotation(c.getInt(0), c.getInt(1), c.getString(2), c.getInt(3));
                     annotations.add(a);
-                    Log.d(tag, "annotation:" + a.toString());
+                    Log.d(TAG, "annotation:" + a.toString());
                 } catch (Exception v) {
-                    Log.e(tag, "erro ao pegar dados do banco:" + v.getMessage());
+                    Log.e(TAG, "erro ao pegar dados do banco:" + v.getMessage());
                 }
                 //add references
             } while (c.moveToNext());
 //            c.close();
-//            db.close();
+//            mSqliteDataBase.close();
         } else {
-            Log.d(tag, "não retornoun nada");
+            Log.d(TAG, "não retornoun nada");
         }
         return annotations;
     }
-    public LinkedList<Annotation> getAnnotationsById(LinkedList<Integer> ids){
+
+    public LinkedList<Annotation> getAnnotationsById(LinkedList<Integer> ids) {
         LinkedList<Annotation> annotations = new LinkedList<>();
         Annotation annotation = new Annotation();
         for (Integer id : ids) {
-            String query = "SELECT * FROM tb_annotation WHERE id_annotation="+id;
-            Cursor cursor = db.rawQuery(query,null);
+            String query = "SELECT * FROM tb_annotation WHERE id_annotation=" + id;
+            Cursor cursor = mSqliteDataBase.rawQuery(query, null);
 
             if (cursor.moveToFirst()) {
                 annotation.setIdAnnotation(cursor.getInt(0));
@@ -562,19 +563,21 @@ public class DataBase {
 
         return annotations;
     }
+
     public void updateAnnotationsBySendFullData(LinkedList<HolderIDS> holderIDS) {
         ContentValues cv = new ContentValues();
         for (HolderIDS holder : holderIDS) {
             cv.put("id_annotation_srv", holder.getIdSrv());
             try {
-                db.update("tb_annotation", cv, "id_annotation=?", new String[]{"" + holder.getId()});
+                mSqliteDataBase.update("tb_annotation", cv, "id_annotation=?", new String[]{"" + holder.getId()});
             } catch (Exception e) {
-                Log.d(tag, e.getMessage());
+                Log.d(TAG, e.getMessage());
             }
         }
     }
-    public void deleteAnnotation(int idAnnotation){
-        db.delete("tb_annotation","id_annotation=?", new String[]{String.valueOf(idAnnotation)});
+
+    public void deleteAnnotation(int idAnnotation) {
+        mSqliteDataBase.delete("tb_annotation", "id_annotation=?", new String[]{String.valueOf(idAnnotation)});
     }
 
     /*
@@ -591,22 +594,21 @@ public class DataBase {
         cv.put("tp_comment", c.getTypeComment());
         cv.put("dt_comment", c.getDateComment());
         cv.put("dt_send", c.getDateSend());
-        db.insert("tb_comment", null, cv);
+        mSqliteDataBase.insert("tb_comment", null, cv);
         try {
-//            db.close();
-            Log.d(tag, "inseriu comentario no banco");
+//            mSqliteDataBase.close();
+            Log.d(TAG, "inseriu comentario no banco");
         } catch (Exception e) {
-            Log.e(tag, "erro ao inserir:" + e.getMessage());
+            Log.e(TAG, "erro ao inserir:" + e.getMessage());
         }
-        Cursor cursor = db.rawQuery("select seq from sqlite_sequence where name='tb_comment'", null);
+        Cursor cursor = mSqliteDataBase.rawQuery("select seq from sqlite_sequence where name='tb_comment'", null);
         int lastID = 0;
         if (cursor.moveToFirst()) {
             lastID = cursor.getInt(0);
-            Log.d(tag, "last id_comment id table:" + lastID);
+            Log.d(TAG, "last id_comment id table:" + lastID);
         }
         return lastID;
     }
-
 
 
     public int insertComment(Comentario c) {
@@ -617,18 +619,18 @@ public class DataBase {
         cv.put("tp_comment", c.getTypeComment());
         cv.put("dt_comment", c.getDateComment());
         cv.put("dt_send", c.getDateSend());
-        db.insert("tb_comment", null, cv);
+        mSqliteDataBase.insert("tb_comment", null, cv);
         try {
-//            db.close();
-            Log.d(tag, "inseriu comentario no banco");
+//            mSqliteDataBase.close();
+            Log.d(TAG, "inseriu comentario no banco");
         } catch (Exception e) {
-            Log.e(tag, "erro ao inserir:" + e.getMessage());
+            Log.e(TAG, "erro ao inserir:" + e.getMessage());
         }
-        Cursor cursor = db.rawQuery("select seq from sqlite_sequence where name='tb_comment'", null);
+        Cursor cursor = mSqliteDataBase.rawQuery("select seq from sqlite_sequence where name='tb_comment'", null);
         int lastID = 0;
         if (cursor.moveToFirst()) {
             lastID = cursor.getInt(0);
-            Log.d(tag, "last id_comment id table:" + lastID);
+            Log.d(TAG, "last id_comment id table:" + lastID);
         }
         return lastID;
     }
@@ -639,7 +641,6 @@ public class DataBase {
         ContentValues cv = new ContentValues();
 
 
-
         cv.put("id_activity_student", c.getIdActivityStudent());
         cv.put("id_author", c.getIdAuthor());
         cv.put("id_comment_version", c.getId_comment_version());
@@ -648,22 +649,20 @@ public class DataBase {
         cv.put("dt_comment", c.getDateComment());
         cv.put("dt_send", c.getDateSend());
 
-        db.insert("tb_comment", null, cv);
+        mSqliteDataBase.insert("tb_comment", null, cv);
         try {
-            Log.d(tag + " insertSpecificComment", "inseriu comentario no banco:"+c);
+            Log.d(TAG + " insertSpecificComment", "inseriu comentario no banco:" + c);
         } catch (Exception e) {
-            Log.e(tag + " insertSpecificComment", "erro ao inserir:" + e.getMessage());
+            Log.e(TAG + " insertSpecificComment", "erro ao inserir:" + e.getMessage());
         }
-        Cursor cursor = db.rawQuery("select seq from sqlite_sequence where name='tb_comment'", null);
+        Cursor cursor = mSqliteDataBase.rawQuery("select seq from sqlite_sequence where name='tb_comment'", null);
         int lastID = 0;
         if (cursor.moveToFirst()) {
             lastID = cursor.getInt(0);
-            Log.d(tag, "last id_comment id table:" + lastID);
+            Log.d(TAG, "last id_comment id table:" + lastID);
         }
         return lastID;
     }
-
-
 
 
     public int insertSpecificCommentOLD(Comentario c, int idNote) {
@@ -676,26 +675,27 @@ public class DataBase {
         cv.put("dt_comment", c.getDateComment());
         cv.put("dt_send", c.getDateSend());
         cv.put("nu_comment_activity", idNote);
-        db.insert("tb_comment", null, cv);
+        mSqliteDataBase.insert("tb_comment", null, cv);
         try {
-//            db.close();
-            Log.d(tag + " insertSpecificComment", "inseriu comentario no banco");
+//            mSqliteDataBase.close();
+            Log.d(TAG + " insertSpecificComment", "inseriu comentario no banco");
         } catch (Exception e) {
-            Log.e(tag + " insertSpecificComment", "erro ao inserir:" + e.getMessage());
+            Log.e(TAG + " insertSpecificComment", "erro ao inserir:" + e.getMessage());
         }
-        Cursor cursor = db.rawQuery("select seq from sqlite_sequence where name='tb_comment'", null);
+        Cursor cursor = mSqliteDataBase.rawQuery("select seq from sqlite_sequence where name='tb_comment'", null);
         int lastID = 0;
         if (cursor.moveToFirst()) {
             lastID = cursor.getInt(0);
-            Log.d(tag, "last id_comment id table:" + lastID);
+            Log.d(TAG, "last id_comment id table:" + lastID);
         }
         return lastID;
 
     }
-    public boolean isFirstSpecificCommentOLD(int idActSt,int nu_comment_activity) {
+
+    public boolean isFirstSpecificCommentOLD(int idActSt, int nu_comment_activity) {
         int id = -1;
         String sql = "select * from tb_comment WHERE tp_comment ='O' AND id_activity_student=" + idActSt + " AND nu_comment_activity= " + nu_comment_activity;
-        Cursor c = db.rawQuery(sql, null);
+        Cursor c = mSqliteDataBase.rawQuery(sql, null);
         if (c.moveToFirst()) {
             return false;
         } else {
@@ -704,12 +704,12 @@ public class DataBase {
 
     }
 
-    public boolean isFirstSpecificComment(int idActSt,int nu_comment_activity) {
+    public boolean isFirstSpecificComment(int idActSt, int nu_comment_activity) {
         int id = -1;
         String sql = "select * from tb_comment_version cv JOIN tb_version_activity va ON va.id_version_activity_srv=cv.id_version_activity WHERE va.id_activity_student=" + idActSt + " AND nu_comment_activity= " + nu_comment_activity;
-        Log.d(tag,"is first specific comment sql:"+sql);
-        Cursor c = db.rawQuery(sql, null);
-        if (c.getCount()>0) {
+        Log.d(TAG, "is first specific comment sql:" + sql);
+        Cursor c = mSqliteDataBase.rawQuery(sql, null);
+        if (c.getCount() > 0) {
             return false;
         } else {
             return true;
@@ -738,68 +738,62 @@ public class DataBase {
         cv.put("dt_comment", c.getDateComment());
         cv.put("dt_send", c.getDateSend());
 
-        db.insert("tb_comment", null, cv);
+        mSqliteDataBase.insert("tb_comment", null, cv);
         try {
-            Log.d(tag + " insertSpecificComment", "inseriu comentario no banco");
+            Log.d(TAG + " insertSpecificComment", "inseriu comentario no banco");
         } catch (Exception e) {
-            Log.e(tag + " insertSpecificComment", "erro ao inserir:" + e.getMessage());
+            Log.e(TAG + " insertSpecificComment", "erro ao inserir:" + e.getMessage());
         }
-        Cursor cursor = db.rawQuery("select seq from sqlite_sequence where name='tb_comment'", null);
+        Cursor cursor = mSqliteDataBase.rawQuery("select seq from sqlite_sequence where name='tb_comment'", null);
         int lastID = 0;
         if (cursor.moveToFirst()) {
             lastID = cursor.getInt(0);
-            Log.d(tag, "last id_comment id table:" + lastID);
+            Log.d(TAG, "last id_comment id table:" + lastID);
         }
         return lastID;
     }
 
-    public int insertObservationByVersion(Observation o){
+    public int insertObservationByVersion(Observation o) {
         ContentValues cv = new ContentValues();
-        if(o.getId_comment_version()>0) {
+        if (o.getId_comment_version() > 0) {
             cv.put("id_comment_version", o.getId_comment_version());
         }
 
         cv.put("id_version_activity", o.getId_version_activity());
         cv.put("tx_reference", o.getTx_reference());
         cv.put("nu_comment_activity", o.getNu_comment_activity());
-        cv.put("nu_initial_pos",o.getNu_initial_position());
+        cv.put("nu_initial_pos", o.getNu_initial_position());
         cv.put("nu_size", o.getNu_size());
-        if(o.getId_comment_version_srv()>0){
+        if (o.getId_comment_version_srv() > 0) {
             cv.put("id_comment_version_srv", o.getId_comment_version_srv());
-        }
-        else{
+        } else {
             cv.put("id_comment_version_srv", o.getId_comment_version());
         }
 
 
-
-
         try {
-            db.insert("tb_comment_version", null, cv);
-            Log.d(tag + " insert", "inseriu observação no banco");
+            mSqliteDataBase.insert("tb_comment_version", null, cv);
+            Log.d(TAG + " insert", "inseriu observação no banco");
         } catch (Exception e) {
-            Log.e(tag + " insert", "erro ao inserir observação:" + e.getMessage());
+            Log.e(TAG + " insert", "erro ao inserir observação:" + e.getMessage());
         }
-        Cursor cursor = db.rawQuery("select seq from sqlite_sequence where name='tb_comment_version'", null);
+        Cursor cursor = mSqliteDataBase.rawQuery("select seq from sqlite_sequence where name='tb_comment_version'", null);
         int lastID = 0;
         if (cursor.moveToFirst()) {
             lastID = cursor.getInt(0);
-            Log.d(tag, "last id_comment id table:" + lastID);
+            Log.d(TAG, "last id_comment id table:" + lastID);
         }
         return lastID;
     }
 
 
-
-
-
     public int getIdObservationByNuCommentActivy(int id_activity_student, int nu_comment_activity) {
         String query = "select id_comment_version from tb_comment_version cv JOIN tb_version_activity va ON va.id_version_activity_srv=cv.id_version_activity WHERE va.id_activity_student=" + id_activity_student + " AND nu_comment_activity= " + nu_comment_activity;
-        Cursor c = db.rawQuery(query, null);
-        int id=-1;
+        Cursor c = mSqliteDataBase.rawQuery(query, null);
+        int id = -1;
         if (c.moveToFirst()) {
             id = c.getInt(0);
-        }else {
+        } else {
             id = 0;
         }
         return id;
@@ -807,11 +801,11 @@ public class DataBase {
 
     public int getIdObservationSrvByNuCommentActivy(int id_activity_student, int nu_comment_activity) {
         String query = "select id_comment_version_srv from tb_comment_version cv JOIN tb_version_activity va ON va.id_version_activity_srv=cv.id_version_activity WHERE va.id_activity_student=" + id_activity_student + " AND nu_comment_activity= " + nu_comment_activity;
-        Cursor c = db.rawQuery(query, null);
-        int id=-1;
+        Cursor c = mSqliteDataBase.rawQuery(query, null);
+        int id = -1;
         if (c.moveToFirst()) {
             id = c.getInt(0);
-        }else {
+        } else {
             id = 0;
         }
         return id;
@@ -819,29 +813,28 @@ public class DataBase {
 
     public String getIdObservationTextByNuCommentActivy(int id_activity_student, int nu_comment_activity) {
         String query = "select distinct tx_reference from tb_comment_version cv JOIN tb_version_activity va ON va.id_version_activity_srv=cv.id_version_activity WHERE va.id_activity_student=" + id_activity_student + " AND nu_comment_activity= " + nu_comment_activity;
-        Cursor c = db.rawQuery(query, null);
-        String r= new String();
+        Cursor c = mSqliteDataBase.rawQuery(query, null);
+        String r = new String();
         //Observation obs= new Observation();
         if (c.moveToFirst()) {
-            r  = c.getString(0);
-            Log.d("tx_observation",r);
+            r = c.getString(0);
+            Log.d("tx_observation", r);
         }
 
         return r;
     }
 
 
-
-    public List<Observation> getObservationsByVersion(int idversion, int nu_comment_activity){
-        ArrayList<Observation>  obs= new ArrayList<Observation>();
-        String sql = "SELECT * from tb_comment_version WHERE nu_comment_activity =" + nu_comment_activity + " AND id_version_activity="+idversion+";";
-        //Log.e(tag, "sql listComments:" + sql);
-        Cursor c = db.rawQuery(sql, null);
+    public List<Observation> getObservationsByVersion(int idversion, int nu_comment_activity) {
+        ArrayList<Observation> obs = new ArrayList<Observation>();
+        String sql = "SELECT * from tb_comment_version WHERE nu_comment_activity =" + nu_comment_activity + " AND id_version_activity=" + idversion + ";";
+        //Log.e(TAG, "sql listComments:" + sql);
+        Cursor c = mSqliteDataBase.rawQuery(sql, null);
 
         if (c.moveToFirst()) {
             do {
                 try {
-                    Observation o= new Observation();
+                    Observation o = new Observation();
                     o.setId_comment_version(c.getInt(0));
                     o.setId_version_activity(c.getInt(1));
                     o.setTx_reference(c.getString(2));
@@ -851,31 +844,30 @@ public class DataBase {
                     o.setId_comment_version_srv(6);
                     obs.add(o);
                 } catch (Exception v) {
-                    Log.e(tag, "erro ao pegar dados do banco:" + v.getMessage());
+                    Log.e(TAG, "erro ao pegar dados do banco:" + v.getMessage());
                 }
                 //add comment
             } while (c.moveToNext());
             c.close();
-//            db.close();
+//            mSqliteDataBase.close();
         } else {
-            Log.d(tag + " get", "não retornou nenhuma observação");
+            Log.d(TAG + " get", "não retornou nenhuma observação");
         }
-        //Log.d(tag, "listou notas no banco n:" + comentarios.size());
+        //Log.d(TAG, "listou notas no banco n:" + comentarios.size());
         return obs;
     }
 
 
-
-    public List<Observation> getObservation(int idversion){
-        ArrayList<Observation>  obs= new ArrayList<Observation>();
-        String sql = "SELECT * from tb_comment_version WHERE id_version_activity="+idversion+";";
-        //Log.e(tag, "sql listComments:" + sql);
-        Cursor c = db.rawQuery(sql, null);
+    public List<Observation> getObservation(int idversion) {
+        ArrayList<Observation> obs = new ArrayList<Observation>();
+        String sql = "SELECT * from tb_comment_version WHERE id_version_activity=" + idversion + ";";
+        //Log.e(TAG, "sql listComments:" + sql);
+        Cursor c = mSqliteDataBase.rawQuery(sql, null);
 
         if (c.moveToFirst()) {
             do {
                 try {
-                    Observation o= new Observation();
+                    Observation o = new Observation();
                     o.setId_comment_version(c.getInt(0));
                     o.setId_version_activity(c.getInt(1));
                     o.setTx_reference(c.getString(2));
@@ -885,29 +877,29 @@ public class DataBase {
                     o.setId_comment_version_srv(c.getInt(6));
                     obs.add(o);
                 } catch (Exception v) {
-                    Log.e(tag, "erro ao pegar dados do banco:" + v.getMessage());
+                    Log.e(TAG, "erro ao pegar dados do banco:" + v.getMessage());
                 }
                 //add comment
             } while (c.moveToNext());
             c.close();
-//            db.close();
+//            mSqliteDataBase.close();
         } else {
-            Log.d(tag + " get", "não retornou nenhuma observação");
+            Log.d(TAG + " get", "não retornou nenhuma observação");
         }
-        //Log.d(tag, "listou notas no banco n:" + comentarios.size());
+        //Log.d(TAG, "listou notas no banco n:" + comentarios.size());
         return obs;
     }
 
-    public List<Observation> getObservationALL(){
-        ArrayList<Observation>  obs= new ArrayList<Observation>();
+    public List<Observation> getObservationALL() {
+        ArrayList<Observation> obs = new ArrayList<Observation>();
         String sql = "SELECT * from tb_comment_version;";
-        //Log.e(tag, "sql listComments:" + sql);
-        Cursor c = db.rawQuery(sql, null);
+        //Log.e(TAG, "sql listComments:" + sql);
+        Cursor c = mSqliteDataBase.rawQuery(sql, null);
 
         if (c.moveToFirst()) {
             do {
                 try {
-                    Observation o= new Observation();
+                    Observation o = new Observation();
                     o.setId_comment_version(c.getInt(0));
                     o.setId_version_activity(c.getInt(1));
                     o.setTx_reference(c.getString(2));
@@ -917,36 +909,27 @@ public class DataBase {
                     o.setId_comment_version_srv(c.getInt(6));
                     obs.add(o);
                 } catch (Exception v) {
-                    Log.e(tag, "erro ao pegar dados do banco:" + v.getMessage());
+                    Log.e(TAG, "erro ao pegar dados do banco:" + v.getMessage());
                 }
                 //add comment
             } while (c.moveToNext());
             c.close();
-//            db.close();
+//            mSqliteDataBase.close();
         } else {
-            Log.d(tag + " get", "não retornou nenhuma observação");
+            Log.d(TAG + " get", "não retornou nenhuma observação");
         }
-        //Log.d(tag, "listou notas no banco n:" + comentarios.size());
+        //Log.d(TAG, "listou notas no banco n:" + comentarios.size());
         return obs;
     }
 
 
-
-
-
-
-
-
-
-
-
-    public int getPersonalComment(int idActSt){
-        int id=-1;
+    public int getPersonalComment(int idActSt) {
+        int id = -1;
         String sql = "select * from tb_comment WHERE tp_comment ='P' AND id_activity_student=" + idActSt + ";";
-        Cursor c = db.rawQuery(sql, null);
+        Cursor c = mSqliteDataBase.rawQuery(sql, null);
         if (c.moveToFirst()) {
             c.moveToFirst();
-            id=(c.getInt(0));
+            id = (c.getInt(0));
 //            c.close();
         }
         return id;
@@ -959,22 +942,21 @@ public class DataBase {
         cv.put("tx_comment", c.getTxtComment());
         cv.put("tp_comment", "P");
         cv.put("dt_comment", c.getDateComment());
-        db.insert("tb_comment", null, cv);
+        mSqliteDataBase.insert("tb_comment", null, cv);
         try {
-//            db.close();
-            Log.d(tag, "inseriu comentario no banco");
+//            mSqliteDataBase.close();
+            Log.d(TAG, "inseriu comentario no banco");
         } catch (Exception e) {
-            Log.e(tag, "erro ao inserir:" + e.getMessage());
+            Log.e(TAG, "erro ao inserir:" + e.getMessage());
         }
-        Cursor cursor = db.rawQuery("select seq from sqlite_sequence where name='tb_comment'", null);
+        Cursor cursor = mSqliteDataBase.rawQuery("select seq from sqlite_sequence where name='tb_comment'", null);
         int lastID = 0;
         if (cursor.moveToFirst()) {
             lastID = cursor.getInt(0);
-            Log.d(tag, "last id_comment id table:" + lastID);
+            Log.d(TAG, "last id_comment id table:" + lastID);
         }
         return lastID;
     }
-
 
 
     public void updatePersonalComment(Comentario c) {
@@ -982,19 +964,19 @@ public class DataBase {
         cv.put("id_author", c.getIdAuthor());
         cv.put("tx_comment", c.getTxtComment());
         cv.put("dt_comment", c.getDateComment());
-        db.update("tb_comment", cv, "tp_comment ='P' AND id_activity_student =" + c.getIdActivityStudent(), null);
+        mSqliteDataBase.update("tb_comment", cv, "tp_comment ='P' AND id_activity_student =" + c.getIdActivityStudent(), null);
         try {
-//            db.close();
-            Log.d(tag, "inseriu comentario no banco");
+//            mSqliteDataBase.close();
+            Log.d(TAG, "inseriu comentario no banco");
         } catch (Exception e) {
-            Log.e(tag, "erro ao inserir:" + e.getMessage());
+            Log.e(TAG, "erro ao inserir:" + e.getMessage());
         }
     }
 
 
     public Comentario getCommentById(int id) {
         String sql = "select * from tb_comment WHERE id_comment =" + id + ";";
-        Cursor c = db.rawQuery(sql, null);
+        Cursor c = mSqliteDataBase.rawQuery(sql, null);
         if (c != null && c.getCount() > 0) {
             c.moveToFirst();
             Comentario comm = new Comentario();
@@ -1023,9 +1005,9 @@ public class DataBase {
         cv.put("tx_reference", c.getTxtReference());
         cv.put("dt_comment", c.getDateComment());
         try {
-            db.update("tb_comment", cv, "id_comment=?", new String[]{"" + c.getIdComment()});
+            mSqliteDataBase.update("tb_comment", cv, "id_comment=?", new String[]{"" + c.getIdComment()});
         } catch (Exception e) {
-            Log.d(tag, e.getMessage());
+            Log.d(TAG, e.getMessage());
         }
     }
 
@@ -1058,8 +1040,8 @@ public class DataBase {
         //sql+=" ORDER BY dt_comment ASC;";
         stBuild.append(" ORDER BY dt_send ASC");
         sql = stBuild.toString();
-        //Log.e(tag, "sql listComments:" + sql);
-        Cursor c = db.rawQuery(sql, null);
+        //Log.e(TAG, "sql listComments:" + sql);
+        Cursor c = mSqliteDataBase.rawQuery(sql, null);
         Comentario cmm;
         if (c.moveToFirst()) {
             do {
@@ -1075,24 +1057,24 @@ public class DataBase {
                     cmm.setDateSend(c.getString(7));
                     comentarios.add(cmm);
                 } catch (Exception v) {
-                    Log.e(tag, "erro ao pegar dados do banco:" + v.getMessage());
+                    Log.e(TAG, "erro ao pegar dados do banco:" + v.getMessage());
                 }
                 //add comment
             } while (c.moveToNext());
             c.close();
-//            db.close();
+//            mSqliteDataBase.close();
         } else {
-            Log.d(tag, "não retornou nada");
+            Log.d(TAG, "não retornou nada");
         }
-        Log.d(tag, "listou comentarios no banco :" + comentarios.toString());
+        Log.d(TAG, "listou comentarios no banco :" + comentarios.toString());
         return comentarios;
     }
 
-    public String getNameByUserId(int idUser){
-        String userName=null;
-        String query="SELECT nm_user FROM tb_user WHERE id_user="+idUser;
-        Cursor c = db.rawQuery(query,null);
-        if (c.moveToFirst()){
+    public String getNameByUserId(int idUser) {
+        String userName = null;
+        String query = "SELECT nm_user FROM tb_user WHERE id_user=" + idUser;
+        Cursor c = mSqliteDataBase.rawQuery(query, null);
+        if (c.moveToFirst()) {
             userName = c.getString(0);
         }
         return userName;
@@ -1100,7 +1082,7 @@ public class DataBase {
 
     //Atualizado para nova versão banco 07/06/2016
     //LISTA COMENTARIOS GERAIS E PESSOAIS
-    public List<Comentario> listGComments(int idActStu,String typeComment) {
+    public List<Comentario> listGComments(int idActStu, String typeComment) {
         ArrayList<Comentario> comentarios = new ArrayList<Comentario>();
         //String sql = "select * from tb_comment WHERE id_activity_student =" + idActStu;
         String sql = "SELECT\n" +
@@ -1117,7 +1099,7 @@ public class DataBase {
                 "\tWHERE 1=1 AND c.id_activity_student = " + idActStu;
 
         StringBuilder stBuild = new StringBuilder(sql);
-        if (typeComment.equalsIgnoreCase("P")||typeComment.equalsIgnoreCase("G") ) {
+        if (typeComment.equalsIgnoreCase("P") || typeComment.equalsIgnoreCase("G")) {
             //sql+=" AND tp_comment='"+typeComment+"' ";
             stBuild.append(" AND tp_comment='" + typeComment + "' ");
         }
@@ -1127,8 +1109,8 @@ public class DataBase {
         //sql+=" ORDER BY dt_comment ASC;";
         stBuild.append(" ORDER BY dt_send ASC");
         sql = stBuild.toString();
-        Log.d(tag, "sql listComments:" + sql);
-        Cursor c = db.rawQuery(sql, null);
+        Log.d(TAG, "sql listComments:" + sql);
+        Cursor c = mSqliteDataBase.rawQuery(sql, null);
         Comentario cmm;
         if (c.moveToFirst()) {
             do {
@@ -1144,21 +1126,21 @@ public class DataBase {
                     cmm.setDateSend(c.getString(7));
                     comentarios.add(cmm);
                 } catch (Exception v) {
-                    Log.e(tag, "erro ao pegar dados do banco:" + v.getMessage());
+                    Log.e(TAG, "erro ao pegar dados do banco:" + v.getMessage());
                 }
                 //add comment
             } while (c.moveToNext());
             c.close();
-//            db.close();
+//            mSqliteDataBase.close();
         } else {
-            Log.d(tag, "não retornoun nada");
+            Log.d(TAG, "não retornoun nada");
         }
-        Log.d(tag, "listou comentarios no banco :" + comentarios.toString());
+        Log.d(TAG, "listou comentarios no banco :" + comentarios.toString());
         return comentarios;
     }
 
 
-    public List<Comentario> listObsComments(int idActStu,int idNote) {
+    public List<Comentario> listObsComments(int idActStu, int idNote) {
         ArrayList<Comentario> comentarios = new ArrayList<Comentario>();
         //String sql = "select * from tb_comment WHERE id_activity_student =" + idActStu;
         String sql = "SELECT\n" +
@@ -1176,7 +1158,7 @@ public class DataBase {
                 "\tWHERE 1=1 AND c.id_activity_student = " + idActStu;
 
         StringBuilder stBuild = new StringBuilder(sql);
-        if (idNote>0) {
+        if (idNote > 0) {
             //sql+=" AND nu_comment_activity="+idNote;
             stBuild.append(" AND cv.nu_comment_activity=" + idNote);
         }
@@ -1185,8 +1167,8 @@ public class DataBase {
         //sql+=" ORDER BY dt_comment ASC;";
         stBuild.append(" ORDER BY dt_send ASC");
         sql = stBuild.toString();
-        Log.d(tag, "sql listComments:" + sql);
-        Cursor c = db.rawQuery(sql, null);
+        Log.d(TAG, "sql listComments:" + sql);
+        Cursor c = mSqliteDataBase.rawQuery(sql, null);
         Comentario cmm;
         if (c.moveToFirst()) {
             do {
@@ -1202,21 +1184,18 @@ public class DataBase {
                     cmm.setDateSend(c.getString(7));
                     comentarios.add(cmm);
                 } catch (Exception v) {
-                    Log.e(tag, "erro ao pegar dados do banco:" + v.getMessage());
+                    Log.e(TAG, "erro ao pegar dados do banco:" + v.getMessage());
                 }
                 //add comment
             } while (c.moveToNext());
             c.close();
-//            db.close();
+//            mSqliteDataBase.close();
         } else {
-            Log.d(tag, "não retornoun nada");
+            Log.d(TAG, "não retornoun nada");
         }
-        Log.d(tag, "listou comentarios no banco :" + comentarios.toString());
+        Log.d(TAG, "listou comentarios no banco :" + comentarios.toString());
         return comentarios;
     }
-
-
-
 
 
     public List<Comentario> listCommentsTESTE() {
@@ -1243,8 +1222,8 @@ public class DataBase {
         //sql+=" ORDER BY dt_comment ASC;";
         stBuild.append(" ORDER BY dt_send ASC");
         sql = stBuild.toString();
-        Log.e(tag, "sql listComments:" + sql);
-        Cursor c = db.rawQuery(sql, null);
+        Log.e(TAG, "sql listComments:" + sql);
+        Cursor c = mSqliteDataBase.rawQuery(sql, null);
         Comentario cmm;
         if (c.moveToFirst()) {
             do {
@@ -1260,54 +1239,53 @@ public class DataBase {
                     cmm.setDateSend(c.getString(7));
                     comentarios.add(cmm);
                 } catch (Exception v) {
-                    Log.e(tag, "erro ao pegar dados do banco:" + v.getMessage());
+                    Log.e(TAG, "erro ao pegar dados do banco:" + v.getMessage());
                 }
                 //add comment
             } while (c.moveToNext());
             c.close();
-//            db.close();
+//            mSqliteDataBase.close();
         } else {
-            Log.d(tag, "não retornoun nada");
+            Log.d(TAG, "não retornoun nada");
         }
-        Log.d(tag, "listou comentarios no banco :" + comentarios.toString());
+        Log.d(TAG, "listou comentarios no banco :" + comentarios.toString());
         return comentarios;
     }
-
-
 
 
     public LinkedList<Integer> listSpecificComments(int idActStu) {
         LinkedList<Integer> comentarios = new LinkedList<>();
         String sql = "SELECT DISTINCT cv.nu_comment_activity from tb_comment_version cv " +
                 "   INNER JOIN tb_version_activity va ON cv.id_version_activity = va.id_version_activity_srv WHERE va.id_activity_student =" + idActStu;
-        //Log.e(tag, "sql listComments:" + sql);
-        Cursor c = db.rawQuery(sql, null);
+        //Log.e(TAG, "sql listComments:" + sql);
+        Cursor c = mSqliteDataBase.rawQuery(sql, null);
         Integer id;
         if (c.moveToFirst()) {
             do {
                 try {
                     id = c.getInt(0);
-                    //Log.e(tag, "listSpecificComments idnow:" + id);
+                    //Log.e(TAG, "listSpecificComments idnow:" + id);
                     comentarios.add(id);
                 } catch (Exception v) {
-                    Log.e(tag, "erro ao pegar dados do banco:" + v.getMessage());
+                    Log.e(TAG, "erro ao pegar dados do banco:" + v.getMessage());
                 }
                 //add comment
             } while (c.moveToNext());
             c.close();
-//            db.close();
+//            mSqliteDataBase.close();
         } else {
-            Log.d(tag + " listSpecific comments", "não retornou nada");
+            Log.d(TAG + " listSpecific comments", "não retornou nada");
         }
-        Log.d(tag, "listou notas no banco n:" + comentarios.size());
+        Log.d(TAG, "listou notas no banco n:" + comentarios.size());
         return comentarios;
     }
-    public LinkedList<Observation> listSpecificCommentsObjects(int idActStu,int idVersionActivity) {
+
+    public LinkedList<Observation> listSpecificCommentsObjects(int idActStu, int idVersionActivity) {
         LinkedList<Observation> comentarios = new LinkedList<>();
         String sql = "SELECT DISTINCT cv.id_comment_version,cv.nu_comment_activity,cv.tx_reference,cv.nu_initial_pos , cv.nu_size from tb_comment_version cv " +
-                "   INNER JOIN tb_version_activity va ON cv.id_version_activity = va.id_version_activity WHERE va.id_activity_student =" + idActStu ; //+ " AND cv.id_version_activity="+idVersionActivity;
-        Log.e(tag, "sql listComments:" + sql);
-        Cursor c = db.rawQuery(sql, null);
+                "   INNER JOIN tb_version_activity va ON cv.id_version_activity = va.id_version_activity WHERE va.id_activity_student =" + idActStu; //+ " AND cv.id_version_activity="+idVersionActivity;
+        Log.e(TAG, "sql listComments:" + sql);
+        Cursor c = mSqliteDataBase.rawQuery(sql, null);
         Integer id;
         if (c.moveToFirst()) {
             do {
@@ -1319,56 +1297,49 @@ public class DataBase {
                     ob.setNu_initial_position(c.getInt(3));
                     ob.setNu_size(4);
                     ob.setId_comment_version_srv(5);
-                    Log.d(tag, "obs:" + ob.toString());
+                    Log.d(TAG, "obs:" + ob.toString());
 
-                    //Log.e(tag, "listSpecificComments idnow:" + id);
+                    //Log.e(TAG, "listSpecificComments idnow:" + id);
                     comentarios.add(ob);
                 } catch (Exception v) {
-                    Log.e(tag, "erro ao pegar dados do banco:" + v.getMessage());
+                    Log.e(TAG, "erro ao pegar dados do banco:" + v.getMessage());
                 }
                 //add comment
             } while (c.moveToNext());
             c.close();
         } else {
-            Log.d(tag + " listSpecific comments", "não retornou nada");
+            Log.d(TAG + " listSpecific comments", "não retornou nada");
         }
-        Log.d(tag, "listou notas no banco n:" + comentarios.toString());
+        Log.d(TAG, "listou notas no banco n:" + comentarios.toString());
         return comentarios;
     }
-
-
 
 
     public List<Integer> listSpecificCommentsOLD(int idActStu) {
         ArrayList<Integer> comentarios = new ArrayList<Integer>();
         String sql = "SELECT DISTINCT nu_comment_activity from tb_comment WHERE id_activity_student =" + idActStu + " AND tp_comment='O'";
-        //Log.e(tag, "sql listComments:" + sql);
-        Cursor c = db.rawQuery(sql, null);
+        //Log.e(TAG, "sql listComments:" + sql);
+        Cursor c = mSqliteDataBase.rawQuery(sql, null);
         Integer id;
         if (c.moveToFirst()) {
             do {
                 try {
                     id = c.getInt(0);
-                    Log.e(tag, "listSpecificComments idnow:" + id);
+                    Log.e(TAG, "listSpecificComments idnow:" + id);
                     comentarios.add(id);
                 } catch (Exception v) {
-                    Log.e(tag, "erro ao pegar dados do banco:" + v.getMessage());
+                    Log.e(TAG, "erro ao pegar dados do banco:" + v.getMessage());
                 }
                 //add comment
             } while (c.moveToNext());
             c.close();
-//            db.close();
+//            mSqliteDataBase.close();
         } else {
-            Log.d(tag + " listSpecific comments", "não retornou nada");
+            Log.d(TAG + " listSpecific comments", "não retornou nada");
         }
-        Log.d(tag, "listou notas no banco n:" + comentarios.size());
+        Log.d(TAG, "listou notas no banco n:" + comentarios.size());
         return comentarios;
     }
-
-
-
-
-
 
 
     public List<Integer> listNotesSpecificCommentsOLD(int version) {
@@ -1377,8 +1348,8 @@ public class DataBase {
                 "LEFT JOIN tb_comment_version as tbcv on tbcv.id_comment = tbc.id_comment " +
                 "LEFT JOIN tb_version_activity as tbva on tbva.id_version_activity = tbcv.id_version_activity" +
                 " WHERE tbva.id_version_activity =" + version;
-        //Log.e(tag, "sql listComments:" + sql);
-        Cursor c = db.rawQuery(sql, null);
+        //Log.e(TAG, "sql listComments:" + sql);
+        Cursor c = mSqliteDataBase.rawQuery(sql, null);
         Integer id;
         if (c.moveToFirst()) {
             do {
@@ -1390,7 +1361,7 @@ public class DataBase {
             } while (c.moveToNext());
             c.close();
         } else {
-            Log.d(tag + " listSpecific comments", "não retornou nada");
+            Log.d(TAG + " listSpecific comments", "não retornou nada");
         }
         return v;
     }
@@ -1399,9 +1370,9 @@ public class DataBase {
         String sql = "SELECT DISTINCT nu_comment_activity,tx_reference from tb_comment_version as tbcv " +
                 "LEFT JOIN tb_version_activity as tbva on tbva.id_version_activity_srv = tbcv.id_version_activity" +
                 " WHERE tbva.id_version_activity =" + version;
-        //Log.e(tag, "sql listComments:" + sql);
-        Cursor c = db.rawQuery(sql, null);
-        LinkedList<Observation> obs= new LinkedList<Observation>();
+        //Log.e(TAG, "sql listComments:" + sql);
+        Cursor c = mSqliteDataBase.rawQuery(sql, null);
+        LinkedList<Observation> obs = new LinkedList<Observation>();
 
         if (c.moveToFirst()) {
             do {
@@ -1415,14 +1386,12 @@ public class DataBase {
                 }
             } while (c.moveToNext());
             c.close();
-            Log.d(tag, "list bolinhas:"+obs.toString());
+            Log.d(TAG, "list bolinhas:" + obs.toString());
         } else {
-            Log.d(tag + " listSpecific comments", "não retornou nada");
+            Log.d(TAG + " listSpecific comments", "não retornou nada");
         }
         return obs;
     }
-
-
 
 
     /*
@@ -1435,7 +1404,7 @@ public class DataBase {
         cv.put("tp_attachment", attach.getTpAttachment());
         cv.put("nm_file", attach.getNmFile());
         cv.put("nm_system", attach.getNmSystem());
-        if (attach.getidAttachmentSrv()==0) {
+        if (attach.getidAttachmentSrv() == 0) {
             cv.put("id_attachment_srv", (byte[]) null);
         } else {
             cv.put("id_attachment_srv", attach.getidAttachmentSrv());
@@ -1443,16 +1412,16 @@ public class DataBase {
         cv.put("id_author", attach.getId_author());
 
         try {
-            db.insert("tb_attachment", null, cv);
-            Log.d(tag, "conseguiu salvar id anexo no comentario do bd");
+            mSqliteDataBase.insert("tb_attachment", null, cv);
+            Log.d(TAG, "conseguiu salvar id anexo no comentario do bd");
         } catch (Exception e) {
-            Log.e(tag, "erro ao salvar na tabela tb_attach_comment:" + e.getMessage());
+            Log.e(TAG, "erro ao salvar na tabela tb_attach_comment:" + e.getMessage());
         }
-        Cursor cursor = db.rawQuery("select seq from sqlite_sequence where name='tb_attachment'", null);
+        Cursor cursor = mSqliteDataBase.rawQuery("select seq from sqlite_sequence where name='tb_attachment'", null);
         int lastID = 0;
         if (cursor.moveToFirst()) {
             lastID = cursor.getInt(0);
-            Log.d(tag, "last id_attachment in table:" + lastID);
+            Log.d(TAG, "last id_attachment in table:" + lastID);
         }
         return lastID;
     }
@@ -1461,30 +1430,30 @@ public class DataBase {
         ContentValues cv = new ContentValues();
         cv.put("tp_attachment", attach.getTpAttachment());
         cv.put("nm_file", attach.getNmFile());
-        cv.put("nm_system", Environment.getExternalStorageDirectory()+"/Android/data/com.ufcspa.unasus.appportfolio/files/images" + File.separator + attach.getNmSystem());
+        cv.put("nm_system", Environment.getExternalStorageDirectory() + "/Android/data/com.ufcspa.unasus.appportfolio/files/images" + File.separator + attach.getNmSystem());
         cv.put("id_attachment_srv", attach.getidAttachmentSrv());
         cv.put("id_author", attach.getId_author());
 
         try {
-            db.insert("tb_attachment", null, cv);
-            Log.d(tag, "conseguiu salvar id anexo no comentario do bd");
+            mSqliteDataBase.insert("tb_attachment", null, cv);
+            Log.d(TAG, "conseguiu salvar id anexo no comentario do bd");
         } catch (Exception e) {
-            Log.e(tag, "erro ao salvar na tabela tb_attach_comment:" + e.getMessage());
+            Log.e(TAG, "erro ao salvar na tabela tb_attach_comment:" + e.getMessage());
         }
-        Cursor cursor = db.rawQuery("select seq from sqlite_sequence where name='tb_attachment'", null);
+        Cursor cursor = mSqliteDataBase.rawQuery("select seq from sqlite_sequence where name='tb_attachment'", null);
         int lastID = 0;
         if (cursor.moveToFirst()) {
             lastID = cursor.getInt(0);
-            Log.d(tag, "last id_attachment in table:" + lastID);
+            Log.d(TAG, "last id_attachment in table:" + lastID);
         }
         return lastID;
     }
 
-    public void updateAttachmentFlDownload(int id_attachment){
+    public void updateAttachmentFlDownload(int id_attachment) {
         ContentValues cv = new ContentValues();
-        cv.put("fl_download","S");
+        cv.put("fl_download", "S");
         try {
-            db.update("tb_attachment",cv,"id_attachment=?", new String[]{String.valueOf(id_attachment)});
+            mSqliteDataBase.update("tb_attachment", cv, "id_attachment=?", new String[]{String.valueOf(id_attachment)});
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -1495,7 +1464,7 @@ public class DataBase {
         String sql = "SELECT * FROM tb_attachment WHERE id_attachment =" + id_attachment;
         Cursor c = null;
         try {
-            c = db.rawQuery(sql, null);
+            c = mSqliteDataBase.rawQuery(sql, null);
             if (c.moveToFirst()) {
                 attch.setIdAttachment(c.getInt(0));
                 attch.setTpAttachment(c.getString(1));
@@ -1504,10 +1473,10 @@ public class DataBase {
                 attch.setIdAttachmentSrv(c.getInt(4));
                 attch.setId_author(c.getInt(5));
             } else {
-                Log.e(tag, "não encontrou a id relacionada a este anexo no banco");
+                Log.e(TAG, "não encontrou a id relacionada a este anexo no banco");
             }
         } catch (Exception e) {
-            Log.wtf(tag, "erro ao tentar buscar anexo no banco:" + e.getMessage());
+            Log.wtf(TAG, "erro ao tentar buscar anexo no banco:" + e.getMessage());
         }
         return attch;
     }
@@ -1520,14 +1489,14 @@ public class DataBase {
         String sql = "SELECT id_attachment FROM tb_attachment WHERE nm_system = '" + path + "'";
         Cursor c = null;
         try {
-            c = db.rawQuery(sql, null);
+            c = mSqliteDataBase.rawQuery(sql, null);
             if (c.moveToFirst()) {
                 return c.getInt(0);
             } else {
-                Log.e(tag, "não encontrou a id relacionada a este anexo no banco");
+                Log.e(TAG, "não encontrou a id relacionada a este anexo no banco");
             }
         } catch (Exception e) {
-            Log.wtf(tag, "erro ao tentar buscar anexo no banco:" + e.getMessage());
+            Log.wtf(TAG, "erro ao tentar buscar anexo no banco:" + e.getMessage());
         }
         return -1;
     }
@@ -1538,19 +1507,19 @@ public class DataBase {
         cv.put("id_attachment", idAttach);
         cv.put("id_comment", idComment);
         try {
-            db.insert("tb_attach_comment", null, cv);
-            Log.d(tag, "conseguiu salvar id anexo no comentario do bd");
+            mSqliteDataBase.insert("tb_attach_comment", null, cv);
+            Log.d(TAG, "conseguiu salvar id anexo no comentario do bd");
         } catch (Exception e) {
-            Log.e(tag, "erro ao salvar na tabela tb_attach_comment:" + e.getMessage());
+            Log.e(TAG, "erro ao salvar na tabela tb_attach_comment:" + e.getMessage());
         }
     }
 
-    public int getLastIdAttachComment(){
-        Cursor cursor = db.rawQuery("select seq from sqlite_sequence where name='tb_attach_comment'", null);
+    public int getLastIdAttachComment() {
+        Cursor cursor = mSqliteDataBase.rawQuery("select seq from sqlite_sequence where name='tb_attach_comment'", null);
         int lastID = 0;
         if (cursor.moveToFirst()) {
             lastID = cursor.getInt(0);
-            Log.d(tag, "last id_attach_comment id table:" + lastID);
+            Log.d(TAG, "last id_attach_comment id table:" + lastID);
         }
         return lastID;
     }
@@ -1561,17 +1530,17 @@ public class DataBase {
                 "id_attachment," +
                 "id_comment" +
                 " from tb_attach_comment where id_attach_comment in ( ");
-        for (int id :ids){
-            if(id==ids.getLast()){
-                sb.append(""+id+" );");
+        for (int id : ids) {
+            if (id == ids.getLast()) {
+                sb.append("" + id + " );");
                 break;
-            }else{
-                sb.append(""+id+" , ");
+            } else {
+                sb.append("" + id + " , ");
             }
         }
-        Log.d(tag+" get attach comments by ids"," query:"+sb.toString());
+        Log.d(TAG + " get attach comments by ids", " query:" + sb.toString());
         String query = sb.toString();
-        Cursor c = db.rawQuery(query, null);
+        Cursor c = mSqliteDataBase.rawQuery(query, null);
         LinkedList lista = new LinkedList<Comentario>();
         if (c.moveToFirst()) {
             do {
@@ -1583,7 +1552,7 @@ public class DataBase {
                 lista.add(attachmentComment);
             } while (c.moveToNext());
         } else {
-            Log.d(tag, "Nao retornou nada na consulta");
+            Log.d(TAG, "Nao retornou nada na consulta");
         }
         return lista;
     }
@@ -1601,10 +1570,10 @@ public class DataBase {
         cv.put("tx_activity", activityStudent.getTxtActivity());
         cv.put("dt_last_access", dateLastAccess);
         try {
-            db.update("tb_version_activity", cv, "id_version_activity=?", new String[]{String.valueOf(idCurrentVersionActivity)});
-            Log.d(tag, "conseguiu salvar alteração da atividade");
+            mSqliteDataBase.update("tb_version_activity", cv, "id_version_activity=?", new String[]{String.valueOf(idCurrentVersionActivity)});
+            Log.d(TAG, "conseguiu salvar alteração da atividade");
         } catch (Exception e) {
-            Log.e(tag, "erro ao atualizar acStudent:" + e.getMessage());
+            Log.e(TAG, "erro ao atualizar acStudent:" + e.getMessage());
         }
     }
 
@@ -1612,13 +1581,13 @@ public class DataBase {
         String query = "SELECT MAX(id_version_activity) FROM tb_version_activity WHERE id_activity_student=" + idActivityStudent + " AND NOT dt_submission='0000-00-00 00:00:00'";
         Cursor c = null;
         try {
-            c = db.rawQuery(query, null);
+            c = mSqliteDataBase.rawQuery(query, null);
             if (c.moveToFirst())
                 return c.getInt(0);
             else
                 return 0;
         } catch (Exception e) {
-            Log.e(tag, "erro ao buscar last id version:" + e.getMessage());
+            Log.e(TAG, "erro ao buscar last id version:" + e.getMessage());
         }
         return 0;
     }
@@ -1626,7 +1595,7 @@ public class DataBase {
     public int getIDVersionAtual(int idActivityStudent) {
         String query = "SELECT id_version_activity FROM tb_version_activity WHERE id_activity_student=" + idActivityStudent + " AND dt_submission='0000-00-00 00:00:00'";
         Cursor c = null;
-        c = db.rawQuery(query, null);
+        c = mSqliteDataBase.rawQuery(query, null);
         if (c.moveToFirst())
             return c.getInt(0);
         else
@@ -1637,13 +1606,13 @@ public class DataBase {
         String query = "SELECT MAX(id_version_activity_srv) FROM tb_version_activity WHERE id_activity_student=" + idActivityStudent;
         Cursor c = null;
         try {
-            c = db.rawQuery(query, null);
+            c = mSqliteDataBase.rawQuery(query, null);
             if (c.moveToFirst())
                 return c.getInt(0);
             else
                 return 0;
         } catch (Exception e) {
-            Log.e(tag, "erro ao buscar last id version:" + e.getMessage());
+            Log.e(TAG, "erro ao buscar last id version:" + e.getMessage());
         }
         return 0;
     }
@@ -1652,62 +1621,62 @@ public class DataBase {
         ActivityStudent acStudent = new ActivityStudent();
         String query = "select tx_activity from tb_version_activity WHERE id_version_activity=(SELECT MAX(id_version_activity) FROM tb_version_activity WHERE id_activity_student=" + idActivityStudent + ") ORDER BY dt_submission;";
         Cursor c = null;
-        Log.d(tag, "query lista act Stu:" + query);
+        Log.d(TAG, "query lista act Stu:" + query);
         try {
-            c = db.rawQuery(query, null);
+            c = mSqliteDataBase.rawQuery(query, null);
             if (c.moveToFirst()) {
                 acStudent.setIdActivityStudent(idActivityStudent);
                 acStudent.setTxtActivity(c.getString(0));
-                Log.d(tag, "há texto da atividade no banco:" + acStudent.getTxtActivity());
+                Log.d(TAG, "há texto da atividade no banco:" + acStudent.getTxtActivity());
             } else {
-                Log.d(tag, "não há texto da atividade no banco");
+                Log.d(TAG, "não há texto da atividade no banco");
                 acStudent.setIdActivityStudent(idActivityStudent);
                 acStudent.setTxtActivity("");
             }
             c.close();
         } catch (Exception e) {
-            Log.e(tag, "erro ao listar atividade do estudante:" + e.getMessage());
+            Log.e(TAG, "erro ao listar atividade do estudante:" + e.getMessage());
         }
 
 
-//        db.close();
+//        mSqliteDataBase.close();
         return acStudent;
     }
 
     public String getTextFromCurrentVersion(int idVersionActivity) {
         Cursor c;
         try {
-            c = db.rawQuery("SELECT tx_activity FROM tb_version_activity WHERE id_version_activity = ?", new String[]{String.valueOf(idVersionActivity)});
+            c = mSqliteDataBase.rawQuery("SELECT tx_activity FROM tb_version_activity WHERE id_version_activity = ?", new String[]{String.valueOf(idVersionActivity)});
             if (c.moveToFirst()) {
                 return c.getString(0);
             }
             c.close();
         } catch (Exception e) {
-            Log.e(tag, "erro ao listar atividade do estudante:" + e.getMessage());
+            Log.e(TAG, "erro ao listar atividade do estudante:" + e.getMessage());
         }
 
         return null;
     }
 
-    public int insertVersionActivity(VersionActivity v){
+    public int insertVersionActivity(VersionActivity v) {
         ContentValues cv = new ContentValues();
         cv.put("tx_activity", v.getTx_activity());
         cv.put("dt_last_access", v.getDt_last_access());
         cv.put("dt_submission", v.getDt_submission());
         cv.put("id_activity_student", v.getId_activity_student());
         cv.put("id_version_activity_srv", v.getId_version_activit_srv());
-        int result=-1;
+        int result = -1;
         try {
-            db.insert("tb_version_activity",null,cv);
-            Log.d(tag, "conseguiu salvar versão da atividade");
-            Cursor cursor = db.rawQuery("select seq from sqlite_sequence where name='tb_version_activity'", null);
+            mSqliteDataBase.insert("tb_version_activity", null, cv);
+            Log.d(TAG, "conseguiu salvar versão da atividade");
+            Cursor cursor = mSqliteDataBase.rawQuery("select seq from sqlite_sequence where name='tb_version_activity'", null);
             if (cursor.moveToFirst()) {
                 result = cursor.getInt(0);
-                Log.d(tag, "last id_version_activity in table:" + result);
+                Log.d(TAG, "last id_version_activity in table:" + result);
             }
 
         } catch (Exception e) {
-            Log.e(tag, "erro ao salvar versao:" + e.getMessage());
+            Log.e(TAG, "erro ao salvar versao:" + e.getMessage());
         }
 
         return result;
@@ -1725,10 +1694,10 @@ public class DataBase {
                 "id_version_activity_srv " +
                 "FROM tb_version_activity " +
                 "WHERE id_activity_student = " + id_activity_student;
-        if (!Singleton.getInstance().portfolioClass.getPerfil().equals("T")){
-            if (getActivityStudentById(Singleton.getInstance().idActivityStudent).getDt_conclusion().equals("null") || getActivityStudentById(Singleton.getInstance().idActivityStudent).getDt_conclusion()==null) {
+        if (!Singleton.getInstance().portfolioClass.getPerfil().equals("T")) {
+            if (getActivityStudentById(Singleton.getInstance().idActivityStudent).getDt_conclusion().equals("null") || getActivityStudentById(Singleton.getInstance().idActivityStudent).getDt_conclusion() == null) {
                 String temp = query + " AND dt_submission='0000-00-00 00:00:00'";
-                Cursor cursor = db.rawQuery(temp, null);
+                Cursor cursor = mSqliteDataBase.rawQuery(temp, null);
                 if (cursor.moveToFirst()) {
                     versionActivities.add(cursorToVersionActivity(cursor));
                 }
@@ -1740,7 +1709,7 @@ public class DataBase {
         } else {
             query = query + " AND NOT dt_submission='0000-00-00 00:00:00' ORDER BY dt_submission DESC";
         }
-        c = db.rawQuery(query, null);
+        c = mSqliteDataBase.rawQuery(query, null);
         if (c.moveToFirst()) {
             do {
                 versionActivities.add(cursorToVersionActivity(c));
@@ -1759,7 +1728,7 @@ public class DataBase {
                 "id_version_activity_srv " +
                 "FROM tb_version_activity " +
                 "WHERE id_version_activity = " + id;
-        Cursor c = db.rawQuery(query, null);
+        Cursor c = mSqliteDataBase.rawQuery(query, null);
         if (c.moveToFirst()) {
             return cursorToVersionActivity(c);
         }
@@ -1781,8 +1750,7 @@ public class DataBase {
     }
 
 
-
-    public User getTutorPerfil(int idActStudent){
+    public User getTutorPerfil(int idActStudent) {
 
         User u = new User();
         String query = "SELECT \n" +
@@ -1794,13 +1762,13 @@ public class DataBase {
                 "\tFROM tb_activity_student as acs\n" +
                 "\tINNER JOIN tb_tutor_portfolio as ps ON  ps.id_portfolio_student = acs.id_portfolio_student\n" +
                 "\tINNER JOIN tb_user as u ON u.id_user = ps.id_tutor\n" +
-                "\tWHERE acs.id_activity_student = "+idActStudent;
-        Cursor cursor = db.rawQuery(query, null);
+                "\tWHERE acs.id_activity_student = " + idActStudent;
+        Cursor cursor = mSqliteDataBase.rawQuery(query, null);
         if (cursor.moveToFirst()) {
             u.setIdUser(cursor.getInt(0));
             u.setName(cursor.getString(1));
             u.setCellphone(cursor.getString(2));
-            u.setPhoto(cursor.getString(3),null);
+            u.setPhoto(cursor.getString(3), null);
         }
         cursor.close();
         return u;
@@ -1808,16 +1776,17 @@ public class DataBase {
 
     private int getIdVersionFromIdVersionSrv(int idSrv) {
         String query = "SELECT id_version_activity FROM tb_version_activity WHERE id_version_activity_srv = " + idSrv;
-        Cursor cursor = db.rawQuery(query, null);
+        Cursor cursor = mSqliteDataBase.rawQuery(query, null);
         if (cursor.moveToFirst()) {
             return cursor.getInt(0);
         }
         cursor.close();
         return -1;
     }
+
     public int getIdVersionSrvFromIdVersion(int id) {
         String query = "SELECT id_version_activity_srv FROM tb_version_activity WHERE id_version_activity = " + id;
-        Cursor cursor = db.rawQuery(query, null);
+        Cursor cursor = mSqliteDataBase.rawQuery(query, null);
         if (cursor.moveToFirst()) {
             return cursor.getInt(0);
         }
@@ -1827,7 +1796,7 @@ public class DataBase {
 
     private int getIdCommentFromIdCommentSrv(int idSrv) {
         String query = "SELECT id_comment FROM tb_comment WHERE id_comment_srv = " + idSrv;
-        Cursor cursor = db.rawQuery(query, null);
+        Cursor cursor = mSqliteDataBase.rawQuery(query, null);
         if (cursor.moveToFirst()) {
             return cursor.getInt(0);
         }
@@ -1837,15 +1806,13 @@ public class DataBase {
 
     public int getIdCommentVersionSrv(int idCV) {
         String query = "SELECT id_comment_version_srv FROM tb_comment_version WHERE id_comment_version = " + idCV;
-        Cursor cursor = db.rawQuery(query, null);
+        Cursor cursor = mSqliteDataBase.rawQuery(query, null);
         if (cursor.moveToFirst()) {
             return cursor.getInt(0);
         }
         cursor.close();
         return -1;
     }
-
-
 
 
     // TÁ ERRADO
@@ -1859,13 +1826,13 @@ public class DataBase {
         int result = -1;
 
         try {
-            db.insert("tb_comment_version", null, cv);
-            Log.d(tag, "conseguiu salvar na tb_comment_version");
-            Cursor cursor = db.rawQuery("select seq from sqlite_sequence where name='tb_comment_version'", null);
+            mSqliteDataBase.insert("tb_comment_version", null, cv);
+            Log.d(TAG, "conseguiu salvar na tb_comment_version");
+            Cursor cursor = mSqliteDataBase.rawQuery("select seq from sqlite_sequence where name='tb_comment_version'", null);
             if (cursor.moveToFirst())
                 result = cursor.getInt(0);
         } catch (Exception e) {
-            Log.e(tag, "erro ao salvar na tb_comment_version:" + e.getMessage());
+            Log.e(TAG, "erro ao salvar na tb_comment_version:" + e.getMessage());
         }
 
         return result;
@@ -1880,13 +1847,13 @@ public class DataBase {
         int result = -1;
 
         try {
-            db.insert("tb_comment_version", null, cv);
-            Log.d(tag, "conseguiu salvar na tb_comment_version");
-            Cursor cursor = db.rawQuery("select seq from sqlite_sequence where name='tb_comment_version'", null);
+            mSqliteDataBase.insert("tb_comment_version", null, cv);
+            Log.d(TAG, "conseguiu salvar na tb_comment_version");
+            Cursor cursor = mSqliteDataBase.rawQuery("select seq from sqlite_sequence where name='tb_comment_version'", null);
             if (cursor.moveToFirst())
                 result = cursor.getInt(0);
         } catch (Exception e) {
-            Log.e(tag, "erro ao salvar na tb_comment_version:" + e.getMessage());
+            Log.e(TAG, "erro ao salvar na tb_comment_version:" + e.getMessage());
         }
 
         return result;
@@ -1897,7 +1864,7 @@ public class DataBase {
 
         for (Integer id : idList) {
             String query = "SELECT id_version_activity, id_comment FROM tb_comment_version WHERE id_comment_version = " + id;
-            Cursor c = db.rawQuery(query, null);
+            Cursor c = mSqliteDataBase.rawQuery(query, null);
             if (c.moveToFirst()) {
                 int id_version_activity = c.getInt(0);
                 int id_comment = c.getInt(1);
@@ -1917,26 +1884,25 @@ public class DataBase {
     }
 
     public boolean cvIsSyncronized(int id_comment_version) {
-        String query = "SELECT * FROM tb_comment_version WHERE id_comment_version_srv = " + id_comment_version +" AND fl_srv='S'";
-        Cursor c = db.rawQuery(query, null);
+        String query = "SELECT * FROM tb_comment_version WHERE id_comment_version_srv = " + id_comment_version + " AND fl_srv='S'";
+        Cursor c = mSqliteDataBase.rawQuery(query, null);
         if (c.moveToFirst()) {
             return true;
-        }else{
+        } else {
             return false;
         }
     }
 
 
-    public boolean isSync(String table,int id){
-        String query = "SELECT * FROM tb_sync WHERE nm_table = '" + table +"' AND co_id_table="+id;
-        Cursor c = db.rawQuery(query, null);
-        if(c.moveToFirst()){
+    public boolean isSync(String table, int id) {
+        String query = "SELECT * FROM tb_sync WHERE nm_table = '" + table + "' AND co_id_table=" + id;
+        Cursor c = mSqliteDataBase.rawQuery(query, null);
+        if (c.moveToFirst()) {
             return false;
-        }else{
+        } else {
             return true;
         }
     }
-
 
 
     public LinkedHashMap<Integer, LinkedList<Observation>> getObservationByVersions(LinkedList<Integer> ids) {
@@ -1952,11 +1918,11 @@ public class DataBase {
             }
 
             query.append(");");
-            Cursor c = db.rawQuery(query.toString(), null);
+            Cursor c = mSqliteDataBase.rawQuery(query.toString(), null);
             if (c.moveToFirst()) {
                 do {
                     try {
-                        Observation o= new Observation();
+                        Observation o = new Observation();
                         o.setId_comment_version(c.getInt(0));
                         o.setId_version_activity(c.getInt(1));
                         o.setTx_reference(c.getString(2));
@@ -1975,25 +1941,21 @@ public class DataBase {
 
 //                        aux.put(o.getId_version_activity(),);
                     } catch (Exception v) {
-                        Log.e(tag, "erro ao pegar dados do banco:" + v.getMessage());
+                        Log.e(TAG, "erro ao pegar dados do banco:" + v.getMessage());
                     }
                     //add comment
                 } while (c.moveToNext());
                 c.close();
-//            db.close();
+//            mSqliteDataBase.close();
             } else {
-                Log.d(tag + " get", "não retornou nenhuma observação");
+                Log.d(TAG + " get", "não retornou nenhuma observação");
             }
-            //Log.d(tag, "listou notas no banco n:" + comentarios.size());
+            //Log.d(TAG, "listou notas no banco n:" + comentarios.size());
             //return obs;
         }
         return aux;
 
     }
-
-
-
-
 
 
     // TÁ ERRADO
@@ -2012,7 +1974,7 @@ public class DataBase {
                 "\t\t JOIN  tb_comment c on cv.id_comment = c.id_comment\n" +
                 "	WHERE 1=1 AND c.id_comment_srv IS NULL AND cv.id_version_activity =" + idVersion;
         LinkedList<Comentario> comentarios = new LinkedList<Comentario>();
-        Cursor c = db.rawQuery(query, null);
+        Cursor c = mSqliteDataBase.rawQuery(query, null);
         Comentario cmm;
         if (c.moveToFirst()) {
             do {
@@ -2028,7 +1990,7 @@ public class DataBase {
                     cmm.setIdNote(c.getInt(7));
                     comentarios.add(cmm);
                 } catch (Exception v) {
-                    Log.e(tag, "erro ao pegar dados do banco:" + v.getMessage());
+                    Log.e(TAG, "erro ao pegar dados do banco:" + v.getMessage());
                 }
             } while (c.moveToNext());
         }
@@ -2060,20 +2022,20 @@ public class DataBase {
         queryNova += " AND " + "b.id_class=" + idClass + ";";
 
         ArrayList<PortfolioClass> portfolios = new ArrayList<PortfolioClass>();
-        Cursor c = db.rawQuery(queryNova, null);
+        Cursor c = mSqliteDataBase.rawQuery(queryNova, null);
         if (c.moveToFirst()) {
             do {
                 portfolios.add(cursorToPortfolio(c));
             } while (c.moveToNext());
         }
 
-//        db.close();
+//        mSqliteDataBase.close();
         return portfolios;
     }
 
     private PortfolioClass cursorToPortfolio(Cursor c) {
         PortfolioClass pc = new PortfolioClass(Integer.parseInt(c.getString(0)), c.getString(1), c.getString(2), c.getString(3));
-        Log.d(tag, "portfolio populado:" + pc.toString());
+        Log.d(TAG, "portfolio populado:" + pc.toString());
         return pc;
     }
 
@@ -2081,14 +2043,14 @@ public class DataBase {
     *************************MÉTODO DESCOBRIR PERFIL DO USUÀRIO***********************************
     */
 
-    public boolean insertIntoTbGuest(int idUser, int idClass,int idGuest,String flComments){
+    public boolean insertIntoTbGuest(int idUser, int idClass, int idGuest, String flComments) {
         ContentValues contentValues = new ContentValues();
-        contentValues.put("id_user",idUser);
-        contentValues.put("id_class",idClass);
-        contentValues.put("id_guest",idGuest);
-        contentValues.put("fl_comments",flComments);
+        contentValues.put("id_user", idUser);
+        contentValues.put("id_class", idClass);
+        contentValues.put("id_guest", idGuest);
+        contentValues.put("fl_comments", flComments);
         try {
-            db.insert("tb_guest",null,contentValues);
+            mSqliteDataBase.insert("tb_guest", null, contentValues);
         } catch (Exception e) {
             e.printStackTrace();
             return false;
@@ -2096,12 +2058,13 @@ public class DataBase {
             return true;
         }
     }
-    public boolean getFlGuest(int idPortfolioClass){
-        String query = "SELECT fl_comments FROM tb_guest p JOIN tb_portfolio_class pc ON p.id_class=pc.id_class WHERE pc.id_portfolio_class="+idPortfolioClass;
-        Cursor cursor = db.rawQuery(query,null);
+
+    public boolean getFlGuest(int idPortfolioClass) {
+        String query = "SELECT fl_comments FROM tb_guest p JOIN tb_portfolio_class pc ON p.id_class=pc.id_class WHERE pc.id_portfolio_class=" + idPortfolioClass;
+        Cursor cursor = mSqliteDataBase.rawQuery(query, null);
 
         if (cursor.moveToFirst()) {
-            if (cursor.getString(0).equals("N")){
+            if (cursor.getString(0).equals("N")) {
                 return false;
             } else {
                 return true;
@@ -2124,13 +2087,13 @@ public class DataBase {
                 "where nr > 0";
         char userType = 'S';
 
-        Cursor cursor = db.rawQuery(query, null);
+        Cursor cursor = mSqliteDataBase.rawQuery(query, null);
 
         if (cursor.moveToFirst()) {
             userType = cursor.getString(0).charAt(0);
         }
 
-//        db.close();
+//        mSqliteDataBase.close();
         return userType;
     }
 
@@ -2164,7 +2127,7 @@ public class DataBase {
 
         List<Team> array_team = new ArrayList<>();
 
-        Cursor cursor = db.rawQuery(query, null);
+        Cursor cursor = mSqliteDataBase.rawQuery(query, null);
 
         if (cursor.moveToFirst()) {
             do {
@@ -2172,13 +2135,13 @@ public class DataBase {
             } while (cursor.moveToNext());
         }
 
-//        db.close();
+//        mSqliteDataBase.close();
         return array_team;
     }
 
-    public String getPortfolioDescription (int portfolioClassId){
-        String query = "SELECT ds_description FROM tb_portfolio p JOIN tb_portfolio_class pc ON p.id_portfolio=pc.id_portfolio WHERE pc.id_portfolio_class="+portfolioClassId;
-        Cursor c = db.rawQuery(query,null);
+    public String getPortfolioDescription(int portfolioClassId) {
+        String query = "SELECT ds_description FROM tb_portfolio p JOIN tb_portfolio_class pc ON p.id_portfolio=pc.id_portfolio WHERE pc.id_portfolio_class=" + portfolioClassId;
+        Cursor c = mSqliteDataBase.rawQuery(query, null);
         c.moveToFirst();
         return c.getString(0);
     }
@@ -2199,10 +2162,10 @@ public class DataBase {
 
             team = new Team(cursor.getInt(0), cursor.getInt(1), cursor.getString(2), cursor.getString(3), cursor.getString(4).charAt(0), dateFormat.parse(dateBegin), dateFormat.parse(dateEnd));
         } catch (ParseException e) {
-            Log.d(tag, "Data em formato errado! (cursorToTeam())");
+            Log.d(TAG, "Data em formato errado! (cursorToTeam())");
         }
 
-//        db.close();
+//        mSqliteDataBase.close();
         return team;
     }
 
@@ -2236,23 +2199,23 @@ public class DataBase {
 
         ArrayList<Activity> array_activity = new ArrayList<>();
 
-        Cursor cursor = db.rawQuery(query, null);
+        Cursor cursor = mSqliteDataBase.rawQuery(query, null);
         cursor.moveToFirst();
 
         do {
             array_activity.add(cursorToActivity(cursor));
         } while (cursor.moveToNext());
 
-//        db.close();
+//        mSqliteDataBase.close();
         return array_activity;
     }
 
-    public LinkedList<com.ufcspa.unasus.appportfolio.model.basicData.ActivityStudent> getActivitiesStudentByIds(LinkedList<Integer> ids){
+    public LinkedList<com.ufcspa.unasus.appportfolio.model.basicData.ActivityStudent> getActivitiesStudentByIds(LinkedList<Integer> ids) {
         LinkedList<com.ufcspa.unasus.appportfolio.model.basicData.ActivityStudent> activityStudents = new LinkedList<>();
         com.ufcspa.unasus.appportfolio.model.basicData.ActivityStudent activityStudent = new com.ufcspa.unasus.appportfolio.model.basicData.ActivityStudent();
         for (Integer id : ids) {
-            String query = "SELECT * FROM tb_activity_student WHERE id_activity_student="+id;
-            Cursor cursor = db.rawQuery(query,null);
+            String query = "SELECT * FROM tb_activity_student WHERE id_activity_student=" + id;
+            Cursor cursor = mSqliteDataBase.rawQuery(query, null);
 
             if (cursor.moveToFirst()) {
                 activityStudent.setIdActivityStudent(cursor.getInt(0));
@@ -2268,10 +2231,10 @@ public class DataBase {
         return activityStudents;
     }
 
-    public com.ufcspa.unasus.appportfolio.model.basicData.ActivityStudent getActivityStudentById(Integer id){
+    public com.ufcspa.unasus.appportfolio.model.basicData.ActivityStudent getActivityStudentById(Integer id) {
         com.ufcspa.unasus.appportfolio.model.basicData.ActivityStudent activity = new com.ufcspa.unasus.appportfolio.model.basicData.ActivityStudent();
-        String query = "SELECT * FROM tb_activity_student WHERE id_activity_student="+id;
-        Cursor cursor = db.rawQuery(query,null);
+        String query = "SELECT * FROM tb_activity_student WHERE id_activity_student=" + id;
+        Cursor cursor = mSqliteDataBase.rawQuery(query, null);
 
         if (cursor.moveToFirst()) {
             activity.setIdActivityStudent(cursor.getInt(0));
@@ -2285,12 +2248,12 @@ public class DataBase {
     }
 
 
-    public String getActivityTitleByIdActivityStudent (int idActivityStudent) {
-        String query = "SELECT ds_title FROM tb_activity JOIN tb_activity_student ON tb_activity.id_activity=tb_activity_student.id_activity WHERE id_activity_student="+idActivityStudent;
-        Cursor cursor = db.rawQuery(query,null);
+    public String getActivityTitleByIdActivityStudent(int idActivityStudent) {
+        String query = "SELECT ds_title FROM tb_activity JOIN tb_activity_student ON tb_activity.id_activity=tb_activity_student.id_activity WHERE id_activity_student=" + idActivityStudent;
+        Cursor cursor = mSqliteDataBase.rawQuery(query, null);
         String ds_title = null;
 
-        if (cursor.moveToFirst()){
+        if (cursor.moveToFirst()) {
             ds_title = cursor.getString(0);
         }
 
@@ -2324,7 +2287,7 @@ public class DataBase {
         if (perfil.equalsIgnoreCase("S"))
             query += " AND u.id_user = " + idUsuario;
         ArrayList<StudFrPortClass> students = new ArrayList<>();
-        Cursor c = db.rawQuery(query, null);
+        Cursor c = mSqliteDataBase.rawQuery(query, null);
         if (c.moveToFirst()) {
             HashMap<Integer, StudFrPortClass> hash = new LinkedHashMap<Integer, StudFrPortClass>();
             int lastid;
@@ -2357,10 +2320,11 @@ public class DataBase {
             } while (c.moveToNext());
 
         } else {
-            Log.d(tag, "Nao retornou nada na consulta");
+            Log.d(TAG, "Nao retornou nada na consulta");
         }
         return students;
     }
+
     public ArrayList<StudFrPortClass> selectListActivitiesAndStudentsByStudent(int idPortfolioClass, String perfil, int idUsuario) {
         String query = "select \n" +
                 "tas.id_activity_student,\n" +
@@ -2384,7 +2348,7 @@ public class DataBase {
         query += " AND u.id_user = " + idUsuario;
         query += " ORDER BY a.nu_order";
         ArrayList<StudFrPortClass> students = new ArrayList<>();
-        Cursor c = db.rawQuery(query, null);
+        Cursor c = mSqliteDataBase.rawQuery(query, null);
         if (c.moveToFirst()) {
             HashMap<Integer, StudFrPortClass> hash = new LinkedHashMap<Integer, StudFrPortClass>();
             int lastid;
@@ -2417,10 +2381,11 @@ public class DataBase {
             } while (c.moveToNext());
 
         } else {
-            Log.d(tag, "Nao retornou nada na consulta");
+            Log.d(TAG, "Nao retornou nada na consulta");
         }
         return students;
     }
+
     public ArrayList<StudFrPortClass> selectFinalizedActivitiesAndStudentsByStudent(int idPortfolioClass, String perfil, int idUsuario) {
         String query = "select \n" +
                 "tas.id_activity_student,\n" +
@@ -2444,7 +2409,7 @@ public class DataBase {
 //        if (perfil.equalsIgnoreCase("S"))
         query += " AND u.id_user = " + idUsuario;
         ArrayList<StudFrPortClass> students = new ArrayList<>();
-        Cursor c = db.rawQuery(query, null);
+        Cursor c = mSqliteDataBase.rawQuery(query, null);
         if (c.moveToFirst()) {
             HashMap<Integer, StudFrPortClass> hash = new LinkedHashMap<Integer, StudFrPortClass>();
             int lastid;
@@ -2479,7 +2444,7 @@ public class DataBase {
             } while (c.moveToNext());
 
         } else {
-            Log.d(tag, "Nao retornou nada na consulta");
+            Log.d(TAG, "Nao retornou nada na consulta");
         }
         return students;
     }
@@ -2494,16 +2459,16 @@ public class DataBase {
     public List<PortfolioClass> selectListClassAndUserType(int idUser) {
         //retorna uma lista com as turmas que o usuário esta cadastro e seu papel nela(tutor ou aluno);
         // perfil S- Student T-tutor
-        String query =  ""
+        String query = ""
                 + "SELECT DISTINCT ps.id_portfolio_class, "
                 + "                                 c.ds_code, "
                 + "                                 c.ds_description, "
                 + "                                 p.ds_title, "
                 + "                                 p.ds_description, "
                 + "                                 CASE "
-                + "                                     WHEN ps.id_student = "+idUser+" THEN 'S' "
-                + "                                     WHEN tp.id_tutor = "+idUser+" THEN 'T' "
-                + "                                     WHEN g.id_user = "+idUser+" THEN 'C' "
+                + "                                     WHEN ps.id_student = " + idUser + " THEN 'S' "
+                + "                                     WHEN tp.id_tutor = " + idUser + " THEN 'T' "
+                + "                                     WHEN g.id_user = " + idUser + " THEN 'C' "
                 + "                                     END AS perfil "
                 + "                                 FROM   tb_portfolio_student AS ps "
                 + "                                 JOIN tb_portfolio_class pc "
@@ -2516,8 +2481,8 @@ public class DataBase {
                 + "                                 ON tp.id_portfolio_student = ps.id_portfolio_student "
                 + "                                 LEFT JOIN tb_guest g "
                 + "                                 ON g.id_class = c.id_class "
-                + "                                 WHERE  ( tp.id_tutor = "+idUser+" OR ps.id_student = "+idUser+" OR g.id_user = "+idUser+")";
-        Cursor c = db.rawQuery(query, null);
+                + "                                 WHERE  ( tp.id_tutor = " + idUser + " OR ps.id_student = " + idUser + " OR g.id_user = " + idUser + ")";
+        Cursor c = mSqliteDataBase.rawQuery(query, null);
         ArrayList lista = new ArrayList<PortfolioClass>();
         if (c.moveToFirst()) {
             do {
@@ -2527,18 +2492,18 @@ public class DataBase {
                 String perfil = c.getString(5);
                 PortfolioClass p = new PortfolioClass(classCode, idPortClass, perfil, portTitle);
                 lista.add(p);
-                Log.d(tag, "port class:" + p.toString());
+                Log.d(TAG, "port class:" + p.toString());
             } while (c.moveToNext());
-            for (int i=lista.size()-1;i>=0;i--){
-                for (int u=lista.size()-1;u>=0;u--) {
-                    if (((PortfolioClass) lista.get(u)).getIdPortClass()==((PortfolioClass) lista.get(i)).getIdPortClass() && ((PortfolioClass) lista.get(u)).getPerfil().equals("C") &&  ((PortfolioClass) lista.get(i)).getPerfil().equals("T")){
+            for (int i = lista.size() - 1; i >= 0; i--) {
+                for (int u = lista.size() - 1; u >= 0; u--) {
+                    if (((PortfolioClass) lista.get(u)).getIdPortClass() == ((PortfolioClass) lista.get(i)).getIdPortClass() && ((PortfolioClass) lista.get(u)).getPerfil().equals("C") && ((PortfolioClass) lista.get(i)).getPerfil().equals("T")) {
                         lista.remove(u);
                     }
                 }
             }
         } else {
-            Log.d(tag, "Nao retornou nada na consulta");
-            query =  ""
+            Log.d(TAG, "Nao retornou nada na consulta");
+            query = ""
                     + "SELECT DISTINCT ps.id_portfolio_class, "
                     + "                                 c.ds_code, "
                     + "                                 c.ds_description, "
@@ -2553,7 +2518,7 @@ public class DataBase {
                     + "                                 ON p.id_portfolio = pc.id_portfolio "
                     + "                                 JOIN tb_tutor_portfolio tp "
                     + "                                 ON tp.id_portfolio_student = ps.id_portfolio_student ";
-            c = db.rawQuery(query, null);
+            c = mSqliteDataBase.rawQuery(query, null);
             if (c.moveToFirst()) {
                 do {
                     int idPortClass = c.getInt(0);
@@ -2562,14 +2527,14 @@ public class DataBase {
                     String perfil = "T";
                     PortfolioClass p = new PortfolioClass(classCode, idPortClass, perfil, portTitle);
                     lista.add(p);
-                    Log.d(tag, "port class:" + p.toString());
+                    Log.d(TAG, "port class:" + p.toString());
                 } while (c.moveToNext());
             }
         }
         return lista;
     }
 
-    public ArrayList<User> getActivityUsers(int idActivityStudent, int idUser){
+    public ArrayList<User> getActivityUsers(int idActivityStudent, int idUser) {
         ArrayList<User> users = new ArrayList<>();
         String query = ""
                 + "SELECT DISTINCT "
@@ -2589,45 +2554,47 @@ public class DataBase {
                 + " JOIN tb_tutor_portfolio tp "
                 + " ON tp.id_portfolio_student=ac.id_portfolio_student "
                 + " WHERE "
-                + " ac.id_activity_student= "+idActivityStudent
+                + " ac.id_activity_student= " + idActivityStudent
                 + " AND ( "
                 + " ps.id_student=u.id_user "
                 + " OR "
                 + " tp.id_tutor=u.id_user)"
-                + " AND NOT u.id_user="+idUser+";";
+                + " AND NOT u.id_user=" + idUser + ";";
 
-        Cursor c = db.rawQuery(query,null);
-        if (c.moveToFirst()){
-            do{
-                User u = new User(c.getInt(0),c.getString(4).toCharArray()[0],c.getString(1));
-                u.setPhoto(c.getString(2),null);
-                if (c.getString(3)!=null && !c.getString(3).equals("null")) {
+        Cursor c = mSqliteDataBase.rawQuery(query, null);
+        if (c.moveToFirst()) {
+            do {
+                User u = new User(c.getInt(0), c.getString(4).toCharArray()[0], c.getString(1));
+                u.setPhoto(c.getString(2), null);
+                if (c.getString(3) != null && !c.getString(3).equals("null")) {
                     u.setCellphone(c.getString(3));
                 }
                 users.add(u);
-            }while (c.moveToNext());
+            } while (c.moveToNext());
         }
 
         return users;
     }
 
-    public boolean userIsGuest(){
-        String query="SELECT * FROM tb_guest;";
-        Cursor c = db.rawQuery(query,null);
+    public boolean userIsGuest() {
+        String query = "SELECT * FROM tb_guest;";
+        Cursor c = mSqliteDataBase.rawQuery(query, null);
 
         return c.moveToFirst();
     }
-    public boolean userIsGuest(int idPortfolioStudent){
-        String query="SELECT * FROM tb_guest g JOIN tb_portfolio_class AS pc ON pc.id_class=g.id_class JOIN tb_portfolio_student AS ps ON ps.id_portfolio_class=pc.id_portfolio_class JOIN tb_tutor_portfolio AS tp ON tp.id_portfolio_student=ps.id_portfolio_student WHERE ps.id_portfolio_student="+idPortfolioStudent+" AND NOT tp.id_tutor="+Singleton.getInstance().user.getIdUser();
-        Cursor c = db.rawQuery(query,null);
+
+    public boolean userIsGuest(int idPortfolioStudent) {
+        String query = "SELECT * FROM tb_guest g JOIN tb_portfolio_class AS pc ON pc.id_class=g.id_class JOIN tb_portfolio_student AS ps ON ps.id_portfolio_class=pc.id_portfolio_class JOIN tb_tutor_portfolio AS tp ON tp.id_portfolio_student=ps.id_portfolio_student WHERE ps.id_portfolio_student=" + idPortfolioStudent + " AND NOT tp.id_tutor=" + Singleton.getInstance().user.getIdUser();
+        Cursor c = mSqliteDataBase.rawQuery(query, null);
 
         boolean isGuest = c.moveToFirst();
 
         return isGuest;
     }
-    public boolean guestCanComment(int idPortfolioStudent){
-        String query="SELECT fl_comments FROM tb_guest g JOIN tb_portfolio_class AS pc ON pc.id_class=g.id_class JOIN tb_portfolio_student AS ps ON ps.id_portfolio_class=pc.id_portfolio_class WHERE ps.id_portfolio_student="+idPortfolioStudent;
-        Cursor c = db.rawQuery(query,null);
+
+    public boolean guestCanComment(int idPortfolioStudent) {
+        String query = "SELECT fl_comments FROM tb_guest g JOIN tb_portfolio_class AS pc ON pc.id_class=g.id_class JOIN tb_portfolio_student AS ps ON ps.id_portfolio_class=pc.id_portfolio_class WHERE ps.id_portfolio_student=" + idPortfolioStudent;
+        Cursor c = mSqliteDataBase.rawQuery(query, null);
         if (userIsGuest(idPortfolioStudent)) {
             if (c.moveToFirst())
                 return c.getString(0).equals("S");
@@ -2649,20 +2616,20 @@ public class DataBase {
         values.put("ds_local_path", path);
         values.put("ds_type", type);
 
-        db.insert("tb_attachment", null, values);
+        mSqliteDataBase.insert("tb_attachment", null, values);
     }
 
     public int getActivityStudentID(int idActivity, int idPortfolioStudent) {
         String query = "SELECT  id_activity_student FROM tb_activity_student WHERE \n" +
                 "\tid_portfolio_student = " + idPortfolioStudent + " and id_activity = " + idActivity + ";";
-        Log.d(tag, "query getActStuID:" + query);
-        Cursor cursor = db.rawQuery(query, null);
+        Log.d(TAG, "query getActStuID:" + query);
+        Cursor cursor = mSqliteDataBase.rawQuery(query, null);
 
         if (cursor.moveToFirst()) {
-            Log.d(tag, "idAcStudent:" + cursor.getInt(0));
+            Log.d(TAG, "idAcStudent:" + cursor.getInt(0));
             return cursor.getInt(0);
         }
-        //db.close();
+        //mSqliteDataBase.close();
         cursor.close();
         return -1;
     }
@@ -2672,20 +2639,20 @@ public class DataBase {
         String query = "id_attachment = " + attachment.getIdAttachment() + " AND\n" +
                 "NOT EXISTS (SELECT NULL FROM tb_attach_comment WHERE tb_attach_comment.id_attachment = tb_attachment.id_attachment) AND\n" +
                 "NOT EXISTS (SELECT NULL FROM tb_attach_activity WHERE tb_attach_activity.id_attachment = tb_attachment.id_attachment);";
-        return db.delete("tb_attachment", query, null) > 0;
+        return mSqliteDataBase.delete("tb_attachment", query, null) > 0;
     }
 
     public ArrayList<Attachment> getAttachments(boolean guest) {
         String query = "SELECT * FROM tb_attachment ";
 
-        if(guest){
-            query=query+"WHERE fl_download='S';";
-        }else
-            query=query+";";
+        if (guest) {
+            query = query + "WHERE fl_download='S';";
+        } else
+            query = query + ";";
 
         ArrayList<Attachment> array_attachment = new ArrayList<>();
 
-        Cursor cursor = db.rawQuery(query, null);
+        Cursor cursor = mSqliteDataBase.rawQuery(query, null);
         cursor.moveToFirst();
 
         do {
@@ -2701,7 +2668,7 @@ public class DataBase {
 
         ArrayList<Attachment> array_attachment = new ArrayList<>();
 
-        Cursor cursor = db.rawQuery(query, null);
+        Cursor cursor = mSqliteDataBase.rawQuery(query, null);
         cursor.moveToFirst();
 
         do {
@@ -2713,10 +2680,10 @@ public class DataBase {
     }
 
     public ArrayList<Attachment> getAttachmentFromStudentId(int idStudent) {
-        String query = "SELECT a.id_attachment,a.id_author,a.tp_attachment,a.nm_file,a.nm_system,a.id_attachment_srv FROM tb_attachment a JOIN tb_attach_activity aa ON a.id_attachment=aa.id_attachment JOIN tb_activity_student ast ON ast.id_activity_student=aa.id_activity_student JOIN tb_portfolio_student ps ON ps.id_portfolio_student=ast.id_portfolio_student WHERE ps.id_student="+idStudent;
+        String query = "SELECT a.id_attachment,a.id_author,a.tp_attachment,a.nm_file,a.nm_system,a.id_attachment_srv FROM tb_attachment a JOIN tb_attach_activity aa ON a.id_attachment=aa.id_attachment JOIN tb_activity_student ast ON ast.id_activity_student=aa.id_activity_student JOIN tb_portfolio_student ps ON ps.id_portfolio_student=ast.id_portfolio_student WHERE ps.id_student=" + idStudent;
         ArrayList<Attachment> array_attachment = new ArrayList<>();
 
-        Cursor cursor = db.rawQuery(query, null);
+        Cursor cursor = mSqliteDataBase.rawQuery(query, null);
         cursor.moveToFirst();
 
         do {
@@ -2732,7 +2699,7 @@ public class DataBase {
 
         ArrayList<Attachment> array_attachment = new ArrayList<>();
 
-        Cursor cursor = db.rawQuery(query, null);
+        Cursor cursor = mSqliteDataBase.rawQuery(query, null);
 
         do {
             if (cursor.getCount() != 0)
@@ -2747,7 +2714,7 @@ public class DataBase {
 
         ArrayList<Attachment> array_attachment = new ArrayList<>();
 
-        Cursor cursor = db.rawQuery(query, null);
+        Cursor cursor = mSqliteDataBase.rawQuery(query, null);
 
         do {
             if (cursor.getCount() != 0)
@@ -2758,7 +2725,7 @@ public class DataBase {
     }
 
     private Attachment cursorToAttachment(Cursor cursor) {
-        Attachment attachment = new Attachment(cursor.getInt(0), cursor.getString(1), cursor.getString(2), cursor.getString(3), cursor.getInt(4),cursor.getInt(5));
+        Attachment attachment = new Attachment(cursor.getInt(0), cursor.getString(1), cursor.getString(2), cursor.getString(3), cursor.getInt(4), cursor.getInt(5));
         return attachment;
     }
 
@@ -2769,16 +2736,16 @@ public class DataBase {
         cv.put("id_activity_student", idActivityStudent);
 
         try {
-            db.insert("tb_attach_activity", null, cv);
+            mSqliteDataBase.insert("tb_attach_activity", null, cv);
         } catch (Exception e) {
-            Log.e(tag, "erro ao salvar na tabela tb_attach_activity:" + e.getMessage());
+            Log.e(TAG, "erro ao salvar na tabela tb_attach_activity:" + e.getMessage());
         }
 
-        Cursor cursor = db.rawQuery("select seq from sqlite_sequence where name='tb_attach_activity'", null);
+        Cursor cursor = mSqliteDataBase.rawQuery("select seq from sqlite_sequence where name='tb_attach_activity'", null);
         int lastID = 0;
         if (cursor.moveToFirst()) {
             lastID = cursor.getInt(0);
-            Log.d(tag, "last id_comment id table:" + lastID);
+            Log.d(TAG, "last id_comment id table:" + lastID);
         }
         return lastID;
     }
@@ -2797,9 +2764,9 @@ public class DataBase {
         cv.put("id_activity_student", sync.getId_activity_student());
         //cv.put("dt_send", sync.getDt_sync());
         try {
-            db.insert("tb_sync", null, cv);
+            mSqliteDataBase.insert("tb_sync", null, cv);
         } catch (Exception e) {
-            Log.e(tag, "erro ao salvar na tabela tb_attach_activity:" + e.getMessage());
+            Log.e(TAG, "erro ao salvar na tabela tb_attach_activity:" + e.getMessage());
         }
     }
 
@@ -2810,29 +2777,28 @@ public class DataBase {
         cv.put("id_activity_student", sync.getId_activity_student());
         //cv.put("dt_send", sync.getDt_sync());
         try {
-            db.insert("tb_sync", null, cv);
+            mSqliteDataBase.insert("tb_sync", null, cv);
         } catch (Exception e) {
-            Log.e(tag, "erro ao salvar na tabela tb_attach_activity:" + e.getMessage());
+            Log.e(TAG, "erro ao salvar na tabela tb_attach_activity:" + e.getMessage());
         }
     }
-
 
 
     public ArrayList getSyncs() {
         String query = "SELECT id_sync, co_id_table, nm_table from tb_sync";
         ArrayList syncs = new ArrayList<Sync>();
-        Cursor c = db.rawQuery(query, null);
+        Cursor c = mSqliteDataBase.rawQuery(query, null);
         if (c.moveToFirst()) {
             do {
                 Sync s = new Sync(c.getInt(0), "-1", c.getInt(1), c.getString(2));
                 syncs.add(s);
-                Log.d("Syncs",s.toString());
+                Log.d("Syncs", s.toString());
             } while (c.moveToNext());
         } else {
 
         }
 
-//        db.close();
+//        mSqliteDataBase.close();
 
         return syncs;
     }
@@ -2857,7 +2823,7 @@ public class DataBase {
                 "\ttbs.id_activity_student = " + id_activity_student;
         int result = 0;
 
-        Cursor c = db.rawQuery(query, null);
+        Cursor c = mSqliteDataBase.rawQuery(query, null);
         if (c.moveToFirst()) {
             int num = c.getInt(0);
             result += num;
@@ -2874,7 +2840,7 @@ public class DataBase {
                 " WHERE tbps.id_portfolio_class = " + id_portfolio_class;
         int result = 0;
 
-        Cursor c = db.rawQuery(query, null);
+        Cursor c = mSqliteDataBase.rawQuery(query, null);
         if (c.moveToFirst())
             do {
                 int id = c.getInt(0);
@@ -2894,7 +2860,7 @@ public class DataBase {
         // ADICIONAR CLAUSULAS WHERE PARA VEFIFICAR SE O TIPO DE COMENTÁRIO É R (RECEBIMENTO) E SE A DATA DE READ É NULL
         int result = 0;
 
-        Cursor c = db.rawQuery(query, null);
+        Cursor c = mSqliteDataBase.rawQuery(query, null);
         if (c.moveToFirst()) {
             int val = c.getInt(0);
             result = val;
@@ -2905,12 +2871,12 @@ public class DataBase {
         return result;
     }
 
-    public int getAllNotifications(){
+    public int getAllNotifications() {
         String query = "SELECT COUNT(*) FROM tb_notice";
 
         int result = 0;
 
-        Cursor c = db.rawQuery(query, null);
+        Cursor c = mSqliteDataBase.rawQuery(query, null);
         if (c.moveToFirst()) {
             int val = c.getInt(0);
             result = val;
@@ -2934,10 +2900,10 @@ public class DataBase {
             query.append(");");
 
             try {
-                db.execSQL(query.toString());
-                Log.d(tag, "removeu NOTICES");
+                mSqliteDataBase.execSQL(query.toString());
+                Log.d(TAG, "removeu NOTICES");
             } catch (Exception e) {
-                Log.e(tag, "erro ao delete NOTICES:" + e.getMessage());
+                Log.e(TAG, "erro ao delete NOTICES:" + e.getMessage());
             }
         }
     }
@@ -2946,7 +2912,7 @@ public class DataBase {
         String query = "SELECT id_notice FROM tb_notice WHERE id_activity_student = " + idActivityStudent + " AND nm_table != 'tb_comment'";
         ArrayList<Integer> aux = new ArrayList<>();
 
-        Cursor c = db.rawQuery(query, null);
+        Cursor c = mSqliteDataBase.rawQuery(query, null);
         if (c.moveToFirst()) {
             do {
                 aux.add(c.getInt(0));
@@ -2964,7 +2930,7 @@ public class DataBase {
                 "WHERE tbs.id_activity_student = " + id_activity_student + " AND tbs.nm_table = 'tb_comment'";
         ArrayList<Integer> result = new ArrayList<>();
 
-        Cursor c = db.rawQuery(query, null);
+        Cursor c = mSqliteDataBase.rawQuery(query, null);
         if (c.moveToFirst()) {
             do {
                 result.add(c.getInt(0));
@@ -2982,7 +2948,7 @@ public class DataBase {
             String query = "SELECT COUNT(*) FROM tb_comment tbc WHERE \n" +
                     "\ttbc.tp_comment = 'G' AND\n" +
                     "\ttbc.id_comment_srv = " + id;
-            Cursor c = db.rawQuery(query, null);
+            Cursor c = mSqliteDataBase.rawQuery(query, null);
             if (c.moveToFirst()) {
                 result += c.getInt(0);
             }
@@ -2998,13 +2964,13 @@ public class DataBase {
                 "WHERE tbs.id_activity_student = " + idActivityStudent + " AND tbs.nm_table = 'tb_comment'";
         ArrayList<Integer> result = new ArrayList<>();
 
-        Cursor c = db.rawQuery(query, null);
+        Cursor c = mSqliteDataBase.rawQuery(query, null);
         if (c.moveToFirst()) {
             do {
                 String sql = "SELECT COUNT(*) FROM tb_comment tbc WHERE \n" +
                         "\ttbc.tp_comment = 'G' AND\n" +
                         "\ttbc.id_comment_srv = " + c.getInt(0);
-                Cursor newCursor = db.rawQuery(sql, null);
+                Cursor newCursor = mSqliteDataBase.rawQuery(sql, null);
                 if (newCursor.moveToFirst()) {
                     if (newCursor.getInt(0) > 0)
                         result.add(c.getInt(1));
@@ -3025,7 +2991,7 @@ public class DataBase {
                 "WHERE tbs.id_activity_student = " + idActivityStudent + " AND tbs.nm_table = 'tb_comment'";
         ArrayList<Integer> result = new ArrayList<>();
 
-        Cursor c = db.rawQuery(query, null);
+        Cursor c = mSqliteDataBase.rawQuery(query, null);
         if (c.moveToFirst()) {
             do {
                 String sql = "SELECT COUNT(*) from tb_comment as tbc " +
@@ -3033,7 +2999,7 @@ public class DataBase {
                         "JOIN tb_version_activity as tbva on tbva.id_version_activity_srv = tbcv.id_version_activity" +
                         " WHERE tbva.id_version_activity_srv = " + idVersionActivitySrv + " AND tbc.id_comment_srv = " + c.getInt(0) + " AND tbc.tp_comment = 'O'";
 
-                Cursor newCursor = db.rawQuery(sql, null);
+                Cursor newCursor = mSqliteDataBase.rawQuery(sql, null);
                 if (newCursor.moveToFirst()) {
                     if (newCursor.getInt(0) > 0)
                         result.add(c.getInt(1));
@@ -3052,7 +3018,7 @@ public class DataBase {
                     "\ttbc.tp_comment = 'O' AND\n" +
                     "\ttbc.id_comment_srv = " + id;
 
-            Cursor c = db.rawQuery(query, null);
+            Cursor c = mSqliteDataBase.rawQuery(query, null);
             if (c.moveToFirst()) {
                 if (c.getInt(0) > 0)
                     return true;
@@ -3069,7 +3035,7 @@ public class DataBase {
                 "WHERE tbs.id_activity_student = " + idActivityStudent + " AND tbs.nm_table = 'tb_comment'";
         Integer result = 0;
 
-        Cursor c = db.rawQuery(query, null);
+        Cursor c = mSqliteDataBase.rawQuery(query, null);
         if (c.moveToFirst()) {
             do {
                 String sql = "SELECT COUNT(*) from tb_comment as tbc " +
@@ -3077,7 +3043,7 @@ public class DataBase {
                         "JOIN tb_version_activity as tbva on tbva.id_version_activity_srv = tbcv.id_version_activity" +
                         " WHERE tbva.id_version_activity_srv = " + idVersionActivity + " AND tbc.id_comment_srv = " + c.getInt(0) + " AND tbc.tp_comment = 'O'";
 
-                Cursor newCursor = db.rawQuery(sql, null);
+                Cursor newCursor = mSqliteDataBase.rawQuery(sql, null);
                 if (newCursor.moveToFirst()) {
                     result += newCursor.getInt(0);
                 }
@@ -3100,9 +3066,9 @@ public class DataBase {
         cv.put("tp_device", d.get_tp_device());
         cv.put("fl_first_login", "T");
         try {
-            db.insert("tb_device", null, cv);
+            mSqliteDataBase.insert("tb_device", null, cv);
         } catch (Exception e) {
-            Log.e(tag, "erro ao salvar na tabela tb_device:" + e.getMessage());
+            Log.e(TAG, "erro ao salvar na tabela tb_device:" + e.getMessage());
         }
     }
 
@@ -3110,11 +3076,11 @@ public class DataBase {
     public Device getDevice() {
         String query = "SELECT * from tb_device";
         Device device = new Device();
-        Cursor c = db.rawQuery(query, null);
+        Cursor c = mSqliteDataBase.rawQuery(query, null);
         if (c.moveToFirst()) {
             device = new Device(c.getString(0), c.getInt(1), c.getInt(2), c.getString(3), c.getString(4)/*, c.getString(5)*/);
         } else {
-            Log.e(tag, "não há registros na tabela tb_device");
+            Log.e(TAG, "não há registros na tabela tb_device");
         }
         return device;
     }
@@ -3133,14 +3099,14 @@ public class DataBase {
     public String getCountTbClass() {
         String query = "SELECT * FROM tb_class";
         String result = null;
-        Cursor c = db.rawQuery(query, null);
+        Cursor c = mSqliteDataBase.rawQuery(query, null);
 
         if (c.moveToFirst()) {
             do {
                 result = c.getInt(0) + ", " + c.getInt(1) + ", " + c.getString(2) + ", " + c.getString(3) + ", " + c.getString(4) + ", ... \n";
             } while (c.moveToNext());
         } else {
-            Log.e(tag, "não há registros na tabela tb_class");
+            Log.e(TAG, "não há registros na tabela tb_class");
         }
 
         return result;
@@ -3149,14 +3115,14 @@ public class DataBase {
     public String getCountTbActivityStudent() {
         String query = "SELECT * FROM tb_activity_student";
         String result = null;
-        Cursor c = db.rawQuery(query, null);
+        Cursor c = mSqliteDataBase.rawQuery(query, null);
 
         if (c.moveToFirst()) {
             do {
                 result = c.getInt(0) + ", " + c.getInt(1) + ", " + c.getInt(2) + ", " + c.getString(3) + ", " + c.getString(4) + ", ... \n";
             } while (c.moveToNext());
         } else {
-            Log.e(tag, "não há registros na tabela tb_activity_student");
+            Log.e(TAG, "não há registros na tabela tb_activity_student");
         }
 
         return result;
@@ -3165,14 +3131,14 @@ public class DataBase {
     public String getCountTbPortfolioStudent() {
         String query = "SELECT * FROM tb_portfolio_student";
         String result = null;
-        Cursor c = db.rawQuery(query, null);
+        Cursor c = mSqliteDataBase.rawQuery(query, null);
 
         if (c.moveToFirst()) {
             do {
                 result = c.getInt(0) + ", " + c.getInt(1) + ", " + c.getInt(2) + ", " + c.getString(3) + ", " + c.getString(4) + ", ... \n";
             } while (c.moveToNext());
         } else {
-            Log.e(tag, "não há registros na tabela tb_portfolio_student");
+            Log.e(TAG, "não há registros na tabela tb_portfolio_student");
         }
 
         return result;
@@ -3184,10 +3150,10 @@ public class DataBase {
         cv.put("fl_basic_data", "T");
         Device device = getDevice();
         try {
-            db.update("tb_device", cv, null, null);
-            Log.e(tag, "Conseguiu alterar tb_device fl_basic_data");
+            mSqliteDataBase.update("tb_device", cv, null, null);
+            Log.e(TAG, "Conseguiu alterar tb_device fl_basic_data");
         } catch (Exception e) {
-            Log.e(tag, "Erro ao alterar tb_device fl_basic_data");
+            Log.e(TAG, "Erro ao alterar tb_device fl_basic_data");
         }
     }
 
@@ -3201,11 +3167,11 @@ public class DataBase {
         if (user.getPhoto() != null)
             cv.put("im_photo", user.getPhoto());
         try {
-            db.update("tb_user", cv, "id_user = ?", new String[]{String.valueOf(user.getIdUser())});
-            Log.e(tag, "Conseguiu alterar tb_user");
+            mSqliteDataBase.update("tb_user", cv, "id_user = ?", new String[]{String.valueOf(user.getIdUser())});
+            Log.e(TAG, "Conseguiu alterar tb_user");
             return true;
         } catch (Exception e) {
-            Log.e(tag, "Erro ao alterar tb_user");
+            Log.e(TAG, "Erro ao alterar tb_user");
             return false;
         }
     }
@@ -3217,10 +3183,10 @@ public class DataBase {
             cv.put("nu_cellphone", u.getCellphone());
             cv.put("im_photo", u.getPhoto());
             try {
-                db.update("tb_user", cv, "id_user = ?", new String[]{String.valueOf(u.getIdUser())});
-                Log.e(tag, "Conseguiu alterar tb_user");
+                mSqliteDataBase.update("tb_user", cv, "id_user = ?", new String[]{String.valueOf(u.getIdUser())});
+                Log.e(TAG, "Conseguiu alterar tb_user");
             } catch (Exception e) {
-                Log.e(tag, "Erro ao alterar tb_user");
+                Log.e(TAG, "Erro ao alterar tb_user");
             }
         }
     }
@@ -3239,13 +3205,13 @@ public class DataBase {
         User user = new User(0, null, null);
 
         String query = "SELECT id_user FROM tb_device";
-        Cursor c = db.rawQuery(query, null);
+        Cursor c = mSqliteDataBase.rawQuery(query, null);
 
         if (c.moveToFirst()) {
             int id_user = c.getInt(0);
 
             query = "SELECT nm_user, nu_identification, ds_email, nu_cellphone, im_photo FROM tb_user WHERE id_user = " + id_user;
-            c = db.rawQuery(query, null);
+            c = mSqliteDataBase.rawQuery(query, null);
 
             if (c.moveToFirst()) {
                 user = new User(id_user, c.getString(0), c.getString(1), c.getString(2), c.getString(3));
@@ -3272,21 +3238,22 @@ public class DataBase {
 
 
             String query = "SELECT * FROM tb_version_activity WHERE id_version_activity_srv=" + va.getId_version_activit_srv();
-            Cursor c = db.rawQuery(query, null);
+            Cursor c = mSqliteDataBase.rawQuery(query, null);
 
             if (c.moveToFirst()) {
-                db.update("tb_version_activity", cv, "id_version_activity_srv=" + va.getId_version_activit_srv(), null);
+                mSqliteDataBase.update("tb_version_activity", cv, "id_version_activity_srv=" + va.getId_version_activit_srv(), null);
                 continue;
             }
             try {
-                db.insert("tb_version_activity", null, cv);
+                mSqliteDataBase.insert("tb_version_activity", null, cv);
 
             } catch (Exception e) {
-                Log.d(tag, "erro ao inserir na tb_version_activity:" + e.getMessage());
+                Log.d(TAG, "erro ao inserir na tb_version_activity:" + e.getMessage());
                 e.printStackTrace();
             }
         }
     }
+
     public void insertOneVersionActivity(VersionActivity va) {
 
         ContentValues cv = new ContentValues();
@@ -3299,16 +3266,16 @@ public class DataBase {
 
 
         String query = "SELECT * FROM tb_version_activity WHERE id_version_activity_srv=" + va.getId_version_activit_srv();
-        Cursor c = db.rawQuery(query, null);
+        Cursor c = mSqliteDataBase.rawQuery(query, null);
 
         if (c.moveToFirst()) {
-            db.update("tb_version_activity", cv, "id_version_activity_srv=" + va.getId_version_activit_srv(), null);
+            mSqliteDataBase.update("tb_version_activity", cv, "id_version_activity_srv=" + va.getId_version_activit_srv(), null);
         }
         try {
-            db.insert("tb_version_activity", null, cv);
+            mSqliteDataBase.insert("tb_version_activity", null, cv);
 
         } catch (Exception e) {
-            Log.d(tag, "erro ao inserir na tb_version_activity:" + e.getMessage());
+            Log.d(TAG, "erro ao inserir na tb_version_activity:" + e.getMessage());
             e.printStackTrace();
         }
 
@@ -3330,10 +3297,10 @@ public class DataBase {
             cv.put("dt_send", c.getDateSend());
 
             try {
-                db.insert("tb_comment", null, cv);
+                mSqliteDataBase.insert("tb_comment", null, cv);
 
             } catch (Exception e) {
-                Log.d(tag, "erro ao inserir na tb_comment:" + e.getMessage());
+                Log.d(TAG, "erro ao inserir na tb_comment:" + e.getMessage());
                 e.printStackTrace();
             }
 
@@ -3342,7 +3309,7 @@ public class DataBase {
 
     public void insertComments(LinkedList<Comentario> comentarios) {
 
-        Log.d(tag, " full data response> cometarios a serem inseridos:\n"+comentarios);
+        Log.d(TAG, " full data response> cometarios a serem inseridos:\n" + comentarios);
         for (Comentario c : comentarios) {
             ContentValues cv = new ContentValues();
             cv.put("id_activity_student", c.getIdActivityStudent());
@@ -3355,18 +3322,15 @@ public class DataBase {
             cv.put("dt_send", c.getDateSend());
 
             try {
-                db.insert("tb_comment", null, cv);
-                Log.d(tag, "inserindo comment no sqlite:" + c);
+                mSqliteDataBase.insert("tb_comment", null, cv);
+                Log.d(TAG, "inserindo comment no sqlite:" + c);
             } catch (Exception e) {
-                Log.e(tag, "erro ao inserir na tb_comment:" + e.getMessage());
+                Log.e(TAG, "erro ao inserir na tb_comment:" + e.getMessage());
                 e.printStackTrace();
             }
 
         }
     }
-
-
-
 
 
     public void insertAttachment(LinkedList<Attachment> anexos) {
@@ -3378,10 +3342,10 @@ public class DataBase {
             cv.put("id_attachment_srv", a.getidAttachmentSrv());
 
             try {
-                db.insert("tb_attachment", null, cv);
+                mSqliteDataBase.insert("tb_attachment", null, cv);
 
             } catch (Exception e) {
-                Log.d(tag, "erro ao inserir na tb_attachment:" + e.getMessage());
+                Log.d(TAG, "erro ao inserir na tb_attachment:" + e.getMessage());
                 e.printStackTrace();
             }
 
@@ -3394,10 +3358,10 @@ public class DataBase {
         cv.put("id_activity_student", id_activity_student);
 
         try {
-            db.insert("tb_attach_activity", null, cv);
+            mSqliteDataBase.insert("tb_attach_activity", null, cv);
 
         } catch (Exception e) {
-            Log.d(tag, "erro ao inserir na tb_attach_activity:" + e.getMessage());
+            Log.d(TAG, "erro ao inserir na tb_attach_activity:" + e.getMessage());
             e.printStackTrace();
         }
     }
@@ -3409,10 +3373,10 @@ public class DataBase {
             cv.put("id_comment", ac.getId_comment());
 
             try {
-                db.insert("tb_attach_comment", null, cv);
+                mSqliteDataBase.insert("tb_attach_comment", null, cv);
 
             } catch (Exception e) {
-                Log.d(tag, "erro ao inserir na tb_attach_comment:" + e.getMessage());
+                Log.d(TAG, "erro ao inserir na tb_attach_comment:" + e.getMessage());
                 e.printStackTrace();
             }
         }
@@ -3426,9 +3390,9 @@ public class DataBase {
             cv.put("id_reference_srv", r.getIdRefSrv());
 
             try {
-                db.insert("tb_reference", null, cv);
+                mSqliteDataBase.insert("tb_reference", null, cv);
             } catch (Exception e) {
-                Log.d(tag, "erro ao inserir na tb_reference:" + e.getMessage());
+                Log.d(TAG, "erro ao inserir na tb_reference:" + e.getMessage());
                 e.printStackTrace();
             }
 
@@ -3448,22 +3412,17 @@ public class DataBase {
             cv.put("dt_read", n.getDt_read());
 
             try {
-                db.insert("tb_notice", null, cv);
-            }
-            catch (SQLiteConstraintException v){
-                Log.d(tag, "id notification já existe:" + v.getMessage());
+                mSqliteDataBase.insert("tb_notice", null, cv);
+            } catch (SQLiteConstraintException v) {
+                Log.d(TAG, "id notification já existe:" + v.getMessage());
                 v.printStackTrace();
-            }
-
-            catch (Exception e) {
-                Log.d(tag, "erro ao inserir na tb_notice:" + e.getMessage());
+            } catch (Exception e) {
+                Log.d(TAG, "erro ao inserir na tb_notice:" + e.getMessage());
                 e.printStackTrace();
             }
 
         }
     }
-
-
 
 
     /*
@@ -3478,9 +3437,9 @@ public class DataBase {
                 "nu_cellphone," +
                 "im_photo" +
                 " from tb_user where id_user = " + ids.get(0));
-        Log.d(tag + " get users by ids", " query:" + sb.toString());
+        Log.d(TAG + " get users by ids", " query:" + sb.toString());
         String query = sb.toString();
-        Cursor c = db.rawQuery(query, null);
+        Cursor c = mSqliteDataBase.rawQuery(query, null);
         LinkedList lista = new LinkedList<User>();
         if (c.moveToFirst()) {
             do {
@@ -3490,11 +3449,11 @@ public class DataBase {
                 user.setIdCode(c.getString(2));
                 user.setEmail(c.getString(3));
                 user.setCellphone(c.getString(4));
-                user.setPhoto(c.getString(5).replace("\n",""), null);
+                user.setPhoto(c.getString(5).replace("\n", ""), null);
                 lista.add(user);
             } while (c.moveToNext());
         } else {
-            Log.d(tag, "Nao retornou nada na consulta");
+            Log.d(TAG, "Nao retornou nada na consulta");
         }
         return lista;
     }
@@ -3510,17 +3469,17 @@ public class DataBase {
                 "dt_comment," +
                 "nu_comment_activity" +
                 " from tb_comment where id_comment in ( ");
-        for (int id :ids){
-            if(id==ids.getLast()){
-                sb.append(""+id+" );");
+        for (int id : ids) {
+            if (id == ids.getLast()) {
+                sb.append("" + id + " );");
                 break;
-            }else{
-                sb.append(""+id+" , ");
+            } else {
+                sb.append("" + id + " , ");
             }
         }
-        Log.d(tag+" get comments by ids"," query:"+sb.toString());
+        Log.d(TAG + " get comments by ids", " query:" + sb.toString());
         String query = sb.toString();
-        Cursor c = db.rawQuery(query, null);
+        Cursor c = mSqliteDataBase.rawQuery(query, null);
         LinkedList lista = new LinkedList<Comentario>();
         if (c.moveToFirst()) {
             do {
@@ -3536,7 +3495,7 @@ public class DataBase {
                 lista.add(comm);
             } while (c.moveToNext());
         } else {
-            Log.d(tag, "Nao retornou nada na consulta");
+            Log.d(TAG, "Nao retornou nada na consulta");
         }
         return lista;
     }
@@ -3552,17 +3511,17 @@ public class DataBase {
                 "id_comment_version," +
                 "id_comment_srv" +
                 " from tb_comment where id_comment in ( ");
-        for (int id :ids){
-            if(id==ids.getLast()){
-                sb.append(""+id+" );");
+        for (int id : ids) {
+            if (id == ids.getLast()) {
+                sb.append("" + id + " );");
                 break;
-            }else{
-                sb.append(""+id+" , ");
+            } else {
+                sb.append("" + id + " , ");
             }
         }
-        Log.d(tag+" get comments by ids"," query:"+sb.toString());
+        Log.d(TAG + " get comments by ids", " query:" + sb.toString());
         String query = sb.toString();
-        Cursor c = db.rawQuery(query, null);
+        Cursor c = mSqliteDataBase.rawQuery(query, null);
         LinkedList lista = new LinkedList<Comentario>();
         if (c.moveToFirst()) {
             do {
@@ -3579,27 +3538,26 @@ public class DataBase {
                 lista.add(comm);
             } while (c.moveToNext());
         } else {
-            Log.d(tag, "Nao retornou nada na consulta");
+            Log.d(TAG, "Nao retornou nada na consulta");
         }
         return lista;
     }
 
 
-
     //nao finalizado ainda
     public List<VersionActivity> getVersionActivitiesByIDs(LinkedList<Integer> ids) {
         StringBuilder sb = new StringBuilder("select * from tb_version_activity where id_version_activity in ( ");
-        for (int id :ids){
-            if(id==ids.getLast()){
-                sb.append(""+id+" );");
+        for (int id : ids) {
+            if (id == ids.getLast()) {
+                sb.append("" + id + " );");
                 break;
-            }else{
+            } else {
                 sb.append("" + id + " , ");
             }
         }
-        Log.d(tag + "get comments by ids", " query:" + sb.toString());
+        Log.d(TAG + "get comments by ids", " query:" + sb.toString());
         String query = sb.toString();
-        Cursor c = db.rawQuery(query, null);
+        Cursor c = mSqliteDataBase.rawQuery(query, null);
         LinkedList lista = new LinkedList<VersionActivity>();
         if (c.moveToFirst()) {
             do {
@@ -3632,7 +3590,7 @@ public class DataBase {
 //                c.close();
             } while (c.moveToNext());
         } else {
-            Log.d(tag, "Nao retornou nada na consulta");
+            Log.d(TAG, "Nao retornou nada na consulta");
         }
         return lista;
     }
@@ -3642,13 +3600,13 @@ public class DataBase {
         for (HolderIDS ids : holderIDS) {
             cv.put("id_comment_srv", ids.getIdSrv());
             cv.put("dt_send", ids.getDate());
-            if(ids.getIdcvSrv()>0){
+            if (ids.getIdcvSrv() > 0) {
                 cv.put("id_comment_version", ids.getIdcvSrv());
             }
             try {
-                db.update("tb_comment", cv, "id_comment=?", new String[]{"" + ids.getId()});
+                mSqliteDataBase.update("tb_comment", cv, "id_comment=?", new String[]{"" + ids.getId()});
             } catch (Exception e) {
-                Log.d(tag, e.getMessage());
+                Log.d(TAG, e.getMessage());
             }
         }
     }
@@ -3657,11 +3615,11 @@ public class DataBase {
         ContentValues cv = new ContentValues();
         for (HolderIDS holder : holderIDS) {
             cv.put("id_comment_version_srv", holder.getIdSrv());
-            cv.put("fl_srv","S");
+            cv.put("fl_srv", "S");
             try {
-                db.update("tb_comment_version", cv, "id_comment_version=?", new String[]{"" + holder.getId()});
+                mSqliteDataBase.update("tb_comment_version", cv, "id_comment_version=?", new String[]{"" + holder.getId()});
             } catch (Exception e) {
-                Log.d(tag, e.getMessage());
+                Log.d(TAG, e.getMessage());
             }
         }
     }
@@ -3670,13 +3628,11 @@ public class DataBase {
         ContentValues cv = new ContentValues();
         cv.put("id_comment_version_srv", id_comment_version);
         try {
-            db.update("tb_comment_version", cv, "id_comment_version=?", new String[]{"" +id_comment_version});
+            mSqliteDataBase.update("tb_comment_version", cv, "id_comment_version=?", new String[]{"" + id_comment_version});
         } catch (Exception e) {
-            Log.d(tag, e.getMessage());
+            Log.d(TAG, e.getMessage());
         }
     }
-
-
 
 
     public void updateVersionsBySendFullData(LinkedList<HolderIDS> holderIDS) {
@@ -3685,9 +3641,9 @@ public class DataBase {
             cv.put("id_version_activity_srv", ids.getIdSrv());
             cv.put("dt_submission", ids.getDate());
             try {
-                db.update("tb_version_activity", cv, "id_version_activity=?", new String[]{"" + ids.getId()});
+                mSqliteDataBase.update("tb_version_activity", cv, "id_version_activity=?", new String[]{"" + ids.getId()});
             } catch (Exception e) {
-                Log.d(tag, e.getMessage());
+                Log.d(TAG, e.getMessage());
             }
         }
     }
@@ -3697,12 +3653,13 @@ public class DataBase {
         cv.put("id_version_activity_srv", idVersionSrv);
         cv.put("dt_submission", dtSubmission);
         try {
-            db.update("tb_version_activity", cv, "id_version_activity=?", new String[]{"" + idVersion});
+            mSqliteDataBase.update("tb_version_activity", cv, "id_version_activity=?", new String[]{"" + idVersion});
         } catch (Exception e) {
-            Log.d(tag, e.getMessage());
+            Log.d(TAG, e.getMessage());
         }
 
     }
+
     public void updateVersions(VersionActivity va) {
         ContentValues cv = new ContentValues();
 //        cv.put("id_activity_student", va.getId_activity_student());
@@ -3714,23 +3671,22 @@ public class DataBase {
 
 
         String query = "SELECT * FROM tb_version_activity WHERE id_version_activity_srv=" + va.getId_version_activit_srv();
-        Cursor c = db.rawQuery(query, null);
+        Cursor c = mSqliteDataBase.rawQuery(query, null);
 
         if (c.moveToFirst()) {
-            db.update("tb_version_activity", cv, "id_version_activity_srv=" + va.getId_version_activit_srv(), null);
+            mSqliteDataBase.update("tb_version_activity", cv, "id_version_activity_srv=" + va.getId_version_activit_srv(), null);
         }
     }
-    public int getIDVersionSrvByLocalID(int idVersion){
-        StringBuilder sb = new StringBuilder("SELECT id_version_activity_srv FROM tb_version_activity where id_version_activity="+idVersion);
-        Cursor c = db.rawQuery(sb.toString(), null);
+
+    public int getIDVersionSrvByLocalID(int idVersion) {
+        StringBuilder sb = new StringBuilder("SELECT id_version_activity_srv FROM tb_version_activity where id_version_activity=" + idVersion);
+        Cursor c = mSqliteDataBase.rawQuery(sb.toString(), null);
         if (c.moveToFirst()) {
             return c.getInt(0);
-        }else{
+        } else {
             return -1;
         }
     }
-
-
 
 
     public void deleteSync(LinkedList<Integer> ids) {
@@ -3743,32 +3699,32 @@ public class DataBase {
                 sb.append("" + id + " , ");
             }
         }
-        Log.d(tag + " DELETE tb_sync", " query:" + sb.toString());
+        Log.d(TAG + " DELETE tb_sync", " query:" + sb.toString());
         String query = sb.toString();
 
         try {
-            db.execSQL(query);
-            Log.d(tag, "Deletou da tb_sync com sucesso");
+            mSqliteDataBase.execSQL(query);
+            Log.d(TAG, "Deletou da tb_sync com sucesso");
         } catch (Exception e) {
-            Log.d(tag, "Nao deletou da tb_sync");
+            Log.d(TAG, "Nao deletou da tb_sync");
         }
     }
 
     public void deleteAllNotificationsFromSync() {
         String query = "DELETE FROM tb_sync WHERE nm_table = 'tb_notice'";
         try {
-            db.execSQL(query);
+            mSqliteDataBase.execSQL(query);
         } catch (Exception e) {
-            Log.d(tag, "Nao deletou da Notificações da tb_sync");
+            Log.d(TAG, "Nao deletou da Notificações da tb_sync");
         }
     }
 
     public void deleteTBUserFromSync() {
         String query = "DELETE FROM tb_sync WHERE nm_table = 'tb_user'";
         try {
-            db.execSQL(query);
+            mSqliteDataBase.execSQL(query);
         } catch (Exception e) {
-            Log.d(tag, "Nao deletou a TB_USER da tb_sync");
+            Log.d(TAG, "Nao deletou a TB_USER da tb_sync");
         }
     }
 
@@ -3782,18 +3738,18 @@ public class DataBase {
                 sb.append("" + id.getId() + " , ");
             }
         }
-        Log.d(tag + " DELETE tb_sync", " query:" + sb.toString());
+        Log.d(TAG + " DELETE tb_sync", " query:" + sb.toString());
         String query = sb.toString();
 
         try {
-            db.execSQL(query);
+            mSqliteDataBase.execSQL(query);
         } catch (Exception e) {
-            Log.d(tag, "Nao deletou da tb_sync");
+            Log.d(TAG, "Nao deletou da tb_sync");
         }
     }
 
     public void cleanDataBase() {
-        context.deleteDatabase("db_portfolio_alpha_atual.sqlite");
+        mContext.deleteDatabase("db_portfolio_alpha_atual.sqlite");
     }
 
     public LinkedHashMap<Integer, LinkedList<Attachment>> getAttachments(LinkedList<Integer> integers) {
@@ -3801,7 +3757,7 @@ public class DataBase {
 
         for (Integer id : integers) {
             String query = "SELECT id_attachment, id_activity_student FROM tb_attach_activity WHERE id_attach_activity = " + id;
-            Cursor c = db.rawQuery(query, null);
+            Cursor c = mSqliteDataBase.rawQuery(query, null);
             if (c.moveToFirst()) {
                 int idAttachment = c.getInt(0);
                 int idActivityStudent = c.getInt(1);
@@ -3810,7 +3766,7 @@ public class DataBase {
                     aux.put(idActivityStudent, new LinkedList<Attachment>());
 
                 String queryAttachment = "SELECT * FROM tb_attachment WHERE id_attachment = " + idAttachment;
-                Cursor cAttachment = db.rawQuery(queryAttachment, null);
+                Cursor cAttachment = mSqliteDataBase.rawQuery(queryAttachment, null);
 
                 if (cAttachment.moveToFirst())
                     aux.get(idActivityStudent).add(cursorToAttachment(cAttachment));
@@ -3827,9 +3783,9 @@ public class DataBase {
         String query = "SELECT tba.nm_system FROM tb_attachment as tba " +
                 "JOIN tb_attach_activity as tbaa on tbaa.id_attachment = tba.id_attachment " +
                 "WHERE tbaa.id_activity_student = " + idActivityStudent;
-        Cursor c = db.rawQuery(query, null);
+        Cursor c = mSqliteDataBase.rawQuery(query, null);
 
-        if (c.getCount()>0) {
+        if (c.getCount() > 0) {
             while (c.moveToNext()) {
                 String nmSystem = c.getString(0);
                 String key = "";
@@ -3845,14 +3801,15 @@ public class DataBase {
         return aux;
 
     }
+
     public void updateIdAttachmentSrvById(int idAttachment, int idAttachmentSrv) {
         ContentValues cv = new ContentValues();
         cv.put("id_attachment_srv", idAttachmentSrv);
         try {
-            db.update("tb_attachment", cv, "id_attachment = " + idAttachment, null);
-            Log.e(tag, "Conseguiu alterar tb_attachment id_attachment_srv");
+            mSqliteDataBase.update("tb_attachment", cv, "id_attachment = " + idAttachment, null);
+            Log.e(TAG, "Conseguiu alterar tb_attachment id_attachment_srv");
         } catch (Exception e) {
-            Log.e(tag, "Erro ao alterar tb_attachment id_attachment_srv");
+            Log.e(TAG, "Erro ao alterar tb_attachment id_attachment_srv");
         }
     }
 
@@ -3866,10 +3823,10 @@ public class DataBase {
             cv.put("id_policy", p.getIdPolicy());
             cv.put("tx_policy", p.getTxPolicy());
             try {
-                db.insert("tb_policy", null, cv);
+                mSqliteDataBase.insert("tb_policy", null, cv);
 
             } catch (Exception e) {
-                Log.d(tag, "erro ao inserir tb_policy:" + e.getMessage());
+                Log.d(TAG, "erro ao inserir tb_policy:" + e.getMessage());
                 e.printStackTrace();
             }
 
@@ -3884,10 +3841,10 @@ public class DataBase {
             cv.put("id_user", p.getIdUser());
             cv.put("fl_accept", p.getFlAccept());
             try {
-                db.insert("tb_policy_user", null, cv);
+                mSqliteDataBase.insert("tb_policy_user", null, cv);
 
             } catch (Exception e) {
-                Log.d(tag, "erro ao inserir tb_policy_user:" + e.getMessage());
+                Log.d(TAG, "erro ao inserir tb_policy_user:" + e.getMessage());
                 e.printStackTrace();
             }
 
@@ -3898,10 +3855,10 @@ public class DataBase {
         ContentValues cv = new ContentValues();
         cv.put("fl_accept", "S");
         try {
-            db.update("tb_policy_user", cv, "id_policy_user = " + idPolicyUser, null);
-            Log.e(tag, "Conseguiu alterar tb_policy_user fl_accept");
+            mSqliteDataBase.update("tb_policy_user", cv, "id_policy_user = " + idPolicyUser, null);
+            Log.e(TAG, "Conseguiu alterar tb_policy_user fl_accept");
         } catch (Exception e) {
-            Log.e(tag, "Erro ao alterar tb_policy_user fl_accept");
+            Log.e(TAG, "Erro ao alterar tb_policy_user fl_accept");
         }
     }
 
@@ -3909,13 +3866,13 @@ public class DataBase {
         Policy policy = new Policy(0, null);
 
         String query = "SELECT id_policy FROM tb_policy";
-        Cursor c = db.rawQuery(query, null);
+        Cursor c = mSqliteDataBase.rawQuery(query, null);
 
         if (c.moveToFirst()) {
             int id_policy = c.getInt(0);
 
             query = "SELECT tx_policy FROM tb_policy WHERE id_policy = " + id_policy;
-            c = db.rawQuery(query, null);
+            c = mSqliteDataBase.rawQuery(query, null);
 
             if (c.moveToFirst()) {
                 policy = new Policy(id_policy, c.getString(0));
@@ -3924,17 +3881,18 @@ public class DataBase {
 
         return policy;
     }
+
     public PolicyUser getPolicyUserByUserId(int idUser) {
         PolicyUser policyUser = new PolicyUser(0, 0, 0, null);
 
         String query = "SELECT id_policy_user FROM tb_policy_user";
-        Cursor c = db.rawQuery(query, null);
+        Cursor c = mSqliteDataBase.rawQuery(query, null);
 
         if (c.moveToFirst()) {
             int id_policy_user = c.getInt(0);
 
             query = "SELECT * FROM tb_policy_user WHERE id_user = " + idUser;
-            c = db.rawQuery(query, null);
+            c = mSqliteDataBase.rawQuery(query, null);
 
             if (c.moveToFirst()) {
                 policyUser = new PolicyUser(id_policy_user, c.getInt(1), c.getInt(2), c.getString(3));
@@ -3943,17 +3901,18 @@ public class DataBase {
 
         return policyUser;
     }
+
     public Policy getPolicyByUserID(int idUser) {//talvez seja melhor fazer lista, pensar nisso
         Policy policy = new Policy(0, null);
 
         String query = "SELECT id_policy_user FROM tb_policy_user";
-        Cursor c = db.rawQuery(query, null);
+        Cursor c = mSqliteDataBase.rawQuery(query, null);
 
         if (c.moveToFirst()) {
             int id_policy_user = c.getInt(0);
 
             query = "SELECT tx_policy FROM tb_policy INNER JOIN tb_policy_user ON tb_policy.id_policy = tb_policy_user.id_policy WHERE tb_policy_user.id_user = " + idUser;
-            c = db.rawQuery(query, null);
+            c = mSqliteDataBase.rawQuery(query, null);
 
             if (c.moveToFirst()) {
                 policy = new Policy(id_policy_user, c.getString(0));

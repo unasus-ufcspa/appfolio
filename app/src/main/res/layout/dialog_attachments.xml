@@ -174,7 +174,6 @@
                 android:layout_marginBottom="2dp"
                 android:layout_marginLeft="2dp"
                 android:layout_marginRight="2dp">
-                <!--todo trocar cor -->
                 <Button
                     android:id="@+id/btn_cancel"
                     android:layout_width="match_parent"

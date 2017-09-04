@@ -18,25 +18,25 @@ import java.util.List;
  * Created by Arthur Zettler on 16/03/2016.
  */
 public class FragmentAttachmentDialogAdapter extends BaseAdapter {
-    private static LayoutInflater inflater = null;
-    private AttachmentDialogFragment context;
-    private List<Attachment> attachments;
+    private static LayoutInflater sInflater = null;
+    private AttachmentDialogFragment mAttachmentDialogFragment;
+    private List<Attachment> mAttachmentList;
 
 
-    public FragmentAttachmentDialogAdapter(AttachmentDialogFragment context, List<Attachment> attachment) {
-        this.context = context;
-        this.attachments = attachment;
-        inflater = (LayoutInflater) context.getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+    public FragmentAttachmentDialogAdapter(AttachmentDialogFragment mAttachmentDialogFragment, List<Attachment> attachment) {
+        this.mAttachmentDialogFragment = mAttachmentDialogFragment;
+        this.mAttachmentList = attachment;
+        sInflater = (LayoutInflater) mAttachmentDialogFragment.getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
 
     @Override
     public int getCount() {
-        return attachments.size();
+        return mAttachmentList.size();
     }
 
     @Override
     public Object getItem(int position) {
-        return attachments.get(position);
+        return mAttachmentList.get(position);
     }
 
     @Override
@@ -46,7 +46,7 @@ public class FragmentAttachmentDialogAdapter extends BaseAdapter {
 
     @Override
     public View getView(final int position, final View convertView, ViewGroup parent) {
-        View rowView = inflater.inflate(R.layout.celladapter_fragment_attachment, null);
+        View rowView = sInflater.inflate(R.layout.celladapter_fragment_attachment, null);
 
         final Holder components = new Holder();
         components.imgAttachment = (ImageView) rowView.findViewById(R.id.img_attachment);
@@ -54,14 +54,14 @@ public class FragmentAttachmentDialogAdapter extends BaseAdapter {
         components.imgDelete = (ImageView) rowView.findViewById(R.id.img_delete);
         components.imgDelete.setVisibility(View.GONE);
 
-        final Attachment aux = attachments.get(position);
+        final Attachment aux = mAttachmentList.get(position);
 
         switch (aux.getTpAttachment()) {
             case "I":
                 rowView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        context.imageClicked(position);
+                        mAttachmentDialogFragment.imageClicked(position);
                     }
                 });
                 components.imgAttachment.setImageResource(R.drawable.ic_attachment_image);
@@ -71,7 +71,7 @@ public class FragmentAttachmentDialogAdapter extends BaseAdapter {
                 rowView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        context.videoClicked(position);
+                        mAttachmentDialogFragment.videoClicked(position);
                     }
                 });
                 components.imgAttachment.setImageResource(R.drawable.ic_attachment_video);
@@ -81,7 +81,7 @@ public class FragmentAttachmentDialogAdapter extends BaseAdapter {
                 rowView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        context.textClicked(position);
+                        mAttachmentDialogFragment.textClicked(position);
                     }
                 });
                 components.imgAttachment.setImageResource(R.drawable.ic_attachment_file);

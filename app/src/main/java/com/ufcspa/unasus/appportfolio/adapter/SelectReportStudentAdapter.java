@@ -37,30 +37,29 @@ import java.util.List;
  * Created by Desenvolvimento on 08/01/2016.
  */
 public class SelectReportStudentAdapter extends BaseAdapter {
-    private static LayoutInflater inflater = null;
-    private Context context;
-    private List<User> listaUsers;
-    private DataBase dataBase;
-    private List<Attachment> attachments;
-    private static final String URL="/webfolio/app_dev.php/download/";
+    private static final String URL = "/webfolio/app_dev.php/download/";
+    private static LayoutInflater sInflater = null;
+    private Context mContext;
+    private List<User> mUserList;
+    private DataBase mDataBase;
+    private List<Attachment> mAttachmentList;
 
-    public SelectReportStudentAdapter(Context context, List<User> classes)
-    {
-        this.context = context;
-        this.listaUsers = classes;
-        this.dataBase = DataBase.getInstance(context);
+    public SelectReportStudentAdapter(Context mContext, List<User> classes) {
+        this.mContext = mContext;
+        this.mUserList = classes;
+        this.mDataBase = DataBase.getInstance(mContext);
 
-        inflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        sInflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
 
     @Override
     public int getCount() {
-        return listaUsers.size();
+        return mUserList.size();
     }
 
     @Override
     public User getItem(int position) {
-        return listaUsers.get(position);
+        return mUserList.get(position);
     }
 
     @Override
@@ -72,15 +71,15 @@ public class SelectReportStudentAdapter extends BaseAdapter {
     public View getView(final int position, View convertView, ViewGroup parent) {
         final Holder holder = new Holder();
         final View rowView;
-        Singleton.getInstance().idStudent=listaUsers.get(position).getIdUser();
+        Singleton.getInstance().idStudent = mUserList.get(position).getIdUser();
 
-        rowView = inflater.inflate(R.layout.item_student_report, null);
+        rowView = sInflater.inflate(R.layout.item_student_report, null);
 
-        holder.p_student_name=(TextView)rowView.findViewById(R.id.p_student_name);
-        holder.p_student_name.setText(listaUsers.get(position).getName());
-        holder.student_image=(ImageView)rowView.findViewById(R.id.student_image);
-        if (listaUsers.get(position).getPhotoBitmap()!=null) {
-            holder.student_image.setImageBitmap(listaUsers.get(position).getPhotoBitmap());
+        holder.p_student_name = (TextView) rowView.findViewById(R.id.p_student_name);
+        holder.p_student_name.setText(mUserList.get(position).getName());
+        holder.student_image = (ImageView) rowView.findViewById(R.id.student_image);
+        if (mUserList.get(position).getPhotoBitmap() != null) {
+            holder.student_image.setImageBitmap(mUserList.get(position).getPhotoBitmap());
         } else {
             holder.student_image.setImageResource(R.drawable.ic_default_picture);
         }
@@ -89,13 +88,13 @@ public class SelectReportStudentAdapter extends BaseAdapter {
             @Override
             public void onClick(View v) {
                 if (Singleton.getInstance().guestUser) {
-                    attachments = dataBase.getAttachmentFromStudentId(listaUsers.get(position).getIdUser());
-                    if (attachments.size() > 0) {
-                        downloadAttachments(attachments);
+                    mAttachmentList = mDataBase.getAttachmentFromStudentId(mUserList.get(position).getIdUser());
+                    if (mAttachmentList.size() > 0) {
+                        downloadAttachments(mAttachmentList);
                     }
                 }
-                if (!Singleton.getInstance().guestUser || attachments.size() == 0) {
-                    Singleton.getInstance().idStudent = listaUsers.get(position).getIdUser();
+                if (!Singleton.getInstance().guestUser || mAttachmentList.size() == 0) {
+                    Singleton.getInstance().idStudent = mUserList.get(position).getIdUser();
                     changeScreen();
                 }
             }
@@ -105,16 +104,15 @@ public class SelectReportStudentAdapter extends BaseAdapter {
     }
 
     private void changeScreen() {
-        LocalBroadcastManager.getInstance(context).sendBroadcast(new Intent("call.fragments.action").putExtra("ID", 7));
+        LocalBroadcastManager.getInstance(mContext).sendBroadcast(new Intent("call.fragments.action").putExtra("ID", 7));
     }
 
-    public class Holder
-    {
+    public class Holder {
         TextView p_student_name;
         ImageView student_image;
     }
 
-    public void downloadAttachments(final List<Attachment> attachments){
+    public void downloadAttachments(final List<Attachment> attachments) {
         DownloadManager manager = new DownloadManager();
         final int[] cont = {attachments.size()};
         for (final Attachment a : attachments) {
@@ -130,7 +128,7 @@ public class SelectReportStudentAdapter extends BaseAdapter {
             File file = new File(filePath);
             if (!file.exists()) { //verifica se arquivo já existe antes de baixar
                 //Log.d("File Path", filePath);
-                String url = "http://" + new HttpClient(context).ip + URL + path;
+                String url = "http://" + new HttpClient(mContext).ip + URL + path;
                 DownloadRequest request = new DownloadRequest()
                         .setUrl(url)
                         .setDestFilePath(filePath)
@@ -139,30 +137,30 @@ public class SelectReportStudentAdapter extends BaseAdapter {
                             public void onSuccess(int downloadId, String filePath) {
                                 super.onSuccess(downloadId, filePath);
                                 cont[0]--;
-                                dataBase.updateAttachmentFlDownload(a.getIdAttachment());
+                                mDataBase.updateAttachmentFlDownload(a.getIdAttachment());
                                 if (filePath.contains(".mp4")) {
                                     saveSmallImage(filePath);
                                 }
                                 Log.d("atividade - anexos", "conseguiu baixar anexo com sucesso: " + filePath);
-                                Toast.makeText(context, "Conseguiu baixar anexo com sucesso", Toast.LENGTH_LONG).show();
+                                Toast.makeText(mContext, "Conseguiu baixar anexo com sucesso", Toast.LENGTH_LONG).show();
                             }
 
                             @Override
                             public void onFailure(int downloadId, int statusCode, String errMsg) {
                                 super.onFailure(downloadId, statusCode, errMsg);
-                                Toast.makeText(context, "Erro ao baixar anexos", Toast.LENGTH_LONG).show();
+                                Toast.makeText(mContext, "Erro ao baixar anexos", Toast.LENGTH_LONG).show();
                             }
                         });
                 manager.add(request);
                 Log.d("atividade - anexos", "url do anexo: " + url);
-            } else{
+            } else {
                 cont[0]--;
-                dataBase.updateAttachmentFlDownload(a.getIdAttachment());
+                mDataBase.updateAttachmentFlDownload(a.getIdAttachment());
                 Log.d("atividade - anexos", filePath + " já existe e não baixado");
             }
 //                downloadAttachment("http://stuffpoint.com/stardoll/image/54056-stardoll-sdfs.jpg" + a.getNmSystem(), a.getNmFile());
         }
-        if (cont[0]==0) {
+        if (cont[0] == 0) {
             changeScreen();
         }
     }
@@ -199,7 +197,7 @@ public class SelectReportStudentAdapter extends BaseAdapter {
             fOutputStream.flush();
             fOutputStream.close();
 
-            MediaStore.Images.Media.insertImage(context.getContentResolver(), file.getAbsolutePath(), file.getName(), file.getName());
+            MediaStore.Images.Media.insertImage(mContext.getContentResolver(), file.getAbsolutePath(), file.getName(), file.getName());
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         } catch (IOException e) {

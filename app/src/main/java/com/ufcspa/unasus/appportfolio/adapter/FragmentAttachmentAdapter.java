@@ -25,29 +25,29 @@ import java.util.Set;
  * Created by desenvolvimento on 10/12/2015.
  */
 public class FragmentAttachmentAdapter extends BaseAdapter {
-    private static LayoutInflater inflater = null;
-    private AttachmentFragment context;
-    private List<Attachment> attachments;
-    private boolean canDelete;
-    private Set<Attachment> shouldDelete;
+    private static LayoutInflater sInflater = null;
+    private AttachmentFragment mAttachmentFragment;
+    private List<Attachment> mAttachmentList;
+    private boolean mCanDelete;
+    private Set<Attachment> mShouldDelete;
 
 
-    public FragmentAttachmentAdapter(AttachmentFragment context, List<Attachment> attachment) {
-        this.context = context;
-        this.attachments = attachment;
-        this.shouldDelete = new HashSet<>();
-        inflater = (LayoutInflater) context.getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        canDelete = false;
+    public FragmentAttachmentAdapter(AttachmentFragment mAttachmentFragment, List<Attachment> attachment) {
+        this.mAttachmentFragment = mAttachmentFragment;
+        this.mAttachmentList = attachment;
+        this.mShouldDelete = new HashSet<>();
+        sInflater = (LayoutInflater) mAttachmentFragment.getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        mCanDelete = false;
     }
 
     @Override
     public int getCount() {
-        return attachments.size();
+        return mAttachmentList.size();
     }
 
     @Override
     public Object getItem(int position) {
-        return attachments.get(position);
+        return mAttachmentList.get(position);
     }
 
     @Override
@@ -57,27 +57,27 @@ public class FragmentAttachmentAdapter extends BaseAdapter {
 
     @Override
     public View getView(final int position, final View convertView, ViewGroup parent) {
-        View rowView = inflater.inflate(R.layout.celladapter_fragment_attachment, null);
+        View rowView = sInflater.inflate(R.layout.celladapter_fragment_attachment, null);
 
         final Holder components = new Holder();
         components.imgAttachment = (ImageView) rowView.findViewById(R.id.img_attachment);
         components.descAttachment = (TextView) rowView.findViewById(R.id.desc_attachment);
         components.imgDelete = (ImageView) rowView.findViewById(R.id.img_delete);
 
-        if (!canDelete)
+        if (!mCanDelete)
             components.imgDelete.setVisibility(View.GONE);
 
-        final Attachment aux = attachments.get(position);
+        final Attachment aux = mAttachmentList.get(position);
 
         switch (aux.getTpAttachment()) {
             case "I":
                 rowView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        if (canDelete)
+                        if (mCanDelete)
                             checkIfIsMarked(components, aux);
                         else
-                            context.imageClicked(position);
+                            mAttachmentFragment.imageClicked(position);
                     }
                 });
                 components.imgAttachment.setImageResource(R.drawable.ic_attachment_image);
@@ -87,10 +87,10 @@ public class FragmentAttachmentAdapter extends BaseAdapter {
                 rowView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        if (canDelete)
+                        if (mCanDelete)
                             checkIfIsMarked(components, aux);
                         else
-                            context.videoClicked(position);
+                            mAttachmentFragment.videoClicked(position);
                     }
                 });
                 components.imgAttachment.setImageResource(R.drawable.ic_attachment_video);
@@ -100,21 +100,21 @@ public class FragmentAttachmentAdapter extends BaseAdapter {
                 rowView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        if (canDelete)
+                        if (mCanDelete)
                             checkIfIsMarked(components, aux);
                         else
-                            context.textClicked(position);
+                            mAttachmentFragment.textClicked(position);
                     }
                 });
                 components.imgAttachment.setImageResource(R.drawable.ic_attachment_file);
                 components.descAttachment.setText(aux.getNmFile());
                 break;
             default:
-                if (!canDelete) {
+                if (!mCanDelete) {
                     rowView.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            context.plusClicked();
+                            mAttachmentFragment.plusClicked();
                         }
                     });
                     components.imgAttachment.setImageResource(R.drawable.ic_attachment_plus);
@@ -124,15 +124,15 @@ public class FragmentAttachmentAdapter extends BaseAdapter {
                 break;
         }
 
-        if (!canDelete) {
+        if (!mCanDelete) {
             rowView.setOnLongClickListener(new View.OnLongClickListener() {
                 @Override
                 public boolean onLongClick(View v) {
-                    canDelete = true;
+                    mCanDelete = true;
                     if (!Singleton.getInstance().guestUser) {
-                        context.deleteOneMedia(attachments.size() - 1);
+                        mAttachmentFragment.deleteOneMedia(mAttachmentList.size() - 1);
                     }
-                    context.getActivity().startActionMode(new ActionBarCallBack());
+                    mAttachmentFragment.getActivity().startActionMode(new ActionBarCallBack());
                     return true;
                 }
             });
@@ -144,15 +144,15 @@ public class FragmentAttachmentAdapter extends BaseAdapter {
     private void checkIfIsMarked(Holder components, Attachment attachment) {
         if (components.imgDelete.getVisibility() == View.VISIBLE) {
             components.imgDelete.setVisibility(View.GONE);
-            shouldDelete.remove(attachment);
+            mShouldDelete.remove(attachment);
         } else {
             components.imgDelete.setVisibility(View.VISIBLE);
-            shouldDelete.add(attachment);
+            mShouldDelete.add(attachment);
         }
     }
 
     public void refresh(List<Attachment> attachments) {
-        this.attachments = attachments;
+        this.mAttachmentList = attachments;
         notifyDataSetChanged();
     }
 
@@ -165,7 +165,7 @@ public class FragmentAttachmentAdapter extends BaseAdapter {
     public class ActionBarCallBack implements ActionMode.Callback {
         @Override
         public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
-            context.deleteMedia(shouldDelete);
+            mAttachmentFragment.deleteMedia(mShouldDelete);
             mode.finish();
             return false;
         }
@@ -173,16 +173,16 @@ public class FragmentAttachmentAdapter extends BaseAdapter {
         @Override
         public boolean onCreateActionMode(ActionMode mode, Menu menu) {
             mode.getMenuInflater().inflate(R.menu.attachment, menu);
-            ((MainActivity) context.getActivity()).hideDrawer();
+            ((MainActivity) mAttachmentFragment.getActivity()).hideDrawer();
             return true;
         }
 
         @Override
         public void onDestroyActionMode(ActionMode mode) {
-            canDelete = false;
-            context.createPlusButton();
+            mCanDelete = false;
+            mAttachmentFragment.createPlusButton();
             notifyDataSetChanged();
-            ((MainActivity) context.getActivity()).showDrawer();
+            ((MainActivity) mAttachmentFragment.getActivity()).showDrawer();
         }
 
         @Override

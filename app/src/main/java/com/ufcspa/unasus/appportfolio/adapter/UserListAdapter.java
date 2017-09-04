@@ -28,30 +28,30 @@ import java.util.ArrayList;
  */
 
 public class UserListAdapter extends BaseAdapter {
-    private ArrayList<User> userList;
-    private DataBase source;
-    private Context context;
-    private static LayoutInflater inflater = null;
-    private Singleton singleton;
+    private ArrayList<User> mUserList;
+    private DataBase mDataBase;
+    private Context mContext;
+    private static LayoutInflater sInflater = null;
+    private static Singleton sSingleton;
 
-    public UserListAdapter(Context context, ArrayList<User> userList) {
-        this.userList = userList;
-        this.context = context;
+    public UserListAdapter(Context mContext, ArrayList<User> mUserList) {
+        this.mUserList = mUserList;
+        this.mContext = mContext;
 
-        singleton = Singleton.getInstance();
-        source = DataBase.getInstance(context);
-        inflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        sSingleton = Singleton.getInstance();
+        mDataBase = DataBase.getInstance(mContext);
+        sInflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
     }
 
     @Override
     public int getCount() {
-        return userList.size();
+        return mUserList.size();
     }
 
     @Override
     public User getItem(int position) {
-        return userList.get(position);
+        return mUserList.get(position);
     }
 
     @Override
@@ -61,28 +61,28 @@ public class UserListAdapter extends BaseAdapter {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        final User aux = userList.get(position);
+        final User aux = mUserList.get(position);
 
-        convertView = inflater.inflate(R.layout.item_student_report,null);
+        convertView = sInflater.inflate(R.layout.item_student_report, null);
 
-        TextView studentName=(TextView)convertView.findViewById(R.id.p_student_name);
+        TextView studentName = (TextView) convertView.findViewById(R.id.p_student_name);
 //        studentName.setText(aux.getName());
         studentName.setVisibility(View.INVISIBLE);
         final ImageView studentPhoto = (ImageView) convertView.findViewById(R.id.student_image);
 
         Bitmap photo = aux.getPhotoBitmap();
         if (photo != null)
-            studentPhoto.setImageBitmap(ConfigFragment.getRoundedRectBitmap(photo,100));
+            studentPhoto.setImageBitmap(ConfigFragment.getRoundedRectBitmap(photo, 100));
         else
             studentPhoto.setImageResource(R.drawable.ic_default_picture);
 
-        studentPhoto.setLayoutParams(new LinearLayout.LayoutParams(48,48));
+        studentPhoto.setLayoutParams(new LinearLayout.LayoutParams(48, 48));
 
         studentPhoto.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
-                Log.d("altura personal",v.getRootView().findViewById(R.id.personal_comment_container).getHeight()+"");
-                displayPersonalComment(v.getRootView().findViewById(R.id.personal_comment_container),aux,event.getRawY()-v.getHeight());
+                Log.d("altura personal", v.getRootView().findViewById(R.id.personal_comment_container).getHeight() + "");
+                displayPersonalComment(v.getRootView().findViewById(R.id.personal_comment_container), aux, event.getRawY() - v.getHeight());
                 return false;
             }
         });
@@ -91,11 +91,11 @@ public class UserListAdapter extends BaseAdapter {
 
     }
 
-    public void displayPersonalComment(View anchorView,User userPerfil,float y) {
+    public void displayPersonalComment(View anchorView, User userPerfil, float y) {
         String cellphone = userPerfil.getCellphone();
         RelativeLayout dialogStudent = (RelativeLayout) anchorView.findViewById(R.id.personal_dialog_student);
-        TextView student_name = (TextView) anchorView.findViewById(R.id.p_student_name);
-        TextView student_cell = (TextView) anchorView.findViewById(R.id.student_phone);
+        TextView studentName = (TextView) anchorView.findViewById(R.id.p_student_name);
+        TextView studentCell = (TextView) anchorView.findViewById(R.id.student_phone);
         EditText edtTextPersonal = (EditText) anchorView.findViewById(R.id.edittext_personal_comment);
 
         if (anchorView.getVisibility() == View.VISIBLE)
@@ -103,26 +103,26 @@ public class UserListAdapter extends BaseAdapter {
         else {
             anchorView.setVisibility(View.VISIBLE);
             anchorView.setY(y);
-            student_cell.setText(cellphone);
-            ArrayList<Comentario> cs=(ArrayList)source.listGComments(singleton.idActivityStudent, "P");
-            if(cs!=null && cs.size()!=0){
-                if(cs.get(0).getTxtComment()!=null){
+            studentCell.setText(cellphone);
+            ArrayList<Comentario> cs = (ArrayList) mDataBase.listGComments(sSingleton.idActivityStudent, "P");
+            if (cs != null && cs.size() != 0) {
+                if (cs.get(0).getTxtComment() != null) {
                     edtTextPersonal.setText(cs.get(0).getTxtComment());
                 }
             }
 
-            if(singleton.portfolioClass.getPerfil().equals("S")||userPerfil.getUserType()=='T'){
-                student_name.setText(userPerfil.getName());
+            if (sSingleton.portfolioClass.getPerfil().equals("S") || userPerfil.getUserType() == 'T') {
+                studentName.setText(userPerfil.getName());
                 dialogStudent.setVisibility(View.GONE);
 
-            }else{
+            } else {
                 dialogStudent.setVisibility(View.VISIBLE);
-                student_name.setText(singleton.portfolioClass.getStudentName());
-                cellphone = singleton.portfolioClass.getCellphone();
-                if (cellphone != null && !cellphone.equals("null") && singleton.portfolioClass.getPerfil().equals("S") )
-                    student_cell.setText(singleton.portfolioClass.getCellphone());
+                studentName.setText(sSingleton.portfolioClass.getStudentName());
+                cellphone = sSingleton.portfolioClass.getCellphone();
+                if (cellphone != null && !cellphone.equals("null") && sSingleton.portfolioClass.getPerfil().equals("S"))
+                    studentCell.setText(sSingleton.portfolioClass.getCellphone());
                 else
-                    student_cell.setText("");
+                    studentCell.setText("");
             }
 
 
