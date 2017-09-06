@@ -14,7 +14,7 @@
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:text="@string/popup_logout"
-            android:id="@+id/textView15"
+            android:id="@+id/tv_title"
             android:layout_alignParentTop="true"
             android:textColor="@color/gray_2"
             android:layout_alignParentRight="true"

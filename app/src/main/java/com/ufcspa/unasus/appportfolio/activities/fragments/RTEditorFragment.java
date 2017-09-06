@@ -366,7 +366,7 @@ public class RTEditorFragment extends HelperFragment {
                     final Dialog dialog = new Dialog(getContext());
                     dialog.setContentView(R.layout.dialog_logout);
                     dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
-                    TextView title = (TextView) dialog.findViewById(R.id.textView15);
+                    TextView title = (TextView) dialog.findViewById(R.id.tv_title);
                     Button accept = (Button) dialog.findViewById(R.id.btn_logout_ok);
                     Button cancel = (Button) dialog.findViewById(R.id.btn_logout_cancel);
 
@@ -420,8 +420,6 @@ public class RTEditorFragment extends HelperFragment {
 
         mSendVersionText = (TextView) view.findViewById(R.id.send_version_text);
         mFinalizeActivityText = (TextView) view.findViewById(R.id.finalize_activity_text);
-
-//        if (sSingleton.portfolioClass.getPerfil().equals("T") || (sSingleton.idCurrentVersionActivity != sSingleton.idVersionActivity)) {
         if (sSingleton.portfolioClass.getPerfil().equals("T") || (sSingleton.idCurrentVersionActivity != sSingleton.idVersionActivity) || !mDataBase.getActivityStudentById(sSingleton.idActivityStudent).getDt_conclusion().equals("null")) {
             mSendVersion.setVisibility(View.GONE);
             mSendVersionText.setVisibility(View.GONE);
